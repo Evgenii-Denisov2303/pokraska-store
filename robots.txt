@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pokraska.store/sitemap.xml
+
+# Боты Яндекса
+User-agent: Yandex
+Allow: /
+Clean-param: utm_source&utm_medium&utm_campaign
+
+# Боты Google
+User-agent: Googlebot
+Allow: /
+
+# Запрет для некоторых ботов
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
