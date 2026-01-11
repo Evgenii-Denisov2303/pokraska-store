@@ -3,34 +3,935 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея работ | Порошковая покраска в Казани</title>
-    <!-- Остальные мета-теги и стили -->
+    <title>Галерея работ | POKRASKA.STORE - Примеры порошковой покраски в Казани</title>
+    <meta name="description" content="Галерея выполненных работ по порошковой покраске в Казани. Реальные примеры покраски дисков, металлоконструкций, оборудования и интерьера.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css">
+
+    <style>
+        /* ========== GALLERY STYLES ========== */
+        .gallery-page {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .gallery-header h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gallery-header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Фильтры */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .filter-btn {
+            padding: 12px 28px;
+            background: white;
+            border: 2px solid #e0e6ed;
+            border-radius: 50px;
+            color: #5a6c7d;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+        }
+
+        .filter-btn.active {
+            background: #3498db;
+            border-color: #3498db;
+            color: white;
+        }
+
+        .filter-btn i {
+            font-size: 1.1em;
+        }
+
+        /* Галерея */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item.highlight {
+            border: 3px solid #3498db;
+            box-shadow: 0 15px 35px rgba(52, 152, 219, 0.2);
+        }
+
+        .gallery-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover .gallery-image img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 25px;
+        }
+
+        .gallery-item:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .zoom-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e50;
+            font-size: 18px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item:hover .zoom-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .zoom-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Информация о работе */
+        .work-info {
+            padding: 25px;
+        }
+
+        .work-category {
+            display: inline-block;
+            padding: 6px 15px;
+            background: #f0f7ff;
+            color: #3498db;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .work-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+        }
+
+        .work-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Детали работы */
+        .work-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        .detail i {
+            color: #3498db;
+            font-size: 1em;
+        }
+
+        .detail.badge {
+            background: #e8f4fc;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        /* Превью цвета */
+        .color-preview {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Счетчик работ */
+        .work-counter {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .counter-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #3498db;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .counter-text {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Кнопка заказа */
+        .order-cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .order-cta .btn {
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            border-radius: 15px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #3498db;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 25px;
+            }
+
+            .gallery-header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-page {
+                padding: 60px 0 80px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .gallery-filters {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .work-counter {
+                padding: 20px;
+            }
+
+            .counter-number {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .gallery-image {
+                height: 220px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Хедер как на других страницах -->
-
-    <section class="section gallery-section">
+    <!-- ========== HEADER ========== -->
+    <header class="header">
         <div class="container">
-            <h1 class="section-title">Галерея наших работ</h1>
-            <p class="section-subtitle">Реальные примеры порошковой покраски в Казани</p>
+            <div class="header-content">
+                <!-- Логотип ПРЕМИУМ -->
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
-            <!-- Фильтры галереи -->
-            <div class="gallery-filters">
-                <button class="filter-btn active" data-filter="all">Все работы</button>
-                <button class="filter-btn" data-filter="wheels">Диски</button>
-                <button class="filter-btn" data-filter="metal">Металлоконструкции</button>
-                <button class="filter-btn" data-filter="equipment">Оборудование</button>
-                <button class="filter-btn" data-filter="interior">Интерьер</button>
-                <button class="filter-btn" data-filter="auto">Автозапчасти</button>
+                <!-- Навигация -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="../index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
+                        <li><a href="prices.html"><i class="fas fa-tag"></i> Цены</a></li>
+                        <li><a href="gallery.html" class="active"><i class="fas fa-images"></i> Работы</a></li>
+                        <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                    </ul>
+
+                    <!-- Контакты в хедере -->
+                    <div class="header-contacts">
+                        <a href="tel:+79534999883" class="phone-link">
+                            <i class="fas fa-phone"></i>
+                            <span>+7 (953) 499-98-83</span>
+                        </a>
+                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Кнопка мобильного меню -->
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== GALLERY PAGE ========== -->
+    <section class="gallery-page">
+        <div class="container">
+            <!-- Заголовок -->
+            <div class="gallery-header">
+                <h1><i class="fas fa-palette"></i> Галерея наших работ</h1>
+                <p class="subtitle">
+                    Реальные примеры порошковой покраски в Казани. Более 5000 покрашенных деталей с 2014 года.
+                    Каждая работа — это история довольного клиента и наш профессионализм.
+                </p>
             </div>
 
-            <!-- Галерея (повторить блок works-grid с большим количеством работ) -->
+            <!-- Фильтры -->
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-layer-group"></i> Все работы
+                </button>
+                <button class="filter-btn" data-filter="wheels">
+                    <i class="fas fa-car"></i> Диски
+                </button>
+                <button class="filter-btn" data-filter="metal">
+                    <i class="fas fa-industry"></i> Металлоконструкции
+                </button>
+                <button class="filter-btn" data-filter="equipment">
+                    <i class="fas fa-cogs"></i> Оборудование
+                </button>
+                <button class="filter-btn" data-filter="interior">
+                    <i class="fas fa-home"></i> Интерьер
+                </button>
+                <button class="filter-btn" data-filter="auto">
+                    <i class="fas fa-tools"></i> Автозапчасти
+                </button>
+            </div>
+
+            <!-- Галерея -->
             <div class="gallery-grid">
-                <!-- Добавьте больше work-item элементов -->
+                <!-- Работа 1: Диски BMW (премиум) -->
+                <div class="gallery-item highlight" data-category="wheels">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/bmw-wheels.jpg" alt="Покраска дисков BMW X5 в черный матовый цвет" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #2c3e50;"></div>
+                                <span style="color: white; font-weight: 600;">Black Matte</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/bmw-wheels-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Диски BMW X5">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-car"></i> Автомобильные диски</span>
+                        <h3 class="work-title">Диски BMW X5</h3>
+                        <p class="work-description">
+                            Полная реставрация литых дисков R19. Пескоструйная обработка, выравнивание,
+                            покраска в черный матовый с защитным лаком. Гарантия 5 лет.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-ruler-combined"></i> R19 | 5x120
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-calendar-alt"></i> 3 дня
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-shield-alt"></i> 5 лет
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 2: Кованые ворота -->
+                <div class="gallery-item" data-category="metal">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/metal-gate.jpg" alt="Порошковая покраска кованых ворот терракотового цвета" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #e74c3c;"></div>
+                                <span style="color: white; font-weight: 600;">Терракотовый</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/metal-gate-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Кованые ворота">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-industry"></i> Металлоконструкции</span>
+                        <h3 class="work-title">Кованые въездные ворота</h3>
+                        <p class="work-description">
+                            Покраска кованых ворот для частного дома. Антикоррозийная обработка,
+                            грунтовка в 2 слоя, покраска терракотовым порошком RAL 3013.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-ruler"></i> 4x2.5 м
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-sun"></i> УФ-защита
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-tint"></i> Атмосферостойкость
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 3: Промышленный станок -->
+                <div class="gallery-item" data-category="equipment">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/industrial-equipment.jpg" alt="Покраска промышленного оборудования серый RAL 7016" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #4a6572;"></div>
+                                <span style="color: white; font-weight: 600;">RAL 7016</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/industrial-equipment-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Промышленное оборудование">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-cogs"></i> Оборудование</span>
+                        <h3 class="work-title">Фрезерный станок ЧПУ</h3>
+                        <p class="work-description">
+                            Покраска промышленного оборудования с химической стойкостью.
+                            Защита от масел, смазок и механических повреждений.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-flask"></i> Химстойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-hard-hat"></i> Защита от износа
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-temperature-high"></i> До 200°C
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 4: Элементы интерьера -->
+                <div class="gallery-item" data-category="interior">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/interior-elements.jpg" alt="Декоративные элементы интерьера золотой металлик" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: linear-gradient(45deg, #FFD700, #D4AF37);"></div>
+                                <span style="color: white; font-weight: 600;">Золотой металлик</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/interior-elements-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Элементы интерьера">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-home"></i> Интерьер</span>
+                        <h3 class="work-title">Декоративные панели для ресторана</h3>
+                        <p class="work-description">
+                            Покраска металлических панелей в золотой металлик с глянцевым эффектом.
+                            Декоративное покрытие для премиального интерьера.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-gem"></i> Глянец
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-hand-sparkles"></i> Антистатик
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-brush"></i> Декоративное
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 5: Автомобильные детали -->
+                <div class="gallery-item" data-category="auto">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/car-parts.jpg" alt="Покраска автомобильных деталей красный металлик" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #e74c3c;"></div>
+                                <span style="color: white; font-weight: 600;">Красный металлик</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/car-parts-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Автомобильные детали">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-tools"></i> Автозапчасти</span>
+                        <h3 class="work-title">Тормозные суппорты Porsche</h3>
+                        <p class="work-description">
+                            Покраска тормозных суппортов с высокой термостойкостью.
+                            Специальное покрытие для работы при экстремальных температурах.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-fire"></i> Термостойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-tachometer-alt"></i> Для спорта
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-weight"></i> Легкое покрытие
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 6: Диски Mercedes -->
+                <div class="gallery-item" data-category="wheels">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/mercedes-wheels.jpg" alt="Диски Mercedes в серебристый металлик" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #bdc3c7;"></div>
+                                <span style="color: white; font-weight: 600;">Серебристый</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/mercedes-wheels-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Диски Mercedes">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-car"></i> Автомобильные диски</span>
+                        <h3 class="work-title">Диски Mercedes E-class</h3>
+                        <p class="work-description">
+                            Реставрация литых дисков с полировкой. Покраска в оригинальный
+                            серебристый цвет с высокой стойкостью к реагентам.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-ruler-combined"></i> R18 | 5x112
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-snowflake"></i> Зимняя стойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-recycle"></i> Эко-покрытие
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 7: Торговое оборудование -->
+                <div class="gallery-item" data-category="equipment">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/commercial-equipment.jpg" alt="Торговые стеллажи белый глянец" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #ecf0f1;"></div>
+                                <span style="color: white; font-weight: 600;">Белый глянец</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/commercial-equipment-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Торговое оборудование">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-store"></i> Торговое оборудование</span>
+                        <h3 class="work-title">Стеллажи для магазина</h3>
+                        <p class="work-description">
+                            Покраска торговых стеллажей в белый глянец. Гигиеничное покрытие,
+                            устойчивое к частым влажным уборкам и дезинфекции.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-bacteria"></i> Антибактериальное
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-hand-holding-water"></i> Влагостойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-soap"></i> Легкая очистка
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Работа 8: Архитектурные элементы -->
+                <div class="gallery-item" data-category="metal">
+                    <div class="gallery-image">
+                        <img src="../assets/images/works/architecture.jpg" alt="Архитектурные конструкции античный бронза" loading="lazy">
+                        <div class="image-overlay">
+                            <div class="color-preview">
+                                <div class="color-dot" style="background: #8B4513;"></div>
+                                <span style="color: white; font-weight: 600;">Античная бронза</span>
+                            </div>
+                        </div>
+                        <a href="../assets/images/works/architecture-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Архитектурные конструкции">
+                            <i class="fas fa-expand-alt"></i>
+                        </a>
+                    </div>
+                    <div class="work-info">
+                        <span class="work-category"><i class="fas fa-archway"></i> Архитектура</span>
+                        <h3 class="work-title">Фасадные панели бизнес-центра</h3>
+                        <p class="work-description">
+                            Покраска архитектурных элементов в эффект "старения". Патинирование,
+                            защита от ультрафиолета и атмосферных воздействий.
+                        </p>
+                        <div class="work-details">
+                            <div class="detail badge">
+                                <i class="fas fa-sun"></i> УФ-стойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-wind"></i> Атмосферостойкость
+                            </div>
+                            <div class="detail">
+                                <i class="fas fa-history"></i> Эффект старения
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Счетчик работ -->
+            <div class="work-counter">
+                <div class="counter-number">5000+</div>
+                <p class="counter-text">
+                    Деталей покрашено с 2014 года. Каждая работа проходит 5-этапный контроль качества:
+                    очистка, фосфатирование, грунтовка, покраска, полимеризация. Гарантия 5 лет на все работы.
+                </p>
+            </div>
+
+            <!-- Призыв к действию -->
+            <div class="order-cta">
+                <a href="../index.html#request-form" class="btn btn-primary">
+                    <i class="fas fa-paint-roller"></i> Заказать покраску
+                </a>
+                <a href="contacts.html" class="btn btn-secondary" style="margin-left: 20px;">
+                    <i class="fas fa-phone-alt"></i> Консультация
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Футер как на других страницах -->
+    <!-- Модальное окно для увеличенного изображения -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Колонка 1: Лого и соцсети -->
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани с 2014 года
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Колонка 2: Галерея -->
+                <div class="footer-column">
+                    <h4>Категории работ</h4>
+                    <ul>
+                        <li><a href="gallery.html?filter=wheels"><i class="fas fa-car"></i> Диски</a></li>
+                        <li><a href="gallery.html?filter=metal"><i class="fas fa-industry"></i> Металлоконструкции</a></li>
+                        <li><a href="gallery.html?filter=equipment"><i class="fas fa-cogs"></i> Оборудование</a></li>
+                        <li><a href="gallery.html?filter=interior"><i class="fas fa-home"></i> Интерьер</a></li>
+                    </ul>
+                </div>
+
+                <!-- Колонка 3: Контакты -->
+                <div class="footer-column">
+                    <h4>Контакты</h4>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> Казань, ул. Промышленная, 15</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2014-<span id="currentYear"></span> POKRASKA.STORE — Профессиональная порошковая покраска в Казани</p>
+                <p><a href="../politika.html">Политика конфиденциальности</a> | Домен: pokraska.store</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        // Текущий год в футере
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Фильтрация галереи
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.modal-close');
+
+            // Функция фильтрации
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Удаляем активный класс у всех кнопок
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Добавляем активный класс текущей кнопке
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+
+                    // Фильтруем элементы
+                    galleryItems.forEach(item => {
+                        if (filterValue === 'all') {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 10);
+                        } else {
+                            if (item.getAttribute('data-category') === filterValue) {
+                                item.style.display = 'block';
+                                setTimeout(() => {
+                                    item.style.opacity = '1';
+                                    item.style.transform = 'scale(1)';
+                                }, 10);
+                            } else {
+                                item.style.opacity = '0';
+                                item.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    item.style.display = 'none';
+                                }, 300);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Модальное окно для изображений
+            document.querySelectorAll('.zoom-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const imgSrc = this.getAttribute('href');
+                    modalImg.src = imgSrc;
+                    modal.style.display = 'flex';
+                });
+            });
+
+            // Закрытие модального окна
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            // Закрытие при клике вне изображения
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Закрытие на Esc
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Анимация при загрузке
+            setTimeout(() => {
+                galleryItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 300);
+        });
+
+        // Параллакс эффект для заголовка
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.gallery-header h1');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.05}px)`;
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты | POKRASKA.STORE - Порошковая покраска в Казани</title>
+    <meta name="description" content="Контакты для заказа порошковой покраски в Казани. Телефон, адрес, схема проезда, режим работы, электронная почта.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/form.css">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css">
+
+    <style>
+        .contacts-page {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: calc(100vh - 300px);
+        }
+
+        .contacts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 40px;
+        }
+
+        .contact-info-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .contact-info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 1.8rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            color: white;
+            font-size: 20px;
+        }
+
+        .contact-details h4 {
+            color: #2c3e50;
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+        }
+
+        .contact-details p {
+            color: #7f8c8d;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .contact-details a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+
+        .map-container {
+            margin-top: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 400px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .working-hours {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .working-hours h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .hours-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .hours-list .day {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .hours-list .time {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .social-contacts {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-contact {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-contact.telegram { background: #0088cc; }
+        .social-contact.whatsapp { background: #25D366; }
+        .social-contact.vk { background: #4C75A3; }
+        .social-contact.instagram {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        }
+
+        @media (max-width: 992px) {
+            .contacts-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .contacts-page {
+                padding: 60px 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-info-card {
+                padding: 25px;
+            }
+
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact-icon {
+                margin: 0 auto 15px;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Логотип ПРЕМИУМ -->
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Навигация -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="../index.html"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
+                        <li><a href="prices.html"><i class="fas fa-tag"></i> Цены</a></li>
+                        <li><a href="gallery.html"><i class="fas fa-images"></i> Работы</a></li>
+                        <li><a href="contacts.html" class="active"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                    </ul>
+
+                    <!-- Контакты в хедере -->
+                    <div class="header-contacts">
+                        <a href="tel:+79534999883" class="phone-link">
+                            <i class="fas fa-phone"></i>
+                            <span>+7 (953) 499-98-83</span>
+                        </a>
+                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Кнопка мобильного меню -->
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== CONTACTS PAGE ========== -->
+    <section class="contacts-page">
+        <div class="container">
+            <h1 class="section-title" style="text-align: center; font-size: 2.5rem;">Контакты</h1>
+            <p class="section-subtitle" style="text-align: center; max-width: 700px; margin: 0 auto 40px;">
+                Свяжитесь с нами любым удобным способом. Мы всегда готовы ответить на ваши вопросы и рассчитать стоимость покраски.
+            </p>
+
+            <div class="contacts-container">
+                <!-- Левая колонка: Контактная информация -->
+                <div class="contact-info-card">
+                    <h3><i class="fas fa-address-card"></i> Контактная информация</h3>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Адрес производства</h4>
+                            <p>Казань, ул. Промышленная, 15</p>
+                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
+                                <i class="fas fa-info-circle"></i> Вход со стороны ворот, цех №3
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Телефон</h4>
+                            <p>
+                                <a href="tel:+79534999883">+7 (953) 499-98-83</a>
+                            </p>
+                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
+                                <i class="fas fa-phone-volume"></i> Звонки принимаются ежедневно
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Электронная почта</h4>
+                            <p>
+                                <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a>
+                            </p>
+                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
+                                <i class="fas fa-paper-plane"></i> Для коммерческих предложений и сотрудничества
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Менеджер</h4>
+                            <p>Евгений Денисов</p>
+                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
+                                <i class="fas fa-comments"></i> Ответит на все вопросы по покраске
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="working-hours">
+                        <h4><i class="fas fa-clock"></i> Режим работы</h4>
+                        <ul class="hours-list">
+                            <li>
+                                <span class="day">Понедельник - Пятница</span>
+                                <span class="time">8:00 - 20:00</span>
+                            </li>
+                            <li>
+                                <span class="day">Суббота</span>
+                                <span class="time">9:00 - 18:00</span>
+                            </li>
+                            <li>
+                                <span class="day">Воскресенье</span>
+                                <span class="time">10:00 - 16:00</span>
+                            </li>
+                            <li style="background: #e8f4fc; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                                <span class="day" style="color: #2980b9;"><i class="fas fa-truck"></i> Выезд замерщика</span>
+                                <span class="time" style="color: #2980b9;">По предварительной записи</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h4 style="margin-top: 30px;"><i class="fas fa-share-alt"></i> Мы в соцсетях</h4>
+                    <div class="social-contacts">
+                        <a href="https://t.me/+79534999883" class="social-contact telegram" target="_blank" title="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://wa.me/79534999883" class="social-contact whatsapp" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://vk.com/pokraska_kazan" class="social-contact vk" target="_blank" title="ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://www.instagram.com/pokraska_kazan/" class="social-contact instagram" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Правая колонка: Форма и карта -->
+                <div>
+                    <!-- Форма быстрой связи -->
+                    <div class="contact-info-card">
+                        <h3><i class="fas fa-comments"></i> Быстрая связь</h3>
+                        <p style="color: #7f8c8d; margin-bottom: 25px;">
+                            Оставьте заявку и мы перезвоним вам в течение 15 минут
+                        </p>
+
+                        <form id="contactFormPage" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
+                            <input type="hidden" name="_subject" value="📞 Контактная форма с сайта pokraska.store">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
+
+                            <div class="form-group">
+                                <input type="text" name="Имя" placeholder="Ваше имя *" required>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="tel" name="Телефон" placeholder="Телефон *" required>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="Сообщение" placeholder="Ваш вопрос или описание детали..." rows="4"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-paper-plane"></i> Отправить сообщение
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Карта -->
+                    <div class="map-container">
+                        <iframe
+                            src="https://yandex.ru/map-widget/v1/?um=constructor%3A3a6d6c2c8c8c8c8c8c8c8c8c8c8c8c8c8&amp;source=constructor"
+                            frameborder="0"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <!-- Дополнительная информация -->
+                    <div class="contact-info-card" style="margin-top: 30px; background: #f8f9fa;">
+                        <h3><i class="fas fa-info-circle"></i> Как нас найти</h3>
+                        <ul style="color: #7f8c8d; line-height: 1.8; padding-left: 20px;">
+                            <li>Мы находимся в промышленной зоне</li>
+                            <li>Есть бесплатная парковка для клиентов</li>
+                            <li>Возможен выезд замерщика по Казани</li>
+                            <li>Принимаем детали на покраску от частных лиц и организаций</li>
+                            <li>Работаем с наличным и безналичным расчетом</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Колонка 1: Лого и соцсети -->
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани с 2014 года
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Колонка 2: Услуги -->
+                <div class="footer-column">
+                    <h4>Услуги</h4>
+                    <ul>
+                        <li><a href="services.html#wheels">Покраска дисков</a></li>
+                        <li><a href="services.html#metal">Металлоконструкции</a></li>
+                        <li><a href="services.html#details">Детали оборудования</a></li>
+                        <li><a href="services.html#interior">Элементы интерьера</a></li>
+                    </ul>
+                </div>
+
+                <!-- Колонка 3: Контакты -->
+                <div class="footer-column">
+                    <h4>Контакты</h4>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> Казань, ул. Промышленная, 15</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
+                        <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2014-<span id="currentYear"></span> POKRASKA.STORE — Профессиональная порошковая покраска в Казани</p>
+                <p><a href="../politika.html">Политика конфиденциальности</a> | Домен: pokraska.store</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        // Текущий год в футере
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Обработчик формы на странице контактов
+        document.getElementById('contactFormPage')?.addEventListener('submit', function(e) {
+            const phone = this.querySelector('[name="Телефон"]').value;
+            const cleanPhone = phone.replace(/\D/g, '');
+
+            if (cleanPhone.length < 10) {
+                e.preventDefault();
+                alert('Пожалуйста, введите корректный номер телефона');
+                return false;
+            }
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+            }
+        });
+    </script>
+</body>
+</html>

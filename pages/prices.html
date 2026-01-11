@@ -4,25 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Цены на порошковую покраску в Казани | POKRASKA.STORE</title>
-    <meta name="description" content="Цены на порошковую покраску в Казани. Прозрачное ценообразование, калькулятор стоимости, акции и скидки.">
+    <meta name="description" content="Цены на порошковую покраску в Казани. Прозрачное ценообразование, калькулятор стоимости, акции и скидки. Покраска дисков от 1500₽.">
 
-    <!-- Пути с ../ -->
+    <!-- CSS -->
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/form.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="../assets/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css">
+
+    <style>
+        /* ========== PRICES PAGE STYLES ========== */
+        .prices-page {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .price-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .price-header h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Таблица цен */
+        .pricing-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 50px;
+        }
+
+        .pricing-table-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .pricing-table-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .pricing-table-header .note {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        table thead {
+            background: #f8f9fa;
+        }
+
+        table th {
+            padding: 20px 25px;
+            text-align: left;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        table td {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #5a6c7d;
+        }
+
+        table tr:hover {
+            background: #f8fafc;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .service-name {
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .service-name i {
+            color: #3498db;
+            font-size: 1.2em;
+        }
+
+        .service-description {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+
+        .price-amount {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #27ae60;
+            text-align: right;
+        }
+
+        .price-note {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* Факторы цены */
+        .price-factors {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .price-factors h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.8rem;
+        }
+
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .factor-card {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .factor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.15);
+        }
+
+        .factor-card i {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .factor-card h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .factor-card p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Калькулятор (упрощенный) */
+        .calculator-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .calculator-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .calculator-section p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Гарантии */
+        .guarantee-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .guarantee-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .guarantee-badge i {
+            font-size: 2rem;
+        }
+
+        /* CTA */
+        .price-cta {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .prices-page {
+                padding: 60px 0;
+            }
+
+            .price-header h1 {
+                font-size: 2.2rem;
+            }
+
+            table th, table td {
+                padding: 15px;
+            }
+
+            .calculator-section, .price-factors, .guarantee-section {
+                padding: 30px;
+            }
+
+            .factors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .price-header h1 {
+                font-size: 1.8rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- ========== HEADER (ОБНОВЛЕННЫЙ) ========== -->
     <header class="header">
         <div class="container">
             <div class="header-content">
+                <!-- Логотип ПРЕМИУМ -->
                 <div class="logo">
-                    <a href="../index.html">
-                        <h1>POKRASKA<span class="domain">.STORE</span></h1>
-                        <p class="tagline">Профессиональная порошковая покраска в Казани</p>
+                    <a href="../index.html" class="logo-link">
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани
+                            </div>
+                        </div>
                     </a>
                 </div>
 
+                <!-- Навигация -->
                 <nav class="nav">
                     <ul class="nav-list">
                         <li><a href="../index.html"><i class="fas fa-home"></i> Главная</a></li>
@@ -32,6 +311,7 @@
                         <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
                     </ul>
 
+                    <!-- Контакты в хедере -->
                     <div class="header-contacts">
                         <a href="tel:+79534999883" class="phone-link">
                             <i class="fas fa-phone"></i>
@@ -43,6 +323,7 @@
                     </div>
                 </nav>
 
+                <!-- Кнопка мобильного меню -->
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -50,117 +331,267 @@
         </div>
     </header>
 
-    <section class="section">
+    <!-- ========== PRICES PAGE ========== -->
+    <section class="prices-page">
         <div class="container">
-            <h1 class="section-title">Цены на порошковую покраску</h1>
-            <p class="section-subtitle">Прозрачное ценообразование и индивидуальный расчет</p>
-
-            <!-- Таблица цен -->
-            <div class="price-table">
-                <h2>Прайс-лист на основные услуги</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Услуга</th>
-                            <th>Описание</th>
-                            <th>Цена от</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Диски R13-R15</td>
-                            <td>Покраска литых/штампованных дисков</td>
-                            <td>1 500 ₽/шт</td>
-                        </tr>
-                        <tr>
-                            <td>Диски R16-R18</td>
-                            <td>Среднеразмерные диски</td>
-                            <td>2 000 ₽/шт</td>
-                        </tr>
-                        <tr>
-                            <td>Диски R19+</td>
-                            <td>Крупногабаритные диски</td>
-                            <td>2 500 ₽/шт</td>
-                        </tr>
-                        <tr>
-                            <td>Металлоконструкции</td>
-                            <td>Заборы, ворота, перила (за м²)</td>
-                            <td>300 ₽/м²</td>
-                        </tr>
-                        <tr>
-                            <td>Детали оборудования</td>
-                            <td>Станки, механизмы (за деталь)</td>
-                            <td>500 ₽/шт</td>
-                        </tr>
-                        <tr>
-                            <td>Элементы интерьера</td>
-                            <td>Мебель, светильники</td>
-                            <td>от 1 000 ₽</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <p style="margin-top: 20px; font-size: 14px; color: #666;">
-                    *Точная стоимость рассчитывается индивидуально после осмотра изделия
+            <!-- Заголовок -->
+            <div class="price-header">
+                <h1><i class="fas fa-tags"></i> Цены на порошковую покраску</h1>
+                <p class="subtitle">
+                    Прозрачное ценообразование. Точная стоимость рассчитывается индивидуально после осмотра изделия.
+                    Скидки при объемных заказах.
                 </p>
             </div>
 
-            <!-- Что влияет на цену -->
+            <!-- Таблица цен -->
+            <div class="pricing-table">
+                <div class="pricing-table-header">
+                    <h2><i class="fas fa-receipt"></i> Прайс-лист на 2024 год</h2>
+                    <p class="note">Актуальные цены с учетом всех этапов обработки</p>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Услуга</th>
+                            <th style="width: 45%;">Описание</th>
+                            <th style="width: 25%;">Стоимость от</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Автомобильные диски -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-car"></i> Диски R13-R15
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Литые и штампованные диски. Включает мойку, обезжиривание, пескоструй, покраску
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">1 500 ₽/шт</div>
+                                <div class="price-note">за 1 диск</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-car"></i> Диски R16-R18
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Среднеразмерные диски. Полный цикл работ с гарантией 3 года
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">2 000 ₽/шт</div>
+                                <div class="price-note">за 1 диск</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-car"></i> Диски R19+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Крупногабаритные и спортивные диски. Сложная подготовка поверхности
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">2 500 ₽/шт</div>
+                                <div class="price-note">за 1 диск</div>
+                            </td>
+                        </tr>
+
+                        <!-- Металлоконструкции -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-industry"></i> Металлоконструкции
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Заборы, ворота, перила, навесы, решетки, балконы. Антикоррозийная защита
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">300 ₽/м²</div>
+                                <div class="price-note">за квадратный метр</div>
+                            </td>
+                        </tr>
+
+                        <!-- Оборудование -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-cogs"></i> Детали оборудования
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Станки, механизмы, промышленное оборудование. Химическая стойкость
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">от 500 ₽</div>
+                                <div class="price-note">за деталь</div>
+                            </td>
+                        </tr>
+
+                        <!-- Интерьер -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-home"></i> Элементы интерьера
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Мебель, светильники, декор. Декоративные и текстурные покрытия
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">от 1 000 ₽</div>
+                                <div class="price-note">индивидуальный расчет</div>
+                            </td>
+                        </tr>
+
+                        <!-- Автозапчасти -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-tools"></i> Автозапчасти
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Суппорты, кронштейны, рамы. Термостойкие покрытия для автоспорта
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">от 800 ₽</div>
+                                <div class="price-note">за деталь</div>
+                            </td>
+                        </tr>
+
+                        <!-- Архитектура -->
+                        <tr>
+                            <td>
+                                <div class="service-name">
+                                    <i class="fas fa-archway"></i> Архитектурные элементы
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-description">
+                                    Фасадные панели, козырьки, элементы декора. УФ-защита, атмосферостойкость
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-amount">от 400 ₽/м²</div>
+                                <div class="price-note">за квадратный метр</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Факторы влияющие на цену -->
             <div class="price-factors">
-                <h2>Что влияет на стоимость?</h2>
-                <div class="factors">
-                    <div class="factor">
+                <h2><i class="fas fa-chart-line"></i> Что влияет на стоимость?</h2>
+                <div class="factors-grid">
+                    <div class="factor-card">
                         <i class="fas fa-expand-alt"></i>
                         <h3>Размер изделия</h3>
-                        <p>Чем больше деталь, тем выше стоимость покраски</p>
+                        <p>Чем больше деталь, тем выше стоимость подготовки и покраски</p>
                     </div>
-                    <div class="factor">
-                        <i class="fas fa-tools"></i>
-                        <h3>Сложность подготовки</h3>
-                        <p>Старые покрытия и ржавчина требуют дополнительной обработки</p>
+
+                    <div class="factor-card">
+                        <i class="fas fa-layer-group"></i>
+                        <h3>Состояние поверхности</h3>
+                        <p>Старые покрытия, ржавчина требуют дополнительной обработки</p>
                     </div>
-                    <div class="factor">
+
+                    <div class="factor-card">
                         <i class="fas fa-palette"></i>
                         <h3>Тип покрытия</h3>
-                        <p>Специальные цвета и текстуры стоят дороже стандартных</p>
+                        <p>Металлики, текстуры, спецэффекты стоят дороже стандартных цветов</p>
                     </div>
-                    <div class="factor">
-                        <i class="fas fa-layer-group"></i>
-                        <h3>Количество деталей</h3>
-                        <p>При большом объеме предоставляем скидки</p>
+
+                    <div class="factor-card">
+                        <i class="fas fa-boxes"></i>
+                        <h3>Объем работ</h3>
+                        <p>При больших заказах предоставляем существенные скидки</p>
                     </div>
                 </div>
             </div>
 
-            <div class="cta-section">
-                <h2>Нужен точный расчет?</h2>
-                <p>Отправьте фото или описание детали для бесплатного расчета</p>
-                <a href="../index.html#request-form" class="btn btn-primary">
+            <!-- Калькулятор -->
+            <div class="calculator-section">
+                <h2><i class="fas fa-calculator"></i> Нужен точный расчет?</h2>
+                <p>Отправьте фото или описание детали и получите бесплатный расчет в течение 30 минут</p>
+                <a href="../index.html#request-form" class="btn btn-primary" style="background: white; color: #2c3e50; padding: 15px 40px; font-size: 1.1rem;">
                     <i class="fas fa-calculator"></i> Рассчитать стоимость
                 </a>
-                <p style="margin-top: 15px; font-size: 14px; color: #666;">
-                    <i class="fas fa-phone"></i> Или позвоните: <a href="tel:+79534999883" style="color: #3498db;">+7 (953) 499-98-83</a>
+                <p style="margin-top: 20px; font-size: 0.95rem;">
+                    <i class="fas fa-phone"></i> Или позвоните:
+                    <a href="tel:+79534999883" style="color: white; font-weight: 600;">+7 (953) 499-98-83</a>
                 </p>
+            </div>
+
+            <!-- Гарантии -->
+            <div class="guarantee-section">
+                <div class="guarantee-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ГАРАНТИЯ 5 ЛЕТ</span>
+                </div>
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">На все работы предоставляем гарантию</h3>
+                <p style="color: #7f8c8d; max-width: 700px; margin: 0 auto;">
+                    Мы уверены в качестве наших материалов и работы. В случае производственного брака
+                    перекрасим изделие бесплатно. 5-этапный контроль качества на каждом этапе.
+                </p>
+            </div>
+
+            <!-- Призыв к действию -->
+            <div class="price-cta">
+                <a href="../index.html#request-form" class="btn btn-primary">
+                    <i class="fas fa-paint-roller"></i> Заказать покраску
+                </a>
+                <a href="contacts.html" class="btn btn-secondary" style="margin-left: 20px;">
+                    <i class="fas fa-phone-alt"></i> Консультация
+                </a>
             </div>
         </div>
     </section>
 
+    <!-- ========== FOOTER (ОБНОВЛЕННЫЙ) ========== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Колонка 1: Лого и соцсети -->
                 <div class="footer-column">
                     <div class="footer-logo">
-                        <h3>POKRASKA<span>.STORE</span></h3>
-                        <p>Профессиональная порошковая покраска в Казани с 2014 года</p>
-                    </div>
-
-                    <div class="social-links">
-                        <a href="https://vk.com/pokraska_kazan" target="_blank"><i class="fab fa-vk"></i></a>
-                        <a href="https://www.instagram.com/pokraska_kazan/" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://t.me/+79534999883" target="_blank"><i class="fab fa-telegram"></i></a>
+                        <div class="logo-premium">
+                            <div class="logo-main">
+                                <span class="logo-primary">POKRASKA</span>
+                                <span class="logo-domain">.STORE</span>
+                            </div>
+                            <div class="logo-tagline">
+                                Профессиональная порошковая покраска в Казани с 2014 года
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Колонка 2: Услуги -->
                 <div class="footer-column">
                     <h4>Услуги</h4>
                     <ul>
@@ -171,33 +602,44 @@
                     </ul>
                 </div>
 
+                <!-- Колонка 3: Контакты -->
                 <div class="footer-column">
                     <h4>Контакты</h4>
                     <ul class="contact-list">
                         <li><i class="fas fa-map-marker-alt"></i> Казань, ул. Промышленная, 15</li>
                         <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@pokraska.store">info@pokraska.store</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
                         <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
-                        <li><i class="fab fa-telegram"></i> <a href="https://t.me/+79534999883" target="_blank">Telegram</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <p>&copy; 2014-<span id="currentYear"></span> POKRASKA.STORE — Профессиональная порошковая покраска в Казани</p>
-                <p>Домен: pokraska.store</p>
+                <p><a href="../politika.html">Политика конфиденциальности</a> | Домен: pokraska.store</p>
             </div>
         </div>
     </footer>
 
-    <!-- Telegram кнопка -->
-    <a href="https://t.me/+79534999883" class="telegram-float" target="_blank" title="Написать в Telegram">
-        <i class="fab fa-telegram"></i>
-    </a>
-
+    <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/main.js"></script>
+
     <script>
+        // Текущий год в футере
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Подсветка строк таблицы
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('table tbody tr');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8fafc';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
     </script>
 </body>
 </html>
