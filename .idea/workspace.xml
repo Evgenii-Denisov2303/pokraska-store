@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e5369d9c-9e83-41bf-aae0-c854b81bed71" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/fontawesome.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/fontawesome.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +119,7 @@
       <workItem from="1768144306535" duration="162000" />
       <workItem from="1768144478158" duration="9000" />
       <workItem from="1768144505922" duration="117000" />
-      <workItem from="1768144678024" duration="7445000" />
+      <workItem from="1768144678024" duration="12114000" />
     </task>
     <servers />
   </component>
