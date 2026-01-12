@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuBtn && nav) {
         mobileMenuBtn.addEventListener('click', function() {
             nav.classList.toggle('active');
-            this.innerHTML = nav.classList.contains('active')
+            const isActive = nav.classList.contains('active');
+            this.setAttribute('aria-expanded', isActive);
+            this.innerHTML = isActive
                 ? '<i class="fas fa-times"></i>'
                 : '<i class="fas fa-bars"></i>';
         });
@@ -16,11 +18,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Закрытие меню при клике на ссылку
     document.querySelectorAll('.nav-list a').forEach(link => {
         link.addEventListener('click', () => {
-            if (nav) nav.classList.remove('active');
+            if (nav) {
+                nav.classList.remove('active');
+                nav.setAttribute('aria-expanded', 'false');
+            }
             if (mobileMenuBtn) {
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
             }
         });
+    });
+
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', (e) => {
+        if (nav && nav.classList.contains('active') &&
+            !nav.contains(e.target) &&
+            !mobileMenuBtn.contains(e.target)) {
+            nav.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            nav.setAttribute('aria-expanded', 'false');
+        }
     });
 
     // Плавная прокрутка для якорей
@@ -29,62 +47,60 @@ document.addEventListener('DOMContentLoaded', function() {
             const href = this.getAttribute('href');
             if (href === '#' || href === '#!') return;
 
-            const targetId = href;
-            const targetElement = document.querySelector(targetId);
-
+            const targetElement = document.querySelector(href);
             if (targetElement) {
                 e.preventDefault();
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: targetElement.offsetTop - headerHeight,
                     behavior: 'smooth'
                 });
+
+                // Обновляем URL без перезагрузки
+                history.pushState(null, null, href);
             }
         });
     });
 
     // Активный пункт меню при прокрутке
-    window.addEventListener('scroll', function() {
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-list a');
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-list a');
 
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.scrollY >= sectionTop - 100) {
-                current = section.getAttribute('id');
-            }
-        });
+    if (sections.length > 0 && navLinks.length > 0) {
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const scrollPosition = window.scrollY + 100;
 
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            const href = link.getAttribute('href');
-            if (href === `#${current}` ||
-                (current === '' && href === 'index.html') ||
-                (current === '' && href === '../index.html')) {
-                link.classList.add('active');
-            }
-        });
-    });
-
-    // Инициализация маски телефона для всех форм
-    const phoneInputs = document.querySelectorAll('input[type="tel"]');
-    phoneInputs.forEach(input => {
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                if (!value.startsWith('7') && !value.startsWith('8')) {
-                    value = '7' + value;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
                 }
-                let formatted = '+7 ';
-                if (value.length > 1) formatted += '(' + value.substring(1, 4);
-                if (value.length > 4) formatted += ') ' + value.substring(4, 7);
-                if (value.length > 7) formatted += '-' + value.substring(7, 9);
-                if (value.length > 9) formatted += '-' + value.substring(9, 11);
-                e.target.value = formatted.substring(0, 18);
-            }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+
+                // Проверяем, является ли ссылка якорем к текущей секции
+                if (href === `#${current}`) {
+                    link.classList.add('active');
+                }
+                // Для главной страницы
+                else if (current === '' && (href === 'index.html' || href === '../index.html')) {
+                    link.classList.add('active');
+                }
+            });
         });
-    });
+
+        // Вызываем сразу для установки начального состояния
+        window.dispatchEvent(new Event('scroll'));
+    }
+
+    // УДАЛЕНО: маска телефона (перенесена в form.js)
+    // const phoneInputs = document.querySelectorAll('input[type="tel"]');
+    // ... удалить весь этот блок ...
 
     // Проверка поддержки localStorage
     if (typeof(Storage) === "undefined") {
@@ -93,18 +109,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Уведомления
     window.showNotification = function(message, type = 'success') {
+        // Проверяем, не существует ли уже уведомление
+        const existingNotifications = document.querySelectorAll('.notification');
+        if (existingNotifications.length >= 3) {
+            // Удаляем самое старое
+            existingNotifications[0].remove();
+        }
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
+        notification.setAttribute('role', 'alert');
+        notification.setAttribute('aria-live', 'polite');
         notification.innerHTML = `
             <div class="notification-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}" aria-hidden="true"></i>
                 <span>${message}</span>
             </div>
         `;
 
         document.body.appendChild(notification);
 
-        setTimeout(() => notification.classList.add('show'), 10);
+        // Показываем с анимацией
+        requestAnimationFrame(() => {
+            notification.classList.add('show');
+        });
+
+        // Автоматическое скрытие
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => {
@@ -115,47 +145,61 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     };
 
-    // Добавляем CSS для уведомлений
-    const notificationCSS = `
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        z-index: 9999;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 350px;
-    }
-    .notification.show {
-        transform: translateX(0);
-    }
-    .notification-success {
-        border-left: 4px solid #27ae60;
-    }
-    .notification-error {
-        border-left: 4px solid #e74c3c;
-    }
-    .notification-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .notification i {
-        font-size: 1.2rem;
-    }
-    .notification-success i {
-        color: #27ae60;
-    }
-    .notification-error i {
-        color: #e74c3c;
-    }
-    `;
+    // Добавляем CSS для уведомлений (один раз)
+    if (!document.querySelector('#notification-styles')) {
+        const notificationCSS = `
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 9999;
+            transform: translateX(120%);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 350px;
+            pointer-events: none;
+        }
+        .notification.show {
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        .notification-success {
+            border-left: 4px solid #27ae60;
+            background: #d4edda;
+            color: #155724;
+        }
+        .notification-error {
+            border-left: 4px solid #e74c3c;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notification i {
+            font-size: 1.2rem;
+        }
+        @media (max-width: 768px) {
+            .notification {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+                transform: translateY(-100%);
+            }
+            .notification.show {
+                transform: translateY(0);
+            }
+        }
+        `;
 
-    const style = document.createElement('style');
-    style.textContent = notificationCSS;
-    document.head.appendChild(style);
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = notificationCSS;
+        document.head.appendChild(style);
+    }
 });

@@ -3,23 +3,59 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
-    // Маска для телефона
+    // УПРОЩЕННАЯ маска для телефона
     const phoneInput = form.querySelector('input[name="Телефон"]');
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                if (!value.startsWith('7') && !value.startsWith('8')) {
+
+            // Ограничиваем длину
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+
+            // Простое форматирование при достаточной длине
+            if (value.length >= 10) {
+                // Формат: +7 (XXX) XXX-XX-XX
+                let formatted = '+7 (' + value.substring(1, 4) + ') ' +
+                               value.substring(4, 7) + '-' +
+                               value.substring(7, 9) + '-' +
+                               value.substring(9, 11);
+
+                // Обрезаем лишние символы
+                formatted = formatted.replace(/-+$/, '');
+                formatted = formatted.replace(/\)\s+$/, ')');
+
+                e.target.value = formatted;
+            } else if (value.length > 0) {
+                // Просто показываем цифры без форматирования
+                e.target.value = value;
+            }
+        });
+
+        // При фокусе очищаем от форматирования для удобного редактирования
+        phoneInput.addEventListener('focus', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.startsWith('7') && value.length > 1) {
+                this.value = value.substring(1); // Убираем ведущую 7
+            }
+        });
+
+        // При потере фокуса - форматируем
+        phoneInput.addEventListener('blur', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 10) {
+                // Добавляем 7 если её нет
+                if (!value.startsWith('7') && value.length === 10) {
                     value = '7' + value;
                 }
-                if (value.length > 1) {
-                    value = '+7 (' + value.substring(1, 4) + ') ' +
+
+                // Форматируем
+                this.value = '+7 (' + value.substring(1, 4) + ') ' +
                             value.substring(4, 7) + '-' +
                             value.substring(7, 9) + '-' +
                             value.substring(9, 11);
-                }
             }
-            e.target.value = value;
         });
     }
 
@@ -44,9 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const cleanPhone = phone.replace(/\D/g, '');
-        if (cleanPhone.length < 10) {
+        if (cleanPhone.length < 11) {  // ← Изменил с 10 на 11 (7 + 10 цифр)
             e.preventDefault();
-            showMessage('Введите корректный номер телефона', 'error');
+            showMessage('Введите корректный номер телефона (10 цифр)', 'error');
             return;
         }
 
@@ -56,12 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
 
-            // Форма отправится стандартным способом через Formsubmit
-            // Через 3 секунды восстановим кнопку
+            // Через 5 секунд восстановим кнопку (на случай ошибки)
             setTimeout(() => {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
-            }, 3000);
+            }, 5000);
         }
     });
 
@@ -89,24 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageDiv.style.display = 'none';
                 messageDiv.innerHTML = '';
             }, 5000);
-        }
-    }
-
-    // Сохраняем данные в localStorage для истории
-    function saveToLocalStorage(data) {
-        try {
-            let requests = JSON.parse(localStorage.getItem('pokraska_requests') || '[]');
-            requests.push(data);
-
-            if (requests.length > 50) {
-                requests = requests.slice(-50);
-            }
-
-            localStorage.setItem('pokraska_requests', JSON.stringify(requests));
-            console.log('✅ Заявка сохранена локально');
-
-        } catch(e) {
-            console.log('⚠️ Не удалось сохранить в localStorage');
         }
     }
 });

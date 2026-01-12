@@ -26,7 +26,7 @@
             <div class="header-content">
                 <!-- Логотип ПРЕМИУМ -->
                 <div class="logo">
-                    <a href="index.html" class="logo-link">
+                    <a href="index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
                             <div class="logo-main">
                                 <span class="logo-primary">POKRASKA</span>
@@ -40,9 +40,9 @@
                 </div>
 
                 <!-- Навигация -->
-                <nav class="nav">
+                <nav class="nav" aria-label="Основная навигация">
                     <ul class="nav-list">
-                        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Главная</a></li>
+                        <li><a href="index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Главная</a></li>
                         <li><a href="pages/services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
                         <li><a href="pages/prices.html"><i class="fas fa-tag"></i> Цены</a></li>
                         <li><a href="pages/gallery.html"><i class="fas fa-images"></i> Работы</a></li>
@@ -51,18 +51,18 @@
 
                     <!-- Контакты в хедере -->
                     <div class="header-contacts">
-                        <a href="tel:+79534999883" class="phone-link">
+                        <a href="tel:+79534999883" class="phone-link" aria-label="Позвонить нам">
                             <i class="fas fa-phone"></i>
                             <span>+7 (953) 499-98-83</span>
                         </a>
-                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank">
+                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
                             <i class="fab fa-telegram"></i>
                         </a>
                     </div>
                 </nav>
 
                 <!-- Кнопка мобильного меню -->
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
@@ -70,27 +70,28 @@
     </header>
 
     <!-- ========== HERO SECTION ========== -->
-    <section class="hero">
+    <section class="hero" aria-label="Главный баннер">
         <div class="container">
             <div class="hero-content">
+                <h1 class="visually-hidden">POKRASKA.STORE - Профессиональная порошковая покраска в Казани</h1>
                 <h2>Порошковая покраска<br>любой сложности в Казани</h2>
                 <p class="hero-subtitle">Более 10 лет опыта. Гарантия 5 лет. Бесплатный выезд и расчет.</p>
 
                 <div class="hero-features">
                     <div class="feature">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         <span>Гарантия 5 лет</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-truck"></i>
+                        <i class="fas fa-truck" aria-hidden="true"></i>
                         <span>Бесплатный выезд</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-clock" aria-hidden="true"></i>
                         <span>От 1 дня</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-palette"></i>
+                        <i class="fas fa-palette" aria-hidden="true"></i>
                         <span>200+ цветов</span>
                     </div>
                 </div>
@@ -103,16 +104,16 @@
     </section>
 
     <!-- ========== SERVICES PREVIEW ========== -->
-    <section class="section services-preview">
+    <section class="section services-preview" aria-labelledby="services-title">
         <div class="container">
-            <h2 class="section-title">Наши услуги</h2>
+            <h2 class="section-title" id="services-title">Наши услуги</h2>
             <p class="section-subtitle">Выполняем все виды порошковой покраски</p>
 
             <div class="services-grid">
                 <!-- Услуга 1 -->
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-car"></i>
+                        <i class="fas fa-car" aria-hidden="true"></i>
                     </div>
                     <h3>Покраска дисков</h3>
                     <p>Автомобильные, литые, штампованные диски любого размера</p>
@@ -122,7 +123,7 @@
                 <!-- Услуга 2 -->
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-industry"></i>
+                        <i class="fas fa-industry" aria-hidden="true"></i>
                     </div>
                     <h3>Металлоконструкции</h3>
                     <p>Заборы, ворота, перила, навесы, решетки</p>
@@ -132,17 +133,17 @@
                 <!-- Услуга 3 -->
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-cogs"></i>
+                        <i class="fas fa-cogs" aria-hidden="true"></i>
                     </div>
                     <h3>Детали оборудования</h3>
                     <p>Промышленное оборудование, станки, механизмы</p>
-                    <a href="pages/services.html#details" class="service-link">Подробнее →</a>
+                    <a href="pages/services.html#equipment" class="service-link">Подробнее →</a>
                 </div>
 
                 <!-- Услуга 4 -->
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-home" aria-hidden="true"></i>
                     </div>
                     <h3>Элементы интерьера</h3>
                     <p>Мебель, светильники, декоративные элементы</p>
@@ -153,19 +154,19 @@
     </section>
 
     <!-- ========== WORKS PREVIEW ========== -->
-    <section class="section works-preview">
+    <section class="section works-preview" aria-labelledby="works-title">
         <div class="container">
-            <h2 class="section-title">Наши работы</h2>
+            <h2 class="section-title" id="works-title">Наши работы</h2>
             <p class="section-subtitle">Более 5000 покрашенных деталей</p>
 
             <div class="works-grid">
                 <!-- Работа 1: Диски BMW -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/bmw-wheels.jpg" alt="Покраска дисков BMW в черный матовый цвет" loading="lazy">
+                        <img src="assets/images/works/bmw-wheels.jpg" alt="Покраска дисков BMW в черный матовый цвет" loading="lazy" width="400" height="300">
                         <div class="work-overlay">
-                            <a href="assets/images/works/bmw-wheels-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска дисков BMW">
-                                <i class="fas fa-search-plus"></i>
+                            <a href="assets/images/works/bmw-wheels-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска дисков BMW" aria-label="Увеличить изображение">
+                                <i class="fas fa-search-plus" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
@@ -179,10 +180,10 @@
                 <!-- Работа 2: Металлические ворота -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/metal-gate.jpg" alt="Покраска металлических ворот терракотового цвета" loading="lazy">
+                        <img src="assets/images/works/metal-gate.jpg" alt="Покраска металлических ворот терракотового цвета" loading="lazy" width="400" height="300">
                         <div class="work-overlay">
-                            <a href="assets/images/works/metal-gate-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска ворот">
-                                <i class="fas fa-search-plus"></i>
+                            <a href="assets/images/works/metal-gate-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска ворот" aria-label="Увеличить изображение">
+                                <i class="fas fa-search-plus" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
@@ -196,10 +197,10 @@
                 <!-- Работа 3: Промышленное оборудование -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/industrial-equipment.jpg" alt="Покраска промышленного оборудования в серый цвет" loading="lazy">
+                        <img src="assets/images/works/industrial-equipment.jpg" alt="Покраска промышленного оборудования в серый цвет" loading="lazy" width="400" height="300">
                         <div class="work-overlay">
-                            <a href="assets/images/works/industrial-equipment-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска оборудования">
-                                <i class="fas fa-search-plus"></i>
+                            <a href="assets/images/works/industrial-equipment-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска оборудования" aria-label="Увеличить изображение">
+                                <i class="fas fa-search-plus" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
@@ -213,10 +214,10 @@
                 <!-- Работа 4: Элементы интерьера -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/interior-elements.jpg" alt="Покраска элементов интерьера в золотистый цвет" loading="lazy">
+                        <img src="assets/images/works/interior-elements.jpg" alt="Покраска элементов интерьера в золотистый цвет" loading="lazy" width="400" height="300">
                         <div class="work-overlay">
-                            <a href="assets/images/works/interior-elements-large.jpg" class="work-zoom" data-lightbox="works" title="Элементы интерьера">
-                                <i class="fas fa-search-plus"></i>
+                            <a href="assets/images/works/interior-elements-large.jpg" class="work-zoom" data-lightbox="works" title="Элементы интерьера" aria-label="Увеличить изображение">
+                                <i class="fas fa-search-plus" aria-hidden="true"></i>
                             </a>
                         </div>
                     </div>
@@ -240,35 +241,35 @@
     </section>
 
     <!-- ========== REQUEST FORM ========== -->
-    <section id="request-form" class="section request-section">
+    <section id="request-form" class="section request-section" aria-labelledby="request-title">
         <div class="container">
             <div class="request-wrapper">
                 <!-- Левая часть - информация -->
                 <div class="request-info">
-                    <h2>Рассчитайте стоимость<br>покраски онлайн</h2>
+                    <h2 id="request-title">Рассчитайте стоимость<br>покраски онлайн</h2>
                     <p>Отправьте заявку и получите точный расчет в течение 30 минут</p>
 
                     <div class="advantages">
                         <div class="advantage">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
                             <span>Бесплатный выезд замерщика</span>
                         </div>
                         <div class="advantage">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
                             <span>Гарантия лучшей цены</span>
                         </div>
                         <div class="advantage">
-                            <i class="fas fa-check-circle"></i>
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
                             <span>Скидка 10% на первый заказ</span>
                         </div>
                     </div>
 
                     <div class="contact-info">
                         <h3>Или свяжитесь с нами:</h3>
-                        <p><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></p>
-                        <p><i class="fas fa-map-marker-alt"></i> Казань, ул. Промышленная, 15</p>
-                        <p><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</p>
-                        <p><i class="fab fa-telegram"></i> <a href="https://t.me/+79534999883" target="_blank">Telegram</a></p>
+                        <p><i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></p>
+                        <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Казань, ул. Промышленная, 15</p>
+                        <p><i class="fas fa-clock" aria-hidden="true"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</p>
+                        <p><i class="fab fa-telegram" aria-hidden="true"></i> <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer">Telegram</a></p>
                     </div>
                 </div>
 
@@ -277,24 +278,22 @@
                     <h3>Оставить заявку</h3>
                     <p class="form-notice">Мы перезвоним вам в течение 15 минут</p>
 
-                    <!-- ИСПРАВЛЕННАЯ ФОРМА С РАБОЧИМИ НАСТРОЙКАМИ -->
                     <form id="contactForm" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
-                        <!-- Скрытые поля для Formsubmit -->
                         <input type="hidden" name="_subject" value="🎨 Новая заявка с сайта pokraska.store">
                         <input type="hidden" name="_template" value="table">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
 
                         <div class="form-group">
-                            <input type="text" name="Имя" placeholder="Ваше имя *" required>
+                            <input type="text" name="Имя" placeholder="Ваше имя *" required aria-label="Ваше имя">
                         </div>
 
                         <div class="form-group">
-                            <input type="tel" name="Телефон" placeholder="Телефон *" required>
+                            <input type="tel" name="Телефон" placeholder="Телефон *" required aria-label="Ваш телефон">
                         </div>
 
                         <div class="form-group">
-                            <select name="Услуга">
+                            <select name="Услуга" aria-label="Выберите услугу">
                                 <option value="">Выберите услугу</option>
                                 <option value="Покраска дисков">Покраска дисков</option>
                                 <option value="Металлоконструкции">Металлоконструкции</option>
@@ -305,7 +304,7 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea name="Сообщение" placeholder="Описание детали, размеры, желаемый цвет..."></textarea>
+                            <textarea name="Сообщение" placeholder="Описание детали, размеры, желаемый цвет..." aria-label="Описание заказа"></textarea>
                         </div>
 
                         <div class="form-group checkbox-group">
@@ -314,10 +313,8 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-paper-plane"></i> Отправить заявку
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i> Отправить заявку
                         </button>
-
-                        <div id="formMessage" class="form-message"></div>
                     </form>
                 </div>
             </div>
@@ -343,13 +340,13 @@
                     </div>
 
                     <div class="social-links">
-                        <a href="https://vk.com/pokraska_kazan" target="_blank" title="ВКонтакте">
+                        <a href="https://vk.com/pokraska_kazan" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="Наша группа ВКонтакте">
                             <i class="fab fa-vk"></i>
                         </a>
-                        <a href="https://www.instagram.com/pokraska_kazan/" target="_blank" title="Instagram">
+                        <a href="https://www.instagram.com/pokraska_kazan/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Наш Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://t.me/+79534999883" target="_blank" title="Telegram">
+                        <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Написать в Telegram">
                             <i class="fab fa-telegram"></i>
                         </a>
                     </div>
@@ -361,7 +358,7 @@
                     <ul>
                         <li><a href="pages/services.html#wheels">Покраска дисков</a></li>
                         <li><a href="pages/services.html#metal">Металлоконструкции</a></li>
-                        <li><a href="pages/services.html#details">Детали оборудования</a></li>
+                        <li><a href="pages/services.html#equipment">Детали оборудования</a></li>
                         <li><a href="pages/services.html#interior">Элементы интерьера</a></li>
                     </ul>
                 </div>
@@ -370,11 +367,11 @@
                 <div class="footer-column">
                     <h4>Контакты</h4>
                     <ul class="contact-list">
-                        <li><i class="fas fa-map-marker-alt"></i> Казань, ул. Промышленная, 15</li>
-                        <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
-                        <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
-                        <li><i class="fab fa-telegram"></i> <a href="https://t.me/+79534999883" target="_blank">Telegram</a></li>
+                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Казань, ул. Промышленная, 15</li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
+                        <li><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
+                        <li><i class="fas fa-clock" aria-hidden="true"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
+                        <li><i class="fab fa-telegram" aria-hidden="true"></i> <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer">Telegram</a></li>
                     </ul>
                 </div>
 
@@ -390,7 +387,6 @@
                 </div>
             </div>
 
-            <!-- Нижняя часть футера -->
             <div class="footer-bottom">
                 <p>&copy; 2014-<span id="currentYear"></span> POKRASKA.STORE — Профессиональная порошковая покраска в Казани</p>
                 <p><a href="politika.html">Политика конфиденциальности</a> | Домен: pokraska.store</p>
@@ -399,7 +395,7 @@
     </footer>
 
     <!-- Telegram кнопка -->
-    <a href="https://t.me/+79534999883" class="telegram-float" target="_blank" title="Написать в Telegram">
+    <a href="https://t.me/+79534999883" class="telegram-float" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Написать в Telegram">
         <i class="fab fa-telegram"></i>
     </a>
 

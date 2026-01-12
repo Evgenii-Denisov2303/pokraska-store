@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Контакты | POKRASKA.STORE - Порошковая покраска в Казани</title>
     <meta name="description" content="Контакты для заказа порошковой покраски в Казани. Телефон, адрес, схема проезда, режим работы, электронная почта.">
 
@@ -39,6 +39,7 @@
             padding-bottom: 15px;
             border-bottom: 2px solid #f0f0f0;
             font-size: 1.8rem;
+            text-align: left;
         }
 
         .contact-item {
@@ -69,16 +70,22 @@
             font-size: 20px;
         }
 
+        .contact-details {
+            flex: 1;
+        }
+
         .contact-details h4 {
             color: #2c3e50;
             margin: 0 0 5px 0;
             font-size: 1.2rem;
+            text-align: left;
         }
 
         .contact-details p {
             color: #7f8c8d;
             margin: 0;
             line-height: 1.5;
+            text-align: left;
         }
 
         .contact-details a {
@@ -89,6 +96,20 @@
 
         .contact-details a:hover {
             text-decoration: underline;
+        }
+
+        .contact-note {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            margin-top: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .contact-note i {
+            margin-top: 2px;
+            flex-shrink: 0;
         }
 
         .map-container {
@@ -115,11 +136,13 @@
         .working-hours h4 {
             color: #2c3e50;
             margin-bottom: 15px;
+            text-align: left;
         }
 
         .hours-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .hours-list li {
@@ -136,17 +159,52 @@
         .hours-list .day {
             color: #2c3e50;
             font-weight: 500;
+            text-align: left;
         }
 
         .hours-list .time {
             color: #27ae60;
             font-weight: 600;
+            text-align: right;
+        }
+
+        .hours-list .special-note {
+            background: #e8f4fc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .hours-list .special-note .day {
+            color: #2980b9;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hours-list .special-note .time {
+            color: #2980b9;
+            text-align: left;
+        }
+
+        .social-section {
+            margin-top: 30px;
+        }
+
+        .social-section h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: left;
         }
 
         .social-contacts {
             display: flex;
             gap: 15px;
-            margin-top: 20px;
+            justify-content: flex-start;
         }
 
         .social-contact {
@@ -173,6 +231,54 @@
             background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
         }
 
+        .contact-form-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .contact-form-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            text-align: left;
+        }
+
+        .contact-form-card p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-align: left;
+        }
+
+        .info-card ul {
+            color: #7f8c8d;
+            line-height: 1.8;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .info-card ul li {
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        /* Мобильные стили */
         @media (max-width: 992px) {
             .contacts-container {
                 grid-template-columns: 1fr;
@@ -185,21 +291,126 @@
         }
 
         @media (max-width: 768px) {
-            .contact-info-card {
+            .contact-info-card,
+            .contact-form-card,
+            .info-card {
                 padding: 25px;
+            }
+
+            .contact-info-card h3,
+            .contact-form-card h3,
+            .info-card h3 {
+                text-align: center;
             }
 
             .contact-item {
                 flex-direction: column;
+                align-items: center;
                 text-align: center;
+                padding: 20px 15px;
             }
 
             .contact-icon {
                 margin: 0 auto 15px;
             }
 
+            .contact-details {
+                width: 100%;
+                text-align: center;
+            }
+
+            .contact-details h4,
+            .contact-details p,
+            .contact-note {
+                text-align: center;
+            }
+
+            .contact-note {
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .working-hours h4,
+            .social-section h4 {
+                text-align: center;
+            }
+
+            .hours-list li {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
+                align-items: center;
+            }
+
+            .hours-list .day,
+            .hours-list .time {
+                text-align: center;
+                width: 100%;
+            }
+
+            .hours-list .special-note {
+                align-items: center;
+                text-align: center;
+            }
+
+            .hours-list .special-note .day,
+            .hours-list .special-note .time {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .social-contacts {
+                justify-content: center;
+            }
+
+            .contact-form-card p {
+                text-align: center;
+            }
+
+            .info-card ul {
+                padding-left: 0;
+                list-style-position: inside;
+                text-align: center;
+            }
+
+            .info-card ul li {
+                text-align: center;
+            }
+
             .map-container {
                 height: 300px;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contacts-page {
+                padding: 40px 0;
+            }
+
+            .contact-info-card,
+            .contact-form-card,
+            .info-card {
+                padding: 20px;
+            }
+
+            .contact-info-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .contact-item {
+                padding: 15px 10px;
+            }
+
+            .contact-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .map-container {
+                height: 250px;
             }
         }
     </style>
@@ -274,9 +485,10 @@
                         <div class="contact-details">
                             <h4>Адрес производства</h4>
                             <p>Казань, ул. Промышленная, 15</p>
-                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
-                                <i class="fas fa-info-circle"></i> Вход со стороны ворот, цех №3
-                            </p>
+                            <div class="contact-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Вход со стороны ворот, цех №3</span>
+                            </div>
                         </div>
                     </div>
 
@@ -289,9 +501,10 @@
                             <p>
                                 <a href="tel:+79534999883">+7 (953) 499-98-83</a>
                             </p>
-                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
-                                <i class="fas fa-phone-volume"></i> Звонки принимаются ежедневно
-                            </p>
+                            <div class="contact-note">
+                                <i class="fas fa-phone-volume"></i>
+                                <span>Звонки принимаются ежедневно</span>
+                            </div>
                         </div>
                     </div>
 
@@ -304,9 +517,10 @@
                             <p>
                                 <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a>
                             </p>
-                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
-                                <i class="fas fa-paper-plane"></i> Для коммерческих предложений и сотрудничества
-                            </p>
+                            <div class="contact-note">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Для коммерческих предложений и сотрудничества</span>
+                            </div>
                         </div>
                     </div>
 
@@ -317,9 +531,10 @@
                         <div class="contact-details">
                             <h4>Менеджер</h4>
                             <p>Евгений Денисов</p>
-                            <p style="font-size: 0.9rem; color: #95a5a6; margin-top: 5px;">
-                                <i class="fas fa-comments"></i> Ответит на все вопросы по покраске
-                            </p>
+                            <div class="contact-note">
+                                <i class="fas fa-comments"></i>
+                                <span>Ответит на все вопросы по покраске</span>
+                            </div>
                         </div>
                     </div>
 
@@ -338,35 +553,35 @@
                                 <span class="day">Воскресенье</span>
                                 <span class="time">10:00 - 16:00</span>
                             </li>
-                            <li style="background: #e8f4fc; padding: 10px; border-radius: 5px; margin-top: 10px;">
-                                <span class="day" style="color: #2980b9;"><i class="fas fa-truck"></i> Выезд замерщика</span>
-                                <span class="time" style="color: #2980b9;">По предварительной записи</span>
+                            <li class="special-note">
+                                <span class="day"><i class="fas fa-truck"></i> Выезд замерщика</span>
+                                <span class="time">По предварительной записи</span>
                             </li>
                         </ul>
                     </div>
 
-                    <h4 style="margin-top: 30px;"><i class="fas fa-share-alt"></i> Мы в соцсетях</h4>
-                    <div class="social-contacts">
-                        <a href="https://t.me/+79534999883" class="social-contact telegram" target="_blank" title="Telegram">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="https://vk.com/pokraska_kazan" class="social-contact vk" target="_blank" title="ВКонтакте">
-                            <i class="fab fa-vk"></i>
-                        </a>
-                        <a href="https://www.instagram.com/pokraska_kazan/" class="social-contact instagram" target="_blank" title="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
+                    <div class="social-section">
+                        <h4><i class="fas fa-share-alt"></i> Мы в соцсетях</h4>
+                        <div class="social-contacts">
+                            <a href="https://t.me/+79534999883" class="social-contact telegram" target="_blank" title="Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://vk.com/pokraska_kazan" class="social-contact vk" target="_blank" title="ВКонтакте">
+                                <i class="fab fa-vk"></i>
+                            </a>
+                            <a href="https://www.instagram.com/pokraska_kazan/" class="social-contact instagram" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Правая колонка: Форма и карта -->
                 <div>
                     <!-- Форма быстрой связи -->
-                    <div class="contact-info-card">
+                    <div class="contact-form-card">
                         <h3><i class="fas fa-comments"></i> Быстрая связь</h3>
-                        <p style="color: #7f8c8d; margin-bottom: 25px;">
-                            Оставьте заявку и мы перезвоним вам в течение 15 минут
-                        </p>
+                        <p>Оставьте заявку и мы перезвоним вам в течение 15 минут</p>
 
                         <form id="contactFormPage" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
                             <input type="hidden" name="_subject" value="📞 Контактная форма с сайта pokraska.store">
@@ -402,9 +617,9 @@
                     </div>
 
                     <!-- Дополнительная информация -->
-                    <div class="contact-info-card" style="margin-top: 30px; background: #f8f9fa;">
+                    <div class="info-card">
                         <h3><i class="fas fa-info-circle"></i> Как нас найти</h3>
-                        <ul style="color: #7f8c8d; line-height: 1.8; padding-left: 20px;">
+                        <ul>
                             <li>Мы находимся в промышленной зоне</li>
                             <li>Есть бесплатная парковка для клиентов</li>
                             <li>Возможен выезд замерщика по Казани</li>
@@ -468,6 +683,7 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/form.js"></script>
 
     <script>
         // Текущий год в футере
