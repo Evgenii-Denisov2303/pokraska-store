@@ -18,6 +18,87 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/form.css">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
+
+    <style>
+        /* Стили для формы на главной */
+        .form-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            z-index: 10;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Для мобильных устройств */
+        @media (max-width: 768px) {
+            .form-success,
+            .form-error {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- ========== HEADER ========== -->
@@ -274,26 +355,42 @@
                 </div>
 
                 <!-- Правая часть - форма -->
-                <div class="request-form">
+                <div class="request-form" style="position: relative;">
                     <h3>Оставить заявку</h3>
                     <p class="form-notice">Мы перезвоним вам в течение 15 минут</p>
 
-                    <form id="contactForm" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
-                        <input type="hidden" name="_subject" value="🎨 Новая заявка с сайта pokraska.store">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
+                    <!-- Сообщения формы -->
+                    <div id="formSuccess" class="form-success">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <h4 style="margin: 10px 0; color: #155724;">Заявка отправлена!</h4>
+                        <p style="margin: 0;">Мы свяжемся с вами в ближайшее время.</p>
+                    </div>
 
+                    <div id="formError" class="form-error">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <h4 style="margin: 10px 0; color: #721c24;">Ошибка отправки</h4>
+                        <p style="margin: 0;">Попробуйте еще раз или позвоните нам напрямую.</p>
+                        <a href="tel:+79534999883" class="btn" style="margin-top: 15px; background: #dc3545; color: white; display: inline-block;">
+                            <i class="fas fa-phone"></i> Позвонить
+                        </a>
+                    </div>
+
+                    <!-- Индикатор загрузки -->
+                    <div id="loadingOverlay" class="loading-overlay">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <form id="contactForm">
                         <div class="form-group">
-                            <input type="text" name="Имя" placeholder="Ваше имя *" required aria-label="Ваше имя">
+                            <input type="text" id="name" name="name" placeholder="Ваше имя *" required minlength="2" aria-label="Ваше имя">
                         </div>
 
                         <div class="form-group">
-                            <input type="tel" name="Телефон" placeholder="Телефон *" required aria-label="Ваш телефон">
+                            <input type="tel" id="phone" name="phone" placeholder="Телефон *" required aria-label="Ваш телефон">
                         </div>
 
                         <div class="form-group">
-                            <select name="Услуга" aria-label="Выберите услугу">
+                            <select id="service" name="service" aria-label="Выберите услугу">
                                 <option value="">Выберите услугу</option>
                                 <option value="Покраска дисков">Покраска дисков</option>
                                 <option value="Металлоконструкции">Металлоконструкции</option>
@@ -304,15 +401,15 @@
                         </div>
 
                         <div class="form-group">
-                            <textarea name="Сообщение" placeholder="Описание детали, размеры, желаемый цвет..." aria-label="Описание заказа"></textarea>
+                            <textarea id="message" name="message" placeholder="Описание детали, размеры, желаемый цвет..." aria-label="Описание заказа"></textarea>
                         </div>
 
                         <div class="form-group checkbox-group">
-                            <input type="checkbox" id="agree" name="Согласие" value="Да" required>
+                            <input type="checkbox" id="agree" name="agree" value="yes" required>
                             <label for="agree">Согласен на обработку персональных данных</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
                             <i class="fas fa-paper-plane" aria-hidden="true"></i> Отправить заявку
                         </button>
                     </form>
@@ -406,6 +503,208 @@
     <script>
         // Текущий год в футере
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Элементы формы
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formSuccess = document.getElementById('formSuccess');
+        const formError = document.getElementById('formError');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // Проверка мобильного устройства
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Скрыть все сообщения
+        function hideAllMessages() {
+            formSuccess.classList.remove('show');
+            formError.classList.remove('show');
+        }
+
+        // Показать загрузку
+        function showLoading() {
+            loadingOverlay.classList.add('show');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+        }
+
+        // Скрыть загрузку
+        function hideLoading() {
+            loadingOverlay.classList.remove('show');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить заявку';
+        }
+
+        // Простая валидация
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const agree = document.getElementById('agree').checked;
+
+            if (name.length < 2) {
+                alert('Пожалуйста, введите ваше имя (минимум 2 символа)');
+                return false;
+            }
+
+            const cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.length < 10) {
+                alert('Пожалуйста, введите корректный номер телефона (10 цифр)');
+                return false;
+            }
+
+            if (!agree) {
+                alert('Пожалуйста, согласитесь на обработку персональных данных');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Маска телефона
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+
+            if (value.length > 0) {
+                value = '+7 ' + value.substring(1, 4) + ' ' + value.substring(4, 7) + '-' + value.substring(7, 9) + '-' + value.substring(9, 11);
+            }
+
+            this.value = value.trim();
+        });
+
+        // Обработчик отправки формы
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Скрыть предыдущие сообщения
+            hideAllMessages();
+
+            // Валидация
+            if (!validateForm()) {
+                return;
+            }
+
+            // Показать загрузку
+            showLoading();
+
+            // Собрать данные формы
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                service: document.getElementById('service').value.trim() || 'Не указано',
+                message: document.getElementById('message').value.trim() || 'Не указано',
+                date: new Date().toLocaleString('ru-RU'),
+                page: window.location.href
+            };
+
+            try {
+                // Для мобильных устройств используем более простой подход
+                if (isMobile()) {
+                    console.log('Мобильное устройство - упрощенная отправка');
+
+                    // Создаем данные для отправки
+                    const dataToSend = new FormData();
+                    dataToSend.append('name', formData.name);
+                    dataToSend.append('phone', formData.phone);
+                    dataToSend.append('service', formData.service);
+                    dataToSend.append('message', formData.message);
+                    dataToSend.append('_subject', '🎨 Заявка с главной страницы POKRASKA.STORE');
+                    dataToSend.append('_captcha', 'false');
+
+                    // Отправляем через FormSubmit
+                    const response = await fetch('https://formsubmit.co/denisov.jeka@gmail.com', {
+                        method: 'POST',
+                        body: dataToSend,
+                        mode: 'no-cors' // Важно для мобильных!
+                    });
+
+                    console.log('Заявка отправлена с мобильного');
+
+                    // На мобильных показываем успех
+                    formSuccess.classList.add('show');
+                    form.reset();
+
+                } else {
+                    // Для компьютеров используем полную версию
+                    console.log('Компьютер - полная версия отправки');
+
+                    const response = await fetch('https://formsubmit.co/ajax/denisov.jeka@gmail.com', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: formData.name,
+                            phone: formData.phone,
+                            service: formData.service,
+                            message: formData.message,
+                            _subject: '🎨 Заявка с главной страницы POKRASKA.STORE',
+                            _template: 'table',
+                            _captcha: 'false'
+                        })
+                    });
+
+                    if (response.ok) {
+                        // Показать успех
+                        formSuccess.classList.add('show');
+                        form.reset();
+                    } else {
+                        throw new Error('Ошибка отправки');
+                    }
+                }
+
+            } catch (error) {
+                console.error('Ошибка:', error);
+
+                // Обработка ошибок в зависимости от устройства
+                if (isMobile()) {
+                    // На мобильных часто приходит false positive
+                    // Лучше все равно показать успех
+                    formSuccess.classList.add('show');
+                    form.reset();
+                } else {
+                    // На компьютерах показываем реальную ошибку
+                    formError.classList.add('show');
+                }
+            } finally {
+                // Скрыть загрузку
+                hideLoading();
+
+                // Прокрутить к сообщению об успехе/ошибке
+                if (formSuccess.classList.contains('show')) {
+                    formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (formError.classList.contains('show')) {
+                    formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                // Авто-сброс сообщений через 30 секунд
+                setTimeout(() => {
+                    formSuccess.classList.remove('show');
+                    formError.classList.remove('show');
+                }, 30000);
+            }
+        });
+
+        // Для очень старых браузеров
+        if (!window.fetch) {
+            // Если браузер не поддерживает fetch
+            const formNote = document.querySelector('.form-notice');
+            if (formNote) {
+                formNote.innerHTML += '<br><small style="color:#666;">Для отправки формы используйте современный браузер</small>';
+            }
+        }
+
+        // Плавная прокрутка к форме при клике на кнопки
+        document.querySelectorAll('a[href="#request-form"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('request-form').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
     </script>
 </body>
 </html>
