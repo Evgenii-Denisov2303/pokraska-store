@@ -103,12 +103,12 @@
             color: #95a5a6;
             margin-top: 5px;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 5px;
+            text-align: left;
         }
 
         .contact-note i {
-            margin-top: 2px;
             flex-shrink: 0;
         }
 
@@ -278,7 +278,7 @@
             text-align: left;
         }
 
-        /* Мобильные стили */
+        /* Мобильные стили - ИСПРАВЛЕННЫЕ */
         @media (max-width: 992px) {
             .contacts-container {
                 grid-template-columns: 1fr;
@@ -301,6 +301,9 @@
             .contact-form-card h3,
             .info-card h3 {
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .contact-item {
@@ -308,10 +311,12 @@
                 align-items: center;
                 text-align: center;
                 padding: 20px 15px;
+                margin-bottom: 20px;
             }
 
             .contact-icon {
                 margin: 0 auto 15px;
+                margin-right: 0;
             }
 
             .contact-details {
@@ -319,21 +324,50 @@
                 text-align: center;
             }
 
-            .contact-details h4,
-            .contact-details p,
-            .contact-note {
+            .contact-details h4 {
+                text-align: center;
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .contact-details p {
+                text-align: center;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .contact-details a {
+                display: inline-block;
                 text-align: center;
             }
 
+            /* ИСПРАВЛЕНИЕ для заметок */
             .contact-note {
+                text-align: center;
                 justify-content: center;
-                flex-direction: column;
+                display: flex;
                 align-items: center;
+                gap: 8px;
+                margin-top: 8px;
+                width: 100%;
+            }
+
+            .contact-note i {
+                flex-shrink: 0;
+            }
+
+            .contact-note span {
+                text-align: center;
+                display: block;
+                width: 100%;
             }
 
             .working-hours h4,
             .social-section h4 {
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
             }
 
             .hours-list li {
@@ -341,6 +375,7 @@
                 text-align: center;
                 gap: 5px;
                 align-items: center;
+                padding: 10px 0;
             }
 
             .hours-list .day,
@@ -352,12 +387,17 @@
             .hours-list .special-note {
                 align-items: center;
                 text-align: center;
+                padding: 15px;
             }
 
-            .hours-list .special-note .day,
-            .hours-list .special-note .time {
+            .hours-list .special-note .day {
                 justify-content: center;
                 text-align: center;
+            }
+
+            .hours-list .special-note .time {
+                text-align: center;
+                width: 100%;
             }
 
             .social-contacts {
@@ -370,12 +410,22 @@
 
             .info-card ul {
                 padding-left: 0;
-                list-style-position: inside;
                 text-align: center;
+                list-style: none;
             }
 
             .info-card ul li {
                 text-align: center;
+                margin-bottom: 10px;
+                position: relative;
+                padding-left: 0;
+            }
+
+            .info-card ul li:before {
+                content: "•";
+                color: #3498db;
+                margin-right: 8px;
+                font-size: 1.2rem;
             }
 
             .map-container {
@@ -401,17 +451,56 @@
 
             .contact-item {
                 padding: 15px 10px;
+                margin-bottom: 15px;
             }
 
             .contact-icon {
                 width: 45px;
                 height: 45px;
                 font-size: 18px;
+                margin-bottom: 12px;
+            }
+
+            .contact-details h4 {
+                font-size: 1.1rem;
+            }
+
+            .contact-details p {
+                font-size: 0.95rem;
+            }
+
+            .contact-note {
+                font-size: 0.85rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .contact-note i {
+                margin-bottom: 3px;
             }
 
             .map-container {
                 height: 250px;
             }
+
+            /* Дополнительное центрирование для очень маленьких экранов */
+            .contact-note span {
+                max-width: 100%;
+                word-break: break-word;
+            }
+        }
+
+        /* Дополнительные исправления для центрирования */
+        .mobile-center {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+        }
+
+        .mobile-center > * {
+            text-align: center !important;
+            justify-content: center !important;
         }
     </style>
 </head>
@@ -586,7 +675,9 @@
                         <form id="contactFormPage" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
                             <input type="hidden" name="_subject" value="📞 Контактная форма с сайта pokraska.store">
                             <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_captcha" value="false">
                             <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
+                            <input type="text" name="_honey" style="display:none">
 
                             <div class="form-group">
                                 <input type="text" name="Имя" placeholder="Ваше имя *" required>
@@ -689,22 +780,36 @@
         // Текущий год в футере
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Обработчик формы на странице контактов
+        // Простой обработчик формы на странице контактов
         document.getElementById('contactFormPage')?.addEventListener('submit', function(e) {
             const phone = this.querySelector('[name="Телефон"]').value;
             const cleanPhone = phone.replace(/\D/g, '');
+            const name = this.querySelector('[name="Имя"]').value.trim();
+            const submitBtn = this.querySelector('button[type="submit"]');
 
-            if (cleanPhone.length < 10) {
+            // Простая валидация
+            if (!name || name.length < 2) {
                 e.preventDefault();
-                alert('Пожалуйста, введите корректный номер телефона');
+                alert('Пожалуйста, введите ваше имя (минимум 2 символа)');
+                this.querySelector('[name="Имя"]').focus();
                 return false;
             }
 
-            const submitBtn = this.querySelector('button[type="submit"]');
+            if (cleanPhone.length < 10) {
+                e.preventDefault();
+                alert('Пожалуйста, введите корректный номер телефона (10 цифр)');
+                this.querySelector('[name="Телефон"]').focus();
+                return false;
+            }
+
+            // Показываем индикатор загрузки
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
             }
+
+            // Форма отправится через Formsubmit
+            return true;
         });
     </script>
 </body>
