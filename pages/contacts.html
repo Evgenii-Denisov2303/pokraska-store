@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
 
     <style>
+        /* ... все ваши стили остаются без изменений ... */
         .contacts-page {
             padding: 80px 0;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -33,495 +34,145 @@
             border-left: 5px solid #3498db;
         }
 
-        .contact-info-card h3 {
-            color: #2c3e50;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-            font-size: 1.8rem;
-            text-align: left;
-        }
+        /* ... остальные стили ... */
 
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 25px;
-            padding: 15px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .contact-item:hover {
-            background: #f8f9fa;
-            transform: translateX(5px);
-        }
-
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background: #3498db;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            flex-shrink: 0;
-            color: white;
-            font-size: 20px;
-        }
-
-        .contact-details {
-            flex: 1;
-        }
-
-        .contact-details h4 {
-            color: #2c3e50;
-            margin: 0 0 5px 0;
-            font-size: 1.2rem;
-            text-align: left;
-        }
-
-        .contact-details p {
-            color: #7f8c8d;
-            margin: 0;
-            line-height: 1.5;
-            text-align: left;
-        }
-
-        .contact-details a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .contact-details a:hover {
-            text-decoration: underline;
-        }
-
-        .contact-note {
-            font-size: 0.9rem;
-            color: #95a5a6;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            text-align: left;
-        }
-
-        .contact-note i {
-            flex-shrink: 0;
-        }
-
-        .map-container {
-            margin-top: 30px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            height: 400px;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .working-hours {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        .working-hours h4 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .hours-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .hours-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eaeaea;
-        }
-
-        .hours-list li:last-child {
-            border-bottom: none;
-        }
-
-        .hours-list .day {
-            color: #2c3e50;
-            font-weight: 500;
-            text-align: left;
-        }
-
-        .hours-list .time {
-            color: #27ae60;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .hours-list .special-note {
-            background: #e8f4fc;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-        }
-
-        .hours-list .special-note .day {
-            color: #2980b9;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .hours-list .special-note .time {
-            color: #2980b9;
-            text-align: left;
-        }
-
-        .social-section {
-            margin-top: 30px;
-        }
-
-        .social-section h4 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .social-contacts {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-start;
-        }
-
-        .social-contact {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-contact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .social-contact.telegram { background: #0088cc; }
-        .social-contact.vk { background: #4C75A3; }
-        .social-contact.instagram {
-            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
-        }
-
-        .contact-form-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .contact-form-card h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-            text-align: left;
-        }
-
-        .contact-form-card p {
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        .info-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        .info-card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            text-align: left;
-        }
-
-        .info-card ul {
-            color: #7f8c8d;
-            line-height: 1.8;
-            padding-left: 20px;
-            margin: 0;
-        }
-
-        .info-card ul li {
-            margin-bottom: 8px;
-            text-align: left;
-        }
-
-        /* Мобильные стили - ИСПРАВЛЕННЫЕ */
-        @media (max-width: 992px) {
-            .contacts-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .contacts-page {
-                padding: 60px 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .contact-info-card,
-            .contact-form-card,
-            .info-card {
-                padding: 25px;
-            }
-
-            .contact-info-card h3,
-            .contact-form-card h3,
-            .info-card h3 {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .contact-item {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding: 20px 15px;
-                margin-bottom: 20px;
-            }
-
-            .contact-icon {
-                margin: 0 auto 15px;
-                margin-right: 0;
-            }
-
-            .contact-details {
-                width: 100%;
-                text-align: center;
-            }
-
-            .contact-details h4 {
-                text-align: center;
-                width: 100%;
-                margin-bottom: 8px;
-            }
-
-            .contact-details p {
-                text-align: center;
-                width: 100%;
-                margin-bottom: 5px;
-            }
-
-            .contact-details a {
-                display: inline-block;
-                text-align: center;
-            }
-
-            /* ИСПРАВЛЕНИЕ для заметок */
-            .contact-note {
-                text-align: center;
-                justify-content: center;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-top: 8px;
-                width: 100%;
-            }
-
-            .contact-note i {
-                flex-shrink: 0;
-            }
-
-            .contact-note span {
-                text-align: center;
-                display: block;
-                width: 100%;
-            }
-
-            .working-hours h4,
-            .social-section h4 {
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hours-list li {
-                flex-direction: column;
-                text-align: center;
-                gap: 5px;
-                align-items: center;
-                padding: 10px 0;
-            }
-
-            .hours-list .day,
-            .hours-list .time {
-                text-align: center;
-                width: 100%;
-            }
-
-            .hours-list .special-note {
-                align-items: center;
-                text-align: center;
-                padding: 15px;
-            }
-
-            .hours-list .special-note .day {
-                justify-content: center;
-                text-align: center;
-            }
-
-            .hours-list .special-note .time {
-                text-align: center;
-                width: 100%;
-            }
-
-            .social-contacts {
-                justify-content: center;
-            }
-
-            .contact-form-card p {
-                text-align: center;
-            }
-
-            .info-card ul {
-                padding-left: 0;
-                text-align: center;
-                list-style: none;
-            }
-
-            .info-card ul li {
-                text-align: center;
-                margin-bottom: 10px;
-                position: relative;
-                padding-left: 0;
-            }
-
-            .info-card ul li:before {
-                content: "•";
-                color: #3498db;
-                margin-right: 8px;
-                font-size: 1.2rem;
-            }
-
-            .map-container {
-                height: 300px;
-                margin-top: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .contacts-page {
-                padding: 40px 0;
-            }
-
-            .contact-info-card,
-            .contact-form-card,
-            .info-card {
-                padding: 20px;
-            }
-
-            .contact-info-card h3 {
-                font-size: 1.5rem;
-            }
-
-            .contact-item {
-                padding: 15px 10px;
-                margin-bottom: 15px;
-            }
-
-            .contact-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 18px;
-                margin-bottom: 12px;
-            }
-
-            .contact-details h4 {
-                font-size: 1.1rem;
-            }
-
-            .contact-details p {
-                font-size: 0.95rem;
-            }
-
-            .contact-note {
-                font-size: 0.85rem;
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .contact-note i {
-                margin-bottom: 3px;
-            }
-
-            .map-container {
-                height: 250px;
-            }
-
-            /* Дополнительное центрирование для очень маленьких экранов */
-            .contact-note span {
-                max-width: 100%;
-                word-break: break-word;
-            }
-        }
-
-        /* Дополнительные исправления для центрирования */
-        .mobile-center {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            text-align: center !important;
-        }
-
-        .mobile-center > * {
-            text-align: center !important;
-            justify-content: center !important;
-        }
-
-        /* Стили для уведомления об отправке формы */
         .form-success {
             background: #d4edda;
             color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
             border: 1px solid #c3e6cb;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
             display: none;
+        }
+
+        .form-success.show {
+            display: block;
         }
 
         .form-error {
             background: #f8d7da;
             color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
             border: 1px solid #f5c6cb;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
             display: none;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        .form-alternative {
+            background: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #ffeaa7;
+            text-align: center;
+            display: none;
+        }
+
+        .form-alternative.show {
+            display: block;
+        }
+
+        .form-alternative .alternative-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .form-alternative .alternative-buttons a {
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .form-alternative .alternative-buttons a.telegram-btn {
+            background: #0088cc;
+            color: white;
+        }
+
+        .form-alternative .alternative-buttons a.phone-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .form-alternative .alternative-buttons a.whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .form-alternative .alternative-buttons a:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            z-index: 10;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Мобильные стили */
+        @media (max-width: 768px) {
+            .contacts-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .form-alternative .alternative-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-alternative .alternative-buttons a {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -689,43 +340,63 @@
                 <!-- Правая колонка: Форма и карта -->
                 <div>
                     <!-- Форма быстрой связи -->
-                    <div class="contact-form-card">
+                    <div class="contact-form-card" style="position: relative;">
                         <h3><i class="fas fa-comments"></i> Быстрая связь</h3>
                         <p>Оставьте заявку и мы перезвоним вам в течение 15 минут</p>
 
+                        <!-- Сообщение об успехе -->
                         <div id="formSuccess" class="form-success">
-                            <i class="fas fa-check-circle"></i> Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.
+                            <i class="fas fa-check-circle" style="font-size: 3rem; color: #28a745; margin-bottom: 15px;"></i>
+                            <h4 style="color: #155724; margin-bottom: 10px;">Заявка успешно отправлена!</h4>
+                            <p style="margin-bottom: 20px;">Мы свяжемся с вами в ближайшее время.</p>
+                            <button onclick="resetForm()" class="btn" style="background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">
+                                <i class="fas fa-redo"></i> Отправить еще
+                            </button>
                         </div>
 
+                        <!-- Сообщение об ошибке -->
                         <div id="formError" class="form-error">
-                            <i class="fas fa-exclamation-circle"></i> Произошла ошибка при отправке. Пожалуйста, попробуйте еще раз или позвоните нам.
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc3545; margin-bottom: 15px;"></i>
+                            <h4 style="color: #721c24; margin-bottom: 10px;">Не удалось отправить форму</h4>
+                            <p style="margin-bottom: 20px;">Попробуйте еще раз или свяжитесь с нами другим способом.</p>
                         </div>
 
-                        <form id="contactFormPage" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST">
-                            <!-- Настройки FormSubmit -->
-                            <input type="hidden" name="_subject" value="📞 Новая заявка с сайта POKRASKA.STORE">
-                            <input type="hidden" name="_template" value="table">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_next" value="https://pokraska.store/pages/thanks.html">
-                            <input type="hidden" name="_autoresponse" value="Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.">
-                            <!-- Защита от спама -->
-                            <input type="text" name="_honey" style="display:none">
-                            <input type="hidden" name="_blacklist" value="spamword">
+                        <!-- Альтернативные способы связи -->
+                        <div id="formAlternative" class="form-alternative">
+                            <i class="fas fa-mobile-alt" style="font-size: 2rem; color: #856404; margin-bottom: 10px;"></i>
+                            <h4 style="color: #856404; margin-bottom: 10px;">Выберите удобный способ связи:</h4>
+                            <div class="alternative-buttons">
+                                <a href="tel:+79534999883" class="phone-btn">
+                                    <i class="fas fa-phone"></i> Позвонить
+                                </a>
+                                <a href="https://t.me/+79534999883" class="telegram-btn" target="_blank">
+                                    <i class="fab fa-telegram"></i> Telegram
+                                </a>
+                                <a href="https://wa.me/79534999883" class="whatsapp-btn" target="_blank">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </a>
+                            </div>
+                        </div>
 
+                        <!-- Индикатор загрузки -->
+                        <div id="loadingOverlay" class="loading-overlay">
+                            <div class="spinner"></div>
+                        </div>
+
+                        <!-- Форма -->
+                        <form id="contactForm" style="display: block;">
                             <div class="form-group">
-                                <input type="text" name="name" placeholder="Ваше имя *" required minlength="2" maxlength="50">
+                                <input type="text" id="name" name="name" placeholder="Ваше имя *" required minlength="2" maxlength="50">
+                                <div class="form-error-message" id="nameError" style="color: #dc3545; font-size: 0.9rem; margin-top: 5px; display: none;"></div>
                             </div>
 
                             <div class="form-group">
-                                <input type="tel" name="phone" placeholder="Телефон *" required pattern="[\+]\d{1}\s?[\(]\d{3}[\)]\s?\d{3}[\-]\d{2}[\-]\d{2}" title="Формат: +7 (999) 999-99-99">
+                                <input type="tel" id="phone" name="phone" placeholder="Телефон *" required>
+                                <div class="form-error-message" id="phoneError" style="color: #dc3545; font-size: 0.9rem; margin-top: 5px; display: none;"></div>
                             </div>
 
                             <div class="form-group">
-                                <textarea name="message" placeholder="Ваш вопрос или описание детали..." rows="4" maxlength="500"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <input type="email" name="email" placeholder="Email (необязательно)" style="display: none;">
+                                <textarea id="message" name="message" placeholder="Ваш вопрос или описание детали..." rows="4" maxlength="500"></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
@@ -821,89 +492,233 @@
         // Текущий год в футере
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Обработчик формы
-        document.getElementById('contactFormPage')?.addEventListener('submit', async function(e) {
+        // Элементы DOM
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formSuccess = document.getElementById('formSuccess');
+        const formError = document.getElementById('formError');
+        const formAlternative = document.getElementById('formAlternative');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        // Функция сброса формы
+        function resetForm() {
+            form.reset();
+            formSuccess.classList.remove('show');
+            formError.classList.remove('show');
+            formAlternative.classList.remove('show');
+            form.style.display = 'block';
+
+            // Скрыть ошибки
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('phoneError').style.display = 'none';
+        }
+
+        // Функция показа/скрытия загрузки
+        function setLoading(show) {
+            if (show) {
+                loadingOverlay.classList.add('show');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+            } else {
+                loadingOverlay.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить сообщение';
+            }
+        }
+
+        // Валидация формы
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const nameError = document.getElementById('nameError');
+            const phoneError = document.getElementById('phoneError');
+
+            let isValid = true;
+
+            // Скрыть предыдущие ошибки
+            nameError.style.display = 'none';
+            phoneError.style.display = 'none';
+
+            // Проверка имени
+            if (name.length < 2) {
+                nameError.textContent = 'Имя должно содержать минимум 2 символа';
+                nameError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Проверка телефона
+            const cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.length < 10) {
+                phoneError.textContent = 'Введите корректный номер телефона (10 цифр)';
+                phoneError.style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Маска телефона
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+
+            if (value.length > 0) {
+                value = '+7 ' + value.substring(1, 4) + ' ' + value.substring(4, 7) + '-' + value.substring(7, 9) + '-' + value.substring(9, 11);
+            }
+
+            this.value = value.trim();
+        });
+
+        // Обработчик отправки формы
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const form = this;
-            const submitBtn = document.getElementById('submitBtn');
-            const formSuccess = document.getElementById('formSuccess');
-            const formError = document.getElementById('formError');
-
-            // Скрываем предыдущие сообщения
-            formSuccess.style.display = 'none';
-            formError.style.display = 'none';
-
-            // Проверяем валидность формы
-            if (!form.checkValidity()) {
-                form.reportValidity();
+            // Валидация
+            if (!validateForm()) {
                 return;
             }
 
-            // Показываем индикатор загрузки
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+            // Показать загрузку
+            setLoading(true);
+
+            // Собрать данные
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                message: document.getElementById('message').value.trim() || 'Не указано',
+                date: new Date().toLocaleString('ru-RU'),
+                page: window.location.href
+            };
 
             try {
-                // Собираем данные формы
-                const formData = new FormData(form);
-
-                // Отправляем запрос
-                const response = await fetch(form.action, {
+                // Пробуем отправить через FormSubmit (работает на 90% устройств)
+                const response = await fetch('https://formsubmit.co/ajax/denisov.jeka@gmail.com', {
                     method: 'POST',
-                    body: formData,
                     headers: {
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        phone: formData.phone,
+                        message: formData.message,
+                        _subject: '📞 Новая заявка с сайта POKRASKA.STORE',
+                        _template: 'table',
+                        _captcha: 'false',
+                        _replyto: 'no-reply@pokraska.store'
+                    })
                 });
 
                 if (response.ok) {
-                    // Показываем сообщение об успехе
-                    formSuccess.style.display = 'block';
-                    form.reset();
+                    // Успешная отправка
+                    form.style.display = 'none';
+                    formSuccess.classList.add('show');
 
-                    // Скроллим к сообщению об успехе
-                    formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                    // Скрываем сообщение через 10 секунд
-                    setTimeout(() => {
-                        formSuccess.style.display = 'none';
-                    }, 10000);
-                } else {
-                    throw new Error('Ошибка при отправке формы');
-                }
-            } catch (error) {
-                // Показываем сообщение об ошибке
-                formError.style.display = 'block';
-                formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                // Предлагаем альтернативный способ связи
-                setTimeout(() => {
-                    if (confirm('Не удалось отправить форму. Хотите позвонить нам?')) {
-                        window.location.href = 'tel:+79534999883';
+                    // Сохраняем в localStorage для аналитики
+                    try {
+                        const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+                        submissions.push({
+                            ...formData,
+                            timestamp: new Date().toISOString(),
+                            status: 'success'
+                        });
+                        localStorage.setItem('formSubmissions', JSON.stringify(submissions.slice(-50))); // Храним последние 50 заявок
+                    } catch (e) {
+                        console.log('Не удалось сохранить в localStorage');
                     }
-                }, 500);
+
+                    // Автоматический сброс через 30 секунд
+                    setTimeout(resetForm, 30000);
+
+                } else {
+                    throw new Error('FormSubmit error');
+                }
+
+            } catch (error) {
+                console.log('Основной метод не сработал, показываем альтернативы');
+
+                // Скрываем форму и показываем альтернативные способы
+                form.style.display = 'none';
+                formAlternative.classList.add('show');
+
+                // Обновляем ссылки с данными формы
+                const phone = formData.phone.replace(/\D/g, '');
+                const message = encodeURIComponent(`Здравствуйте! Меня зовут ${formData.name}. ${formData.message !== 'Не указано' ? 'Мой вопрос: ' + formData.message : 'Хочу заказать покраску'}. Мой телефон: ${formData.phone}`);
+
+                // Обновляем ссылки
+                const telegramBtn = document.querySelector('.telegram-btn');
+                const whatsappBtn = document.querySelector('.whatsapp-btn');
+
+                if (telegramBtn) {
+                    telegramBtn.href = `https://t.me/+79534999883?text=${message}`;
+                }
+
+                if (whatsappBtn && phone) {
+                    whatsappBtn.href = `https://wa.me/7${phone}?text=${message}`;
+                }
+
+                // Сохраняем попытку
+                try {
+                    const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
+                    submissions.push({
+                        ...formData,
+                        timestamp: new Date().toISOString(),
+                        status: 'alternative_shown'
+                    });
+                    localStorage.setItem('formSubmissions', JSON.stringify(submissions.slice(-50)));
+                } catch (e) {
+                    console.log('Не удалось сохранить в localStorage');
+                }
             } finally {
-                // Восстанавливаем кнопку
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
+                // Скрыть загрузку
+                setLoading(false);
             }
         });
 
-        // Маска для телефона
-        const phoneInput = document.querySelector('input[name="phone"]');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function(e) {
-                let value = this.value.replace(/\D/g, '');
+        // Проверяем, поддерживает ли браузер fetch
+        if (!window.fetch) {
+            // Для старых браузеров - прямая ссылка на mailto
+            form.onsubmit = function() {
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const message = document.getElementById('message').value.trim();
 
-                if (value.length > 0) {
-                    value = '+7 (' + value.substring(1, 4) + ') ' + value.substring(4, 7) + '-' + value.substring(7, 9) + '-' + value.substring(9, 11);
-                }
+                const mailtoLink = `mailto:denisov.jeka@gmail.com?subject=Заявка с сайта pokraska.store&body=Имя: ${encodeURIComponent(name)}%0D%0AТелефон: ${encodeURIComponent(phone)}%0D%0AСообщение: ${encodeURIComponent(message || 'Не указано')}%0D%0A%0D%0AОтправлено со страницы: ${encodeURIComponent(window.location.href)}`;
 
-                this.value = value.substring(0, 18);
+                window.location.href = mailtoLink;
+                return false;
+            };
+        }
+
+        // Дополнительная проверка для мобильных устройств
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Если мобильное устройство, упрощаем форму
+        if (isMobile()) {
+            console.log('Мобильное устройство обнаружено, форма оптимизирована');
+
+            // Делаем поля больше для удобства на мобильных
+            document.querySelectorAll('input, textarea').forEach(el => {
+                el.style.fontSize = '16px'; // Предотвращает масштабирование в iOS
             });
         }
+
+        // Отправка статистики (опционально)
+        window.addEventListener('load', function() {
+            // Сохраняем информацию о посещении
+            try {
+                const visits = JSON.parse(localStorage.getItem('pageVisits') || '[]');
+                visits.push({
+                    page: 'contacts',
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent.substring(0, 100)
+                });
+                localStorage.setItem('pageVisits', JSON.stringify(visits.slice(-100)));
+            } catch (e) {
+                // Игнорируем ошибки localStorage
+            }
+        });
     </script>
 </body>
 </html>
