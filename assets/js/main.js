@@ -1,44 +1,114 @@
 // ========== MAIN JS ==========
 document.addEventListener('DOMContentLoaded', function() {
-    // Мобильное меню
+    // Мобильное меню - ИСПРАВЛЕННАЯ ВЕРСИЯ
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('.nav');
+    const body = document.body;
+    let isMenuOpen = false;
+    let isAnimating = false;
 
     if (mobileMenuBtn && nav) {
-        mobileMenuBtn.addEventListener('click', function() {
-            nav.classList.toggle('active');
-            const isActive = nav.classList.contains('active');
-            this.setAttribute('aria-expanded', isActive);
-            this.innerHTML = isActive
-                ? '<i class="fas fa-times"></i>'
-                : '<i class="fas fa-bars"></i>';
+        // Функция открытия/закрытия меню
+        function toggleMobileMenu() {
+            if (isAnimating) return; // Защита от быстрых повторных кликов
+
+            isAnimating = true;
+
+            if (!isMenuOpen) {
+                // Открываем меню
+                nav.style.display = 'flex';
+                // Даем время для отображения перед анимацией
+                requestAnimationFrame(() => {
+                    nav.classList.add('active');
+                });
+                body.style.overflow = 'hidden'; // Блокируем скролл страницы
+                mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                isMenuOpen = true;
+            } else {
+                // Закрываем меню
+                nav.classList.remove('active');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                body.style.overflow = ''; // Разблокируем скролл
+                isMenuOpen = false;
+
+                // Скрываем меню после завершения анимации
+                setTimeout(() => {
+                    if (!isMenuOpen) {
+                        nav.style.display = 'none';
+                    }
+                }, 300);
+            }
+
+            // Снимаем блокировку через 300мс (время анимации)
+            setTimeout(() => {
+                isAnimating = false;
+            }, 300);
+        }
+
+        // Один обработчик вместо нескольких
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Предотвращаем всплытие
+            toggleMobileMenu();
         });
+
+        // Инициализация - скрываем меню на старте
+        nav.style.display = 'none';
     }
 
     // Закрытие меню при клике на ссылку
     document.querySelectorAll('.nav-list a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (nav) {
+        link.addEventListener('click', (e) => {
+            if (nav && isMenuOpen) {
+                // Плавное закрытие меню
                 nav.classList.remove('active');
-                nav.setAttribute('aria-expanded', 'false');
-            }
-            if (mobileMenuBtn) {
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                body.style.overflow = '';
+                isMenuOpen = false;
+
+                // Скрываем меню после анимации
+                setTimeout(() => {
+                    nav.style.display = 'none';
+                }, 300);
             }
         });
     });
 
-    // Закрытие меню при клике вне его
+    // Закрытие меню при клике вне его - ИСПРАВЛЕННЫЙ ВАРИАНТ
     document.addEventListener('click', (e) => {
-        if (nav && nav.classList.contains('active') &&
+        if (nav && isMenuOpen &&
             !nav.contains(e.target) &&
+            e.target !== mobileMenuBtn &&
             !mobileMenuBtn.contains(e.target)) {
+
             nav.classList.remove('active');
             mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             mobileMenuBtn.setAttribute('aria-expanded', 'false');
-            nav.setAttribute('aria-expanded', 'false');
+            body.style.overflow = '';
+            isMenuOpen = false;
+
+            setTimeout(() => {
+                nav.style.display = 'none';
+            }, 300);
         }
+    });
+
+    // Закрытие меню при ресайзе окна
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768 && nav && isMenuOpen) {
+                nav.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                nav.style.display = '';
+                body.style.overflow = '';
+                isMenuOpen = false;
+            }
+        }, 250);
     });
 
     // Плавная прокрутка для якорей
@@ -97,10 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Вызываем сразу для установки начального состояния
         window.dispatchEvent(new Event('scroll'));
     }
-
-    // УДАЛЕНО: маска телефона (перенесена в form.js)
-    // const phoneInputs = document.querySelectorAll('input[type="tel"]');
-    // ... удалить весь этот блок ...
 
     // Проверка поддержки localStorage
     if (typeof(Storage) === "undefined") {
