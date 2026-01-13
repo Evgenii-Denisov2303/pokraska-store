@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let isMenuOpen = false;
     let isAnimating = false;
 
+    // Функция для проверки мобильного режима
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
     if (mobileMenuBtn && nav) {
         // Функция открытия/закрытия меню
         function toggleMobileMenu() {
@@ -16,8 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!isMenuOpen) {
                 // Открываем меню
-                nav.style.display = 'flex';
-                // Даем время для отображения перед анимацией
+                // НЕ используем style.display = 'flex' - CSS уже это делает через .nav.active
                 requestAnimationFrame(() => {
                     nav.classList.add('active');
                 });
@@ -33,12 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body.style.overflow = ''; // Разблокируем скролл
                 isMenuOpen = false;
 
-                // Скрываем меню после завершения анимации
-                setTimeout(() => {
-                    if (!isMenuOpen) {
-                        nav.style.display = 'none';
-                    }
-                }, 300);
+                // УДАЛИЛ: setTimeout для скрытия меню - CSS сам управляет отображением
             }
 
             // Снимаем блокировку через 300мс (время анимации)
@@ -47,68 +46,66 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }
 
+        // Инициализация - НИЧЕГО НЕ ДЕЛАЕМ!
+        // nav.style.display = ''; // УДАЛИТЬ ЭТУ СТРОКУ ПОЛНОСТЬЮ!
+        // CSS сам управляет отображением через медиа-запросы
+
+        // Если мы на десктопе, убедимся что меню видимо
+        if (!isMobile()) {
+            nav.classList.remove('active'); // Убираем класс active если он был
+            // Не трогаем display - CSS сам всё настроит
+        }
+
         // Один обработчик вместо нескольких
         mobileMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation(); // Предотвращаем всплытие
             toggleMobileMenu();
         });
 
-        // Инициализация - скрываем меню на старте
-        nav.style.display = 'none';
-    }
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (nav && isMenuOpen) {
+                    // Плавное закрытие меню
+                    nav.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    body.style.overflow = '';
+                    isMenuOpen = false;
+                }
+            });
+        });
 
-    // Закрытие меню при клике на ссылку
-    document.querySelectorAll('.nav-list a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            if (nav && isMenuOpen) {
-                // Плавное закрытие меню
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', (e) => {
+            if (nav && isMenuOpen &&
+                !nav.contains(e.target) &&
+                e.target !== mobileMenuBtn &&
+                !mobileMenuBtn.contains(e.target)) {
+
                 nav.classList.remove('active');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
                 mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 body.style.overflow = '';
                 isMenuOpen = false;
-
-                // Скрываем меню после анимации
-                setTimeout(() => {
-                    nav.style.display = 'none';
-                }, 300);
             }
         });
-    });
+    }
 
-    // Закрытие меню при клике вне его - ИСПРАВЛЕННЫЙ ВАРИАНТ
-    document.addEventListener('click', (e) => {
-        if (nav && isMenuOpen &&
-            !nav.contains(e.target) &&
-            e.target !== mobileMenuBtn &&
-            !mobileMenuBtn.contains(e.target)) {
-
-            nav.classList.remove('active');
-            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            mobileMenuBtn.setAttribute('aria-expanded', 'false');
-            body.style.overflow = '';
-            isMenuOpen = false;
-
-            setTimeout(() => {
-                nav.style.display = 'none';
-            }, 300);
-        }
-    });
-
-    // Закрытие меню при ресайзе окна
-    let resizeTimer;
+    // Закрытие меню при ресайзе окна - УПРОЩЕННАЯ ВЕРСИЯ
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            if (window.innerWidth > 768 && nav && isMenuOpen) {
+        if (nav) {
+            // Если перешли на десктоп, закрываем мобильное меню
+            if (window.innerWidth > 768) {
                 nav.classList.remove('active');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
-                nav.style.display = '';
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
                 body.style.overflow = '';
                 isMenuOpen = false;
             }
-        }, 250);
+        }
     });
 
     // Плавная прокрутка для якорей
@@ -268,4 +265,4 @@ document.addEventListener('DOMContentLoaded', function() {
         style.textContent = notificationCSS;
         document.head.appendChild(style);
     }
-});
+}); 
