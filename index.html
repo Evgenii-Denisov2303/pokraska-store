@@ -120,6 +120,17 @@
                     </a>
                 </div>
 
+                <!-- Контакты для десктопа -->
+                <div class="header-contacts desktop-contacts">
+                    <a href="tel:+79534999883" class="phone-link" aria-label="Позвонить нам">
+                        <i class="fas fa-phone"></i>
+                        <span>+7 (953) 499-98-83</span>
+                    </a>
+                    <a href="https://t.me/+79534999883" class="telegram-link" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                </div>
+
                 <!-- Навигация -->
                 <nav class="nav" aria-label="Основная навигация">
                     <ul class="nav-list">
@@ -130,8 +141,8 @@
                         <li><a href="pages/contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
                     </ul>
 
-                    <!-- Контакты в хедере -->
-                    <div class="header-contacts">
+                    <!-- Контакты для мобильного меню (будут видны только внутри меню) -->
+                    <div class="header-contacts mobile-contacts">
                         <a href="tel:+79534999883" class="phone-link" aria-label="Позвонить нам">
                             <i class="fas fa-phone"></i>
                             <span>+7 (953) 499-98-83</span>
@@ -572,7 +583,7 @@
             this.value = value.trim();
         });
 
-        // Обработчик отправки формы - ОДИНАКОВЫЙ ДЛЯ ВСЕХ УСТРОЙСТВ
+        // Обработчик отправки формы
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
