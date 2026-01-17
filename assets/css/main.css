@@ -291,10 +291,16 @@ body {
     height: 44px;
     border-radius: 8px;
     transition: all 0.3s;
+    position: relative;
+    z-index: 1002;
 }
 
 .mobile-menu-btn:hover {
     background: #f8f9fa;
+}
+
+.mobile-menu-btn.active i {
+    transform: rotate(90deg);
 }
 
 /* ========== HERO SECTION ========== */
@@ -1054,22 +1060,24 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
+        order: 1;
     }
 
     .nav {
         position: fixed;
-        top: 140px;
+        top: 100px;
         left: 0;
         right: 0;
         background: white;
-        flex-direction: column;
         padding: 20px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         display: none;
         border-radius: 0 0 15px 15px;
         z-index: 999;
-        max-height: calc(100vh - 140px);
+        max-height: calc(100vh - 100px);
         overflow-y: auto;
+        flex-direction: column;
+        width: 100%;
     }
 
     .nav.active {
@@ -1103,6 +1111,7 @@ body {
         border-bottom: 1px solid #f0f0f0;
         justify-content: flex-start;
         font-size: 1.1rem;
+        width: 100%;
     }
 
     .nav-list li:last-child a {
@@ -1111,31 +1120,26 @@ body {
 
     /* Контакты в мобильном меню */
     .mobile-contacts {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-        width: 100%;
+        display: none;
     }
 
-    .mobile-contacts .contact-phone {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-        padding: 15px;
-        width: 100%;
-    }
-
-    .mobile-contacts .phone-info {
-        align-items: center;
-        text-align: center;
-    }
-
+    /* Скрываем нижнюю строку контактов в мобильной версии */
     .header-contacts-row {
         display: none;
+    }
+
+    /* Отображаем контакты в мобильном меню */
+    .nav.active + .header-contacts-row {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        z-index: 998;
+        border-top: 1px solid #eee;
     }
 
     .hero {
