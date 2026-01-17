@@ -104,8 +104,9 @@
     <!-- ========== HEADER ========== -->
     <header class="header">
         <div class="container">
-            <div class="header-content">
-                <!-- Логотип ПРЕМИУМ -->
+            <!-- Верхняя строка: Лого + Навигация -->
+            <div class="header-top">
+                <!-- Логотип -->
                 <div class="logo">
                     <a href="index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
@@ -120,17 +121,6 @@
                     </a>
                 </div>
 
-                <!-- Контакты для десктопа -->
-                <div class="header-contacts desktop-contacts">
-                    <a href="tel:+79534999883" class="phone-link" aria-label="Позвонить нам">
-                        <i class="fas fa-phone"></i>
-                        <span>+7 (953) 499-98-83</span>
-                    </a>
-                    <a href="https://t.me/+79534999883" class="telegram-link" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
-                        <i class="fab fa-telegram"></i>
-                    </a>
-                </div>
-
                 <!-- Навигация -->
                 <nav class="nav" aria-label="Основная навигация">
                     <ul class="nav-list">
@@ -140,23 +130,42 @@
                         <li><a href="pages/gallery.html"><i class="fas fa-images"></i> Работы</a></li>
                         <li><a href="pages/contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
                     </ul>
-
-                    <!-- Контакты для мобильного меню (будут видны только внутри меню) -->
-                    <div class="header-contacts mobile-contacts">
-                        <a href="tel:+79534999883" class="phone-link" aria-label="Позвонить нам">
-                            <i class="fas fa-phone"></i>
-                            <span>+7 (953) 499-98-83</span>
-                        </a>
-                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                    </div>
                 </nav>
 
                 <!-- Кнопка мобильного меню -->
                 <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
+            </div>
+
+            <!-- Нижняя строка: Контакты -->
+            <div class="header-contacts-row">
+                <div class="contacts-container">
+                    <div class="contacts-main">
+                        <a href="tel:+79534999883" class="contact-phone">
+                            <i class="fas fa-phone"></i>
+                            <div class="phone-info">
+                                <span class="phone-number">+7 (953) 499-98-83</span>
+                                <span class="phone-label">Звоните с 8:00 до 20:00</span>
+                            </div>
+                        </a>
+                        <div class="contact-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Казань, ул. Промышленная, 15</span>
+                        </div>
+                    </div>
+
+                    <div class="contacts-social">
+                        <a href="https://t.me/+79534999883" class="social-link telegram" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram</span>
+                        </a>
+                        <a href="https://vk.com/pokraska_kazan" class="social-link vk" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                            <span>ВКонтакте</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -583,7 +592,7 @@
             this.value = value.trim();
         });
 
-        // Обработчик отправки формы
+        // Обработчик отправки формы - ОДИНАКОВЫЙ ДЛЯ ВСЕХ УСТРОЙСТВ
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 

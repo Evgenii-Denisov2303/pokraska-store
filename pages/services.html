@@ -284,6 +284,32 @@
             font-size: 1.2em;
         }
 
+        /* Соцсети в футере */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: #3498db;
+            transform: translateY(-3px);
+        }
+
         /* Адаптивность */
         @media (max-width: 992px) {
             .service-content {
@@ -321,6 +347,12 @@
             .service-nav-link {
                 justify-content: center;
             }
+
+            .service-cta .btn {
+                width: 100%;
+                margin-bottom: 15px;
+                margin-left: 0 !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -335,17 +367,23 @@
             .service-content {
                 padding: 25px;
             }
+
+            .service-header .service-id {
+                padding: 6px 15px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ========== HEADER (ОБНОВЛЕННЫЙ) ========== -->
+    <!-- ========== HEADER ========== -->
     <header class="header">
         <div class="container">
-            <div class="header-content">
-                <!-- Логотип ПРЕМИУМ -->
+            <!-- Верхняя строка: Лого + Навигация -->
+            <div class="header-top">
+                <!-- Логотип -->
                 <div class="logo">
-                    <a href="../index.html" class="logo-link">
+                    <a href="../index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
                             <div class="logo-main">
                                 <span class="logo-primary">POKRASKA</span>
@@ -359,31 +397,50 @@
                 </div>
 
                 <!-- Навигация -->
-                <nav class="nav">
+                <nav class="nav" aria-label="Основная навигация">
                     <ul class="nav-list">
                         <li><a href="../index.html"><i class="fas fa-home"></i> Главная</a></li>
-                        <li><a href="services.html" class="active"><i class="fas fa-paint-roller"></i> Услуги</a></li>
+                        <li><a href="services.html" class="active" aria-current="page"><i class="fas fa-paint-roller"></i> Услуги</a></li>
                         <li><a href="prices.html"><i class="fas fa-tag"></i> Цены</a></li>
                         <li><a href="gallery.html"><i class="fas fa-images"></i> Работы</a></li>
                         <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
                     </ul>
-
-                    <!-- Контакты в хедере -->
-                    <div class="header-contacts">
-                        <a href="tel:+79534999883" class="phone-link">
-                            <i class="fas fa-phone"></i>
-                            <span>+7 (953) 499-98-83</span>
-                        </a>
-                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                    </div>
                 </nav>
 
                 <!-- Кнопка мобильного меню -->
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
+            </div>
+
+            <!-- Нижняя строка: Контакты -->
+            <div class="header-contacts-row">
+                <div class="contacts-container">
+                    <div class="contacts-main">
+                        <a href="tel:+79534999883" class="contact-phone">
+                            <i class="fas fa-phone"></i>
+                            <div class="phone-info">
+                                <span class="phone-number">+7 (953) 499-98-83</span>
+                                <span class="phone-label">Звоните с 8:00 до 20:00</span>
+                            </div>
+                        </a>
+                        <div class="contact-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Казань, ул. Промышленная, 15</span>
+                        </div>
+                    </div>
+
+                    <div class="contacts-social">
+                        <a href="https://t.me/+79534999883" class="social-link telegram" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram</span>
+                        </a>
+                        <a href="https://vk.com/pokraska_kazan" class="social-link vk" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                            <span>ВКонтакте</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -427,7 +484,7 @@
                 <div class="service-header">
                     <i class="fas fa-car"></i>
                     <h2>Покраска автомобильных дисков</h2>
-                    <div class="service-id">Популярная услуга</div> <!-- ИСПРАВЛЕНО -->
+                    <div class="service-id">Популярная услуга</div>
                 </div>
 
                 <div class="service-content">
@@ -520,7 +577,7 @@
                 <div class="service-header">
                     <i class="fas fa-industry"></i>
                     <h2>Покраска металлоконструкций</h2>
-                    <div class="service-id">Для дома и бизнеса</div> <!-- ИСПРАВЛЕНО -->
+                    <div class="service-id">Для дома и бизнеса</div>
                 </div>
 
                 <div class="service-content">
@@ -571,7 +628,7 @@
                 <div class="service-header">
                     <i class="fas fa-cogs"></i>
                     <h2>Покраска промышленного оборудования</h2>
-                    <div class="service-id">Для промышленности</div> <!-- ИСПРАВЛЕНО -->
+                    <div class="service-id">Для промышленности</div>
                 </div>
 
                 <div class="service-content">
@@ -622,7 +679,7 @@
                 <div class="service-header">
                     <i class="fas fa-home"></i>
                     <h2>Покраска элементов интерьера</h2>
-                    <div class="service-id">Дизайнерские решения</div> <!-- ИСПРАВЛЕНО -->
+                    <div class="service-id">Дизайнерские решения</div>
                 </div>
 
                 <div class="service-content">
@@ -685,7 +742,7 @@
         </div>
     </section>
 
-    <!-- ========== FOOTER (ОБНОВЛЕННЫЙ) ========== -->
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -701,6 +758,18 @@
                                 Профессиональная порошковая покраска в Казани с 2014 года
                             </div>
                         </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://vk.com/pokraska_kazan" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="Наша группа ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://www.instagram.com/pokraska_kazan/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Наш Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Написать в Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -723,6 +792,18 @@
                         <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
                         <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
                         <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
+                        <li><i class="fab fa-telegram"></i> <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+                    </ul>
+                </div>
+
+                <!-- Колонка 4: Полезное -->
+                <div class="footer-column">
+                    <h4>Полезное</h4>
+                    <ul>
+                        <li><a href="prices.html">Цены и расчет</a></li>
+                        <li><a href="gallery.html">Галерея работ</a></li>
+                        <li><a href="../index.html#request-form">Оставить заявку</a></li>
+                        <li><a href="contacts.html">Схема проезда</a></li>
                     </ul>
                 </div>
             </div>
@@ -734,6 +815,11 @@
         </div>
     </footer>
 
+    <!-- Telegram кнопка -->
+    <a href="https://t.me/+79534999883" class="telegram-float" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Написать в Telegram">
+        <i class="fab fa-telegram"></i>
+    </a>
+
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/main.js"></script>
 
@@ -741,20 +827,21 @@
         // Текущий год в футере
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Подсветка активной ссылки в навигации услуг
+        // Активная навигация услуг и плавная прокрутка
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.service-nav-link');
             const sections = document.querySelectorAll('.service-detail-card');
 
-            // Функция обновления активной ссылки
+            // Функция обновления активной ссылки при скролле
             function updateActiveLink() {
                 let current = '';
+                const scrollPosition = window.scrollY + 150; // Смещение для активации
 
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.clientHeight;
 
-                    if (window.scrollY >= (sectionTop - 100)) {
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                         current = section.getAttribute('id');
                     }
                 });
@@ -765,12 +852,14 @@
                         link.classList.add('active');
                     }
                 });
+
+                // Если мы в начале страницы, снимаем активность
+                if (scrollPosition < sections[0].offsetTop - 100) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                }
             }
 
-            // Слушаем скролл
-            window.addEventListener('scroll', updateActiveLink);
-
-            // Плавная прокрутка для ссылок навигации
+            // Плавная прокрутка для ссылок навигации услуг
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -779,16 +868,107 @@
                     const targetElement = document.querySelector(targetId);
 
                     if (targetElement) {
+                        const header = document.querySelector('.header');
+                        const headerHeight = header ? header.offsetHeight : 140;
+
                         window.scrollTo({
-                            top: targetElement.offsetTop - 80,
+                            top: targetElement.offsetTop - headerHeight,
                             behavior: 'smooth'
                         });
+
+                        // Обновляем URL
+                        history.pushState(null, null, targetId);
                     }
                 });
             });
 
-            // Инициализация
+            // Проверяем якорь в URL при загрузке
+            const hash = window.location.hash;
+            if (hash) {
+                const targetElement = document.querySelector(hash);
+                if (targetElement) {
+                    setTimeout(() => {
+                        const header = document.querySelector('.header');
+                        const headerHeight = header ? header.offsetHeight : 140;
+
+                        window.scrollTo({
+                            top: targetElement.offsetTop - headerHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+            }
+
+            // Слушаем скролл для обновления активной ссылки
+            window.addEventListener('scroll', updateActiveLink);
+
+            // Инициализация при загрузке
             updateActiveLink();
+
+            // Анимация появления карточек
+            const serviceCards = document.querySelectorAll('.service-detail-card');
+            serviceCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+
+            // Анимация навигационных ссылок
+            const navLinksAnimated = document.querySelectorAll('.service-nav-link');
+            navLinksAnimated.forEach((link, index) => {
+                link.style.opacity = '0';
+                link.style.transform = 'translateY(10px)';
+
+                setTimeout(() => {
+                    link.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    link.style.opacity = '1';
+                    link.style.transform = 'translateY(0)';
+                }, index * 100 + 500);
+            });
+        });
+
+        // Эффект параллакса для заголовка
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.services-header h1');
+            if (header) {
+                const parallaxValue = scrolled * 0.03;
+                header.style.transform = `translateY(${parallaxValue}px)`;
+            }
+        });
+
+        // Обработчик для ссылок на форму заявки
+        document.querySelectorAll('a[href*="#request-form"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.includes('#request-form')) {
+                    e.preventDefault();
+
+                    // Если мы на главной странице
+                    if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.includes('index')) {
+                        const targetElement = document.getElementById('request-form');
+                        if (targetElement) {
+                            const header = document.querySelector('.header');
+                            const headerHeight = header ? header.offsetHeight : 140;
+
+                            window.scrollTo({
+                                top: targetElement.offsetTop - headerHeight,
+                                behavior: 'smooth'
+                            });
+
+                            history.pushState(null, null, '#request-form');
+                        }
+                    } else {
+                        // Если не на главной - переходим на главную
+                        window.location.href = href;
+                    }
+                }
+            });
         });
     </script>
 </body>

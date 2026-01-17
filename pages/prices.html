@@ -241,6 +241,32 @@
             font-size: 2rem;
         }
 
+        /* Соцсети в футере */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: #3498db;
+            transform: translateY(-3px);
+        }
+
         /* CTA */
         .price-cta {
             text-align: center;
@@ -267,6 +293,12 @@
             .factors-grid {
                 grid-template-columns: 1fr;
             }
+
+            .price-cta .btn {
+                width: 100%;
+                margin-bottom: 15px;
+                margin-left: 0 !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -278,17 +310,24 @@
                 display: block;
                 overflow-x: auto;
             }
+
+            .service-name {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ========== HEADER (ОБНОВЛЕННЫЙ) ========== -->
+    <!-- ========== HEADER ========== -->
     <header class="header">
         <div class="container">
-            <div class="header-content">
-                <!-- Логотип ПРЕМИУМ -->
+            <!-- Верхняя строка: Лого + Навигация -->
+            <div class="header-top">
+                <!-- Логотип -->
                 <div class="logo">
-                    <a href="../index.html" class="logo-link">
+                    <a href="../index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
                             <div class="logo-main">
                                 <span class="logo-primary">POKRASKA</span>
@@ -302,31 +341,50 @@
                 </div>
 
                 <!-- Навигация -->
-                <nav class="nav">
+                <nav class="nav" aria-label="Основная навигация">
                     <ul class="nav-list">
                         <li><a href="../index.html"><i class="fas fa-home"></i> Главная</a></li>
                         <li><a href="services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
-                        <li><a href="prices.html" class="active"><i class="fas fa-tag"></i> Цены</a></li>
+                        <li><a href="prices.html" class="active" aria-current="page"><i class="fas fa-tag"></i> Цены</a></li>
                         <li><a href="gallery.html"><i class="fas fa-images"></i> Работы</a></li>
                         <li><a href="contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
                     </ul>
-
-                    <!-- Контакты в хедере -->
-                    <div class="header-contacts">
-                        <a href="tel:+79534999883" class="phone-link">
-                            <i class="fas fa-phone"></i>
-                            <span>+7 (953) 499-98-83</span>
-                        </a>
-                        <a href="https://t.me/+79534999883" class="telegram-link" target="_blank">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                    </div>
                 </nav>
 
                 <!-- Кнопка мобильного меню -->
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
+            </div>
+
+            <!-- Нижняя строка: Контакты -->
+            <div class="header-contacts-row">
+                <div class="contacts-container">
+                    <div class="contacts-main">
+                        <a href="tel:+79534999883" class="contact-phone">
+                            <i class="fas fa-phone"></i>
+                            <div class="phone-info">
+                                <span class="phone-number">+7 (953) 499-98-83</span>
+                                <span class="phone-label">Звоните с 8:00 до 20:00</span>
+                            </div>
+                        </a>
+                        <div class="contact-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Казань, ул. Промышленная, 15</span>
+                        </div>
+                    </div>
+
+                    <div class="contacts-social">
+                        <a href="https://t.me/+79534999883" class="social-link telegram" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Telegram">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram</span>
+                        </a>
+                        <a href="https://vk.com/pokraska_kazan" class="social-link vk" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                            <span>ВКонтакте</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -572,7 +630,7 @@
         </div>
     </section>
 
-    <!-- ========== FOOTER (ОБНОВЛЕННЫЙ) ========== -->
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -589,6 +647,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="social-links">
+                        <a href="https://vk.com/pokraska_kazan" target="_blank" rel="noopener noreferrer" title="ВКонтакте" aria-label="Наша группа ВКонтакте">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://www.instagram.com/pokraska_kazan/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Наш Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Написать в Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Колонка 2: Услуги -->
@@ -597,7 +667,7 @@
                     <ul>
                         <li><a href="services.html#wheels">Покраска дисков</a></li>
                         <li><a href="services.html#metal">Металлоконструкции</a></li>
-                        <li><a href="services.html#details">Детали оборудования</a></li>
+                        <li><a href="services.html#equipment">Детали оборудования</a></li>
                         <li><a href="services.html#interior">Элементы интерьера</a></li>
                     </ul>
                 </div>
@@ -610,6 +680,18 @@
                         <li><i class="fas fa-phone"></i> <a href="tel:+79534999883">+7 (953) 499-98-83</a></li>
                         <li><i class="fas fa-envelope"></i> <a href="mailto:denisov.jeka@gmail.com">denisov.jeka@gmail.com</a></li>
                         <li><i class="fas fa-clock"></i> Пн-Пт: 8:00-20:00, Сб: 9:00-18:00</li>
+                        <li><i class="fab fa-telegram"></i> <a href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+                    </ul>
+                </div>
+
+                <!-- Колонка 4: Полезное -->
+                <div class="footer-column">
+                    <h4>Полезное</h4>
+                    <ul>
+                        <li><a href="prices.html">Цены и расчет</a></li>
+                        <li><a href="gallery.html">Галерея работ</a></li>
+                        <li><a href="../index.html#request-form">Оставить заявку</a></li>
+                        <li><a href="contacts.html">Схема проезда</a></li>
                     </ul>
                 </div>
             </div>
@@ -620,6 +702,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Telegram кнопка -->
+    <a href="https://t.me/+79534999883" class="telegram-float" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Написать в Telegram">
+        <i class="fab fa-telegram"></i>
+    </a>
 
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/main.js"></script>
@@ -634,11 +721,73 @@
             rows.forEach(row => {
                 row.addEventListener('mouseenter', function() {
                     this.style.backgroundColor = '#f8fafc';
+                    this.style.transition = 'background-color 0.3s ease';
                 });
                 row.addEventListener('mouseleave', function() {
                     this.style.backgroundColor = '';
                 });
             });
+
+            // Анимация для карточек факторов
+            const factorCards = document.querySelectorAll('.factor-card');
+            factorCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Плавный скролл для ссылок на главную страницу с якорем
+            document.querySelectorAll('a[href*="#request-form"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.includes('#request-form')) {
+                        e.preventDefault();
+
+                        // Если мы на главной странице
+                        if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.includes('index')) {
+                            const targetElement = document.getElementById('request-form');
+                            if (targetElement) {
+                                const header = document.querySelector('.header');
+                                const headerHeight = header ? header.offsetHeight : 140;
+
+                                window.scrollTo({
+                                    top: targetElement.offsetTop - headerHeight,
+                                    behavior: 'smooth'
+                                });
+
+                                // Добавляем параметр в URL
+                                history.pushState(null, null, '#request-form');
+                            }
+                        } else {
+                            // Если не на главной - переходим на главную
+                            window.location.href = href;
+                        }
+                    }
+                });
+            });
+
+            // Форматирование цен для лучшей читаемости
+            document.querySelectorAll('.price-amount').forEach(priceElement => {
+                const text = priceElement.textContent;
+                // Добавляем пробелы для тысяч
+                const formatted = text.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+                priceElement.textContent = formatted;
+            });
+        });
+
+        // Эффект параллакса для заголовка
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.price-header h1');
+            if (header) {
+                const parallaxValue = scrolled * 0.03;
+                header.style.transform = `translateY(${parallaxValue}px)`;
+            }
         });
     </script>
 </body>
