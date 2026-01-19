@@ -1271,6 +1271,12 @@ body.menu-open {
         transition: transform 0.25s ease, opacity 0.2s ease;
     }
 
+    .header-contacts-row + .contacts-container-page,
+    .header-contacts-row + .container,
+    .header-contacts-row + .request-section {
+        padding-top: 80px;
+    }
+
     .header.is-collapsed .header-contacts-row {
         opacity: 0;
         transform: translateY(-100%);
