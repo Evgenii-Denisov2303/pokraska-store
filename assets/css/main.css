@@ -1272,7 +1272,11 @@ body.menu-open {
     }
 
     .header + * {
-        padding-top: 80px;
+        padding-top: 140px;
+    }
+
+    body.contacts-collapsed .header + * {
+        padding-top: 70px;
     }
 
     .header.is-collapsed .header-contacts-row {

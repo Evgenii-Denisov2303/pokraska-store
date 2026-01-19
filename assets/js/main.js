@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
+            body.classList.remove('contacts-collapsed');
             const currentScrollY = window.scrollY;
             const scrollingDown = currentScrollY > lastScrollY;
             const nearTop = currentScrollY < 20;
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 isHeaderCollapsed = true;
                 setHeaderHeight();
             }
+            body.classList.add('contacts-collapsed');
             headerTop.classList.add('is-hidden');
         } else if (!scrollingDown || nearTop) {
             if (isHeaderCollapsed) {
@@ -65,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
+            body.classList.remove('contacts-collapsed');
             headerTop.classList.remove('is-hidden');
         }
 
