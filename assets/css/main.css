@@ -1163,6 +1163,7 @@ body.menu-open {
         padding: 10px 15px;
         position: relative;
         box-shadow: none;
+        z-index: 1002;
     }
 
     .header.is-hidden .header-top {
@@ -1215,7 +1216,7 @@ body.menu-open {
 
     .nav {
         position: fixed;
-    top: var(--header-height, 100px);
+        top: var(--header-top-height, 70px);
         left: 0;
         right: 0;
         background: white;
@@ -1223,7 +1224,7 @@ body.menu-open {
         box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         display: none;
         border-radius: 0 0 15px 15px;
-        z-index: 999;
+        z-index: 1001;
     max-height: calc(100vh - var(--header-height, 100px));
         overflow-y: auto;
         flex-direction: column;

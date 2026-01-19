@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isMobile = window.innerWidth <= 768;
         const heightTarget = isMobile ? (header || headerTop) : (headerTop || header);
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
+        if (headerTop) {
+            document.documentElement.style.setProperty('--header-top-height', `${headerTop.offsetHeight}px`);
+        }
     }
 
     setHeaderHeight();
