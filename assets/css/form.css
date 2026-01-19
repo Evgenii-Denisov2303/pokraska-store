@@ -3,12 +3,18 @@
 /* Общие стили формы */
 .request-form {
     background: white;
+    background-image: linear-gradient(180deg, rgba(52, 152, 219, 0.05), rgba(255, 255, 255, 0) 60%);
     padding: 45px;
     border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     border: 2px solid #e8eef5;
     position: relative;
     overflow: hidden;
+    align-self: start;
+}
+
+.request-form--compact {
+    padding: 28px;
 }
 
 .request-form:before {
@@ -51,12 +57,16 @@
 
 .yandex-form-embed {
     width: calc(100% - 2px);
-    min-height: 720px;
+    min-height: 680px;
     border: 0;
     border-radius: 8px;
     display: block;
     background: #ffffff;
     margin: 0 2px 2px 0;
+}
+
+.request-form--compact .yandex-form-embed {
+    min-height: 600px;
 }
 
 @media (max-width: 768px) {
@@ -66,7 +76,15 @@
     }
 
     .yandex-form-embed {
-        min-height: 800px;
+        min-height: 740px;
+    }
+
+    .request-form--compact {
+        padding: 24px;
+    }
+
+    .request-form--compact .yandex-form-embed {
+        min-height: 660px;
     }
 }
 
@@ -77,7 +95,15 @@
     }
 
     .yandex-form-embed {
-        min-height: 860px;
+        min-height: 780px;
+    }
+
+    .request-form--compact {
+        padding: 20px;
+    }
+
+    .request-form--compact .yandex-form-embed {
+        min-height: 720px;
     }
 }
 

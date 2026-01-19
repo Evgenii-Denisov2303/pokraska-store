@@ -21,6 +21,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 50px;
     margin-top: 40px;
+    align-items: start;
 }
 
 .contact-info-card {
@@ -29,6 +30,7 @@
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     border-left: 5px solid #3498db;
+    align-self: start;
 }
 
 .contact-info-card h3 {
@@ -245,6 +247,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     margin-bottom: 30px;
     position: relative;
+    align-self: start;
 }
 
 .contact-form-card h3 {
