@@ -263,7 +263,11 @@
                 <!-- Работа 1: Диски Mercedes -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/mercedes-wheels.jpg" alt="Покраска дисков Mercedes в серебристый металлик" loading="lazy" decoding="async" width="1200" height="800">
+                        <picture>
+                            <source type="image/avif" srcset="assets/images/works/mercedes-wheels.avif 1x, assets/images/works/mercedes-wheels-large.avif 2x">
+                            <source type="image/webp" srcset="assets/images/works/mercedes-wheels.webp 1x, assets/images/works/mercedes-wheels-large.webp 2x">
+                            <img src="assets/images/works/mercedes-wheels.jpg" srcset="assets/images/works/mercedes-wheels-large.jpg 2x" alt="Покраска дисков Mercedes в серебристый металлик" loading="lazy" decoding="async" width="1200" height="800">
+                        </picture>
                         <div class="work-overlay">
                             <a href="assets/images/works/mercedes-wheels-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска дисков Mercedes" aria-label="Увеличить изображение">
                                 <i class="fas fa-search-plus" aria-hidden="true"></i>
@@ -280,7 +284,11 @@
                 <!-- Работа 2: Металлические ворота -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/metal-gate.jpg" alt="Покраска металлических ворот терракотового цвета" loading="lazy" decoding="async" width="1200" height="800">
+                        <picture>
+                            <source type="image/avif" srcset="assets/images/works/metal-gate.avif 1x, assets/images/works/metal-gate-large.avif 2x">
+                            <source type="image/webp" srcset="assets/images/works/metal-gate.webp 1x, assets/images/works/metal-gate-large.webp 2x">
+                            <img src="assets/images/works/metal-gate.jpg" srcset="assets/images/works/metal-gate-large.jpg 2x" alt="Покраска металлических ворот терракотового цвета" loading="lazy" decoding="async" width="1200" height="800">
+                        </picture>
                         <div class="work-overlay">
                             <a href="assets/images/works/metal-gate.jpg" class="work-zoom" data-lightbox="works" title="Покраска металлических ворот" aria-label="Увеличить изображение">
                                 <i class="fas fa-search-plus" aria-hidden="true"></i>
@@ -297,7 +305,11 @@
                 <!-- Работа 3: Торговое оборудование -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/commercial-equipment.jpg" alt="Покраска торгового оборудования в белый глянец" loading="lazy" decoding="async" width="1200" height="800">
+                        <picture>
+                            <source type="image/avif" srcset="assets/images/works/commercial-equipment.avif 1x, assets/images/works/commercial-equipment-large.avif 2x">
+                            <source type="image/webp" srcset="assets/images/works/commercial-equipment.webp 1x, assets/images/works/commercial-equipment-large.webp 2x">
+                            <img src="assets/images/works/commercial-equipment.jpg" srcset="assets/images/works/commercial-equipment-large.jpg 2x" alt="Покраска торгового оборудования в белый глянец" loading="lazy" decoding="async" width="1200" height="800">
+                        </picture>
                         <div class="work-overlay">
                             <a href="assets/images/works/commercial-equipment-large.jpg" class="work-zoom" data-lightbox="works" title="Покраска торгового оборудования" aria-label="Увеличить изображение">
                                 <i class="fas fa-search-plus" aria-hidden="true"></i>
@@ -314,7 +326,11 @@
                 <!-- Работа 4: Элементы интерьера -->
                 <div class="work-item">
                     <div class="work-image-container">
-                        <img src="assets/images/works/interior-elements.jpg" alt="Покраска элементов интерьера в золотистый цвет" loading="lazy" decoding="async" width="1200" height="800">
+                        <picture>
+                            <source type="image/avif" srcset="assets/images/works/interior-elements.avif 1x, assets/images/works/interior-elements-large.avif 2x">
+                            <source type="image/webp" srcset="assets/images/works/interior-elements.webp 1x, assets/images/works/interior-elements-large.webp 2x">
+                            <img src="assets/images/works/interior-elements.jpg" srcset="assets/images/works/interior-elements-large.jpg 2x" alt="Покраска элементов интерьера в золотистый цвет" loading="lazy" decoding="async" width="1200" height="800">
+                        </picture>
                         <div class="work-overlay">
                             <a href="assets/images/works/interior-elements-large.jpg" class="work-zoom" data-lightbox="works" title="Элементы интерьера" aria-label="Увеличить изображение">
                                 <i class="fas fa-search-plus" aria-hidden="true"></i>
@@ -336,6 +352,76 @@
                 <a href="#request-form" class="btn btn-secondary">
                     <i class="fas fa-paint-roller"></i> Заказать покраску
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section cases-section" aria-labelledby="cases-title">
+        <div class="container">
+            <h2 class="section-title" id="cases-title">Кейсы</h2>
+            <p class="section-subtitle">Коротко о задачах и результате</p>
+
+            <div class="cases-grid">
+                <article class="case-card">
+                    <div class="case-header">
+                        <h3>Диски BMW</h3>
+                        <span class="case-badge">R19 • 2 дня</span>
+                    </div>
+                    <p>Восстановили геометрию, подготовили поверхность и нанесли металлик с защитным лаком.</p>
+                    <div class="case-tags">
+                        <span>Серебристый металлик</span>
+                        <span>Антикоррозийная грунтовка</span>
+                    </div>
+                </article>
+
+                <article class="case-card">
+                    <div class="case-header">
+                        <h3>Торговые стеллажи</h3>
+                        <span class="case-badge">42 детали • 3 дня</span>
+                    </div>
+                    <p>Сняли старое покрытие, сделали равномерный белый глянец и усилили стойкость к истиранию.</p>
+                    <div class="case-tags">
+                        <span>Белый глянец</span>
+                        <span>Износостойкое покрытие</span>
+                    </div>
+                </article>
+
+                <article class="case-card">
+                    <div class="case-header">
+                        <h3>Металлоконструкции</h3>
+                        <span class="case-badge">Объект • 5 дней</span>
+                    </div>
+                    <p>Порошковая окраска ворот и опор с защитой от коррозии и устойчивостью к погоде.</p>
+                    <div class="case-tags">
+                        <span>Терракотовый RAL</span>
+                        <span>Антикор</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section trust-section" aria-labelledby="trust-title">
+        <div class="container">
+            <h2 class="section-title" id="trust-title">Почему выбирают нас</h2>
+            <p class="section-subtitle">Стабильный результат, понятный процесс, аккуратная работа</p>
+
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <i class="fas fa-stopwatch" aria-hidden="true"></i>
+                    <h3>Сроки без срывов</h3>
+                    <p>Планируем загрузку и заранее согласуем график, чтобы выдавать в обещанный срок.</p>
+                </div>
+                <div class="trust-card">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    <h3>Долговечное покрытие</h3>
+                    <p>Подготовка поверхности + контроль толщины — покрытие служит годами.</p>
+                </div>
+                <div class="trust-card">
+                    <i class="fas fa-comments" aria-hidden="true"></i>
+                    <h3>Честная коммуникация</h3>
+                    <p>Покажем референсы, согласуем цвет и держим связь на каждом этапе.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -411,6 +497,14 @@
                 <div class="request-form request-form--compact">
                     <h3>Оставить заявку</h3>
                     <p class="form-notice">Мы перезвоним вам в течение 15 минут</p>
+                    <div class="quick-actions">
+                        <a class="btn btn-outline" href="tel:+79534999883">
+                            <i class="fas fa-phone" aria-hidden="true"></i> Позвонить
+                        </a>
+                        <a class="btn btn-outline" href="https://t.me/+79534999883" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-telegram" aria-hidden="true"></i> Telegram
+                        </a>
+                    </div>
                     <div class="yandex-form-frame">
                         <iframe class="yandex-form-embed" title="Заявка POKRASKA.STORE" src="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" name="ya-form-696e3c3ee010db8992425918" loading="lazy"></iframe>
                     </div>

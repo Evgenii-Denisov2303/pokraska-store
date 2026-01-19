@@ -115,6 +115,11 @@
     overflow: hidden;
 }
 
+.gallery-image picture {
+    display: block;
+    height: 100%;
+}
+
 .gallery-image img {
     width: 100%;
     height: 100%;
