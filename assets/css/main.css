@@ -45,10 +45,7 @@ body.menu-open {
 /* ========== HEADER ========== */
 .header {
     background: white;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    position: static;
 }
 
 .header .container {
@@ -64,6 +61,11 @@ body.menu-open {
     align-items: center;
     padding: 15px 20px;
     border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
 /* Логотип */
@@ -1236,9 +1238,6 @@ body.menu-open {
         padding: 15px 20px;
     }
 
-    .header.is-collapsed .header-contacts-row {
-        display: none;
-    }
 
     .hero {
         padding: 80px 0;
