@@ -1286,6 +1286,12 @@ body.menu-open {
         pointer-events: none;
     }
 
+    .header-contacts-row.is-hidden {
+        opacity: 0;
+        transform: translateY(calc(-100% - var(--header-height, 70px)));
+        pointer-events: none;
+    }
+
 
     .hero {
         padding: 80px 0;

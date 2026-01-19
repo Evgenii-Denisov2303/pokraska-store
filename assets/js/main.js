@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const header = document.querySelector('.header');
     const headerTop = document.querySelector('.header-top');
+    const headerContactsRow = document.querySelector('.header-contacts-row');
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
 
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setHeaderHeight();
             }
             header.classList.remove('is-hidden');
+            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
             body.classList.remove('contacts-collapsed');
             const currentScrollY = window.scrollY;
             const scrollingDown = currentScrollY > lastScrollY;
@@ -35,8 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (scrollingDown && currentScrollY > 120) {
                 header.classList.add('is-hidden');
+                if (headerContactsRow) headerContactsRow.classList.add('is-hidden');
             } else if (!scrollingDown || nearTop) {
                 header.classList.remove('is-hidden');
+                if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
             }
 
             lastScrollY = currentScrollY;
@@ -45,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (body.classList.contains('menu-open')) {
             header.classList.remove('is-hidden');
+            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
             lastScrollY = window.scrollY;
             return;
         }
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             body.classList.add('contacts-collapsed');
             header.classList.add('is-hidden');
+            if (headerContactsRow) headerContactsRow.classList.add('is-hidden');
         } else if (!scrollingDown || nearTop) {
             if (isHeaderCollapsed) {
                 isHeaderCollapsed = false;
@@ -67,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             body.classList.remove('contacts-collapsed');
             header.classList.remove('is-hidden');
+            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
         }
 
         lastScrollY = currentScrollY;
