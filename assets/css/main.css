@@ -85,22 +85,37 @@ body.menu-open {
 }
 
 .logo-main {
-    font-size: 1.4rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 800;
     line-height: 1.2;
     position: relative;
     padding-bottom: 6px;
     display: inline-flex;
     align-items: baseline;
     gap: 3px;
+    letter-spacing: 0.02em;
 }
 
 .logo-primary {
     color: #2c3e50;
+    text-transform: uppercase;
 }
 
 .logo-domain {
-    color: #3498db;
+    color: #2d8bd6;
+    font-weight: 700;
+}
+
+.logo-main:before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    bottom: -2px;
+    height: 10px;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.18), rgba(231, 76, 60, 0.18));
+    filter: blur(6px);
+    z-index: -1;
 }
 
 .logo-main:after {
@@ -109,8 +124,8 @@ body.menu-open {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(231,76,60,0) 0%, rgba(231,76,60,0.35) 15%, rgba(231,76,60,1) 50%, rgba(231,76,60,0.35) 85%, rgba(231,76,60,0) 100%);
+    height: 3px;
+    background: linear-gradient(90deg, rgba(231,76,60,0) 0%, rgba(231,76,60,0.5) 15%, rgba(231,76,60,1) 50%, rgba(231,76,60,0.5) 85%, rgba(231,76,60,0) 100%);
 }
 
 .logo-tagline {
@@ -1047,6 +1062,7 @@ body.menu-open {
     color: #bdc3c7;
     margin-bottom: 18px;
     line-height: 1.7;
+    font-size: 0.95rem;
 }
 
 .social-links {
@@ -1114,6 +1130,7 @@ body.menu-open {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 0.95rem;
 }
 
 .footer-column a:hover {
@@ -1126,7 +1143,7 @@ body.menu-open {
     align-items: flex-start;
     gap: 15px;
     margin-bottom: 12px;
-    line-height: 1.6;
+    line-height: 1.45;
 }
 
 .contact-list i {
@@ -1141,7 +1158,7 @@ body.menu-open {
     padding-top: 20px;
     border-top: 1px solid rgba(255,255,255,0.1);
     color: #bdc3c7;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     position: relative;
     z-index: 1;
 }
@@ -1489,11 +1506,11 @@ body.menu-open {
 
     /* Логотип на мобильных */
     .logo-primary {
-        font-size: 26px;
+        font-size: 28px;
     }
 
     .logo-domain {
-        font-size: 22px;
+        font-size: 24px;
     }
 
     .logo-tagline {
