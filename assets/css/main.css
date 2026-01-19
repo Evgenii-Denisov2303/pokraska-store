@@ -1272,6 +1272,10 @@ body.menu-open {
         padding-top: var(--header-height, 140px);
     }
 
+    body.header-hidden {
+        padding-top: 0;
+    }
+
 
     .hero {
         padding: 80px 0;

@@ -29,14 +29,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 setHeaderHeight();
             }
             header.classList.remove('is-hidden');
+            body.classList.remove('header-hidden');
             const currentScrollY = window.scrollY;
             const scrollingDown = currentScrollY > lastScrollY;
             const nearTop = currentScrollY < 20;
 
             if (scrollingDown && currentScrollY > 120) {
                 header.classList.add('is-hidden');
+                body.classList.add('header-hidden');
             } else if (!scrollingDown || nearTop) {
                 header.classList.remove('is-hidden');
+                body.classList.remove('header-hidden');
             }
 
             lastScrollY = currentScrollY;
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (body.classList.contains('menu-open')) {
             header.classList.remove('is-hidden');
+            body.classList.remove('header-hidden');
             lastScrollY = window.scrollY;
             return;
         }
@@ -59,12 +63,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 setHeaderHeight();
             }
             header.classList.add('is-hidden');
+            body.classList.add('header-hidden');
         } else if (!scrollingDown || nearTop) {
             if (isHeaderCollapsed) {
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
             header.classList.remove('is-hidden');
+            body.classList.remove('header-hidden');
         }
 
         lastScrollY = currentScrollY;
