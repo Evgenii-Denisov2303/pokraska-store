@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollingDown = currentScrollY > lastScrollY;
         const nearTop = currentScrollY < 20;
 
-        if (scrollingDown && currentScrollY > 80) {
+        if (scrollingDown && currentScrollY > 20) {
             if (!isHeaderCollapsed) {
                 isHeaderCollapsed = true;
                 setHeaderHeight();
