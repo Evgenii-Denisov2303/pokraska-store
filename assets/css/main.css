@@ -1271,9 +1271,7 @@ body.menu-open {
         transition: transform 0.25s ease, opacity 0.2s ease;
     }
 
-    .header-contacts-row + .contacts-container-page,
-    .header-contacts-row + .container,
-    .header-contacts-row + .request-section {
+    .header + * {
         padding-top: 80px;
     }
 
