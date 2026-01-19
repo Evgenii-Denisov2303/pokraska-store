@@ -239,60 +239,8 @@
                     <!-- Форма быстрой связи -->
                     <div class="contact-form-card">
                         <h3><i class="fas fa-comments"></i> Быстрая связь</h3>
-                        <p>Оставьте заявку и мы перезвоним вам в течение 15 минут</p>
-
-                        <!-- Сообщения формы -->
-                        <div id="formSuccess" class="form-success">
-                            <i class="fas fa-check-circle"></i>
-                            <h4>Заявка отправлена!</h4>
-                            <p>Мы свяжемся с вами в ближайшее время.</p>
-                        </div>
-
-                        <div id="formError" class="form-error">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <h4>Ошибка отправки</h4>
-                            <p>Попробуйте еще раз или позвоните нам напрямую.</p>
-                            <a href="tel:+79534999883" class="btn btn-call">
-                                <i class="fas fa-phone"></i> Позвонить
-                            </a>
-                        </div>
-
-                        <!-- Индикатор загрузки -->
-                        <div id="loadingOverlay" class="loading-overlay">
-                            <div class="spinner"></div>
-                        </div>
-
-                        <!-- Форма -->
-                        <form id="contactForm" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST" data-subject="📞 Заявка с контактов POKRASKA.STORE">
-                            <input type="hidden" name="_subject" value="📞 Заявка с контактов POKRASKA.STORE">
-                            <input type="hidden" name="_captcha" value="false">
-                            <input type="hidden" name="_template" value="table">
-                            <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
-                            <div class="form-group">
-                                <input type="text" id="name" name="name" placeholder="Ваше имя *" required minlength="2" aria-label="Ваше имя">
-                            </div>
-
-                            <div class="form-group">
-                                <input type="tel" id="phone" name="phone" placeholder="Телефон *" required aria-label="Ваш телефон">
-                            </div>
-
-                            <div class="form-group">
-                                <textarea id="message" name="message" placeholder="Ваш вопрос или описание детали..." rows="4" aria-label="Ваше сообщение"></textarea>
-                            </div>
-
-                            <div class="form-group checkbox-group">
-                                <input type="checkbox" id="agree" name="agree" value="yes" required>
-                                <label for="agree">Согласен на обработку персональных данных</label>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
-                                <i class="fas fa-paper-plane"></i> Отправить сообщение
-                            </button>
-
-                            <div class="form-note">
-                                Нажимая кнопку, вы соглашаетесь с <a href="../politika.html">политикой конфиденциальности</a>
-                            </div>
-                        </form>
+                        <p class="form-notice">Оставьте заявку и мы перезвоним вам в течение 15 минут</p>
+                        <iframe class="yandex-form-embed" title="Заявка POKRASKA.STORE" src="https://forms.yandex.ru/u/696e3c3ee010db8992425918" loading="lazy"></iframe>
                     </div>
 
                     <!-- Карта -->

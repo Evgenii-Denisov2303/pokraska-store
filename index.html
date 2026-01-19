@@ -411,65 +411,7 @@
                 <div class="request-form">
                     <h3>Оставить заявку</h3>
                     <p class="form-notice">Мы перезвоним вам в течение 15 минут</p>
-
-                    <!-- Сообщения формы -->
-                    <div id="formSuccess" class="form-success">
-                        <i class="fas fa-check-circle"></i>
-                        <h4>Заявка отправлена!</h4>
-                        <p>Мы свяжемся с вами в ближайшее время.</p>
-                    </div>
-
-                    <div id="formError" class="form-error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <h4>Ошибка отправки</h4>
-                        <p>Попробуйте еще раз или позвоните нам напрямую.</p>
-                        <a href="tel:+79534999883" class="btn btn-call">
-                            <i class="fas fa-phone"></i> Позвонить
-                        </a>
-                    </div>
-
-                    <!-- Индикатор загрузки -->
-                    <div id="loadingOverlay" class="loading-overlay">
-                        <div class="spinner"></div>
-                    </div>
-
-                    <form id="contactForm" action="https://formsubmit.co/denisov.jeka@gmail.com" method="POST" data-subject="🎨 Заявка с сайта POKRASKA.STORE">
-                        <input type="hidden" name="_subject" value="🎨 Заявка с сайта POKRASKA.STORE">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="hidden" name="_next" value="https://pokraska.store/thanks.html">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Ваше имя *" required minlength="2" aria-label="Ваше имя">
-                        </div>
-
-                        <div class="form-group">
-                            <input type="tel" id="phone" name="phone" placeholder="Телефон *" required aria-label="Ваш телефон">
-                        </div>
-
-                        <div class="form-group">
-                            <select id="service" name="service" aria-label="Выберите услугу">
-                                <option value="">Выберите услугу</option>
-                                <option value="Покраска дисков">Покраска дисков</option>
-                                <option value="Металлоконструкции">Металлоконструкции</option>
-                                <option value="Детали оборудования">Детали оборудования</option>
-                                <option value="Элементы интерьера">Элементы интерьера</option>
-                                <option value="Другое">Другое</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Описание детали, размеры, желаемый цвет..." aria-label="Описание заказа"></textarea>
-                        </div>
-
-                        <div class="form-group checkbox-group">
-                            <input type="checkbox" id="agree" name="agree" value="yes" required>
-                            <label for="agree">Согласен на обработку персональных данных</label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
-                            <i class="fas fa-paper-plane" aria-hidden="true"></i> Отправить заявку
-                        </button>
-                    </form>
+                    <iframe class="yandex-form-embed" title="Заявка POKRASKA.STORE" src="https://forms.yandex.ru/u/696e3c3ee010db8992425918" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
