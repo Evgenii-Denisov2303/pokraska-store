@@ -1,0 +1,331 @@
+/* ========== PRICES PAGE STYLES ========== */
+.prices-page {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+}
+
+.price-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.price-header h1 {
+    color: #2c3e50;
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.price-header .subtitle {
+    color: #7f8c8d;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Таблица цен */
+.pricing-table {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
+}
+
+.pricing-table-header {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.pricing-table-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.pricing-table-header .note {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+table thead {
+    background: #f8f9fa;
+}
+
+table th {
+    padding: 20px 25px;
+    text-align: left;
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #e0e6ed;
+}
+
+table td {
+    padding: 20px 25px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #5a6c7d;
+}
+
+table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+table tr:hover {
+    background: #f8fafc;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+.price-col-service {
+    width: 30%;
+}
+
+.price-col-description {
+    width: 45%;
+}
+
+.price-col-cost {
+    width: 25%;
+}
+
+.service-name {
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.service-name i {
+    color: #3498db;
+    font-size: 1.2em;
+}
+
+.service-description {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    line-height: 1.5;
+}
+
+.price-amount {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #27ae60;
+    text-align: right;
+}
+
+.price-note {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    text-align: right;
+    margin-top: 5px;
+}
+
+/* Факторы цены */
+.price-factors {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.price-factors h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.8rem;
+}
+
+.factors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.factor-card {
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #3498db;
+    transition: all 0.3s ease;
+}
+
+.factor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.15);
+}
+
+.factor-card i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+.factor-card h3 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.factor-card p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Калькулятор (упрощенный) */
+.calculator-section {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    border-radius: 20px;
+    padding: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.calculator-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.calculator-section p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.calculator-section .btn {
+    background: white;
+    color: #2c3e50;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+}
+
+.calculator-contact {
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.calculator-contact a {
+    color: white;
+    font-weight: 600;
+}
+
+/* Гарантии */
+.guarantee-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.guarantee-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    padding: 20px 40px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.guarantee-badge i {
+    font-size: 2rem;
+}
+
+.guarantee-title {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.guarantee-text {
+    color: #7f8c8d;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* CTA */
+.price-cta {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.price-cta .btn + .btn {
+    margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .prices-page {
+        padding: 60px 0;
+    }
+
+    .price-header h1 {
+        font-size: 2.2rem;
+    }
+
+    table th, table td {
+        padding: 15px;
+    }
+
+    .calculator-section, .price-factors, .guarantee-section {
+        padding: 30px;
+    }
+
+    .factors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .price-cta .btn {
+        width: 100%;
+        margin-bottom: 15px;
+        margin-left: 0;
+    }
+
+    .price-cta .btn + .btn {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .price-header h1 {
+        font-size: 1.8rem;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .service-name {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /thanks.html
+Disallow: /view-requests.html
 
 Sitemap: https://pokraska.store/sitemap.xml
 

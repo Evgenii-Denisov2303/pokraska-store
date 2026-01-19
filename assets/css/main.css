@@ -16,6 +16,10 @@ body {
     background: #f8f9fa;
 }
 
+body.menu-open {
+    overflow: hidden;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -47,12 +51,18 @@ body {
     z-index: 1000;
 }
 
+.header .container {
+    padding: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 /* Верхняя строка: Лого + Навигация */
 .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0 15px;
+    padding: 15px 20px;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -62,49 +72,44 @@ body {
 }
 
 .logo-premium {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .logo-main {
-    display: flex;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+    padding-bottom: 6px;
+    display: inline-flex;
     align-items: baseline;
     gap: 3px;
-    margin-bottom: 5px;
 }
 
 .logo-primary {
-    font-size: 32px;
-    font-weight: 800;
     color: #2c3e50;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .logo-domain {
-    font-size: 28px;
-    font-weight: 700;
-    color: #e74c3c;
-    position: relative;
+    color: #3498db;
 }
 
-.logo-domain:after {
+.logo-main:after {
     content: '';
     position: absolute;
-    bottom: -3px;
     left: 0;
+    bottom: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #e74c3c, transparent);
+    background: linear-gradient(90deg, rgba(231,76,60,0) 0%, rgba(231,76,60,0.35) 15%, rgba(231,76,60,1) 50%, rgba(231,76,60,0.35) 85%, rgba(231,76,60,0) 100%);
 }
 
 .logo-tagline {
-    font-size: 14px;
+    font-size: 0.85rem;
     color: #7f8c8d;
-    font-weight: 400;
-    letter-spacing: 0.5px;
+    max-width: 200px;
 }
 
 /* Навигация */
@@ -116,7 +121,9 @@ body {
 .nav-list {
     display: flex;
     list-style: none;
-    gap: 25px;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-list a {
@@ -126,25 +133,20 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: color 0.3s;
-    padding: 8px 0;
-    position: relative;
+    font-size: 0.95rem;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.nav-list a:hover,
-.nav-list a.active {
+.nav-list a:hover {
+    background: #f8f9fa;
     color: #3498db;
 }
 
-.nav-list a.active:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
+.nav-list a.active {
     background: #3498db;
-    border-radius: 2px;
+    color: white;
 }
 
 /* Нижняя строка: Контакты */
@@ -437,6 +439,13 @@ body {
     text-align: center;
 }
 
+.btn-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
 /* ========== SECTIONS ========== */
 .section {
     padding: 100px 0;
@@ -469,6 +478,54 @@ body {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* ========== FAQ ========== */
+.faq-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid #e8eef5;
+    padding: 18px 20px;
+}
+
+.faq-question {
+    cursor: pointer;
+    font-weight: 600;
+    color: #2c3e50;
+    list-style: none;
+    position: relative;
+    padding-right: 28px;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-question:after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #3498db;
+    font-weight: 700;
+}
+
+.faq-item[open] .faq-question:after {
+    content: '–';
+}
+
+.faq-answer {
+    margin-top: 12px;
+    color: #7f8c8d;
+    line-height: 1.6;
 }
 
 /* ========== SERVICES ========== */
@@ -827,11 +884,14 @@ body {
     background: linear-gradient(to right, #3498db, #e74c3c);
 }
 
+
 .footer-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 50px;
     margin-bottom: 60px;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-logo h3 {
@@ -943,6 +1003,8 @@ body {
     border-top: 1px solid rgba(255,255,255,0.1);
     color: #bdc3c7;
     font-size: 0.95rem;
+    position: relative;
+    z-index: 1;
 }
 
 .footer-bottom p {
@@ -1009,7 +1071,16 @@ body {
 /* Для планшетов */
 @media (max-width: 992px) {
     .header-top {
-        padding: 15px 0;
+        padding: 15px 20px;
+    }
+
+    .nav-list {
+        gap: 10px;
+    }
+
+    .nav-list a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
     }
 
     .contacts-container {
@@ -1056,6 +1127,9 @@ body {
 
 /* Для мобильных телефонов */
 @media (max-width: 768px) {
+    .header-top {
+        flex-wrap: wrap;
+    }
     .mobile-menu-btn {
         display: flex;
         align-items: center;
@@ -1065,7 +1139,7 @@ body {
 
     .nav {
         position: fixed;
-        top: 100px;
+    top: var(--header-height, 100px);
         left: 0;
         right: 0;
         background: white;
@@ -1074,7 +1148,7 @@ body {
         display: none;
         border-radius: 0 0 15px 15px;
         z-index: 999;
-        max-height: calc(100vh - 100px);
+    max-height: calc(100vh - var(--header-height, 100px));
         overflow-y: auto;
         flex-direction: column;
         width: 100%;
@@ -1118,28 +1192,9 @@ body {
         border-bottom: none;
     }
 
-    /* Контакты в мобильном меню */
-    .mobile-contacts {
-        display: none;
-    }
-
-    /* Скрываем нижнюю строку контактов в мобильной версии */
     .header-contacts-row {
-        display: none;
-    }
-
-    /* Отображаем контакты в мобильном меню */
-    .nav.active + .header-contacts-row {
         display: block;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        z-index: 998;
-        border-top: 1px solid #eee;
+        padding: 15px 20px;
     }
 
     .hero {
@@ -1230,6 +1285,33 @@ body {
 
 /* Для очень маленьких экранов */
 @media (max-width: 480px) {
+    .header-top,
+    .header-contacts-row {
+        padding: 12px 15px;
+    }
+
+    .logo-premium {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .logo-tagline {
+        display: none;
+    }
+
+    .social-link span {
+        display: none;
+    }
+
+    .social-link {
+        padding: 10px;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        justify-content: center;
+    }
+
     .container {
         padding: 0 15px;
     }

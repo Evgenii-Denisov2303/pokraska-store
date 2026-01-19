@@ -76,9 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Валидация формы
     function validateForm() {
-        const name = form.querySelector('[name="name"]')?.value.trim();
-        const phone = form.querySelector('[name="phone"]')?.value.trim();
+        const nameInput = form.querySelector('input[name="name"], input#name');
+        const phoneInputField = form.querySelector('input[name="phone"], input#phone');
         const agree = form.querySelector('#agree')?.checked;
+        const name = nameInput ? nameInput.value.trim().replace(/\s+/g, ' ') : '';
+        const phone = phoneInputField ? phoneInputField.value.trim() : '';
+
+        if (nameInput) {
+            nameInput.value = name;
+        }
 
         // Валидация имени
         if (!name || name.length < 2) {
@@ -87,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Валидация телефона
-        const cleanPhone = phone?.replace(/\D/g, '') || '';
+        const cleanPhone = phone.replace(/\D/g, '');
         if (cleanPhone.length < 10) {
             showMessage('Пожалуйста, введите корректный номер телефона (10 цифр)', 'error');
             return false;
@@ -128,17 +134,91 @@ document.addEventListener('DOMContentLoaded', function() {
 
         showLoading();
 
+        const subject = form.dataset.subject || '🎨 Заявка с сайта POKRASKA.STORE';
+        const nextUrl = form.dataset.next || 'https://pokraska.store/thanks.html';
+
+        function ensureHidden(name, value) {
+            let input = form.querySelector(`input[name="${name}"]`);
+            if (!input) {
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                form.appendChild(input);
+            }
+            input.value = value;
+        }
+
+        ensureHidden('_subject', subject);
+        ensureHidden('_captcha', 'false');
+        ensureHidden('_template', 'table');
+        ensureHidden('_next', nextUrl);
+
+        const formData = new FormData(form);
+
+        function showSuccess(message) {
+            if (formSuccess) {
+                if (message) {
+                    const textNode = formSuccess.querySelector('p');
+                    if (textNode) textNode.textContent = message;
+                }
+                formSuccess.classList.add('show');
+                formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function redirectAfterSuccess() {
+            if (!nextUrl) return;
+            window.location.href = nextUrl;
+        }
+
+        function showError() {
+            if (formError) {
+                formError.classList.add('show');
+                formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function submitViaIframe(data) {
+            return new Promise((resolve) => {
+                const iframe = document.createElement('iframe');
+                iframe.name = `formsubmit-iframe-${Date.now()}`;
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+
+                const hiddenForm = document.createElement('form');
+                hiddenForm.method = 'POST';
+                hiddenForm.action = 'https://formsubmit.co/denisov.jeka@gmail.com';
+                hiddenForm.target = iframe.name;
+                hiddenForm.style.display = 'none';
+
+                data.forEach((value, key) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    hiddenForm.appendChild(input);
+                });
+
+                document.body.appendChild(hiddenForm);
+                hiddenForm.submit();
+
+                setTimeout(() => {
+                    hiddenForm.remove();
+                    iframe.remove();
+                    resolve();
+                }, 3000);
+            });
+        }
+
         try {
-            // Подготавливаем данные для FormSubmit
-            const formData = new FormData(form);
+            if (!window.fetch) {
+                await submitViaIframe(formData);
+                showSuccess('Заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+                form.reset();
+                redirectAfterSuccess();
+                return;
+            }
 
-            // Добавляем дополнительные параметры для FormSubmit
-            formData.append('_subject', '🎨 Заявка с сайта POKRASKA.STORE');
-            formData.append('_captcha', 'false');
-            formData.append('_template', 'table');
-            formData.append('_next', 'https://pokraska.store/thanks.html');
-
-            // Отправка через FormSubmit
             const response = await fetch('https://formsubmit.co/ajax/denisov.jeka@gmail.com', {
                 method: 'POST',
                 body: formData,
@@ -147,58 +227,53 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
+            const contentType = response.headers.get('content-type') || '';
+            if (!response.ok || !contentType.includes('application/json')) {
+                throw new Error('FormSubmit вернул неожиданный ответ');
+            }
+
             const result = await response.json();
-
-            if (result.success) {
-                // Показываем успех
-                if (formSuccess) {
-                    formSuccess.classList.add('show');
-                    formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-
-                // Сбрасываем форму
-                form.reset();
-
-                // Прячем сообщение через 10 секунд
-                setTimeout(() => {
-                    if (formSuccess) formSuccess.classList.remove('show');
-                }, 10000);
-
-            } else {
+            if (!result.success && result.success !== 'true') {
                 throw new Error('FormSubmit вернул ошибку');
             }
 
+            showSuccess('Заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+            form.reset();
+            redirectAfterSuccess();
         } catch (error) {
             console.error('Ошибка отправки формы:', error);
 
-            // Показываем ошибку
-            if (formError) {
-                formError.classList.add('show');
-                formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            try {
+                await submitViaIframe(formData);
+                showSuccess('Заявка отправлена. Мы свяжемся с вами в ближайшее время.');
+                form.reset();
+                redirectAfterSuccess();
+            } catch (iframeError) {
+                console.error('Ошибка отправки через iframe:', iframeError);
+                showError();
 
-                // Прячем ошибку через 10 секунд
-                setTimeout(() => {
-                    if (formError) formError.classList.remove('show');
-                }, 10000);
-            }
+                if (confirm('Не удалось отправить форму автоматически. Хотите отправить письмо вручную через почтовый клиент?')) {
+                    const name = form.querySelector('[name="name"]')?.value.trim() || '';
+                    const phone = form.querySelector('[name="phone"]')?.value.trim() || '';
+                    const service = form.querySelector('[name="service"]')?.value.trim() || 'Не указано';
+                    const message = form.querySelector('[name="message"]')?.value.trim() || 'Не указано';
 
-            // Предлагаем альтернативу
-            if (confirm('Не удалось отправить форму автоматически. Хотите отправить письмо вручную через почтовый клиент?')) {
-                const name = form.querySelector('[name="name"]')?.value.trim() || '';
-                const phone = form.querySelector('[name="phone"]')?.value.trim() || '';
-                const service = form.querySelector('[name="service"]')?.value.trim() || 'Не указано';
-                const message = form.querySelector('[name="message"]')?.value.trim() || 'Не указано';
+                    const mailtoBody = `Имя: ${encodeURIComponent(name)}%0D%0A` +
+                                     `Телефон: ${encodeURIComponent(phone)}%0D%0A` +
+                                     `Услуга: ${encodeURIComponent(service)}%0D%0A` +
+                                     `Сообщение: ${encodeURIComponent(message)}%0D%0A%0D%0A` +
+                                     `Страница: ${encodeURIComponent(window.location.href)}`;
 
-                const mailtoBody = `Имя: ${encodeURIComponent(name)}%0D%0A` +
-                                 `Телефон: ${encodeURIComponent(phone)}%0D%0A` +
-                                 `Услуга: ${encodeURIComponent(service)}%0D%0A` +
-                                 `Сообщение: ${encodeURIComponent(message)}%0D%0A%0D%0A` +
-                                 `Страница: ${encodeURIComponent(window.location.href)}`;
-
-                window.location.href = `mailto:denisov.jeka@gmail.com?subject=${encodeURIComponent('Заявка с сайта POKRASKA.STORE')}&body=${mailtoBody}`;
+                    window.location.href = `mailto:denisov.jeka@gmail.com?subject=${encodeURIComponent('Заявка с сайта POKRASKA.STORE')}&body=${mailtoBody}`;
+                }
             }
         } finally {
             hideLoading();
+
+            setTimeout(() => {
+                if (formSuccess) formSuccess.classList.remove('show');
+                if (formError) formError.classList.remove('show');
+            }, 10000);
         }
     });
 
@@ -210,4 +285,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    if (!window.fetch) {
+        const formNote = form.querySelector('.form-note');
+        if (formNote) {
+            formNote.innerHTML += '<br><small style="color:#666;">Для отправки формы используйте современный браузер</small>';
+        }
+    }
 });

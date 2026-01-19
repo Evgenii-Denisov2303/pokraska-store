@@ -9,7 +9,7 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/logo.png</image:loc>
+      <image:loc>https://pokraska.store/assets/images/works/bmw-wheels-large.jpg</image:loc>
       <image:title>POKRASKA.STORE - Порошковая покраска в Казани</image:title>
     </image:image>
   </url>
@@ -37,11 +37,11 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/works/work1.jpg</image:loc>
+      <image:loc>https://pokraska.store/assets/images/works/bmw-wheels-large.jpg</image:loc>
       <image:title>Покраска дисков BMW в Казани</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/works/work2.jpg</image:loc>
+      <image:loc>https://pokraska.store/assets/images/works/metal-gate.jpg</image:loc>
       <image:title>Покраска металлических ворот</image:title>
     </image:image>
   </url>
