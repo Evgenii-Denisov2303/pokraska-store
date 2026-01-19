@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const nav = document.querySelector('.nav');
     const body = document.body;
     const header = document.querySelector('.header');
+    const headerContactsRow = document.querySelector('.header-contacts-row');
+    let lastScrollY = window.scrollY;
+    let isHeaderCollapsed = false;
 
     function setHeaderHeight() {
         if (!header) return;
@@ -13,6 +16,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setHeaderHeight();
     window.addEventListener('resize', setHeaderHeight);
+    window.addEventListener('resize', () => {
+        updateHeaderOnScroll();
+    });
+
+    function updateHeaderOnScroll() {
+        if (!header || !headerContactsRow) return;
+        const isMobile = window.innerWidth <= 768;
+
+        if (!isMobile) {
+            if (isHeaderCollapsed) {
+                header.classList.remove('is-collapsed');
+                isHeaderCollapsed = false;
+                setHeaderHeight();
+            }
+            lastScrollY = window.scrollY;
+            return;
+        }
+
+        const currentScrollY = window.scrollY;
+        const scrollingDown = currentScrollY > lastScrollY;
+        const nearTop = currentScrollY < 20;
+
+        if (body.classList.contains('menu-open')) {
+            lastScrollY = currentScrollY;
+            return;
+        }
+
+        if (scrollingDown && currentScrollY > 80) {
+            if (!isHeaderCollapsed) {
+                header.classList.add('is-collapsed');
+                isHeaderCollapsed = true;
+                setHeaderHeight();
+            }
+        } else if (!scrollingDown || nearTop) {
+            if (isHeaderCollapsed) {
+                header.classList.remove('is-collapsed');
+                isHeaderCollapsed = false;
+                setHeaderHeight();
+            }
+        }
+
+        lastScrollY = currentScrollY;
+    }
 
     if (mobileMenuBtn && nav) {
         const icon = mobileMenuBtn.querySelector('i');
@@ -93,4 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 4. Обновление высоты шапки при загрузке изображений
     window.addEventListener('load', setHeaderHeight);
+    window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
+    updateHeaderOnScroll();
 });

@@ -1236,6 +1236,10 @@ body.menu-open {
         padding: 15px 20px;
     }
 
+    .header.is-collapsed .header-contacts-row {
+        display: none;
+    }
+
     .hero {
         padding: 80px 0;
     }
