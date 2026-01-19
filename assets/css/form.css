@@ -41,22 +41,43 @@
     border-left: 4px solid #3498db;
 }
 
+.yandex-form-frame {
+    background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
+    border: 1px solid #e6edf5;
+    border-radius: 16px;
+    padding: 6px 12px 14px 6px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
 .yandex-form-embed {
-    width: 100%;
-    min-height: 680px;
+    width: calc(100% - 2px);
+    min-height: 720px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 8px;
+    display: block;
+    background: #ffffff;
+    margin: 0 2px 2px 0;
 }
 
 @media (max-width: 768px) {
+    .yandex-form-frame {
+        padding: 6px 12px 14px 6px;
+        border-radius: 14px;
+    }
+
     .yandex-form-embed {
-        min-height: 720px;
+        min-height: 800px;
     }
 }
 
 @media (max-width: 480px) {
+    .yandex-form-frame {
+        padding: 6px 12px 14px 6px;
+        border-radius: 12px;
+    }
+
     .yandex-form-embed {
-        min-height: 760px;
+        min-height: 860px;
     }
 }
 
