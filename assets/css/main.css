@@ -1297,7 +1297,10 @@ body.menu-open {
     }
 
     .contacts-container {
-        gap: 10px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 8px 10px;
     }
 
     .contacts-main {
@@ -1329,6 +1332,8 @@ body.menu-open {
 
     .contacts-social {
         gap: 8px;
+        justify-self: end;
+        align-self: start;
     }
 
     .social-link {
