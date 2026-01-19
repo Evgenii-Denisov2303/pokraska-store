@@ -1129,6 +1129,45 @@ body.menu-open {
 @media (max-width: 768px) {
     .header-top {
         flex-wrap: wrap;
+        padding: 10px 15px;
+    }
+
+    .header-contacts-row {
+        padding: 10px 15px;
+    }
+
+    .contacts-container {
+        gap: 10px;
+    }
+
+    .contacts-main {
+        gap: 10px;
+    }
+
+    .contact-phone,
+    .contact-address {
+        padding: 6px 10px;
+    }
+
+    .phone-number {
+        font-size: 1rem;
+    }
+
+    .phone-label {
+        font-size: 0.75rem;
+    }
+
+    .contact-address {
+        font-size: 0.85rem;
+    }
+
+    .contacts-social {
+        gap: 10px;
+    }
+
+    .social-link {
+        padding: 8px 14px;
+        font-size: 0.85rem;
     }
     .mobile-menu-btn {
         display: flex;
@@ -1287,7 +1326,7 @@ body.menu-open {
 @media (max-width: 480px) {
     .header-top,
     .header-contacts-row {
-        padding: 12px 15px;
+        padding: 8px 12px;
     }
 
     .logo-premium {
@@ -1297,6 +1336,14 @@ body.menu-open {
     }
 
     .logo-tagline {
+        display: none;
+    }
+
+    .contact-phone i {
+        font-size: 1.1rem;
+    }
+
+    .phone-label {
         display: none;
     }
 
