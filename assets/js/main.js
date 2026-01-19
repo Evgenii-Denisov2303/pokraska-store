@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setHeaderHeight() {
         if (!headerTop && !header) return;
-        const heightTarget = headerTop || header;
+        const heightTarget = window.innerWidth <= 768 ? (headerTop || header) : (header || headerTop);
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
     }
 
@@ -78,7 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
-                const headerHeight = headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100);
+                const headerHeight = window.innerWidth <= 768
+                    ? (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100))
+                    : (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100));
                 window.scrollTo({
                     top: target.offsetTop - headerHeight,
                     behavior: 'smooth'

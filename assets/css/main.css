@@ -45,7 +45,10 @@ body.menu-open {
 /* ========== HEADER ========== */
 .header {
     background: white;
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
 .header .container {
@@ -61,11 +64,8 @@ body.menu-open {
     align-items: center;
     padding: 15px 20px;
     border-bottom: 1px solid #f0f0f0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    position: relative;
     background: white;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
 /* Логотип */
@@ -1129,9 +1129,18 @@ body.menu-open {
 
 /* Для мобильных телефонов */
 @media (max-width: 768px) {
+    .header {
+        position: static;
+        box-shadow: none;
+    }
+
     .header-top {
         flex-wrap: wrap;
         padding: 10px 15px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     }
 
     .header-contacts-row {
