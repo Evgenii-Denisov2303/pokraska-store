@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
     const header = document.querySelector('.header');
     const headerTop = document.querySelector('.header-top');
-    const headerContactsRow = document.querySelector('.header-contacts-row');
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
 
     function setHeaderHeight() {
         if (!headerTop && !header) return;
-        const heightTarget = headerTop || header;
+        const isMobile = window.innerWidth <= 768;
+        const heightTarget = isMobile ? (header || headerTop) : (headerTop || header);
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
     }
 
@@ -29,18 +29,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 setHeaderHeight();
             }
             header.classList.remove('is-hidden');
-            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
-            body.classList.remove('contacts-collapsed');
             const currentScrollY = window.scrollY;
             const scrollingDown = currentScrollY > lastScrollY;
             const nearTop = currentScrollY < 20;
 
             if (scrollingDown && currentScrollY > 120) {
                 header.classList.add('is-hidden');
-                if (headerContactsRow) headerContactsRow.classList.add('is-hidden');
             } else if (!scrollingDown || nearTop) {
                 header.classList.remove('is-hidden');
-                if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
             }
 
             lastScrollY = currentScrollY;
@@ -49,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (body.classList.contains('menu-open')) {
             header.classList.remove('is-hidden');
-            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
             lastScrollY = window.scrollY;
             return;
         }
@@ -63,17 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 isHeaderCollapsed = true;
                 setHeaderHeight();
             }
-            body.classList.add('contacts-collapsed');
             header.classList.add('is-hidden');
-            if (headerContactsRow) headerContactsRow.classList.add('is-hidden');
         } else if (!scrollingDown || nearTop) {
             if (isHeaderCollapsed) {
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
-            body.classList.remove('contacts-collapsed');
             header.classList.remove('is-hidden');
-            if (headerContactsRow) headerContactsRow.classList.remove('is-hidden');
         }
 
         lastScrollY = currentScrollY;
@@ -141,7 +132,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
-                const headerHeight = headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100);
+                const headerHeight = window.innerWidth <= 768
+                    ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
+                    : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
                 window.scrollTo({
                     top: target.offsetTop - headerHeight,
                     behavior: 'smooth'

@@ -1145,17 +1145,28 @@ body.menu-open {
 /* Для мобильных телефонов */
 @media (max-width: 768px) {
     .header {
-        position: static;
-        box-shadow: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .header.is-hidden {
+        transform: translateY(-100%);
     }
 
     .header-top {
         flex-wrap: wrap;
         padding: 10px 15px;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        position: relative;
+        box-shadow: none;
+    }
+
+    .header.is-hidden .header-top {
+        transform: none;
     }
 
     .header-contacts-row {
@@ -1257,39 +1268,8 @@ body.menu-open {
         border-bottom: none;
     }
 
-    .header-contacts-row {
-        display: block;
-        padding: 12px 20px;
-        position: fixed;
-        top: var(--header-height, 70px);
-        left: 0;
-        right: 0;
-        z-index: 999;
-        background: #f8fafc;
-        border-bottom: 1px solid #e8eef5;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        transition: transform 0.15s ease, opacity 0.15s ease;
-        will-change: transform, opacity;
-    }
-
-    .header + * {
-        padding-top: 140px;
-    }
-
-    body.contacts-collapsed .header + * {
-        padding-top: 70px;
-    }
-
-    .header.is-hidden .header-contacts-row {
-        opacity: 0;
-        transform: translateY(calc(-100% - var(--header-height, 70px)));
-        pointer-events: none;
-    }
-
-    .header-contacts-row.is-hidden {
-        opacity: 0;
-        transform: translateY(calc(-100% - var(--header-height, 70px)));
-        pointer-events: none;
+    body {
+        padding-top: var(--header-height, 140px);
     }
 
 
