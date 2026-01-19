@@ -24,19 +24,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!isMobile) {
             if (isHeaderCollapsed) {
-                header.classList.remove('is-collapsed');
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
+            header.classList.remove('is-hidden');
             body.classList.remove('contacts-collapsed');
             const currentScrollY = window.scrollY;
             const scrollingDown = currentScrollY > lastScrollY;
             const nearTop = currentScrollY < 20;
 
             if (scrollingDown && currentScrollY > 120) {
-                headerTop.classList.add('is-hidden');
+                header.classList.add('is-hidden');
             } else if (!scrollingDown || nearTop) {
-                headerTop.classList.remove('is-hidden');
+                header.classList.remove('is-hidden');
             }
 
             lastScrollY = currentScrollY;
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (body.classList.contains('menu-open')) {
-            headerTop.classList.remove('is-hidden');
+            header.classList.remove('is-hidden');
             lastScrollY = window.scrollY;
             return;
         }
@@ -55,20 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (scrollingDown && currentScrollY > 80) {
             if (!isHeaderCollapsed) {
-                header.classList.add('is-collapsed');
                 isHeaderCollapsed = true;
                 setHeaderHeight();
             }
             body.classList.add('contacts-collapsed');
-            headerTop.classList.add('is-hidden');
+            header.classList.add('is-hidden');
         } else if (!scrollingDown || nearTop) {
             if (isHeaderCollapsed) {
-                header.classList.remove('is-collapsed');
                 isHeaderCollapsed = false;
                 setHeaderHeight();
             }
             body.classList.remove('contacts-collapsed');
-            headerTop.classList.remove('is-hidden');
+            header.classList.remove('is-hidden');
         }
 
         lastScrollY = currentScrollY;
