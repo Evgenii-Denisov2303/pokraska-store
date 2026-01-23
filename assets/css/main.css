@@ -1376,10 +1376,10 @@ body.modal-open {
     padding: 22px 26px;
     border-radius: 22px;
     background:
-        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.24), rgba(255,255,255,0.03) 60%),
-        linear-gradient(135deg, rgba(19,62,112,0.9), rgba(12,39,76,0.92));
-    border: 1px solid rgba(255,255,255,0.28);
+        linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)),
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), rgba(255,255,255,0.02) 60%),
+        linear-gradient(135deg, rgba(26,86,150,0.88), rgba(20,64,118,0.9));
+    border: 1px solid rgba(255,255,255,0.14);
     box-shadow:
         0 30px 70px rgba(0,0,0,0.5),
         0 12px 35px rgba(52,152,219,0.25),
@@ -1399,7 +1399,7 @@ body.modal-open {
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: 0.75;
+    opacity: 0.45;
 }
 
 .footer-logo::after {
