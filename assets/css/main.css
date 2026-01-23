@@ -382,7 +382,9 @@ body.modal-open {
     justify-content: center;
     padding: 6px;
     border-radius: 16px;
-    background: #8f9bab;
+    background: #5c667a;
+    border: none;
+    box-shadow: none;
 }
 
 .footer-logo .logo-image {
@@ -397,9 +399,9 @@ body.modal-open {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
+    padding: 8px;
+    border-radius: 18px;
+    background: #eaf4ff;
 }
 
 @media (max-width: 768px) {
