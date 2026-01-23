@@ -518,6 +518,18 @@ body.modal-open {
     box-shadow: none;
 }
 
+.header-contact-stack .phone-number {
+    font-size: 1.05rem;
+}
+
+.header-contact-stack .phone-label {
+    font-size: 0.8rem;
+}
+
+.header-contact-stack .contact-address {
+    font-size: 0.9rem;
+}
+
 .header-contact-stack .contact-phone:hover {
     transform: none;
     box-shadow: none;
