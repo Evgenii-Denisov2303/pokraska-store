@@ -114,21 +114,6 @@
                 <button class="filter-btn active" data-filter="all">
                     <i class="fas fa-layer-group"></i> Все работы
                 </button>
-                <button class="filter-btn" data-filter="wheels">
-                    <i class="fas fa-car"></i> Диски
-                </button>
-                <button class="filter-btn" data-filter="metal">
-                    <i class="fas fa-industry"></i> Металлоконструкции
-                </button>
-                <button class="filter-btn" data-filter="equipment">
-                    <i class="fas fa-cogs"></i> Оборудование
-                </button>
-                <button class="filter-btn" data-filter="interior">
-                    <i class="fas fa-home"></i> Интерьер
-                </button>
-                <button class="filter-btn" data-filter="auto">
-                    <i class="fas fa-tools"></i> Автозапчасти
-                </button>
                 <button class="filter-btn" data-filter="real">
                     <i class="fas fa-images"></i> Реальные работы
                 </button>
@@ -148,320 +133,17 @@
 
             <!-- Галерея -->
             <div class="gallery-grid">
-                <!-- Работа 1: Диски BMW (премиум) -->
-                <div class="gallery-item highlight" data-category="wheels">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/bmw-wheels.avif 1x, ../assets/images/works/bmw-wheels-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/bmw-wheels.webp 1x, ../assets/images/works/bmw-wheels-large.webp 2x">
-                            <img src="../assets/images/works/bmw-wheels.jpg" srcset="../assets/images/works/bmw-wheels-large.jpg 2x" alt="Покраска дисков BMW X5 в черный матовый цвет" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #2c3e50;"></div>
-                                <span class="color-name">Black Matte</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/bmw-wheels-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Диски BMW X5">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-car"></i> Автомобильные диски</span>
-                        <h3 class="work-title">Диски BMW X5</h3>
-                        <p class="work-description">
-                            Полная реставрация литых дисков R19. Пескоструйная обработка, выравнивание,
-                            покраска в черный матовый с защитным лаком. Гарантия 5 лет.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-ruler-combined"></i> R19 | 5x120
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-calendar-alt"></i> 3 дня
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-shield-alt"></i> 5 лет
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 2: Кованые ворота -->
-                <div class="gallery-item" data-category="metal">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/metal-gate.avif 1x, ../assets/images/works/metal-gate-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/metal-gate.webp 1x, ../assets/images/works/metal-gate-large.webp 2x">
-                            <img src="../assets/images/works/metal-gate.jpg" srcset="../assets/images/works/metal-gate-large.jpg 2x" alt="Порошковая покраска кованых ворот терракотового цвета" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #e74c3c;"></div>
-                                <span class="color-name">Терракотовый</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/metal-gate.jpg" class="zoom-btn" data-lightbox="gallery" title="Кованые ворота">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-industry"></i> Металлоконструкции</span>
-                        <h3 class="work-title">Кованые въездные ворота</h3>
-                        <p class="work-description">
-                            Покраска кованых ворот для частного дома. Антикоррозийная обработка,
-                            грунтовка в 2 слоя, покраска терракотовым порошком RAL 3013.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-ruler"></i> 4x2.5 м
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-sun"></i> УФ-защита
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-tint"></i> Атмосферостойкость
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 3: Промышленный станок -->
-                <div class="gallery-item" data-category="equipment">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/industrial-equipment.avif 1x, ../assets/images/works/industrial-equipment-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/industrial-equipment.webp 1x, ../assets/images/works/industrial-equipment-large.webp 2x">
-                            <img src="../assets/images/works/industrial-equipment.jpg" srcset="../assets/images/works/industrial-equipment-large.jpg 2x" alt="Покраска промышленного оборудования серый RAL 7016" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #4a6572;"></div>
-                                <span class="color-name">RAL 7016</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/industrial-equipment-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Промышленное оборудование">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-cogs"></i> Оборудование</span>
-                        <h3 class="work-title">Фрезерный станок ЧПУ</h3>
-                        <p class="work-description">
-                            Покраска промышленного оборудования с химической стойкостью.
-                            Защита от масел, смазок и механических повреждений.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-flask"></i> Химстойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-hard-hat"></i> Защита от износа
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-temperature-high"></i> До 200°C
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 4: Элементы интерьера -->
-                <div class="gallery-item" data-category="interior">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/interior-elements.avif 1x, ../assets/images/works/interior-elements-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/interior-elements.webp 1x, ../assets/images/works/interior-elements-large.webp 2x">
-                            <img src="../assets/images/works/interior-elements.jpg" srcset="../assets/images/works/interior-elements-large.jpg 2x" alt="Декоративные элементы интерьера золотой металлик" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: linear-gradient(45deg, #FFD700, #D4AF37);"></div>
-                                <span class="color-name">Золотой металлик</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/interior-elements-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Элементы интерьера">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-home"></i> Интерьер</span>
-                        <h3 class="work-title">Декоративные панели для ресторана</h3>
-                        <p class="work-description">
-                            Покраска металлических панелей в золотой металлик с глянцевым эффектом.
-                            Декоративное покрытие для премиального интерьера.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-gem"></i> Глянец
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-hand-sparkles"></i> Антистатик
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-brush"></i> Декоративное
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 5: Автомобильные детали -->
-                <div class="gallery-item" data-category="auto">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/car-parts.avif 1x, ../assets/images/works/car-parts-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/car-parts.webp 1x, ../assets/images/works/car-parts-large.webp 2x">
-                            <img src="../assets/images/works/car-parts.jpg" srcset="../assets/images/works/car-parts-large.jpg 2x" alt="Покраска автомобильных деталей красный металлик" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #e74c3c;"></div>
-                                <span class="color-name">Красный металлик</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/car-parts.jpg" class="zoom-btn" data-lightbox="gallery" title="Автомобильные детали">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-tools"></i> Автозапчасти</span>
-                        <h3 class="work-title">Тормозные суппорты Porsche</h3>
-                        <p class="work-description">
-                            Покраска тормозных суппортов с высокой термостойкостью.
-                            Специальное покрытие для работы при экстремальных температурах.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-fire"></i> Термостойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-tachometer-alt"></i> Для спорта
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-weight"></i> Легкое покрытие
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 6: Диски Mercedes -->
-                <div class="gallery-item" data-category="wheels">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/mercedes-wheels.avif 1x, ../assets/images/works/mercedes-wheels-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/mercedes-wheels.webp 1x, ../assets/images/works/mercedes-wheels-large.webp 2x">
-                            <img src="../assets/images/works/mercedes-wheels.jpg" srcset="../assets/images/works/mercedes-wheels-large.jpg 2x" alt="Диски Mercedes в серебристый металлик" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #bdc3c7;"></div>
-                                <span class="color-name">Серебристый</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/mercedes-wheels-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Диски Mercedes">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-car"></i> Автомобильные диски</span>
-                        <h3 class="work-title">Диски Mercedes E-class</h3>
-                        <p class="work-description">
-                            Реставрация литых дисков с полировкой. Покраска в оригинальный
-                            серебристый цвет с высокой стойкостью к реагентам.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-ruler-combined"></i> R18 | 5x112
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-snowflake"></i> Зимняя стойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-recycle"></i> Эко-покрытие
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 7: Торговое оборудование -->
-                <div class="gallery-item" data-category="equipment">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/commercial-equipment.avif 1x, ../assets/images/works/commercial-equipment-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/commercial-equipment.webp 1x, ../assets/images/works/commercial-equipment-large.webp 2x">
-                            <img src="../assets/images/works/commercial-equipment.jpg" srcset="../assets/images/works/commercial-equipment-large.jpg 2x" alt="Торговые стеллажи белый глянец" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #ecf0f1;"></div>
-                                <span class="color-name">Белый глянец</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/commercial-equipment-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Торговое оборудование">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-store"></i> Торговое оборудование</span>
-                        <h3 class="work-title">Стеллажи для магазина</h3>
-                        <p class="work-description">
-                            Покраска торговых стеллажей в белый глянец. Гигиеничное покрытие,
-                            устойчивое к частым влажным уборкам и дезинфекции.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-bacteria"></i> Антибактериальное
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-hand-holding-water"></i> Влагостойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-soap"></i> Легкая очистка
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Работа 8: Архитектурные элементы -->
-                <div class="gallery-item" data-category="metal">
-                    <div class="gallery-image">
-                        <picture>
-                            <source type="image/avif" srcset="../assets/images/works/architecture.avif 1x, ../assets/images/works/architecture-large.avif 2x">
-                            <source type="image/webp" srcset="../assets/images/works/architecture.webp 1x, ../assets/images/works/architecture-large.webp 2x">
-                            <img src="../assets/images/works/architecture.jpg" srcset="../assets/images/works/architecture-large.jpg 2x" alt="Архитектурные конструкции античный бронза" loading="lazy" decoding="async" width="1200" height="800">
-                        </picture>
-                        <div class="image-overlay">
-                            <div class="color-preview">
-                                <div class="color-dot" style="background: #8B4513;"></div>
-                                <span class="color-name">Античная бронза</span>
-                            </div>
-                        </div>
-                        <a href="../assets/images/works/architecture-large.jpg" class="zoom-btn" data-lightbox="gallery" title="Архитектурные конструкции">
-                            <i class="fas fa-expand-alt"></i>
-                        </a>
-                    </div>
-                    <div class="work-info">
-                        <span class="work-category"><i class="fas fa-archway"></i> Архитектура</span>
-                        <h3 class="work-title">Фасадные панели бизнес-центра</h3>
-                        <p class="work-description">
-                            Покраска архитектурных элементов в эффект "старения". Патинирование,
-                            защита от ультрафиолета и атмосферных воздействий.
-                        </p>
-                        <div class="work-details">
-                            <div class="detail badge">
-                                <i class="fas fa-sun"></i> УФ-стойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-wind"></i> Атмосферостойкость
-                            </div>
-                            <div class="detail">
-                                <i class="fas fa-history"></i> Эффект старения
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-01.jpg" alt="Реальные работы — фото 1" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-01.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -471,9 +153,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-02.jpg" alt="Реальные работы — фото 2" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-02.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -483,9 +173,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-03.jpg" alt="Реальные работы — фото 3" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-03.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -495,9 +193,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-04.jpg" alt="Реальные работы — фото 4" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-04.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -507,9 +213,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-05.jpg" alt="Реальные работы — фото 5" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-05.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -519,9 +233,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-06.jpg" alt="Реальные работы — фото 6" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-06.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -531,9 +253,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-07.jpg" alt="Реальные работы — фото 7" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-07.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -543,9 +273,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-08.jpg" alt="Реальные работы — фото 8" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-08.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -555,9 +293,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-09.jpg" alt="Реальные работы — фото 9" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-09.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -567,9 +313,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-10.jpg" alt="Реальные работы — фото 10" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-10.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -579,9 +333,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-11.jpg" alt="Реальные работы — фото 11" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-11.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -591,9 +353,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="real">
+                <div class="gallery-item" data-category="real">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/real/real-12.jpg" alt="Реальные работы — фото 12" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Реальные работы</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Фото работ</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/real/real-12.jpg" class="zoom-btn" data-lightbox="gallery" title="Реальные работы">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -603,9 +373,17 @@
                         <h3 class="work-title">Фото работ</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-01.jpg" alt="Ворота — фото 1" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-01.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -615,9 +393,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-02.jpg" alt="Ворота — фото 2" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-02.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -627,9 +413,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-03.jpg" alt="Ворота — фото 3" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-03.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -639,9 +433,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-04.jpg" alt="Ворота — фото 4" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-04.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -651,9 +453,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-05.jpg" alt="Ворота — фото 5" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-05.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -663,9 +473,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="gates">
+                <div class="gallery-item" data-category="gates">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/gates/gates-06.jpg" alt="Ворота — фото 6" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Ворота</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Распашные ворота</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/gates/gates-06.jpg" class="zoom-btn" data-lightbox="gallery" title="Ворота">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -675,9 +493,17 @@
                         <h3 class="work-title">Распашные ворота</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-01.jpg" alt="Калитки — фото 1" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-01.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -687,9 +513,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-02.jpg" alt="Калитки — фото 2" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-02.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -699,9 +533,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-03.jpg" alt="Калитки — фото 3" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-03.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -711,9 +553,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-04.jpg" alt="Калитки — фото 4" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-04.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -723,9 +573,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-05.jpg" alt="Калитки — фото 5" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-05.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -735,9 +593,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="wickets">
+                <div class="gallery-item" data-category="wickets">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/wickets/wickets-06.jpg" alt="Калитки — фото 6" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Калитки</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Калитки</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/wickets/wickets-06.jpg" class="zoom-btn" data-lightbox="gallery" title="Калитки">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -747,9 +613,17 @@
                         <h3 class="work-title">Калитки</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-01.jpg" alt="Пескоструй — фото 1" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-01.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -759,9 +633,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-02.jpg" alt="Пескоструй — фото 2" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-02.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -771,9 +653,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-03.jpg" alt="Пескоструй — фото 3" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-03.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -783,9 +673,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-04.jpg" alt="Пескоструй — фото 4" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-04.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -795,9 +693,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-05.jpg" alt="Пескоструй — фото 5" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-05.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -807,9 +713,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-06.jpg" alt="Пескоструй — фото 6" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-06.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -819,9 +733,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-07.jpg" alt="Пескоструй — фото 7" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-07.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -831,9 +753,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="sandblast">
+                <div class="gallery-item" data-category="sandblast">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/sandblast/sandblast-08.jpg" alt="Пескоструй — фото 8" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Пескоструй</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Пескоструй</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/sandblast/sandblast-08.jpg" class="zoom-btn" data-lightbox="gallery" title="Пескоструй">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -843,9 +773,17 @@
                         <h3 class="work-title">Пескоструй</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-01.png" alt="Материал ворот — фото 1" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-01.png" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -855,9 +793,17 @@
                         <h3 class="work-title">Материал ворот</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-02.png" alt="Материал ворот — фото 2" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-02.png" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -867,9 +813,17 @@
                         <h3 class="work-title">Материал ворот</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-03.png" alt="Материал ворот — фото 3" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-03.png" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -879,9 +833,17 @@
                         <h3 class="work-title">Материал ворот</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-04.png" alt="Материал ворот — фото 4" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-04.png" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -891,9 +853,17 @@
                         <h3 class="work-title">Материал ворот</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-05.png" alt="Материал ворот — фото 5" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-05.png" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
@@ -903,9 +873,17 @@
                         <h3 class="work-title">Материал ворот</h3>
                     </div>
                 </div>
-                <div class="gallery-item simple" data-category="materials">
+                <div class="gallery-item" data-category="materials">
                     <div class="gallery-image">
                         <img src="../assets/images/gallery/materials/materials-06.jpg" alt="Материал ворот — фото 6" loading="lazy" decoding="async">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <div class="overlay-title">Материал ворот</div>
+                                <div class="overlay-tags">
+                                    <span class="overlay-tag">Материал ворот</span>
+                                </div>
+                            </div>
+                        </div>
                         <a href="../assets/images/gallery/materials/materials-06.jpg" class="zoom-btn" data-lightbox="gallery" title="Материал ворот">
                             <i class="fas fa-expand-alt"></i>
                         </a>
