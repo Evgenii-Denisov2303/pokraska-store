@@ -134,6 +134,32 @@ body.menu-open {
     max-width: 200px;
 }
 
+.logo-main--image {
+    padding-bottom: 0;
+}
+
+.logo-main--image:before,
+.logo-main--image:after {
+    content: none;
+}
+
+.logo-image {
+    display: block;
+    height: 52px;
+    width: auto;
+    max-width: 220px;
+}
+
+.footer-logo .logo-image {
+    height: 50px;
+}
+
+@media (max-width: 768px) {
+    .logo-image {
+        height: 44px;
+    }
+}
+
 /* Навигация */
 .nav {
     display: flex;
