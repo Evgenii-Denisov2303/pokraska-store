@@ -104,9 +104,7 @@
     <!-- ========== HEADER ========== -->
     <header class="header">
         <div class="container">
-            <!-- Верхняя строка: Лого + Навигация -->
-            <div class="header-top">
-                <!-- Логотип -->
+            <div class="header-top header-top--compact">
                 <div class="logo">
                     <a href="index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
@@ -120,41 +118,22 @@
                     </a>
                 </div>
 
-                <!-- Навигация -->
-                <nav class="nav" aria-label="Основная навигация">
-                    <ul class="nav-list">
-                        <li><a href="index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Главная</a></li>
-                        <li><a href="pages/services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
-                        <li><a href="pages/prices.html"><i class="fas fa-tag"></i> Цены</a></li>
-                        <li><a href="pages/gallery.html"><i class="fas fa-images"></i> Работы</a></li>
-                        <li><a href="pages/contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
-                    </ul>
-                </nav>
-
-                <!-- Кнопка мобильного меню -->
-                <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-
-            <!-- Нижняя строка: Контакты -->
-            <div class="header-contacts-row">
-                <div class="contacts-container">
-                    <div class="contacts-main">
-                        <a href="tel:+79534999883" class="contact-phone">
-                            <i class="fas fa-phone"></i>
-                            <div class="phone-info">
-                                <span class="phone-number">+7 (953) 499-98-83</span>
-                                <span class="phone-label">Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
-                            </div>
-                        </a>
-                        <div class="contact-address">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Казань, Старое Победилово, ул. Садовая, 72</span>
+                <div class="header-contact-stack">
+                    <a href="tel:+79534999883" class="contact-phone">
+                        <i class="fas fa-phone"></i>
+                        <div class="phone-info">
+                            <span class="phone-number">+7 (953) 499-98-83</span>
+                            <span class="phone-label">Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
                         </div>
+                    </a>
+                    <div class="contact-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Казань, Старое Победилово, ул. Садовая, 72</span>
                     </div>
+                </div>
 
-                    <div class="contacts-social">
+                <div class="header-actions">
+                    <div class="contacts-social contacts-social--compact">
                         <a href="https://t.me/+79534999883" class="social-link telegram" target="_blank" rel="noopener noreferrer" title="Написать в Telegram" aria-label="Telegram">
                             <i class="fab fa-telegram"></i>
                             <span>Telegram</span>
@@ -164,8 +143,22 @@
                             <span>ВКонтакте</span>
                         </a>
                     </div>
+
+                    <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
+
+            <nav class="nav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="pages/services.html"><i class="fas fa-paint-roller"></i> Услуги</a></li>
+                    <li><a href="pages/prices.html"><i class="fas fa-tag"></i> Цены</a></li>
+                    <li><a href="pages/gallery.html"><i class="fas fa-images"></i> Работы</a></li>
+                    <li><a href="pages/contacts.html"><i class="fas fa-map-marker-alt"></i> Контакты</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 

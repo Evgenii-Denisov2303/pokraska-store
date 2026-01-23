@@ -59,7 +59,7 @@ body.menu-open {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
+    padding: 16px 20px;
     border-bottom: 1px solid #f0f0f0;
     position: sticky;
     top: 0;
@@ -67,6 +67,8 @@ body.menu-open {
     background: white;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     transition: transform 0.25s ease;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .header.is-hidden .header-top {
@@ -132,6 +134,23 @@ body.menu-open {
     font-size: 0.85rem;
     color: #7f8c8d;
     max-width: 200px;
+}
+
+.header-top--compact .logo-tagline {
+    max-width: 220px;
+}
+
+.header-contact-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 220px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 /* Палитра цветов */
@@ -279,7 +298,7 @@ body.menu-open {
 
 .logo-image {
     display: block;
-    height: 72px;
+    height: 92px;
     width: auto;
     max-width: 300px;
 }
@@ -290,22 +309,34 @@ body.menu-open {
 
 @media (max-width: 768px) {
     .logo-image {
-        height: 58px;
+        height: 70px;
     }
 }
 
 /* Навигация */
 .nav {
-    display: flex;
-    align-items: center;
+    position: fixed;
+    top: var(--header-top-height, 90px);
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: none;
+    border-radius: 0 0 15px 15px;
+    z-index: 1001;
+    max-height: calc(100vh - var(--header-height, 100px));
+    overflow-y: auto;
 }
 
 .nav-list {
     display: flex;
+    flex-direction: column;
     list-style: none;
-    gap: 20px;
+    gap: 0;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 .nav-list a {
@@ -315,10 +346,11 @@ body.menu-open {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.95rem;
-    padding: 8px 15px;
+    font-size: 1rem;
+    padding: 14px 12px;
     border-radius: 8px;
     transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .nav-list a:hover {
@@ -329,6 +361,16 @@ body.menu-open {
 .nav-list a.active {
     background: #3498db;
     color: white;
+    border-bottom-color: transparent;
+}
+
+.nav-list li:last-child a {
+    border-bottom: none;
+}
+
+.nav.active {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Нижняя строка: Контакты */
@@ -416,10 +458,41 @@ body.menu-open {
     font-size: 1.1rem;
 }
 
+.header-contact-stack .contact-phone,
+.header-contact-stack .contact-address {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.header-contact-stack .contact-phone:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.header-contact-stack .phone-label {
+    display: none;
+}
+
 .contacts-social {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.contacts-social--compact .social-link {
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    gap: 0;
+}
+
+.contacts-social--compact .social-link span {
+    display: none;
 }
 
 .social-link {
@@ -464,7 +537,7 @@ body.menu-open {
 
 /* Кнопка мобильного меню */
 .mobile-menu-btn {
-    display: none;
+    display: inline-flex;
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -1392,6 +1465,14 @@ body.menu-open {
         padding: 15px 20px;
     }
 
+    .header-top--compact {
+        gap: 16px;
+    }
+
+    .header-contact-stack {
+        min-width: 0;
+    }
+
     .nav-list {
         gap: 10px;
     }
@@ -1467,6 +1548,20 @@ body.menu-open {
         z-index: 1002;
     }
 
+    .header-top--compact {
+        align-items: center;
+    }
+
+    .header-contact-stack {
+        order: 3;
+        width: 100%;
+    }
+
+    .header-actions {
+        order: 2;
+        margin-left: auto;
+    }
+
     .header.is-hidden .header-top {
         transform: none;
     }
@@ -1513,6 +1608,11 @@ body.menu-open {
         gap: 8px;
         justify-self: end;
         align-self: start;
+    }
+
+    .contacts-social--compact .social-link {
+        width: 36px;
+        height: 36px;
     }
 
     .social-link {
