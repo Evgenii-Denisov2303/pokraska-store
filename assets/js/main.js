@@ -158,6 +158,25 @@ document.addEventListener('DOMContentLoaded', function() {
         yearElement.textContent = new Date().getFullYear();
     }
 
+    // 5. Палитра цветов (мини-превью + главный слайд)
+    document.querySelectorAll('[data-palette]').forEach((slider) => {
+        const mainImg = slider.querySelector('.palette-main img');
+        const thumbs = slider.querySelectorAll('.palette-thumb');
+        if (!mainImg || !thumbs.length) return;
+
+        thumbs.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const src = btn.getAttribute('data-src');
+                const alt = btn.getAttribute('data-alt') || '';
+                if (!src) return;
+                mainImg.src = src;
+                if (alt) mainImg.alt = alt;
+                thumbs.forEach((b) => b.classList.remove('is-active'));
+                btn.classList.add('is-active');
+            });
+        });
+    });
+
     // 4. Обновление высоты шапки при загрузке изображений
     window.addEventListener('load', setHeaderHeight);
     window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
