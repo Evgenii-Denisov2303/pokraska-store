@@ -53,4 +53,12 @@
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
+
+  <!-- Политика конфиденциальности -->
+  <url>
+    <loc>https://pokraska.store/politika.html</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

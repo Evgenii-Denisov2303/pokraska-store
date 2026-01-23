@@ -16,7 +16,8 @@ body {
     background: #f8f9fa;
 }
 
-body.menu-open {
+body.menu-open,
+body.modal-open {
     overflow: hidden;
 }
 
