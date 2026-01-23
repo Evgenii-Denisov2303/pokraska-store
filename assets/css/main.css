@@ -145,18 +145,18 @@ body.menu-open {
 
 .logo-image {
     display: block;
-    height: 52px;
+    height: 64px;
     width: auto;
-    max-width: 220px;
+    max-width: 260px;
 }
 
 .footer-logo .logo-image {
-    height: 50px;
+    height: 60px;
 }
 
 @media (max-width: 768px) {
     .logo-image {
-        height: 44px;
+        height: 52px;
     }
 }
 
