@@ -215,6 +215,63 @@ body.menu-open {
     font-size: 0.9rem;
 }
 
+.palette-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.75);
+    z-index: 2000;
+    padding: 20px;
+}
+
+.palette-modal.is-open {
+    display: flex;
+}
+
+.palette-modal__content {
+    position: relative;
+    width: min(1100px, 96vw);
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.palette-modal__image {
+    width: 100%;
+    height: auto;
+    max-height: 82vh;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.palette-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.12);
+    color: #0f172a;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.palette-modal__close:hover {
+    background: rgba(15, 23, 42, 0.2);
+}
+
 .palette-thumbs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -317,14 +374,15 @@ body.menu-open {
 .nav {
     position: fixed;
     top: var(--header-top-height, 90px);
-    left: 0;
-    right: 0;
+    right: 20px;
+    left: auto;
     background: white;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     display: none;
     border-radius: 0 0 15px 15px;
     z-index: 1001;
+    width: min(360px, 90vw);
     max-height: calc(100vh - var(--header-height, 100px));
     overflow-y: auto;
 }
@@ -1541,25 +1599,33 @@ body.menu-open {
     }
 
     .header-top {
-        flex-wrap: wrap;
-        padding: 10px 15px;
+        flex-wrap: nowrap;
+        padding: 12px 15px;
         position: relative;
         box-shadow: none;
         z-index: 1002;
     }
 
     .header-top--compact {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
         align-items: center;
+        gap: 12px;
     }
 
     .header-contact-stack {
-        order: 3;
+        order: 2;
         width: 100%;
+        align-items: flex-end;
+        text-align: right;
     }
 
     .header-actions {
-        order: 2;
-        margin-left: auto;
+        order: 3;
+        margin-left: 0;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
     }
 
     .header.is-hidden .header-top {
@@ -1613,6 +1679,11 @@ body.menu-open {
     .contacts-social--compact .social-link {
         width: 36px;
         height: 36px;
+    }
+
+    .nav {
+        right: 10px;
+        width: min(320px, 92vw);
     }
 
     .social-link {

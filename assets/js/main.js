@@ -158,7 +158,43 @@ document.addEventListener('DOMContentLoaded', function() {
         yearElement.textContent = new Date().getFullYear();
     }
 
-    // 5. Палитра цветов (мини-превью + главный слайд)
+    // 5. Палитра цветов (мини-превью + главный слайд + модальное увеличение)
+    const paletteModal = document.querySelector('.palette-modal');
+    const paletteModalImage = paletteModal ? paletteModal.querySelector('.palette-modal__image') : null;
+    const paletteModalClose = paletteModal ? paletteModal.querySelector('.palette-modal__close') : null;
+
+    function openPaletteModal(src, alt) {
+        if (!paletteModal || !paletteModalImage || !src) return;
+        paletteModalImage.src = src;
+        paletteModalImage.alt = alt || '';
+        paletteModal.classList.add('is-open');
+        document.body.classList.add('modal-open');
+    }
+
+    function closePaletteModal() {
+        if (!paletteModal) return;
+        paletteModal.classList.remove('is-open');
+        document.body.classList.remove('modal-open');
+    }
+
+    if (paletteModal) {
+        paletteModal.addEventListener('click', (event) => {
+            if (event.target === paletteModal) {
+                closePaletteModal();
+            }
+        });
+    }
+
+    if (paletteModalClose) {
+        paletteModalClose.addEventListener('click', closePaletteModal);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && paletteModal && paletteModal.classList.contains('is-open')) {
+            closePaletteModal();
+        }
+    });
+
     document.querySelectorAll('[data-palette]').forEach((slider) => {
         const mainImg = slider.querySelector('.palette-main img');
         const zoomLink = slider.querySelector('.palette-zoom');
@@ -177,6 +213,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.classList.add('is-active');
             });
         });
+
+        if (zoomLink) {
+            zoomLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                openPaletteModal(mainImg.src, mainImg.alt);
+            });
+        }
     });
 
     // 4. Обновление высоты шапки при загрузке изображений
