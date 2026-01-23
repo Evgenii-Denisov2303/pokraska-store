@@ -134,6 +134,65 @@ body.menu-open {
     max-width: 200px;
 }
 
+/* Палитра цветов */
+.palette-section {
+    background: #fff;
+}
+
+.palette-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 40px;
+    align-items: center;
+}
+
+.palette-list {
+    margin: 20px 0 25px;
+    padding-left: 18px;
+    color: #5a6c7d;
+}
+
+.palette-list li {
+    margin-bottom: 8px;
+}
+
+.palette-media img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+}
+
+.palette-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 30px;
+    padding: 25px;
+    background: #f7f9fb;
+    border-radius: 18px;
+    border: 1px solid #e6edf3;
+    margin: 25px 0;
+}
+
+.palette-card__info ul {
+    margin: 15px 0 20px;
+    padding-left: 18px;
+    color: #5a6c7d;
+}
+
+.palette-card__media img {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+}
+
+@media (max-width: 900px) {
+    .palette-wrapper,
+    .palette-card {
+        grid-template-columns: 1fr;
+    }
+}
+
 .logo-main--image {
     padding-bottom: 0;
 }
