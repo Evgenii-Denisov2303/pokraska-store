@@ -376,12 +376,30 @@ body.modal-open {
     filter: saturate(0.9) contrast(0.95);
 }
 
+.header .logo-main--image {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 16px;
+    background: #d5dde8;
+}
+
 .footer-logo .logo-image {
     height: 88px;
     border-radius: 16px;
     filter:
         drop-shadow(0 10px 22px rgba(0,0,0,0.55))
         drop-shadow(0 0 18px rgba(255,255,255,0.22));
+}
+
+.footer-logo .logo-main--image {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 18px;
+    background: #eaf4ff;
 }
 
 @media (max-width: 768px) {
@@ -1673,6 +1691,10 @@ body.modal-open {
         grid-template-columns: auto 1fr auto;
         align-items: center;
         gap: 12px;
+    }
+
+    .header-top--compact .logo {
+        justify-self: end;
     }
 
     .header-contact-stack {
