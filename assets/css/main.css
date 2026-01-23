@@ -1379,18 +1379,16 @@ body.modal-open {
     justify-content: center;
     padding: 22px 26px;
     border-radius: 30px;
-    background:
-        linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07)),
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.28), rgba(255,255,255,0.06) 60%),
-        linear-gradient(135deg, rgba(118,176,232,0.82), rgba(86,146,214,0.84));
-    border: none;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.28);
     box-shadow:
-        0 30px 70px rgba(0,0,0,0.5),
-        0 12px 35px rgba(52,152,219,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.35),
-        inset 0 -12px 28px rgba(0,0,0,0.35);
+        0 26px 60px rgba(0,0,0,0.35),
+        0 10px 30px rgba(52,152,219,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.35);
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .footer-logo::before {
@@ -1399,11 +1397,8 @@ body.modal-open {
     inset: -1px;
     border-radius: 30px;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(52,152,219,0.95), rgba(231,76,60,0.9), rgba(241,196,15,0.6));
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.45), rgba(255,255,255,0));
+    opacity: 0.7;
 }
 
 .footer-logo::after {
