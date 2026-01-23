@@ -123,10 +123,16 @@
     height: 400px;
 }
 
-.map-container iframe {
+.map-container > div {
     width: 100%;
     height: 100%;
+}
+
+.map-container iframe {
+    width: 100% !important;
+    height: 100% !important;
     border: none;
+    display: block;
 }
 
 .working-hours {
