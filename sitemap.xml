@@ -5,7 +5,7 @@
   <!-- Главная страница -->
   <url>
     <loc>https://pokraska.store/</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2026-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -17,7 +17,7 @@
   <!-- Услуги -->
   <url>
     <loc>https://pokraska.store/pages/services.html</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2026-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -25,7 +25,7 @@
   <!-- Цены -->
   <url>
     <loc>https://pokraska.store/pages/prices.html</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2026-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -33,7 +33,7 @@
   <!-- Галерея работ -->
   <url>
     <loc>https://pokraska.store/pages/gallery.html</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2026-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <image:image>
@@ -49,7 +49,7 @@
   <!-- Контакты -->
   <url>
     <loc>https://pokraska.store/pages/contacts.html</loc>
-    <lastmod>2024-01-11</lastmod>
+    <lastmod>2026-01-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
