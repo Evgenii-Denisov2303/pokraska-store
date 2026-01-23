@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 5. Палитра цветов (мини-превью + главный слайд)
     document.querySelectorAll('[data-palette]').forEach((slider) => {
         const mainImg = slider.querySelector('.palette-main img');
+        const zoomLink = slider.querySelector('.palette-zoom');
         const thumbs = slider.querySelectorAll('.palette-thumb');
         if (!mainImg || !thumbs.length) return;
 
@@ -171,6 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!src) return;
                 mainImg.src = src;
                 if (alt) mainImg.alt = alt;
+                if (zoomLink) zoomLink.href = src;
                 thumbs.forEach((b) => b.classList.remove('is-active'));
                 btn.classList.add('is-active');
             });
