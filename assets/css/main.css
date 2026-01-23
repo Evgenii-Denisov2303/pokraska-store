@@ -366,7 +366,7 @@ body.modal-open {
 
 .logo-image {
     display: block;
-    height: 92px;
+    height: 104px;
     width: auto;
     max-width: 300px;
 }
@@ -519,15 +519,15 @@ body.modal-open {
 }
 
 .header-contact-stack .phone-number {
-    font-size: 1.05rem;
+    font-size: 0.98rem;
 }
 
 .header-contact-stack .phone-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .header-contact-stack .contact-address {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
 }
 
 .header-contact-stack .contact-phone:hover {
