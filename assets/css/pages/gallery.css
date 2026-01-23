@@ -131,6 +131,19 @@
     transform: scale(1.05);
 }
 
+.gallery-item.simple .gallery-image {
+    height: 240px;
+}
+
+.gallery-item.simple .work-info {
+    padding: 16px 20px 20px;
+}
+
+.gallery-item.simple .work-title {
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+
 .image-overlay {
     position: absolute;
     top: 0;
