@@ -371,6 +371,10 @@ body.modal-open {
     max-width: 300px;
 }
 
+.header .logo-image {
+    filter: saturate(0.9) contrast(0.95);
+}
+
 .footer-logo .logo-image {
     height: 88px;
     filter:
@@ -1374,12 +1378,12 @@ body.modal-open {
     align-items: center;
     justify-content: center;
     padding: 22px 26px;
-    border-radius: 22px;
+    border-radius: 26px;
     background:
-        linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)),
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), rgba(255,255,255,0.02) 60%),
-        linear-gradient(135deg, rgba(26,86,150,0.88), rgba(20,64,118,0.9));
-    border: 1px solid rgba(255,255,255,0.14);
+        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.22), rgba(255,255,255,0.04) 60%),
+        linear-gradient(135deg, rgba(72,132,204,0.85), rgba(46,98,172,0.88));
+    border: 1px solid rgba(255,255,255,0.1);
     box-shadow:
         0 30px 70px rgba(0,0,0,0.5),
         0 12px 35px rgba(52,152,219,0.25),
@@ -1393,7 +1397,7 @@ body.modal-open {
     content: '';
     position: absolute;
     inset: -1px;
-    border-radius: 22px;
+    border-radius: 26px;
     padding: 1px;
     background: linear-gradient(135deg, rgba(52,152,219,0.95), rgba(231,76,60,0.9), rgba(241,196,15,0.6));
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
