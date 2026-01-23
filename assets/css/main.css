@@ -369,6 +369,7 @@ body.modal-open {
     height: 104px;
     width: auto;
     max-width: 300px;
+    border-radius: 14px;
 }
 
 .header .logo-image {
@@ -377,6 +378,7 @@ body.modal-open {
 
 .footer-logo .logo-image {
     height: 88px;
+    border-radius: 16px;
     filter:
         drop-shadow(0 10px 22px rgba(0,0,0,0.55))
         drop-shadow(0 0 18px rgba(255,255,255,0.22));
@@ -1379,16 +1381,14 @@ body.modal-open {
     justify-content: center;
     padding: 22px 26px;
     border-radius: 30px;
-    background: rgba(255,255,255,0.22);
-    border: 1px solid rgba(255,255,255,0.28);
+    background:
+        linear-gradient(145deg, rgba(10,26,44,0.92), rgba(24,60,96,0.92));
+    border: 1px solid rgba(255,255,255,0.14);
     box-shadow:
-        0 26px 60px rgba(0,0,0,0.35),
-        0 10px 30px rgba(52,152,219,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.35);
+        0 24px 55px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.18);
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
 }
 
 .footer-logo::before {
@@ -1397,8 +1397,8 @@ body.modal-open {
     inset: -1px;
     border-radius: 30px;
     padding: 1px;
-    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.45), rgba(255,255,255,0));
-    opacity: 0.7;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.35), rgba(255,255,255,0));
+    opacity: 0.6;
 }
 
 .footer-logo::after {
