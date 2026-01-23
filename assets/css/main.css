@@ -1913,6 +1913,10 @@ body.modal-open {
         padding: 0 20px;
     }
 
+    .footer-column--logo {
+        justify-self: end;
+    }
+
     .telegram-float {
         width: 55px;
         height: 55px;
