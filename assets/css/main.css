@@ -366,15 +366,16 @@ body.modal-open {
 
 .logo-image {
     display: block;
-    height: 104px;
+    height: 80px;
     width: auto;
     max-width: 300px;
     border-radius: 0;
+    object-fit: contain;
 }
 
 .header .logo-image {
-    filter: saturate(0.9) contrast(0.95);
-    border-radius: 16px;
+    filter: none;
+    border-radius: 12px;
     background: transparent;
 }
 
@@ -384,11 +385,11 @@ body.modal-open {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 8px;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #2e333a 0%, #1f242b 100%);
-    border: none;
-    box-shadow: none;
+    padding: 4px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 .header .logo-main--image::after {
@@ -430,7 +431,7 @@ body.modal-open {
 
 @media (max-width: 768px) {
     .logo-image {
-        height: 70px;
+        height: 64px;
     }
 }
 
