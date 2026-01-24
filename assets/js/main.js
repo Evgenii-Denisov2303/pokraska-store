@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
 
+    function isCompactViewport() {
+        return window.innerWidth <= 768 || window.innerHeight <= 520;
+    }
+
     function setHeaderHeight() {
         if (!headerTop && !header) return;
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = isCompactViewport();
         const heightTarget = isMobile ? (header || headerTop) : (headerTop || header);
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
         if (headerTop) {
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = isCompactViewport();
 
         if (!isMobile) {
             if (isHeaderCollapsed) {
@@ -118,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Закрытие меню при ресайзе
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && nav.classList.contains('active')) {
+            if (!isCompactViewport() && nav.classList.contains('active')) {
                 toggleMenu(false);
             }
         });
@@ -141,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
-                const headerHeight = window.innerWidth <= 768
+                const headerHeight = isCompactViewport()
                     ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
                     : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
                 window.scrollTo({
