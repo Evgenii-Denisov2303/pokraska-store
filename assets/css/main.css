@@ -155,7 +155,8 @@ body.modal-open {
     min-width: 220px;
     margin-left: 0;
     justify-self: center;
-    text-align: center;
+    text-align: right;
+    align-items: flex-end;
 }
 
 .header-actions {
@@ -412,14 +413,11 @@ body.modal-open {
 }
 
 .footer-logo .logo-image {
-    height: 140px;
-    border-radius: 34px;
-    border: 8px solid transparent;
-    background:
-        linear-gradient(#ffffff, #ffffff) padding-box,
-        radial-gradient(circle at 50% 45%, #9bc8ff 0%, #5a86d6 42%, #2a4475 68%, #0b1628 100%) border-box;
-    filter:
-        drop-shadow(0 10px 20px rgba(0,0,0,0.32));
+    height: 110px;
+    border-radius: 18px;
+    border: none;
+    background: transparent;
+    filter: drop-shadow(0 12px 26px rgba(0,0,0,0.28));
 }
 
 .footer-logo .logo-main--image {
@@ -428,12 +426,10 @@ body.modal-open {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 6px;
-    border-radius: 38px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-    box-shadow:
-        0 12px 28px rgba(0,0,0,0.28),
-        inset 0 0 0 1px rgba(255,255,255,0.06);
+    padding: 0;
+    border-radius: 20px;
+    background: transparent;
+    box-shadow: none;
 }
 
 .footer-logo .logo-main--image::before {
