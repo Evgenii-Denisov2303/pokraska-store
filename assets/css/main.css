@@ -387,7 +387,7 @@ body.modal-open {
     overflow: hidden;
     padding: 4px;
     border-radius: 14px;
-    background: linear-gradient(180deg, #ffffff 0%, #eef1f4 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #dfe4ea 100%);
     border: none;
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
