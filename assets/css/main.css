@@ -712,6 +712,11 @@ body.modal-open {
     font-size: 1.1rem;
 }
 
+.contact-address span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .header-contact-stack .contact-phone,
 .header-contact-stack .contact-address {
     padding: 0;
@@ -2180,7 +2185,8 @@ body.modal-open {
     }
 
     .contact-info p {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        align-items: flex-start;
         gap: 8px;
     }
 
@@ -2293,7 +2299,8 @@ body.modal-open {
     .header-contact-stack .contact-address {
         width: 100%;
         justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        align-items: flex-start;
     }
 
     .nav {
