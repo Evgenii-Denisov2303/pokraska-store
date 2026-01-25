@@ -2332,6 +2332,10 @@ body.modal-open {
         padding-top: var(--header-height, 110px);
     }
 
+    body.header-hidden {
+        padding-top: 0;
+    }
+
     .header-actions,
     .mobile-menu-btn {
         display: none;
