@@ -1785,6 +1785,14 @@ body.modal-open {
     .nav-list a {
         white-space: nowrap;
     }
+
+    .footer-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .footer-column--logo {
+        justify-self: start;
+    }
 }
 
 /* Для планшетов */
@@ -2143,10 +2151,32 @@ body.modal-open {
         grid-template-columns: 1fr;
         gap: 28px;
         padding: 0 20px;
+        text-align: center;
     }
 
     .footer-column--logo {
-        justify-self: start;
+        justify-self: center;
+    }
+
+    .footer-column h4:after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-column a {
+        justify-content: center;
+    }
+
+    .contact-list li {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .contact-list i {
+        margin-top: 0;
     }
 
     .telegram-float {
@@ -2217,6 +2247,13 @@ body.modal-open {
         justify-self: center;
     }
 
+    .header-contact-stack .contact-phone,
+    .header-contact-stack .contact-address {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     .nav {
         position: static;
         display: flex;
@@ -2284,6 +2321,59 @@ body.modal-open {
 
     .section {
         padding: 45px 0;
+    }
+}
+
+/* Альбомная ориентация с узкой шириной: возвращаем бургер-меню */
+@media (max-height: 520px) and (max-width: 740px) {
+    .header-actions,
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav {
+        position: fixed;
+        top: var(--header-top-height, 60px);
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        display: none;
+        border-radius: 0 0 12px 12px;
+        z-index: 1001;
+        max-height: calc(100vh - var(--header-top-height, 60px));
+        overflow-y: auto;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav.active {
+        display: flex;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+    }
+
+    .nav-list li {
+        width: 100%;
+    }
+
+    .nav-list a {
+        padding: 12px;
+        border-bottom: 1px solid #f0f0f0;
+        justify-content: flex-start;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .nav-list li:last-child a {
+        border-bottom: none;
     }
 }
 
