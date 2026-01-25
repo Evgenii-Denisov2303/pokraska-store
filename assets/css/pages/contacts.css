@@ -24,6 +24,10 @@
     align-items: start;
 }
 
+.contacts-container-page > * {
+    min-width: 0;
+}
+
 .contact-info-card {
     background: white;
     padding: 40px;
@@ -89,6 +93,7 @@
     margin: 0;
     line-height: 1.5;
     text-align: left;
+    overflow-wrap: break-word;
 }
 
 .contact-details a {

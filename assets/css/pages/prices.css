@@ -281,6 +281,16 @@ table tr:last-child td {
     margin-left: 20px;
 }
 
+@media (max-width: 1024px) {
+    .pricing-table {
+        overflow-x: auto;
+    }
+
+    .pricing-table table {
+        min-width: 720px;
+    }
+}
+
 @media (max-width: 768px) {
     .prices-page {
         padding: 60px 0;

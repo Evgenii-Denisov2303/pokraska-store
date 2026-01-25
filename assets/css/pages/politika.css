@@ -188,6 +188,12 @@
     .privacy-page .section h2 {
         font-size: 1.3rem;
     }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        width: 100%;
+    }
 }
 
 /* Стили для таблиц (если будут) */
