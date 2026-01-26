@@ -595,7 +595,8 @@ body.modal-open {
     justify-content: center;
     text-decoration: none;
     border-radius: 18px;
-    transition: transform 0.3s ease, filter 0.3s ease;
+    transition: transform 0.25s ease;
+    transform: translateZ(0);
 }
 
 .footer-logo-link:focus-visible {
@@ -604,21 +605,49 @@ body.modal-open {
 }
 
 .footer-logo-link .logo-main--image {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transform-origin: center;
+    backface-visibility: hidden;
+    will-change: transform, box-shadow;
 }
 
 .footer-logo-link:hover .logo-main--image,
 .footer-logo-link:focus-visible .logo-main--image {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.28);
+    transform: translate3d(0, -2px, 0) scale(1.02);
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.24);
+}
+
+.footer-logo-link .logo-image {
+    transition: filter 0.25s ease;
+}
+
+.footer-logo-link:hover .logo-image,
+.footer-logo-link:focus-visible .logo-image {
+    filter: brightness(1.12) contrast(1.08) drop-shadow(0 10px 18px rgba(15, 23, 42, 0.25));
+}
+
+.footer-logo-link:active .logo-main--image {
+    transform: translate3d(0, 0, 0) scale(0.99);
 }
 
 .footer-logo .logo-main--image::before {
     content: none;
 }
 
-.footer-logo .logo-main--image::after {
-    content: none;
+.footer-logo-link .logo-main--image::after {
+    content: '';
+    position: absolute;
+    inset: -40% -60%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.7) 48%, transparent 66%);
+    transform: translateX(-140%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+.footer-logo-link:hover .logo-main--image::after,
+.footer-logo-link:focus-visible .logo-main--image::after {
+    transform: translateX(140%);
 }
 
 @media (max-width: 768px) {
