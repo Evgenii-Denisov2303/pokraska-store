@@ -18,14 +18,21 @@
 
 .contacts-container-page {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+        "info form"
+        "find map";
+    gap: 40px 50px;
     margin-top: 40px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .contacts-container-page > * {
     min-width: 0;
+}
+
+.contacts-container-page > div:not(.contact-info-card) {
+    display: contents;
 }
 
 .contact-info-card {
@@ -34,7 +41,10 @@
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     border-left: 5px solid #3498db;
-    align-self: start;
+    align-self: stretch;
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-info-card h3 {
@@ -121,11 +131,11 @@
 }
 
 .map-container {
-    margin-top: 30px;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     height: 600px;
+    grid-area: map;
 }
 
 .map-container > div {
@@ -256,9 +266,11 @@
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
     position: relative;
-    align-self: start;
+    align-self: stretch;
+    grid-area: form;
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-form-card h3 {
@@ -281,7 +293,8 @@
     background: #f8f9fa;
     padding: 25px;
     border-radius: 10px;
-    margin-top: 30px;
+    grid-area: find;
+    align-self: start;
 }
 
 .info-card h3 {
@@ -321,6 +334,11 @@
 @media (max-width: 992px) {
     .contacts-container-page {
         grid-template-columns: 1fr;
+        grid-template-areas:
+            "info"
+            "form"
+            "map"
+            "find";
         gap: 30px;
     }
 
