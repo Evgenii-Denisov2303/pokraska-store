@@ -558,13 +558,13 @@ body.modal-open {
     position: absolute;
     inset: -120% -120%;
     background: radial-gradient(120% 60% at 100% 0%,
-        rgba(255,255,255,1) 0%,
-        rgba(255,255,255,0.7) 40%,
-        rgba(255,255,255,0) 75%);
+        rgba(0,0,0,0.7) 0%,
+        rgba(0,0,0,0.45) 40%,
+        rgba(0,0,0,0) 75%);
     transform: translate(65%, -65%) rotate(10deg);
     opacity: 0;
     pointer-events: none;
-    filter: blur(0.4px);
+    filter: blur(0.2px);
     z-index: 2;
 }
 
@@ -579,7 +579,7 @@ body.modal-open {
 
 .header .logo-main--image::after {
     animation: logo-wave-shine 2.6s ease-in-out infinite;
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 .footer-logo .logo-image {
@@ -2181,14 +2181,14 @@ body.modal-open {
 @keyframes logo-wave-shine {
     0% {
         transform: translate(65%, -65%) rotate(10deg);
-        opacity: 0.25;
+        opacity: 0.3;
     }
     35% {
         opacity: 1;
     }
     100% {
         transform: translate(-65%, 65%) rotate(10deg);
-        opacity: 0.25;
+        opacity: 0.3;
     }
 }
 
