@@ -339,3 +339,62 @@ table tr:last-child td {
         gap: 5px;
     }
 }
+
+/* ========== PREMIUM THEME OVERRIDES ========== */
+.prices-page {
+    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+}
+
+.price-header h1 {
+    background: linear-gradient(135deg, var(--premium-ink) 0%, var(--premium-accent) 100%);
+    -webkit-text-fill-color: transparent;
+}
+
+.pricing-table,
+.price-factors,
+.calculator-section,
+.guarantee-section {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border-color: var(--premium-border);
+}
+
+.factor-card {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+}
+
+.pricing-table-header {
+    background: linear-gradient(135deg, var(--premium-accent), var(--premium-accent-strong));
+    color: #1b1f24;
+}
+
+.price-amount {
+    color: #7a5b1e;
+}
+
+.price-factors {
+    border: 1px solid var(--premium-border);
+}
+
+.factor-card {
+    border-left-color: var(--premium-accent);
+}
+
+.factor-card i {
+    color: var(--premium-accent-strong);
+}
+
+.calculator-section {
+    background: linear-gradient(135deg, #1a1f27, #2d333c);
+}
+
+.calculator-section .btn {
+    color: #1b1f24;
+    background: linear-gradient(135deg, #d6b36e, #b7873b);
+}
+
+.guarantee-badge {
+    background: linear-gradient(135deg, #efe1c7, #d7bd87);
+    color: #5a3b0f;
+}

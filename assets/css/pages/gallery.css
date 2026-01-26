@@ -429,3 +429,44 @@
         font-size: 2.6rem;
     }
 }
+
+/* ========== PREMIUM THEME OVERRIDES ========== */
+.gallery-page {
+    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+}
+
+.gallery-header h1 {
+    background: linear-gradient(135deg, var(--premium-ink) 0%, var(--premium-accent) 100%);
+    -webkit-text-fill-color: transparent;
+}
+
+.gallery-item,
+.color-card,
+.work-counter {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border-color: var(--premium-border);
+}
+
+.filter-btn.active {
+    background: var(--premium-accent);
+    border-color: var(--premium-accent-strong);
+    color: #1b1f24;
+}
+
+.gallery-item.highlight {
+    border-color: var(--premium-accent);
+}
+
+.work-category {
+    color: var(--premium-accent-strong);
+}
+
+.detail.badge {
+    background: #efe1c7;
+    color: #5a3b0f;
+}
+
+.work-counter {
+    background: linear-gradient(135deg, #1a1f27, #2d333c);
+}

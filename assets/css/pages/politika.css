@@ -220,3 +220,46 @@ table th {
 table tr:hover {
     background: #f5f7fa;
 }
+
+/* ========== PREMIUM THEME OVERRIDES ========== */
+.privacy-page {
+    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+}
+
+.privacy-container,
+.contact-block {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border-color: var(--premium-border);
+}
+
+.privacy-header {
+    border-bottom-color: var(--premium-accent);
+}
+
+.privacy-header h1 {
+    color: var(--premium-ink);
+}
+
+.privacy-page .section h2 i {
+    color: var(--premium-accent-strong);
+}
+
+.highlight {
+    border-left-color: var(--premium-accent);
+    background: #f5efe4;
+}
+
+.contact-block {
+    background: linear-gradient(135deg, #1a1f27, #2d333c);
+}
+
+.back-btn {
+    background: var(--premium-accent);
+    color: #1b1f24;
+}
+
+.back-btn:hover {
+    background: var(--premium-accent-strong);
+    color: #1b1f24;
+}

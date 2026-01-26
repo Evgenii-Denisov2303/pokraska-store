@@ -381,3 +381,50 @@
         font-size: 0.8rem;
     }
 }
+
+/* ========== PREMIUM THEME OVERRIDES ========== */
+.services-page {
+    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+}
+
+.services-header h1 {
+    background: linear-gradient(135deg, var(--premium-ink) 0%, var(--premium-accent) 100%);
+    -webkit-text-fill-color: transparent;
+}
+
+.service-detail-card,
+.service-image,
+.service-quick-nav {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border-color: var(--premium-border);
+}
+
+.service-header {
+    background: linear-gradient(135deg, var(--premium-accent), var(--premium-accent-strong));
+    color: #1b1f24;
+}
+
+.service-header i {
+    color: #1b1f24;
+}
+
+.service-header .service-id {
+    background: rgba(27, 31, 36, 0.12);
+    color: #1b1f24;
+}
+
+.advantage-item {
+    border-left-color: var(--premium-accent);
+}
+
+.advantage-item i {
+    color: var(--premium-accent-strong);
+}
+
+.service-nav-link:hover,
+.service-nav-link.active {
+    background: var(--premium-accent);
+    color: #1b1f24;
+    border-color: var(--premium-accent-strong);
+}

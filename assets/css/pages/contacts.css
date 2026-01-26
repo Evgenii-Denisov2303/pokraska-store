@@ -542,3 +542,49 @@
         height: 320px;
     }
 }
+
+/* ========== PREMIUM THEME OVERRIDES ========== */
+.contacts-page {
+    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+}
+
+.contact-info-card,
+.contact-form-card,
+.info-card,
+.map-container {
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    border-color: var(--premium-border);
+}
+
+.contact-info-card {
+    border-left-color: var(--premium-accent);
+}
+
+.contact-icon {
+    background: var(--premium-accent);
+}
+
+.contact-details a {
+    color: var(--premium-accent-strong);
+}
+
+.contact-details a:hover {
+    color: #8d6425;
+}
+
+.working-hours {
+    background: #f5efe4;
+}
+
+.hours-list .time {
+    color: #6f8a3b;
+}
+
+.social-contact.telegram {
+    background: linear-gradient(135deg, #3b3f46, #1f242b);
+}
+
+.social-contact.vk {
+    background: linear-gradient(135deg, #5a533f, #3f3728);
+}
