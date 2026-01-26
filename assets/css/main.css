@@ -536,7 +536,7 @@ body.modal-open {
     border-radius: 12px;
     background: transparent;
     position: relative;
-    z-index: 1;
+    z-index: 0;
 }
 
 .header .logo-main--image {
@@ -556,30 +556,25 @@ body.modal-open {
 .header .logo-main--image::after {
     content: '';
     position: absolute;
-    inset: -120% -120%;
-    background: radial-gradient(120% 60% at 100% 0%,
-        rgba(0,0,0,0.7) 0%,
-        rgba(0,0,0,0.45) 40%,
-        rgba(0,0,0,0) 75%);
-    transform: translate(65%, -65%) rotate(10deg);
-    opacity: 0;
+    inset: -80% -80%;
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.98) 48%,
+        rgba(255,255,255,0) 62%);
+    transform: translate(70%, -70%) rotate(8deg);
+    opacity: 1;
     pointer-events: none;
-    filter: blur(0.2px);
-    z-index: 2;
+    filter: none;
+    mix-blend-mode: screen;
+    z-index: 3;
 }
 
 .header .logo-main--image::before {
     content: none;
 }
 
-.header .logo-link:hover .logo-main--image::after,
-.header .logo-link:focus-visible .logo-main--image::after {
-    opacity: 1;
-}
-
 .header .logo-main--image::after {
-    animation: logo-wave-shine 2.6s ease-in-out infinite;
-    opacity: 0.9;
+    animation: logo-wave-shine 2.2s linear infinite;
 }
 
 .footer-logo .logo-image {
@@ -2180,15 +2175,10 @@ body.modal-open {
 
 @keyframes logo-wave-shine {
     0% {
-        transform: translate(65%, -65%) rotate(10deg);
-        opacity: 0.3;
-    }
-    35% {
-        opacity: 1;
+        transform: translate(70%, -70%) rotate(8deg);
     }
     100% {
-        transform: translate(-65%, 65%) rotate(10deg);
-        opacity: 0.3;
+        transform: translate(-70%, 70%) rotate(8deg);
     }
 }
 
