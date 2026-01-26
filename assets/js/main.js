@@ -406,7 +406,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!range) return;
 
         const update = () => {
-            block.style.setProperty('--before-width', `${range.value}%`);
+            const value = Number(range.value);
+            const inverted = 100 - value;
+            block.style.setProperty('--before-width', `${inverted}%`);
         };
 
         range.addEventListener('input', update);
