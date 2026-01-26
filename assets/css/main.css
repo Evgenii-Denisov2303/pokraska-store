@@ -1526,16 +1526,33 @@ body.modal-open {
 }
 
 .before-after__handle:after {
-    content: '< >';
+    content: '◀ ▶';
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #ffffff;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     pointer-events: none;
+}
+
+.before-after__hint {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    pointer-events: none;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.25);
 }
 
 .before-after__range {
