@@ -37,7 +37,7 @@
 
 .contact-info-card {
     background: white;
-    padding: 40px;
+    padding: 32px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     border-left: 5px solid #3498db;
@@ -62,8 +62,8 @@
 .contact-item {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 25px;
-    padding: 15px;
+    margin-bottom: 20px;
+    padding: 12px;
     border-radius: 10px;
     transition: all 0.3s ease;
 }
@@ -152,9 +152,9 @@
 
 .working-hours {
     background: #f8f9fa;
-    padding: 25px;
+    padding: 20px;
     border-radius: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .working-hours h4 {
@@ -219,7 +219,7 @@
 }
 
 .social-section {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .social-section h4 {
@@ -263,7 +263,7 @@
 
 .contact-form-card {
     background: white;
-    padding: 40px;
+    padding: 32px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
@@ -285,13 +285,13 @@
 
 .contact-form-card p {
     color: #7f8c8d;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
     text-align: left;
 }
 
 .info-card {
     background: #f8f9fa;
-    padding: 25px;
+    padding: 20px;
     border-radius: 10px;
     grid-area: find;
     align-self: start;

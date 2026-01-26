@@ -1435,14 +1435,14 @@ body.modal-open {
 .request-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: 32px;
     align-items: start;
 }
 
 .request-info {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     padding-top: 0;
     align-self: start;
 }
@@ -1458,8 +1458,8 @@ body.modal-open {
 .request-info > p {
     color: #7f8c8d;
     margin: 0;
-    font-size: 1.2rem;
-    line-height: 1.7;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 .advantages {
@@ -1471,10 +1471,10 @@ body.modal-open {
 .advantage {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 14px;
     margin: 0;
     color: #2c3e50;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
 .advantage i {
@@ -1485,7 +1485,7 @@ body.modal-open {
 
 .contact-info {
     margin-top: 0;
-    padding: 22px;
+    padding: 18px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.08);
@@ -1494,8 +1494,8 @@ body.modal-open {
 
 .contact-info h3 {
     color: #2c3e50;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
+    margin-bottom: 18px;
+    font-size: 1.4rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -1511,12 +1511,12 @@ body.modal-open {
 }
 
 .contact-info p {
-    margin: 18px 0;
+    margin: 12px 0;
     display: flex;
     align-items: center;
     gap: 15px;
     color: #555;
-    font-size: 1.05rem;
+    font-size: 1rem;
 }
 
 .contact-info i {

@@ -4,7 +4,7 @@
 .request-form {
     background: white;
     background-image: linear-gradient(180deg, rgba(52, 152, 219, 0.05), rgba(255, 255, 255, 0) 60%);
-    padding: 45px;
+    padding: 36px;
     border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     border: 2px solid #e8eef5;
@@ -26,7 +26,7 @@
 }
 
 .request-form--compact {
-    padding: 28px;
+    padding: 24px;
 }
 
 .request-form:before {
@@ -51,9 +51,9 @@
 .form-notice {
     text-align: center;
     color: #7f8c8d;
-    margin-bottom: 30px;
+    margin-bottom: 22px;
     font-size: 1rem;
-    padding: 12px;
+    padding: 10px;
     background: #f8f9fa;
     border-radius: 8px;
     border-left: 4px solid #3498db;
@@ -69,7 +69,7 @@
 
 .yandex-form-embed {
     width: calc(100% - 2px);
-    min-height: 620px;
+    min-height: 560px;
     border: 0;
     border-radius: 8px;
     display: block;
@@ -78,7 +78,7 @@
 }
 
 .request-form--compact .yandex-form-embed {
-    min-height: 560px;
+    min-height: 520px;
 }
 
 @media (max-width: 768px) {
@@ -88,15 +88,15 @@
     }
 
     .yandex-form-embed {
-        min-height: 700px;
+        min-height: 640px;
     }
 
     .request-form--compact {
-        padding: 24px;
+        padding: 22px;
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 620px;
+        min-height: 560px;
     }
 }
 
@@ -107,15 +107,15 @@
     }
 
     .yandex-form-embed {
-        min-height: 740px;
+        min-height: 680px;
     }
 
     .request-form--compact {
-        padding: 20px;
+        padding: 18px;
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 660px;
+        min-height: 600px;
     }
 
     .quick-actions {
