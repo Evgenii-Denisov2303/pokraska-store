@@ -1497,6 +1497,19 @@ body.modal-open {
     box-shadow: 0 12px 24px rgba(0,0,0,0.25);
 }
 
+.before-after__handle:after {
+    content: '< >';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    pointer-events: none;
+}
+
 .before-after__range {
     width: 100%;
     margin-top: 16px;
