@@ -565,14 +565,14 @@ body.modal-open {
 .header .logo-wave {
     display: block;
     position: absolute;
-    inset: -160% -160%;
+    inset: -200% -200%;
     background: linear-gradient(135deg,
         rgba(255,255,255,0) 0%,
         rgba(255,255,255,0) 44%,
         rgba(255,255,255,0.7) 50%,
         rgba(255,255,255,0) 56%,
         rgba(255,255,255,0) 100%);
-    transform: translate(115%, -115%) rotate(10deg);
+    transform: translate(140%, -140%) rotate(10deg);
     opacity: 0.6;
     pointer-events: none;
     filter: blur(0.6px);
@@ -2183,11 +2183,11 @@ body.modal-open {
 
 @keyframes logo-wave-shine {
     0% {
-        transform: translate(115%, -115%) rotate(10deg);
+        transform: translate(140%, -140%) rotate(10deg);
         opacity: 0.6;
     }
     100% {
-        transform: translate(-115%, 115%) rotate(10deg);
+        transform: translate(-140%, 140%) rotate(10deg);
         opacity: 0.6;
     }
 }
