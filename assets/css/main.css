@@ -612,23 +612,6 @@ body.modal-open {
     content: none;
 }
 
-.footer-logo-link .logo-main--image::after {
-    content: '';
-    position: absolute;
-    inset: -10px;
-    border-radius: inherit;
-    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.45);
-    opacity: 0;
-    transition: opacity 0.3s ease, box-shadow 0.3s ease;
-    pointer-events: none;
-}
-
-.footer-logo-link:hover .logo-main--image::after,
-.footer-logo-link:focus-visible .logo-main--image::after {
-    opacity: 1;
-    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2), 0 0 16px rgba(52, 152, 219, 0.35);
-}
-
 @media (max-width: 768px) {
     .logo-image {
         height: 64px;
@@ -2076,11 +2059,6 @@ body.modal-open {
     backdrop-filter: blur(6px);
     position: relative;
     overflow: hidden;
-    transition: box-shadow 0.25s ease;
-}
-
-.footer-logo:hover {
-    box-shadow: 0 22px 42px rgba(0,0,0,0.28);
 }
 
 .footer-logo::before {
