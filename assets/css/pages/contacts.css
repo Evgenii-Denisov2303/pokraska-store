@@ -544,8 +544,21 @@
 }
 
 /* ========== PREMIUM THEME OVERRIDES ========== */
+body.theme-contacts {
+    --premium-ink: #111316;
+    --premium-ink-soft: #2b2e33;
+    --premium-muted: #6b6f76;
+    --premium-surface: #fbfaf7;
+    --premium-surface-strong: #ffffff;
+    --premium-border: #e8e3d8;
+    --premium-accent: #1b1f24;
+    --premium-accent-strong: #000000;
+    --premium-on-accent: #fbfaf7;
+    --premium-hero: linear-gradient(135deg, #111316 0%, #2a2d33 100%);
+}
+
 .contacts-page {
-    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+    background: linear-gradient(135deg, var(--premium-surface) 0%, var(--premium-border) 100%);
 }
 
 .contact-info-card,

@@ -431,8 +431,20 @@
 }
 
 /* ========== PREMIUM THEME OVERRIDES ========== */
+body.theme-gallery {
+    --premium-ink: #10241f;
+    --premium-ink-soft: #1f3530;
+    --premium-muted: #61706c;
+    --premium-surface: #f5f2ea;
+    --premium-surface-strong: #ffffff;
+    --premium-border: #e2dacb;
+    --premium-accent: #c9a24e;
+    --premium-accent-strong: #a67f2d;
+    --premium-hero: linear-gradient(135deg, #0f1f1a 0%, #24362f 100%);
+}
+
 .gallery-page {
-    background: linear-gradient(135deg, #f7f4ef 0%, #ece6dc 100%);
+    background: linear-gradient(135deg, var(--premium-surface) 0%, var(--premium-border) 100%);
 }
 
 .gallery-header h1 {
