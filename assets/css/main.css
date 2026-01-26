@@ -1509,6 +1509,7 @@ body.modal-open {
     width: 2px;
     background: rgba(255,255,255,0.9);
     transform: translateX(-1px);
+    cursor: ew-resize;
 }
 
 .before-after__handle:before {
@@ -1523,36 +1524,70 @@ body.modal-open {
     border: 2px solid rgba(255,255,255,0.9);
     transform: translate(-50%, -50%);
     box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+    animation: handle-pulse 1.8s ease-in-out infinite;
 }
 
-.before-after__handle:after {
-    content: '◀ ▶';
+.before-after__arrows {
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 44px;
+    height: 22px;
     transform: translate(-50%, -50%);
-    color: #ffffff;
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 1px;
     pointer-events: none;
+    animation: arrows-slide 1.6s ease-in-out infinite;
 }
 
-.before-after__hint {
+.before-after__arrows:before,
+.before-after__arrows:after {
+    content: '';
     position: absolute;
-    left: 50%;
-    bottom: 18px;
-    transform: translateX(-50%);
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.75);
-    color: #ffffff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    pointer-events: none;
-    box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    opacity: 0.9;
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.before-after__arrows:before {
+    left: 6px;
+    transform: translateY(-50%) rotate(135deg);
+}
+
+.before-after__arrows:after {
+    right: 6px;
+}
+
+@keyframes arrows-slide {
+    0% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) translateX(-4px);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateX(4px);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) translateX(-4px);
+    }
+}
+
+@keyframes handle-pulse {
+    0% {
+        box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        box-shadow: 0 16px 28px rgba(0,0,0,0.32);
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    100% {
+        box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 .before-after__range {
