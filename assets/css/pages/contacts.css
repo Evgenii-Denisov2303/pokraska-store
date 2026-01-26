@@ -37,7 +37,7 @@
 
 .contact-info-card {
     background: white;
-    padding: 32px;
+    padding: 28px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     border-left: 5px solid #3498db;
@@ -62,8 +62,8 @@
 .contact-item {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 20px;
-    padding: 12px;
+    margin-bottom: 16px;
+    padding: 10px;
     border-radius: 10px;
     transition: all 0.3s ease;
 }
@@ -263,7 +263,7 @@
 
 .contact-form-card {
     background: white;
-    padding: 32px;
+    padding: 28px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     position: relative;
@@ -285,8 +285,12 @@
 
 .contact-form-card p {
     color: #7f8c8d;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     text-align: left;
+}
+
+.contact-form-card .yandex-form-embed {
+    min-height: 500px;
 }
 
 .info-card {

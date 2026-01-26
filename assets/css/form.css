@@ -69,7 +69,7 @@
 
 .yandex-form-embed {
     width: calc(100% - 2px);
-    min-height: 560px;
+    min-height: 520px;
     border: 0;
     border-radius: 8px;
     display: block;
@@ -78,7 +78,7 @@
 }
 
 .request-form--compact .yandex-form-embed {
-    min-height: 520px;
+    min-height: 480px;
 }
 
 @media (max-width: 768px) {
@@ -88,7 +88,7 @@
     }
 
     .yandex-form-embed {
-        min-height: 640px;
+        min-height: 600px;
     }
 
     .request-form--compact {
@@ -96,7 +96,7 @@
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 560px;
+        min-height: 520px;
     }
 }
 
@@ -107,7 +107,7 @@
     }
 
     .yandex-form-embed {
-        min-height: 680px;
+        min-height: 640px;
     }
 
     .request-form--compact {
@@ -115,7 +115,7 @@
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 600px;
+        min-height: 560px;
     }
 
     .quick-actions {
