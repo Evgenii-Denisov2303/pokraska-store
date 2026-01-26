@@ -565,18 +565,19 @@ body.modal-open {
 .header .logo-wave {
     display: block;
     position: absolute;
-    inset: 0;
+    inset: -160% -160%;
     background: linear-gradient(135deg,
-        rgba(255,255,255,0) 38%,
-        rgba(255,255,255,0.55) 50%,
-        rgba(255,255,255,0) 62%);
-    background-size: 220% 220%;
-    background-position: 120% -20%;
-    opacity: 0.7;
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0) 44%,
+        rgba(255,255,255,0.7) 50%,
+        rgba(255,255,255,0) 56%,
+        rgba(255,255,255,0) 100%);
+    transform: translate(115%, -115%) rotate(10deg);
+    opacity: 0.6;
     pointer-events: none;
-    filter: blur(0.8px);
+    filter: blur(0.6px);
     z-index: 2;
-    animation: logo-wave-shine 3.6s linear infinite;
+    animation: logo-wave-shine 3.1s linear infinite;
 }
 
 .header .logo-wave::before,
@@ -2182,12 +2183,12 @@ body.modal-open {
 
 @keyframes logo-wave-shine {
     0% {
-        background-position: 120% -20%;
-        opacity: 0.7;
+        transform: translate(115%, -115%) rotate(10deg);
+        opacity: 0.6;
     }
     100% {
-        background-position: -20% 120%;
-        opacity: 0.7;
+        transform: translate(-115%, 115%) rotate(10deg);
+        opacity: 0.6;
     }
 }
 
