@@ -1613,8 +1613,8 @@ body.modal-open {
 
 .before-after__prompt-arrow {
     position: relative;
-    width: 22px;
-    height: 10px;
+    width: 30px;
+    height: 12px;
     animation: prompt-arrow-nudge 1.4s ease-in-out infinite;
 }
 
@@ -1623,9 +1623,11 @@ body.modal-open {
     position: absolute;
     left: 0;
     top: 50%;
-    width: 14px;
-    height: 2px;
-    background: #3498db;
+    width: 18px;
+    height: 3px;
+    background: linear-gradient(90deg, #1f3f6e 0%, #3ba7ff 100%);
+    border-radius: 999px;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.55);
     transform: translateY(-50%);
 }
 
@@ -1634,11 +1636,13 @@ body.modal-open {
     position: absolute;
     right: 0;
     top: 50%;
-    width: 9px;
-    height: 9px;
-    border-right: 2px solid #3498db;
-    border-top: 2px solid #3498db;
-    transform: translateY(-50%) rotate(45deg);
+    width: 0;
+    height: 0;
+    border-left: 10px solid #3ba7ff;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    transform: translateY(-50%);
+    filter: drop-shadow(0 0 6px rgba(52, 152, 219, 0.55));
 }
 
 @keyframes prompt-arrow-nudge {
