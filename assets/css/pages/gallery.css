@@ -80,6 +80,16 @@
     padding: 0 20px;
 }
 
+.gallery-more {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.gallery-show-more {
+    min-width: 220px;
+    display: none;
+}
+
 .gallery-item {
     background: white;
     border-radius: 20px;
