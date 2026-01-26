@@ -522,6 +522,10 @@ body.modal-open {
     content: none;
 }
 
+.logo-wave {
+    display: none;
+}
+
 .logo-image {
     display: block;
     height: 80px;
@@ -536,7 +540,7 @@ body.modal-open {
     border-radius: 12px;
     background: transparent;
     position: relative;
-    z-index: 0;
+    z-index: 1;
 }
 
 .header .logo-main--image {
@@ -553,29 +557,26 @@ body.modal-open {
     isolation: isolate;
 }
 
+.header .logo-main--image::before,
 .header .logo-main--image::after {
-    content: '';
-    position: absolute;
-    inset: -25% -25%;
-    background: linear-gradient(135deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.95) 42%,
-        rgba(170,195,225,0.7) 50%,
-        rgba(255,255,255,0.95) 58%,
-        rgba(255,255,255,0) 70%);
-    transform: translate(35%, -35%) rotate(10deg);
-    opacity: 0.85;
-    pointer-events: none;
-    filter: blur(1px);
-    mix-blend-mode: normal;
-    z-index: 2;
-}
-
-.header .logo-main--image::before {
     content: none;
 }
 
-.header .logo-main--image::after {
+.header .logo-wave {
+    display: block;
+    position: absolute;
+    inset: -28% -28%;
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.95) 44%,
+        rgba(220,235,255,0.85) 50%,
+        rgba(255,255,255,0.95) 56%,
+        rgba(255,255,255,0) 72%);
+    transform: translate(32%, -32%) rotate(10deg);
+    opacity: 0.9;
+    pointer-events: none;
+    filter: blur(0.6px);
+    z-index: 2;
     animation: logo-wave-shine 2.2s linear infinite;
 }
 
@@ -2177,10 +2178,10 @@ body.modal-open {
 
 @keyframes logo-wave-shine {
     0% {
-        transform: translate(35%, -35%) rotate(10deg);
+        transform: translate(32%, -32%) rotate(10deg);
     }
     100% {
-        transform: translate(-35%, 35%) rotate(10deg);
+        transform: translate(-32%, 32%) rotate(10deg);
     }
 }
 
