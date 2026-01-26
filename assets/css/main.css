@@ -1477,7 +1477,7 @@ body.modal-open {
     overflow: hidden;
     right: 0;
     left: auto;
-    border-left: 2px solid rgba(255,255,255,0.8);
+    border-left: none;
     border-right: none;
 }
 
@@ -1511,8 +1511,8 @@ body.modal-open {
     top: 0;
     bottom: 0;
     left: calc(100% - var(--before-width, 50%));
-    width: 2px;
-    background: rgba(255,255,255,0.9);
+    width: 0;
+    background: transparent;
     transform: translateX(-1px);
     cursor: ew-resize;
 }
@@ -1536,11 +1536,11 @@ body.modal-open {
     left: 0;
     right: 0;
     top: 50%;
-    height: 4px;
+    height: 5px;
     transform: translateY(-50%);
     border-radius: 999px;
-    background: rgba(255,255,255,0.45);
-    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.15);
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0.15));
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
 }
 
 .before-after__prompt-hint {
@@ -1551,25 +1551,25 @@ body.modal-open {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255,255,255,0.5);
-    color: #ffffff;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #3498db;
+    color: #1f3f6e;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18);
     animation: prompt-pulse 1.8s ease-in-out infinite;
 }
 
 .before-after__prompt-hint i {
-    font-size: 0.95rem;
-    color: #ffffff;
+    font-size: 1rem;
+    color: #3498db;
     animation: prompt-hand 1.6s ease-in-out infinite;
 }
 
 .before-after__prompt-arrow {
     position: relative;
-    width: 18px;
-    height: 8px;
+    width: 22px;
+    height: 10px;
     animation: prompt-arrow-nudge 1.4s ease-in-out infinite;
 }
 
@@ -1578,9 +1578,9 @@ body.modal-open {
     position: absolute;
     left: 0;
     top: 50%;
-    width: 12px;
+    width: 14px;
     height: 2px;
-    background: #ffffff;
+    background: #3498db;
     transform: translateY(-50%);
 }
 
@@ -1589,10 +1589,10 @@ body.modal-open {
     position: absolute;
     right: 0;
     top: 50%;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid #ffffff;
-    border-top: 2px solid #ffffff;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid #3498db;
+    border-top: 2px solid #3498db;
     transform: translateY(-50%) rotate(45deg);
 }
 
