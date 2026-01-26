@@ -548,6 +548,7 @@ body.modal-open {
     background: linear-gradient(180deg, #ffffff 0%, #dfe4ea 100%);
     border: none;
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    isolation: isolate;
 }
 
 .header .logo-main--image::after {
@@ -558,7 +559,8 @@ body.modal-open {
     transform: translateY(-160%);
     opacity: 0;
     pointer-events: none;
-    filter: blur(0.5px);
+    filter: blur(0.6px);
+    z-index: 2;
 }
 
 .header .logo-main--image::before {
