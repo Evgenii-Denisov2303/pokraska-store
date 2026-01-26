@@ -607,6 +607,7 @@ body.modal-open {
     transition: box-shadow 0.25s ease;
     transform-origin: center;
     backface-visibility: hidden;
+    position: relative;
 }
 
 .footer-logo-link:hover .logo-main--image,
@@ -629,6 +630,23 @@ body.modal-open {
 
 .footer-logo .logo-main--image::before {
     content: none;
+}
+
+.footer-logo-link .logo-main--image::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.45);
+    opacity: 0;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+    pointer-events: none;
+}
+
+.footer-logo-link:hover .logo-main--image::after,
+.footer-logo-link:focus-visible .logo-main--image::after {
+    opacity: 1;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2), 0 0 16px rgba(52, 152, 219, 0.35);
 }
 
 @media (max-width: 768px) {
@@ -2083,26 +2101,6 @@ body.modal-open {
 
 .footer-logo:hover {
     box-shadow: 0 22px 42px rgba(0,0,0,0.28);
-}
-
-.footer-logo-link .logo-main--image {
-    position: relative;
-}
-
-.footer-logo-link .logo-main--image::after {
-    content: '';
-    position: absolute;
-    inset: -12px;
-    border-radius: inherit;
-    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.45);
-    opacity: 0;
-    transition: opacity 0.3s ease, box-shadow 0.3s ease;
-}
-
-.footer-logo-link:hover .logo-main--image::after,
-.footer-logo-link:focus-visible .logo-main--image::after {
-    opacity: 1;
-    box-shadow: 0 0 0 6px rgba(52, 152, 219, 0.18), 0 0 18px rgba(52, 152, 219, 0.35);
 }
 
 .footer-logo::before {
