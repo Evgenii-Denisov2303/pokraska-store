@@ -201,6 +201,7 @@
                     </div>
                     <h3>Покраска дисков</h3>
                     <p>Автомобильные, литые, штампованные диски любого размера</p>
+                    <div class="service-price">от 2 500 ₽</div>
                     <a href="pages/services.html#wheels" class="service-link">Подробнее →</a>
                 </div>
 
@@ -211,6 +212,7 @@
                     </div>
                     <h3>Металлоконструкции</h3>
                     <p>Заборы, ворота, перила, навесы, решетки</p>
+                    <div class="service-price">от 180 ₽/м²</div>
                     <a href="pages/services.html#metal" class="service-link">Подробнее →</a>
                 </div>
 
@@ -221,6 +223,7 @@
                     </div>
                     <h3>Детали оборудования</h3>
                     <p>Промышленное оборудование, станки, механизмы</p>
+                    <div class="service-price">от 1 200 ₽</div>
                     <a href="pages/services.html#equipment" class="service-link">Подробнее →</a>
                 </div>
 
@@ -231,8 +234,58 @@
                     </div>
                     <h3>Элементы интерьера</h3>
                     <p>Мебель, светильники, декоративные элементы</p>
+                    <div class="service-price">от 900 ₽</div>
                     <a href="pages/services.html#interior" class="service-link">Подробнее →</a>
                 </div>
+            </div>
+
+            <div class="text-center btn-group">
+                <a href="#request-form" class="btn btn-primary">
+                    <i class="fas fa-calculator"></i> Получить расчет
+                </a>
+                <a href="pages/prices.html" class="btn btn-secondary">
+                    <i class="fas fa-tag"></i> Посмотреть цены
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PROCESS TIMELINE ========== -->
+    <section class="section process-section" aria-labelledby="process-title">
+        <div class="container">
+            <h2 class="section-title" id="process-title">Как мы работаем</h2>
+            <p class="section-subtitle">Простой и прозрачный процесс от заявки до выдачи</p>
+
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-phone-alt" aria-hidden="true"></i></div>
+                    <h3>Заявка и расчет</h3>
+                    <p>Отправляете фото или описание — даем цену и сроки.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-truck-loading" aria-hidden="true"></i></div>
+                    <h3>Прием и подготовка</h3>
+                    <p>Пескоструй, обезжиривание и подготовка поверхности.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-spray-can" aria-hidden="true"></i></div>
+                    <h3>Покраска</h3>
+                    <p>Наносим порошок, выдерживаем режимы полимеризации.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-check-circle" aria-hidden="true"></i></div>
+                    <h3>Контроль и выдача</h3>
+                    <p>Проверяем качество и выдаем готовый результат.</p>
+                </div>
+            </div>
+
+            <div class="text-center btn-group">
+                <a href="#request-form" class="btn btn-primary">
+                    <i class="fas fa-calculator"></i> Рассчитать стоимость
+                </a>
+                <a href="pages/contacts.html" class="btn btn-outline">
+                    <i class="fas fa-map-marker-alt"></i> Как добраться
+                </a>
             </div>
         </div>
     </section>
@@ -340,6 +393,29 @@
         </div>
     </section>
 
+    <!-- ========== BEFORE/AFTER ========== -->
+    <section class="section before-after-section" aria-labelledby="before-after-title">
+        <div class="container">
+            <h2 class="section-title" id="before-after-title">До и после покраски</h2>
+            <p class="section-subtitle">Сравните результат на примере одной детали</p>
+
+            <div class="before-after" data-before-after>
+                <div class="before-after__media">
+                    <img class="before-after__image before-after__image--after" src="assets/images/before-after/after.jpg" alt="Диск после порошковой покраски" loading="lazy" decoding="async">
+                    <div class="before-after__before">
+                        <img class="before-after__image before-after__image--before" src="assets/images/before-after/before.jpg" alt="Диск до порошковой покраски" loading="lazy" decoding="async">
+                    </div>
+                    <span class="before-after__label before-after__label--before">До</span>
+                    <span class="before-after__label before-after__label--after">После</span>
+                    <div class="before-after__handle" aria-hidden="true"></div>
+                </div>
+                <input class="before-after__range" type="range" min="0" max="100" value="50" aria-label="Сравнение до и после">
+            </div>
+
+            <p class="before-after__note">* Пример визуализации результата. Используйте ползунок, чтобы сравнить покрытие.</p>
+        </div>
+    </section>
+
     <section class="section cases-section" aria-labelledby="cases-title">
         <div class="container">
             <h2 class="section-title" id="cases-title">Кейсы</h2>
@@ -381,6 +457,70 @@
                         <span>Антикор</span>
                     </div>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== REVIEWS ========== -->
+    <section class="section reviews-section" aria-labelledby="reviews-title">
+        <div class="container">
+            <h2 class="section-title" id="reviews-title">Отзывы клиентов</h2>
+            <p class="section-subtitle">Нам доверяют частные и корпоративные заказчики</p>
+
+            <div class="reviews-grid">
+                <article class="review-card">
+                    <div class="review-rating" aria-label="Оценка 5 из 5">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>Сделали диски за два дня, без подтеков и царапин. Цвет ровный, смотрится дорого.</p>
+                    <div class="review-author">
+                        <span class="review-name">Илья К.</span>
+                        <span class="review-meta">Покраска дисков R18</span>
+                    </div>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-rating" aria-label="Оценка 5 из 5">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>Красили ограждения и перила. Сроки соблюдены, покрытие держится отлично.</p>
+                    <div class="review-author">
+                        <span class="review-name">ООО «СтальПром»</span>
+                        <span class="review-meta">Металлоконструкции</span>
+                    </div>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-rating" aria-label="Оценка 5 из 5">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>Покраска оборудования без задержек. Ровный глянец, качество отличное.</p>
+                    <div class="review-author">
+                        <span class="review-name">Марина П.</span>
+                        <span class="review-meta">Торговое оборудование</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="text-center btn-group">
+                <a href="#request-form" class="btn btn-primary">
+                    <i class="fas fa-calculator"></i> Получить расчет
+                </a>
+                <a href="pages/contacts.html" class="btn btn-outline">
+                    <i class="fas fa-phone"></i> Связаться с нами
+                </a>
             </div>
         </div>
     </section>

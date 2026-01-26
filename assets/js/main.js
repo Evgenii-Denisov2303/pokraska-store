@@ -400,6 +400,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 7. До/После слайдер
+    document.querySelectorAll('[data-before-after]').forEach((block) => {
+        const range = block.querySelector('.before-after__range');
+        if (!range) return;
+
+        const update = () => {
+            block.style.setProperty('--before-width', `${range.value}%`);
+        };
+
+        range.addEventListener('input', update);
+        update();
+    });
+
     // 4. Обновление высоты шапки при загрузке изображений
     window.addEventListener('load', setHeaderHeight);
     window.addEventListener('scroll', updateHeaderOnScroll, { passive: true });
