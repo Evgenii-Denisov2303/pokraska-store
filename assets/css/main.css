@@ -167,7 +167,7 @@ body.modal-open {
 }
 
 .header-top--compact .logo-tagline {
-    max-width: 220px;
+    max-width: 200px;
 }
 
 .header-top--compact {
@@ -202,7 +202,7 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    min-width: 220px;
+    min-width: 200px;
     margin-left: 0;
     justify-self: center;
     text-align: left;
@@ -666,7 +666,7 @@ body.modal-open {
     display: flex;
     flex-direction: row;
     list-style: none;
-    gap: 4px;
+    gap: 3px;
     margin: 0;
     padding: 0;
 }
@@ -678,8 +678,8 @@ body.modal-open {
     display: flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.95rem;
-    padding: 4px 6px;
+    font-size: 1rem;
+    padding: 3px 5px;
     line-height: 1.1;
     border-radius: 8px;
     transition: all 0.3s ease;
