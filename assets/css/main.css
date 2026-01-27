@@ -666,7 +666,7 @@ body.modal-open {
     display: flex;
     flex-direction: row;
     list-style: none;
-    gap: 10px;
+    gap: 4px;
     margin: 0;
     padding: 0;
 }
@@ -677,9 +677,9 @@ body.modal-open {
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.95rem;
-    padding: 6px 10px;
+    gap: 4px;
+    font-size: 0.9rem;
+    padding: 4px 6px;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
@@ -1510,20 +1510,8 @@ body.modal-open {
     border-right: none;
 }
 
-.before-after__before::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 20% 25%, rgba(138, 72, 28, 0.55), transparent 45%),
-        radial-gradient(circle at 70% 65%, rgba(110, 52, 16, 0.45), transparent 50%),
-        linear-gradient(180deg, rgba(86, 45, 18, 0.15), rgba(18, 9, 4, 0.35));
-    mix-blend-mode: multiply;
-    pointer-events: none;
-}
-
 .before-after__image--before {
-    filter: sepia(0.9) saturate(1.8) hue-rotate(-18deg) contrast(1.1) brightness(0.75);
+    filter: none;
 }
 
 .before-after__label {
