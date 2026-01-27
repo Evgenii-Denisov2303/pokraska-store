@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const counterElement = document.querySelector('.counter-number');
     if (counterElement) {
-        const finalNumber = 5000;
+        const finalNumber = 200;
         let currentNumber = 0;
         const increment = finalNumber / 100;
         const duration = 2000;

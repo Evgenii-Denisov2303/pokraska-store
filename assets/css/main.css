@@ -209,6 +209,10 @@ body.modal-open {
     align-items: flex-start;
 }
 
+.header-contact-stack .contact-phone + .contact-phone {
+    margin-top: 2px;
+}
+
 .header-actions {
     align-items: center;
     gap: 14px;
@@ -1900,6 +1904,37 @@ body.modal-open {
     margin: 0;
     color: #5f6b76;
     line-height: 1.6;
+}
+
+/* ========== PARTNERS ========== */
+.partners-section {
+    background: #f8fafc;
+}
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    align-items: center;
+}
+
+.partner-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px;
+}
+
+.partner-card--logo img {
+    max-width: 120px;
+    max-height: 54px;
+    width: 100%;
+    height: auto;
 }
 
 /* ========== REQUEST SECTION ========== */
