@@ -10,7 +10,7 @@
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://pokraska.store/assets/images/catalog/sliding-gate-1.jpg</image:loc>
-      <image:title>POKRASKA.STORE — Ворота и заборы в Казани</image:title>
+      <image:title>POKRASKA.STORE — Ворота, заборы и порошковая покраска в Казани</image:title>
     </image:image>
   </url>
 
@@ -20,6 +20,14 @@
     <lastmod>2026-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Порошковая покраска -->
+  <url>
+    <loc>https://pokraska.store/pages/powder-coating.html</loc>
+    <lastmod>2026-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <!-- Цены -->
