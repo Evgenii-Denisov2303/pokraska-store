@@ -948,6 +948,31 @@ body.modal-open {
     margin-right: auto;
 }
 
+.hero-bullets {
+    list-style: none;
+    margin: 0 0 22px 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.hero-bullets li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    justify-content: center;
+    text-align: left;
+}
+
+.hero-bullet {
+    color: #9bd3ff;
+    font-size: 1.2em;
+    line-height: 1;
+}
+
 .hero-features {
     display: flex;
     justify-content: center;
@@ -2692,6 +2717,15 @@ body.modal-open {
     .hero-subtitle {
         font-size: 1rem;
         padding: 0 20px;
+    }
+
+    .hero-bullets {
+        font-size: 1.1rem;
+        padding: 0 20px;
+    }
+
+    .hero-bullets li {
+        justify-content: flex-start;
     }
 
     .hero-features {
