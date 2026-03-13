@@ -1,0 +1,446 @@
+/* ========== FORM STYLES ========== */
+
+/* Общие стили формы */
+.request-form {
+    background: white;
+    background-image: linear-gradient(180deg, rgba(52, 152, 219, 0.05), rgba(255, 255, 255, 0) 60%);
+    padding: 36px;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border: 2px solid #e8eef5;
+    position: relative;
+    overflow: hidden;
+    align-self: start;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 0 0 20px;
+}
+
+.quick-actions .btn {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+}
+
+.request-form--compact {
+    padding: 24px;
+}
+
+.request-form:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #3498db, #e74c3c);
+}
+
+.request-form h3 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Уведомление формы */
+.form-notice {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 22px;
+    font-size: 1rem;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.yandex-form-frame {
+    background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
+    border: 1px solid #e6edf5;
+    border-radius: 16px;
+    padding: 6px 12px 14px 6px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.yandex-form-embed {
+    width: calc(100% - 2px);
+    min-height: 520px;
+    border: 0;
+    border-radius: 8px;
+    display: block;
+    background: #ffffff;
+    margin: 0 2px 2px 0;
+}
+
+.request-form--compact .yandex-form-embed {
+    min-height: 480px;
+}
+
+@media (max-width: 768px) {
+    .yandex-form-frame {
+        padding: 6px 12px 14px 6px;
+        border-radius: 14px;
+    }
+
+    .yandex-form-embed {
+        min-height: 600px;
+    }
+
+    .request-form--compact {
+        padding: 22px;
+    }
+
+    .request-form--compact .yandex-form-embed {
+        min-height: 520px;
+    }
+}
+
+@media (max-width: 480px) {
+    .yandex-form-frame {
+        padding: 6px 12px 14px 6px;
+        border-radius: 12px;
+    }
+
+    .yandex-form-embed {
+        min-height: 640px;
+    }
+
+    .request-form--compact {
+        padding: 18px;
+    }
+
+    .request-form--compact .yandex-form-embed {
+        min-height: 560px;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Группы полей */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 18px 20px;
+    border: 2px solid #e0e6ed;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-family: inherit;
+    transition: all 0.3s;
+    background: #f8f9fa;
+    color: #333;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Специфические стили полей */
+.form-group textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+}
+
+/* Чекбокс */
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #3498db;
+    flex-shrink: 0;
+}
+
+.checkbox-group label {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+}
+
+/* Кнопка отправки */
+.btn-submit {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #2980b9, #1f639e);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-submit .fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Сообщения формы */
+.form-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #c3e6cb;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-success.show {
+    display: block;
+}
+
+.form-success i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #27ae60;
+}
+
+.form-success h4 {
+    margin: 10px 0;
+    font-size: 1.3rem;
+}
+
+.form-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #f5c6cb;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-error.show {
+    display: block;
+}
+
+.form-error i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #dc3545;
+}
+
+.form-error h4 {
+    margin: 10px 0;
+    font-size: 1.3rem;
+}
+
+.btn-call {
+    margin-top: 15px;
+    background: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.btn-call:hover {
+    background: #c82333;
+    color: white;
+}
+
+/* Индикатор загрузки */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    z-index: 10;
+}
+
+.loading-overlay.show {
+    display: flex;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Валидация */
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+    border-color: #e74c3c;
+    background: rgba(231, 76, 60, 0.05);
+}
+
+.form-group input.success,
+.form-group select.success,
+.form-group textarea.success {
+    border-color: #27ae60;
+    background: rgba(39, 174, 96, 0.05);
+}
+
+.validation-message {
+    display: none;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.validation-message.error {
+    display: block;
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+/* Адаптивность формы */
+@media (max-width: 768px) {
+    .request-form {
+        padding: 30px 25px;
+    }
+
+    .request-form h3 {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 16px;
+        font-size: 16px; /* Для отключения зума на iOS */
+    }
+
+    .checkbox-group {
+        padding: 12px;
+    }
+
+    .checkbox-group label {
+        font-size: 0.85rem;
+    }
+
+    .btn-submit {
+        padding: 16px;
+        font-size: 1rem;
+    }
+
+    .form-success,
+    .form-error {
+        padding: 15px;
+        margin: 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .request-form {
+        padding: 25px 20px;
+    }
+
+    .request-form h3 {
+        font-size: 1.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 14px;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Маска телефона (опционально) */
+.phone-mask {
+    position: relative;
+}
+
+.phone-mask:before {
+    content: '+7';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+.phone-mask input {
+    padding-left: 45px !important;
+}

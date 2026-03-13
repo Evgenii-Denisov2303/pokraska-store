@@ -1,0 +1,351 @@
+/*!
+ * Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2023 Fonticons, Inc.
+ */
+.fa {
+  font-family: var(--fa-style-family, "Font Awesome 6 Free");
+  font-weight: var(--fa-style, 900);
+}
+
+.fa,
+.fa-classic,
+.fa-sharp,
+.fas,
+.fa-solid,
+.far,
+.fa-regular,
+.fab,
+.fa-brands {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: var(--fa-display, inline-block);
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+}
+
+.fas,
+.fa-classic,
+.fa-solid,
+.far,
+.fa-regular {
+  font-family: 'Font Awesome 6 Free';
+}
+
+.fab,
+.fa-brands {
+  font-family: 'Font Awesome 6 Brands';
+}
+
+/* Font Face для Solid иконок */
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("../fonts/webfonts/fa-solid-900.woff2") format("woff2"),
+       url("../fonts/webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+/* Font Face для Brand иконок */
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fonts/webfonts/fa-brands-400.woff2") format("woff2"),
+       url("../fonts/webfonts/fa-brands-400.ttf") format("truetype");
+}
+
+/* Font Face для Regular иконок */
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fonts/webfonts/fa-regular-400.woff2") format("woff2"),
+       url("../fonts/webfonts/fa-regular-400.ttf") format("truetype");
+}
+
+/* Конкретные веса для классов */
+.fas,
+.fa-solid {
+  font-weight: 900;
+}
+
+.far,
+.fa-regular {
+  font-weight: 400;
+}
+
+.fab,
+.fa-brands {
+  font-weight: 400;
+}
+
+/* ==================== ИКОНКИ ИЗ ВАШЕГО HTML ==================== */
+
+/* Иконки из главной страницы */
+.fa-home:before { content: "\f015"; }
+.fa-paint-roller:before { content: "\f5aa"; }
+.fa-tag:before { content: "\f02b"; }
+.fa-images:before { content: "\f302"; }
+.fa-map-marker-alt:before { content: "\f3c5"; }
+.fa-phone:before { content: "\f095"; }
+.fa-bars:before { content: "\f0c9"; }
+.fa-shield-alt:before { content: "\f3ed"; }
+.fa-truck:before { content: "\f0d1"; }
+.fa-clock:before { content: "\f017"; }
+.fa-palette:before { content: "\f53f"; }
+.fa-calculator:before { content: "\f1ec"; }
+.fa-car:before { content: "\f1b9"; }
+.fa-industry:before { content: "\f275"; }
+.fa-cogs:before { content: "\f085"; }
+.fa-search-plus:before { content: "\f00e"; }
+.fa-paper-plane:before { content: "\f1d8"; }
+.fa-telegram-plane:before { content: "\f2c6"; }
+.fa-check-circle:before { content: "\f058"; }
+.fa-envelope:before { content: "\f0e0"; }
+.fa-comment-dots:before { content: "\f4ad"; }
+.fa-vk:before { content: "\f189"; }
+.fa-instagram:before { content: "\f16d"; }
+
+/* Иконки, которые у вас были изначально */
+.fa-shield-halved:before { content: "\f3ed"; }
+.fa-truck-fast:before { content: "\f48b"; }
+.fa-telegram:before { content: "\f2c6"; }
+
+/* НОВЫЕ ИКОНКИ для страницы контактов */
+.fa-address-card:before { content: "\f2bb"; }      /* добавлено для заголовка */
+.fa-user-tie:before { content: "\f508"; }         /* добавлено для менеджера */
+.fa-phone-volume:before { content: "\f2a0"; }     /* добавлено для телефона */
+.fa-comments:before { content: "\f086"; }         /* добавлено для менеджера */
+.fa-share-alt:before { content: "\f1e0"; }        /* добавлено для соцсетей */
+.fa-info-circle:before { content: "\f05a"; }      /* уже есть, используется */
+
+/* Дополнительные иконки, которые могут понадобиться */
+.fa-chevron-right:before { content: "\f054"; }
+.fa-chevron-left:before { content: "\f053"; }
+.fa-times:before { content: "\f00d"; }
+.fa-check:before { content: "\f00c"; }
+.fa-user:before { content: "\f007"; }
+.fa-shopping-cart:before { content: "\f07a"; }
+.fa-search:before { content: "\f002"; }
+.fa-star:before { content: "\f005"; }
+.fa-heart:before { content: "\f004"; }
+.fa-share:before { content: "\f064"; }
+.fa-angle-down:before { content: "\f107"; }
+.fa-angle-up:before { content: "\f106"; }
+.fa-angle-right:before { content: "\f105"; }
+.fa-angle-left:before { content: "\f104"; }
+
+/* Иконки, используемые в страницах */
+.fa-archway:before { content: "\f557"; }
+.fa-arrow-left:before { content: "\f060"; }
+.fa-bacteria:before { content: "\f959"; }
+.fa-boxes:before { content: "\f468"; }
+.fa-brush:before { content: "\f55d"; }
+.fa-building:before { content: "\f1ad"; }
+.fa-bullseye:before { content: "\f140"; }
+.fa-calendar-alt:before { content: "\f073"; }
+.fa-chart-line:before { content: "\f201"; }
+.fa-clipboard-list:before { content: "\f46d"; }
+.fa-cookie-bite:before { content: "\f564"; }
+.fa-database:before { content: "\f1c0"; }
+.fa-expand-alt:before { content: "\f424"; }
+.fa-fill-drip:before { content: "\f576"; }
+.fa-fire:before { content: "\f06d"; }
+.fa-flask:before { content: "\f0c3"; }
+.fa-gem:before { content: "\f3a5"; }
+.fa-hand-holding-water:before { content: "\f4c1"; }
+.fa-handshake:before { content: "\f2b5"; }
+.fa-hand-sparkles:before { content: "\f95d"; }
+.fa-hard-hat:before { content: "\f807"; }
+.fa-headset:before { content: "\f590"; }
+.fa-history:before { content: "\f1da"; }
+.fa-layer-group:before { content: "\f5fd"; }
+.fa-lock:before { content: "\f023"; }
+.fa-oil-can:before { content: "\f613"; }
+.fa-phone-alt:before { content: "\f879"; }
+.fa-receipt:before { content: "\f543"; }
+.fa-recycle:before { content: "\f1b8"; }
+.fa-ruler:before { content: "\f545"; }
+.fa-ruler-combined:before { content: "\f546"; }
+.fa-ship:before { content: "\f21a"; }
+.fa-snowflake:before { content: "\f2dc"; }
+.fa-soap:before { content: "\f96e"; }
+.fa-sparkles:before { content: "\f890"; }
+.fa-stopwatch:before { content: "\f2f2"; }
+.fa-store:before { content: "\f54e"; }
+.fa-sun:before { content: "\f185"; }
+.fa-sync-alt:before { content: "\f2f1"; }
+.fa-tachometer-alt:before { content: "\f3fd"; }
+.fa-tags:before { content: "\f02c"; }
+.fa-temperature-high:before { content: "\f769"; }
+.fa-texture:before { content: "\f5d8"; }
+.fa-tint:before { content: "\f043"; }
+.fa-tools:before { content: "\f7d9"; }
+.fa-tractor:before { content: "\f722"; }
+.fa-user-check:before { content: "\f4fc"; }
+.fa-user-shield:before { content: "\f505"; }
+.fa-warehouse:before { content: "\f494"; }
+.fa-weight:before { content: "\f496"; }
+.fa-wind:before { content: "\f72e"; }
+.fa-exclamation-triangle:before { content: "\f071"; }
+.fa-cog:before { content: "\f013"; }
+.fa-wrench:before { content: "\f0ad"; }
+.fa-paint-brush:before { content: "\f1fc"; }
+
+/* УДАЛЕНО: WhatsApp иконка, если была */
+/* .fa-whatsapp:before { content: "\f232"; } */
+
+/* Спиннеры и анимации */
+.fa-spin {
+  animation: fa-spin 1s linear infinite;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Размеры */
+.fa-xs {
+  font-size: 0.75em;
+  line-height: 0.08333em;
+  vertical-align: 0.125em;
+}
+
+.fa-sm {
+  font-size: 0.875em;
+  line-height: 0.07143em;
+  vertical-align: 0.05357em;
+}
+
+.fa-lg {
+  font-size: 1.25em;
+  line-height: 0.05em;
+  vertical-align: -0.075em;
+}
+
+.fa-xl {
+  font-size: 1.5em;
+  line-height: 0.04167em;
+  vertical-align: -0.125em;
+}
+
+.fa-2xl {
+  font-size: 2em;
+  line-height: 0.03125em;
+  vertical-align: -0.1875em;
+}
+
+.fa-1x {
+  font-size: 1em;
+}
+
+.fa-2x {
+  font-size: 2em;
+}
+
+.fa-3x {
+  font-size: 3em;
+}
+
+.fa-4x {
+  font-size: 4em;
+}
+
+.fa-5x {
+  font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
+.fa-8x {
+  font-size: 8em;
+}
+
+.fa-9x {
+  font-size: 9em;
+}
+
+.fa-10x {
+  font-size: 10em;
+}
+
+/* Стек иконок */
+.fa-stack {
+  display: inline-block;
+  height: 2em;
+  line-height: 2em;
+  position: relative;
+  vertical-align: middle;
+  width: 2.5em;
+}
+
+.fa-stack-1x,
+.fa-stack-2x {
+  left: 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.fa-stack-1x {
+  line-height: inherit;
+}
+
+.fa-stack-2x {
+  font-size: 2em;
+}
+
+/* Фиксированная ширина */
+.fa-fw {
+  text-align: center;
+  width: 1.25em;
+}
+
+/* Список */
+.fa-ul {
+  list-style-type: none;
+  margin-left: var(--fa-li-margin, 2.5em);
+  padding-left: 0;
+}
+
+.fa-li {
+  left: calc(var(--fa-li-width, 2em) * -1);
+  position: absolute;
+  text-align: center;
+  width: var(--fa-li-width, 2em);
+  line-height: inherit;
+}
+
+/* Границы и выравнивание */
+.fa-border {
+  border-radius: 0.1em;
+  border: solid 0.08em #eee;
+  padding: 0.2em 0.25em 0.15em;
+}
+
+.fa-pull-left {
+  float: left;
+  margin-right: 0.3em;
+}
+
+.fa-pull-right {
+  float: right;
+  margin-left: 0.3em;
+}
