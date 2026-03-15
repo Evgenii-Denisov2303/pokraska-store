@@ -171,4 +171,77 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    document.querySelectorAll('[data-catalog-gallery]').forEach((gallery) => {
+        const mainLink = gallery.querySelector('[data-gallery-main-link]');
+        const mainImage = gallery.querySelector('[data-gallery-main-image]');
+        const thumbs = Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb'));
+        const hiddenLinks = Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]'));
+        const prevBtn = gallery.querySelector('.catalog-panel__media-nav--prev');
+        const nextBtn = gallery.querySelector('.catalog-panel__media-nav--next');
+
+        if (!mainLink || !mainImage || !thumbs.length) {
+            return;
+        }
+
+        let activeIndex = thumbs.findIndex((thumb) => thumb.classList.contains('is-active'));
+        if (activeIndex < 0) {
+            activeIndex = 0;
+            thumbs[0].classList.add('is-active');
+        }
+
+        const syncGallery = (index) => {
+            const thumb = thumbs[index];
+            if (!thumb) {
+                return;
+            }
+
+            const src = thumb.dataset.gallerySrc;
+            const alt = thumb.dataset.galleryAlt || '';
+            const title = thumb.dataset.galleryTitle || alt || '';
+
+            if (!src) {
+                return;
+            }
+
+            activeIndex = index;
+            mainLink.href = src;
+            mainLink.title = title;
+            mainImage.src = src;
+            mainImage.alt = alt;
+
+            thumbs.forEach((item, itemIndex) => {
+                item.classList.toggle('is-active', itemIndex === activeIndex);
+            });
+        };
+
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => syncGallery(index));
+        });
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                const nextIndex = (activeIndex - 1 + thumbs.length) % thumbs.length;
+                syncGallery(nextIndex);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                const nextIndex = (activeIndex + 1) % thumbs.length;
+                syncGallery(nextIndex);
+            });
+        }
+
+        mainLink.addEventListener('click', (event) => {
+            const hiddenLink = hiddenLinks[activeIndex];
+            if (!hiddenLink) {
+                return;
+            }
+            event.preventDefault();
+            hiddenLink.click();
+        });
+
+        syncGallery(activeIndex);
+    });
+
 });

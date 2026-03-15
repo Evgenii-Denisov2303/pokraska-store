@@ -86,7 +86,7 @@
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="../assets/css/form.css">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260315-frame-gallery1">
+    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260315-frame-hero-gallery2">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
@@ -330,10 +330,30 @@
                                     <span>Плавный ход створки</span>
                                 </div>
                             </div>
-                            <div class="catalog-panel__media catalog-panel__media--feature">
-                                <a href="../assets/images/catalog/gate-frame-1.jpg" data-lightbox="catalog-sliding-frame" title="Каркас откатных ворот">
-                                    <img src="../assets/images/catalog/gate-frame-1.jpg" alt="Каркас откатных ворот" loading="lazy" decoding="async">
-                                </a>
+                            <div class="catalog-panel__media-gallery" data-catalog-gallery>
+                                <div class="catalog-panel__media-frame">
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--prev" type="button" aria-label="Предыдущее фото">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <a class="catalog-panel__media catalog-panel__media--feature catalog-panel__media--gallery" href="../assets/images/catalog/gate-frame-1.jpg" data-gallery-main-link title="Каркас откатных ворот">
+                                        <img src="../assets/images/catalog/gate-frame-1.jpg" alt="Каркас откатных ворот" data-gallery-main-image loading="lazy" decoding="async">
+                                    </a>
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--next" type="button" aria-label="Следующее фото">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="catalog-panel__media-thumbs">
+                                    <button class="catalog-panel__media-thumb is-active" type="button" data-gallery-index="0" data-gallery-src="../assets/images/catalog/gate-frame-1.jpg" data-gallery-alt="Каркас откатных ворот" data-gallery-title="Каркас откатных ворот">
+                                        <img src="../assets/images/catalog/gate-frame-1.jpg" alt="Каркас откатных ворот" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="1" data-gallery-src="../assets/images/catalog/gate-frame-2.png" data-gallery-alt="Каркас откатных ворот на объекте" data-gallery-title="Каркас откатных ворот на объекте">
+                                        <img src="../assets/images/catalog/gate-frame-2.png" alt="Каркас откатных ворот на объекте" loading="lazy" decoding="async">
+                                    </button>
+                                </div>
+                                <div hidden aria-hidden="true">
+                                    <a href="../assets/images/catalog/gate-frame-1.jpg" data-lightbox="catalog-sliding-frame-hero" data-gallery-lightbox-link="0" title="Каркас откатных ворот"></a>
+                                    <a href="../assets/images/catalog/gate-frame-2.png" data-lightbox="catalog-sliding-frame-hero" data-gallery-lightbox-link="1" title="Каркас откатных ворот на объекте"></a>
+                                </div>
                             </div>
                         </div>
                         <div class="catalog-info-grid">
@@ -381,7 +401,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="catalog-panel__gallery catalog-panel__gallery--frame">
+                        <div class="catalog-panel__gallery catalog-panel__gallery--pair">
                             <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
                                 <a href="../assets/images/catalog/gate-hardware-kit.jpg" data-lightbox="catalog-sliding-frame" title="Комплект фурнитуры для откатных ворот">
                                     <img src="../assets/images/catalog/gate-hardware-kit.jpg" alt="Комплект фурнитуры для откатных ворот" loading="lazy" decoding="async">
@@ -390,11 +410,6 @@
                             <figure class="catalog-panel__gallery-item">
                                 <a href="../assets/images/catalog/gate-frame-profile.jpeg" data-lightbox="catalog-sliding-frame" title="Профиль направляющей для каркаса откатных ворот">
                                     <img src="../assets/images/catalog/gate-frame-profile.jpeg" alt="Профиль направляющей для каркаса откатных ворот" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/catalog/gate-frame-2.png" data-lightbox="catalog-sliding-frame" title="Каркас откатных ворот на объекте">
-                                    <img src="../assets/images/catalog/gate-frame-2.png" alt="Каркас откатных ворот на объекте" loading="lazy" decoding="async">
                                 </a>
                             </figure>
                         </div>
@@ -1531,6 +1546,6 @@
 
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/main.js" defer></script>
-    <script src="../assets/js/services.js?v=20260307-catalog-groups1" defer></script>
+    <script src="../assets/js/services.js?v=20260315-frame-hero-gallery2" defer></script>
 </body>
 </html>
