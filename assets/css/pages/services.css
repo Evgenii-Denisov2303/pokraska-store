@@ -1572,6 +1572,11 @@
     background: linear-gradient(180deg, #edf5fd 0%, #ddebf9 100%);
 }
 
+.catalog-panel__media--extra {
+    margin-top: 18px;
+    min-height: 300px;
+}
+
 .catalog-panel__gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
