@@ -1593,6 +1593,10 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.catalog-panel__gallery--frame {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .catalog-panel__gallery--automation {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
@@ -2036,6 +2040,10 @@
     }
 
     .catalog-panel__gallery--pair {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-panel__gallery--frame {
         grid-template-columns: 1fr;
     }
 
