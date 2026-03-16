@@ -728,8 +728,13 @@ body.modal-open {
 
 .header-top--compact .nav-list {
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    column-gap: 18px;
     row-gap: 10px;
+}
+
+.header-top--compact .nav-list li {
+    flex: 0 0 auto;
 }
 
 .header-top--compact .nav-list a {
@@ -2879,7 +2884,7 @@ body.modal-open {
 /* ========== RESPONSIVE DESIGN ========== */
 
 /* Среднее окно: бургер-меню, контакты и логотип в одной строке */
-@media (max-width: 1400px) {
+@media (max-width: 1280px) {
     .header-top--compact {
         grid-template-columns: auto minmax(0, 1fr) auto;
         grid-template-areas: "logo contacts actions";
