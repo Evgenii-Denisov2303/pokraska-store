@@ -33,9 +33,17 @@
   <!-- Цены -->
   <url>
     <loc>https://pokraska.store/pages/prices.html</loc>
-    <lastmod>2026-01-27</lastmod>
+    <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <!-- Оплата и документы -->
+  <url>
+    <loc>https://pokraska.store/pages/payment-documents.html</loc>
+    <lastmod>2026-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
   </url>
 
   <!-- Галерея работ -->
