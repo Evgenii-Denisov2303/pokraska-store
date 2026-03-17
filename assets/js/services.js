@@ -100,11 +100,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const catalogPanels = document.querySelectorAll('[data-catalog-panel]');
     const catalogGroupTabs = document.querySelectorAll('[data-catalog-group]');
     const catalogGroupPanels = document.querySelectorAll('[data-catalog-group-panel]');
+    const catalogLayout = document.querySelector('[data-catalog-layout]');
 
     if (catalogTabs.length && catalogPanels.length) {
+        const lastActiveTabByGroup = new Map();
+
         const activateCatalogGroup = (groupId) => {
             if (!catalogGroupTabs.length || !catalogGroupPanels.length) {
                 return;
+            }
+
+            if (catalogLayout) {
+                catalogLayout.dataset.activeGroup = groupId;
             }
 
             catalogGroupTabs.forEach((groupTab) => {
@@ -134,13 +141,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const activeTab = Array.from(catalogTabs).find((tab) => tab.dataset.catalogTab === panelId);
             const groupPanel = activeTab ? activeTab.closest('[data-catalog-group-panel]') : null;
             if (groupPanel) {
+                lastActiveTabByGroup.set(groupPanel.dataset.catalogGroupPanel, panelId);
                 activateCatalogGroup(groupPanel.dataset.catalogGroupPanel);
             }
         };
 
         catalogGroupTabs.forEach((groupTab) => {
             groupTab.addEventListener('click', () => {
-                activateCatalogGroup(groupTab.dataset.catalogGroup);
+                const groupId = groupTab.dataset.catalogGroup;
+                const groupPanel = Array.from(catalogGroupPanels).find((panel) => panel.dataset.catalogGroupPanel === groupId);
+                const groupTabsList = groupPanel ? Array.from(groupPanel.querySelectorAll('[data-catalog-tab]')) : [];
+                const rememberedPanelId = lastActiveTabByGroup.get(groupId);
+                const targetTab =
+                    groupTabsList.find((tab) => tab.dataset.catalogTab === rememberedPanelId) ||
+                    groupTabsList[0];
+
+                if (targetTab) {
+                    activateCatalogTab(targetTab.dataset.catalogTab);
+                } else {
+                    activateCatalogGroup(groupId);
+                }
             });
         });
 

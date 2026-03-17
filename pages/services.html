@@ -152,7 +152,7 @@
     <section class="catalog-page">
         <div class="container">
             <h1 class="visually-hidden">Каталог ворот, заборов и автоматики в Казани</h1>
-            <div class="catalog-layout">
+            <div class="catalog-layout" data-catalog-layout data-active-group="gates">
                 <aside class="catalog-sidebar" aria-label="Категории каталога">
                     <div class="catalog-group-tabs" role="tablist" aria-label="Группы каталога">
                         <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates">
@@ -175,31 +175,59 @@
 
                     <div class="catalog-group-panels">
                         <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
-                            <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing">Распашные ворота</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing-frame">Каркас распашных ворот</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-wicket">Калитки</button>
+                            <div class="catalog-group-panel__intro">
+                                <span class="catalog-group-panel__eyebrow">Изделия и каркасы</span>
+                                <h3>Ворота</h3>
+                                <p>Откатные, распашные, калитки и каркасы под дальнейшую обшивку, автоматику и монтаж.</p>
+                            </div>
+                            <div class="catalog-group-panel__links">
+                                <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing">Распашные ворота</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing-frame">Каркас распашных ворот</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-wicket">Калитки</button>
+                            </div>
                         </div>
 
                         <div class="catalog-group-panel" data-catalog-group-panel="fences" hidden>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из сайдинга</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-picket">Заборы из металлоштакетника</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-louver">Заборы из жалюзи</button>
+                            <div class="catalog-group-panel__intro">
+                                <span class="catalog-group-panel__eyebrow">Ограждения участка</span>
+                                <h3>Заборы</h3>
+                                <p>Практичные и декоративные решения для фасадной линии, приватности участка и единого внешнего вида.</p>
+                            </div>
+                            <div class="catalog-group-panel__links">
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из сайдинга</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-picket">Заборы из металлоштакетника</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-louver">Заборы из жалюзи</button>
+                            </div>
                         </div>
 
                         <div class="catalog-group-panel" data-catalog-group-panel="garage" hidden>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-shutters">Рольставни</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-grilles">Металлические раздвижные решетки</button>
+                            <div class="catalog-group-panel__intro">
+                                <span class="catalog-group-panel__eyebrow">Защита и доступ</span>
+                                <h3>Гараж и защита</h3>
+                                <p>Гаражные системы, рольворота, рольставни и защитные конструкции для частных и коммерческих объектов.</p>
+                            </div>
+                            <div class="catalog-group-panel__links">
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-shutters">Рольставни</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-grilles">Металлические раздвижные решетки</button>
+                            </div>
                         </div>
 
                         <div class="catalog-group-panel" data-catalog-group-panel="automation" hidden>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-components">Комплектующие для откатных ворот</button>
-                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
+                            <div class="catalog-group-panel__intro">
+                                <span class="catalog-group-panel__eyebrow">Приводы и комплектующие</span>
+                                <h3>Автоматика</h3>
+                                <p>Подбор приводов, комплектов и сопутствующих элементов под вес створки, размеры ворот и режим работы.</p>
+                            </div>
+                            <div class="catalog-group-panel__links">
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-components">Комплектующие для откатных ворот</button>
+                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
+                            </div>
                         </div>
                     </div>
                 </aside>
@@ -433,9 +461,10 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Ворота / Распашные ворота</div>
                             <h2>Распашные ворота</h2>
                         </div>
-                        <div class="catalog-panel__grid">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
-                                <p>Распашные ворота — это классическая, надежная конструкция из двух створок на петлях, закрепленных к опорным столбам. Створки из металлического каркаса с разным заполнением открываются наружу или внутрь участка. Подходят для дач, частных домов и промышленных объектов, обеспечивая классический внешний вид и функциональность. Можно установить калитку в едином дизайне с воротами, чтобы въездная группа выглядела эстетично и гармонировала с участком. Индивидуальный размер. Порошковая покраска. Цвет на выбор. Управление — механическое или автоматическое (с пульта).</p>
+                                <p>Распашные ворота - это классическая надежная конструкция из двух створок на петлях, закрепленных на опорных столбах. Створки из металлического каркаса с разным заполнением открываются внутрь или наружу участка, подходят для частных домов, дач, коммерческих и производственных объектов.</p>
+                                <p>Изготавливаем распашные ворота по индивидуальным размерам проема, подбираем заполнение, цвет и вариант управления. По желанию можно предусмотреть калитку в едином стиле, автоматику и порошковую покраску, чтобы въездная группа выглядела аккуратно и работала без лишних доработок на объекте.</p>
                                 <div class="catalog-panel__badges">
                                     <span>Под размер проема</span>
                                     <span>Цвет на выбор</span>
@@ -443,19 +472,35 @@
                                     <span>Калитка в едином дизайне</span>
                                 </div>
                             </div>
-                            <div class="catalog-panel__media">
-                                <a href="../assets/images/catalog/swing-gate-2.jpg" data-lightbox="catalog-swing" title="Распашные ворота с автоматикой">
-                                    <img src="../assets/images/catalog/swing-gate-2.jpg" alt="Распашные ворота с автоматикой" loading="lazy" decoding="async">
-                                </a>
+                            <div class="catalog-panel__media-gallery" data-catalog-gallery>
+                                <div class="catalog-panel__media-frame">
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--prev" type="button" aria-label="Предыдущее фото">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <a class="catalog-panel__media catalog-panel__media--feature catalog-panel__media--gallery" href="../assets/images/catalog/swing-gate-2.jpg" data-gallery-main-link title="Распашные ворота с автоматикой">
+                                        <img src="../assets/images/catalog/swing-gate-2.jpg" alt="Распашные ворота с автоматикой" data-gallery-main-image loading="lazy" decoding="async">
+                                    </a>
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--next" type="button" aria-label="Следующее фото">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="catalog-panel__media-thumbs">
+                                    <button class="catalog-panel__media-thumb is-active" type="button" data-gallery-index="0" data-gallery-src="../assets/images/catalog/swing-gate-2.jpg" data-gallery-alt="Распашные ворота с автоматикой" data-gallery-title="Распашные ворота с автоматикой">
+                                        <img src="../assets/images/catalog/swing-gate-2.jpg" alt="Распашные ворота с автоматикой" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="1" data-gallery-src="../assets/images/catalog/swing-gate-3.jpg" data-gallery-alt="Распашные ворота с калиткой" data-gallery-title="Распашные ворота с калиткой">
+                                        <img src="../assets/images/catalog/swing-gate-3.jpg" alt="Распашные ворота с калиткой" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="2" data-gallery-src="../assets/images/catalog/swing-gate-1.jpg" data-gallery-alt="Распашные ворота для частного дома" data-gallery-title="Распашные ворота для частного дома">
+                                        <img src="../assets/images/catalog/swing-gate-1.jpg" alt="Распашные ворота для частного дома" loading="lazy" decoding="async">
+                                    </button>
+                                </div>
+                                <div hidden aria-hidden="true">
+                                    <a href="../assets/images/catalog/swing-gate-2.jpg" data-lightbox="catalog-swing-hero" data-gallery-lightbox-link="0" title="Распашные ворота с автоматикой"></a>
+                                    <a href="../assets/images/catalog/swing-gate-3.jpg" data-lightbox="catalog-swing-hero" data-gallery-lightbox-link="1" title="Распашные ворота с калиткой"></a>
+                                    <a href="../assets/images/catalog/swing-gate-1.jpg" data-lightbox="catalog-swing-hero" data-gallery-lightbox-link="2" title="Распашные ворота для частного дома"></a>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="catalog-panel__gallery">
-                            <figure class="catalog-panel__gallery-item">
-                                <a href="../assets/images/catalog/swing-gate-3.jpg" data-lightbox="catalog-swing" title="Распашные ворота с калиткой">
-                                    <img src="../assets/images/catalog/swing-gate-3.jpg" alt="Распашные ворота с калиткой" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
                         </div>
 
                         <div class="catalog-info-grid">
@@ -478,10 +523,12 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способы оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Преимущества</h3>
+                                <ul>
+                                    <li>Классическая надежная конструкция на каждый день</li>
+                                    <li>Калитка, автоматика и фурнитура подбираются под задачу</li>
+                                    <li>Подходят под разные варианты заполнения и цвета</li>
+                                    <li>Изготавливаются под размер конкретного проема</li>
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
@@ -601,13 +648,6 @@
                                     <li>Возможность установки автоматики</li>
                                 </ul>
                             </div>
-                            <div class="catalog-info-card">
-                                <h3>Способ оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
-                                </ul>
-                            </div>
                         </div>
                         <div class="catalog-panel__cta">
                             <div>
@@ -684,10 +724,12 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способ оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Преимущества</h3>
+                                <ul>
+                                    <li>Удобный отдельный вход без открытия ворот</li>
+                                    <li>Можно выполнить в одном стиле с ограждением</li>
+                                    <li>Подготовим под замок, ручку и нужную фурнитуру</li>
+                                    <li>Подходит для частных и коммерческих объектов</li>
                                 </ul>
                             </div>
                         </div>
@@ -777,7 +819,7 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Заборы / Сайдинг</div>
                             <h2>Заборы из сайдинга</h2>
                         </div>
-                        <div class="catalog-panel__grid">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
                                 <p>Металлосайдинг — это прочное, долговечное и эстетичное решение для ограждения участка. Аккуратные горизонтальные линии и современный вид. Хорошо сочетается с фасадом дома и воротами. Может быть представлен в любом цветовом решении, в гладкой и рельефной фактуре, что расширяет выбор заказчика.</p>
                                 <p>Заборы из металлического сайдинга под дерево сочетают в себе эстетику дерева и долговечность металла, всегда выглядят красиво и современно.</p>
@@ -788,10 +830,30 @@
                                     <span>Современный внешний вид</span>
                                 </div>
                             </div>
-                            <div class="catalog-panel__media">
-                                <a href="../assets/images/gallery/fence/fence-04.jpg" data-lightbox="catalog-siding" title="Забор из металлосайдинга">
-                                    <img src="../assets/images/gallery/fence/fence-04.jpg" alt="Забор из металлосайдинга под дерево" loading="lazy" decoding="async">
-                                </a>
+                            <div class="catalog-panel__media-gallery" data-catalog-gallery>
+                                <div class="catalog-panel__media-frame">
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--prev" type="button" aria-label="Предыдущее фото">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <a class="catalog-panel__media catalog-panel__media--feature catalog-panel__media--gallery" href="../assets/images/gallery/fence/fence-04.jpg" data-gallery-main-link title="Забор из металлосайдинга">
+                                        <img src="../assets/images/gallery/fence/fence-04.jpg" alt="Забор из металлосайдинга под дерево" data-gallery-main-image loading="lazy" decoding="async">
+                                    </a>
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--next" type="button" aria-label="Следующее фото">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="catalog-panel__media-thumbs">
+                                    <button class="catalog-panel__media-thumb is-active" type="button" data-gallery-index="0" data-gallery-src="../assets/images/gallery/fence/fence-04.jpg" data-gallery-alt="Забор из металлосайдинга под дерево" data-gallery-title="Забор из металлосайдинга">
+                                        <img src="../assets/images/gallery/fence/fence-04.jpg" alt="Забор из металлосайдинга под дерево" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="1" data-gallery-src="../assets/images/gallery/fence/fence-09.jpg" data-gallery-alt="Пример забора из металлосайдинга" data-gallery-title="Пример забора из металлосайдинга">
+                                        <img src="../assets/images/gallery/fence/fence-09.jpg" alt="Пример забора из металлосайдинга" loading="lazy" decoding="async">
+                                    </button>
+                                </div>
+                                <div hidden aria-hidden="true">
+                                    <a href="../assets/images/gallery/fence/fence-04.jpg" data-lightbox="catalog-siding-hero" data-gallery-lightbox-link="0" title="Забор из металлосайдинга"></a>
+                                    <a href="../assets/images/gallery/fence/fence-09.jpg" data-lightbox="catalog-siding-hero" data-gallery-lightbox-link="1" title="Пример забора из металлосайдинга"></a>
+                                </div>
                             </div>
                         </div>
                         <div class="catalog-info-grid">
@@ -822,13 +884,6 @@
                                     <li><em>*Реальный цвет может отличаться от изображения на экране.</em></li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="catalog-panel__gallery catalog-panel__gallery--pair">
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/gallery/fence/fence-09.jpg" data-lightbox="catalog-siding" title="Пример забора из металлосайдинга">
-                                    <img src="../assets/images/gallery/fence/fence-09.jpg" alt="Пример забора из металлосайдинга" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
                         </div>
                         <div class="catalog-palette-card">
                             <div class="catalog-palette-card__info">
@@ -874,7 +929,7 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Заборы / Металлоштакетник</div>
                             <h2>Заборы из металлоштакетника</h2>
                         </div>
-                        <div class="catalog-panel__grid">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
                                 <p>Забор из металлоштакетника сочетает аккуратный ритм вертикальных планок, долговечность металла и более легкий внешний вид по сравнению со сплошными ограждениями. Подходит для частных домов, когда нужно современное и аккуратное решение для фасадной линии.</p>
                                 <div class="catalog-panel__badges">
@@ -884,10 +939,34 @@
                                     <span>Порошковая покраска</span>
                                 </div>
                             </div>
-                            <div class="catalog-panel__media">
-                                <a href="../assets/images/gallery/fence/fence-02.jpg" data-lightbox="catalog-picket" title="Забор из металлоштакетника">
-                                    <img src="../assets/images/gallery/fence/fence-02.jpg" alt="Забор из металлоштакетника" loading="lazy" decoding="async">
-                                </a>
+                            <div class="catalog-panel__media-gallery" data-catalog-gallery>
+                                <div class="catalog-panel__media-frame">
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--prev" type="button" aria-label="Предыдущее фото">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <a class="catalog-panel__media catalog-panel__media--feature catalog-panel__media--gallery" href="../assets/images/gallery/fence/fence-02.jpg" data-gallery-main-link title="Забор из металлоштакетника">
+                                        <img src="../assets/images/gallery/fence/fence-02.jpg" alt="Забор из металлоштакетника" data-gallery-main-image loading="lazy" decoding="async">
+                                    </a>
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--next" type="button" aria-label="Следующее фото">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="catalog-panel__media-thumbs">
+                                    <button class="catalog-panel__media-thumb is-active" type="button" data-gallery-index="0" data-gallery-src="../assets/images/gallery/fence/fence-02.jpg" data-gallery-alt="Забор из металлоштакетника" data-gallery-title="Забор из металлоштакетника">
+                                        <img src="../assets/images/gallery/fence/fence-02.jpg" alt="Забор из металлоштакетника" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="1" data-gallery-src="../assets/images/gallery/fence/fence-05.jpg" data-gallery-alt="Забор из металлоштакетника в темном цвете" data-gallery-title="Металлоштакетник в темном цвете">
+                                        <img src="../assets/images/gallery/fence/fence-05.jpg" alt="Забор из металлоштакетника в темном цвете" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="2" data-gallery-src="../assets/images/gallery/fence/fence-08.jpg" data-gallery-alt="Пример забора из металлоштакетника" data-gallery-title="Пример забора из металлоштакетника">
+                                        <img src="../assets/images/gallery/fence/fence-08.jpg" alt="Пример забора из металлоштакетника" loading="lazy" decoding="async">
+                                    </button>
+                                </div>
+                                <div hidden aria-hidden="true">
+                                    <a href="../assets/images/gallery/fence/fence-02.jpg" data-lightbox="catalog-picket-hero" data-gallery-lightbox-link="0" title="Забор из металлоштакетника"></a>
+                                    <a href="../assets/images/gallery/fence/fence-05.jpg" data-lightbox="catalog-picket-hero" data-gallery-lightbox-link="1" title="Металлоштакетник в темном цвете"></a>
+                                    <a href="../assets/images/gallery/fence/fence-08.jpg" data-lightbox="catalog-picket-hero" data-gallery-lightbox-link="2" title="Пример забора из металлоштакетника"></a>
+                                </div>
                             </div>
                         </div>
                         <div class="catalog-info-grid">
@@ -910,24 +989,14 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способ оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Преимущества</h3>
+                                <ul>
+                                    <li>Аккуратный внешний вид без ощущения глухого забора</li>
+                                    <li>Гибкая настройка приватности и шага между планками</li>
+                                    <li>Можно выполнить в одном стиле с воротами и калиткой</li>
+                                    <li>Устойчив к коррозии и погодным нагрузкам</li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="catalog-panel__gallery catalog-panel__gallery--pair">
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/gallery/fence/fence-05.jpg" data-lightbox="catalog-picket" title="Металлоштакетник в темном цвете">
-                                    <img src="../assets/images/gallery/fence/fence-05.jpg" alt="Забор из металлоштакетника в темном цвете" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/gallery/fence/fence-08.jpg" data-lightbox="catalog-picket" title="Пример забора из металлоштакетника">
-                                    <img src="../assets/images/gallery/fence/fence-08.jpg" alt="Пример забора из металлоштакетника" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
                         </div>
                         <div class="catalog-palette-card">
                             <div class="catalog-palette-card__info">
@@ -973,7 +1042,7 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Заборы / Жалюзи</div>
                             <h2>Заборы жалюзи</h2>
                         </div>
-                        <div class="catalog-panel__grid">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
                                 <p>Заборы жалюзи объединяют современный внешний вид, приватность и естественную вентиляцию участка. Ламели располагаются под углом, поэтому с улицы обзор ограничен, а сама конструкция остается легкой и аккуратной.</p>
                                 <div class="catalog-panel__badges">
@@ -983,10 +1052,34 @@
                                     <span>Под ворота и калитку в одном стиле</span>
                                 </div>
                             </div>
-                            <div class="catalog-panel__media">
-                                <a href="../assets/images/gallery/fence/fence-07.png" data-lightbox="catalog-louver" title="Забор жалюзи">
-                                    <img src="../assets/images/gallery/fence/fence-07.png" alt="Забор жалюзи" loading="lazy" decoding="async">
-                                </a>
+                            <div class="catalog-panel__media-gallery" data-catalog-gallery>
+                                <div class="catalog-panel__media-frame">
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--prev" type="button" aria-label="Предыдущее фото">
+                                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <a class="catalog-panel__media catalog-panel__media--feature catalog-panel__media--gallery" href="../assets/images/gallery/fence/fence-07.png" data-gallery-main-link title="Забор жалюзи">
+                                        <img src="../assets/images/gallery/fence/fence-07.png" alt="Забор жалюзи" data-gallery-main-image loading="lazy" decoding="async">
+                                    </a>
+                                    <button class="catalog-panel__media-nav catalog-panel__media-nav--next" type="button" aria-label="Следующее фото">
+                                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div class="catalog-panel__media-thumbs">
+                                    <button class="catalog-panel__media-thumb is-active" type="button" data-gallery-index="0" data-gallery-src="../assets/images/gallery/fence/fence-07.png" data-gallery-alt="Забор жалюзи" data-gallery-title="Забор жалюзи">
+                                        <img src="../assets/images/gallery/fence/fence-07.png" alt="Забор жалюзи" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="1" data-gallery-src="../assets/images/catalog/fence-louver-1.jpg" data-gallery-alt="Темный забор жалюзи" data-gallery-title="Темный забор жалюзи">
+                                        <img src="../assets/images/catalog/fence-louver-1.jpg" alt="Темный забор жалюзи" loading="lazy" decoding="async">
+                                    </button>
+                                    <button class="catalog-panel__media-thumb" type="button" data-gallery-index="2" data-gallery-src="../assets/images/gallery/fence/fence-10.jpg" data-gallery-alt="Жалюзи с калиткой" data-gallery-title="Жалюзи с калиткой">
+                                        <img src="../assets/images/gallery/fence/fence-10.jpg" alt="Жалюзи с калиткой" loading="lazy" decoding="async">
+                                    </button>
+                                </div>
+                                <div hidden aria-hidden="true">
+                                    <a href="../assets/images/gallery/fence/fence-07.png" data-lightbox="catalog-louver-hero" data-gallery-lightbox-link="0" title="Забор жалюзи"></a>
+                                    <a href="../assets/images/catalog/fence-louver-1.jpg" data-lightbox="catalog-louver-hero" data-gallery-lightbox-link="1" title="Темный забор жалюзи"></a>
+                                    <a href="../assets/images/gallery/fence/fence-10.jpg" data-lightbox="catalog-louver-hero" data-gallery-lightbox-link="2" title="Жалюзи с калиткой"></a>
+                                </div>
                             </div>
                         </div>
                         <div class="catalog-info-grid">
@@ -1009,24 +1102,14 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способ оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Где подходит</h3>
+                                <ul>
+                                    <li>Фасадные линии частных домов</li>
+                                    <li>Современные коттеджи и таунхаусы</li>
+                                    <li>Участки, где важны приватность и вентиляция</li>
+                                    <li>Проекты с воротами и калиткой в едином стиле</li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="catalog-panel__gallery catalog-panel__gallery--pair">
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/catalog/fence-louver-1.jpg" data-lightbox="catalog-louver" title="Темный забор жалюзи">
-                                    <img src="../assets/images/catalog/fence-louver-1.jpg" alt="Темный забор жалюзи" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
-                            <figure class="catalog-panel__gallery-item catalog-panel__gallery-item--cover">
-                                <a href="../assets/images/gallery/fence/fence-10.jpg" data-lightbox="catalog-louver" title="Жалюзи с калиткой">
-                                    <img src="../assets/images/gallery/fence/fence-10.jpg" alt="Жалюзи с калиткой" loading="lazy" decoding="async">
-                                </a>
-                            </figure>
                         </div>
                         <div class="catalog-palette-card">
                             <div class="catalog-palette-card__info">
@@ -1174,10 +1257,12 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способ оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Преимущества</h3>
+                                <ul>
+                                    <li>Компактное открывание без вылета створки вперед</li>
+                                    <li>Теплые сэндвич-панели и аккуратный внешний вид</li>
+                                    <li>Подходят для частных гаражей и коммерческих проемов</li>
+                                    <li>Легко дополняются приводом и входной калиткой</li>
                                 </ul>
                             </div>
                         </div>
@@ -1199,29 +1284,48 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Гараж / Рольворота</div>
                             <h2>Рольворота</h2>
                         </div>
-                        <div class="catalog-panel__grid catalog-panel__grid--stack">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
-                                <p>Рольворота и калитка в одном стиле, тип профиля 77М (вид с улицы). Калитка уличная с заполнением роллетным полотном (в одном стиле с рядом стоящими воротами), механический замок, ручка. Каркас изготовление из металлической трубы, покраска в полимерной покрасочной камере (порошковая).</p>
                                 <p>Рольворота (рулонные ворота) — это компактная система для защиты гаражей, въездов во дворы и торговых площадей. Они работают по принципу рольставней: гибкое полотно при открытии сворачивается в рулон, который прячется в защитный короб над проемом.</p>
-                                <p><strong>Применение:</strong> гараж, навес, торговый павильон. Универсальность монтажа — можно ставить внакладку снаружи, внутри или непосредственно в проем. Цветовая палитра рольворот позволяет подобрать оптимальное решение для любого экстерьера.</p>
-                                <p><strong>Управление:</strong> ручное (пружинно-инерционный механизм) или автоматическое (электропривод с пультом).</p>
+                                <p>Подходят для гаражей, навесов, торговых павильонов и хозяйственных проемов. Монтаж можно выполнить внакладку снаружи, внутри помещения или непосредственно в проем, а по внешнему виду рольворота легко согласовать с калиткой и фасадом.</p>
                                 <div class="catalog-panel__badges">
                                     <span>Компактная система</span>
                                     <span>Под гараж и навес</span>
                                     <span>Ручное и автоматическое управление</span>
                                     <span>Цвет на выбор</span>
                                 </div>
-                                <h3>Состав конструкции</h3>
-                                <p>Полотно рольворот может состоять из различного вида алюминиевых профилей:</p>
-                                <ul>
-                                    <li>Из пенонаполненных профилей — самый популярный вариант для частных гаражей.</li>
-                                    <li>Из экструдированных профилей повышенной прочности (антивандальные). Имеют толстые стенки и ребра жёсткости.</li>
-                                </ul>
                             </div>
                             <div class="catalog-panel__media catalog-panel__media--contain">
                                 <a href="../assets/images/catalog/roller-gate-1.png" data-lightbox="catalog-roller" title="Рольворота и калитка в одном стиле">
                                     <img src="../assets/images/catalog/roller-gate-1.png" alt="Рольворота и калитка в одном стиле" loading="lazy" decoding="async">
                                 </a>
+                            </div>
+                        </div>
+                        <div class="catalog-info-grid">
+                            <div class="catalog-info-card">
+                                <h3>Где применяют</h3>
+                                <ul>
+                                    <li>Гаражи и навесы</li>
+                                    <li>Дворовые и хозяйственные проемы</li>
+                                    <li>Торговые павильоны и сервисные помещения</li>
+                                    <li>Объекты, где важна компактность открывания</li>
+                                </ul>
+                            </div>
+                            <div class="catalog-info-card">
+                                <h3>Управление</h3>
+                                <ul>
+                                    <li>Пружинно-инерционный механизм для ручного подъема</li>
+                                    <li>Электропривод с пультом для автоматического управления</li>
+                                    <li>Подбор под размеры проема и режим использования</li>
+                                </ul>
+                            </div>
+                            <div class="catalog-info-card">
+                                <h3>Состав полотна</h3>
+                                <ul>
+                                    <li>Пенонаполненный профиль для частных гаражей</li>
+                                    <li>Экструдированный профиль повышенной прочности</li>
+                                    <li>Цвет и комплектация подбираются под экстерьер объекта</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="catalog-panel__cta">
@@ -1642,10 +1746,12 @@
                                 </ul>
                             </div>
                             <div class="catalog-info-card">
-                                <h3>Способы оплаты</h3>
-                                <ul class="catalog-list--inline">
-                                    <li>Наличными</li>
-                                    <li>Безналичный расчет</li>
+                                <h3>Преимущества</h3>
+                                <ul>
+                                    <li>Складная конструкция экономит место при открывании</li>
+                                    <li>Можно установить в проем или внаклад</li>
+                                    <li>Подходят для торговых, офисных и частных объектов</li>
+                                    <li>Покрытие и комплектация подбираются под условия эксплуатации</li>
                                 </ul>
                             </div>
                         </div>
