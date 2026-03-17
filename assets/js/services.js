@@ -105,6 +105,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (catalogTabs.length && catalogPanels.length) {
         const lastActiveTabByGroup = new Map();
 
+        const getCatalogHashState = (hashValue = window.location.hash) => {
+            const hashId = hashValue ? hashValue.replace('#', '') : '';
+            if (!hashId) {
+                return null;
+            }
+
+            const targetElement = document.getElementById(hashId);
+            if (!targetElement) {
+                return null;
+            }
+
+            const directTab = Array.from(catalogTabs).find((tab) => tab.dataset.catalogTab === hashId);
+            if (directTab) {
+                return { panelId: hashId, targetElement };
+            }
+
+            const parentPanel = targetElement.closest('[data-catalog-panel]');
+            if (parentPanel) {
+                return { panelId: parentPanel.id, targetElement };
+            }
+
+            return null;
+        };
+
+        const scrollCatalogTarget = (targetElement, smooth = true) => {
+            if (!targetElement) {
+                return;
+            }
+
+            const headerHeight = header ? header.offsetHeight : 140;
+            window.scrollTo({
+                top: targetElement.getBoundingClientRect().top + window.scrollY - headerHeight - 12,
+                behavior: smooth ? 'smooth' : 'auto'
+            });
+        };
+
         const activateCatalogGroup = (groupId) => {
             if (!catalogGroupTabs.length || !catalogGroupPanels.length) {
                 return;
@@ -174,11 +210,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        const hashPanel = window.location.hash ? window.location.hash.replace('#', '') : '';
-        const hashTarget = hashPanel && document.getElementById(hashPanel) ? hashPanel : null;
+        const hashState = getCatalogHashState();
         let initialTab = document.querySelector('.catalog-link.is-active') || catalogTabs[0];
-        if (hashTarget) {
-            const hashTab = Array.from(catalogTabs).find((tab) => tab.dataset.catalogTab === hashTarget);
+        if (hashState) {
+            const hashTab = Array.from(catalogTabs).find((tab) => tab.dataset.catalogTab === hashState.panelId);
             if (hashTab) {
                 initialTab = hashTab;
             }
@@ -189,6 +224,25 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (catalogGroupTabs.length) {
             activateCatalogGroup(catalogGroupTabs[0].dataset.catalogGroup);
         }
+
+        if (hashState) {
+            setTimeout(() => {
+                scrollCatalogTarget(hashState.targetElement, false);
+            }, 60);
+        }
+
+        window.addEventListener('hashchange', () => {
+            const currentHashState = getCatalogHashState();
+            if (!currentHashState) {
+                return;
+            }
+
+            activateCatalogTab(currentHashState.panelId);
+
+            setTimeout(() => {
+                scrollCatalogTarget(currentHashState.targetElement, true);
+            }, 60);
+        });
     }
 
     document.querySelectorAll('[data-catalog-gallery]').forEach((gallery) => {
