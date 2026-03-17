@@ -1501,6 +1501,10 @@
     line-height: 1.6;
 }
 
+.catalog-panel__text--top {
+    align-self: start;
+}
+
 .catalog-panel__text--flow::after {
     content: "";
     display: block;
@@ -1526,6 +1530,20 @@
 .catalog-panel__text ul {
     margin: 12px 0 0;
     padding-left: 18px;
+}
+
+.catalog-inline-link {
+    color: #1f6fb2;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.catalog-inline-link:hover,
+.catalog-inline-link:focus-visible {
+    color: #14558e;
+    text-decoration-color: currentColor;
 }
 
 .catalog-panel__badges {
