@@ -286,6 +286,12 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbs.forEach((item, itemIndex) => {
                 item.classList.toggle('is-active', itemIndex === activeIndex);
             });
+
+            thumb.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
         };
 
         thumbs.forEach((thumb, index) => {
