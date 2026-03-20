@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevButton = gallery.querySelector('[data-gallery-prev]') || createNavButton('prev', 'Предыдущее фото', 'fa-chevron-left');
         const nextButton = gallery.querySelector('[data-gallery-next]') || createNavButton('next', 'Следующее фото', 'fa-chevron-right');
 
+        if (thumbs.length === 1) {
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+        }
+
         const normalizeIndex = (index) => {
             if (!thumbs.length) {
                 return 0;
