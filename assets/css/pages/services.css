@@ -1255,7 +1255,7 @@
 .automation-products--details {
     align-items: stretch;
     grid-auto-rows: 1fr;
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.16fr) minmax(0, 0.92fr);
+    grid-template-columns: minmax(0, 1.16fr) minmax(0, 0.92fr) minmax(0, 0.92fr);
     gap: 18px;
 }
 
