@@ -1253,7 +1253,8 @@
 }
 
 .automation-products--details {
-    align-items: start;
+    align-items: stretch;
+    grid-auto-rows: 1fr;
 }
 
 .catalog-panel__section-heading {
@@ -1451,7 +1452,8 @@
 }
 
 .automation-products--details .automation-card {
-    align-self: start;
+    align-self: stretch;
+    height: 100%;
 }
 
 .automation-products--details .automation-card__description,
@@ -1459,8 +1461,32 @@
     min-height: 0;
 }
 
+.automation-products--details .automation-card__specs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.automation-products--details .automation-card__specs li {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    padding: 8px 10px;
+}
+
+.automation-card__specs--dense {
+    gap: 7px;
+}
+
+.automation-card__specs--dense li {
+    padding: 7px 9px;
+}
+
 .automation-products--details .automation-card__media {
     margin-top: 0;
+    min-height: 164px;
+}
+
+.automation-products--details .automation-card__cta {
+    margin-top: auto;
 }
 
 .automation-card--link:hover .automation-card__description,
@@ -2582,6 +2608,10 @@
 
     .automation-card__thumb img {
         height: 94px;
+    }
+
+    .automation-products--details .automation-card__specs {
+        grid-template-columns: 1fr;
     }
 
     .automation-guide {
