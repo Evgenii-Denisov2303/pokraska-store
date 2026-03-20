@@ -2,8 +2,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.service-nav-link');
     const sections = document.querySelectorAll('.service-detail-card');
     const header = document.querySelector('.header');
+    const catalogContactListMarkup = `
+        <a href="tel:+79625542260"><i class="fas fa-phone"></i> +7 (962) 554-22-60</a>
+        <a href="tel:+79376154629"><i class="fas fa-phone"></i> +7 (937) 615-46-29</a>
+        <a href="mailto:vorota404@mail.ru"><i class="fas fa-envelope"></i> vorota404@mail.ru</a>
+    `.trim();
 
     const hasNav = navLinks.length && sections.length;
+
+    document.querySelectorAll('.catalog-contact-list').forEach((contactList) => {
+        contactList.innerHTML = catalogContactListMarkup;
+    });
 
     function updateActiveLink() {
         if (!hasNav) {
