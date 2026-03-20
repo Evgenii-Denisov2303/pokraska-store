@@ -1902,6 +1902,23 @@
     align-content: start;
 }
 
+#catalog-panel-wicket .catalog-panel__media--contain {
+    min-height: 0;
+    height: 100%;
+}
+
+#catalog-panel-wicket .catalog-panel__media--contain img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 32%;
+    background: transparent;
+}
+
+#catalog-panel-wicket .catalog-panel__media-frame {
+    aspect-ratio: 6 / 5;
+}
+
 .catalog-panel__text--wicket h3 {
     margin: 4px 0 0;
     color: #2c3e50;
