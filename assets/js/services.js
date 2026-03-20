@@ -261,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const hiddenLinks = Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]'));
         const prevBtn = gallery.querySelector('.catalog-panel__media-nav--prev');
         const nextBtn = gallery.querySelector('.catalog-panel__media-nav--next');
+        const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
 
         if (!mainLink || !mainImage || !thumbs.length) {
             return;
@@ -279,6 +280,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (nextBtn) {
                 nextBtn.style.display = 'none';
+            }
+
+            if (thumbsWrap) {
+                thumbsWrap.style.display = 'none';
             }
         }
 

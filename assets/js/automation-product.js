@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainImage = gallery.querySelector('[data-main-image]');
         const mainLink = gallery.querySelector('[data-main-link]');
         const thumbs = Array.from(gallery.querySelectorAll('[data-thumb-src]'));
+        const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
 
         if (!mainImage || !mainLink || !thumbs.length) {
             return;
@@ -25,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (thumbs.length === 1) {
             prevButton.style.display = 'none';
             nextButton.style.display = 'none';
+
+            if (thumbsWrap) {
+                thumbsWrap.style.display = 'none';
+            }
         }
 
         const normalizeIndex = (index) => {
