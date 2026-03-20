@@ -1259,6 +1259,11 @@
     gap: 18px;
 }
 
+.automation-products--accessories-grid {
+    gap: 18px;
+    grid-auto-rows: 1fr;
+}
+
 .catalog-panel__section-heading {
     margin-top: 24px;
     display: grid;
@@ -1453,6 +1458,25 @@
     min-height: 2.8em;
 }
 
+.automation-products--accessories-grid .automation-card {
+    align-self: stretch;
+    height: 100%;
+}
+
+.automation-products--accessories-grid .automation-card__description,
+.automation-products--accessories-grid .automation-card__title {
+    min-height: 0;
+}
+
+.automation-products--accessories-grid .automation-card__media {
+    min-height: 210px;
+    margin-top: 0;
+}
+
+.automation-products--accessories-grid .automation-card__cta {
+    margin-top: auto;
+}
+
 .automation-products--details .automation-card {
     align-self: stretch;
     height: 100%;
@@ -1574,6 +1598,10 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
+}
+
+.automation-card__thumbs--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .automation-card__thumb {

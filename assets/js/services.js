@@ -272,6 +272,16 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbs[0].classList.add('is-active');
         }
 
+        if (thumbs.length === 1) {
+            if (prevBtn) {
+                prevBtn.style.display = 'none';
+            }
+
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+            }
+        }
+
         const syncGallery = (index) => {
             const thumb = thumbs[index];
             if (!thumb) {
