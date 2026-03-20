@@ -1252,6 +1252,10 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.automation-products--details {
+    align-items: start;
+}
+
 .catalog-panel__section-heading {
     margin-top: 24px;
     display: grid;
@@ -1444,6 +1448,19 @@
 
 .automation-products--three .automation-card__title {
     min-height: 2.8em;
+}
+
+.automation-products--details .automation-card {
+    align-self: start;
+}
+
+.automation-products--details .automation-card__description,
+.automation-products--details .automation-card__title {
+    min-height: 0;
+}
+
+.automation-products--details .automation-card__media {
+    margin-top: 0;
 }
 
 .automation-card--link:hover .automation-card__description,
@@ -1902,6 +1919,12 @@
     align-self: start;
 }
 
+.catalog-panel__media-gallery--wicket {
+    max-width: 520px;
+    width: 100%;
+    justify-self: end;
+}
+
 .catalog-panel__media-frame {
     position: relative;
 }
@@ -2113,6 +2136,19 @@
 
 .catalog-panel__media--contain img {
     height: auto;
+    object-fit: contain;
+}
+
+.catalog-panel__media--wicket {
+    min-height: 0;
+    padding: 18px;
+}
+
+.catalog-panel__media--wicket img {
+    width: auto;
+    max-width: 100%;
+    max-height: 420px;
+    margin: 0 auto;
     object-fit: contain;
 }
 
@@ -2522,6 +2558,11 @@
 
     .catalog-panel__inline-media {
         width: min(46%, 260px);
+    }
+
+    .catalog-panel__media-gallery--wicket {
+        max-width: none;
+        justify-self: stretch;
     }
 
     .catalog-panel__cta,

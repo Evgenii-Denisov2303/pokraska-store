@@ -283,6 +283,15 @@ document.addEventListener('DOMContentLoaded', function() {
             mainImage.src = src;
             mainImage.alt = alt;
 
+            const thumbImage = thumb.querySelector('img');
+            const width = thumbImage?.getAttribute('width');
+            const height = thumbImage?.getAttribute('height');
+
+            if (width && height) {
+                mainImage.width = Number(width);
+                mainImage.height = Number(height);
+            }
+
             thumbs.forEach((item, itemIndex) => {
                 item.classList.toggle('is-active', itemIndex === activeIndex);
             });
