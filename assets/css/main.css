@@ -88,15 +88,16 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid rgba(22, 40, 63, 0.08);
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: white;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 34px rgba(18, 30, 48, 0.08);
     transition: transform 0.25s ease;
-    gap: 20px;
+    gap: 18px;
     flex-wrap: wrap;
 }
 
@@ -112,7 +113,7 @@ body.modal-open {
 .logo-premium {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .logo-main {
@@ -160,14 +161,15 @@ body.modal-open {
 }
 
 .logo-tagline {
-    font-size: 0.85rem;
-    color: #4b5563;
-    font-weight: 600;
-    max-width: 200px;
+    font-size: 0.76rem;
+    color: #66758b;
+    font-weight: 700;
+    line-height: 1.35;
+    max-width: 168px;
 }
 
 .header-top--compact .logo-tagline {
-    max-width: 200px;
+    max-width: 168px;
 }
 
 .header-top--compact {
@@ -177,7 +179,7 @@ body.modal-open {
         "logo contacts actions"
         "nav nav nav";
     align-items: center;
-    gap: 16px 20px;
+    gap: 14px 18px;
 }
 
 .header-top--compact > * {
@@ -243,17 +245,13 @@ body.modal-open {
 
 .header-contact-stack {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 8px 10px;
     min-width: 200px;
     margin-left: 0;
     justify-self: center;
     text-align: left;
     align-items: flex-start;
-}
-
-.header-contact-stack .contact-phone + .contact-phone {
-    margin-top: 2px;
 }
 
 .header-actions {
@@ -729,8 +727,8 @@ body.modal-open {
 .header-top--compact .nav-list {
     flex-wrap: wrap;
     justify-content: center;
-    column-gap: 18px;
-    row-gap: 10px;
+    column-gap: 12px;
+    row-gap: 8px;
 }
 
 .header-top--compact .nav-list li {
@@ -747,22 +745,26 @@ body.modal-open {
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 1.1rem;
-    padding: 3px 5px;
+    gap: 0;
+    font-size: 0.97rem;
+    padding: 8px 10px;
     line-height: 1.1;
-    border-radius: 8px;
+    border-radius: 999px;
     transition: all 0.3s ease;
 }
 
+.nav-list a i {
+    display: none;
+}
+
 .nav-list a:hover {
-    background: #f8f9fa;
-    color: #3498db;
+    background: rgba(22, 93, 171, 0.08);
+    color: #165dab;
 }
 
 .nav-list a.active {
-    background: #3498db;
-    color: white;
+    background: rgba(22, 93, 171, 0.12);
+    color: #165dab;
     font-weight: 700;
 }
 
@@ -862,28 +864,16 @@ body.modal-open {
 
 .header-contact-stack .contact-phone,
 .header-contact-stack .contact-address {
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+    margin: 0;
 }
 
 .header-contact-stack .phone-number {
-    font-size: 1.05rem;
+    font-size: 1.01rem;
     font-weight: 800;
 }
 
 .header-contact-stack .phone-label {
-    font-size: 0.75rem;
-}
-
-.header-contact-stack .contact-address {
-    font-weight: 600;
-    color: #3f4b59;
-}
-
-.header-contact-stack .contact-address {
-    font-size: 0.82rem;
+    font-size: 0.72rem;
 }
 
 .header-contact-stack .contact-phone:hover {
@@ -894,6 +884,85 @@ body.modal-open {
 
 .header-contact-stack .phone-label {
     display: none;
+}
+
+.header-contact-stack .contact-phone:first-of-type {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 100%;
+    padding: 8px 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(22, 93, 171, 0.08) 0%, rgba(22, 93, 171, 0.03) 100%);
+    border: 1px solid rgba(22, 93, 171, 0.1);
+}
+
+.header-contact-stack .contact-phone:first-of-type i {
+    color: #165dab;
+    font-size: 0.95rem;
+}
+
+.header-contact-stack .contact-phone:first-of-type .phone-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.header-contact-stack .contact-phone:first-of-type .phone-label {
+    display: block;
+    color: #6b7a90;
+    font-weight: 700;
+}
+
+.header-contact-stack .contact-phone:nth-of-type(2),
+.header-contact-stack .contact-address {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(22, 40, 63, 0.08);
+    color: #546477;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.header-contact-stack .contact-phone:nth-of-type(2) {
+    text-decoration: none;
+}
+
+.header-contact-stack .contact-phone:nth-of-type(2) i {
+    display: none;
+}
+
+.header-contact-stack .contact-phone:nth-of-type(2) .phone-info {
+    display: inline-flex;
+    align-items: center;
+}
+
+.header-contact-stack .contact-phone:nth-of-type(2) .phone-number {
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.header-contact-stack .contact-address {
+    max-width: 250px;
+    white-space: nowrap;
+}
+
+.header-contact-stack .contact-address i {
+    color: #165dab;
+    font-size: 0.9rem;
+}
+
+.header-contact-stack .contact-address span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .contacts-social {
@@ -3769,6 +3838,24 @@ body.modal-open {
         justify-self: start;
         text-align: left;
         align-items: flex-start;
+        gap: 0;
+        min-width: 0;
+    }
+
+    .header-contact-stack .contact-phone:first-of-type {
+        flex: 0 1 auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        grid-template-columns: 14px minmax(0, 1fr);
+        gap: 8px;
+    }
+
+    .header-contact-stack .contact-phone:first-of-type .phone-label,
+    .header-contact-stack .contact-phone:nth-of-type(2),
+    .header-contact-stack .contact-address {
+        display: none;
     }
 
     .header-top--compact .nav {
@@ -4039,6 +4126,12 @@ body.modal-open {
         text-align: left;
         justify-self: start;
         min-width: 0;
+    }
+
+    .header-contact-stack .contact-phone:first-of-type {
+        width: 100%;
+        grid-template-columns: 12px minmax(0, 1fr);
+        gap: 6px;
     }
 
     .header-actions {

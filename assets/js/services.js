@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.service-nav-link');
     const sections = document.querySelectorAll('.service-detail-card');
     const header = document.querySelector('.header');
+    const navigationEntry = performance.getEntriesByType('navigation')[0];
+    const shouldResetCatalogScroll =
+        !window.location.hash &&
+        navigationEntry &&
+        navigationEntry.type === 'navigate';
     const catalogContactListMarkup = `
         <a href="tel:+79625542260"><i class="fas fa-phone"></i> +7 (962) 554-22-60</a>
         <a href="tel:+79376154629"><i class="fas fa-phone"></i> +7 (937) 615-46-29</a>
@@ -238,6 +243,13 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 scrollCatalogTarget(hashState.targetElement, false);
             }, 60);
+        } else if (shouldResetCatalogScroll) {
+            requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'auto'
+                });
+            });
         }
 
         window.addEventListener('hashchange', () => {
