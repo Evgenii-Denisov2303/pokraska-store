@@ -3362,7 +3362,7 @@ body.modal-open {
     display: grid;
     grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
     gap: 32px;
-    align-items: start;
+    align-items: stretch;
     position: relative;
     z-index: 1;
     padding: 32px;
@@ -3378,7 +3378,7 @@ body.modal-open {
     flex-direction: column;
     gap: 18px;
     padding-top: 0;
-    align-self: start;
+    min-height: 100%;
 }
 
 .request-info h2 {
@@ -3483,7 +3483,7 @@ body.modal-open {
 }
 
 .contact-info {
-    margin-top: 0;
+    margin-top: auto;
     padding: 20px 20px 18px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 251, 255, 0.96));
     border-radius: 22px;
