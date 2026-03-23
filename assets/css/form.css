@@ -2,15 +2,41 @@
 
 /* Общие стили формы */
 .request-form {
-    background: white;
-    background-image: linear-gradient(180deg, rgba(52, 152, 219, 0.05), rgba(255, 255, 255, 0) 60%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 251, 255, 0.96));
     padding: 36px;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    border: 2px solid #e8eef5;
+    border-radius: 22px;
+    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.10);
+    border: 1px solid #dbe8f3;
     position: relative;
     overflow: hidden;
     align-self: start;
+}
+
+.request-form__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    margin-bottom: 14px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(237, 245, 255, 0.96));
+    border: 1px solid #d4e4f2;
+    color: #1f5b96;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: 0 12px 22px rgba(47, 121, 195, 0.12);
+}
+
+.request-form__eyebrow::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2f79c3;
+    box-shadow: 0 0 0 6px rgba(47, 121, 195, 0.16);
 }
 
 .quick-actions {
@@ -23,6 +49,12 @@
 .quick-actions .btn {
     padding: 12px 18px;
     font-size: 0.95rem;
+    min-height: 48px;
+    border-radius: 14px;
+    border: 1px solid #dbe8f3;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 251, 255, 0.96));
+    color: #1f5b96;
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.04);
 }
 
 .request-form--compact {
@@ -36,35 +68,37 @@
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(to right, #3498db, #e74c3c);
+    background: linear-gradient(90deg, #2f79c3, #b56f42);
 }
 
 .request-form h3 {
     color: #2c3e50;
-    margin-bottom: 25px;
-    text-align: center;
-    font-size: 1.8rem;
+    margin-bottom: 14px;
+    text-align: left;
+    font-size: 1.65rem;
     font-weight: 700;
 }
 
 /* Уведомление формы */
 .form-notice {
-    text-align: center;
-    color: #7f8c8d;
+    text-align: left;
+    color: #64717d;
     margin-bottom: 22px;
-    font-size: 1rem;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #3498db;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    padding: 13px 15px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 251, 255, 0.96));
+    border-radius: 16px;
+    border: 1px solid #dbe8f3;
+    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.04);
 }
 
 .yandex-form-frame {
     background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
-    border: 1px solid #e6edf5;
-    border-radius: 16px;
+    border: 1px solid #dbe8f3;
+    border-radius: 20px;
     padding: 6px 12px 14px 6px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
 }
 
 .yandex-form-embed {
