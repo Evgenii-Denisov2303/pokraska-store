@@ -153,8 +153,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const headerHeight = isCompactViewport()
                     ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
                     : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
+                const extraOffset = Number(target.dataset.scrollOffset || 0);
                 window.scrollTo({
-                    top: target.offsetTop - headerHeight,
+                    top: target.offsetTop - headerHeight - extraOffset,
                     behavior: 'smooth'
                 });
             }

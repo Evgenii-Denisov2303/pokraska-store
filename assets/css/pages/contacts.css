@@ -349,30 +349,11 @@
 }
 
 .quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    margin: 0 0 20px;
 }
 
 .quick-actions .btn {
     justify-content: center;
-    width: 100%;
-    min-height: 54px;
-}
-
-.quick-actions .btn:first-child {
-    grid-column: 1 / -1;
-    min-height: 58px;
-}
-
-.quick-actions .btn-outline {
-    min-height: 48px;
-    background: rgba(255, 255, 255, 0.78);
-    border-color: rgba(22, 93, 171, 0.14);
-}
-
-.quick-actions .btn-outline:hover {
-    background: rgba(22, 93, 171, 0.08);
 }
 
 .contact-trust {
@@ -559,11 +540,7 @@
     }
 
     .quick-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .quick-actions .btn:first-child {
-        grid-column: auto;
+        margin-bottom: 18px;
     }
 
     .contacts-card-header h2,
