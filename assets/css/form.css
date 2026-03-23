@@ -10,6 +10,9 @@
     position: relative;
     overflow: hidden;
     align-self: start;
+    display: flex;
+    flex-direction: column;
+    overflow-anchor: none;
 }
 
 .request-form__eyebrow {
@@ -83,6 +86,7 @@
 
 .request-form--compact {
     padding: 28px 24px 24px;
+    min-height: clamp(760px, 58vw, 860px);
 }
 
 .request-form:before {
@@ -123,20 +127,26 @@
     border-radius: 20px;
     padding: 6px 12px 14px 6px;
     box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    overflow-anchor: none;
 }
 
 .yandex-form-embed {
-    width: calc(100% - 2px);
+    width: 100%;
     min-height: 520px;
     border: 0;
     border-radius: 8px;
     display: block;
     background: #ffffff;
-    margin: 0 2px 2px 0;
+    margin: 0;
+    flex: 1 1 auto;
 }
 
 .request-form--compact .yandex-form-embed {
-    min-height: 480px;
+    min-height: 620px;
 }
 
 @media (max-width: 768px) {
@@ -151,10 +161,11 @@
 
     .request-form--compact {
         padding: 22px;
+        min-height: auto;
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 520px;
+        min-height: 580px;
     }
 }
 
@@ -170,10 +181,11 @@
 
     .request-form--compact {
         padding: 20px 18px 18px;
+        min-height: auto;
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 560px;
+        min-height: 600px;
     }
 
     .quick-actions {
