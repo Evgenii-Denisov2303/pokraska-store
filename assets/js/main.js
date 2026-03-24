@@ -142,23 +142,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 2. Плавная прокрутка
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href === '#' || href === '#!') return;
+    document.addEventListener('click', (event) => {
+        const anchor = event.target.closest('a[href^="#"]');
+        if (!anchor) return;
 
-            const target = document.querySelector(href);
-            if (target) {
-                e.preventDefault();
-                const headerHeight = isCompactViewport()
-                    ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
-                    : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
-                const extraOffset = Number(target.dataset.scrollOffset || 0);
-                window.scrollTo({
-                    top: target.offsetTop - headerHeight - extraOffset,
-                    behavior: 'smooth'
-                });
-            }
+        const href = anchor.getAttribute('href');
+        if (!href || href === '#' || href === '#!') return;
+
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        event.preventDefault();
+        const headerHeight = isCompactViewport()
+            ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
+            : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
+        const extraOffset = Number(target.dataset.scrollOffset || 0);
+        window.scrollTo({
+            top: target.offsetTop - headerHeight - extraOffset,
+            behavior: 'smooth'
         });
     });
 
@@ -175,12 +176,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const DIRECTION_SHOWCASE_INTERVAL = 4800;
     const DIRECTION_SHOWCASE_RESUME_DELAY = 1200;
 
-    document.querySelectorAll('[data-direction-showcase]').forEach((showcase) => {
+    function initDirectionShowcase(showcase) {
+        if (!showcase || showcase.dataset.directionShowcaseBound === 'true') return;
+
         const slides = Array.from(showcase.querySelectorAll('[data-direction-showcase-slide]'));
         const dots = Array.from(showcase.querySelectorAll('[data-direction-showcase-dot]'));
         const viewport = showcase.querySelector('.direction-showcase__viewport');
 
         if (slides.length === 0 || dots.length === 0) return;
+
+        showcase.dataset.directionShowcaseBound = 'true';
 
         let activeIndex = Math.max(0, slides.findIndex((slide) => slide.classList.contains('is-active')));
         let autoplayTimer = null;
@@ -339,6 +344,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         applySlide(activeIndex, DIRECTION_SHOWCASE_INITIAL_DELAY);
         startAutoplay(DIRECTION_SHOWCASE_INITIAL_DELAY);
+    }
+
+    function initDirectionShowcases(root = document) {
+        root.querySelectorAll('[data-direction-showcase]').forEach((showcase) => {
+            initDirectionShowcase(showcase);
+        });
+    }
+
+    initDirectionShowcases();
+
+    document.addEventListener('pokraska:direction-showcases-updated', (event) => {
+        const root = event.detail?.root || document;
+        root.querySelectorAll('[data-direction-showcase]').forEach((showcase) => {
+            delete showcase.dataset.directionShowcaseBound;
+        });
+        initDirectionShowcases(root);
     });
 
     // 5. Палитра цветов (мини-превью + главный слайд + модальное увеличение)

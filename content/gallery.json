@@ -1,0 +1,70 @@
+{
+  "header": {
+    "title": "Галерея наших работ",
+    "subtitle": "Реальные примеры готовых ворот, заборов, автоматики и обработки металла в Казани. Каждый объект — это аккуратный монтаж и внимательная работа с деталями."
+  },
+  "filters": [
+    {
+      "value": "sliding",
+      "label": "Откатные",
+      "icon": "fas fa-expand-alt"
+    },
+    {
+      "value": "swing",
+      "label": "Распашные",
+      "icon": "fas fa-archway"
+    },
+    {
+      "value": "wicket",
+      "label": "Калитки",
+      "icon": "fas fa-lock"
+    },
+    {
+      "value": "fence",
+      "label": "Заборы",
+      "icon": "fas fa-layer-group"
+    },
+    {
+      "value": "automation",
+      "label": "Автоматика",
+      "icon": "fas fa-cogs"
+    },
+    {
+      "value": "install",
+      "label": "Монтаж",
+      "icon": "fas fa-tools"
+    },
+    {
+      "value": "sandblast",
+      "label": "Пескоструй",
+      "icon": "fas fa-wind"
+    },
+    {
+      "value": "powder",
+      "label": "Порошковая покраска",
+      "icon": "fas fa-paint-roller"
+    },
+    {
+      "value": "all",
+      "label": "Все работы",
+      "icon": "fas fa-layer-group"
+    }
+  ],
+  "showMoreLabel": "Показать еще",
+  "counter": {
+    "value": "200+",
+    "text": "Объектов выполнено с 2014 года. Контроль качества на каждом этапе изготовления и монтажа. Гарантия 1 год на готовые конструкции."
+  },
+  "cta": {
+    "primary": {
+      "label": "Получить расчет",
+      "href": "../index.html#request-form",
+      "icon": "fas fa-calculator"
+    },
+    "secondary": {
+      "label": "Консультация",
+      "href": "contacts.html",
+      "icon": "fas fa-phone-alt"
+    }
+  }
+}
