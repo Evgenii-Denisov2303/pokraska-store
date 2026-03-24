@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-direction-showcase]').forEach((showcase) => {
         const slides = Array.from(showcase.querySelectorAll('[data-direction-showcase-slide]'));
         const dots = Array.from(showcase.querySelectorAll('[data-direction-showcase-dot]'));
+        const viewport = showcase.querySelector('.direction-showcase__viewport');
 
         if (slides.length === 0 || dots.length === 0) return;
 
@@ -289,6 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+
+        if (viewport && slides.length > 1) {
+            viewport.addEventListener('click', () => {
+                applySlide(activeIndex + 1, DIRECTION_SHOWCASE_INTERVAL);
+                syncAutoplay(DIRECTION_SHOWCASE_RESUME_DELAY);
+            });
+        }
 
         if (supportsHover.matches) {
             showcase.addEventListener('mouseenter', stopAutoplay);
