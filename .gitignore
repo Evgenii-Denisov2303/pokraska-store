@@ -1,2 +1,5 @@
 .idea/
 .venv/
+.env
+deploy/.env
+deploy/.env.local

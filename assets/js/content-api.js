@@ -1,8 +1,16 @@
 (function() {
     const contentCache = new Map();
+    const metaContentBase = document.querySelector('meta[name="pokraska-content-base"]')?.content?.trim();
+    const configuredBase = (window.POKRASKA_CONTENT_BASE || metaContentBase || '').trim().replace(/\/+$/, '');
 
     function cloneData(value) {
         return value == null ? value : JSON.parse(JSON.stringify(value));
+    }
+
+    function buildContentUrl(name, fresh) {
+        const suffix = fresh ? `?t=${Date.now()}` : '';
+        const basePath = `${configuredBase}/content/${name}.json${suffix}`;
+        return configuredBase ? basePath : `/content/${name}.json${suffix}`;
     }
 
     async function loadContentFile(name, options = {}) {
@@ -12,8 +20,7 @@
             return cloneData(contentCache.get(name));
         }
 
-        const suffix = fresh ? `?t=${Date.now()}` : '';
-        const response = await fetch(`/content/${name}.json${suffix}`, {
+        const response = await fetch(buildContentUrl(name, fresh), {
             cache: fresh ? 'no-store' : 'default'
         });
 
@@ -27,6 +34,7 @@
     }
 
     window.PokraskaContent = {
-        loadContentFile
+        loadContentFile,
+        baseUrl: configuredBase
     };
 })();
