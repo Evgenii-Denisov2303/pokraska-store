@@ -2350,6 +2350,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
+    align-items: stretch;
 }
 
 .catalog-palette-card__gallery--single {
@@ -2357,12 +2358,16 @@
 }
 
 .catalog-palette-card__item {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #ffffff;
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--catalog-accent-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    aspect-ratio: 16 / 10;
+    padding: 10px;
 }
 
 .catalog-palette-card__item:hover {
@@ -2372,8 +2377,8 @@
 
 .catalog-palette-card__item img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
     display: block;
     background: #ffffff;
 }
