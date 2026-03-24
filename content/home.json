@@ -136,8 +136,8 @@
       "lead": "Подготавливаем металл, подбираем цвет и покрытие и выполняем стойкую порошковую покраску для штампованных дисков, конструкций, оборудования и декоративных изделий.",
       "facts": [
         {
-          "value": "До 5 лет",
-          "text": "гарантия на покрытие"
+          "value": "Подбор покрытия",
+          "text": "с учетом нагрузки и условий эксплуатации"
         },
         {
           "value": "RAL и фактуры",
@@ -191,23 +191,37 @@
       ],
       "slides": [
         {
-          "src": "/assets/images/gallery/powder/powder-09.jpg",
-          "alt": "Порошковая покраска металлических изделий",
-          "caption": "Металлические изделия",
+          "src": "/assets/images/catalog/home-direction-powder-01.png",
+          "alt": "Маляр наносит порошковое покрытие на металлические изделия",
+          "caption": "Порошковая покраска в камере",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "src": "/assets/images/catalog/home-direction-powder-02.jpg",
+          "alt": "Порошковая покраска металлических радиаторов",
+          "caption": "Радиаторы и металлоизделия",
           "width": 4000,
           "height": 3000
         },
         {
-          "src": "/assets/images/gallery/powder/powder-03.jpg",
-          "alt": "Порошковая покраска штампованных дисков",
-          "caption": "Покраска штампованных дисков",
+          "src": "/assets/images/catalog/home-direction-powder-03.jpg",
+          "alt": "Порошковая покраска секций ограждения",
+          "caption": "Секции и ограждения",
           "width": 4000,
           "height": 3000
         },
         {
-          "src": "/assets/images/gallery/powder/powder-11.jpg",
-          "alt": "Порошковая покраска профиля",
-          "caption": "Профиль и элементы",
+          "src": "/assets/images/catalog/home-direction-powder-04.png",
+          "alt": "Порошковая покраска металлических панелей",
+          "caption": "Панели и фасадные элементы",
+          "width": 1420,
+          "height": 1024
+        },
+        {
+          "src": "/assets/images/catalog/home-direction-powder-05.jpg",
+          "alt": "Порошковая покраска каркасов и стоек",
+          "caption": "Каркасы и стойки",
           "width": 4000,
           "height": 3000
         }
