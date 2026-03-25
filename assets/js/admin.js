@@ -2037,6 +2037,7 @@
         if (!elements.searchInput || !elements.searchStatus) return;
 
         elements.searchInput.value = state.searchQuery;
+        elements.searchInput.placeholder = `Найти блок в этом разделе, например: ${getSectionSpecificSearchExamples(state.activeKey)}`;
 
         if (!state.searchQuery.trim()) {
             elements.searchStatus.textContent = 'Показываются все блоки раздела.';
@@ -2123,6 +2124,178 @@
         }
     }
 
+    const fieldUiCopy = {
+        global: {
+            labels: {
+                titleMain: 'Первая строка заголовка',
+                titleSub: 'Вторая строка заголовка',
+                subtitleStrong: 'Акцентная подпись',
+                footerCaption: 'Подпись внизу сайта',
+                copyrightStartYear: 'Год начала работы',
+                companyParagraphs: 'Абзацы о компании',
+                bulletPoints: 'Короткий список под заголовком',
+                sectionTitle: 'Заголовок секции',
+                sectionSubtitle: 'Описание секции',
+                mediaTags: 'Подписи над фото',
+                titleHtml: 'Главный заголовок',
+                subtitle: 'Поясняющий текст',
+                lead: 'Основной текст',
+                trust: 'Нижняя доверительная строка',
+                value: 'Крупный факт',
+                arrowLabel: 'Текст ссылки',
+                formEyebrow: 'Подпись над формой',
+                formTitle: 'Заголовок формы',
+                formNotice: 'Текст над формой',
+                contactTitle: 'Заголовок контактов',
+                contactIntro: 'Текст рядом с контактами',
+                contactLines: 'Контакты рядом с формой',
+                quickActions: 'Быстрые кнопки',
+                quickNav: 'Быстрые ссылки по странице',
+                pageTitle: 'Скрытый заголовок страницы',
+                introTitle: 'Подзаголовок внутри карточки',
+                paragraphs: 'Основные абзацы',
+                tailParagraphs: 'Дополнительный текст',
+                badges: 'Короткие акценты',
+                sectionHeading: 'Заголовок блока с товарами',
+                products: 'Карточки товаров',
+                productCards: 'Карточки товаров',
+                specGroups: 'Блоки характеристик',
+                specs: 'Список характеристик',
+                processSteps: 'Шаги процесса',
+                paletteCard: 'Карточка палитры',
+                beforeAfter: 'Блок до / после',
+                listingHeader: 'Заголовок списка товаров',
+                sharedCta: 'Общие кнопки карточек',
+                iframeSrc: 'Ссылка на форму',
+                mapSrc: 'Ссылка на карту',
+                href: 'Куда ведёт ссылка',
+                actionHref: 'Куда ведёт кнопка',
+                src: 'Фото',
+                alt: 'Описание фото',
+                meta: 'Короткая подпись',
+                cta: 'Текст кнопки',
+                chips: 'Короткие акценты',
+                bullets: 'Короткие пункты',
+                facts: 'Факты и акценты',
+                cards: 'Карточки',
+                items: 'Элементы списка'
+            },
+            hints: {
+                titleMain: 'Эта строка стоит первой в крупном заголовке.',
+                titleSub: 'Эта строка идёт сразу после первой и завершает главный заголовок.',
+                subtitleStrong: 'Небольшой акцентный текст рядом с главным блоком.',
+                titleHtml: 'Можно использовать переносы строк или простую HTML-разметку, если она уже применяется на странице.',
+                breadcrumb: 'Текст над карточкой или страницей, который показывает путь пользователя.',
+                paragraphs: 'Основной текст карточки. Можно менять порядок абзацев.',
+                tailParagraphs: 'Дополнительный текст, который идёт после коротких акцентов.',
+                badges: 'Короткие подписи или бейджи рядом с основным текстом.',
+                introTitle: 'Этот подзаголовок идёт внутри карточки перед основным описанием.',
+                products: 'Список карточек, которые видит клиент внутри этого раздела.',
+                specs: 'Сюда лучше вносить короткие характеристики без длинных предложений.',
+                quickActions: 'Кнопки быстрой связи или быстрых действий рядом с формой.',
+                quickNav: 'Быстрые ссылки по странице. Лучше держать формулировки короткими.',
+                contactLines: 'Телефоны и мессенджеры рядом с формой или блоком контактов.'
+            },
+            placeholders: {
+                titleMain: 'Например: Ворота, заборы',
+                titleSub: 'Например: и порошковая покраска',
+                subtitleStrong: 'Например: Работаем под ключ',
+                footerCaption: 'Короткая подпись в самом низу сайта',
+                bulletPoints: 'Например: Откатные ворота',
+                sectionTitle: 'Например: Основные направления',
+                sectionSubtitle: 'Коротко объясни, что человек найдёт в этом блоке',
+                titleHtml: 'Можно вставить заголовок с переносами строк',
+                introTitle: 'Например: Почему выбирают этот вариант',
+                paragraphs: 'Основной текст карточки',
+                tailParagraphs: 'Дополнительный текст после коротких акцентов',
+                badges: 'Например: Монтаж под ключ',
+                value: 'Например: 10+ лет',
+                formEyebrow: 'Например: Быстрый расчёт',
+                formTitle: 'Например: Оставить заявку',
+                formNotice: 'Короткий текст над формой',
+                contactTitle: 'Например: Быстрый контакт',
+                contactIntro: 'Коротко объясни, как с вами связаться',
+                pageTitle: 'Скрытый заголовок для страницы',
+                breadcrumb: 'Например: Каталог / Ворота',
+                specs: 'Например: Ширина 4000 мм',
+                cta: 'Например: Открыть комплект'
+            }
+        },
+        site: {
+            labels: {
+                tagline: 'Подпись рядом с логотипом',
+                logoAlt: 'Описание логотипа',
+                primaryPhone: 'Основной номер',
+                secondaryPhone: 'Второй номер',
+                navigation: 'Пункты верхнего меню',
+                usefulLinks: 'Полезные ссылки в футере'
+            }
+        },
+        home: {
+            labels: {
+                directions: 'Новые большие блоки на главной',
+                process: 'Как мы работаем',
+                trust: 'Почему выбирают нас',
+                request: 'Блок заявки и контактов',
+                facts: 'Карточки фактов',
+                advantages: 'Список услуг рядом с формой'
+            },
+            hints: {
+                directions: 'Здесь меняются два главных больших блока на главной странице.',
+                request: 'Это один из самых заметных блоков на главной, лучше держать тексты короткими и уверенными.'
+            }
+        },
+        catalogPanels: {
+            labels: {
+                breadcrumb: 'Путь сверху',
+                title: 'Заголовок карточки',
+                introTitle: 'Подзаголовок внутри карточки',
+                badges: 'Короткие акценты',
+                palette: 'Блок цвета и фактуры',
+                products: 'Карточки товаров внизу',
+                specGroups: 'Блоки характеристик',
+                faq: 'Вопросы и ответы',
+                cta: 'Нижний призыв к действию'
+            },
+            hints: {
+                breadcrumb: 'Этот текст виден вверху карточки как путь к разделу.',
+                products: 'Ниже именно эти карточки видит посетитель как товары или комплекты.',
+                palette: 'Здесь можно описать цвет, покрытие, палитру или фактуру.'
+            }
+        },
+        contacts: {
+            labels: {
+                manager: 'Контакт менеджера',
+                managerTitle: 'Подпись менеджера',
+                quickActions: 'Кнопки быстрой связи',
+                routeBadges: 'Короткие ориентиры',
+                findUs: 'Как нас найти'
+            }
+        },
+        prices: {
+            labels: {
+                factors: 'От чего зависит цена',
+                calculator: 'Калькулятор и пояснение',
+                guarantee: 'Гарантия и доверие'
+            }
+        },
+        servicePages: {
+            labels: {
+                sections: 'Карточки услуг',
+                header: 'Верхняя часть страницы',
+                cta: 'Нижний блок связи',
+                faq: 'Вопросы и ответы'
+            }
+        }
+    };
+
+    function getFieldUiValue(type, field) {
+        const sectionKey = state.activeKey;
+        const sectionMap = fieldUiCopy[sectionKey]?.[type] || {};
+        const globalMap = fieldUiCopy.global[type] || {};
+        return sectionMap[field.key] || globalMap[field.key] || '';
+    }
+
     function setQuickMode(enabled, options = {}) {
         const nextValue = Boolean(enabled);
         const changed = state.quickMode !== nextValue;
@@ -2151,6 +2324,11 @@
     }
 
     function getFieldHint(field) {
+        const sectionHint = getFieldUiValue('hints', field);
+        if (sectionHint) {
+            return sectionHint;
+        }
+
         const fieldHints = {
             href: 'Ссылка на страницу, якорь или телефон. Если всё работает, это поле лучше менять осторожно.',
             icon: 'Поле для иконки. Если не уверены, лучше оставьте как есть.',
@@ -2169,6 +2347,11 @@
     }
 
     function getFieldPlaceholder(field) {
+        const sectionPlaceholder = getFieldUiValue('placeholders', field);
+        if (sectionPlaceholder) {
+            return sectionPlaceholder;
+        }
+
         const placeholders = {
             label: 'Например: Получить расчёт',
             title: 'Введите заголовок',
@@ -2195,6 +2378,8 @@
 
     function getDisplayLabel(field) {
         const defaultLabel = field.label || field.key;
+        const sectionLabel = getFieldUiValue('labels', field);
+        if (sectionLabel) return sectionLabel;
         if (!state.simpleMode) return defaultLabel;
 
         const labelMap = {
@@ -2787,6 +2972,23 @@
         return metaParts.join(' · ');
     }
 
+    function getArrayHelperText(field) {
+        const helperMap = {
+            slides: 'Слайды можно переставлять мышкой, чтобы поменять порядок показа на сайте.',
+            products: 'Карточки можно быстро просмотреть и переставить. Так меняется порядок показа на странице.',
+            quickNav: 'Держи подписи короткими, чтобы ссылки легко читались в верхнем меню страницы.',
+            quickActions: 'Это быстрые кнопки связи. Обычно здесь лучше держать 2-3 понятных действия.',
+            contactLines: 'Телефоны и мессенджеры лучше подписывать так, как их видит клиент.',
+            items: 'Элементы списка можно переставлять и дублировать, если нужен похожий блок.',
+            facts: 'Факты лучше делать короткими: одна сильная цифра и короткое пояснение.',
+            cards: 'Карточки можно переставлять и дублировать, чтобы быстрее собирать похожие блоки.',
+            specs: 'Характеристики лучше писать короткими пунктами без длинных абзацев.',
+            faq: 'Вопросы и ответы будут показаны как раскрывающийся блок на сайте.'
+        };
+
+        return helperMap[field.key] || '';
+    }
+
     function slugifyLabel(value) {
         return String(value || '')
             .toLowerCase()
@@ -3111,6 +3313,22 @@
                 </article>
             </div>
         `;
+    }
+
+    function getSectionSpecificSearchExamples(sectionKey) {
+        const examples = {
+            site: 'логотип, меню, телефоны, футер',
+            home: 'hero, направления, форма, факты',
+            catalog: 'группы, бренды, CTA',
+            catalogPanels: 'откатные, калитки, FAQ, палитра, товары',
+            servicePages: 'быстрые ссылки, карточки услуг, FAQ',
+            automation: 'товары, hero, комплект, CTA',
+            prices: 'факторы, калькулятор, гарантия',
+            paymentDocuments: 'этапы, документы, доверие',
+            contacts: 'телефоны, карта, форма, ориентиры'
+        };
+
+        return examples[sectionKey] || 'заголовок, текст, фото, кнопки';
     }
 
     function focusField(matcher) {
@@ -3665,9 +3883,17 @@
         toolbar.className = 'admin-array__toolbar';
         toolbar.innerHTML = `
             <div class="admin-array__title">${field.label || field.key}</div>
-            ${field.allowAddRemove === false ? '' : '<button type="button" class="admin-btn">Добавить</button>'}
+            ${field.allowAddRemove === false ? '' : `<button type="button" class="admin-btn">Добавить ${String(field.itemLabel || 'элемент').toLowerCase()}</button>`}
         `;
         body.appendChild(toolbar);
+
+        const helperText = getArrayHelperText(field);
+        if (helperText) {
+            const helperNode = document.createElement('p');
+            helperNode.className = 'admin-array__hint';
+            helperNode.textContent = helperText;
+            body.appendChild(helperNode);
+        }
 
         const addButton = toolbar.querySelector('button');
         const list = document.createElement('div');

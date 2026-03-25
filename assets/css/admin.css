@@ -1366,6 +1366,13 @@ body.admin-page.admin-media-open {
     gap: 12px;
 }
 
+.admin-array__hint {
+    margin: -2px 0 0;
+    color: var(--admin-text-soft);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
 .admin-array__list {
     display: grid;
     gap: 12px;
