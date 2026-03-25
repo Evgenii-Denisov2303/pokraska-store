@@ -1686,6 +1686,7 @@
         quickMode: getInitialQuickMode(),
         simpleMode: true,
         searchQuery: '',
+        navQuery: '',
         mediaLibrary: [],
         mediaPickerContext: null,
         mediaSearchQuery: '',
@@ -1698,10 +1699,14 @@
         shell: document.querySelector('.admin-shell'),
         main: document.querySelector('.admin-main'),
         nav: document.getElementById('adminNav'),
+        navSearch: document.getElementById('adminNavSearch'),
+        navSearchClearBtn: document.getElementById('adminNavSearchClearBtn'),
+        sidebarFooter: document.getElementById('adminSidebarFooter'),
         form: document.getElementById('adminForm'),
         title: document.getElementById('adminTitle'),
         description: document.getElementById('adminDescription'),
         alert: document.getElementById('adminAlert'),
+        commandCenter: document.getElementById('adminCommandCenter'),
         connection: document.getElementById('adminConnection'),
         reloadBtn: document.getElementById('adminReloadBtn'),
         historyBtn: document.getElementById('adminHistoryBtn'),
@@ -2962,6 +2967,152 @@
         return previewLinks[0] || null;
     }
 
+    function collectSectionStats(value, stats = {
+        textCount: 0,
+        imageCount: 0,
+        linkCount: 0,
+        arrayCount: 0,
+        fieldCount: 0
+    }) {
+        if (Array.isArray(value)) {
+            stats.arrayCount += 1;
+            value.forEach((item) => collectSectionStats(item, stats));
+            return stats;
+        }
+
+        if (!value || typeof value !== 'object') {
+            return stats;
+        }
+
+        Object.entries(value).forEach(([key, childValue]) => {
+            if (typeof childValue === 'string') {
+                const trimmedValue = childValue.trim();
+                if (!trimmedValue) return;
+
+                stats.fieldCount += 1;
+                if (['title', 'titleHtml', 'lead', 'subtitle', 'text', 'description', 'question', 'answer', 'note', 'valueHtml'].includes(key)) {
+                    stats.textCount += 1;
+                }
+                if (key === 'src' && isImageLikeValue(trimmedValue)) {
+                    stats.imageCount += 1;
+                }
+                if (key === 'href' || key === 'actionHref' || key === 'iframeSrc' || key === 'mapSrc') {
+                    stats.linkCount += 1;
+                }
+            } else if (Array.isArray(childValue) || (childValue && typeof childValue === 'object')) {
+                collectSectionStats(childValue, stats);
+            }
+        });
+
+        return stats;
+    }
+
+    function getSectionWorkflowStatus(sectionKey) {
+        const status = getSectionStatus(sectionKey);
+
+        if (status.tone === 'draft') {
+            return {
+                title: 'Шаг 2 из 3: проверь и сохрани',
+                text: 'В разделе есть черновые правки. Сначала сохрани их в файлы проекта, потом отметь раздел как опубликованный.'
+            };
+        }
+
+        if (status.tone === 'saved') {
+            return {
+                title: 'Шаг 3 из 3: отметь публикацию',
+                text: 'Контент уже сохранён в проект. Если всё проверено, можно отметить раздел как опубликованный.'
+            };
+        }
+
+        if (status.tone === 'published') {
+            return {
+                title: 'Раздел в порядке',
+                text: 'Последняя версия раздела сохранена и уже отмечена как опубликованная.'
+            };
+        }
+
+        return {
+            title: 'Шаг 1 из 3: начни редактирование',
+            text: 'Выбери нужный блок, внеси правки и сохрани раздел. Если правок пока нет, этот статус будет оставаться нейтральным.'
+        };
+    }
+
+    function renderSidebarFooter() {
+        if (!elements.sidebarFooter) return;
+
+        const activeConfig = contentConfigs[state.activeKey];
+        const status = getSectionStatus(state.activeKey);
+
+        elements.sidebarFooter.innerHTML = `
+            <div class="admin-sidebar-footer__card">
+                <p class="admin-toolbar__eyebrow">Активный раздел</p>
+                <strong>${activeConfig.label}</strong>
+                <span class="admin-status-badge is-${status.tone}">${status.label}</span>
+            </div>
+            <div class="admin-sidebar-footer__links">
+                <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+                <a href="../admin/" target="_blank" rel="noopener noreferrer">Открыть админку в новой вкладке</a>
+                <a href="../docs/admin-deploy.md" target="_blank" rel="noopener noreferrer">Инструкция по публикации</a>
+            </div>
+        `;
+    }
+
+    function renderCommandCenter(sectionKey) {
+        if (!elements.commandCenter) return;
+
+        const config = contentConfigs[sectionKey];
+        const meta = sectionMeta[sectionKey] || {};
+        const status = getSectionStatus(sectionKey);
+        const workflow = getSectionWorkflowStatus(sectionKey);
+        const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
+        const stats = collectSectionStats(state.data[sectionKey]);
+        const activeIcon = meta.icon || 'fa-pen';
+
+        elements.commandCenter.innerHTML = `
+            <div class="admin-command-center__hero">
+                <div class="admin-command-center__hero-copy">
+                    <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
+                    <div class="admin-command-center__eyebrow">Текущий рабочий сценарий</div>
+                    <h2>${config.label}</h2>
+                    <p>${meta.summary || config.description}</p>
+                    <div class="admin-command-center__flow">
+                        <strong>${workflow.title}</strong>
+                        <span>${workflow.text}</span>
+                    </div>
+                    <div class="admin-command-center__actions">
+                        ${previewLinks.map((link) => `
+                            <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="admin-command-center__hero-side">
+                    <span class="admin-status-badge is-${status.tone}">${status.label}</span>
+                    <div class="admin-command-center__hero-note">${status.description}</div>
+                </div>
+            </div>
+            <div class="admin-command-center__stats">
+                <article class="admin-command-stat">
+                    <strong>${stats.textCount}</strong>
+                    <span>Текстовых блоков</span>
+                </article>
+                <article class="admin-command-stat">
+                    <strong>${stats.imageCount}</strong>
+                    <span>Изображений</span>
+                </article>
+                <article class="admin-command-stat">
+                    <strong>${stats.linkCount}</strong>
+                    <span>Ссылок и форм</span>
+                </article>
+                <article class="admin-command-stat">
+                    <strong>${stats.arrayCount}</strong>
+                    <span>Списков и карточек</span>
+                </article>
+            </div>
+        `;
+    }
+
     function focusField(matcher) {
         const fields = Array.from(elements.form?.querySelectorAll('.admin-field') || []);
         const targetField = fields.find((fieldNode) => !fieldNode.closest('[hidden]') && matcher(fieldNode));
@@ -3216,6 +3367,10 @@
 
     function renderNav() {
         elements.nav.innerHTML = '';
+        const navQuery = state.navQuery.trim().toLowerCase();
+        if (elements.navSearch) {
+            elements.navSearch.value = state.navQuery;
+        }
 
         const renderGroup = (group) => {
             if (!Array.isArray(group.items) || !group.items.length) {
@@ -3242,6 +3397,17 @@
                 if (!config) return;
 
                 const meta = sectionMeta[key] || {};
+                const haystack = [
+                    config.label,
+                    config.description,
+                    meta.navHint,
+                    meta.summary
+                ].filter(Boolean).join(' ').toLowerCase();
+
+                if (navQuery && !haystack.includes(navQuery)) {
+                    return;
+                }
+
                 const status = getSectionStatus(key);
                 const button = document.createElement('button');
                 button.type = 'button';
@@ -3271,7 +3437,9 @@
                 groupWrapper.appendChild(button);
             });
 
-            elements.nav.appendChild(groupWrapper);
+            if (groupWrapper.querySelector('.admin-nav__button')) {
+                elements.nav.appendChild(groupWrapper);
+            }
         };
 
         if (state.quickMode) {
@@ -3290,6 +3458,12 @@
                     : group.items
             });
         });
+
+        if (!elements.nav.children.length) {
+            elements.nav.innerHTML = '<div class="admin-empty">По этому запросу разделы не найдены. Попробуй другое слово.</div>';
+        }
+
+        renderSidebarFooter();
     }
 
     function renderField(field, parentObject, contentKey) {
@@ -3772,6 +3946,7 @@
         elements.description.textContent = meta.navHint || config.description;
         elements.form.innerHTML = '';
         state.lastFocusedField = null;
+        renderCommandCenter(key);
         renderOverview(key);
         renderJumpbar(key);
 
@@ -4099,6 +4274,18 @@
         elements.searchInput?.addEventListener('input', () => {
             state.searchQuery = elements.searchInput.value;
             applySectionFilter();
+        });
+        elements.navSearch?.addEventListener('input', () => {
+            state.navQuery = elements.navSearch.value;
+            renderNav();
+        });
+        elements.navSearchClearBtn?.addEventListener('click', () => {
+            state.navQuery = '';
+            if (elements.navSearch) {
+                elements.navSearch.value = '';
+                elements.navSearch.focus();
+            }
+            renderNav();
         });
         elements.searchClearBtn?.addEventListener('click', () => {
             state.searchQuery = '';

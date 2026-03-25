@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=20260325-13">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260325-14">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -19,6 +19,16 @@
             </a>
 
             <p class="admin-sidebar__lead">Здесь можно менять тексты, фотографии, ссылки и контакты без ручного редактирования кода. Выбери раздел слева, внеси правки и сохрани изменения.</p>
+
+            <section class="admin-sidebar-search">
+                <label class="admin-sidebar-search__field">
+                    <span class="sr-only">Поиск раздела в админке</span>
+                    <input class="admin-input" type="search" id="adminNavSearch" placeholder="Найти раздел: главная, каталог, контакты">
+                </label>
+                <button class="admin-btn admin-btn--ghost" type="button" id="adminNavSearchClearBtn">
+                    <i class="fas fa-xmark" aria-hidden="true"></i>
+                </button>
+            </section>
 
             <nav class="admin-nav" id="adminNav" aria-label="Разделы админки"></nav>
 
@@ -32,6 +42,8 @@
                 <p>Кнопка <code>Резервная копия</code> скачивает текущие данные на компьютер, если нужно сохранить черновик отдельно.</p>
                 <p>Если нужно открыть админку заказчику через интернет, включается вход по логину и паролю. Подробности: <code>docs/admin-deploy.md</code>.</p>
             </div>
+
+            <div class="admin-sidebar-footer" id="adminSidebarFooter"></div>
         </aside>
 
         <main class="admin-main">
@@ -90,6 +102,8 @@
             </header>
 
             <div class="admin-alert" id="adminAlert" hidden></div>
+
+            <section class="admin-command-center" id="adminCommandCenter"></section>
 
             <section class="admin-card admin-card--intro admin-mode-note" id="adminModeNote">
                 <h2 id="adminModeNoteTitle">Режим заказчика включён</h2>
@@ -240,6 +254,6 @@
         </div>
     </div>
 
-    <script src="../assets/js/admin.js?v=20260325-13" defer></script>
+    <script src="../assets/js/admin.js?v=20260325-14" defer></script>
 </body>
 </html>
