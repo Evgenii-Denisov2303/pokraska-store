@@ -3269,6 +3269,7 @@
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
         const stats = collectSectionStats(state.data[sectionKey]);
         const activeIcon = meta.icon || 'fa-pen';
+        const scenarios = getSectionScenarios(sectionKey);
 
         elements.commandCenter.innerHTML = `
             <div class="admin-command-center__hero">
@@ -3312,7 +3313,34 @@
                     <span>Списков и карточек</span>
                 </article>
             </div>
+            ${scenarios.length ? `
+                <div class="admin-command-center__scenarios">
+                    <div class="admin-command-center__scenario-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Частые сценарии</p>
+                            <h3>Что обычно меняют в этом разделе</h3>
+                        </div>
+                        <span>Можно кликнуть и сразу перейти в нужный блок формы</span>
+                    </div>
+                    <div class="admin-scenarios-grid">
+                        ${scenarios.map((scenario, index) => `
+                            <button class="admin-scenario-card" type="button" data-scenario-index="${index}">
+                                <span class="admin-scenario-card__icon"><i class="fas ${scenario.icon}" aria-hidden="true"></i></span>
+                                <strong>${scenario.title}</strong>
+                                <span>${scenario.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
         `;
+
+        elements.commandCenter.querySelectorAll('[data-scenario-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-scenario-index'));
+                runSectionScenario(scenarios[index]);
+            });
+        });
     }
 
     function getSectionSpecificSearchExamples(sectionKey) {
@@ -3329,6 +3357,56 @@
         };
 
         return examples[sectionKey] || 'заголовок, текст, фото, кнопки';
+    }
+
+    function getSectionScenarios(sectionKey) {
+        const scenarioMap = {
+            site: [
+                { icon: 'fa-signature', title: 'Обновить логотип и подпись', text: 'Поменять название, подпись рядом с логотипом и подписи внизу сайта.', sectionKey: 'brand', focusKeys: ['name', 'tagline'] },
+                { icon: 'fa-phone', title: 'Поправить телефоны и адрес', text: 'Быстро обновить номера, адрес, email и режим работы.', sectionKey: 'contact', focusKeys: ['address', 'primaryPhone', 'secondaryPhone'] },
+                { icon: 'fa-bars', title: 'Подправить меню', text: 'Изменить пункты верхней навигации и ссылки в футере.', sectionKey: 'navigation', focusKeys: ['label', 'href'] },
+                { icon: 'fa-building', title: 'Обновить футер', text: 'Переписать блок о компании и полезные ссылки.', sectionKey: 'footer', focusKeys: ['companyTitle', 'usefulTitle'] }
+            ],
+            home: [
+                { icon: 'fa-bolt', title: 'Поменять главный экран', text: 'Обновить заголовок, подзаголовок и сильную подпись в hero-блоке.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'] },
+                { icon: 'fa-layer-group', title: 'Обновить большие блоки', text: 'Поменять тексты и фото в двух главных направлениях на главной.', sectionKey: 'directions', focusKeys: ['sectionTitle', 'sectionSubtitle', 'title'] },
+                { icon: 'fa-shield-heart', title: 'Подправить доверие', text: 'Изменить факты, преимущества и причины выбора компании.', sectionKey: 'trust', focusKeys: ['eyebrow', 'title', 'cards'] },
+                { icon: 'fa-paper-plane', title: 'Обновить форму заявки', text: 'Поменять подписи, контакты и быстрые кнопки рядом с формой.', sectionKey: 'request', focusKeys: ['formTitle', 'contactTitle', 'quickActions'] }
+            ],
+            catalog: [
+                { icon: 'fa-folder-tree', title: 'Изменить группы каталога', text: 'Поменять названия и описания основных групп страницы каталога.', sectionKey: 'groups', focusKeys: ['title', 'text'] },
+                { icon: 'fa-users', title: 'Обновить бренды', text: 'Подправить блок партнёров и подписи брендов.', sectionKey: 'partners', focusKeys: ['title'] },
+                { icon: 'fa-bullhorn', title: 'Поменять нижний CTA', text: 'Скорректировать призыв и контакты внизу страницы каталога.', sectionKey: 'cta', focusKeys: ['title', 'text'] }
+            ],
+            catalogPanels: [
+                { icon: 'fa-truck-ramp-box', title: 'Откатные ворота', text: 'Быстро открыть и править тексты, характеристики и CTA этого блока.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'products'] },
+                { icon: 'fa-door-open', title: 'Распашные ворота', text: 'Перейти сразу к карточке распашных ворот и её описанию.', sectionKey: 'swing', focusKeys: ['title', 'paragraphs', 'cards'] },
+                { icon: 'fa-person-shelter', title: 'Калитки и заборы', text: 'Поменять фото и тексты в карточках калиток и заборов.', sectionKey: 'wicket', focusKeys: ['title', 'src', 'paragraphs'] },
+                { icon: 'fa-robot', title: 'Автоматика и комплектующие', text: 'Сразу перейти к техничным карточкам автоматики.', sectionKey: 'automationSliding', focusKeys: ['title', 'products', 'specs'] }
+            ],
+            servicePages: [
+                { icon: 'fa-spray-can-sparkles', title: 'Порошковая покраска', text: 'Поменять шапку, карточки услуг и нижний CTA на странице покраски.', sectionKey: 'powderCoating', focusKeys: ['title', 'sections', 'cta'] },
+                { icon: 'fa-wind', title: 'Пескоструй', text: 'Открыть страницу пескоструйной обработки и её ключевые блоки.', sectionKey: 'sandblasting', focusKeys: ['title', 'sections', 'beforeAfter'] },
+                { icon: 'fa-link', title: 'Общие кнопки карточек', text: 'Поменять общие подписи и ссылки на кнопках услуг.', sectionKey: 'sharedCta', focusKeys: ['label', 'href'] }
+            ],
+            prices: [
+                { icon: 'fa-calculator', title: 'Факторы цены', text: 'Подправить карточки с тем, от чего зависит стоимость.', sectionKey: 'factors', focusKeys: ['title', 'text'] },
+                { icon: 'fa-file-invoice', title: 'Калькулятор и пояснение', text: 'Изменить верхнюю часть калькулятора и тексты рядом с ним.', sectionKey: 'calculator', focusKeys: ['title', 'text'] },
+                { icon: 'fa-circle-question', title: 'FAQ и гарантия', text: 'Быстро перейти к вопросам и гарантийным блокам.', sectionKey: 'guarantee', focusKeys: ['title', 'text', 'badge'] }
+            ],
+            paymentDocuments: [
+                { icon: 'fa-file-signature', title: 'Официальное оформление', text: 'Поменять блоки про договор, оплату и документы.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'] },
+                { icon: 'fa-list-check', title: 'Этапы работы', text: 'Изменить понятные шаги по оформлению и сопровождению.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'] },
+                { icon: 'fa-phone-volume', title: 'Связь и CTA', text: 'Подправить кнопки и призыв внизу страницы.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
+            ],
+            contacts: [
+                { icon: 'fa-mobile-screen-button', title: 'Телефоны и менеджер', text: 'Поменять верхний контактный блок и данные менеджера.', sectionKey: 'overview', focusKeys: ['title', 'items', 'manager'] },
+                { icon: 'fa-paper-plane', title: 'Быстрая связь', text: 'Подправить кнопки связи и тексты рядом с формой.', sectionKey: 'connect', focusKeys: ['title', 'actions', 'iframeSrc'] },
+                { icon: 'fa-map-location-dot', title: 'Карта и ориентиры', text: 'Обновить карту, ориентиры и блок как нас найти.', sectionKey: 'location', focusKeys: ['title', 'mapSrc', 'badges'] }
+            ]
+        };
+
+        return scenarioMap[sectionKey] || [];
     }
 
     function focusField(matcher) {
@@ -3350,6 +3428,50 @@
         targetField.classList.add('is-focused-shot');
         window.setTimeout(() => targetField.classList.remove('is-focused-shot'), 1200);
         return true;
+    }
+
+    function getTopLevelSectionId(contentKey, fieldKey) {
+        const config = contentConfigs[contentKey];
+        const topField = config?.schema?.fields?.find((field) => field.key === fieldKey);
+        if (!topField) return '';
+        return `admin-top-${contentKey}-${slugifyLabel(topField.key || topField.label)}`;
+    }
+
+    function openTopLevelSection(contentKey, fieldKey) {
+        const targetId = getTopLevelSectionId(contentKey, fieldKey);
+        if (!targetId) return null;
+
+        const details = document.getElementById(targetId);
+        if (!(details instanceof HTMLDetailsElement)) return null;
+
+        details.open = true;
+        details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return details;
+    }
+
+    function runSectionScenario(scenario) {
+        if (!scenario) return;
+
+        let scopedContainer = null;
+        if (scenario.sectionKey) {
+            const topLevelDetails = openTopLevelSection(state.activeKey, scenario.sectionKey);
+            scopedContainer = topLevelDetails;
+        }
+
+        if (Array.isArray(scenario.focusKeys) && scenario.focusKeys.length) {
+            window.setTimeout(() => {
+                focusField((fieldNode) => {
+                    if (scopedContainer && !scopedContainer.contains(fieldNode)) {
+                        return false;
+                    }
+
+                    const fieldKey = fieldNode.dataset.fieldKey || '';
+                    return scenario.focusKeys.some((candidate) => fieldKey === candidate || fieldKey.includes(candidate));
+                });
+            }, 120);
+        }
+
+        showAlert(`Открыт сценарий: ${scenario.title}.`, 'info');
     }
 
     function renderStatusCard(sectionKey) {
@@ -3381,6 +3503,7 @@
         if (!elements.quickActionsCard) return;
 
         const previewLink = getPrimaryPreviewLink(sectionKey);
+        const scenarios = getSectionScenarios(sectionKey).slice(0, 3);
 
         elements.quickActionsCard.innerHTML = `
             <div class="admin-preview-card__header">
@@ -3408,6 +3531,16 @@
                     </a>
                 ` : ''}
             </div>
+            ${scenarios.length ? `
+                <div class="admin-quick-actions__scenarios">
+                    ${scenarios.map((scenario, index) => `
+                        <button class="admin-quick-actions__scenario" type="button" data-quick-scenario-index="${index}">
+                            <i class="fas ${scenario.icon}" aria-hidden="true"></i>
+                            <span>${scenario.title}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            ` : ''}
         `;
 
         elements.quickActionsCard.querySelectorAll('[data-quick-action]').forEach((button) => {
@@ -3443,6 +3576,13 @@
                 }
 
                 showAlert('Для этого действия пока не найден подходящий блок в текущем разделе.', 'info');
+            });
+        });
+
+        elements.quickActionsCard.querySelectorAll('[data-quick-scenario-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-quick-scenario-index'));
+                runSectionScenario(scenarios[index]);
             });
         });
     }
