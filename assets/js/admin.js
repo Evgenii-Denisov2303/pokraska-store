@@ -1691,6 +1691,7 @@
         mediaPickerContext: null,
         mediaSearchQuery: '',
         historyOpen: false,
+        activeGuide: null,
         livePreviewHref: '',
         lastFocusedField: null
     };
@@ -1744,6 +1745,11 @@
         historyModal: document.getElementById('adminHistoryModal'),
         historyCloseBtn: document.getElementById('adminHistoryCloseBtn'),
         historyList: document.getElementById('adminHistoryList'),
+        guideModal: document.getElementById('adminGuideModal'),
+        guideTitle: document.getElementById('adminGuideTitle'),
+        guideLead: document.getElementById('adminGuideLead'),
+        guideContent: document.getElementById('adminGuideContent'),
+        guideCloseBtn: document.getElementById('adminGuideCloseBtn'),
         logoutBtn: document.getElementById('adminLogoutBtn'),
         overview: document.getElementById('adminOverview'),
         statusCard: document.getElementById('adminStatusCard'),
@@ -3044,6 +3050,24 @@
         event.returnValue = '';
     }
 
+    function handleGlobalKeydown(event) {
+        if (event.key !== 'Escape') return;
+
+        if (elements.guideModal && !elements.guideModal.hidden) {
+            closeGuideModal();
+            return;
+        }
+
+        if (elements.historyModal && !elements.historyModal.hidden) {
+            closeHistoryModal();
+            return;
+        }
+
+        if (elements.mediaPicker && !elements.mediaPicker.hidden) {
+            closeMediaPicker();
+        }
+    }
+
     function stripHtmlTags(value) {
         return String(value || '')
             .replace(/<br\s*\/?>/gi, ' ')
@@ -3270,6 +3294,7 @@
         const stats = collectSectionStats(state.data[sectionKey]);
         const activeIcon = meta.icon || 'fa-pen';
         const scenarios = getSectionScenarios(sectionKey);
+        const guides = getSectionGuides(sectionKey);
 
         elements.commandCenter.innerHTML = `
             <div class="admin-command-center__hero">
@@ -3333,12 +3358,43 @@
                     </div>
                 </div>
             ` : ''}
+            ${guides.length ? `
+                <div class="admin-command-center__guides">
+                    <div class="admin-command-center__scenario-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Мини-мастера</p>
+                            <h3>Пошаговые маршруты для частых правок</h3>
+                        </div>
+                        <span>Открой мастер, иди по шагам и переходи сразу в нужные блоки формы.</span>
+                    </div>
+                    <div class="admin-guides-grid">
+                        ${guides.map((guide, index) => `
+                            <button class="admin-guide-card" type="button" data-guide-index="${index}">
+                                <span class="admin-guide-card__icon"><i class="fas ${guide.icon}" aria-hidden="true"></i></span>
+                                <strong>${guide.title}</strong>
+                                <p>${guide.summary}</p>
+                                <div class="admin-guide-card__meta">
+                                    <span><i class="fas fa-list-ol" aria-hidden="true"></i> ${guide.steps.length} шага</span>
+                                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> Открыть мастер</span>
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
         `;
 
         elements.commandCenter.querySelectorAll('[data-scenario-index]').forEach((button) => {
             button.addEventListener('click', () => {
                 const index = Number(button.getAttribute('data-scenario-index'));
                 runSectionScenario(scenarios[index]);
+            });
+        });
+
+        elements.commandCenter.querySelectorAll('[data-guide-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-guide-index'));
+                openGuideModal(sectionKey, index);
             });
         });
     }
@@ -3409,8 +3465,449 @@
         return scenarioMap[sectionKey] || [];
     }
 
+    function getSectionGuides(sectionKey) {
+        switch (sectionKey) {
+        case 'site':
+            return [
+                {
+                    icon: 'fa-compass-drafting',
+                    title: 'Шапка, телефоны и футер',
+                    summary: 'Помогает быстро обновить логотип, контакты и нижнюю часть сайта без ручного поиска по всей форме.',
+                    result: 'После этих шагов на сайте обновятся логотип, телефоны, адрес и подписи в футере.',
+                    tips: [
+                        'Сначала проверь подпись рядом с логотипом и основной номер телефона.',
+                        'После правок открой главную и контакты в предпросмотре, чтобы убедиться, что всё выглядит одинаково.',
+                        'Если меняются номера, лучше пройти шапку и футер за один заход.'
+                    ],
+                    steps: [
+                        { title: 'Обновить бренд и подпись', text: 'Проверь название компании, подпись рядом с логотипом и подписи внизу сайта.', sectionKey: 'brand', focusKeys: ['name', 'tagline', 'footerCaption'], focusLabel: 'Название, подпись рядом с логотипом, подпись в футере' },
+                        { title: 'Поменять телефоны и адрес', text: 'Обнови основной и второй номер, адрес, email и режим работы.', sectionKey: 'contact', focusKeys: ['primaryPhone', 'secondaryPhone', 'address', 'email', 'hours'], focusLabel: 'Телефоны, адрес, email, режим работы' },
+                        { title: 'Проверить меню и футер', text: 'Если что-то переименовали, сразу доведи до конца пункты меню и полезные ссылки.', sectionKey: 'navigation', focusKeys: ['label', 'href'], focusLabel: 'Пункты меню и их ссылки' },
+                        { title: 'Финально просмотреть футер', text: 'Зайди в нижний блок о компании и убедись, что подписи и ссылки звучат в одном стиле.', sectionKey: 'footer', focusKeys: ['companyTitle', 'usefulTitle'], focusLabel: 'Блок о компании и полезные ссылки' }
+                    ]
+                },
+                {
+                    icon: 'fa-bars-progress',
+                    title: 'Меню и навигация сайта',
+                    summary: 'Нужен, когда меняются разделы сайта, порядок меню или подписи ссылок в футере.',
+                    result: 'Навигация будет выглядеть цельно и не потеряется между шапкой и футером.',
+                    tips: [
+                        'Верхнее меню лучше держать коротким и понятным.',
+                        'После правок проверь, чтобы все ссылки вели туда, куда ожидает посетитель.'
+                    ],
+                    steps: [
+                        { title: 'Проверить верхнее меню', text: 'Обнови названия разделов и их ссылки в верхней навигации.', sectionKey: 'navigation', focusKeys: ['label', 'href'], focusLabel: 'Названия пунктов меню и ссылки' },
+                        { title: 'Сверить контакты рядом с меню', text: 'Если поменялся маршрут связи, проверь основной номер и подпись в шапке.', sectionKey: 'contact', focusKeys: ['primaryPhone', 'secondaryPhone'], focusLabel: 'Телефоны рядом с шапкой' },
+                        { title: 'Довести изменения в футере', text: 'В конце выровняй полезные ссылки и блок компании в футере.', sectionKey: 'footer', focusKeys: ['usefulLinks', 'companyParagraphs'], focusLabel: 'Ссылки и текст в футере' }
+                    ]
+                }
+            ];
+        case 'home':
+            return [
+                {
+                    icon: 'fa-house-chimney-window',
+                    title: 'Главная: первый экран и направления',
+                    summary: 'Помогает быстро обновить hero-блок и два больших направления на главной странице.',
+                    result: 'Пользователь сразу увидит новый заголовок, понятный акцент и свежие карточки направлений.',
+                    tips: [
+                        'Сначала правь hero, а затем большие карточки направлений.',
+                        'Если меняешь фото, открой предпросмотр страницы и проверь, как они смотрятся в слайде.',
+                        'Лучше держать главный заголовок коротким, а смысл уводить в подзаголовок.'
+                    ],
+                    steps: [
+                        { title: 'Поменять главный экран', text: 'Обнови главный заголовок, подзаголовок и сильную подпись в верхнем hero-блоке.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'], focusLabel: 'Главный заголовок и сильная подпись' },
+                        { title: 'Проверить преимущества рядом', text: 'Если нужно, быстро подправь короткий список услуг и преимущества под заголовком.', sectionKey: 'hero', focusKeys: ['bulletPoints', 'features'], focusLabel: 'Короткий список услуг и преимущества' },
+                        { title: 'Обновить блоки направлений', text: 'Перейди к двум большим карточкам и поправь тексты, факты, кнопки и фото.', sectionKey: 'directions', focusKeys: ['sectionTitle', 'sectionSubtitle', 'slides', 'items', 'actions'], focusLabel: 'Карточки направлений, слайды и кнопки' }
+                    ]
+                },
+                {
+                    icon: 'fa-handshake-angle',
+                    title: 'Главная: доверие и заявка',
+                    summary: 'Подойдёт для быстрого обновления блока доверия, формы заявки и контактов рядом с ней.',
+                    result: 'На главной будут звучать новые преимущества, а форма и быстрые кнопки останутся цельными и понятными.',
+                    tips: [
+                        'В блоке доверия лучше держать короткие сильные факты вместо длинных абзацев.',
+                        'После правок формы проверь телефоны и быстрые кнопки на главной и в контактах.'
+                    ],
+                    steps: [
+                        { title: 'Обновить блок доверия', text: 'Поменяй заголовок, акцентные факты и карточки преимуществ.', sectionKey: 'trust', focusKeys: ['eyebrow', 'title', 'highlights', 'cards'], focusLabel: 'Заголовок, факты и карточки преимуществ' },
+                        { title: 'Подправить форму заявки', text: 'Проверь заголовок формы, вводный текст и быструю подсказку над ней.', sectionKey: 'request', focusKeys: ['formEyebrow', 'formTitle', 'formNotice'], focusLabel: 'Подписи формы и вводный текст' },
+                        { title: 'Сверить контакты рядом с формой', text: 'В конце выровняй быстрые кнопки, контакты и iframe формы.', sectionKey: 'request', focusKeys: ['contactTitle', 'contactLines', 'quickActions', 'iframeSrc'], focusLabel: 'Контакты, кнопки связи и iframe формы' }
+                    ]
+                }
+            ];
+        case 'catalog':
+            return [
+                {
+                    icon: 'fa-folder-tree',
+                    title: 'Структура каталога',
+                    summary: 'Хороший сценарий, если нужно обновить группы каталога, их подписи и общий CTA внизу страницы.',
+                    result: 'Каталог сохранит понятную структуру, а посетитель быстрее найдёт нужную группу.',
+                    tips: [
+                        'Группы лучше называть коротко и так же, как их видят люди в меню.',
+                        'После правок открой каталог и проверь, не выбиваются ли подписи по длине.'
+                    ],
+                    steps: [
+                        { title: 'Проверить группы каталога', text: 'Обнови названия основных групп и короткие описания в верхней части каталога.', sectionKey: 'groups', focusKeys: ['title', 'text'], focusLabel: 'Названия групп и короткие описания' },
+                        { title: 'Подправить блок партнёров', text: 'Если меняются бренды или подача автоматики, доведи это в партнерском блоке.', sectionKey: 'partners', focusKeys: ['title', 'items'], focusLabel: 'Заголовок и карточки партнёров' },
+                        { title: 'Финальный CTA каталога', text: 'Проверь нижний призыв, чтобы после правок каталог заканчивался понятным действием.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний призыв и кнопки' }
+                    ]
+                }
+            ];
+        case 'catalogPanels':
+            return [
+                {
+                    icon: 'fa-warehouse',
+                    title: 'Ворота и каркасы',
+                    summary: 'Пошагово проводит по карточкам откатных, распашных ворот и их каркасов.',
+                    result: 'Тексты, характеристики и CTA в воротах и каркасах будут выровнены без блуждания по длинной форме.',
+                    tips: [
+                        'Сначала правь готовые ворота, потом каркасы — так проще держать структуру в голове.',
+                        'Если меняешь фото, проверь стартовый кадр и порядок слайдов.',
+                        'Короткие характеристики лучше не превращать в длинные абзацы.'
+                    ],
+                    steps: [
+                        { title: 'Откатные ворота', text: 'Зайди в карточку откатных ворот и обнови заголовок, описание и ключевые карточки.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Заголовок, описание, карточки и CTA' },
+                        { title: 'Каркас откатных ворот', text: 'Проверь описание каркаса, характеристики и ссылку на комплектующие.', sectionKey: 'slidingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и CTA' },
+                        { title: 'Распашные ворота', text: 'Перейди к распашным воротам и выровняй текст, характеристики и нижний призыв.', sectionKey: 'swing', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Текст, характеристики и призыв' },
+                        { title: 'Каркас распашных ворот', text: 'В конце проверь каркас распашных ворот, чтобы он был согласован по подаче с основным разделом.', sectionKey: 'swingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и CTA' }
+                    ]
+                },
+                {
+                    icon: 'fa-fence',
+                    title: 'Калитки и заборы',
+                    summary: 'Отдельный мастер для калиток и всех видов заборов: профнастил, сайдинг, штакетник и жалюзи.',
+                    result: 'Все карточки ограждений можно пройти одним маршрутом и быстро сверить структуру текстов.',
+                    tips: [
+                        'Открывай карточки по очереди, а потом сравни стиль и длину текстов.',
+                        'Если меняешь палитры и фактуры, проверь, чтобы карточки не были перегружены картинками.'
+                    ],
+                    steps: [
+                        { title: 'Калитки', text: 'Поменяй стартовое фото, краткое описание и преимущества калиток.', sectionKey: 'wicket', focusKeys: ['title', 'paragraphs', 'cards', 'src'], focusLabel: 'Фото, описание и карточки преимуществ' },
+                        { title: 'Профнастил и металлосайдинг', text: 'Пройди карточки профнастила и сайдинга, выровняй описание, характеристики и блоки цвета.', sectionKey: 'fenceProfnastil', focusKeys: ['title', 'paragraphs', 'palette', 'cards'], focusLabel: 'Описание, характеристики и блок цвета' },
+                        { title: 'Штакетник и жалюзи', text: 'Потом открой штакетник и жалюзи, чтобы довести варианты заполнения и стоимость.', sectionKey: 'fencePicket', focusKeys: ['title', 'paragraphs', 'cards', 'faq'], focusLabel: 'Варианты заполнения, стоимость и FAQ' },
+                        { title: 'Финальная проверка жалюзи', text: 'В завершение отдельно просмотри карточку жалюзи и её нижний CTA.', sectionKey: 'fenceLouver', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Основной текст и CTA' }
+                    ]
+                }
+            ];
+        case 'servicePages':
+            return [
+                {
+                    icon: 'fa-spray-can-sparkles',
+                    title: 'Порошковая покраска',
+                    summary: 'Быстрый мастер по шапке страницы, карточкам услуг, FAQ и нижнему CTA покраски.',
+                    result: 'Страница покраски обновится как цельный маршрут, а не набор разрозненных блоков.',
+                    tips: [
+                        'В шапке держи обещание коротким, а детали уводи в карточки услуг.',
+                        'После правок CTA проверь телефоны и кнопки.'
+                    ],
+                    steps: [
+                        { title: 'Шапка и быстрые ссылки', text: 'Обнови заголовок страницы и верхние быстрые ссылки.', sectionKey: 'powderCoating', focusKeys: ['header', 'quickNav'], focusLabel: 'Шапка страницы и быстрые ссылки' },
+                        { title: 'Карточки услуг', text: 'Пройди карточки услуг, преимущества и шаги процесса.', sectionKey: 'powderCoating', focusKeys: ['sections', 'advantages', 'processSteps'], focusLabel: 'Карточки услуг, преимущества и шаги' },
+                        { title: 'FAQ и CTA', text: 'Финально обнови FAQ и нижний блок связи.', sectionKey: 'powderCoating', focusKeys: ['faq', 'cta'], focusLabel: 'FAQ и нижний CTA' }
+                    ]
+                },
+                {
+                    icon: 'fa-wind',
+                    title: 'Пескоструйная обработка',
+                    summary: 'Отдельный мастер по странице пескоструя: шапка, услуги, блок до/после и завершение страницы.',
+                    result: 'Страница пескоструя будет читаться цельно и без разрозненных правок.',
+                    tips: [
+                        'После правок блока до/после проверь, что подписи к нему остаются понятными.',
+                        'Секции услуги лучше выравнивать по структуре с порошковой покраской.'
+                    ],
+                    steps: [
+                        { title: 'Шапка и быстрые ссылки', text: 'Открой верх страницы и поправь заголовок, подзаголовок и навигацию.', sectionKey: 'sandblasting', focusKeys: ['header', 'quickNav'], focusLabel: 'Шапка страницы и быстрые ссылки' },
+                        { title: 'Карточки услуг и до/после', text: 'Потом пройди карточки услуг и блок сравнения.', sectionKey: 'sandblasting', focusKeys: ['sections', 'beforeAfter'], focusLabel: 'Карточки услуг и блок до/после' },
+                        { title: 'FAQ и CTA', text: 'В конце проверь вопросы и блок связи.', sectionKey: 'sandblasting', focusKeys: ['faq', 'cta'], focusLabel: 'FAQ и нижний CTA' }
+                    ]
+                }
+            ];
+        case 'automation':
+            return [
+                {
+                    icon: 'fa-bolt',
+                    title: 'Страница автоматики',
+                    summary: 'Мастер по общей странице автоматики, комплектующим и карточкам отдельных товаров.',
+                    result: 'Автоматика будет редактироваться понятными кусками: landing, комплектующие, товары.',
+                    tips: [
+                        'Landing лучше править сначала: hero, карточки комплектов, guide, CTA.',
+                        'Товарные страницы удобнее проходить уже после общей страницы.'
+                    ],
+                    steps: [
+                        { title: 'Landing распашной автоматики', text: 'Обнови hero, карточки комплектов и guide-блок на основной странице автоматики.', sectionKey: 'swingLanding', focusKeys: ['hero', 'products', 'guide', 'cta'], focusLabel: 'Hero, карточки комплектов, guide и CTA' },
+                        { title: 'Комплектующие для откатных ворот', text: 'Перейди к отдельной странице комплектующих и обнови её описание и блоки характеристик.', sectionKey: 'slidingComponentsPage', focusKeys: ['title', 'description', 'sections'], focusLabel: 'Описание и блоки характеристик' },
+                        { title: 'Страницы отдельных товаров', text: 'Финально пройди карточки отдельных товаров и общие кнопки.', sectionKey: 'productPages', focusKeys: ['title', 'description', 'specs'], focusLabel: 'Название, описание и характеристики товаров' }
+                    ]
+                }
+            ];
+        case 'paymentDocuments':
+            return [
+                {
+                    icon: 'fa-file-signature',
+                    title: 'Оплата и документы',
+                    summary: 'Собранный мастер по странице доверия: официальное оформление, этапы и нижний CTA.',
+                    result: 'Страница будет держать один понятный сценарий: как оформляется заказ и какие документы получает клиент.',
+                    tips: [
+                        'Лучше не перегружать эту страницу техническими формулировками.',
+                        'Держи акцент на доверии, понятности оплаты и комплекте документов.'
+                    ],
+                    steps: [
+                        { title: 'Главный блок доверия', text: 'Проверь заголовок, подзаголовок и карточки про договор, оплату и отчётность.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'], focusLabel: 'Заголовок, подзаголовок и карточки' },
+                        { title: 'Этапы оформления', text: 'Потом выровняй шаги процесса и их формулировки.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'], focusLabel: 'Шаги оформления и пояснения' },
+                        { title: 'Нижний CTA и связь', text: 'В конце проверь завершающий призыв и кнопки связи.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний CTA и кнопки связи' }
+                    ]
+                }
+            ];
+        case 'contacts':
+            return [
+                {
+                    icon: 'fa-address-book',
+                    title: 'Контакты: верх и основные данные',
+                    summary: 'Подойдёт, когда нужно быстро обновить hero страницы контактов и основной блок с менеджером и телефонами.',
+                    result: 'Контактная страница будет сразу выглядеть аккуратно и не потеряет главные номера и адрес.',
+                    tips: [
+                        'На этой странице лучше сначала обновлять hero, потом основной контактный блок.',
+                        'Если меняется один номер, проверь, не остался ли старый в форме или кнопках.'
+                    ],
+                    steps: [
+                        { title: 'Hero страницы контактов', text: 'Поменяй верхний заголовок, подзаголовок и факты в hero-блоке.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'facts'], focusLabel: 'Верхний заголовок, подзаголовок и факты' },
+                        { title: 'Основные контакты и менеджер', text: 'Обнови телефоны, адрес, карточки контактов и данные менеджера.', sectionKey: 'overview', focusKeys: ['items', 'manager', 'hours'], focusLabel: 'Карточки контактов, менеджер и режим работы' },
+                        { title: 'Финальная сверка', text: 'После правок открой страницу и проверь, что номера и адрес везде совпадают.', sectionKey: 'overview', focusKeys: ['title', 'text'], focusLabel: 'Заголовок и основной текст блока' }
+                    ]
+                },
+                {
+                    icon: 'fa-route',
+                    title: 'Контакты: связь и карта',
+                    summary: 'Отдельный мастер для формы связи, кнопок, карты и ориентиров.',
+                    result: 'Блок быстрой связи и нижний маршрут будут собраны и не станут спорить между собой.',
+                    tips: [
+                        'Форму и быстрые кнопки лучше менять вместе, чтобы они оставались цельным сценарием.',
+                        'После правок карты проверь, что iframe открывается и ориентиры звучат понятно.'
+                    ],
+                    steps: [
+                        { title: 'Быстрая связь и форма', text: 'Проверь заголовок, заметку, кнопки и iframe формы.', sectionKey: 'connect', focusKeys: ['title', 'notice', 'actions', 'iframeSrc'], focusLabel: 'Заголовок, кнопки и iframe формы' },
+                        { title: 'Карта и бейджи', text: 'Открой нижний блок и проверь карту, короткие бейджи и ориентиры.', sectionKey: 'location', focusKeys: ['title', 'mapSrc', 'badges', 'points'], focusLabel: 'Карта, бейджи и ориентиры' },
+                        { title: 'Завершающий маршрут', text: 'В конце ещё раз открой страницу и проверь, что маршрут читается легко и без перегруза.', sectionKey: 'location', focusKeys: ['text'], focusLabel: 'Описание нижнего блока' }
+                    ]
+                }
+            ];
+        case 'prices':
+            return [
+                {
+                    icon: 'fa-tags',
+                    title: 'Цены: верх и факторы стоимости',
+                    summary: 'Позволяет быстро обновить заголовок страницы и карточки факторов цены.',
+                    result: 'Страница цен сразу объяснит, от чего зависит стоимость и куда человеку идти дальше.',
+                    tips: [
+                        'Факторы цены лучше держать короткими карточками без длинных абзацев.',
+                        'Если меняешь акценты, проверь длину заголовков, чтобы карточки оставались ровными.'
+                    ],
+                    steps: [
+                        { title: 'Шапка страницы', text: 'Проверь главный заголовок и подзаголовок на странице цен.', sectionKey: 'header', focusKeys: ['title', 'subtitle'], focusLabel: 'Главный заголовок и подзаголовок' },
+                        { title: 'Факторы стоимости', text: 'Потом пройди карточки факторов, их заголовки и описания.', sectionKey: 'factors', focusKeys: ['title', 'items'], focusLabel: 'Заголовок блока и карточки факторов' },
+                        { title: 'Быстрая сверка CTA', text: 'После правок открой низ страницы и проверь, что кнопки остаются логичным продолжением страницы.', sectionKey: 'cta', focusKeys: ['primary', 'secondary'], focusLabel: 'Главная и вторичная кнопки' }
+                    ]
+                },
+                {
+                    icon: 'fa-calculator',
+                    title: 'Цены: калькулятор и доверие',
+                    summary: 'Сценарий для правки калькулятора, блока гарантии и нижних ответов на вопросы.',
+                    result: 'Калькулятор и гарантия будут работать как единый блок доверия, а не как отдельные куски.',
+                    tips: [
+                        'Сначала поправь калькулятор и телефоны, потом переходи к гарантии.',
+                        'FAQ лучше держать коротким и без дублей из верхних блоков.'
+                    ],
+                    steps: [
+                        { title: 'Калькулятор и звонок', text: 'Обнови заголовок, описание, кнопку и телефоны рядом с калькулятором.', sectionKey: 'calculator', focusKeys: ['title', 'text', 'action', 'phones'], focusLabel: 'Калькулятор, кнопка и телефоны' },
+                        { title: 'Гарантия', text: 'Проверь плашку, заголовок и пояснение в блоке гарантии.', sectionKey: 'guarantee', focusKeys: ['badge', 'title', 'text'], focusLabel: 'Плашка, заголовок и текст гарантии' },
+                        { title: 'FAQ страницы', text: 'В конце пройди вопросы и ответы, чтобы закрыть частые возражения клиента.', sectionKey: 'faq', focusKeys: ['title', 'items'], focusLabel: 'FAQ и список вопросов' }
+                    ]
+                }
+            ];
+        default:
+            return [];
+        }
+    }
+
+    function getTopLevelFieldLabel(contentKey, fieldKey) {
+        const config = contentConfigs[contentKey];
+        const field = config?.schema?.fields?.find((item) => item.key === fieldKey);
+        return field?.label || fieldKey;
+    }
+
+    function clearSectionSearch() {
+        state.searchQuery = '';
+        if (elements.searchInput) {
+            elements.searchInput.value = '';
+        }
+        applySectionFilter();
+    }
+
+    function revealSectionTarget(target) {
+        if (!target) return false;
+
+        clearSectionSearch();
+
+        let scopedContainer = null;
+        if (target.sectionKey) {
+            scopedContainer = openTopLevelSection(state.activeKey, target.sectionKey);
+        }
+
+        if (Array.isArray(target.focusKeys) && target.focusKeys.length) {
+            window.setTimeout(() => {
+                focusField((fieldNode) => {
+                    if (scopedContainer && !scopedContainer.contains(fieldNode)) {
+                        return false;
+                    }
+
+                    const fieldKey = fieldNode.dataset.fieldKey || '';
+                    return target.focusKeys.some((candidate) => fieldKey === candidate || fieldKey.includes(candidate));
+                });
+            }, 120);
+        }
+
+        return Boolean(scopedContainer);
+    }
+
+    function getActiveGuide() {
+        if (!state.activeGuide) return null;
+        const guides = getSectionGuides(state.activeGuide.sectionKey);
+        return guides[state.activeGuide.guideIndex] || null;
+    }
+
+    function closeGuideModal(options = {}) {
+        if (!elements.guideModal) return;
+        elements.guideModal.hidden = true;
+        document.body.classList.remove('admin-guide-open');
+        if (!options.keepState) {
+            state.activeGuide = null;
+        }
+    }
+
+    function renderGuideModal() {
+        const guide = getActiveGuide();
+        if (!guide || !elements.guideContent || !elements.guideTitle || !elements.guideLead) {
+            closeGuideModal();
+            return;
+        }
+
+        const currentStepIndex = Math.min(state.activeGuide?.stepIndex || 0, Math.max(guide.steps.length - 1, 0));
+        const previewLink = getPrimaryPreviewLink(state.activeGuide.sectionKey);
+
+        elements.guideTitle.textContent = guide.title;
+        elements.guideLead.textContent = guide.summary;
+        elements.guideContent.innerHTML = `
+            <aside class="admin-guide__aside">
+                <section class="admin-guide__intro-card">
+                    <span class="admin-guide__icon"><i class="fas ${guide.icon}" aria-hidden="true"></i></span>
+                    <div class="admin-guide__eyebrow">Что получится после правок</div>
+                    <h3>${guide.title}</h3>
+                    <p>${guide.result}</p>
+                    <div class="admin-guide__meta">
+                        <span><i class="fas fa-list-ol" aria-hidden="true"></i> ${guide.steps.length} шага</span>
+                        <span><i class="fas fa-folder-open" aria-hidden="true"></i> ${contentConfigs[state.activeGuide.sectionKey].label}</span>
+                    </div>
+                </section>
+                <section class="admin-guide__tips-card">
+                    <div class="admin-guide__aside-head">
+                        <p class="admin-toolbar__eyebrow">Перед началом</p>
+                        <h3>На что обратить внимание</h3>
+                    </div>
+                    <ul class="admin-guide__tips">
+                        ${guide.tips.map((tip) => `<li>${tip}</li>`).join('')}
+                    </ul>
+                    <div class="admin-guide__aside-actions">
+                        ${previewLink ? `
+                            <a class="admin-btn admin-btn--ghost" href="${previewLink.href}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
+                            </a>
+                        ` : ''}
+                        <button class="admin-btn admin-btn--primary" type="button" data-guide-run-current>
+                            <i class="fas fa-location-arrow" aria-hidden="true"></i> Перейти к текущему шагу
+                        </button>
+                    </div>
+                </section>
+            </aside>
+            <section class="admin-guide__steps-wrap">
+                <div class="admin-guide__steps-head">
+                    <div>
+                        <p class="admin-toolbar__eyebrow">Шаги мастера</p>
+                        <h3>Иди сверху вниз и сохраняй раздел в конце</h3>
+                    </div>
+                    <span>Можно открыть любой шаг сразу: нужный блок формы раскроется автоматически.</span>
+                </div>
+                <div class="admin-guide__steps">
+                    ${guide.steps.map((step, index) => `
+                        <article class="admin-guide-step ${index === currentStepIndex ? 'is-current' : ''}">
+                            <div class="admin-guide-step__number">${index + 1}</div>
+                            <div class="admin-guide-step__content">
+                                <div class="admin-guide-step__header">
+                                    <div>
+                                        <strong>${step.title}</strong>
+                                        <p>${step.text}</p>
+                                    </div>
+                                    <span class="admin-status-badge is-${index === currentStepIndex ? 'saved' : 'idle'}">${index === currentStepIndex ? 'Текущий шаг' : 'Шаг мастера'}</span>
+                                </div>
+                                <div class="admin-guide-step__meta">
+                                    <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${getTopLevelFieldLabel(state.activeGuide.sectionKey, step.sectionKey)}</span>
+                                    ${step.focusLabel ? `<span><i class="fas fa-pen" aria-hidden="true"></i> ${step.focusLabel}</span>` : ''}
+                                </div>
+                                <div class="admin-guide-step__actions">
+                                    <button class="admin-btn admin-btn--primary" type="button" data-guide-step-index="${index}">
+                                        <i class="fas fa-arrow-right" aria-hidden="true"></i> Перейти к шагу
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('')}
+                </div>
+            </section>
+        `;
+
+        elements.guideContent.querySelector('[data-guide-run-current]')?.addEventListener('click', () => {
+            runGuideStep(currentStepIndex);
+        });
+
+        elements.guideContent.querySelectorAll('[data-guide-step-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-guide-step-index'));
+                runGuideStep(index);
+            });
+        });
+    }
+
+    function openGuideModal(sectionKey, guideIndex = 0, options = {}) {
+        if (!elements.guideModal) return;
+
+        const guides = getSectionGuides(sectionKey);
+        if (!guides.length || !guides[guideIndex]) return;
+
+        state.activeGuide = {
+            sectionKey,
+            guideIndex,
+            stepIndex: options.stepIndex || 0
+        };
+
+        renderGuideModal();
+        elements.guideModal.hidden = false;
+        document.body.classList.add('admin-guide-open');
+    }
+
+    function runGuideStep(stepIndex) {
+        const guide = getActiveGuide();
+        if (!guide || !guide.steps[stepIndex]) return;
+
+        state.activeGuide.stepIndex = stepIndex;
+        renderGuideModal();
+
+        const step = guide.steps[stepIndex];
+        revealSectionTarget(step);
+        showAlert(`Открыт шаг ${stepIndex + 1}: ${step.title}.`, 'info');
+    }
+
     function focusField(matcher) {
-        const fields = Array.from(elements.form?.querySelectorAll('.admin-field') || []);
+        const fields = Array.from(elements.form?.querySelectorAll('.admin-field, details.admin-section') || []);
         const targetField = fields.find((fieldNode) => !fieldNode.closest('[hidden]') && matcher(fieldNode));
         if (!targetField) return false;
 
@@ -3451,26 +3948,7 @@
 
     function runSectionScenario(scenario) {
         if (!scenario) return;
-
-        let scopedContainer = null;
-        if (scenario.sectionKey) {
-            const topLevelDetails = openTopLevelSection(state.activeKey, scenario.sectionKey);
-            scopedContainer = topLevelDetails;
-        }
-
-        if (Array.isArray(scenario.focusKeys) && scenario.focusKeys.length) {
-            window.setTimeout(() => {
-                focusField((fieldNode) => {
-                    if (scopedContainer && !scopedContainer.contains(fieldNode)) {
-                        return false;
-                    }
-
-                    const fieldKey = fieldNode.dataset.fieldKey || '';
-                    return scenario.focusKeys.some((candidate) => fieldKey === candidate || fieldKey.includes(candidate));
-                });
-            }, 120);
-        }
-
+        revealSectionTarget(scenario);
         showAlert(`Открыт сценарий: ${scenario.title}.`, 'info');
     }
 
@@ -3504,6 +3982,7 @@
 
         const previewLink = getPrimaryPreviewLink(sectionKey);
         const scenarios = getSectionScenarios(sectionKey).slice(0, 3);
+        const guides = getSectionGuides(sectionKey).slice(0, 2);
 
         elements.quickActionsCard.innerHTML = `
             <div class="admin-preview-card__header">
@@ -3530,6 +4009,11 @@
                         <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
                     </a>
                 ` : ''}
+                ${guides.length ? `
+                    <button class="admin-btn admin-btn--primary" type="button" data-open-guide="0">
+                        <i class="fas fa-map-signs" aria-hidden="true"></i> Открыть мастер
+                    </button>
+                ` : ''}
             </div>
             ${scenarios.length ? `
                 <div class="admin-quick-actions__scenarios">
@@ -3537,6 +4021,16 @@
                         <button class="admin-quick-actions__scenario" type="button" data-quick-scenario-index="${index}">
                             <i class="fas ${scenario.icon}" aria-hidden="true"></i>
                             <span>${scenario.title}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            ` : ''}
+            ${guides.length ? `
+                <div class="admin-quick-actions__guides">
+                    ${guides.map((guide, index) => `
+                        <button class="admin-quick-actions__guide" type="button" data-open-guide="${index}">
+                            <i class="fas ${guide.icon}" aria-hidden="true"></i>
+                            <span>${guide.title}</span>
                         </button>
                     `).join('')}
                 </div>
@@ -3583,6 +4077,13 @@
             button.addEventListener('click', () => {
                 const index = Number(button.getAttribute('data-quick-scenario-index'));
                 runSectionScenario(scenarios[index]);
+            });
+        });
+
+        elements.quickActionsCard.querySelectorAll('[data-open-guide]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-open-guide'));
+                openGuideModal(sectionKey, index);
             });
         });
     }
@@ -3833,6 +4334,8 @@
             details.className = 'admin-section';
             details.open = !field.startCollapsed;
             details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+            details.dataset.fieldKey = field.key;
+            details.dataset.fieldLabel = getDisplayLabel(field);
 
             const { primaryFields, secondaryFields, advancedFields } = splitFieldsForMode(field.fields);
             const visibleFieldCount = primaryFields.length + secondaryFields.length + advancedFields.length;
@@ -4007,6 +4510,8 @@
         const section = document.createElement('details');
         section.className = 'admin-section';
         section.open = !field.startCollapsed;
+        section.dataset.fieldKey = field.key;
+        section.dataset.fieldLabel = getDisplayLabel(field);
 
         const summary = document.createElement('summary');
         const arrayMeta = field.allowReorder === false
@@ -4308,6 +4813,11 @@
         const key = state.activeKey;
         const config = contentConfigs[key];
         const meta = sectionMeta[key] || {};
+        if (state.activeGuide && state.activeGuide.sectionKey !== key) {
+            closeGuideModal();
+        } else if (state.activeGuide && state.activeGuide.sectionKey === key && !elements.guideModal?.hidden) {
+            renderGuideModal();
+        }
         elements.title.textContent = config.label;
         elements.description.textContent = meta.navHint || config.description;
         elements.form.innerHTML = '';
@@ -4695,12 +5205,20 @@
                 closeHistoryModal();
             }
         });
+        elements.guideCloseBtn?.addEventListener('click', () => closeGuideModal());
+        elements.guideModal?.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target instanceof HTMLElement && target.dataset.guideClose === 'true') {
+                closeGuideModal();
+            }
+        });
         elements.customerModeBtn?.addEventListener('click', () => setEditorMode('customer'));
         elements.managerModeBtn?.addEventListener('click', () => setEditorMode('manager'));
         elements.advancedModeBtn?.addEventListener('click', () => setEditorMode('advanced'));
         elements.loginForm?.addEventListener('submit', handleLoginSubmit);
         elements.logoutBtn?.addEventListener('click', handleLogout);
         window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('keydown', handleGlobalKeydown);
     }
 
     document.addEventListener('DOMContentLoaded', init);

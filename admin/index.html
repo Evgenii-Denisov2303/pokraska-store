@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=20260325-16">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260325-17">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -232,6 +232,23 @@
         </div>
     </div>
 
+    <div class="admin-media admin-guide" id="adminGuideModal" hidden>
+        <div class="admin-media__backdrop" data-guide-close="true"></div>
+        <div class="admin-guide__dialog" role="dialog" aria-modal="true" aria-labelledby="adminGuideTitle">
+            <div class="admin-media__header admin-guide__header">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Пошаговый мастер</p>
+                    <h2 id="adminGuideTitle">Мини-мастер</h2>
+                    <p class="admin-media__lead" id="adminGuideLead">Здесь можно пройти по шагам и быстро дойти до нужных полей без ручного поиска по всей форме.</p>
+                </div>
+                <button class="admin-btn admin-btn--ghost" type="button" id="adminGuideCloseBtn">
+                    <i class="fas fa-xmark" aria-hidden="true"></i> Закрыть
+                </button>
+            </div>
+            <div class="admin-guide__body" id="adminGuideContent"></div>
+        </div>
+    </div>
+
     <div class="admin-auth" id="adminAuth" hidden>
         <div class="admin-auth__card">
             <p class="admin-toolbar__eyebrow">Защищенный вход</p>
@@ -254,6 +271,6 @@
         </div>
     </div>
 
-    <script src="../assets/js/admin.js?v=20260325-16" defer></script>
+    <script src="../assets/js/admin.js?v=20260325-17" defer></script>
 </body>
 </html>
