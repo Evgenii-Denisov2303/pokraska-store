@@ -19,6 +19,9 @@ const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || '127.0.0.1';
 const ROOT_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(ROOT_DIR, 'content');
+const IMAGE_ROOT_DIR = path.join(ROOT_DIR, 'assets', 'images');
+const ADMIN_DATA_DIR = path.resolve(ROOT_DIR, '..', '.pokraska-store-admin');
+const ADMIN_STATE_FILE = path.join(ADMIN_DATA_DIR, 'admin-state.json');
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || '';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const AUTH_ENABLED = Boolean(ADMIN_USERNAME && ADMIN_PASSWORD);
@@ -39,6 +42,7 @@ const MIME_TYPES = {
     '.css': 'text/css; charset=utf-8',
     '.html': 'text/html; charset=utf-8',
     '.ico': 'image/x-icon',
+    '.gif': 'image/gif',
     '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg',
     '.js': 'application/javascript; charset=utf-8',
@@ -47,6 +51,7 @@ const MIME_TYPES = {
     '.svg': 'image/svg+xml',
     '.txt': 'text/plain; charset=utf-8',
     '.webmanifest': 'application/manifest+json; charset=utf-8',
+    '.webp': 'image/webp',
     '.xml': 'application/xml; charset=utf-8'
 };
 
@@ -63,7 +68,10 @@ function isAdminPath(pathname) {
         || pathname.startsWith('/api/auth/')
         || pathname === '/api/auth'
         || pathname === '/api/content'
-        || pathname.startsWith('/api/content/');
+        || pathname.startsWith('/api/content/')
+        || pathname === '/api/admin/state'
+        || pathname === '/api/admin/publish'
+        || pathname === '/api/media/upload';
 }
 
 function getClientIp(request) {
@@ -269,6 +277,171 @@ async function readRequestBody(request) {
     return Buffer.concat(chunks).toString('utf-8');
 }
 
+async function readJsonFile(filePath, fallbackValue) {
+    try {
+        const content = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(content);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return fallbackValue;
+        }
+
+        throw error;
+    }
+}
+
+async function writeJsonFile(filePath, payload) {
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, `${JSON.stringify(payload, null, 2)}\n`, 'utf-8');
+}
+
+function getActorName(request) {
+    const session = getSession(request);
+    if (session?.username) return session.username;
+
+    const headerValue = String(request.headers['x-admin-actor'] || '').trim();
+    return headerValue || 'local';
+}
+
+function createEmptyAdminState() {
+    return {
+        sections: {}
+    };
+}
+
+async function readAdminState() {
+    const state = await readJsonFile(ADMIN_STATE_FILE, createEmptyAdminState());
+    if (!state.sections || typeof state.sections !== 'object') {
+        state.sections = {};
+    }
+    return state;
+}
+
+async function writeAdminState(payload) {
+    await writeJsonFile(ADMIN_STATE_FILE, payload);
+}
+
+function getSectionStateEntry(adminState, sectionKey, fileName, label) {
+    if (!adminState.sections[sectionKey]) {
+        adminState.sections[sectionKey] = {
+            sectionKey,
+            fileName,
+            label,
+            history: []
+        };
+    }
+
+    const entry = adminState.sections[sectionKey];
+    entry.sectionKey = sectionKey;
+    entry.fileName = fileName;
+    entry.label = label || entry.label || sectionKey;
+    if (!Array.isArray(entry.history)) {
+        entry.history = [];
+    }
+    return entry;
+}
+
+function trimSectionHistory(entry) {
+    entry.history = entry.history.slice(0, 6);
+}
+
+function pushSectionHistoryEntry(entry, nextItem) {
+    entry.history.unshift(nextItem);
+    trimSectionHistory(entry);
+}
+
+function createClientAdminState(adminState) {
+    return {
+        sections: Object.fromEntries(
+            Object.entries(adminState.sections || {}).map(([sectionKey, entry]) => [
+                sectionKey,
+                {
+                    sectionKey,
+                    fileName: entry.fileName || '',
+                    label: entry.label || sectionKey,
+                    lastSavedAt: entry.lastSavedAt || null,
+                    lastSavedBy: entry.lastSavedBy || null,
+                    lastPublishedAt: entry.lastPublishedAt || null,
+                    lastPublishedBy: entry.lastPublishedBy || null,
+                    history: Array.isArray(entry.history)
+                        ? entry.history.map((item) => ({
+                            id: item.id,
+                            action: item.action,
+                            savedAt: item.savedAt || null,
+                            savedBy: item.savedBy || null,
+                            label: item.label || entry.label || sectionKey,
+                            sectionKey,
+                            data: item.data || null
+                        }))
+                        : []
+                }
+            ])
+        )
+    };
+}
+
+function sanitizeFileName(fileName) {
+    const originalName = String(fileName || 'image').trim();
+    const parsed = path.parse(originalName);
+    const baseName = (parsed.name || 'image')
+        .toLowerCase()
+        .replace(/[^a-z0-9-_]+/gi, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 60) || 'image';
+
+    return {
+        baseName,
+        ext: parsed.ext.toLowerCase()
+    };
+}
+
+function inferImageExtension(fileName, mimeType) {
+    const { ext } = sanitizeFileName(fileName);
+    if (ext && ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'].includes(ext)) {
+        return ext;
+    }
+
+    const mimeMap = {
+        'image/jpeg': '.jpg',
+        'image/png': '.png',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'image/svg+xml': '.svg'
+    };
+
+    return mimeMap[String(mimeType || '').toLowerCase()] || '.png';
+}
+
+function resolveUploadDirectory(directory) {
+    let relativeDirectory = String(directory || 'assets/images/catalog').replace(/\\/g, '/').replace(/^\/+/, '');
+    if (!relativeDirectory.startsWith('assets/images/')) {
+        relativeDirectory = 'assets/images/catalog';
+    }
+
+    const fullDirectory = path.normalize(path.join(ROOT_DIR, relativeDirectory));
+    if (!fullDirectory.startsWith(IMAGE_ROOT_DIR)) {
+        throw new Error('Недопустимая папка для загрузки');
+    }
+
+    return {
+        relativeDirectory,
+        fullDirectory
+    };
+}
+
+function decodeDataUrlImage(dataUrl) {
+    const match = String(dataUrl || '').match(/^data:(image\/[a-z0-9.+-]+);base64,([\s\S]+)$/i);
+    if (!match) {
+        throw new Error('Ожидалось изображение в формате data URL');
+    }
+
+    return {
+        mimeType: match[1].toLowerCase(),
+        buffer: Buffer.from(match[2], 'base64')
+    };
+}
+
 function shouldAllowContentCors(origin) {
     if (!origin || !CONTENT_CORS_ORIGINS.length) return false;
     return CONTENT_CORS_ORIGINS.includes('*') || CONTENT_CORS_ORIGINS.includes(origin);
@@ -388,6 +561,145 @@ async function handleAuthApi(request, response, pathname) {
     return false;
 }
 
+async function handleAdminStateApi(request, response, pathname) {
+    if (pathname === '/api/admin/state') {
+        if (AUTH_ENABLED && !getSession(request)) {
+            sendJson(request, response, 401, {
+                ok: false,
+                error: 'Нужен вход в админку'
+            });
+            return true;
+        }
+
+        if (request.method !== 'GET') {
+            sendJson(request, response, 405, { error: 'Метод не поддерживается' });
+            return true;
+        }
+
+        const adminState = await readAdminState();
+        sendJson(request, response, 200, {
+            ok: true,
+            state: createClientAdminState(adminState)
+        });
+        return true;
+    }
+
+    if (pathname === '/api/admin/publish') {
+        if (request.method !== 'POST') {
+            sendJson(request, response, 405, { error: 'Метод не поддерживается' });
+            return true;
+        }
+
+        if (AUTH_ENABLED && !getSession(request)) {
+            sendJson(request, response, 401, {
+                ok: false,
+                error: 'Нужен вход в админку'
+            });
+            return true;
+        }
+
+        try {
+            const body = await readRequestBody(request);
+            const parsed = JSON.parse(body || '{}');
+            const sectionKey = String(parsed.sectionKey || '').trim();
+            const fileName = String(parsed.fileName || '').trim();
+            const label = String(parsed.label || '').trim();
+
+            if (!sectionKey || !fileName) {
+                throw new Error('Не указан раздел для публикации');
+            }
+
+            const adminState = await readAdminState();
+            const entry = getSectionStateEntry(adminState, sectionKey, fileName, label || sectionKey);
+            const actor = getActorName(request);
+            const savedAt = new Date().toISOString();
+
+            entry.lastPublishedAt = savedAt;
+            entry.lastPublishedBy = actor;
+            pushSectionHistoryEntry(entry, {
+                id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                action: 'publish',
+                savedAt,
+                savedBy: actor,
+                label: label || entry.label
+            });
+
+            await writeAdminState(adminState);
+
+            sendJson(request, response, 200, {
+                ok: true,
+                state: createClientAdminState(adminState),
+                section: createClientAdminState({ sections: { [sectionKey]: entry } }).sections[sectionKey]
+            });
+        } catch (error) {
+            sendJson(request, response, 400, {
+                ok: false,
+                error: 'Не удалось обновить статус публикации',
+                details: error.message
+            });
+        }
+        return true;
+    }
+
+    return false;
+}
+
+async function handleMediaApi(request, response, pathname) {
+    if (pathname !== '/api/media/upload') {
+        return false;
+    }
+
+    if (request.method !== 'POST') {
+        sendJson(request, response, 405, { error: 'Метод не поддерживается' });
+        return true;
+    }
+
+    if (AUTH_ENABLED && !getSession(request)) {
+        sendJson(request, response, 401, {
+            ok: false,
+            error: 'Нужен вход в админку'
+        });
+        return true;
+    }
+
+    try {
+        const body = await readRequestBody(request);
+        const parsed = JSON.parse(body || '{}');
+        const fileName = String(parsed.fileName || parsed.name || '').trim();
+        const directory = String(parsed.directory || 'assets/images/catalog');
+        const imageData = String(parsed.dataUrl || parsed.data || '').trim();
+
+        if (!fileName || !imageData) {
+            throw new Error('Нужно передать имя файла и само изображение');
+        }
+
+        const { relativeDirectory, fullDirectory } = resolveUploadDirectory(directory);
+        const { mimeType, buffer } = decodeDataUrlImage(imageData);
+        const { baseName } = sanitizeFileName(fileName);
+        const extension = inferImageExtension(fileName, mimeType);
+        const nextFileName = `${baseName}-${Date.now()}${extension}`;
+        const outputPath = path.join(fullDirectory, nextFileName);
+
+        await fs.mkdir(fullDirectory, { recursive: true });
+        await fs.writeFile(outputPath, buffer);
+
+        sendJson(request, response, 200, {
+            ok: true,
+            path: `${relativeDirectory}/${nextFileName}`.replace(/\\/g, '/'),
+            fileName: nextFileName,
+            directory: relativeDirectory
+        });
+    } catch (error) {
+        sendJson(request, response, 400, {
+            ok: false,
+            error: 'Не удалось загрузить изображение',
+            details: error.message
+        });
+    }
+
+    return true;
+}
+
 async function handleContentApi(request, response, pathname) {
     const match = pathname.match(/^\/api\/content\/([a-z0-9-]+)$/i);
     if (!match) return false;
@@ -423,7 +735,32 @@ async function handleContentApi(request, response, pathname) {
             const parsed = JSON.parse(body);
             await fs.mkdir(CONTENT_DIR, { recursive: true });
             await fs.writeFile(filePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
-            sendJson(request, response, 200, { ok: true, file: fileName });
+            const sectionKey = String(request.headers['x-admin-section-key'] || '').trim() || match[1];
+            const sectionLabel = String(request.headers['x-admin-section-label'] || '').trim() || sectionKey;
+            const actor = getActorName(request);
+            const savedAt = new Date().toISOString();
+            const adminState = await readAdminState();
+            const entry = getSectionStateEntry(adminState, sectionKey, match[1], sectionLabel);
+
+            entry.lastSavedAt = savedAt;
+            entry.lastSavedBy = actor;
+            pushSectionHistoryEntry(entry, {
+                id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                action: 'save',
+                savedAt,
+                savedBy: actor,
+                label: sectionLabel,
+                data: parsed
+            });
+
+            await writeAdminState(adminState);
+
+            sendJson(request, response, 200, {
+                ok: true,
+                file: fileName,
+                state: createClientAdminState(adminState),
+                section: createClientAdminState({ sections: { [sectionKey]: entry } }).sections[sectionKey]
+            });
         } catch (error) {
             sendJson(request, response, 400, {
                 error: 'Не удалось сохранить JSON',
@@ -534,6 +871,14 @@ const server = http.createServer(async (request, response) => {
         }
 
         if (await handleAuthApi(request, response, pathname)) {
+            return;
+        }
+
+        if (await handleAdminStateApi(request, response, pathname)) {
+            return;
+        }
+
+        if (await handleMediaApi(request, response, pathname)) {
             return;
         }
 
