@@ -106,11 +106,11 @@
         return {
             key: 'faq',
             type: 'group',
-            label: 'FAQ',
+            label: 'Вопросы и ответы',
             startCollapsed: true,
             fields: [
-                { key: 'title', type: 'text', label: 'Заголовок FAQ' },
-                { key: 'subtitle', type: 'textarea', label: 'Подзаголовок FAQ' },
+                { key: 'title', type: 'text', label: 'Заголовок блока вопросов' },
+                { key: 'subtitle', type: 'textarea', label: 'Пояснение над вопросами' },
                 {
                     key: 'items',
                     type: 'array',
@@ -186,7 +186,7 @@
                     itemType: 'text'
                 },
                 { key: 'href', type: 'text', label: 'Ссылка карточки' },
-                { key: 'cta', type: 'text', label: 'Текст CTA' }
+                { key: 'cta', type: 'text', label: 'Текст кнопки' }
             ]
         };
     }
@@ -259,7 +259,7 @@
                 {
                     key: 'cta',
                     type: 'group',
-                    label: 'Нижний CTA панели',
+                    label: 'Нижний блок связи панели',
                     startCollapsed: true,
                     fields: [
                         { key: 'title', type: 'text', label: 'Заголовок' },
@@ -386,14 +386,14 @@
         },
         home: {
             label: 'Главная страница',
-            description: 'Hero, основные направления, процесс, доверие и форма заявки.',
+            description: 'Первый экран, основные направления, процесс, доверие и форма заявки.',
             fileName: 'home',
             schema: {
                 fields: [
                     {
                         key: 'hero',
                         type: 'group',
-                        label: 'Hero-блок',
+                        label: 'Первый экран',
                         fields: [
                             { key: 'titleMain', type: 'text', label: 'Главный заголовок' },
                             { key: 'titleSub', type: 'text', label: 'Подзаголовок' },
@@ -551,7 +551,7 @@
                                     { key: 'icon', type: 'text', label: 'Иконка' }
                                 ]
                             },
-                            { key: 'iframeSrc', type: 'text', label: 'Ссылка на iframe формы' }
+                            { key: 'iframeSrc', type: 'text', label: 'Ссылка на встроенную форму' }
                         ]
                     }
                 ]
@@ -559,7 +559,7 @@
         },
         catalog: {
             label: 'Каталог',
-            description: 'Группы каталога, подписи разделов, бренды и нижний CTA страницы каталога.',
+            description: 'Группы каталога, подписи разделов, бренды и нижний блок связи страницы каталога.',
             fileName: 'catalog',
             schema: {
                 fields: [
@@ -600,7 +600,7 @@
                     {
                         key: 'cta',
                         type: 'group',
-                        label: 'Нижний CTA',
+                        label: 'Нижний блок связи',
                         fields: [
                             { key: 'title', type: 'text', label: 'Заголовок' },
                             { key: 'text', type: 'textarea', label: 'Описание' },
@@ -623,7 +623,7 @@
         },
         catalogPanels: {
             label: 'Каталог: карточки',
-            description: 'Полное содержимое внутренних карточек каталога: тексты, списки, FAQ, палитры и CTA.',
+            description: 'Полное содержимое внутренних карточек каталога: тексты, списки, вопросы и ответы, палитры и нижние блоки связи.',
             fileName: 'catalog-panels',
             schema: {
                 fields: [
@@ -648,7 +648,7 @@
         },
         servicePages: {
             label: 'Услуги покраски и пескоструя',
-            description: 'Заголовки, навигация, карточки, FAQ и CTA для порошковой покраски и пескоструйной обработки.',
+            description: 'Заголовки, навигация, карточки, вопросы и ответы и нижние блоки связи для порошковой покраски и пескоструйной обработки.',
             fileName: 'service-pages',
             schema: {
                 fields: [
@@ -732,7 +732,7 @@
                             {
                                 key: 'cta',
                                 type: 'group',
-                                label: 'Нижний CTA',
+                                label: 'Нижний блок связи',
                                 fields: [
                                     { key: 'title', type: 'text', label: 'Заголовок' },
                                     { key: 'text', type: 'textarea', label: 'Описание' },
@@ -753,7 +753,7 @@
                             {
                                 key: 'faq',
                                 type: 'group',
-                                label: 'FAQ',
+                                label: 'Вопросы и ответы',
                                 fields: [
                                     { key: 'title', type: 'text', label: 'Заголовок' },
                                     { key: 'subtitle', type: 'textarea', label: 'Подзаголовок' },
@@ -839,7 +839,7 @@
                             {
                                 key: 'cta',
                                 type: 'group',
-                                label: 'Нижний CTA',
+                                label: 'Нижний блок связи',
                                 fields: [
                                     { key: 'title', type: 'text', label: 'Заголовок' },
                                     { key: 'text', type: 'textarea', label: 'Описание' },
@@ -860,7 +860,7 @@
                             {
                                 key: 'faq',
                                 type: 'group',
-                                label: 'FAQ',
+                                label: 'Вопросы и ответы',
                                 fields: [
                                     { key: 'title', type: 'text', label: 'Заголовок' },
                                     { key: 'subtitle', type: 'textarea', label: 'Подзаголовок' },
@@ -905,7 +905,7 @@
                             {
                                 key: 'hero',
                                 type: 'group',
-                                label: 'Hero',
+                                label: 'Первый экран',
                                 fields: [
                                     { key: 'breadcrumbs', type: 'text', label: 'Хлебные крошки' },
                                     { key: 'title', type: 'text', label: 'Заголовок' },
@@ -950,7 +950,7 @@
                             {
                                 key: 'cta',
                                 type: 'group',
-                                label: 'Нижний CTA',
+                                label: 'Нижний блок связи',
                                 fields: [
                                     { key: 'title', type: 'text', label: 'Заголовок' },
                                     { key: 'text', type: 'textarea', label: 'Описание' },
@@ -1023,7 +1023,7 @@
         },
         gallery: {
             label: 'Галерея работ',
-            description: 'Заголовок, фильтры, счетчик и CTA галереи.',
+            description: 'Заголовок, фильтры, счетчик и нижний блок связи галереи.',
             fileName: 'gallery',
             schema: {
                 fields: [
@@ -1061,7 +1061,7 @@
                     {
                         key: 'cta',
                         type: 'group',
-                        label: 'Кнопки CTA',
+                        label: 'Кнопки нижнего блока',
                         fields: [
                             createButtonGroupSchema('primary', 'Главная кнопка'),
                             createButtonGroupSchema('secondary', 'Вторичная кнопка')
@@ -1072,7 +1072,7 @@
         },
         prices: {
             label: 'Страница цен',
-            description: 'Заголовок, факторы стоимости, калькулятор, гарантия и FAQ на странице цен.',
+            description: 'Заголовок, факторы стоимости, калькулятор, гарантия и вопросы с ответами на странице цен.',
             fileName: 'prices',
             schema: {
                 fields: [
@@ -1176,7 +1176,7 @@
                     {
                         key: 'faq',
                         type: 'group',
-                        label: 'FAQ',
+                        label: 'Вопросы и ответы',
                         fields: [
                             { key: 'title', type: 'text', label: 'Заголовок' },
                             { key: 'subtitle', type: 'textarea', label: 'Подзаголовок' },
@@ -1198,14 +1198,14 @@
         },
         paymentDocuments: {
             label: 'Оплата и документы',
-            description: 'Hero, карточки преимуществ, этапы и CTA страницы оплаты и документов.',
+            description: 'Первый экран, карточки преимуществ, этапы и нижний блок связи страницы оплаты и документов.',
             fileName: 'payment-documents',
             schema: {
                 fields: [
                     {
                         key: 'hero',
                         type: 'group',
-                        label: 'Hero-блок',
+                        label: 'Первый экран',
                         fields: [
                             { key: 'eyebrow', type: 'text', label: 'Надзаголовок' },
                             { key: 'title', type: 'text', label: 'Заголовок' },
@@ -1278,7 +1278,7 @@
                     {
                         key: 'cta',
                         type: 'group',
-                        label: 'CTA',
+                        label: 'Нижний блок связи',
                         fields: [
                             { key: 'title', type: 'text', label: 'Заголовок' },
                             { key: 'text', type: 'textarea', label: 'Описание' },
@@ -1309,14 +1309,14 @@
         },
         contacts: {
             label: 'Контакты',
-            description: 'Hero, контакты, форма связи, ориентиры и карта на странице контактов.',
+            description: 'Первый экран, контакты, форма связи, ориентиры и карта на странице контактов.',
             fileName: 'contacts',
             schema: {
                 fields: [
                     {
                         key: 'hero',
                         type: 'group',
-                        label: 'Hero-блок',
+                        label: 'Первый экран',
                         fields: [
                             { key: 'title', type: 'text', label: 'Заголовок' },
                             { key: 'subtitle', type: 'textarea', label: 'Подзаголовок' },
@@ -1409,7 +1409,7 @@
                                     { key: 'text', type: 'textarea', label: 'Текст' }
                                 ]
                             },
-                            { key: 'iframeSrc', type: 'text', label: 'Ссылка на iframe формы' }
+                            { key: 'iframeSrc', type: 'text', label: 'Ссылка на встроенную форму' }
                         ]
                     },
                     {
@@ -1518,7 +1518,7 @@
             navHint: 'Главный экран, новые блоки, доверие и заявка.',
             summary: 'Здесь редактируется вся главная страница: первый экран, направления, процесс работы, доверие и блок заявки.',
             bullets: [
-                'Главный экран и первый CTA.',
+                'Главный экран и первая кнопка.',
                 'Блоки “Основные направления”, “Как мы работаем” и “Почему выбирают нас”.',
                 'Тексты и быстрые контакты в заявке.'
             ],
@@ -1533,12 +1533,12 @@
         },
         catalog: {
             icon: 'fa-list',
-            navHint: 'Группы каталога, вступления разделов и нижний CTA.',
+            navHint: 'Группы каталога, вступления разделов и нижний блок связи.',
             summary: 'Раздел управляет верхней структурой каталога: группами слева, вводными текстами и нижним призывом к действию.',
             bullets: [
                 'Названия групп “Ворота”, “Заборы”, “Гараж и защита”, “Автоматика”.',
                 'Короткие описания и ссылки внутри каждой группы.',
-                'Нижний CTA в конце страницы каталога.'
+                'Нижний блок связи в конце страницы каталога.'
             ],
             tips: [
                 'Если меняется только конкретная карточка товара, смотри раздел “Каталог: карточки”.',
@@ -1551,12 +1551,12 @@
         },
         catalogPanels: {
             icon: 'fa-folder-open',
-            navHint: 'Тексты, списки, палитры, FAQ и CTA внутри карточек каталога.',
-            summary: 'Здесь лежит самое содержимое карточек каталога: описания, характеристики, FAQ, палитры, шаги выбора и CTA.',
+            navHint: 'Тексты, списки, палитры, вопросы и нижние блоки связи внутри карточек каталога.',
+            summary: 'Здесь лежит основное содержимое карточек каталога: описания, характеристики, вопросы и ответы, палитры, шаги выбора и нижние блоки связи.',
             bullets: [
                 'Тексты по воротам, заборам, каркасам и автоматике.',
                 'Списки характеристик, преимуществ и блоков выбора.',
-                'FAQ, палитры и нижние CTA у конкретных карточек.'
+                'Вопросы и ответы, палитры и нижние блоки связи у конкретных карточек.'
             ],
             tips: [
                 'Если нужно поправить текст в одной карточке, почти всегда раздел нужен именно этот.',
@@ -1574,7 +1574,7 @@
             bullets: [
                 'Верхние блоки и быстрые ссылки.',
                 'Карточки услуг, преимущества и этапы.',
-                'FAQ и нижние CTA обеих страниц.'
+                'Вопросы и ответы и нижние блоки связи обеих страниц.'
             ],
             tips: [
                 'Следи, чтобы тексты покраски и пескоструя не дублировали друг друга.',
@@ -1591,13 +1591,13 @@
             navHint: 'Карточки автоматики, комплекты и комплектующие.',
             summary: 'Раздел управляет отдельной страницей автоматики и карточками с комплектами для откатных и распашных ворот.',
             bullets: [
-                'Hero и вводные блоки автоматики.',
+                'Первый экран и вводные блоки автоматики.',
                 'Карточки комплектов и характеристики.',
                 'Раздел комплектующих и страницы отдельных товаров.'
             ],
             tips: [
                 'В автоматику лучше писать коротко и по делу: вес, размеры, что входит в комплект.',
-                'Если меняешь CTA карточек, проверь, что ссылки ведут на нужные страницы.',
+                'Если меняешь кнопки карточек, проверь, что ссылки ведут на нужные страницы.',
                 'После сохранения открой автоматику и одну карточку товара.'
             ],
             previewLinks: [
@@ -1612,7 +1612,7 @@
             bullets: [
                 'Заголовок и описание страницы работ.',
                 'Названия фильтров и их порядок.',
-                'Кнопка “Показать ещё” и CTA.'
+                'Кнопка “Показать ещё” и нижний блок связи.'
             ],
             tips: [
                 'Сами фотографии лежат в проекте отдельно, а здесь настраивается подача страницы.',
@@ -1626,11 +1626,11 @@
         prices: {
             icon: 'fa-tag',
             navHint: 'Шапка страницы цен, факторы стоимости и калькулятор.',
-            summary: 'Здесь собраны тексты и карточки страницы “Цены”: факторы стоимости, калькулятор, гарантия и FAQ.',
+            summary: 'Здесь собраны тексты и карточки страницы “Цены”: факторы стоимости, калькулятор, гарантия и вопросы с ответами.',
             bullets: [
                 'Вступление и заголовок страницы.',
                 'Карточки факторов стоимости и блок калькулятора.',
-                'Гарантия, FAQ и нижние кнопки.'
+                'Гарантия, вопросы с ответами и нижние кнопки.'
             ],
             tips: [
                 'Лучше писать простыми словами, от чего зависит цена.',
@@ -1643,12 +1643,12 @@
         },
         paymentDocuments: {
             icon: 'fa-receipt',
-            navHint: 'Доверие, документы, этапы и CTA страницы оплаты.',
+            navHint: 'Доверие, документы, этапы и нижний блок связи страницы оплаты.',
             summary: 'Раздел для страницы “Оплата и документы”: доверие, этапы работы и кнопки связи.',
             bullets: [
-                'Hero и акцентные карточки.',
+                'Первый экран и акцентные карточки.',
                 'Преимущества и этапы работы.',
-                'CTA и кнопки связи.'
+                'Нижний блок связи и кнопки связи.'
             ],
             tips: [
                 'Здесь лучше делать акцент на прозрачности и официальном оформлении.',
@@ -1665,11 +1665,11 @@
             summary: 'Раздел редактирует страницу контактов: верхний блок, телефоны, форму связи, карту и подсказки как добраться.',
             bullets: [
                 'Основные контакты и менеджер.',
-                'Блок быстрой связи и iframe формы.',
+                'Блок быстрой связи и встроенная форма.',
                 'Карта, ориентиры и бейджи внизу.'
             ],
             tips: [
-                'Если меняешь карту, проверь, что iframe открывается без ошибок.',
+                'Если меняешь карту, проверь, что встроенная карта открывается без ошибок.',
                 'Телефоны и мессенджеры должны совпадать с общими настройками сайта.',
                 'После сохранения посмотри страницу на десктопе и на мобильной ширине.'
             ],
@@ -2384,8 +2384,8 @@
             alt: 'Короткое описание изображения для сайта и поисковиков.',
             width: 'Лучше указывать реальную ширину файла.',
             height: 'Лучше указывать реальную высоту файла.',
-            iframeSrc: 'Ссылка на встроенную форму или внешний виджет.',
-            mapSrc: 'Ссылка на карту для встраивания на страницу.',
+            iframeSrc: 'Ссылка на встроенную форму или подключаемый виджет.',
+            mapSrc: 'Ссылка на встроенную карту для страницы.',
             panelId: 'Служебный ID вкладки. Менять только если точно понимаете, зачем.',
             id: 'Служебный идентификатор. Обычно его лучше не менять.',
             pageKey: 'Служебный ключ страницы. Лучше оставить без изменений.'
@@ -2429,6 +2429,25 @@
         const sectionLabel = getFieldUiValue('labels', field);
         if (sectionLabel) return sectionLabel;
         if (!state.simpleMode) return defaultLabel;
+
+        if (field.key === 'hero' && field.type === 'group') return 'Первый экран';
+        if (field.key === 'cta' && field.type === 'group') return 'Нижний блок связи';
+        if (field.key === 'faq' && field.type === 'group') return 'Вопросы и ответы';
+        if (field.key === 'request' && field.type === 'group') return 'Заявка и контакты';
+        if (field.key === 'trust' && field.type === 'group') return 'Доверие и преимущества';
+        if (field.key === 'process' && field.type === 'group') return 'Как мы работаем';
+        if (field.key === 'directions' && field.type === 'group') return 'Главные направления';
+        if (field.key === 'overview' && field.type === 'group') return 'Основные контакты';
+        if (field.key === 'connect' && field.type === 'group') return 'Быстрая связь';
+        if (field.key === 'location' && field.type === 'group') return 'Карта и ориентиры';
+        if (field.key === 'workflow' && field.type === 'group') return 'Этапы работы';
+        if (field.key === 'benefits' && field.type === 'group') return 'Преимущества';
+        if (field.key === 'guide' && field.type === 'group') return 'Подсказки по выбору';
+        if (field.key === 'groups' && field.type === 'group') return 'Группы каталога';
+        if (field.key === 'partners' && field.type === 'group') return 'Партнеры и бренды';
+        if (field.key === 'factors' && field.type === 'group') return 'Факторы цены';
+        if (field.key === 'calculator' && field.type === 'group') return 'Калькулятор и контакты';
+        if (field.key === 'guarantee' && field.type === 'group') return 'Гарантия и ответы';
 
         const labelMap = {
             src: 'Фото',
@@ -2838,7 +2857,7 @@
                     <div class="admin-media-card__path">${formatDateTime(entry.savedAt)}</div>
                     <div class="admin-history-card__meta">
                         <span>${entry.action === 'publish' ? 'Отметка публикации' : 'Сохранение'}</span>
-                        <span>${entry.savedBy || 'local'}</span>
+                        <span>${entry.savedBy === 'local' ? 'Этот компьютер' : (entry.savedBy || '—')}</span>
                         <span>${entry.label || contentConfigs[state.activeKey].label}</span>
                     </div>
                     ${entry.data ? `
@@ -3574,11 +3593,11 @@
     function getSectionSpecificSearchExamples(sectionKey) {
         const examples = {
             site: 'логотип, меню, телефоны, футер',
-            home: 'hero, направления, форма, факты',
-            catalog: 'группы, бренды, CTA',
-            catalogPanels: 'откатные, калитки, FAQ, палитра, товары',
-            servicePages: 'быстрые ссылки, карточки услуг, FAQ',
-            automation: 'товары, hero, комплект, CTA',
+            home: 'первый экран, направления, форма, факты',
+            catalog: 'группы, бренды, нижний блок связи',
+            catalogPanels: 'откатные, калитки, вопросы, палитра, товары',
+            servicePages: 'быстрые ссылки, карточки услуг, вопросы',
+            automation: 'товары, первый экран, комплект, кнопки',
             prices: 'факторы, калькулятор, гарантия',
             paymentDocuments: 'этапы, документы, доверие',
             contacts: 'телефоны, карта, форма, ориентиры'
@@ -3612,11 +3631,11 @@
                     target: { sectionKey: 'navigation', focusKeys: ['label', 'href'] }
                 }
             ],
-            home: [
+        home: [
                 {
                     icon: 'fa-heading',
                     title: 'Поменять заголовок на главной',
-                    text: 'Сразу переводит к главному hero-блоку и его заголовку.',
+                    text: 'Сразу переводит к первому экрану и его заголовку.',
                     kind: 'focus',
                     target: { sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'] }
                 },
@@ -3630,7 +3649,7 @@
                 {
                     icon: 'fa-paper-plane',
                     title: 'Поправить форму заявки',
-                    text: 'Открывает блок заявки с кнопками связи и формой.',
+                    text: 'Открывает блок заявки с кнопками связи и встроенной формой.',
                     kind: 'focus',
                     target: { sectionKey: 'request', focusKeys: ['formTitle', 'quickActions', 'iframeSrc'] }
                 }
@@ -3646,7 +3665,7 @@
                 {
                     icon: 'fa-bullhorn',
                     title: 'Поправить нижний призыв',
-                    text: 'Открывает нижний CTA каталога и его кнопки.',
+                    text: 'Открывает нижний блок связи каталога и его кнопки.',
                     kind: 'focus',
                     target: { sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
                 },
@@ -3715,7 +3734,7 @@
                 {
                     icon: 'fa-bolt',
                     title: 'Поправить общую страницу автоматики',
-                    text: 'Открывает landing, карточки комплектов и guide-блок.',
+                    text: 'Открывает первый экран, карточки комплектов и блок подсказок по выбору.',
                     kind: 'focus',
                     target: { sectionKey: 'swingLanding', focusKeys: ['hero', 'products', 'guide', 'cta'] }
                 },
@@ -3768,7 +3787,7 @@
                 {
                     icon: 'fa-paper-plane',
                     title: 'Поправить кнопки связи',
-                    text: 'Переходит к блоку быстрой связи и форме.',
+                    text: 'Переходит к блоку быстрой связи и встроенной форме.',
                     kind: 'focus',
                     target: { sectionKey: 'connect', focusKeys: ['actions', 'iframeSrc', 'notice'] }
                 },
@@ -3797,7 +3816,7 @@
                 },
                 {
                     icon: 'fa-circle-question',
-                    title: 'Проверить гарантию и FAQ',
+                    title: 'Проверить гарантию и вопросы',
                     text: 'Открывает гарантию и ответы на частые вопросы.',
                     kind: 'guide',
                     guideIndex: 1
@@ -3817,7 +3836,7 @@
                 { icon: 'fa-building', title: 'Только футер', text: 'Показывает только нижний блок компании и полезные ссылки.', fieldKeys: ['footer'] }
             ],
             home: [
-                { icon: 'fa-house', title: 'Только первый экран', text: 'Hero-блок без остальной страницы.', fieldKeys: ['hero'] },
+                { icon: 'fa-house', title: 'Только первый экран', text: 'Первый экран без остальных блоков страницы.', fieldKeys: ['hero'] },
                 { icon: 'fa-layer-group', title: 'Только направления', text: 'Только два больших блока на главной.', fieldKeys: ['directions'] },
                 { icon: 'fa-shield-heart', title: 'Только доверие', text: 'Только блок с преимуществами и фактами.', fieldKeys: ['trust'] },
                 { icon: 'fa-paper-plane', title: 'Только форма заявки', text: 'Только заявка, контакты и быстрые кнопки.', fieldKeys: ['request'] }
@@ -3825,7 +3844,7 @@
             catalog: [
                 { icon: 'fa-folder-tree', title: 'Только группы каталога', text: 'Только верхние группы каталога.', fieldKeys: ['groups'] },
                 { icon: 'fa-users', title: 'Только партнёры', text: 'Только блок брендов и партнёров.', fieldKeys: ['partners'] },
-                { icon: 'fa-bullhorn', title: 'Только нижний CTA', text: 'Только призыв и кнопки внизу каталога.', fieldKeys: ['cta'] }
+                { icon: 'fa-bullhorn', title: 'Только нижний блок связи', text: 'Только призыв и кнопки внизу каталога.', fieldKeys: ['cta'] }
             ],
             catalogPanels: [
                 { icon: 'fa-warehouse', title: 'Только ворота и каркасы', text: 'Оставляет только откатные, распашные и их каркасы.', fieldKeys: ['sliding', 'slidingFrame', 'swing', 'swingFrame'] },
@@ -3836,27 +3855,27 @@
             servicePages: [
                 { icon: 'fa-spray-can-sparkles', title: 'Только порошковая покраска', text: 'Показывает только раздел порошковой покраски.', fieldKeys: ['powderCoating'] },
                 { icon: 'fa-wind', title: 'Только пескоструй', text: 'Показывает только страницу пескоструйной обработки.', fieldKeys: ['sandblasting'] },
-                { icon: 'fa-link', title: 'Только общие кнопки', text: 'Оставляет только общие CTA для карточек услуг.', fieldKeys: ['sharedCta'] }
+                { icon: 'fa-link', title: 'Только общие кнопки', text: 'Оставляет только общий блок кнопок для карточек услуг.', fieldKeys: ['sharedCta'] }
             ],
             automation: [
-                { icon: 'fa-bolt', title: 'Только landing автоматики', text: 'Только основная страница автоматики и комплектов.', fieldKeys: ['swingLanding'] },
+                { icon: 'fa-bolt', title: 'Только основной экран автоматики', text: 'Только основная страница автоматики и комплектов.', fieldKeys: ['swingLanding'] },
                 { icon: 'fa-gears', title: 'Только комплектующие', text: 'Только страница комплектующих.', fieldKeys: ['slidingComponentsPage'] },
                 { icon: 'fa-box-open', title: 'Только товары', text: 'Только страницы отдельных товаров и общие кнопки.', fieldKeys: ['productPages', 'sharedActions'] }
             ],
             paymentDocuments: [
                 { icon: 'fa-file-signature', title: 'Только верхний блок доверия', text: 'Только главный блок про договор и документы.', fieldKeys: ['hero'] },
                 { icon: 'fa-list-check', title: 'Только этапы работы', text: 'Только пошаговое описание процесса.', fieldKeys: ['workflow'] },
-                { icon: 'fa-phone-volume', title: 'Только нижний CTA', text: 'Только завершающий призыв и кнопки связи.', fieldKeys: ['cta'] }
+                { icon: 'fa-phone-volume', title: 'Только нижний блок связи', text: 'Только завершающий призыв и кнопки связи.', fieldKeys: ['cta'] }
             ],
             contacts: [
-                { icon: 'fa-address-book', title: 'Только основные контакты', text: 'Только hero и основной блок контактов.', fieldKeys: ['hero', 'overview'] },
-                { icon: 'fa-paper-plane', title: 'Только быстрая связь', text: 'Только форма и быстрые кнопки.', fieldKeys: ['connect'] },
+                { icon: 'fa-address-book', title: 'Только основные контакты', text: 'Только первый экран и основной блок контактов.', fieldKeys: ['hero', 'overview'] },
+                { icon: 'fa-paper-plane', title: 'Только быстрая связь', text: 'Только встроенная форма и быстрые кнопки.', fieldKeys: ['connect'] },
                 { icon: 'fa-map-location-dot', title: 'Только карта и ориентиры', text: 'Только нижний блок с картой и маршрутом.', fieldKeys: ['location'] }
             ],
             prices: [
                 { icon: 'fa-tags', title: 'Только факторы цены', text: 'Показывает только карточки факторов стоимости.', fieldKeys: ['factors'] },
                 { icon: 'fa-calculator', title: 'Только калькулятор', text: 'Оставляет только калькулятор и телефоны рядом.', fieldKeys: ['calculator'] },
-                { icon: 'fa-circle-question', title: 'Только гарантия и вопросы', text: 'Показывает гарантию, FAQ и нижние кнопки.', fieldKeys: ['guarantee', 'cta', 'faq'] }
+                { icon: 'fa-circle-question', title: 'Только гарантия и вопросы', text: 'Показывает гарантию, вопросы с ответами и нижние кнопки.', fieldKeys: ['guarantee', 'cta', 'faq'] }
             ]
         };
 
@@ -3868,7 +3887,7 @@
             {
                 icon: 'fa-heading',
                 title: 'Поменять заголовок на главной',
-                text: 'Сразу переведёт в главный экран и покажет только hero-блок.',
+                text: 'Сразу переведёт в первый экран и покажет только его.',
                 sectionKey: 'home',
                 kind: 'screen',
                 screenIndex: 0,
@@ -4008,7 +4027,7 @@
                 { icon: 'fa-building', title: 'Обновить футер', text: 'Переписать блок о компании и полезные ссылки.', sectionKey: 'footer', focusKeys: ['companyTitle', 'usefulTitle'] }
             ],
             home: [
-                { icon: 'fa-bolt', title: 'Поменять главный экран', text: 'Обновить заголовок, подзаголовок и сильную подпись в hero-блоке.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'] },
+                { icon: 'fa-bolt', title: 'Поменять главный экран', text: 'Обновить заголовок, подзаголовок и сильную подпись в первом экране.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'] },
                 { icon: 'fa-layer-group', title: 'Обновить большие блоки', text: 'Поменять тексты и фото в двух главных направлениях на главной.', sectionKey: 'directions', focusKeys: ['sectionTitle', 'sectionSubtitle', 'title'] },
                 { icon: 'fa-shield-heart', title: 'Подправить доверие', text: 'Изменить факты, преимущества и причины выбора компании.', sectionKey: 'trust', focusKeys: ['eyebrow', 'title', 'cards'] },
                 { icon: 'fa-paper-plane', title: 'Обновить форму заявки', text: 'Поменять подписи, контакты и быстрые кнопки рядом с формой.', sectionKey: 'request', focusKeys: ['formTitle', 'contactTitle', 'quickActions'] }
@@ -4016,32 +4035,32 @@
             catalog: [
                 { icon: 'fa-folder-tree', title: 'Изменить группы каталога', text: 'Поменять названия и описания основных групп страницы каталога.', sectionKey: 'groups', focusKeys: ['title', 'text'] },
                 { icon: 'fa-users', title: 'Обновить бренды', text: 'Подправить блок партнёров и подписи брендов.', sectionKey: 'partners', focusKeys: ['title'] },
-                { icon: 'fa-bullhorn', title: 'Поменять нижний CTA', text: 'Скорректировать призыв и контакты внизу страницы каталога.', sectionKey: 'cta', focusKeys: ['title', 'text'] }
+                { icon: 'fa-bullhorn', title: 'Поменять нижний блок связи', text: 'Скорректировать призыв и контакты внизу страницы каталога.', sectionKey: 'cta', focusKeys: ['title', 'text'] }
             ],
             catalogPanels: [
-                { icon: 'fa-truck-ramp-box', title: 'Откатные ворота', text: 'Быстро открыть и править тексты, характеристики и CTA этого блока.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'products'] },
+                { icon: 'fa-truck-ramp-box', title: 'Откатные ворота', text: 'Быстро открыть и править тексты, характеристики и кнопки этого блока.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'products'] },
                 { icon: 'fa-door-open', title: 'Распашные ворота', text: 'Перейти сразу к карточке распашных ворот и её описанию.', sectionKey: 'swing', focusKeys: ['title', 'paragraphs', 'cards'] },
                 { icon: 'fa-person-shelter', title: 'Калитки и заборы', text: 'Поменять фото и тексты в карточках калиток и заборов.', sectionKey: 'wicket', focusKeys: ['title', 'src', 'paragraphs'] },
                 { icon: 'fa-robot', title: 'Автоматика и комплектующие', text: 'Сразу перейти к техничным карточкам автоматики.', sectionKey: 'automationSliding', focusKeys: ['title', 'products', 'specs'] }
             ],
             servicePages: [
-                { icon: 'fa-spray-can-sparkles', title: 'Порошковая покраска', text: 'Поменять шапку, карточки услуг и нижний CTA на странице покраски.', sectionKey: 'powderCoating', focusKeys: ['title', 'sections', 'cta'] },
+                { icon: 'fa-spray-can-sparkles', title: 'Порошковая покраска', text: 'Поменять шапку, карточки услуг и нижний блок связи на странице покраски.', sectionKey: 'powderCoating', focusKeys: ['title', 'sections', 'cta'] },
                 { icon: 'fa-wind', title: 'Пескоструй', text: 'Открыть страницу пескоструйной обработки и её ключевые блоки.', sectionKey: 'sandblasting', focusKeys: ['title', 'sections', 'beforeAfter'] },
                 { icon: 'fa-link', title: 'Общие кнопки карточек', text: 'Поменять общие подписи и ссылки на кнопках услуг.', sectionKey: 'sharedCta', focusKeys: ['label', 'href'] }
             ],
             prices: [
                 { icon: 'fa-calculator', title: 'Факторы цены', text: 'Подправить карточки с тем, от чего зависит стоимость.', sectionKey: 'factors', focusKeys: ['title', 'text'] },
                 { icon: 'fa-file-invoice', title: 'Калькулятор и пояснение', text: 'Изменить верхнюю часть калькулятора и тексты рядом с ним.', sectionKey: 'calculator', focusKeys: ['title', 'text'] },
-                { icon: 'fa-circle-question', title: 'FAQ и гарантия', text: 'Быстро перейти к вопросам и гарантийным блокам.', sectionKey: 'guarantee', focusKeys: ['title', 'text', 'badge'] }
+                { icon: 'fa-circle-question', title: 'Вопросы и гарантия', text: 'Быстро перейти к вопросам с ответами и гарантийным блокам.', sectionKey: 'guarantee', focusKeys: ['title', 'text', 'badge'] }
             ],
             paymentDocuments: [
                 { icon: 'fa-file-signature', title: 'Официальное оформление', text: 'Поменять блоки про договор, оплату и документы.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'] },
                 { icon: 'fa-list-check', title: 'Этапы работы', text: 'Изменить понятные шаги по оформлению и сопровождению.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'] },
-                { icon: 'fa-phone-volume', title: 'Связь и CTA', text: 'Подправить кнопки и призыв внизу страницы.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
+                { icon: 'fa-phone-volume', title: 'Связь и нижний блок', text: 'Подправить кнопки и призыв внизу страницы.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
             ],
             contacts: [
                 { icon: 'fa-mobile-screen-button', title: 'Телефоны и менеджер', text: 'Поменять верхний контактный блок и данные менеджера.', sectionKey: 'overview', focusKeys: ['title', 'items', 'manager'] },
-                { icon: 'fa-paper-plane', title: 'Быстрая связь', text: 'Подправить кнопки связи и тексты рядом с формой.', sectionKey: 'connect', focusKeys: ['title', 'actions', 'iframeSrc'] },
+                { icon: 'fa-paper-plane', title: 'Быстрая связь', text: 'Подправить кнопки связи и тексты рядом со встроенной формой.', sectionKey: 'connect', focusKeys: ['title', 'actions', 'iframeSrc'] },
                 { icon: 'fa-map-location-dot', title: 'Карта и ориентиры', text: 'Обновить карту, ориентиры и блок как нас найти.', sectionKey: 'location', focusKeys: ['title', 'mapSrc', 'badges'] }
             ]
         };
@@ -4091,15 +4110,15 @@
                 {
                     icon: 'fa-house-chimney-window',
                     title: 'Главная: первый экран и направления',
-                    summary: 'Помогает быстро обновить hero-блок и два больших направления на главной странице.',
+                    summary: 'Помогает быстро обновить первый экран и два больших направления на главной странице.',
                     result: 'Пользователь сразу увидит новый заголовок, понятный акцент и свежие карточки направлений.',
                     tips: [
-                        'Сначала правь hero, а затем большие карточки направлений.',
+                        'Сначала правь первый экран, а затем большие карточки направлений.',
                         'Если меняешь фото, открой предпросмотр страницы и проверь, как они смотрятся в слайде.',
                         'Лучше держать главный заголовок коротким, а смысл уводить в подзаголовок.'
                     ],
                     steps: [
-                        { title: 'Поменять главный экран', text: 'Обнови главный заголовок, подзаголовок и сильную подпись в верхнем hero-блоке.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'], focusLabel: 'Главный заголовок и сильная подпись' },
+                        { title: 'Поменять главный экран', text: 'Обнови главный заголовок, подзаголовок и сильную подпись в первом экране.', sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'], focusLabel: 'Главный заголовок и сильная подпись' },
                         { title: 'Проверить преимущества рядом', text: 'Если нужно, быстро подправь короткий список услуг и преимущества под заголовком.', sectionKey: 'hero', focusKeys: ['bulletPoints', 'features'], focusLabel: 'Короткий список услуг и преимущества' },
                         { title: 'Обновить блоки направлений', text: 'Перейди к двум большим карточкам и поправь тексты, факты, кнопки и фото.', sectionKey: 'directions', focusKeys: ['sectionTitle', 'sectionSubtitle', 'slides', 'items', 'actions'], focusLabel: 'Карточки направлений, слайды и кнопки' }
                     ]
@@ -4116,7 +4135,7 @@
                     steps: [
                         { title: 'Обновить блок доверия', text: 'Поменяй заголовок, акцентные факты и карточки преимуществ.', sectionKey: 'trust', focusKeys: ['eyebrow', 'title', 'highlights', 'cards'], focusLabel: 'Заголовок, факты и карточки преимуществ' },
                         { title: 'Подправить форму заявки', text: 'Проверь заголовок формы, вводный текст и быструю подсказку над ней.', sectionKey: 'request', focusKeys: ['formEyebrow', 'formTitle', 'formNotice'], focusLabel: 'Подписи формы и вводный текст' },
-                        { title: 'Сверить контакты рядом с формой', text: 'В конце выровняй быстрые кнопки, контакты и iframe формы.', sectionKey: 'request', focusKeys: ['contactTitle', 'contactLines', 'quickActions', 'iframeSrc'], focusLabel: 'Контакты, кнопки связи и iframe формы' }
+                        { title: 'Сверить контакты рядом с формой', text: 'В конце выровняй быстрые кнопки, контакты и встроенную форму.', sectionKey: 'request', focusKeys: ['contactTitle', 'contactLines', 'quickActions', 'iframeSrc'], focusLabel: 'Контакты, кнопки связи и встроенная форма' }
                     ]
                 }
             ];
@@ -4125,7 +4144,7 @@
                 {
                     icon: 'fa-folder-tree',
                     title: 'Структура каталога',
-                    summary: 'Хороший сценарий, если нужно обновить группы каталога, их подписи и общий CTA внизу страницы.',
+                    summary: 'Хороший сценарий, если нужно обновить группы каталога, их подписи и общий нижний блок связи внизу страницы.',
                     result: 'Каталог сохранит понятную структуру, а посетитель быстрее найдёт нужную группу.',
                     tips: [
                         'Группы лучше называть коротко и так же, как их видят люди в меню.',
@@ -4134,7 +4153,7 @@
                     steps: [
                         { title: 'Проверить группы каталога', text: 'Обнови названия основных групп и короткие описания в верхней части каталога.', sectionKey: 'groups', focusKeys: ['title', 'text'], focusLabel: 'Названия групп и короткие описания' },
                         { title: 'Подправить блок партнёров', text: 'Если меняются бренды или подача автоматики, доведи это в партнерском блоке.', sectionKey: 'partners', focusKeys: ['title', 'items'], focusLabel: 'Заголовок и карточки партнёров' },
-                        { title: 'Финальный CTA каталога', text: 'Проверь нижний призыв, чтобы после правок каталог заканчивался понятным действием.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний призыв и кнопки' }
+                        { title: 'Финальный блок связи каталога', text: 'Проверь нижний призыв, чтобы после правок каталог заканчивался понятным действием.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний призыв и кнопки' }
                     ]
                 }
             ];
@@ -4144,17 +4163,17 @@
                     icon: 'fa-warehouse',
                     title: 'Ворота и каркасы',
                     summary: 'Пошагово проводит по карточкам откатных, распашных ворот и их каркасов.',
-                    result: 'Тексты, характеристики и CTA в воротах и каркасах будут выровнены без блуждания по длинной форме.',
+                    result: 'Тексты, характеристики и кнопки в воротах и каркасах будут выровнены без блуждания по длинной форме.',
                     tips: [
                         'Сначала правь готовые ворота, потом каркасы — так проще держать структуру в голове.',
                         'Если меняешь фото, проверь стартовый кадр и порядок слайдов.',
                         'Короткие характеристики лучше не превращать в длинные абзацы.'
                     ],
                     steps: [
-                        { title: 'Откатные ворота', text: 'Зайди в карточку откатных ворот и обнови заголовок, описание и ключевые карточки.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Заголовок, описание, карточки и CTA' },
-                        { title: 'Каркас откатных ворот', text: 'Проверь описание каркаса, характеристики и ссылку на комплектующие.', sectionKey: 'slidingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и CTA' },
+                        { title: 'Откатные ворота', text: 'Зайди в карточку откатных ворот и обнови заголовок, описание и ключевые карточки.', sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Заголовок, описание, карточки и кнопки' },
+                        { title: 'Каркас откатных ворот', text: 'Проверь описание каркаса, характеристики и ссылку на комплектующие.', sectionKey: 'slidingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и кнопки' },
                         { title: 'Распашные ворота', text: 'Перейди к распашным воротам и выровняй текст, характеристики и нижний призыв.', sectionKey: 'swing', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Текст, характеристики и призыв' },
-                        { title: 'Каркас распашных ворот', text: 'В конце проверь каркас распашных ворот, чтобы он был согласован по подаче с основным разделом.', sectionKey: 'swingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и CTA' }
+                        { title: 'Каркас распашных ворот', text: 'В конце проверь каркас распашных ворот, чтобы он был согласован по подаче с основным разделом.', sectionKey: 'swingFrame', focusKeys: ['title', 'paragraphs', 'specGroups', 'cta'], focusLabel: 'Описание, характеристики и кнопки' }
                     ]
                 },
                 {
@@ -4169,8 +4188,8 @@
                     steps: [
                         { title: 'Калитки', text: 'Поменяй стартовое фото, краткое описание и преимущества калиток.', sectionKey: 'wicket', focusKeys: ['title', 'paragraphs', 'cards', 'src'], focusLabel: 'Фото, описание и карточки преимуществ' },
                         { title: 'Профнастил и металлосайдинг', text: 'Пройди карточки профнастила и сайдинга, выровняй описание, характеристики и блоки цвета.', sectionKey: 'fenceProfnastil', focusKeys: ['title', 'paragraphs', 'palette', 'cards'], focusLabel: 'Описание, характеристики и блок цвета' },
-                        { title: 'Штакетник и жалюзи', text: 'Потом открой штакетник и жалюзи, чтобы довести варианты заполнения и стоимость.', sectionKey: 'fencePicket', focusKeys: ['title', 'paragraphs', 'cards', 'faq'], focusLabel: 'Варианты заполнения, стоимость и FAQ' },
-                        { title: 'Финальная проверка жалюзи', text: 'В завершение отдельно просмотри карточку жалюзи и её нижний CTA.', sectionKey: 'fenceLouver', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Основной текст и CTA' }
+                        { title: 'Штакетник и жалюзи', text: 'Потом открой штакетник и жалюзи, чтобы довести варианты заполнения и стоимость.', sectionKey: 'fencePicket', focusKeys: ['title', 'paragraphs', 'cards', 'faq'], focusLabel: 'Варианты заполнения, стоимость и вопросы с ответами' },
+                        { title: 'Финальная проверка жалюзи', text: 'В завершение отдельно просмотри карточку жалюзи и её нижний блок связи.', sectionKey: 'fenceLouver', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Основной текст и кнопки' }
                     ]
                 },
                 {
@@ -4183,9 +4202,9 @@
                         'Комплектующие лучше держать короче и по делу, без перегруза списками.'
                     ],
                     steps: [
-                        { title: 'Автоматика для откатных ворот', text: 'Открой карточку откатной автоматики и проверь шаги выбора, товары и CTA.', sectionKey: 'automationSliding', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Шаги выбора, товары и CTA' },
-                        { title: 'Автоматика для распашных ворот', text: 'Потом пройди раздел распашной автоматики и выровняй карточки комплектов.', sectionKey: 'automationSwing', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Товары, описание и CTA' },
-                        { title: 'Комплектующие', text: 'В завершение обнови комплектующие и их техничные блоки.', sectionKey: 'automationComponents', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и CTA' }
+                        { title: 'Автоматика для откатных ворот', text: 'Открой карточку откатной автоматики и проверь шаги выбора, товары и кнопки.', sectionKey: 'automationSliding', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Шаги выбора, товары и кнопки' },
+                        { title: 'Автоматика для распашных ворот', text: 'Потом пройди раздел распашной автоматики и выровняй карточки комплектов.', sectionKey: 'automationSwing', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Товары, описание и кнопки' },
+                        { title: 'Комплектующие', text: 'В завершение обнови комплектующие и их техничные блоки.', sectionKey: 'automationComponents', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и кнопки' }
                     ]
                 },
                 {
@@ -4198,9 +4217,9 @@
                         'После правок проверь, чтобы стартовые фото не спорили между собой.'
                     ],
                     steps: [
-                        { title: 'Секционные ворота', text: 'Проверь тексты, характеристики и CTA у секционных ворот.', sectionKey: 'sectional', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и CTA' },
-                        { title: 'Рольворота и рольставни', text: 'Обнови карточки рольворот и рольставней, чтобы они шли в едином стиле.', sectionKey: 'roller', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Текст, характеристики и CTA' },
-                        { title: 'Раздвижные решётки', text: 'Финально открой металлические раздвижные решётки и проверь главный кадр, текст и блок преимуществ.', sectionKey: 'grilles', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Главный кадр, текст и CTA' }
+                        { title: 'Секционные ворота', text: 'Проверь тексты, характеристики и кнопки у секционных ворот.', sectionKey: 'sectional', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и кнопки' },
+                        { title: 'Рольворота и рольставни', text: 'Обнови карточки рольворот и рольставней, чтобы они шли в едином стиле.', sectionKey: 'roller', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Текст, характеристики и кнопки' },
+                        { title: 'Раздвижные решётки', text: 'Финально открой металлические раздвижные решётки и проверь главный кадр, текст и блок преимуществ.', sectionKey: 'grilles', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Главный кадр, текст и кнопки' }
                     ]
                 }
             ];
@@ -4209,16 +4228,16 @@
                 {
                     icon: 'fa-spray-can-sparkles',
                     title: 'Порошковая покраска',
-                    summary: 'Быстрый мастер по шапке страницы, карточкам услуг, FAQ и нижнему CTA покраски.',
+                    summary: 'Быстрый мастер по шапке страницы, карточкам услуг, вопросам и нижнему блоку связи покраски.',
                     result: 'Страница покраски обновится как цельный маршрут, а не набор разрозненных блоков.',
                     tips: [
                         'В шапке держи обещание коротким, а детали уводи в карточки услуг.',
-                        'После правок CTA проверь телефоны и кнопки.'
+                        'После правок нижнего блока связи проверь телефоны и кнопки.'
                     ],
                     steps: [
                         { title: 'Шапка и быстрые ссылки', text: 'Обнови заголовок страницы и верхние быстрые ссылки.', sectionKey: 'powderCoating', focusKeys: ['header', 'quickNav'], focusLabel: 'Шапка страницы и быстрые ссылки' },
                         { title: 'Карточки услуг', text: 'Пройди карточки услуг, преимущества и шаги процесса.', sectionKey: 'powderCoating', focusKeys: ['sections', 'advantages', 'processSteps'], focusLabel: 'Карточки услуг, преимущества и шаги' },
-                        { title: 'FAQ и CTA', text: 'Финально обнови FAQ и нижний блок связи.', sectionKey: 'powderCoating', focusKeys: ['faq', 'cta'], focusLabel: 'FAQ и нижний CTA' }
+                        { title: 'Вопросы и нижний блок', text: 'Финально обнови вопросы и ответы и нижний блок связи.', sectionKey: 'powderCoating', focusKeys: ['faq', 'cta'], focusLabel: 'Вопросы и ответы и нижний блок связи' }
                     ]
                 },
                 {
@@ -4233,7 +4252,7 @@
                     steps: [
                         { title: 'Шапка и быстрые ссылки', text: 'Открой верх страницы и поправь заголовок, подзаголовок и навигацию.', sectionKey: 'sandblasting', focusKeys: ['header', 'quickNav'], focusLabel: 'Шапка страницы и быстрые ссылки' },
                         { title: 'Карточки услуг и до/после', text: 'Потом пройди карточки услуг и блок сравнения.', sectionKey: 'sandblasting', focusKeys: ['sections', 'beforeAfter'], focusLabel: 'Карточки услуг и блок до/после' },
-                        { title: 'FAQ и CTA', text: 'В конце проверь вопросы и блок связи.', sectionKey: 'sandblasting', focusKeys: ['faq', 'cta'], focusLabel: 'FAQ и нижний CTA' }
+                        { title: 'Вопросы и нижний блок', text: 'В конце проверь вопросы и ответы и блок связи.', sectionKey: 'sandblasting', focusKeys: ['faq', 'cta'], focusLabel: 'Вопросы и ответы и нижний блок связи' }
                     ]
                 }
             ];
@@ -4243,13 +4262,13 @@
                     icon: 'fa-bolt',
                     title: 'Страница автоматики',
                     summary: 'Мастер по общей странице автоматики, комплектующим и карточкам отдельных товаров.',
-                    result: 'Автоматика будет редактироваться понятными кусками: landing, комплектующие, товары.',
+                    result: 'Автоматика будет редактироваться понятными кусками: первый экран, комплектующие, товары.',
                     tips: [
-                        'Landing лучше править сначала: hero, карточки комплектов, guide, CTA.',
+                        'Сначала лучше править первый экран, карточки комплектов, блок подсказок и кнопки.',
                         'Товарные страницы удобнее проходить уже после общей страницы.'
                     ],
                     steps: [
-                        { title: 'Landing распашной автоматики', text: 'Обнови hero, карточки комплектов и guide-блок на основной странице автоматики.', sectionKey: 'swingLanding', focusKeys: ['hero', 'products', 'guide', 'cta'], focusLabel: 'Hero, карточки комплектов, guide и CTA' },
+                        { title: 'Основной экран автоматики', text: 'Обнови первый экран, карточки комплектов и блок подсказок на основной странице автоматики.', sectionKey: 'swingLanding', focusKeys: ['hero', 'products', 'guide', 'cta'], focusLabel: 'Первый экран, карточки комплектов, подсказки и кнопки' },
                         { title: 'Комплектующие для откатных ворот', text: 'Перейди к отдельной странице комплектующих и обнови её описание и блоки характеристик.', sectionKey: 'slidingComponentsPage', focusKeys: ['title', 'description', 'sections'], focusLabel: 'Описание и блоки характеристик' },
                         { title: 'Страницы отдельных товаров', text: 'Финально пройди карточки отдельных товаров и общие кнопки.', sectionKey: 'productPages', focusKeys: ['title', 'description', 'specs'], focusLabel: 'Название, описание и характеристики товаров' }
                     ]
@@ -4260,7 +4279,7 @@
                 {
                     icon: 'fa-file-signature',
                     title: 'Оплата и документы',
-                    summary: 'Собранный мастер по странице доверия: официальное оформление, этапы и нижний CTA.',
+                    summary: 'Собранный мастер по странице доверия: официальное оформление, этапы и нижний блок связи.',
                     result: 'Страница будет держать один понятный сценарий: как оформляется заказ и какие документы получает клиент.',
                     tips: [
                         'Лучше не перегружать эту страницу техническими формулировками.',
@@ -4269,7 +4288,7 @@
                     steps: [
                         { title: 'Главный блок доверия', text: 'Проверь заголовок, подзаголовок и карточки про договор, оплату и отчётность.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'], focusLabel: 'Заголовок, подзаголовок и карточки' },
                         { title: 'Этапы оформления', text: 'Потом выровняй шаги процесса и их формулировки.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'], focusLabel: 'Шаги оформления и пояснения' },
-                        { title: 'Нижний CTA и связь', text: 'В конце проверь завершающий призыв и кнопки связи.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний CTA и кнопки связи' }
+                        { title: 'Нижний блок и связь', text: 'В конце проверь завершающий призыв и кнопки связи.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний блок связи и кнопки' }
                     ]
                 }
             ];
@@ -4278,14 +4297,14 @@
                 {
                     icon: 'fa-address-book',
                     title: 'Контакты: верх и основные данные',
-                    summary: 'Подойдёт, когда нужно быстро обновить hero страницы контактов и основной блок с менеджером и телефонами.',
+                    summary: 'Подойдёт, когда нужно быстро обновить первый экран страницы контактов и основной блок с менеджером и телефонами.',
                     result: 'Контактная страница будет сразу выглядеть аккуратно и не потеряет главные номера и адрес.',
                     tips: [
-                        'На этой странице лучше сначала обновлять hero, потом основной контактный блок.',
+                        'На этой странице лучше сначала обновлять первый экран, потом основной контактный блок.',
                         'Если меняется один номер, проверь, не остался ли старый в форме или кнопках.'
                     ],
                     steps: [
-                        { title: 'Hero страницы контактов', text: 'Поменяй верхний заголовок, подзаголовок и факты в hero-блоке.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'facts'], focusLabel: 'Верхний заголовок, подзаголовок и факты' },
+                        { title: 'Первый экран контактов', text: 'Поменяй верхний заголовок, подзаголовок и факты в первом экране.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'facts'], focusLabel: 'Верхний заголовок, подзаголовок и факты' },
                         { title: 'Основные контакты и менеджер', text: 'Обнови телефоны, адрес, карточки контактов и данные менеджера.', sectionKey: 'overview', focusKeys: ['items', 'manager', 'hours'], focusLabel: 'Карточки контактов, менеджер и режим работы' },
                         { title: 'Финальная сверка', text: 'После правок открой страницу и проверь, что номера и адрес везде совпадают.', sectionKey: 'overview', focusKeys: ['title', 'text'], focusLabel: 'Заголовок и основной текст блока' }
                     ]
@@ -4297,10 +4316,10 @@
                     result: 'Блок быстрой связи и нижний маршрут будут собраны и не станут спорить между собой.',
                     tips: [
                         'Форму и быстрые кнопки лучше менять вместе, чтобы они оставались цельным сценарием.',
-                        'После правок карты проверь, что iframe открывается и ориентиры звучат понятно.'
+                        'После правок карты проверь, что встроенная карта открывается и ориентиры звучат понятно.'
                     ],
                     steps: [
-                        { title: 'Быстрая связь и форма', text: 'Проверь заголовок, заметку, кнопки и iframe формы.', sectionKey: 'connect', focusKeys: ['title', 'notice', 'actions', 'iframeSrc'], focusLabel: 'Заголовок, кнопки и iframe формы' },
+                        { title: 'Быстрая связь и форма', text: 'Проверь заголовок, заметку, кнопки и встроенную форму.', sectionKey: 'connect', focusKeys: ['title', 'notice', 'actions', 'iframeSrc'], focusLabel: 'Заголовок, кнопки и встроенная форма' },
                         { title: 'Карта и бейджи', text: 'Открой нижний блок и проверь карту, короткие бейджи и ориентиры.', sectionKey: 'location', focusKeys: ['title', 'mapSrc', 'badges', 'points'], focusLabel: 'Карта, бейджи и ориентиры' },
                         { title: 'Завершающий маршрут', text: 'В конце ещё раз открой страницу и проверь, что маршрут читается легко и без перегруза.', sectionKey: 'location', focusKeys: ['text'], focusLabel: 'Описание нижнего блока' }
                     ]
@@ -4320,7 +4339,7 @@
                     steps: [
                         { title: 'Шапка страницы', text: 'Проверь главный заголовок и подзаголовок на странице цен.', sectionKey: 'header', focusKeys: ['title', 'subtitle'], focusLabel: 'Главный заголовок и подзаголовок' },
                         { title: 'Факторы стоимости', text: 'Потом пройди карточки факторов, их заголовки и описания.', sectionKey: 'factors', focusKeys: ['title', 'items'], focusLabel: 'Заголовок блока и карточки факторов' },
-                        { title: 'Быстрая сверка CTA', text: 'После правок открой низ страницы и проверь, что кнопки остаются логичным продолжением страницы.', sectionKey: 'cta', focusKeys: ['primary', 'secondary'], focusLabel: 'Главная и вторичная кнопки' }
+                        { title: 'Быстрая сверка кнопок', text: 'После правок открой низ страницы и проверь, что кнопки остаются логичным продолжением страницы.', sectionKey: 'cta', focusKeys: ['primary', 'secondary'], focusLabel: 'Главная и вторичная кнопки' }
                     ]
                 },
                 {
@@ -4330,12 +4349,12 @@
                     result: 'Калькулятор и гарантия будут работать как единый блок доверия, а не как отдельные куски.',
                     tips: [
                         'Сначала поправь калькулятор и телефоны, потом переходи к гарантии.',
-                        'FAQ лучше держать коротким и без дублей из верхних блоков.'
+                        'Вопросы и ответы лучше держать короткими и без дублей из верхних блоков.'
                     ],
                     steps: [
                         { title: 'Калькулятор и звонок', text: 'Обнови заголовок, описание, кнопку и телефоны рядом с калькулятором.', sectionKey: 'calculator', focusKeys: ['title', 'text', 'action', 'phones'], focusLabel: 'Калькулятор, кнопка и телефоны' },
                         { title: 'Гарантия', text: 'Проверь плашку, заголовок и пояснение в блоке гарантии.', sectionKey: 'guarantee', focusKeys: ['badge', 'title', 'text'], focusLabel: 'Плашка, заголовок и текст гарантии' },
-                        { title: 'FAQ страницы', text: 'В конце пройди вопросы и ответы, чтобы закрыть частые возражения клиента.', sectionKey: 'faq', focusKeys: ['title', 'items'], focusLabel: 'FAQ и список вопросов' }
+                        { title: 'Вопросы и ответы страницы', text: 'В конце пройди вопросы и ответы, чтобы закрыть частые возражения клиента.', sectionKey: 'faq', focusKeys: ['title', 'items'], focusLabel: 'Вопросы и ответы и список вопросов' }
                     ]
                 }
             ];
