@@ -586,6 +586,11 @@ body.admin-page.admin-guide-open {
     gap: 14px;
 }
 
+.admin-command-center__tasks {
+    display: grid;
+    gap: 14px;
+}
+
 .admin-command-center__scenario-head {
     display: flex;
     justify-content: space-between;
@@ -614,6 +619,12 @@ body.admin-page.admin-guide-open {
 .admin-guides-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.admin-tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
 }
 
@@ -714,6 +725,47 @@ body.admin-page.admin-guide-open {
     color: var(--admin-accent);
     font-size: 12px;
     font-weight: 700;
+}
+
+.admin-task-card {
+    border: 1px solid rgba(47, 111, 199, 0.16);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 255, 0.96));
+    color: var(--admin-text);
+    border-radius: 22px;
+    padding: 18px;
+    text-align: left;
+    cursor: pointer;
+    display: grid;
+    gap: 10px;
+    transition: 0.2s ease;
+    box-shadow: var(--admin-shadow);
+}
+
+.admin-task-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(47, 111, 199, 0.28);
+}
+
+.admin-task-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(47, 111, 199, 0.1);
+    color: var(--admin-accent);
+    font-size: 16px;
+}
+
+.admin-task-card strong {
+    font-size: 16px;
+}
+
+.admin-task-card p {
+    margin: 0;
+    color: var(--admin-text-soft);
+    line-height: 1.6;
 }
 
 .admin-command-stat {
@@ -1039,9 +1091,29 @@ body.admin-page.admin-guide-open {
     gap: 8px;
 }
 
+.admin-quick-actions__tasks {
+    display: grid;
+    gap: 8px;
+}
+
 .admin-quick-actions__guide {
     border: 1px solid rgba(47, 111, 199, 0.16);
     background: rgba(47, 111, 199, 0.06);
+    color: var(--admin-text);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+}
+
+.admin-quick-actions__task {
+    border: 1px solid rgba(47, 111, 199, 0.12);
+    background: rgba(255, 255, 255, 0.94);
     color: var(--admin-text);
     border-radius: 16px;
     padding: 12px 14px;
@@ -1945,7 +2017,8 @@ body.admin-page.admin-guide-open {
     }
 
     .admin-scenarios-grid,
-    .admin-guides-grid {
+    .admin-guides-grid,
+    .admin-tasks-grid {
         grid-template-columns: 1fr;
     }
 

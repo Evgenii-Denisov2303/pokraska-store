@@ -3293,6 +3293,7 @@
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
         const stats = collectSectionStats(state.data[sectionKey]);
         const activeIcon = meta.icon || 'fa-pen';
+        const tasks = getSectionQuickTasks(sectionKey);
         const scenarios = getSectionScenarios(sectionKey);
         const guides = getSectionGuides(sectionKey);
 
@@ -3338,6 +3339,26 @@
                     <span>Списков и карточек</span>
                 </article>
             </div>
+            ${tasks.length ? `
+                <div class="admin-command-center__tasks">
+                    <div class="admin-command-center__scenario-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Что хочешь сделать прямо сейчас</p>
+                            <h3>Готовые задачи без поиска по форме</h3>
+                        </div>
+                        <span>Выбери понятное действие, а админка сама откроет нужный блок или запустит мастер.</span>
+                    </div>
+                    <div class="admin-tasks-grid">
+                        ${tasks.map((task, index) => `
+                            <button class="admin-task-card" type="button" data-task-index="${index}">
+                                <span class="admin-task-card__icon"><i class="fas ${task.icon}" aria-hidden="true"></i></span>
+                                <strong>${task.title}</strong>
+                                <p>${task.text}</p>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
             ${scenarios.length ? `
                 <div class="admin-command-center__scenarios">
                     <div class="admin-command-center__scenario-head">
@@ -3391,6 +3412,13 @@
             });
         });
 
+        elements.commandCenter.querySelectorAll('[data-task-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-task-index'));
+                runQuickTask(tasks[index]);
+            });
+        });
+
         elements.commandCenter.querySelectorAll('[data-guide-index]').forEach((button) => {
             button.addEventListener('click', () => {
                 const index = Number(button.getAttribute('data-guide-index'));
@@ -3413,6 +3441,227 @@
         };
 
         return examples[sectionKey] || 'заголовок, текст, фото, кнопки';
+    }
+
+    function getSectionQuickTasks(sectionKey) {
+        const taskMap = {
+            site: [
+                {
+                    icon: 'fa-phone',
+                    title: 'Изменить телефоны и адрес',
+                    text: 'Открывает блок контактов и приводит к номерам, адресу и режиму работы.',
+                    kind: 'focus',
+                    target: { sectionKey: 'contact', focusKeys: ['primaryPhone', 'secondaryPhone', 'address', 'hours'] }
+                },
+                {
+                    icon: 'fa-signature',
+                    title: 'Поменять подпись рядом с логотипом',
+                    text: 'Быстрый переход к названию бренда и подписи в шапке.',
+                    kind: 'focus',
+                    target: { sectionKey: 'brand', focusKeys: ['name', 'tagline'] }
+                },
+                {
+                    icon: 'fa-bars',
+                    title: 'Обновить верхнее меню',
+                    text: 'Сразу открывает список пунктов меню и их ссылок.',
+                    kind: 'focus',
+                    target: { sectionKey: 'navigation', focusKeys: ['label', 'href'] }
+                }
+            ],
+            home: [
+                {
+                    icon: 'fa-heading',
+                    title: 'Поменять заголовок на главной',
+                    text: 'Сразу переводит к главному hero-блоку и его заголовку.',
+                    kind: 'focus',
+                    target: { sectionKey: 'hero', focusKeys: ['titleMain', 'titleSub', 'subtitleStrong'] }
+                },
+                {
+                    icon: 'fa-image',
+                    title: 'Заменить фото в слайде направлений',
+                    text: 'Откроет нужный блок и сразу вызовет выбор изображения.',
+                    kind: 'media',
+                    target: { sectionKey: 'directions', focusKeys: ['gates', 'slides', 'src'] }
+                },
+                {
+                    icon: 'fa-paper-plane',
+                    title: 'Поправить форму заявки',
+                    text: 'Открывает блок заявки с кнопками связи и формой.',
+                    kind: 'focus',
+                    target: { sectionKey: 'request', focusKeys: ['formTitle', 'quickActions', 'iframeSrc'] }
+                }
+            ],
+            catalog: [
+                {
+                    icon: 'fa-folder-tree',
+                    title: 'Поменять группы каталога',
+                    text: 'Быстрый переход к основным группам и их описаниям.',
+                    kind: 'focus',
+                    target: { sectionKey: 'groups', focusKeys: ['title', 'text'] }
+                },
+                {
+                    icon: 'fa-bullhorn',
+                    title: 'Поправить нижний призыв',
+                    text: 'Открывает нижний CTA каталога и его кнопки.',
+                    kind: 'focus',
+                    target: { sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
+                },
+                {
+                    icon: 'fa-map-signs',
+                    title: 'Открыть мастер по каталогу',
+                    text: 'Пошаговый маршрут по основным правкам этой страницы.',
+                    kind: 'guide',
+                    guideIndex: 0
+                }
+            ],
+            catalogPanels: [
+                {
+                    icon: 'fa-truck-ramp-box',
+                    title: 'Поправить откатные ворота',
+                    text: 'Быстрый переход к тексту, характеристикам и карточкам откатных ворот.',
+                    kind: 'focus',
+                    target: { sectionKey: 'sliding', focusKeys: ['title', 'paragraphs', 'cards', 'cta'] }
+                },
+                {
+                    icon: 'fa-image',
+                    title: 'Поменять фото в калитках',
+                    text: 'Открывает карточку калиток и сразу запускает выбор изображения.',
+                    kind: 'media',
+                    target: { sectionKey: 'wicket', focusKeys: ['src', 'title'] }
+                },
+                {
+                    icon: 'fa-fence',
+                    title: 'Поправить заборы',
+                    text: 'Открывает заборы и позволяет пройти их уже по шагам.',
+                    kind: 'guide',
+                    guideIndex: 1
+                },
+                {
+                    icon: 'fa-robot',
+                    title: 'Открыть автоматику',
+                    text: 'Пошаговый маршрут по автоматике и комплектующим.',
+                    kind: 'guide',
+                    guideIndex: 2
+                }
+            ],
+            servicePages: [
+                {
+                    icon: 'fa-spray-can-sparkles',
+                    title: 'Поменять блоки покраски',
+                    text: 'Открывает страницу порошковой покраски и её карточки услуг.',
+                    kind: 'guide',
+                    guideIndex: 0
+                },
+                {
+                    icon: 'fa-wind',
+                    title: 'Поправить пескоструй',
+                    text: 'Пошаговый маршрут по пескоструйной странице.',
+                    kind: 'guide',
+                    guideIndex: 1
+                },
+                {
+                    icon: 'fa-link',
+                    title: 'Обновить общие кнопки',
+                    text: 'Сразу открывает общие кнопки карточек услуг.',
+                    kind: 'focus',
+                    target: { sectionKey: 'sharedCta', focusKeys: ['primary', 'secondary', 'label'] }
+                }
+            ],
+            automation: [
+                {
+                    icon: 'fa-bolt',
+                    title: 'Поправить общую страницу автоматики',
+                    text: 'Открывает landing, карточки комплектов и guide-блок.',
+                    kind: 'focus',
+                    target: { sectionKey: 'swingLanding', focusKeys: ['hero', 'products', 'guide', 'cta'] }
+                },
+                {
+                    icon: 'fa-gears',
+                    title: 'Обновить комплектующие',
+                    text: 'Переходит к странице комплектующих и её спискам.',
+                    kind: 'focus',
+                    target: { sectionKey: 'slidingComponentsPage', focusKeys: ['title', 'sections'] }
+                },
+                {
+                    icon: 'fa-map-signs',
+                    title: 'Открыть мастер по автоматике',
+                    text: 'Пошагово ведёт по всей странице и товарным карточкам.',
+                    kind: 'guide',
+                    guideIndex: 0
+                }
+            ],
+            paymentDocuments: [
+                {
+                    icon: 'fa-file-signature',
+                    title: 'Поправить блок доверия',
+                    text: 'Открывает верхний блок про договор и документы.',
+                    kind: 'focus',
+                    target: { sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'] }
+                },
+                {
+                    icon: 'fa-list-check',
+                    title: 'Обновить этапы оформления',
+                    text: 'Сразу переводит к шагам процесса.',
+                    kind: 'focus',
+                    target: { sectionKey: 'workflow', focusKeys: ['title', 'steps'] }
+                },
+                {
+                    icon: 'fa-map-signs',
+                    title: 'Открыть мастер страницы',
+                    text: 'Пошагово пройти страницу оплаты и документов.',
+                    kind: 'guide',
+                    guideIndex: 0
+                }
+            ],
+            contacts: [
+                {
+                    icon: 'fa-phone',
+                    title: 'Изменить телефоны и менеджера',
+                    text: 'Открывает основной блок контактов и данные менеджера.',
+                    kind: 'focus',
+                    target: { sectionKey: 'overview', focusKeys: ['items', 'manager', 'hours'] }
+                },
+                {
+                    icon: 'fa-paper-plane',
+                    title: 'Поправить кнопки связи',
+                    text: 'Переходит к блоку быстрой связи и форме.',
+                    kind: 'focus',
+                    target: { sectionKey: 'connect', focusKeys: ['actions', 'iframeSrc', 'notice'] }
+                },
+                {
+                    icon: 'fa-map-location-dot',
+                    title: 'Обновить карту и ориентиры',
+                    text: 'Открывает нижний блок с картой и ориентирами.',
+                    kind: 'focus',
+                    target: { sectionKey: 'location', focusKeys: ['mapSrc', 'badges', 'points'] }
+                }
+            ],
+            prices: [
+                {
+                    icon: 'fa-tags',
+                    title: 'Поменять факторы цены',
+                    text: 'Открывает карточки с факторами стоимости.',
+                    kind: 'focus',
+                    target: { sectionKey: 'factors', focusKeys: ['title', 'items'] }
+                },
+                {
+                    icon: 'fa-calculator',
+                    title: 'Поправить калькулятор',
+                    text: 'Переходит к блоку калькулятора и телефонам рядом.',
+                    kind: 'focus',
+                    target: { sectionKey: 'calculator', focusKeys: ['title', 'action', 'phones'] }
+                },
+                {
+                    icon: 'fa-circle-question',
+                    title: 'Проверить гарантию и FAQ',
+                    text: 'Открывает гарантию и ответы на частые вопросы.',
+                    kind: 'guide',
+                    guideIndex: 1
+                }
+            ]
+        };
+
+        return taskMap[sectionKey] || [];
     }
 
     function getSectionScenarios(sectionKey) {
@@ -3588,6 +3837,36 @@
                         { title: 'Штакетник и жалюзи', text: 'Потом открой штакетник и жалюзи, чтобы довести варианты заполнения и стоимость.', sectionKey: 'fencePicket', focusKeys: ['title', 'paragraphs', 'cards', 'faq'], focusLabel: 'Варианты заполнения, стоимость и FAQ' },
                         { title: 'Финальная проверка жалюзи', text: 'В завершение отдельно просмотри карточку жалюзи и её нижний CTA.', sectionKey: 'fenceLouver', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Основной текст и CTA' }
                     ]
+                },
+                {
+                    icon: 'fa-robot',
+                    title: 'Автоматика и комплектующие',
+                    summary: 'Сценарий для техничных карточек автоматики: комплекты, шаги выбора и аксессуары.',
+                    result: 'Карточки автоматики и комплектующих можно поправить без ощущения лабиринта.',
+                    tips: [
+                        'Сначала выровняй блоки выбора, потом карточки комплектов.',
+                        'Комплектующие лучше держать короче и по делу, без перегруза списками.'
+                    ],
+                    steps: [
+                        { title: 'Автоматика для откатных ворот', text: 'Открой карточку откатной автоматики и проверь шаги выбора, товары и CTA.', sectionKey: 'automationSliding', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Шаги выбора, товары и CTA' },
+                        { title: 'Автоматика для распашных ворот', text: 'Потом пройди раздел распашной автоматики и выровняй карточки комплектов.', sectionKey: 'automationSwing', focusKeys: ['title', 'steps', 'products', 'cta'], focusLabel: 'Товары, описание и CTA' },
+                        { title: 'Комплектующие', text: 'В завершение обнови комплектующие и их техничные блоки.', sectionKey: 'automationComponents', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и CTA' }
+                    ]
+                },
+                {
+                    icon: 'fa-shield-halved',
+                    title: 'Гараж и защита',
+                    summary: 'Собирает в одном месте секционные ворота, рольворота, рольставни и раздвижные решётки.',
+                    result: 'Можно быстро пройти весь блок гаража и защиты без промотки всей формы.',
+                    tips: [
+                        'Держи формулировки короткими и одинаково спокойными по тону.',
+                        'После правок проверь, чтобы стартовые фото не спорили между собой.'
+                    ],
+                    steps: [
+                        { title: 'Секционные ворота', text: 'Проверь тексты, характеристики и CTA у секционных ворот.', sectionKey: 'sectional', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Описание, характеристики и CTA' },
+                        { title: 'Рольворота и рольставни', text: 'Обнови карточки рольворот и рольставней, чтобы они шли в едином стиле.', sectionKey: 'roller', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Текст, характеристики и CTA' },
+                        { title: 'Раздвижные решётки', text: 'Финально открой металлические раздвижные решётки и проверь главный кадр, текст и блок преимуществ.', sectionKey: 'grilles', focusKeys: ['title', 'paragraphs', 'cards', 'cta'], focusLabel: 'Главный кадр, текст и CTA' }
+                    ]
                 }
             ];
         case 'servicePages':
@@ -3744,6 +4023,24 @@
         applySectionFilter();
     }
 
+    function findScopedContainer(target) {
+        if (!target?.sectionKey) return elements.form;
+        return openTopLevelSection(state.activeKey, target.sectionKey) || elements.form;
+    }
+
+    function openMediaPickerForTarget(target) {
+        const scopedContainer = findScopedContainer(target);
+        if (!scopedContainer) return false;
+
+        const mediaButton = scopedContainer.querySelector('.admin-field[data-field-key="src"] .admin-field__media-actions button');
+        if (mediaButton instanceof HTMLButtonElement) {
+            mediaButton.click();
+            return true;
+        }
+
+        return false;
+    }
+
     function revealSectionTarget(target) {
         if (!target) return false;
 
@@ -3768,6 +4065,43 @@
         }
 
         return Boolean(scopedContainer);
+    }
+
+    function runQuickTask(task) {
+        if (!task) return;
+
+        if (task.kind === 'guide') {
+            openGuideModal(state.activeKey, task.guideIndex || 0);
+            showAlert(`Открыта задача: ${task.title}.`, 'info');
+            return;
+        }
+
+        if (task.kind === 'media') {
+            revealSectionTarget(task.target);
+            window.setTimeout(() => {
+                if (openMediaPickerForTarget(task.target)) {
+                    showAlert(`Открыта задача: ${task.title}.`, 'info');
+                    return;
+                }
+
+                showAlert('Не удалось автоматически открыть выбор фото. Нужный блок уже раскрыт, фото можно выбрать вручную.', 'info');
+            }, 180);
+            return;
+        }
+
+        if (task.kind === 'focus') {
+            revealSectionTarget(task.target);
+            showAlert(`Открыта задача: ${task.title}.`, 'info');
+            return;
+        }
+
+        if (task.kind === 'preview') {
+            const previewLink = getPrimaryPreviewLink(state.activeKey);
+            if (previewLink) {
+                window.open(previewLink.href, '_blank', 'noopener');
+            }
+            return;
+        }
     }
 
     function getActiveGuide() {
@@ -3981,6 +4315,7 @@
         if (!elements.quickActionsCard) return;
 
         const previewLink = getPrimaryPreviewLink(sectionKey);
+        const tasks = getSectionQuickTasks(sectionKey).slice(0, 3);
         const scenarios = getSectionScenarios(sectionKey).slice(0, 3);
         const guides = getSectionGuides(sectionKey).slice(0, 2);
 
@@ -4035,6 +4370,16 @@
                     `).join('')}
                 </div>
             ` : ''}
+            ${tasks.length ? `
+                <div class="admin-quick-actions__tasks">
+                    ${tasks.map((task, index) => `
+                        <button class="admin-quick-actions__task" type="button" data-quick-task-index="${index}">
+                            <i class="fas ${task.icon}" aria-hidden="true"></i>
+                            <span>${task.title}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            ` : ''}
         `;
 
         elements.quickActionsCard.querySelectorAll('[data-quick-action]').forEach((button) => {
@@ -4084,6 +4429,13 @@
             button.addEventListener('click', () => {
                 const index = Number(button.getAttribute('data-open-guide'));
                 openGuideModal(sectionKey, index);
+            });
+        });
+
+        elements.quickActionsCard.querySelectorAll('[data-quick-task-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-quick-task-index'));
+                runQuickTask(tasks[index]);
             });
         });
     }
