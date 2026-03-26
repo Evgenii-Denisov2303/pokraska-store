@@ -1692,6 +1692,7 @@
         mediaSearchQuery: '',
         historyOpen: false,
         activeGuide: null,
+        activeSimpleScreen: null,
         livePreviewHref: '',
         lastFocusedField: null
     };
@@ -1708,6 +1709,7 @@
         description: document.getElementById('adminDescription'),
         alert: document.getElementById('adminAlert'),
         commandCenter: document.getElementById('adminCommandCenter'),
+        screenCard: document.getElementById('adminScreenCard'),
         connection: document.getElementById('adminConnection'),
         reloadBtn: document.getElementById('adminReloadBtn'),
         historyBtn: document.getElementById('adminHistoryBtn'),
@@ -1726,6 +1728,7 @@
         expandBtn: document.getElementById('adminExpandBtn'),
         jumpbar: document.getElementById('adminJumpbar'),
         searchInput: document.getElementById('adminSectionSearch'),
+        searchCard: document.getElementById('adminSearchCard'),
         searchClearBtn: document.getElementById('adminSearchClearBtn'),
         searchStatus: document.getElementById('adminSearchStatus'),
         dirtyBar: document.getElementById('adminDirtyBar'),
@@ -3294,6 +3297,8 @@
         const stats = collectSectionStats(state.data[sectionKey]);
         const activeIcon = meta.icon || 'fa-pen';
         const tasks = getSectionQuickTasks(sectionKey);
+        const simpleScreens = getSectionSimpleScreens(sectionKey);
+        const activeSimpleScreen = getActiveSimpleScreen(sectionKey);
         const scenarios = getSectionScenarios(sectionKey);
         const guides = getSectionGuides(sectionKey);
 
@@ -3359,6 +3364,30 @@
                     </div>
                 </div>
             ` : ''}
+            ${simpleScreens.length ? `
+                <div class="admin-command-center__screens">
+                    <div class="admin-command-center__scenario-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Простые экраны</p>
+                            <h3>Показывать только нужные блоки</h3>
+                        </div>
+                        <span>Это самый спокойный режим: админка оставит только нужные куски раздела и уберёт остальную форму.</span>
+                    </div>
+                    <div class="admin-screens-grid">
+                        ${simpleScreens.map((screen, index) => `
+                            <button class="admin-screen-tile ${activeSimpleScreen && state.activeSimpleScreen?.screenIndex === index ? 'is-active' : ''}" type="button" data-screen-index="${index}">
+                                <span class="admin-screen-tile__icon"><i class="fas ${screen.icon}" aria-hidden="true"></i></span>
+                                <strong>${screen.title}</strong>
+                                <p>${screen.text}</p>
+                                <div class="admin-screen-tile__meta">
+                                    <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${screen.fieldKeys.length} блока</span>
+                                    <span><i class="fas fa-eye" aria-hidden="true"></i> Простой экран</span>
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
             ${scenarios.length ? `
                 <div class="admin-command-center__scenarios">
                     <div class="admin-command-center__scenario-head">
@@ -3416,6 +3445,13 @@
             button.addEventListener('click', () => {
                 const index = Number(button.getAttribute('data-task-index'));
                 runQuickTask(tasks[index]);
+            });
+        });
+
+        elements.commandCenter.querySelectorAll('[data-screen-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-screen-index'));
+                openSimpleScreen(sectionKey, index);
             });
         });
 
@@ -3662,6 +3698,93 @@
         };
 
         return taskMap[sectionKey] || [];
+    }
+
+    function getSectionSimpleScreens(sectionKey) {
+        const screenMap = {
+            site: [
+                { icon: 'fa-signature', title: 'Только логотип и подпись', text: 'Показывает только блок бренда и подписи.', fieldKeys: ['brand'] },
+                { icon: 'fa-phone', title: 'Только контакты', text: 'Показывает только телефоны, адрес, почту и режим работы.', fieldKeys: ['contact'] },
+                { icon: 'fa-bars', title: 'Только меню', text: 'Оставляет на экране только верхнее меню.', fieldKeys: ['navigation'] },
+                { icon: 'fa-building', title: 'Только футер', text: 'Показывает только нижний блок компании и полезные ссылки.', fieldKeys: ['footer'] }
+            ],
+            home: [
+                { icon: 'fa-house', title: 'Только первый экран', text: 'Hero-блок без остальной страницы.', fieldKeys: ['hero'] },
+                { icon: 'fa-layer-group', title: 'Только направления', text: 'Только два больших блока на главной.', fieldKeys: ['directions'] },
+                { icon: 'fa-shield-heart', title: 'Только доверие', text: 'Только блок с преимуществами и фактами.', fieldKeys: ['trust'] },
+                { icon: 'fa-paper-plane', title: 'Только форма заявки', text: 'Только заявка, контакты и быстрые кнопки.', fieldKeys: ['request'] }
+            ],
+            catalog: [
+                { icon: 'fa-folder-tree', title: 'Только группы каталога', text: 'Только верхние группы каталога.', fieldKeys: ['groups'] },
+                { icon: 'fa-users', title: 'Только партнёры', text: 'Только блок брендов и партнёров.', fieldKeys: ['partners'] },
+                { icon: 'fa-bullhorn', title: 'Только нижний CTA', text: 'Только призыв и кнопки внизу каталога.', fieldKeys: ['cta'] }
+            ],
+            catalogPanels: [
+                { icon: 'fa-warehouse', title: 'Только ворота и каркасы', text: 'Оставляет только откатные, распашные и их каркасы.', fieldKeys: ['sliding', 'slidingFrame', 'swing', 'swingFrame'] },
+                { icon: 'fa-fence', title: 'Только калитки и заборы', text: 'Показывает только калитки и все заборы.', fieldKeys: ['wicket', 'fenceProfnastil', 'fenceSiding', 'fencePicket', 'fenceLouver'] },
+                { icon: 'fa-robot', title: 'Только автоматика', text: 'Только автоматика и комплектующие.', fieldKeys: ['automationSliding', 'automationSwing', 'automationComponents'] },
+                { icon: 'fa-shield-halved', title: 'Только гараж и защита', text: 'Только секционные, рольворота, рольставни и решётки.', fieldKeys: ['sectional', 'roller', 'shutters', 'grilles'] }
+            ],
+            servicePages: [
+                { icon: 'fa-spray-can-sparkles', title: 'Только порошковая покраска', text: 'Показывает только раздел порошковой покраски.', fieldKeys: ['powderCoating'] },
+                { icon: 'fa-wind', title: 'Только пескоструй', text: 'Показывает только страницу пескоструйной обработки.', fieldKeys: ['sandblasting'] },
+                { icon: 'fa-link', title: 'Только общие кнопки', text: 'Оставляет только общие CTA для карточек услуг.', fieldKeys: ['sharedCta'] }
+            ],
+            automation: [
+                { icon: 'fa-bolt', title: 'Только landing автоматики', text: 'Только основная страница автоматики и комплектов.', fieldKeys: ['swingLanding'] },
+                { icon: 'fa-gears', title: 'Только комплектующие', text: 'Только страница комплектующих.', fieldKeys: ['slidingComponentsPage'] },
+                { icon: 'fa-box-open', title: 'Только товары', text: 'Только страницы отдельных товаров и общие кнопки.', fieldKeys: ['productPages', 'sharedActions'] }
+            ],
+            paymentDocuments: [
+                { icon: 'fa-file-signature', title: 'Только верхний блок доверия', text: 'Только главный блок про договор и документы.', fieldKeys: ['hero'] },
+                { icon: 'fa-list-check', title: 'Только этапы работы', text: 'Только пошаговое описание процесса.', fieldKeys: ['workflow'] },
+                { icon: 'fa-phone-volume', title: 'Только нижний CTA', text: 'Только завершающий призыв и кнопки связи.', fieldKeys: ['cta'] }
+            ],
+            contacts: [
+                { icon: 'fa-address-book', title: 'Только основные контакты', text: 'Только hero и основной блок контактов.', fieldKeys: ['hero', 'overview'] },
+                { icon: 'fa-paper-plane', title: 'Только быстрая связь', text: 'Только форма и быстрые кнопки.', fieldKeys: ['connect'] },
+                { icon: 'fa-map-location-dot', title: 'Только карта и ориентиры', text: 'Только нижний блок с картой и маршрутом.', fieldKeys: ['location'] }
+            ],
+            prices: [
+                { icon: 'fa-tags', title: 'Только факторы цены', text: 'Показывает только карточки факторов стоимости.', fieldKeys: ['factors'] },
+                { icon: 'fa-calculator', title: 'Только калькулятор', text: 'Оставляет только калькулятор и телефоны рядом.', fieldKeys: ['calculator'] },
+                { icon: 'fa-circle-question', title: 'Только гарантия и вопросы', text: 'Показывает гарантию, FAQ и нижние кнопки.', fieldKeys: ['guarantee', 'cta', 'faq'] }
+            ]
+        };
+
+        return screenMap[sectionKey] || [];
+    }
+
+    function getActiveSimpleScreen(sectionKey = state.activeKey) {
+        if (!state.activeSimpleScreen || state.activeSimpleScreen.sectionKey !== sectionKey) {
+            return null;
+        }
+
+        const screens = getSectionSimpleScreens(sectionKey);
+        return screens[state.activeSimpleScreen.screenIndex] || null;
+    }
+
+    function openSimpleScreen(sectionKey, screenIndex) {
+        const screens = getSectionSimpleScreens(sectionKey);
+        if (!screens.length || !screens[screenIndex]) return;
+
+        state.activeSimpleScreen = {
+            sectionKey,
+            screenIndex
+        };
+        state.searchQuery = '';
+        renderActiveSection();
+        showAlert(`Включён простой экран: ${screens[screenIndex].title}.`, 'info');
+    }
+
+    function closeSimpleScreen(options = {}) {
+        if (!state.activeSimpleScreen) return;
+        state.activeSimpleScreen = null;
+        state.searchQuery = '';
+        renderActiveSection();
+        if (!options.silent) {
+            showAlert('Показан полный раздел целиком.', 'info');
+        }
     }
 
     function getSectionScenarios(sectionKey) {
@@ -4044,6 +4167,16 @@
     function revealSectionTarget(target) {
         if (!target) return false;
 
+        const activeScreen = getActiveSimpleScreen();
+        if (
+            activeScreen
+            && target.sectionKey
+            && !activeScreen.fieldKeys.includes(target.sectionKey)
+        ) {
+            state.activeSimpleScreen = null;
+            renderActiveSection();
+        }
+
         clearSectionSearch();
 
         let scopedContainer = null;
@@ -4316,6 +4449,7 @@
 
         const previewLink = getPrimaryPreviewLink(sectionKey);
         const tasks = getSectionQuickTasks(sectionKey).slice(0, 3);
+        const simpleScreens = getSectionSimpleScreens(sectionKey).slice(0, 2);
         const scenarios = getSectionScenarios(sectionKey).slice(0, 3);
         const guides = getSectionGuides(sectionKey).slice(0, 2);
 
@@ -4380,6 +4514,16 @@
                     `).join('')}
                 </div>
             ` : ''}
+            ${simpleScreens.length ? `
+                <div class="admin-quick-actions__screens">
+                    ${simpleScreens.map((screen, index) => `
+                        <button class="admin-quick-actions__screen" type="button" data-quick-screen-index="${index}">
+                            <i class="fas ${screen.icon}" aria-hidden="true"></i>
+                            <span>${screen.title}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            ` : ''}
         `;
 
         elements.quickActionsCard.querySelectorAll('[data-quick-action]').forEach((button) => {
@@ -4437,6 +4581,48 @@
                 const index = Number(button.getAttribute('data-quick-task-index'));
                 runQuickTask(tasks[index]);
             });
+        });
+
+        elements.quickActionsCard.querySelectorAll('[data-quick-screen-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-quick-screen-index'));
+                openSimpleScreen(sectionKey, index);
+            });
+        });
+    }
+
+    function renderScreenCard(sectionKey) {
+        if (!elements.screenCard) return;
+
+        const activeScreen = getActiveSimpleScreen(sectionKey);
+        if (!activeScreen) {
+            elements.screenCard.hidden = true;
+            elements.screenCard.innerHTML = '';
+            return;
+        }
+
+        const labels = activeScreen.fieldKeys.map((fieldKey) => getTopLevelFieldLabel(sectionKey, fieldKey));
+        elements.screenCard.hidden = false;
+        elements.screenCard.innerHTML = `
+            <div class="admin-screen-card__head">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Сейчас включён простой экран</p>
+                    <h2>${activeScreen.title}</h2>
+                    <p>${activeScreen.text}</p>
+                </div>
+                <div class="admin-screen-card__actions">
+                    <button class="admin-btn admin-btn--ghost" type="button" id="adminScreenBackBtn">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Показать весь раздел
+                    </button>
+                </div>
+            </div>
+            <div class="admin-screen-card__chips">
+                ${labels.map((label) => `<span><i class="fas fa-layer-group" aria-hidden="true"></i> ${label}</span>`).join('')}
+            </div>
+        `;
+
+        elements.screenCard.querySelector('#adminScreenBackBtn')?.addEventListener('click', () => {
+            closeSimpleScreen();
         });
     }
 
@@ -5165,6 +5351,10 @@
         const key = state.activeKey;
         const config = contentConfigs[key];
         const meta = sectionMeta[key] || {};
+        const activeSimpleScreen = getActiveSimpleScreen(key);
+        const visibleFields = activeSimpleScreen
+            ? config.schema.fields.filter((field) => activeSimpleScreen.fieldKeys.includes(field.key))
+            : config.schema.fields;
         if (state.activeGuide && state.activeGuide.sectionKey !== key) {
             closeGuideModal();
         } else if (state.activeGuide && state.activeGuide.sectionKey === key && !elements.guideModal?.hidden) {
@@ -5175,18 +5365,32 @@
         elements.form.innerHTML = '';
         state.lastFocusedField = null;
         renderCommandCenter(key);
-        renderOverview(key);
-        renderJumpbar(key);
+        renderScreenCard(key);
 
-        config.schema.fields.forEach((field, index) => {
+        if (elements.overview) {
+            elements.overview.hidden = Boolean(activeSimpleScreen);
+        }
+        if (elements.jumpbar) {
+            elements.jumpbar.hidden = Boolean(activeSimpleScreen);
+        }
+        if (elements.searchCard) {
+            elements.searchCard.hidden = Boolean(activeSimpleScreen);
+        }
+
+        if (!activeSimpleScreen) {
+            renderOverview(key);
+            renderJumpbar(key);
+        }
+
+        visibleFields.forEach((field, index) => {
             const fieldNode = renderField(field, state.data[key], key);
 
             if (
-                state.simpleMode
+                (state.simpleMode || activeSimpleScreen)
                 && fieldNode instanceof HTMLDetailsElement
-                && !field.startCollapsed
+                && (!field.startCollapsed || activeSimpleScreen)
             ) {
-                fieldNode.open = index === 0;
+                fieldNode.open = activeSimpleScreen ? true : index === 0;
             }
 
             elements.form.appendChild(fieldNode);
