@@ -271,6 +271,14 @@
     }
 
     const contentConfigs = {
+        dashboard: {
+            label: 'Быстрый старт',
+            description: 'Домашний экран админки с крупными действиями: что именно хотите изменить на сайте.',
+            virtual: true,
+            schema: {
+                fields: []
+            }
+        },
         site: {
             label: 'Общие настройки',
             description: 'Шапка, контакты, навигация и футер на всех страницах сайта.',
@@ -1465,6 +1473,26 @@
     ];
 
     const sectionMeta = {
+        dashboard: {
+            icon: 'fa-rocket',
+            navHint: 'Крупные действия: что именно хотите поменять на сайте прямо сейчас.',
+            summary: 'Это домашний экран админки. Здесь можно выбрать готовое действие и сразу перейти в нужный раздел, не вспоминая структуру сайта.',
+            bullets: [
+                'Поменять тексты на главной.',
+                'Обновить фото в каталоге или на главной.',
+                'Изменить контакты, карту, цены или документы.'
+            ],
+            tips: [
+                'Сначала выбери задачу, а не раздел сайта.',
+                'Если задача узкая, используй “Простые экраны” внутри разделов.',
+                'После правок всегда открывай страницу в предпросмотре.'
+            ],
+            previewLinks: [
+                { label: 'Открыть главную', href: '../index.html' },
+                { label: 'Открыть каталог', href: '../pages/services.html' },
+                { label: 'Открыть контакты', href: '../pages/contacts.html' }
+            ]
+        },
         site: {
             icon: 'fa-globe',
             navHint: 'Шапка, телефоны, меню и футер на всём сайте.',
@@ -1674,7 +1702,7 @@
     ]);
 
     const state = {
-        activeKey: 'site',
+        activeKey: 'dashboard',
         data: {},
         dirty: {},
         adminState: { sections: {} },
@@ -1990,6 +2018,13 @@
 
     async function loadAllContent(options = {}) {
         for (const key of Object.keys(contentConfigs)) {
+            const config = contentConfigs[key];
+            if (config.virtual) {
+                state.data[key] = {};
+                state.dirty[key] = false;
+                continue;
+            }
+
             const data = await loadContent(key, options);
             state.data[key] = deepClone(data);
             state.dirty[key] = false;
@@ -2080,6 +2115,10 @@
 
     function updateDirtyBar() {
         if (!elements.dirtyBar || !elements.dirtyBarTitle || !elements.dirtyBarText) return;
+        if (contentConfigs[state.activeKey]?.virtual) {
+            elements.dirtyBar.hidden = true;
+            return;
+        }
 
         const activeConfig = contentConfigs[state.activeKey];
         const hasChanges = Boolean(state.dirty[state.activeKey]);
@@ -3286,6 +3325,27 @@
         `;
     }
 
+    function switchAdminSection(nextKey) {
+        if (!contentConfigs[nextKey]) return false;
+        if (state.activeKey !== nextKey && state.activeKey !== 'dashboard' && !confirmDiscardChanges()) {
+            return false;
+        }
+
+        if (state.activeKey !== nextKey) {
+            state.activeSimpleScreen = null;
+            if (state.activeGuide && state.activeGuide.sectionKey !== nextKey) {
+                state.activeGuide = null;
+            }
+        }
+
+        state.activeKey = nextKey;
+        state.searchQuery = '';
+        clearAlert();
+        renderNav();
+        renderActiveSection();
+        return true;
+    }
+
     function renderCommandCenter(sectionKey) {
         if (!elements.commandCenter) return;
 
@@ -3301,6 +3361,54 @@
         const activeSimpleScreen = getActiveSimpleScreen(sectionKey);
         const scenarios = getSectionScenarios(sectionKey);
         const guides = getSectionGuides(sectionKey);
+
+        if (config.virtual) {
+            const dashboardActions = getDashboardHomeActions();
+            elements.commandCenter.innerHTML = `
+                <div class="admin-command-center__hero">
+                    <div class="admin-command-center__hero-copy">
+                        <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
+                        <div class="admin-command-center__eyebrow">Стартовый сценарий</div>
+                        <h2>${config.label}</h2>
+                        <p>${meta.summary || config.description}</p>
+                        <div class="admin-command-center__flow">
+                            <strong>Выбери задачу и сразу перейди к правке</strong>
+                            <span>Этот экран нужен, чтобы не вспоминать структуру сайта. Просто нажми нужное действие и админка сама доведёт до формы, фото или мастера.</span>
+                        </div>
+                        <div class="admin-command-center__actions">
+                            ${(meta.previewLinks || []).map((link) => `
+                                <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="admin-command-center__hero-side">
+                        <span class="admin-status-badge is-idle">Стартовый экран</span>
+                        <div class="admin-command-center__hero-note">Сейчас здесь нет формы и служебных полей — только готовые действия, которые отправят тебя в нужный раздел.</div>
+                    </div>
+                </div>
+                <div class="admin-command-center__stats">
+                    <article class="admin-command-stat">
+                        <strong>${dashboardActions.length}</strong>
+                        <span>Готовых действий</span>
+                    </article>
+                    <article class="admin-command-stat">
+                        <strong>${Object.keys(contentConfigs).length - 1}</strong>
+                        <span>Рабочих разделов</span>
+                    </article>
+                    <article class="admin-command-stat">
+                        <strong>1 клик</strong>
+                        <span>До нужного блока</span>
+                    </article>
+                    <article class="admin-command-stat">
+                        <strong>0</strong>
+                        <span>Лишних полей на старте</span>
+                    </article>
+                </div>
+            `;
+            return;
+        }
 
         elements.commandCenter.innerHTML = `
             <div class="admin-command-center__hero">
@@ -3755,6 +3863,83 @@
         return screenMap[sectionKey] || [];
     }
 
+    function getDashboardHomeActions() {
+        return [
+            {
+                icon: 'fa-heading',
+                title: 'Поменять заголовок на главной',
+                text: 'Сразу переведёт в главный экран и покажет только hero-блок.',
+                sectionKey: 'home',
+                kind: 'screen',
+                screenIndex: 0,
+                previewHref: '../index.html'
+            },
+            {
+                icon: 'fa-image',
+                title: 'Заменить фото на главной',
+                text: 'Откроет блок направлений и сразу предложит выбрать новое фото.',
+                sectionKey: 'home',
+                kind: 'task',
+                taskIndex: 1,
+                previewHref: '../index.html'
+            },
+            {
+                icon: 'fa-phone',
+                title: 'Изменить телефоны и адрес',
+                text: 'Быстро откроет общие контакты сайта без остальной формы.',
+                sectionKey: 'site',
+                kind: 'screen',
+                screenIndex: 1,
+                previewHref: '../pages/contacts.html'
+            },
+            {
+                icon: 'fa-truck-ramp-box',
+                title: 'Поправить откатные ворота',
+                text: 'Сразу переведёт в карточку откатных ворот внутри каталога.',
+                sectionKey: 'catalogPanels',
+                kind: 'task',
+                taskIndex: 0,
+                previewHref: '../pages/services.html'
+            },
+            {
+                icon: 'fa-fence',
+                title: 'Поменять калитки и заборы',
+                text: 'Откроет простой экран только с калитками и заборами.',
+                sectionKey: 'catalogPanels',
+                kind: 'screen',
+                screenIndex: 1,
+                previewHref: '../pages/services.html'
+            },
+            {
+                icon: 'fa-map-location-dot',
+                title: 'Обновить контакты и карту',
+                text: 'Откроет страницу контактов сразу на форме и карте.',
+                sectionKey: 'contacts',
+                kind: 'guide',
+                guideIndex: 1,
+                previewHref: '../pages/contacts.html'
+            },
+            {
+                icon: 'fa-calculator',
+                title: 'Поправить цены и калькулятор',
+                text: 'Переведёт в страницу цен и покажет только калькулятор и факторы.',
+                sectionKey: 'prices',
+                kind: 'screen',
+                screenIndex: 1,
+                previewHref: '../pages/prices.html'
+            },
+            {
+                icon: 'fa-file-signature',
+                title: 'Обновить оплату и документы',
+                text: 'Сразу откроет страницу доверия и её пошаговый мастер.',
+                sectionKey: 'paymentDocuments',
+                kind: 'guide',
+                guideIndex: 0,
+                previewHref: '../pages/payment-documents.html'
+            }
+        ];
+    }
+
     function getActiveSimpleScreen(sectionKey = state.activeKey) {
         if (!state.activeSimpleScreen || state.activeSimpleScreen.sectionKey !== sectionKey) {
             return null;
@@ -3785,6 +3970,33 @@
         if (!options.silent) {
             showAlert('Показан полный раздел целиком.', 'info');
         }
+    }
+
+    function runDashboardAction(action) {
+        if (!action?.sectionKey) return;
+        if (!switchAdminSection(action.sectionKey)) return;
+
+        window.setTimeout(() => {
+            if (action.kind === 'task') {
+                const tasks = getSectionQuickTasks(action.sectionKey);
+                runQuickTask(tasks[action.taskIndex]);
+                return;
+            }
+
+            if (action.kind === 'screen') {
+                openSimpleScreen(action.sectionKey, action.screenIndex || 0);
+                return;
+            }
+
+            if (action.kind === 'guide') {
+                openGuideModal(action.sectionKey, action.guideIndex || 0);
+                return;
+            }
+
+            if (action.kind === 'focus') {
+                revealSectionTarget(action.target);
+            }
+        }, 120);
     }
 
     function getSectionScenarios(sectionKey) {
@@ -4626,6 +4838,77 @@
         });
     }
 
+    function renderDashboardHome() {
+        const actions = getDashboardHomeActions();
+        if (elements.form) {
+            elements.form.innerHTML = `
+                <section class="admin-dashboard-home">
+                    <div class="admin-dashboard-home__hero">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Домашний экран админки</p>
+                            <h2>Что хотите изменить на сайте?</h2>
+                            <p>Выбери готовое действие, и админка сама откроет нужный раздел, мастер или простой экран без поиска по всей форме.</p>
+                        </div>
+                        <div class="admin-dashboard-home__hero-note">
+                            <strong>Быстрый сценарий</strong>
+                            <span>Нажал действие → открылся нужный блок → сохранил изменения → проверил страницу.</span>
+                        </div>
+                    </div>
+                    <div class="admin-dashboard-home__grid">
+                        ${actions.map((action, index) => `
+                            <button class="admin-dashboard-action" type="button" data-dashboard-action-index="${index}">
+                                <span class="admin-dashboard-action__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
+                                <strong>${action.title}</strong>
+                                <p>${action.text}</p>
+                                <div class="admin-dashboard-action__footer">
+                                    <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${contentConfigs[action.sectionKey].label}</span>
+                                    <span><i class="fas fa-arrow-right" aria-hidden="true"></i> Открыть</span>
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="admin-dashboard-home__links">
+                        ${actions.map((action) => `
+                            <a href="${action.previewHref}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                                <span>${action.title}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+
+            elements.form.querySelectorAll('[data-dashboard-action-index]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const index = Number(button.getAttribute('data-dashboard-action-index'));
+                    runDashboardAction(actions[index]);
+                });
+            });
+        }
+
+        if (elements.previewPanel) {
+            elements.previewPanel.hidden = true;
+        }
+        if (elements.overview) {
+            elements.overview.hidden = true;
+            elements.overview.innerHTML = '';
+        }
+        if (elements.jumpbar) {
+            elements.jumpbar.hidden = true;
+            elements.jumpbar.innerHTML = '';
+        }
+        if (elements.searchCard) {
+            elements.searchCard.hidden = true;
+        }
+        if (elements.screenCard) {
+            elements.screenCard.hidden = true;
+            elements.screenCard.innerHTML = '';
+        }
+        if (elements.modeNote) {
+            elements.modeNote.hidden = true;
+        }
+    }
+
     function renderMiniPreview(sectionKey) {
         if (!elements.miniPreviewCard) return;
 
@@ -4769,6 +5052,49 @@
             elements.navSearch.value = state.navQuery;
         }
 
+        const dashboardConfig = contentConfigs.dashboard;
+        const dashboardMeta = sectionMeta.dashboard || {};
+        const dashboardHaystack = [
+            dashboardConfig.label,
+            dashboardConfig.description,
+            dashboardMeta.navHint,
+            dashboardMeta.summary
+        ].filter(Boolean).join(' ').toLowerCase();
+
+        if (!navQuery || dashboardHaystack.includes(navQuery)) {
+            const dashboardButton = document.createElement('button');
+            dashboardButton.type = 'button';
+            dashboardButton.className = `admin-nav__button${state.activeKey === 'dashboard' ? ' is-active' : ''}`;
+            dashboardButton.innerHTML = `
+                <span class="admin-nav__button-icon"><i class="fas ${dashboardMeta.icon || 'fa-rocket'}" aria-hidden="true"></i></span>
+                <span class="admin-nav__button-copy">
+                    <strong>${dashboardConfig.label}</strong>
+                    <span>${dashboardMeta.navHint || dashboardConfig.description}</span>
+                    <span class="admin-nav__button-status is-idle">Стартовый экран</span>
+                </span>
+            `;
+
+            dashboardButton.addEventListener('click', () => {
+                switchAdminSection('dashboard');
+            });
+
+            const dashboardWrapper = document.createElement('section');
+            dashboardWrapper.className = 'admin-nav__group';
+
+            const groupTitle = document.createElement('h2');
+            groupTitle.className = 'admin-nav__group-title';
+            groupTitle.textContent = 'Старт';
+            dashboardWrapper.appendChild(groupTitle);
+
+            const groupNote = document.createElement('p');
+            groupNote.className = 'admin-nav__group-note';
+            groupNote.textContent = 'Домашний экран с готовыми действиями без поиска по разделам.';
+            dashboardWrapper.appendChild(groupNote);
+
+            dashboardWrapper.appendChild(dashboardButton);
+            elements.nav.appendChild(dashboardWrapper);
+        }
+
         const renderGroup = (group) => {
             if (!Array.isArray(group.items) || !group.items.length) {
                 return;
@@ -4820,15 +5146,7 @@
                 `;
 
                 button.addEventListener('click', () => {
-                    if (state.activeKey !== key && !confirmDiscardChanges()) {
-                        return;
-                    }
-
-                    state.activeKey = key;
-                    state.searchQuery = '';
-                    clearAlert();
-                    renderNav();
-                    renderActiveSection();
+                    switchAdminSection(key);
                 });
 
                 groupWrapper.appendChild(button);
@@ -5351,6 +5669,17 @@
         const key = state.activeKey;
         const config = contentConfigs[key];
         const meta = sectionMeta[key] || {};
+        if (config.virtual) {
+            elements.title.textContent = config.label;
+            elements.description.textContent = meta.navHint || config.description;
+            elements.form.innerHTML = '';
+            state.lastFocusedField = null;
+            renderCommandCenter(key);
+            renderDashboardHome();
+            updateToolbarState();
+            updateDirtyBar();
+            return;
+        }
         const activeSimpleScreen = getActiveSimpleScreen(key);
         const visibleFields = activeSimpleScreen
             ? config.schema.fields.filter((field) => activeSimpleScreen.fieldKeys.includes(field.key))
@@ -5366,6 +5695,9 @@
         state.lastFocusedField = null;
         renderCommandCenter(key);
         renderScreenCard(key);
+        if (elements.previewPanel) {
+            elements.previewPanel.hidden = false;
+        }
 
         if (elements.overview) {
             elements.overview.hidden = Boolean(activeSimpleScreen);
@@ -5375,6 +5707,9 @@
         }
         if (elements.searchCard) {
             elements.searchCard.hidden = Boolean(activeSimpleScreen);
+        }
+        if (elements.modeNote) {
+            elements.modeNote.hidden = false;
         }
 
         if (!activeSimpleScreen) {
@@ -5406,6 +5741,18 @@
     }
 
     function updateToolbarState() {
+        const activeConfig = contentConfigs[state.activeKey];
+        if (activeConfig?.virtual) {
+            elements.saveBtn.disabled = true;
+            elements.publishBtn.disabled = true;
+            elements.downloadBtn.disabled = true;
+            elements.reloadBtn.disabled = false;
+            elements.historyBtn.disabled = true;
+            elements.saveBtn.innerHTML = '<i class="fas fa-rocket" aria-hidden="true"></i> Выберите действие';
+            updateDirtyBar();
+            return;
+        }
+
         const hasChanges = Boolean(state.dirty[state.activeKey]);
         const canSave = state.apiAvailable
             && hasChanges
@@ -5451,6 +5798,7 @@
     async function saveActiveSection() {
         const key = state.activeKey;
         const config = contentConfigs[key];
+        if (config?.virtual) return;
 
         if (!state.apiAvailable) {
             showAlert('Сервер сохранения не запущен. Изменения записать нельзя, но можно сделать резервную копию.', 'info');
@@ -5518,6 +5866,7 @@
     async function publishActiveSection() {
         const key = state.activeKey;
         const config = contentConfigs[key];
+        if (config?.virtual) return;
 
         if (!state.apiAvailable) {
             showAlert('Сервер сохранения не найден. Отметить публикацию нельзя.', 'info');
@@ -5575,6 +5924,7 @@
     function downloadActiveSection() {
         const key = state.activeKey;
         const config = contentConfigs[key];
+        if (config?.virtual) return;
         const blob = new Blob([JSON.stringify(state.data[key], null, 2)], {
             type: 'application/json;charset=utf-8'
         });
@@ -5592,6 +5942,13 @@
     async function reloadActiveSection() {
         try {
             const key = state.activeKey;
+            const config = contentConfigs[key];
+            if (config?.virtual) {
+                renderActiveSection();
+                clearAlert();
+                showAlert('Домашний экран обновлён.', 'success');
+                return;
+            }
             const data = await loadContent(key, { fresh: true });
             await loadAdminState();
             state.data[key] = deepClone(data);
