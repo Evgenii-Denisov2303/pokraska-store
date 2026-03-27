@@ -272,8 +272,8 @@
 
     const contentConfigs = {
         dashboard: {
-            label: 'Быстрый старт',
-            description: 'Домашний экран админки с крупными действиями: что именно хотите изменить на сайте.',
+            label: 'С чего начать',
+            description: 'Главный экран админки с готовыми действиями: что именно хотите поменять на сайте.',
             virtual: true,
             schema: {
                 fields: []
@@ -623,7 +623,7 @@
         },
         catalogPanels: {
             label: 'Каталог: карточки',
-            description: 'Полное содержимое внутренних карточек каталога: тексты, списки, вопросы и ответы, палитры и нижние блоки связи.',
+            description: 'Тексты и блоки внутренних карточек каталога: описания, списки, цвета, вопросы и нижние призывы.',
             fileName: 'catalog-panels',
             schema: {
                 fields: [
@@ -2123,16 +2123,16 @@
                 elements.modeNoteText.textContent = 'Показываются только самые нужные поля: заголовки, тексты, фото, кнопки и контакты. Это самый спокойный режим для обычной работы.';
             } else if (state.quickMode && state.editorRole === 'manager') {
                 elements.modeNoteTitle.textContent = 'Быстрые правки для менеджера включены';
-                elements.modeNoteText.textContent = 'Видны тексты, фото, ссылки и формы без глубокой техники. Если нужно редактировать всё подряд, переключись на “Все поля”.';
+                elements.modeNoteText.textContent = 'Видны тексты, фото, ссылки и формы без лишней глубины. Если нужно открыть всё, переключитесь на “Все поля”.';
             } else if (state.editorRole === 'customer') {
                 elements.modeNoteTitle.textContent = 'Режим заказчика включён';
-                elements.modeNoteText.textContent = 'Показываются только основные поля: тексты, фото, кнопки и контакты. Ссылки, формы, служебные ID и технические параметры спрятаны.';
+                elements.modeNoteText.textContent = 'Показываются только основные поля: тексты, фото, кнопки и контакты. Всё лишнее для обычной работы скрыто.';
             } else if (state.editorRole === 'manager') {
                 elements.modeNoteTitle.textContent = 'Режим менеджера включён';
-                elements.modeNoteText.textContent = 'Показываются контент и рабочие поля вроде ссылок, карт и форм. Служебные ID, иконки и глубоко технические параметры всё ещё скрыты.';
+                elements.modeNoteText.textContent = 'Показываются контент и рабочие поля: ссылки, карты и формы. Служебные ID, иконки и глубоко технические настройки всё ещё скрыты.';
             } else {
                 elements.modeNoteTitle.textContent = 'Расширенный режим включён';
-                elements.modeNoteText.textContent = 'Показываются все поля без упрощения: контент, ссылки, иконки, размеры изображений, служебные ID и другие технические параметры.';
+                elements.modeNoteText.textContent = 'Показываются все поля без упрощения: контент, ссылки, иконки, размеры изображений, служебные ID и другие настройки.';
             }
         }
 
@@ -2226,8 +2226,8 @@
                     nextValue === 'customer'
                         ? 'Включен режим заказчика. Показываются только основные поля контента.'
                         : nextValue === 'manager'
-                            ? 'Включен режим менеджера. Видны тексты, фото, ссылки и формы без лишней техники.'
-                            : 'Включен расширенный режим. Показаны все технические параметры.',
+                            ? 'Включен режим менеджера. Видны тексты, фото, ссылки и формы без лишней глубины.'
+                            : 'Включен расширенный режим. Показаны все доступные настройки.',
                     'info'
                 );
             }
@@ -3673,11 +3673,11 @@
         panel.innerHTML = `
             <div class="admin-contact-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Быстрое редактирование контактов</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим контактов</p>
                     <h2>Телефоны и контакты сайта</h2>
-                    <p>Здесь удобно менять основные номера, мессенджеры, адрес, почту и режим работы без перехода по общей структуре сайта.</p>
+                    <p>Здесь удобно менять основные номера, мессенджеры, адрес, почту и режим работы без лишнего поиска по сайту.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Компактный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -3701,7 +3701,7 @@
             createCompactContactCard(fieldMap.get('max'), value, contentKey, {
                 icon: 'fa-comments',
                 title: 'Max',
-                text: 'Второй канал быстрой связи, если нужен заказчику.'
+                text: 'Дополнительный канал связи, если вы его используете.'
             })
         ].filter(Boolean);
 
@@ -3755,11 +3755,11 @@
         panel.innerHTML = `
             <div class="admin-request-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран заявки</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим заявки</p>
                     <h2>Форма и быстрый контакт на главной</h2>
-                    <p>Здесь удобно менять тексты блока заявки, быстрый контакт, кнопки и встроенную форму без всей структуры главной страницы.</p>
+                    <p>Здесь удобно менять тексты блока заявки, быстрый контакт, кнопки и встроенную форму без всей главной страницы.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -3892,11 +3892,11 @@
         panel.innerHTML = `
             <div class="admin-catalog-cta-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран CTA каталога</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим каталога</p>
                     <h2>Нижний блок связи каталога</h2>
-                    <p>Здесь удобно менять завершающий призыв и контакты внизу каталога без всей страницы каталога и карточек.</p>
+                    <p>Здесь удобно менять завершающий призыв и контакты внизу каталога без всей страницы каталога.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -3975,11 +3975,11 @@
         panel.innerHTML = `
             <div class="admin-home-hero-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран первого экрана</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим первого экрана</p>
                     <h2>Главный блок на главной странице</h2>
                     <p>Здесь удобно менять главный заголовок, подзаголовок, короткий список, преимущества и основную кнопку без всей главной страницы.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -4085,9 +4085,9 @@
         panel.innerHTML = `
             <div class="admin-catalog-groups-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран групп каталога</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим групп каталога</p>
                     <h2>Группы на странице каталога</h2>
-                    <p>Здесь удобно менять названия групп, короткие описания и список ссылок внутри каждой группы без длинной общей формы каталога.</p>
+                    <p>Здесь удобно менять названия групп, короткие описания и список ссылок внутри каждой группы без длинной формы каталога.</p>
                 </div>
                 <span class="admin-status-badge is-idle">${array.length} группы</span>
             </div>
@@ -4148,11 +4148,11 @@
         panel.innerHTML = `
             <div class="admin-automation-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран автоматики</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим автоматики</p>
                     <h2>${getDisplayLabel(field)}</h2>
                     <p>Здесь удобно менять вводный блок, шаги выбора или пояснения, карточки комплектов и нижний призыв без длинной формы карточки каталога.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -4287,11 +4287,11 @@
         panel.innerHTML = `
             <div class="admin-garage-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран гаража и защиты</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим гаража и защиты</p>
                     <h2>${getDisplayLabel(field)}</h2>
-                    <p>Здесь удобно менять вводный текст, характеристики, цвета и нижний призыв без всей длинной карточки каталога.</p>
+                    <p>Здесь удобно менять вводный текст, характеристики, цвета и нижний призыв без длинной карточки каталога.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -4421,11 +4421,11 @@
         panel.innerHTML = `
             <div class="admin-location-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран маршрута</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим контактов</p>
                     <h2>Карта и ориентиры</h2>
                     <p>Здесь удобно править нижний блок страницы контактов: заголовок, краткое описание, ориентиры, кнопки маршрута и саму карту.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -4527,11 +4527,11 @@
         panel.innerHTML = `
             <div class="admin-service-page-quick__intro">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Компактный экран сервисной страницы</p>
+                    <p class="admin-toolbar__eyebrow">Удобный режим страницы услуги</p>
                     <h2>${getDisplayLabel(field)}</h2>
-                    <p>Здесь удобно править шапку страницы, навигацию, карточки услуг, нижний блок связи и FAQ без всей сервисной структуры.</p>
+                    <p>Здесь удобно править шапку страницы, навигацию, карточки услуг, нижний блок связи и FAQ без всей структуры страницы.</p>
                 </div>
-                <span class="admin-status-badge is-idle">Отдельный экран</span>
+                <span class="admin-status-badge is-idle">Удобный режим</span>
             </div>
         `;
 
@@ -4850,14 +4850,14 @@
             elements.commandCenter.innerHTML = `
                 <div class="admin-command-center__hero">
                     <div class="admin-command-center__hero-copy">
-                        <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
-                        <div class="admin-command-center__eyebrow">Стартовый сценарий</div>
-                        <h2>${config.label}</h2>
-                        <p>${meta.summary || config.description}</p>
-                        <div class="admin-command-center__flow">
-                            <strong>Выбери задачу и сразу перейди к правке</strong>
-                            <span>Этот экран нужен, чтобы не вспоминать структуру сайта. Просто нажми нужное действие и админка сама доведёт до формы, фото или мастера.</span>
-                        </div>
+                    <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
+                    <div class="admin-command-center__eyebrow">Быстрый старт</div>
+                    <h2>${config.label}</h2>
+                    <p>${meta.summary || config.description}</p>
+                    <div class="admin-command-center__flow">
+                        <strong>Выбери задачу и сразу перейди к правке</strong>
+                        <span>Этот экран нужен, чтобы не вспоминать структуру сайта. Просто нажмите нужное действие, и админка сама откроет нужный блок.</span>
+                    </div>
                         <div class="admin-command-center__actions">
                             ${(meta.previewLinks || []).map((link) => `
                                 <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
@@ -4868,9 +4868,9 @@
                     </div>
                     <div class="admin-command-center__hero-side">
                         <span class="admin-status-badge is-idle">Стартовый экран</span>
-                        <div class="admin-command-center__hero-note">Сейчас здесь нет формы и служебных полей — только готовые действия, которые отправят тебя в нужный раздел.</div>
-                    </div>
+                    <div class="admin-command-center__hero-note">Здесь нет длинной формы и лишних полей, только готовые действия для быстрого старта.</div>
                 </div>
+            </div>
                 <div class="admin-command-center__stats">
                     <article class="admin-command-stat">
                         <strong>${dashboardActions.length}</strong>
@@ -4897,7 +4897,7 @@
             <div class="admin-command-center__hero">
                 <div class="admin-command-center__hero-copy">
                     <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
-                    <div class="admin-command-center__eyebrow">Текущий рабочий сценарий</div>
+                    <div class="admin-command-center__eyebrow">Текущий раздел</div>
                     <h2>${config.label}</h2>
                     <p>${meta.summary || config.description}</p>
                     <div class="admin-command-center__flow">
@@ -4940,9 +4940,9 @@
                     <div class="admin-command-center__scenario-head">
                         <div>
                             <p class="admin-toolbar__eyebrow">Что хочешь сделать прямо сейчас</p>
-                            <h3>Готовые задачи без поиска по форме</h3>
+                            <h3>Готовые действия</h3>
                         </div>
-                        <span>Выбери понятное действие, а админка сама откроет нужный блок или запустит мастер.</span>
+                        <span>Нажмите нужное действие, и админка сама откроет нужный блок.</span>
                     </div>
                     <div class="admin-tasks-grid">
                         ${tasks.map((task, index) => `
@@ -4960,7 +4960,7 @@
                     <div class="admin-command-center__scenario-head">
                         <div>
                             <p class="admin-toolbar__eyebrow">Простые экраны</p>
-                            <h3>Показывать только нужные блоки</h3>
+                            <h3>Показывать только нужное</h3>
                         </div>
                         <span>Это самый спокойный режим: админка оставит только нужные куски раздела и уберёт остальную форму.</span>
                     </div>
@@ -4983,10 +4983,10 @@
                 <div class="admin-command-center__scenarios">
                     <div class="admin-command-center__scenario-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Частые сценарии</p>
+                            <p class="admin-toolbar__eyebrow">Частые правки</p>
                             <h3>Что обычно меняют в этом разделе</h3>
                         </div>
-                        <span>Можно кликнуть и сразу перейти в нужный блок формы</span>
+                        <span>Можно нажать и сразу перейти в нужный блок формы.</span>
                     </div>
                     <div class="admin-scenarios-grid">
                         ${scenarios.map((scenario, index) => `
@@ -5003,10 +5003,10 @@
                 <div class="admin-command-center__guides">
                     <div class="admin-command-center__scenario-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Мини-мастера</p>
+                            <p class="admin-toolbar__eyebrow">Пошаговые подсказки</p>
                             <h3>Пошаговые маршруты для частых правок</h3>
                         </div>
-                        <span>Открой мастер, иди по шагам и переходи сразу в нужные блоки формы.</span>
+                        <span>Открой подсказку, иди по шагам и переходи сразу в нужные блоки формы.</span>
                     </div>
                     <div class="admin-guides-grid">
                         ${guides.map((guide, index) => `
@@ -5016,7 +5016,7 @@
                                 <p>${guide.summary}</p>
                                 <div class="admin-guide-card__meta">
                                     <span><i class="fas fa-list-ol" aria-hidden="true"></i> ${guide.steps.length} шага</span>
-                                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> Открыть мастер</span>
+                                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> Открыть подсказку</span>
                                 </div>
                             </button>
                         `).join('')}
@@ -5135,7 +5135,7 @@
                 },
                 {
                     icon: 'fa-map-signs',
-                    title: 'Открыть мастер по каталогу',
+                    title: 'Открыть шаги по каталогу',
                     text: 'Пошаговый маршрут по основным правкам этой страницы.',
                     kind: 'guide',
                     guideIndex: 0
@@ -5211,7 +5211,7 @@
                 },
                 {
                     icon: 'fa-map-signs',
-                    title: 'Открыть мастер по автоматике',
+                    title: 'Открыть шаги по автоматике',
                     text: 'Пошагово ведёт по всей странице и товарным карточкам.',
                     kind: 'guide',
                     guideIndex: 0
@@ -5234,7 +5234,7 @@
                 },
                 {
                     icon: 'fa-map-signs',
-                    title: 'Открыть мастер страницы',
+                    title: 'Открыть шаги страницы',
                     text: 'Пошагово пройти страницу оплаты и документов.',
                     kind: 'guide',
                     guideIndex: 0
@@ -5414,7 +5414,7 @@
             {
                 icon: 'fa-file-signature',
                 title: 'Обновить оплату и документы',
-                text: 'Сразу откроет страницу доверия и её пошаговый мастер.',
+                text: 'Сразу откроет страницу доверия и её пошаговую подсказку.',
                 sectionKey: 'paymentDocuments',
                 kind: 'guide',
                 guideIndex: 0,
@@ -5608,7 +5608,7 @@
                 {
                     icon: 'fa-folder-tree',
                     title: 'Структура каталога',
-                    summary: 'Хороший сценарий, если нужно обновить группы каталога, их подписи и общий нижний блок связи внизу страницы.',
+                    summary: 'Подходит, если нужно обновить группы каталога, их подписи и общий нижний блок связи внизу страницы.',
                     result: 'Каталог сохранит понятную структуру, а посетитель быстрее найдёт нужную группу.',
                     tips: [
                         'Группы лучше называть коротко и так же, как их видят люди в меню.',
@@ -5643,7 +5643,7 @@
                 {
                     icon: 'fa-fence',
                     title: 'Калитки и заборы',
-                    summary: 'Отдельный мастер для калиток и всех видов заборов: профнастил, сайдинг, штакетник и жалюзи.',
+                    summary: 'Отдельная пошаговая подсказка для калиток и всех видов заборов: профнастил, сайдинг, штакетник и жалюзи.',
                     result: 'Все карточки ограждений можно пройти одним маршрутом и быстро сверить структуру текстов.',
                     tips: [
                         'Открывай карточки по очереди, а потом сравни стиль и длину текстов.',
@@ -5692,7 +5692,7 @@
                 {
                     icon: 'fa-spray-can-sparkles',
                     title: 'Порошковая покраска',
-                    summary: 'Быстрый мастер по шапке страницы, карточкам услуг, вопросам и нижнему блоку связи покраски.',
+                    summary: 'Быстрая пошаговая подсказка по шапке страницы, карточкам услуг, вопросам и нижнему блоку связи покраски.',
                     result: 'Страница покраски обновится как цельный маршрут, а не набор разрозненных блоков.',
                     tips: [
                         'В шапке держи обещание коротким, а детали уводи в карточки услуг.',
@@ -5707,7 +5707,7 @@
                 {
                     icon: 'fa-wind',
                     title: 'Пескоструйная обработка',
-                    summary: 'Отдельный мастер по странице пескоструя: шапка, услуги, блок до/после и завершение страницы.',
+                    summary: 'Отдельная пошаговая подсказка по странице пескоструя: шапка, услуги, блок до/после и завершение страницы.',
                     result: 'Страница пескоструя будет читаться цельно и без разрозненных правок.',
                     tips: [
                         'После правок блока до/после проверь, что подписи к нему остаются понятными.',
@@ -5743,8 +5743,8 @@
                 {
                     icon: 'fa-file-signature',
                     title: 'Оплата и документы',
-                    summary: 'Собранный мастер по странице доверия: официальное оформление, этапы и нижний блок связи.',
-                    result: 'Страница будет держать один понятный сценарий: как оформляется заказ и какие документы получает клиент.',
+                    summary: 'Пошаговая подсказка по странице доверия: официальное оформление, этапы и нижний блок связи.',
+                    result: 'Страница будет спокойно вести человека по понятному пути: как оформляется заказ и какие документы получает клиент.',
                     tips: [
                         'Лучше не перегружать эту страницу техническими формулировками.',
                         'Держи акцент на доверии, понятности оплаты и комплекте документов.'
@@ -5776,10 +5776,10 @@
                 {
                     icon: 'fa-route',
                     title: 'Контакты: связь и карта',
-                    summary: 'Отдельный мастер для формы связи, кнопок, карты и ориентиров.',
+                    summary: 'Отдельная пошаговая подсказка для формы связи, кнопок, карты и ориентиров.',
                     result: 'Блок быстрой связи и нижний маршрут будут собраны и не станут спорить между собой.',
                     tips: [
-                        'Форму и быстрые кнопки лучше менять вместе, чтобы они оставались цельным сценарием.',
+                        'Форму и быстрые кнопки лучше менять вместе, чтобы они оставались одним цельным блоком.',
                         'После правок карты проверь, что встроенная карта открывается и ориентиры звучат понятно.'
                     ],
                     steps: [
@@ -5996,7 +5996,7 @@
             <section class="admin-guide__steps-wrap">
                 <div class="admin-guide__steps-head">
                     <div>
-                        <p class="admin-toolbar__eyebrow">Шаги мастера</p>
+                        <p class="admin-toolbar__eyebrow">Шаги подсказки</p>
                         <h3>Иди сверху вниз и сохраняй раздел в конце</h3>
                     </div>
                     <span>Можно открыть любой шаг сразу: нужный блок формы раскроется автоматически.</span>
@@ -6011,7 +6011,7 @@
                                         <strong>${step.title}</strong>
                                         <p>${step.text}</p>
                                     </div>
-                                    <span class="admin-status-badge is-${index === currentStepIndex ? 'saved' : 'idle'}">${index === currentStepIndex ? 'Текущий шаг' : 'Шаг мастера'}</span>
+                                    <span class="admin-status-badge is-${index === currentStepIndex ? 'saved' : 'idle'}">${index === currentStepIndex ? 'Текущий шаг' : 'Следующий шаг'}</span>
                                 </div>
                                 <div class="admin-guide-step__meta">
                                     <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${getTopLevelFieldLabel(state.activeGuide.sectionKey, step.sectionKey)}</span>
@@ -6113,7 +6113,7 @@
     function runSectionScenario(scenario) {
         if (!scenario) return;
         revealSectionTarget(scenario);
-        showAlert(`Открыт сценарий: ${scenario.title}.`, 'info');
+        showAlert(`Открыт путь: ${scenario.title}.`, 'info');
     }
 
     function renderStatusCard(sectionKey) {
@@ -6154,7 +6154,7 @@
             <div class="admin-preview-card__header">
                 <div>
                     <p class="admin-toolbar__eyebrow">Частые действия</p>
-                    <h2>Быстрые сценарии</h2>
+                    <h2>Быстрые действия</h2>
                 </div>
             </div>
             <div class="admin-quick-actions">
@@ -6177,7 +6177,7 @@
                 ` : ''}
                 ${guides.length ? `
                     <button class="admin-btn admin-btn--primary" type="button" data-open-guide="0">
-                        <i class="fas fa-map-signs" aria-hidden="true"></i> Открыть мастер
+                        <i class="fas fa-map-signs" aria-hidden="true"></i> Открыть подсказку
                     </button>
                 ` : ''}
             </div>
@@ -6332,11 +6332,11 @@
                         <div>
                             <p class="admin-toolbar__eyebrow">Домашний экран админки</p>
                             <h2>Что хотите изменить на сайте?</h2>
-                            <p>Выбери готовое действие, и админка сама откроет нужный раздел, мастер или простой экран без поиска по всей форме.</p>
+                            <p>Выберите готовое действие, и админка сама откроет нужный раздел, подсказку или простой экран без поиска по всей форме.</p>
                         </div>
                         <div class="admin-dashboard-home__hero-note">
-                            <strong>Быстрый сценарий</strong>
-                            <span>Нажал действие → открылся нужный блок → сохранил изменения → проверил страницу.</span>
+                            <strong>Понятный путь</strong>
+                            <span>Нажали действие → открылся нужный блок → сохранили изменения → проверили страницу.</span>
                         </div>
                     </div>
                     <div class="admin-dashboard-home__grid">
