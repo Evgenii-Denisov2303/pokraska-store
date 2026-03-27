@@ -2357,6 +2357,12 @@
     grid-template-columns: 1fr;
 }
 
+.catalog-palette-card__gallery--single .catalog-palette-card__item {
+    aspect-ratio: auto;
+    align-items: stretch;
+    padding: 12px;
+}
+
 .catalog-palette-card__gallery--swatches {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -2390,7 +2396,7 @@
 .catalog-palette-card__gallery--single .catalog-palette-card__item img {
     height: auto;
     object-fit: contain;
-    padding: 10px;
+    padding: 0;
 }
 
 .catalog-palette-swatch {
