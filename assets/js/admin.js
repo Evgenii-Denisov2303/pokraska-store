@@ -5191,6 +5191,7 @@
             catalogPanels: 'откатные, калитки, вопросы, палитра, товары',
             servicePages: 'быстрые ссылки, карточки услуг, вопросы',
             automation: 'товары, первый экран, комплект, кнопки',
+            gallery: 'заголовок, фильтры, показать еще, счетчик',
             prices: 'факторы, калькулятор, гарантия',
             paymentDocuments: 'этапы, документы, доверие',
             contacts: 'телефоны, карта, форма, ориентиры'
@@ -5346,13 +5347,43 @@
                     guideIndex: 0
                 }
             ],
+            gallery: [
+                {
+                    icon: 'fa-heading',
+                    title: 'Поменять шапку галереи',
+                    text: 'Открывает заголовок и подзаголовок страницы работ.',
+                    kind: 'focus',
+                    target: { sectionKey: 'header', focusKeys: ['title', 'subtitle'] }
+                },
+                {
+                    icon: 'fa-filter',
+                    title: 'Поправить фильтры',
+                    text: 'Переходит к фильтрам и подписи кнопки “Показать еще”.',
+                    kind: 'focus',
+                    target: { sectionKey: 'filters', focusKeys: ['label', 'icon', 'value'] }
+                },
+                {
+                    icon: 'fa-map-signs',
+                    title: 'Открыть шаги по галерее',
+                    text: 'Пошагово проводит по шапке, фильтрам, счётчику и кнопкам.',
+                    kind: 'guide',
+                    guideIndex: 0
+                }
+            ],
             paymentDocuments: [
                 {
                     icon: 'fa-file-signature',
                     title: 'Поправить блок доверия',
                     text: 'Открывает верхний блок про договор и документы.',
                     kind: 'focus',
-                    target: { sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'] }
+                    target: { sectionKey: 'hero', focusKeys: ['title', 'lead', 'text', 'chips'] }
+                },
+                {
+                    icon: 'fa-shield-heart',
+                    title: 'Обновить преимущества',
+                    text: 'Переходит к карточкам преимуществ и официального оформления.',
+                    kind: 'focus',
+                    target: { sectionKey: 'benefits', focusKeys: ['title', 'items'] }
                 },
                 {
                     icon: 'fa-list-check',
@@ -5455,8 +5486,14 @@
                 { icon: 'fa-gears', title: 'Только комплектующие', text: 'Только страница комплектующих.', fieldKeys: ['slidingComponentsPage'] },
                 { icon: 'fa-box-open', title: 'Только товары', text: 'Только страницы отдельных товаров и общие кнопки.', fieldKeys: ['productPages', 'sharedActions'] }
             ],
+            gallery: [
+                { icon: 'fa-heading', title: 'Только шапка и счётчик', text: 'Показывает заголовок галереи и счётчик выполненных работ.', fieldKeys: ['header', 'counter'] },
+                { icon: 'fa-filter', title: 'Только фильтры', text: 'Оставляет на экране только фильтры и подпись “Показать еще”.', fieldKeys: ['filters', 'showMoreLabel'] },
+                { icon: 'fa-bullhorn', title: 'Только нижние кнопки', text: 'Показывает только финальные кнопки внизу страницы работ.', fieldKeys: ['cta'] }
+            ],
             paymentDocuments: [
                 { icon: 'fa-file-signature', title: 'Только верхний блок доверия', text: 'Только главный блок про договор и документы.', fieldKeys: ['hero'] },
+                { icon: 'fa-shield-heart', title: 'Только преимущества', text: 'Только карточки преимуществ и официального оформления.', fieldKeys: ['benefits'] },
                 { icon: 'fa-list-check', title: 'Только этапы работы', text: 'Только пошаговое описание процесса.', fieldKeys: ['workflow'] },
                 { icon: 'fa-phone-volume', title: 'Только нижний блок связи', text: 'Только завершающий призыв и кнопки связи.', fieldKeys: ['cta'] }
             ],
@@ -5466,6 +5503,7 @@
                 { icon: 'fa-map-location-dot', title: 'Только карта и ориентиры', text: 'Только нижний блок с картой и маршрутом.', fieldKeys: ['location'] }
             ],
             prices: [
+                { icon: 'fa-heading', title: 'Только шапка страницы', text: 'Показывает только заголовок и подзаголовок страницы цен.', fieldKeys: ['header'] },
                 { icon: 'fa-tags', title: 'Только факторы цены', text: 'Показывает только карточки факторов стоимости.', fieldKeys: ['factors'] },
                 { icon: 'fa-calculator', title: 'Только калькулятор', text: 'Оставляет только калькулятор и телефоны рядом.', fieldKeys: ['calculator'] },
                 { icon: 'fa-circle-question', title: 'Только гарантия и вопросы', text: 'Показывает гарантию, вопросы с ответами и нижние кнопки.', fieldKeys: ['guarantee', 'cta', 'faq'] }
@@ -5521,6 +5559,15 @@
                 kind: 'screen',
                 screenIndex: 1,
                 previewHref: '../pages/services.html'
+            },
+            {
+                icon: 'fa-images',
+                title: 'Поправить галерею работ',
+                text: 'Откроет галерею и покажет только шапку, фильтры и счётчик.',
+                sectionKey: 'gallery',
+                kind: 'screen',
+                screenIndex: 0,
+                previewHref: '../pages/gallery.html'
             },
             {
                 icon: 'fa-map-location-dot',
@@ -5641,13 +5688,18 @@
                 { icon: 'fa-wind', title: 'Пескоструй', text: 'Открыть страницу пескоструйной обработки и её ключевые блоки.', sectionKey: 'sandblasting', focusKeys: ['title', 'sections', 'beforeAfter'] },
                 { icon: 'fa-link', title: 'Общие кнопки карточек', text: 'Поменять общие подписи и ссылки на кнопках услуг.', sectionKey: 'sharedCta', focusKeys: ['label', 'href'] }
             ],
+            gallery: [
+                { icon: 'fa-heading', title: 'Заголовок и вводный текст', text: 'Быстро обновить шапку страницы работ.', sectionKey: 'header', focusKeys: ['title', 'subtitle'] },
+                { icon: 'fa-filter', title: 'Фильтры и показ карточек', text: 'Поменять фильтры и подпись кнопки “Показать еще”.', sectionKey: 'filters', focusKeys: ['label', 'icon', 'value'] },
+                { icon: 'fa-chart-simple', title: 'Счётчик и нижние кнопки', text: 'Открыть число объектов и финальные кнопки действия.', sectionKey: 'counter', focusKeys: ['value', 'text'] }
+            ],
             prices: [
                 { icon: 'fa-calculator', title: 'Факторы цены', text: 'Подправить карточки с тем, от чего зависит стоимость.', sectionKey: 'factors', focusKeys: ['title', 'text'] },
                 { icon: 'fa-file-invoice', title: 'Калькулятор и пояснение', text: 'Изменить верхнюю часть калькулятора и тексты рядом с ним.', sectionKey: 'calculator', focusKeys: ['title', 'text'] },
                 { icon: 'fa-circle-question', title: 'Вопросы и гарантия', text: 'Быстро перейти к вопросам с ответами и гарантийным блокам.', sectionKey: 'guarantee', focusKeys: ['title', 'text', 'badge'] }
             ],
             paymentDocuments: [
-                { icon: 'fa-file-signature', title: 'Официальное оформление', text: 'Поменять блоки про договор, оплату и документы.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'] },
+                { icon: 'fa-file-signature', title: 'Официальное оформление', text: 'Поменять вводный блок про договор, оплату и документы.', sectionKey: 'hero', focusKeys: ['title', 'lead', 'text', 'chips'] },
                 { icon: 'fa-list-check', title: 'Этапы работы', text: 'Изменить понятные шаги по оформлению и сопровождению.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'] },
                 { icon: 'fa-phone-volume', title: 'Связь и нижний блок', text: 'Подправить кнопки и призыв внизу страницы.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'] }
             ],
@@ -5747,6 +5799,26 @@
                         { title: 'Проверить группы каталога', text: 'Обнови названия основных групп и короткие описания в верхней части каталога.', sectionKey: 'groups', focusKeys: ['title', 'text'], focusLabel: 'Названия групп и короткие описания' },
                         { title: 'Подправить блок партнёров', text: 'Если меняются бренды или подача автоматики, доведи это в партнерском блоке.', sectionKey: 'partners', focusKeys: ['title', 'items'], focusLabel: 'Заголовок и карточки партнёров' },
                         { title: 'Финальный блок связи каталога', text: 'Проверь нижний призыв, чтобы после правок каталог заканчивался понятным действием.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний призыв и кнопки' }
+                    ]
+                }
+            ];
+        case 'gallery':
+            return [
+                {
+                    icon: 'fa-images',
+                    title: 'Галерея: шапка, фильтры и действия',
+                    summary: 'Подходит, когда нужно быстро обновить страницу работ без поиска по всей форме.',
+                    result: 'Заголовок, фильтры, кнопка показа и нижние действия будут собраны в одном спокойном маршруте.',
+                    tips: [
+                        'Фильтры лучше держать короткими и одинаковыми по стилю.',
+                        'После правок проверь, чтобы подписи фильтров не ломали строку на странице.',
+                        'Счётчик и нижние кнопки лучше менять вместе, чтобы финальный блок выглядел цельно.'
+                    ],
+                    steps: [
+                        { title: 'Шапка страницы работ', text: 'Обнови главный заголовок и поясняющий текст страницы галереи.', sectionKey: 'header', focusKeys: ['title', 'subtitle'], focusLabel: 'Заголовок и подзаголовок' },
+                        { title: 'Фильтры галереи', text: 'Проверь порядок фильтров, подписи и иконки, чтобы ими было удобно пользоваться.', sectionKey: 'filters', focusKeys: ['label', 'icon', 'value'], focusLabel: 'Фильтры, подписи и иконки' },
+                        { title: 'Счётчик выполненных работ', text: 'Проверь число объектов и пояснение рядом со счётчиком, а кнопку “Показать еще” потом удобно сверить в простом экране фильтров.', sectionKey: 'counter', focusKeys: ['value', 'text'], focusLabel: 'Счётчик и пояснение' },
+                        { title: 'Нижние кнопки связи', text: 'В конце выровняй две кнопки внизу страницы работ.', sectionKey: 'cta', focusKeys: ['label', 'href'], focusLabel: 'Главная и вторичная кнопки' }
                     ]
                 }
             ];
@@ -5879,7 +5951,7 @@
                         'Держи акцент на доверии, понятности оплаты и комплекте документов.'
                     ],
                     steps: [
-                        { title: 'Главный блок доверия', text: 'Проверь заголовок, подзаголовок и карточки про договор, оплату и отчётность.', sectionKey: 'hero', focusKeys: ['title', 'subtitle', 'cards'], focusLabel: 'Заголовок, подзаголовок и карточки' },
+                        { title: 'Главный блок доверия', text: 'Проверь заголовок, короткий лид, поясняющий текст и чипы про договор, оплату и отчётность.', sectionKey: 'hero', focusKeys: ['title', 'lead', 'text', 'chips'], focusLabel: 'Заголовок, лид, описание и чипы' },
                         { title: 'Этапы оформления', text: 'Потом выровняй шаги процесса и их формулировки.', sectionKey: 'workflow', focusKeys: ['title', 'subtitle', 'steps'], focusLabel: 'Шаги оформления и пояснения' },
                         { title: 'Нижний блок и связь', text: 'В конце проверь завершающий призыв и кнопки связи.', sectionKey: 'cta', focusKeys: ['title', 'text', 'actions'], focusLabel: 'Нижний блок связи и кнопки' }
                     ]
