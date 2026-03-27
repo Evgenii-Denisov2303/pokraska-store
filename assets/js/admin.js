@@ -2052,15 +2052,56 @@
         rebuildMediaLibrary();
     }
 
-    function showAlert(message, type = 'info') {
+    function showAlert(message, type = 'info', options = {}) {
         elements.alert.hidden = false;
         elements.alert.className = `admin-alert is-${type}`;
-        elements.alert.textContent = message;
+        elements.alert.innerHTML = '';
+
+        const body = document.createElement('div');
+        body.className = 'admin-alert__body';
+
+        const messageNode = document.createElement('div');
+        messageNode.className = 'admin-alert__message';
+        messageNode.textContent = message;
+        body.appendChild(messageNode);
+
+        const actions = Array.isArray(options.actions) ? options.actions.filter(Boolean) : [];
+        if (actions.length) {
+            const actionsNode = document.createElement('div');
+            actionsNode.className = 'admin-alert__actions';
+
+            actions.forEach((action) => {
+                const buttonClass = action.style === 'primary' ? 'admin-btn admin-btn--primary' : 'admin-btn admin-btn--ghost';
+                if (action.href) {
+                    const link = document.createElement('a');
+                    link.className = buttonClass;
+                    link.href = action.href;
+                    link.target = action.target || '_blank';
+                    link.rel = action.rel || 'noopener noreferrer';
+                    link.textContent = action.label || 'Открыть';
+                    actionsNode.appendChild(link);
+                    return;
+                }
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = buttonClass;
+                button.textContent = action.label || 'Продолжить';
+                if (typeof action.onClick === 'function') {
+                    button.addEventListener('click', action.onClick);
+                }
+                actionsNode.appendChild(button);
+            });
+
+            body.appendChild(actionsNode);
+        }
+
+        elements.alert.appendChild(body);
     }
 
     function clearAlert() {
         elements.alert.hidden = true;
-        elements.alert.textContent = '';
+        elements.alert.innerHTML = '';
         elements.alert.className = 'admin-alert';
     }
 
@@ -3087,7 +3128,21 @@
             faq: 'Вопросы и ответы будут показаны как раскрывающийся блок на сайте.'
         };
 
-        return helperMap[field.key] || '';
+        if (helperMap[field.key]) {
+            return helperMap[field.key];
+        }
+
+        if (isMediaArrayField(field)) {
+            return 'Фото здесь удобно менять карточками: можно быстро выбрать другое изображение, открыть файл и переставить порядок показа.';
+        }
+
+        return '';
+    }
+
+    function isMediaArrayField(field) {
+        return field?.itemType === 'object'
+            && Array.isArray(field.fields)
+            && field.fields.some((childField) => childField.key === 'src');
     }
 
     function slugifyLabel(value) {
@@ -5622,9 +5677,13 @@
     function renderArrayField(field, parentObject, contentKey) {
         const array = Array.isArray(parentObject[field.key]) ? parentObject[field.key] : [];
         parentObject[field.key] = array;
+        const isMediaArray = isMediaArrayField(field);
 
         const section = document.createElement('details');
         section.className = 'admin-section';
+        if (isMediaArray) {
+            section.classList.add('admin-section--media-array');
+        }
         section.open = !field.startCollapsed;
         section.dataset.fieldKey = field.key;
         section.dataset.fieldLabel = getDisplayLabel(field);
@@ -5638,13 +5697,16 @@
 
         const body = document.createElement('div');
         body.className = 'admin-array';
+        if (isMediaArray) {
+            body.classList.add('admin-array--media');
+        }
         section.appendChild(body);
 
         const toolbar = document.createElement('div');
         toolbar.className = 'admin-array__toolbar';
         toolbar.innerHTML = `
             <div class="admin-array__title">${field.label || field.key}</div>
-            ${field.allowAddRemove === false ? '' : `<button type="button" class="admin-btn">Добавить ${String(field.itemLabel || 'элемент').toLowerCase()}</button>`}
+            ${field.allowAddRemove === false ? '' : `<button type="button" class="admin-btn ${isMediaArray ? 'admin-btn--primary' : ''}">${isMediaArray ? 'Добавить фото' : `Добавить ${String(field.itemLabel || 'элемент').toLowerCase()}`}</button>`}
         `;
         body.appendChild(toolbar);
 
@@ -5659,6 +5721,9 @@
         const addButton = toolbar.querySelector('button');
         const list = document.createElement('div');
         list.className = 'admin-array__list';
+        if (isMediaArray) {
+            list.classList.add('admin-array__list--media');
+        }
         body.appendChild(list);
 
         function markDirty() {
@@ -5676,6 +5741,9 @@
             array.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'admin-array-card';
+                if (isMediaArray) {
+                    card.classList.add('admin-array-card--media');
+                }
                 card.dataset.index = String(index);
 
                 const header = document.createElement('div');
@@ -5752,7 +5820,7 @@
                     const { primaryFields, secondaryFields, advancedFields } = splitFieldsForMode(field.fields);
                     const itemTitle = getArrayItemTitle(field, itemObject, index);
                     const itemMeta = getArrayItemMeta(field, itemObject);
-                    const imageField = Array.isArray(field.fields)
+                    const imageField = isMediaArray
                         ? field.fields.find((childField) => childField.key === 'src')
                         : null;
                     const imageValue = imageField && typeof itemObject.src === 'string'
@@ -5765,7 +5833,7 @@
                     if (hasImagePreview) {
                         details.classList.add('admin-array-card__details--media');
                     }
-                    details.open = !state.simpleMode && index === 0;
+                    details.open = isMediaArray ? false : (!state.simpleMode && index === 0);
                     card.appendChild(details);
 
                     const summary = document.createElement('summary');
@@ -5985,6 +6053,27 @@
             addButton.addEventListener('click', () => {
                 if (field.itemType === 'text') {
                     array.push('');
+                    markDirty();
+                    rerenderList();
+                    return;
+                }
+
+                if (isMediaArray) {
+                    openMediaPicker({
+                        title: field.label ? `Добавить фото в «${field.label}»` : 'Добавить фото',
+                        directory: getMediaDefaultDirectory(contentKey),
+                        apply: (selectedValue) => {
+                            const itemObject = {};
+                            field.fields.forEach((childField) => {
+                                itemObject[childField.key] = createDefaultValue(childField);
+                            });
+                            itemObject.src = selectedValue;
+                            array.push(itemObject);
+                            markDirty();
+                            rerenderList();
+                        }
+                    });
+                    return;
                 } else {
                     const itemObject = {};
                     field.fields.forEach((childField) => {
@@ -6207,7 +6296,17 @@
             renderHistoryModal();
             refreshLivePreview();
             updateToolbarState();
-            showAlert(`Раздел «${config.label}» сохранён в файлы проекта. Если сайт уже обновлён, можно отметить его как опубликованный.`, 'success');
+            const previewLink = getPrimaryPreviewLink(key);
+            showAlert(
+                `Раздел «${config.label}» сохранён в файлы проекта. Если сайт уже обновлён, можно отметить его как опубликованный.`,
+                'success',
+                {
+                    actions: [
+                        previewLink ? { label: 'Открыть страницу', href: previewLink.href, style: 'primary' } : null,
+                        { label: 'Продолжить редактирование', onClick: () => clearAlert() }
+                    ]
+                }
+            );
         } catch (error) {
             showAlert(error.message, 'error');
         }
@@ -6265,7 +6364,17 @@
             renderStatusCard(key);
             renderHistoryModal();
             updateToolbarState();
-            showAlert(`Раздел «${config.label}» отмечен как опубликованный.`, 'success');
+            const previewLink = getPrimaryPreviewLink(key);
+            showAlert(
+                `Раздел «${config.label}» отмечен как опубликованный.`,
+                'success',
+                {
+                    actions: [
+                        previewLink ? { label: 'Открыть страницу', href: previewLink.href, style: 'primary' } : null,
+                        { label: 'Продолжить редактирование', onClick: () => clearAlert() }
+                    ]
+                }
+            );
         } catch (error) {
             showAlert(error.message, 'error');
         }
