@@ -52,7 +52,7 @@ body.admin-page.admin-guide-open {
 }
 
 body.admin-page.admin-customer-layout .admin-help {
-    display: none;
+    margin-top: 24px;
 }
 
 .admin-shell {
@@ -248,10 +248,66 @@ body.admin-page.admin-customer-layout .admin-help {
 
 .admin-help {
     margin-top: 28px;
-    padding: 18px;
+    padding: 0;
     border-radius: 20px;
     border: 1px solid var(--admin-border);
     background: var(--admin-surface-muted);
+    overflow: hidden;
+}
+
+.admin-help > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px;
+}
+
+.admin-help > summary::-webkit-details-marker {
+    display: none;
+}
+
+.admin-help__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.admin-help__summary-copy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.admin-help__summary-copy strong {
+    font-size: 15px;
+    line-height: 1.2;
+}
+
+.admin-help__summary-copy span {
+    color: var(--admin-text-soft);
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+.admin-help__summary-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid var(--admin-border);
+    background: rgba(47, 111, 199, 0.08);
+    color: var(--admin-accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.admin-help[open] .admin-help__summary-icon {
+    transform: rotate(180deg);
+}
+
+.admin-help__body {
+    padding: 0 18px 18px;
 }
 
 .admin-help h2 {
@@ -587,6 +643,11 @@ body.admin-page.admin-customer-layout .admin-help {
     gap: 10px;
 }
 
+.admin-toolbar__more-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(33, 61, 98, 0.12), transparent);
+}
+
 .admin-toolbar__more-title {
     margin: 0;
     color: var(--admin-text-soft);
@@ -602,9 +663,28 @@ body.admin-page.admin-customer-layout .admin-help {
     gap: 10px;
 }
 
+.admin-toolbar__more-actions--primary {
+    grid-template-columns: 1fr;
+}
+
+.admin-toolbar__more-actions--secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .admin-toolbar__more-actions .admin-btn {
     width: 100%;
     justify-content: flex-start;
+}
+
+.admin-toolbar__more-note {
+    margin: -2px 0 0;
+    color: var(--admin-text-soft);
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.admin-toolbar__more-note strong {
+    color: var(--admin-text);
 }
 
 .admin-command-center {
@@ -3556,6 +3636,10 @@ body.admin-page.admin-customer-layout .admin-help {
     }
 
     .admin-toolbar__more-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-toolbar__more-actions--secondary {
         grid-template-columns: 1fr;
     }
 

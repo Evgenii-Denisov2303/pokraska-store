@@ -1748,6 +1748,7 @@
         connection: document.getElementById('adminConnection'),
         previewToggleBtn: document.getElementById('adminPreviewToggleBtn'),
         previewSwitcher: document.getElementById('adminPreviewSwitcher'),
+        toolbarMore: document.querySelector('.admin-toolbar__more'),
         reloadBtn: document.getElementById('adminReloadBtn'),
         historyBtn: document.getElementById('adminHistoryBtn'),
         downloadBtn: document.getElementById('adminDownloadBtn'),
@@ -4813,6 +4814,12 @@
 
         if (nextCard === 'live' && state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual) {
             refreshLivePreview();
+        }
+    }
+
+    function closeToolbarMore() {
+        if (elements.toolbarMore instanceof HTMLDetailsElement) {
+            elements.toolbarMore.open = false;
         }
     }
 
@@ -7908,16 +7915,40 @@
                 setActivePreviewCard(button.getAttribute('data-preview-card') || 'actions');
             });
         });
-        elements.publishBtn?.addEventListener('click', publishActiveSection);
+        elements.publishBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            publishActiveSection();
+        });
         elements.dirtySaveBtn?.addEventListener('click', saveActiveSection);
         elements.dirtyResetBtn?.addEventListener('click', resetActiveSection);
-        elements.downloadBtn.addEventListener('click', downloadActiveSection);
-        elements.reloadBtn.addEventListener('click', reloadActiveSection);
-        elements.quickModeBtn?.addEventListener('click', () => setQuickMode(true));
-        elements.fullModeBtn?.addEventListener('click', () => setQuickMode(false));
-        elements.historyBtn?.addEventListener('click', openHistoryModal);
-        elements.collapseBtn?.addEventListener('click', () => setAllSectionStates(false));
-        elements.expandBtn?.addEventListener('click', () => setAllSectionStates(true));
+        elements.downloadBtn.addEventListener('click', () => {
+            closeToolbarMore();
+            downloadActiveSection();
+        });
+        elements.reloadBtn.addEventListener('click', () => {
+            closeToolbarMore();
+            reloadActiveSection();
+        });
+        elements.quickModeBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setQuickMode(true);
+        });
+        elements.fullModeBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setQuickMode(false);
+        });
+        elements.historyBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            openHistoryModal();
+        });
+        elements.collapseBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setAllSectionStates(false);
+        });
+        elements.expandBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setAllSectionStates(true);
+        });
         elements.searchInput?.addEventListener('input', () => {
             state.searchQuery = elements.searchInput.value;
             applySectionFilter();
@@ -7983,11 +8014,23 @@
                 closeGuideModal();
             }
         });
-        elements.customerModeBtn?.addEventListener('click', () => setEditorMode('customer'));
-        elements.managerModeBtn?.addEventListener('click', () => setEditorMode('manager'));
-        elements.advancedModeBtn?.addEventListener('click', () => setEditorMode('advanced'));
+        elements.customerModeBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setEditorMode('customer');
+        });
+        elements.managerModeBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setEditorMode('manager');
+        });
+        elements.advancedModeBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            setEditorMode('advanced');
+        });
         elements.loginForm?.addEventListener('submit', handleLoginSubmit);
-        elements.logoutBtn?.addEventListener('click', handleLogout);
+        elements.logoutBtn?.addEventListener('click', () => {
+            closeToolbarMore();
+            handleLogout();
+        });
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('keydown', handleGlobalKeydown);
     }

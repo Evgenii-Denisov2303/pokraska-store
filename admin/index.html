@@ -32,16 +32,27 @@
 
             <nav class="admin-nav" id="adminNav" aria-label="Разделы админки"></nav>
 
-            <div class="admin-help">
-                <h2>Как пользоваться</h2>
-                <ol>
-                    <li>Выбери нужный раздел слева.</li>
-                    <li>Измени текст, фото, кнопки или контакты.</li>
-                    <li>Нажми <code>Сохранить изменения</code> и проверь страницу по ссылкам справа.</li>
-                </ol>
-                <p><code>Резервная копия</code> скачивает текущие данные на компьютер, если нужно сохранить отдельную копию перед правками.</p>
-                <p>Если нужно открыть админку заказчику через интернет, можно включить вход по логину и паролю. Подробности: <code>docs/admin-deploy.md</code>.</p>
-            </div>
+            <details class="admin-help">
+                <summary class="admin-help__summary">
+                    <span class="admin-help__summary-copy">
+                        <strong>Короткая инструкция</strong>
+                        <span>Три шага для обычной работы и ссылка на развёрнутую публикацию.</span>
+                    </span>
+                    <span class="admin-help__summary-icon">
+                        <i class="fas fa-circle-chevron-down" aria-hidden="true"></i>
+                    </span>
+                </summary>
+                <div class="admin-help__body">
+                    <h2>Как пользоваться</h2>
+                    <ol>
+                        <li>Выбери нужный раздел слева.</li>
+                        <li>Измени текст, фото, кнопки или контакты.</li>
+                        <li>Нажми <code>Сохранить изменения</code> и проверь страницу по ссылкам справа.</li>
+                    </ol>
+                    <p><code>Резервная копия</code> скачивает текущие данные на компьютер, если нужно сохранить отдельную копию перед правками.</p>
+                    <p>Если нужно открыть админку заказчику через интернет, можно включить вход по логину и паролю. Подробности: <code>docs/admin-deploy.md</code>.</p>
+                </div>
+            </details>
 
             <div class="admin-sidebar-footer" id="adminSidebarFooter"></div>
         </aside>
@@ -93,30 +104,40 @@
                                         <i class="fas fa-sliders" aria-hidden="true"></i> Расширенный
                                     </button>
                                 </div>
+                                <p class="admin-toolbar__more-note">Если чаще всего меняют тексты, фото и контакты, лучше оставить <strong>Быстрые правки</strong> и профиль <strong>Заказчик</strong>.</p>
                             </section>
-                            <div class="admin-toolbar__more-actions">
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminReloadBtn">
-                                    <i class="fas fa-rotate-right" aria-hidden="true"></i> Обновить
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminHistoryBtn">
-                                    <i class="fas fa-clock-rotate-left" aria-hidden="true"></i> История версий
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminCollapseBtn">
-                                    <i class="fas fa-compress" aria-hidden="true"></i> Свернуть всё
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminExpandBtn">
-                                    <i class="fas fa-expand" aria-hidden="true"></i> Развернуть всё
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminDownloadBtn">
-                                    <i class="fas fa-download" aria-hidden="true"></i> Резервная копия
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminPublishBtn">
-                                    <i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Отметить как опубликовано
-                                </button>
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminLogoutBtn" hidden>
-                                    <i class="fas fa-right-from-bracket" aria-hidden="true"></i> Выйти
-                                </button>
-                            </div>
+                            <section class="admin-toolbar__more-group">
+                                <p class="admin-toolbar__more-title">Обычная работа</p>
+                                <div class="admin-toolbar__more-actions admin-toolbar__more-actions--primary">
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminHistoryBtn">
+                                        <i class="fas fa-clock-rotate-left" aria-hidden="true"></i> История версий
+                                    </button>
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminPublishBtn">
+                                        <i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Отметить как опубликовано
+                                    </button>
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminDownloadBtn">
+                                        <i class="fas fa-download" aria-hidden="true"></i> Резервная копия
+                                    </button>
+                                </div>
+                            </section>
+                            <div class="admin-toolbar__more-divider" role="presentation"></div>
+                            <section class="admin-toolbar__more-group">
+                                <p class="admin-toolbar__more-title">Дополнительные инструменты</p>
+                                <div class="admin-toolbar__more-actions admin-toolbar__more-actions--secondary">
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminReloadBtn">
+                                        <i class="fas fa-rotate-right" aria-hidden="true"></i> Обновить
+                                    </button>
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminCollapseBtn">
+                                        <i class="fas fa-compress" aria-hidden="true"></i> Свернуть всё
+                                    </button>
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminExpandBtn">
+                                        <i class="fas fa-expand" aria-hidden="true"></i> Развернуть всё
+                                    </button>
+                                    <button class="admin-btn admin-btn--ghost" type="button" id="adminLogoutBtn" hidden>
+                                        <i class="fas fa-right-from-bracket" aria-hidden="true"></i> Выйти
+                                    </button>
+                                </div>
+                            </section>
                         </div>
                     </details>
                 </div>
