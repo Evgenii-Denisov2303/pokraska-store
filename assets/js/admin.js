@@ -3563,6 +3563,13 @@
             && field?.key === 'contact';
     }
 
+    function shouldUseCompactRequestEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'home'
+            && field?.type === 'group'
+            && field?.key === 'request';
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -3676,6 +3683,143 @@
         ].filter(Boolean);
         secondaryCards.forEach((card) => detailsCard.appendChild(card));
         panel.appendChild(detailsCard);
+
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactRequestEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-request';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Заявка, контакты и быстрые кнопки на главной', 'fa-paper-plane'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-request-quick';
+        panel.innerHTML = `
+            <div class="admin-request-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран заявки</p>
+                    <h2>Форма и быстрый контакт на главной</h2>
+                    <p>Здесь удобно менять тексты блока заявки, быстрый контакт, кнопки и встроенную форму без всей структуры главной страницы.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+
+        const topGrid = document.createElement('div');
+        topGrid.className = 'admin-request-quick__grid';
+
+        const heroCard = document.createElement('section');
+        heroCard.className = 'admin-request-quick__card';
+        heroCard.innerHTML = `
+            <div class="admin-request-quick__card-head">
+                <div class="admin-request-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Тексты блока</h3>
+                    <p>Верхние подписи, заголовок и короткие акценты рядом с формой.</p>
+                </div>
+            </div>
+        `;
+        const heroGrid = document.createElement('div');
+        heroGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            heroGrid,
+            ['eyebrow', 'titleHtml', 'lead', 'facts', 'advantages']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        heroCard.appendChild(heroGrid);
+        topGrid.appendChild(heroCard);
+
+        const contactCard = document.createElement('section');
+        contactCard.className = 'admin-request-quick__card';
+        contactCard.innerHTML = `
+            <div class="admin-request-quick__card-head">
+                <div class="admin-request-quick__card-icon"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Быстрый контакт</h3>
+                    <p>Заголовок контактов и список телефонов и мессенджеров рядом.</p>
+                </div>
+            </div>
+        `;
+        const contactGrid = document.createElement('div');
+        contactGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            contactGrid,
+            ['contactTitle', 'contactIntro', 'contactLines']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        contactCard.appendChild(contactGrid);
+        topGrid.appendChild(contactCard);
+
+        panel.appendChild(topGrid);
+
+        const bottomGrid = document.createElement('div');
+        bottomGrid.className = 'admin-request-quick__grid admin-request-quick__grid--bottom';
+
+        const formCard = document.createElement('section');
+        formCard.className = 'admin-request-quick__card';
+        formCard.innerHTML = `
+            <div class="admin-request-quick__card-head">
+                <div class="admin-request-quick__card-icon"><i class="fas fa-rectangle-list" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Форма заявки</h3>
+                    <p>Заголовок формы, пояснение и ссылка на встроенную форму.</p>
+                </div>
+            </div>
+        `;
+        const formGrid = document.createElement('div');
+        formGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            formGrid,
+            ['formEyebrow', 'formTitle', 'formNotice', 'iframeSrc']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        formCard.appendChild(formGrid);
+        bottomGrid.appendChild(formCard);
+
+        const actionCard = document.createElement('section');
+        actionCard.className = 'admin-request-quick__card';
+        actionCard.innerHTML = `
+            <div class="admin-request-quick__card-head">
+                <div class="admin-request-quick__card-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Быстрые кнопки</h3>
+                    <p>Кнопки «Позвонить», «Max», «Telegram» и другие быстрые действия.</p>
+                </div>
+            </div>
+        `;
+        const actionGrid = document.createElement('div');
+        actionGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            actionGrid,
+            ['quickActions']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        actionCard.appendChild(actionGrid);
+        bottomGrid.appendChild(actionCard);
+
+        panel.appendChild(bottomGrid);
 
         details.appendChild(panel);
         return details;
@@ -5719,6 +5863,10 @@
         if (field.type === 'group') {
             if (shouldUseCompactContactEditor(contentKey, field)) {
                 return renderCompactContactEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactRequestEditor(contentKey, field)) {
+                return renderCompactRequestEditor(field, value, contentKey);
             }
 
             const details = document.createElement('details');
