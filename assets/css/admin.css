@@ -2596,6 +2596,25 @@ body.admin-page.admin-customer-layout .admin-help {
     flex: 0 1 220px;
 }
 
+.admin-media__meta {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.admin-media__meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(34, 50, 74, 0.06);
+    color: var(--admin-text-soft);
+    font-size: 13px;
+    font-weight: 700;
+}
+
 .admin-media__grid {
     margin-top: 18px;
     display: grid;
@@ -2617,6 +2636,11 @@ body.admin-page.admin-customer-layout .admin-help {
     border-radius: 20px;
     overflow: hidden;
     background: var(--admin-surface-muted);
+}
+
+.admin-media-card.is-current {
+    border-color: rgba(47, 111, 199, 0.28);
+    box-shadow: 0 16px 36px rgba(47, 111, 199, 0.08);
 }
 
 .admin-media-card img {
@@ -3323,6 +3347,10 @@ body.admin-page.admin-customer-layout .admin-help {
 
     .admin-media__header {
         flex-direction: column;
+    }
+
+    .admin-media__meta {
+        gap: 8px;
     }
 
     .admin-media__grid {

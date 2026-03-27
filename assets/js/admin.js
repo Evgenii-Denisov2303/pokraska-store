@@ -1775,6 +1775,7 @@
         mediaPicker: document.getElementById('adminMediaPicker'),
         mediaCloseBtn: document.getElementById('adminMediaCloseBtn'),
         mediaTitle: document.getElementById('adminMediaTitle'),
+        mediaMeta: document.getElementById('adminMediaMeta'),
         mediaSearch: document.getElementById('adminMediaSearch'),
         mediaDirectory: document.getElementById('adminMediaDirectory'),
         mediaUploadBtn: document.getElementById('adminMediaUploadBtn'),
@@ -1782,6 +1783,7 @@
         mediaList: document.getElementById('adminMediaList'),
         historyModal: document.getElementById('adminHistoryModal'),
         historyCloseBtn: document.getElementById('adminHistoryCloseBtn'),
+        historyMeta: document.getElementById('adminHistoryMeta'),
         historyList: document.getElementById('adminHistoryList'),
         guideModal: document.getElementById('adminGuideModal'),
         guideTitle: document.getElementById('adminGuideTitle'),
@@ -2726,7 +2728,21 @@
 
         const query = state.mediaSearchQuery.trim().toLowerCase();
         const filteredItems = state.mediaLibrary.filter((item) => item.toLowerCase().includes(query));
+        const currentValue = typeof state.mediaPickerContext?.currentValue === 'string'
+            ? state.mediaPickerContext.currentValue.trim()
+            : '';
+        const currentFileName = currentValue ? getFileNameFromPath(currentValue) : '';
+        const directoryLabel = elements.mediaDirectory instanceof HTMLSelectElement
+            ? (elements.mediaDirectory.selectedOptions[0]?.textContent || elements.mediaDirectory.value)
+            : (state.mediaPickerContext?.directory || getMediaDefaultDirectory(state.activeKey));
         elements.mediaTitle.textContent = state.mediaPickerContext?.title || 'Выбрать фото';
+        if (elements.mediaMeta) {
+            elements.mediaMeta.innerHTML = `
+                <span><i class="fas fa-folder-open" aria-hidden="true"></i> ${directoryLabel}</span>
+                <span><i class="fas fa-image" aria-hidden="true"></i> Найдено: ${filteredItems.length}</span>
+                <span><i class="fas fa-check-circle" aria-hidden="true"></i> ${currentFileName ? `Сейчас выбрано: ${currentFileName}` : 'Фото пока не выбрано'}</span>
+            `;
+        }
 
         if (!filteredItems.length) {
             elements.mediaList.innerHTML = '<div class="admin-media__empty">По этому запросу ничего не найдено. Попробуй другое имя файла или очисти поиск.</div>';
@@ -2736,15 +2752,16 @@
         elements.mediaList.innerHTML = filteredItems.map((item) => {
             const previewUrl = getPreviewUrl(item);
             const fileName = getFileNameFromPath(item);
+            const isCurrent = Boolean(currentValue && item === currentValue);
 
             return `
-                <article class="admin-media-card">
+                <article class="admin-media-card${isCurrent ? ' is-current' : ''}">
                     <img src="${previewUrl}" alt="${fileName}" loading="lazy">
                     <div class="admin-media-card__body">
                         <div class="admin-media-card__title">${fileName}</div>
                         <div class="admin-media-card__path">${item}</div>
                         <button class="admin-btn admin-btn--primary" type="button" data-media-select="${item}">
-                            <i class="fas fa-check" aria-hidden="true"></i> Выбрать
+                            <i class="fas fa-check" aria-hidden="true"></i> ${isCurrent ? 'Оставить это фото' : 'Выбрать'}
                         </button>
                     </div>
                 </article>
@@ -2775,6 +2792,9 @@
         renderMediaPicker();
         elements.mediaPicker.hidden = false;
         document.body.classList.add('admin-media-open');
+        window.setTimeout(() => {
+            elements.mediaSearch?.focus();
+        }, 0);
     }
 
     async function handleMediaUpload(file) {
@@ -2913,13 +2933,31 @@
         closeHistoryModal();
         renderNav();
         renderActiveSection();
-        showAlert(`Версия от ${formatDateTime(entry.savedAt)} восстановлена. Нажми “Сохранить изменения”, чтобы применить её на сайте.`, 'success');
+        showAlert(`Версия от ${formatDateTime(entry.savedAt)} восстановлена. Теперь сохраните раздел, чтобы вернуть её на сайт.`, 'success', {
+            actions: [
+                { label: 'Сохранить сейчас', style: 'primary', onClick: () => saveActiveSection() },
+                { label: 'Продолжить', onClick: () => clearAlert() }
+            ]
+        });
     }
 
     function renderHistoryModal() {
         if (!elements.historyList) return;
 
         const entries = getHistoryEntriesForActiveSection();
+        if (elements.historyMeta) {
+            const latestEntry = entries[0];
+            const publishCount = entries.filter((entry) => entry.action === 'publish').length;
+            elements.historyMeta.innerHTML = entries.length
+                ? `
+                    <span><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> Версий: ${entries.length}</span>
+                    <span><i class="fas fa-calendar-check" aria-hidden="true"></i> Последняя: ${formatDateTime(latestEntry?.savedAt)}</span>
+                    <span><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Публикаций: ${publishCount}</span>
+                `
+                : `
+                    <span><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> История появится после первого сохранения</span>
+                `;
+        }
 
         if (!entries.length) {
             elements.historyList.innerHTML = '<div class="admin-media__empty">История пока пустая. Первая версия появится после успешного сохранения этого раздела.</div>';
@@ -2927,9 +2965,9 @@
         }
 
         elements.historyList.innerHTML = entries.map((entry, index) => `
-            <article class="admin-media-card">
+            <article class="admin-media-card${index === 0 ? ' is-current' : ''}">
                 <div class="admin-media-card__body">
-                    <div class="admin-media-card__title">${index === 0 ? 'Последнее действие' : `Версия ${index + 1}`}</div>
+                    <div class="admin-media-card__title">${index === 0 ? 'Последняя версия' : `Версия ${index + 1}`}</div>
                     <div class="admin-media-card__path">${formatDateTime(entry.savedAt)}</div>
                     <div class="admin-history-card__meta">
                         <span>${entry.action === 'publish' ? 'Отметка публикации' : 'Сохранение'}</span>
@@ -2938,7 +2976,7 @@
                     </div>
                     ${entry.data ? `
                         <button class="admin-btn admin-btn--primary" type="button" data-history-restore="${entry.id}">
-                            <i class="fas fa-rotate-left" aria-hidden="true"></i> Вернуть версию
+                            <i class="fas fa-rotate-left" aria-hidden="true"></i> Вернуть эту версию
                         </button>
                     ` : `
                         <span class="admin-history-card__note">Это запись без снимка данных.</span>
@@ -6929,6 +6967,7 @@
                 openMediaPicker({
                     title: getDisplayLabel(field),
                     directory: getMediaDefaultDirectory(contentKey),
+                    currentValue: input.value,
                     apply: (selectedValue) => applyFieldValue(selectedValue)
                 });
             });
@@ -7189,6 +7228,7 @@
                             openMediaPicker({
                                 title: itemTitle ? `Выбрать фото для «${itemTitle}»` : 'Выбрать фото',
                                 directory: getMediaDefaultDirectory(contentKey),
+                                currentValue: itemObject.src,
                                 apply: (selectedValue) => {
                                     itemObject.src = selectedValue;
                                     markDirty();
@@ -7484,7 +7524,7 @@
             saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
             updateDirtyBar();
         } else if (!hasChanges) {
-            saveButtonHtml = '<i class="fas fa-check" aria-hidden="true"></i> Изменений пока нет';
+            saveButtonHtml = '<i class="fas fa-check" aria-hidden="true"></i> Сохранено';
             updateDirtyBar();
         } else if (!state.apiAvailable) {
             saveButtonHtml = '<i class="fas fa-server" aria-hidden="true"></i> Нет сервера сохранения';
@@ -7564,11 +7604,12 @@
             updateToolbarState();
             const previewLink = getPrimaryPreviewLink(key);
             showAlert(
-                `Раздел «${config.label}» сохранён в файлы проекта. Если сайт уже обновлён, можно отметить его как опубликованный.`,
+                `Раздел «${config.label}» сохранён. Если всё выглядит правильно, можно отметить его как опубликованный.`,
                 'success',
                 {
                     actions: [
                         previewLink ? { label: 'Открыть страницу', href: previewLink.href, style: 'primary' } : null,
+                        { label: 'Открыть историю', onClick: () => openHistoryModal() },
                         { label: 'Продолжить редактирование', onClick: () => clearAlert() }
                     ]
                 }
@@ -7637,6 +7678,7 @@
                 {
                     actions: [
                         previewLink ? { label: 'Открыть страницу', href: previewLink.href, style: 'primary' } : null,
+                        { label: 'Открыть историю', onClick: () => openHistoryModal() },
                         { label: 'Продолжить редактирование', onClick: () => clearAlert() }
                     ]
                 }
