@@ -5207,9 +5207,14 @@
 
     function updatePreviewCardsUi() {
         const previewVisible = !contentConfigs[state.activeKey]?.virtual;
+        const activeCard = state.activePreviewCard || 'actions';
 
         if (elements.previewSwitcher) {
-            elements.previewSwitcher.hidden = true;
+            elements.previewSwitcher.hidden = !previewVisible;
+            elements.previewSwitcher.querySelectorAll('[data-preview-card]').forEach((button) => {
+                const cardKey = button.getAttribute('data-preview-card') || 'actions';
+                button.classList.toggle('is-active', cardKey === activeCard);
+            });
         }
 
         if (elements.editorHelpers) {
@@ -5217,13 +5222,13 @@
         }
 
         if (elements.quickActionsCard) {
-            elements.quickActionsCard.hidden = !previewVisible;
+            elements.quickActionsCard.hidden = !previewVisible || activeCard !== 'actions';
         }
         if (elements.statusCard) {
-            elements.statusCard.hidden = !previewVisible;
+            elements.statusCard.hidden = !previewVisible || activeCard !== 'status';
         }
         if (elements.miniPreviewCard) {
-            elements.miniPreviewCard.hidden = !previewVisible;
+            elements.miniPreviewCard.hidden = !previewVisible || activeCard !== 'summary';
         }
     }
 
@@ -6937,45 +6942,55 @@
                     </button>
                 ` : ''}
             </div>
-            ${scenarios.length ? `
-                <div class="admin-quick-actions__scenarios">
-                    ${scenarios.map((scenario, index) => `
-                        <button class="admin-quick-actions__scenario" type="button" data-quick-scenario-index="${index}">
-                            <i class="fas ${scenario.icon}" aria-hidden="true"></i>
-                            <span>${scenario.title}</span>
-                        </button>
-                    `).join('')}
-                </div>
-            ` : ''}
-            ${guides.length ? `
-                <div class="admin-quick-actions__guides">
-                    ${guides.map((guide, index) => `
-                        <button class="admin-quick-actions__guide" type="button" data-open-guide="${index}">
-                            <i class="fas ${guide.icon}" aria-hidden="true"></i>
-                            <span>${guide.title}</span>
-                        </button>
-                    `).join('')}
-                </div>
-            ` : ''}
-            ${tasks.length ? `
-                <div class="admin-quick-actions__tasks">
-                    ${tasks.map((task, index) => `
-                        <button class="admin-quick-actions__task" type="button" data-quick-task-index="${index}">
-                            <i class="fas ${task.icon}" aria-hidden="true"></i>
-                            <span>${task.title}</span>
-                        </button>
-                    `).join('')}
-                </div>
-            ` : ''}
-            ${simpleScreens.length ? `
-                <div class="admin-quick-actions__screens">
-                    ${simpleScreens.map((screen, index) => `
-                        <button class="admin-quick-actions__screen" type="button" data-quick-screen-index="${index}">
-                            <i class="fas ${screen.icon}" aria-hidden="true"></i>
-                            <span>${screen.title}</span>
-                        </button>
-                    `).join('')}
-                </div>
+            ${(scenarios.length || tasks.length || simpleScreens.length || guides.length > 1) ? `
+                <details class="admin-quick-actions__extras">
+                    <summary>
+                        <span>Ещё переходы и подсказки</span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </summary>
+                    <div class="admin-quick-actions__extras-body">
+                        ${scenarios.length ? `
+                            <div class="admin-quick-actions__scenarios">
+                                ${scenarios.map((scenario, index) => `
+                                    <button class="admin-quick-actions__scenario" type="button" data-quick-scenario-index="${index}">
+                                        <i class="fas ${scenario.icon}" aria-hidden="true"></i>
+                                        <span>${scenario.title}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${guides.length > 1 ? `
+                            <div class="admin-quick-actions__guides">
+                                ${guides.slice(1).map((guide, index) => `
+                                    <button class="admin-quick-actions__guide" type="button" data-open-guide="${index + 1}">
+                                        <i class="fas ${guide.icon}" aria-hidden="true"></i>
+                                        <span>${guide.title}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${tasks.length ? `
+                            <div class="admin-quick-actions__tasks">
+                                ${tasks.map((task, index) => `
+                                    <button class="admin-quick-actions__task" type="button" data-quick-task-index="${index}">
+                                        <i class="fas ${task.icon}" aria-hidden="true"></i>
+                                        <span>${task.title}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${simpleScreens.length ? `
+                            <div class="admin-quick-actions__screens">
+                                ${simpleScreens.map((screen, index) => `
+                                    <button class="admin-quick-actions__screen" type="button" data-quick-screen-index="${index}">
+                                        <i class="fas ${screen.icon}" aria-hidden="true"></i>
+                                        <span>${screen.title}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </details>
             ` : ''}
         `;
 
@@ -8207,7 +8222,7 @@
             elements.searchCard.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.modeNote) {
-            elements.modeNote.hidden = Boolean(activeSimpleScreen);
+            elements.modeNote.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.pageLinks) {
             elements.pageLinks.hidden = useSectionTabs || Boolean(activeSimpleScreen);
