@@ -4854,6 +4854,10 @@
 
         updateToolbarChrome();
 
+        if (state.previewPanelOpen && !options.keepActiveCard) {
+            setActivePreviewCard('live');
+        }
+
         if (state.previewPanelOpen) {
             refreshLivePreview();
         }
@@ -6355,6 +6359,7 @@
                 if (action === 'image') {
                     const firstImageAction = elements.form?.querySelector('.admin-field[data-field-key="src"] .admin-field__media-actions button');
                     if (firstImageAction instanceof HTMLButtonElement) {
+                        setActivePreviewCard('summary');
                         firstImageAction.click();
                         return;
                     }
@@ -6362,12 +6367,14 @@
 
                 if (action === 'text') {
                     if (focusField((fieldNode) => /title|lead|subtitle|text|description/i.test(fieldNode.dataset.fieldKey || ''))) {
+                        setActivePreviewCard('summary');
                         return;
                     }
                 }
 
                 if (action === 'contacts') {
                     if (focusField((fieldNode) => /address|email|hours|href|label|phone/i.test(fieldNode.dataset.fieldKey || ''))) {
+                        setActivePreviewCard('summary');
                         return;
                     }
                 }
@@ -6375,6 +6382,7 @@
                 if (action === 'add') {
                     const addButton = elements.form?.querySelector('.admin-array__toolbar .admin-btn');
                     if (addButton instanceof HTMLButtonElement) {
+                        setActivePreviewCard('actions');
                         addButton.click();
                         return;
                     }
@@ -7686,6 +7694,7 @@
             }
             pushSectionHistory(config.fileName, state.data[key]);
             state.dirty[key] = false;
+            setActivePreviewCard('status');
             renderNav();
             renderStatusCard(key);
             renderMiniPreview(key);
@@ -7757,6 +7766,7 @@
                 state.adminState = payload.state;
             }
 
+            setActivePreviewCard('status');
             renderNav();
             renderStatusCard(key);
             renderHistoryModal();
@@ -7810,6 +7820,7 @@
             await loadAdminState();
             state.data[key] = deepClone(data);
             state.dirty[key] = false;
+            setActivePreviewCard('status');
             clearAlert();
             renderNav();
             renderActiveSection();
