@@ -342,8 +342,9 @@ body.admin-page.admin-customer-layout .admin-help {
     padding: 22px 24px 18px;
     border: 1px solid rgba(33, 61, 98, 0.1);
     border-radius: 24px;
-    background: rgba(242, 246, 251, 0.92);
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(14px);
+    box-shadow: 0 18px 40px rgba(30, 52, 88, 0.08);
 }
 
 .admin-toolbar__eyebrow {
@@ -447,7 +448,7 @@ body.admin-page.admin-customer-layout .admin-help {
     font: inherit;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -461,9 +462,35 @@ body.admin-page.admin-customer-layout .admin-help {
     color: #fff;
 }
 
+.admin-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(47, 111, 199, 0.24);
+    box-shadow: 0 12px 24px rgba(30, 52, 88, 0.08);
+}
+
+.admin-btn--primary:hover:not(:disabled) {
+    border-color: transparent;
+    box-shadow: 0 14px 28px rgba(47, 111, 199, 0.24);
+}
+
 .admin-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.admin-btn:focus-visible,
+.admin-nav__button:focus-visible,
+.admin-task-card:focus-visible,
+.admin-guide-card:focus-visible,
+.admin-screen-tile:focus-visible,
+.admin-scenario-card:focus-visible,
+.admin-dashboard-action:focus-visible,
+.admin-quick-actions__scenario:focus-visible,
+.admin-quick-actions__guide:focus-visible,
+.admin-quick-actions__task:focus-visible,
+.admin-quick-actions__screen:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(47, 111, 199, 0.14);
 }
 
 .admin-alert {
@@ -795,6 +822,7 @@ body.admin-page.admin-customer-layout .admin-help {
 .admin-guide-card:hover {
     transform: translateY(-1px);
     border-color: rgba(47, 111, 199, 0.3);
+    box-shadow: 0 18px 36px rgba(47, 111, 199, 0.09);
 }
 
 .admin-guide-card__icon {
@@ -854,6 +882,7 @@ body.admin-page.admin-customer-layout .admin-help {
 .admin-task-card:hover {
     transform: translateY(-1px);
     border-color: rgba(47, 111, 199, 0.28);
+    box-shadow: 0 18px 34px rgba(47, 111, 199, 0.08);
 }
 
 .admin-task-card__icon {
@@ -972,11 +1001,11 @@ body.admin-page.admin-customer-layout .admin-help {
 
 .admin-card,
 .admin-section {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.92);
     border: 1px solid var(--admin-border);
     border-radius: 24px;
     padding: 22px 24px;
-    box-shadow: var(--admin-shadow);
+    box-shadow: 0 18px 38px rgba(30, 52, 88, 0.06);
 }
 
 .admin-section.is-dirty {
@@ -1978,7 +2007,7 @@ body.admin-page.admin-customer-layout .admin-help {
 
 .admin-preview-card {
     display: grid;
-    gap: 14px;
+    gap: 16px;
 }
 
 .admin-preview-card__header {

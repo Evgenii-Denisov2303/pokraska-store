@@ -5195,7 +5195,7 @@
                     target: { sectionKey: 'wicket', focusKeys: ['src', 'title'] }
                 },
                 {
-                    icon: 'fa-fence',
+                    icon: 'fa-border-all',
                     title: 'Поправить заборы',
                     text: 'Открывает заборы и позволяет пройти их уже по шагам.',
                     kind: 'guide',
@@ -5350,7 +5350,7 @@
             ],
             catalogPanels: [
                 { icon: 'fa-warehouse', title: 'Только ворота и каркасы', text: 'Оставляет только откатные, распашные и их каркасы.', fieldKeys: ['sliding', 'slidingFrame', 'swing', 'swingFrame'] },
-                { icon: 'fa-fence', title: 'Только калитки и заборы', text: 'Показывает только калитки и все заборы.', fieldKeys: ['wicket', 'fenceProfnastil', 'fenceSiding', 'fencePicket', 'fenceLouver'] },
+                { icon: 'fa-border-all', title: 'Только калитки и заборы', text: 'Показывает только калитки и все заборы.', fieldKeys: ['wicket', 'fenceProfnastil', 'fenceSiding', 'fencePicket', 'fenceLouver'] },
                 { icon: 'fa-robot', title: 'Только автоматика', text: 'Только автоматика и комплектующие.', fieldKeys: ['automationSliding', 'automationSwing', 'automationComponents'] },
                 { icon: 'fa-shield-halved', title: 'Только гараж и защита', text: 'Только секционные, рольворота, рольставни и решётки.', fieldKeys: ['sectional', 'roller', 'shutters', 'grilles'] }
             ],
@@ -5423,7 +5423,7 @@
                 previewHref: '../pages/services.html'
             },
             {
-                icon: 'fa-fence',
+                icon: 'fa-border-all',
                 title: 'Поменять калитки и заборы',
                 text: 'Откроет простой экран только с калитками и заборами.',
                 sectionKey: 'catalogPanels',
@@ -5679,7 +5679,7 @@
                     ]
                 },
                 {
-                    icon: 'fa-fence',
+                    icon: 'fa-border-all',
                     title: 'Калитки и заборы',
                     summary: 'Отдельная пошаговая подсказка для калиток и всех видов заборов: профнастил, сайдинг, штакетник и жалюзи.',
                     result: 'Все карточки ограждений можно пройти одним маршрутом и быстро сверить структуру текстов.',
