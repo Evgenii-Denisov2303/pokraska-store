@@ -1477,7 +1477,7 @@
 
     const sectionMeta = {
         dashboard: {
-            icon: 'fa-rocket',
+            icon: 'fa-compass-drafting',
             navHint: 'Крупные действия: что именно хотите поменять на сайте прямо сейчас.',
             summary: 'Это домашний экран админки. Здесь можно выбрать готовое действие и сразу перейти в нужный раздел, не вспоминая структуру сайта.',
             bullets: [
@@ -3498,7 +3498,7 @@
         }
 
         return {
-            icon: 'fa-pen',
+            icon: 'fa-heading',
             text: 'Текстовые и служебные поля'
         };
     }
@@ -3544,7 +3544,7 @@
         const screenTemplates = [
             {
                 key: 'text',
-                icon: 'fa-pen',
+                icon: 'fa-heading',
                 title: 'Текст и заголовки',
                 text: 'Хлебные крошки, заголовки, абзацы и бейджи.',
                 fieldKeys: ['breadcrumb', 'title', 'introTitle', 'paragraphs', 'badges', 'tailParagraphs', 'sectionHeading']
@@ -3715,7 +3715,7 @@
         card.className = `admin-contact-quick__card${options.wide ? ' is-wide' : ''}`;
         card.innerHTML = `
             <div class="admin-contact-quick__card-head">
-                <div class="admin-contact-quick__card-icon"><i class="fas ${options.icon || 'fa-pen'}" aria-hidden="true"></i></div>
+                <div class="admin-contact-quick__card-icon"><i class="fas ${options.icon || 'fa-rectangle-list'}" aria-hidden="true"></i></div>
                 <div>
                     <h3>${options.title || getDisplayLabel(childField)}</h3>
                     ${options.text ? `<p>${options.text}</p>` : ''}
@@ -4743,7 +4743,7 @@
         details.dataset.fieldLabel = getDisplayLabel(field);
 
         const summary = document.createElement('summary');
-        summary.appendChild(createSectionSummary(field.label || field.key, options.summary || '', options.summaryIcon || 'fa-pen'));
+        summary.appendChild(createSectionSummary(field.label || field.key, options.summary || '', options.summaryIcon || 'fa-rectangle-list'));
         details.appendChild(summary);
 
         const panel = document.createElement('div');
@@ -4767,7 +4767,7 @@
         card.className = `admin-service-page-quick__card${options.wide ? ' is-wide' : ''}`;
         card.innerHTML = `
             <div class="admin-service-page-quick__card-head">
-                <div class="admin-service-page-quick__card-icon"><i class="fas ${options.icon || 'fa-pen'}" aria-hidden="true"></i></div>
+                <div class="admin-service-page-quick__card-icon"><i class="fas ${options.icon || 'fa-rectangle-list'}" aria-hidden="true"></i></div>
                 <div>
                     <h3>${options.title || 'Блок'}</h3>
                     ${options.text ? `<p>${options.text}</p>` : ''}
@@ -5349,7 +5349,19 @@
         }
 
         renderToolbarPath(state.activeKey);
+        updateStickyOffsets();
         updatePreviewPanelUi();
+    }
+
+    function updateStickyOffsets() {
+        if (!elements.toolbar) return;
+        const isDesktopLayout = window.innerWidth > 1180;
+        const toolbarHeight = Math.ceil(elements.toolbar.getBoundingClientRect().height || 0);
+        const previewTop = isDesktopLayout ? Math.max(toolbarHeight + 18, 124) : 0;
+        const tabsTop = isDesktopLayout ? Math.max(toolbarHeight + 8, 108) : 0;
+
+        document.documentElement.style.setProperty('--admin-sticky-preview-top', `${previewTop}px`);
+        document.documentElement.style.setProperty('--admin-sticky-tabs-top', `${tabsTop}px`);
     }
 
     function setPreviewPanelOpen(open, options = {}) {
@@ -5476,6 +5488,7 @@
 
     function renderCommandCenter(sectionKey) {
         if (!elements.commandCenter) return;
+        elements.commandCenter.classList.remove('is-compact');
 
         const config = contentConfigs[sectionKey];
         const meta = sectionMeta[sectionKey] || {};
@@ -5483,12 +5496,50 @@
         const workflow = getSectionWorkflowStatus(sectionKey);
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
         const stats = collectSectionStats(state.data[sectionKey]);
-        const activeIcon = meta.icon || 'fa-pen';
+        const activeIcon = meta.icon || 'fa-rectangle-list';
         const tasks = getSectionQuickTasks(sectionKey);
         const simpleScreens = getSectionSimpleScreens(sectionKey);
         const activeSimpleScreen = getActiveSimpleScreen(sectionKey);
         const scenarios = getSectionScenarios(sectionKey);
         const guides = getSectionGuides(sectionKey);
+        const focusCards = [
+            ...tasks.map((task, index) => ({
+                type: 'task',
+                index,
+                icon: task.icon,
+                title: task.title,
+                text: task.text,
+                meta: 'Открыть нужный блок',
+                active: false
+            })),
+            ...simpleScreens.map((screen, index) => ({
+                type: 'screen',
+                index,
+                icon: screen.icon,
+                title: screen.title,
+                text: screen.text,
+                meta: `${screen.fieldKeys.length} ${screen.fieldKeys.length === 1 ? 'блок' : screen.fieldKeys.length < 5 ? 'блока' : 'блоков'}`,
+                active: Boolean(activeSimpleScreen && state.activeSimpleScreen?.screenIndex === index)
+            }))
+        ];
+        const routeCards = [
+            ...scenarios.map((scenario, index) => ({
+                type: 'scenario',
+                index,
+                icon: scenario.icon,
+                title: scenario.title,
+                text: scenario.text,
+                meta: 'Быстрый переход'
+            })),
+            ...guides.map((guide, index) => ({
+                type: 'guide',
+                index,
+                icon: guide.icon,
+                title: guide.title,
+                text: guide.summary,
+                meta: `${guide.steps.length} ${guide.steps.length === 1 ? 'шаг' : guide.steps.length < 5 ? 'шага' : 'шагов'}`
+            }))
+        ];
 
         if (config.virtual) {
             const dashboardActions = getDashboardHomeActions();
@@ -5534,7 +5585,35 @@
                         <span>Лишних полей на старте</span>
                     </article>
                 </div>
+                <div class="admin-command-center__routes admin-command-center__routes--dashboard">
+                    <div class="admin-command-center__section-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">С чего начать</p>
+                            <h3>Самые частые действия</h3>
+                        </div>
+                        <span>Если нужно быстро сменить телефоны, фото или текст на главной, начните отсюда.</span>
+                    </div>
+                    <div class="admin-route-list">
+                        ${dashboardActions.slice(0, 6).map((action, index) => `
+                            <button class="admin-route-chip admin-route-chip--feature" type="button" data-dashboard-route-index="${index}">
+                                <span class="admin-route-chip__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
+                                <span class="admin-route-chip__copy">
+                                    <strong>${action.title}</strong>
+                                    <span>${action.text}</span>
+                                </span>
+                                <span class="admin-route-chip__meta">Открыть</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
             `;
+
+            elements.commandCenter.querySelectorAll('[data-dashboard-route-index]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const index = Number(button.getAttribute('data-dashboard-route-index'));
+                    runDashboardAction(dashboardActions[index]);
+                });
+            });
             return;
         }
 
@@ -5575,94 +5654,51 @@
                     <strong>${stats.linkCount}</strong>
                     <span>Ссылок и форм</span>
                 </article>
-                <article class="admin-command-stat">
-                    <strong>${stats.arrayCount}</strong>
-                    <span>Списков и карточек</span>
-                </article>
-            </div>
-            ${tasks.length ? `
-                <div class="admin-command-center__tasks">
-                    <div class="admin-command-center__scenario-head">
+                    <article class="admin-command-stat">
+                        <strong>${stats.arrayCount}</strong>
+                        <span>Списков и карточек</span>
+                    </article>
+                </div>
+            ${focusCards.length ? `
+                <div class="admin-command-center__focus">
+                    <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Что хочешь сделать прямо сейчас</p>
-                            <h3>Готовые действия</h3>
+                            <p class="admin-toolbar__eyebrow">С чего удобнее начать</p>
+                            <h3>Главные действия</h3>
                         </div>
-                        <span>Нажмите нужное действие, и админка сама откроет нужный блок.</span>
+                        <span>Открой действие или спокойный экран, и админка сфокусируется только на нужной части раздела.</span>
                     </div>
-                    <div class="admin-tasks-grid">
-                        ${tasks.map((task, index) => `
-                            <button class="admin-task-card" type="button" data-task-index="${index}">
-                                <span class="admin-task-card__icon"><i class="fas ${task.icon}" aria-hidden="true"></i></span>
-                                <strong>${task.title}</strong>
-                                <p>${task.text}</p>
+                    <div class="admin-focus-grid">
+                        ${focusCards.map((item) => `
+                            <button class="admin-focus-tile${item.type === 'screen' ? ' is-screen' : ''}${item.active ? ' is-active' : ''}" type="button" data-focus-type="${item.type}" data-focus-index="${item.index}">
+                                <span class="admin-focus-tile__badge">${item.type === 'screen' ? 'Простой экран' : 'Действие'}</span>
+                                <span class="admin-focus-tile__icon"><i class="fas ${item.icon}" aria-hidden="true"></i></span>
+                                <strong>${item.title}</strong>
+                                <p>${item.text}</p>
+                                <span class="admin-focus-tile__meta">${item.meta}</span>
                             </button>
                         `).join('')}
                     </div>
                 </div>
             ` : ''}
-            ${simpleScreens.length ? `
-                <div class="admin-command-center__screens">
-                    <div class="admin-command-center__scenario-head">
+            ${routeCards.length ? `
+                <div class="admin-command-center__routes">
+                    <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Простые экраны</p>
-                            <h3>Показывать только нужное</h3>
+                            <p class="admin-toolbar__eyebrow">Быстрые маршруты</p>
+                            <h3>Куда перейти одним нажатием</h3>
                         </div>
-                        <span>Это самый спокойный режим: админка оставит только нужные куски раздела и уберёт остальную форму.</span>
+                        <span>Здесь собраны частые переходы и пошаговые подсказки без лишних промежуточных блоков.</span>
                     </div>
-                    <div class="admin-screens-grid">
-                        ${simpleScreens.map((screen, index) => `
-                            <button class="admin-screen-tile ${activeSimpleScreen && state.activeSimpleScreen?.screenIndex === index ? 'is-active' : ''}" type="button" data-screen-index="${index}">
-                                <span class="admin-screen-tile__icon"><i class="fas ${screen.icon}" aria-hidden="true"></i></span>
-                                <strong>${screen.title}</strong>
-                                <p>${screen.text}</p>
-                                <div class="admin-screen-tile__meta">
-                                    <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${screen.fieldKeys.length} блока</span>
-                                    <span><i class="fas fa-eye" aria-hidden="true"></i> Простой экран</span>
-                                </div>
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            ${scenarios.length ? `
-                <div class="admin-command-center__scenarios">
-                    <div class="admin-command-center__scenario-head">
-                        <div>
-                            <p class="admin-toolbar__eyebrow">Частые правки</p>
-                            <h3>Что обычно меняют в этом разделе</h3>
-                        </div>
-                        <span>Можно нажать и сразу перейти в нужный блок формы.</span>
-                    </div>
-                    <div class="admin-scenarios-grid">
-                        ${scenarios.map((scenario, index) => `
-                            <button class="admin-scenario-card" type="button" data-scenario-index="${index}">
-                                <span class="admin-scenario-card__icon"><i class="fas ${scenario.icon}" aria-hidden="true"></i></span>
-                                <strong>${scenario.title}</strong>
-                                <span>${scenario.text}</span>
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            ${guides.length ? `
-                <div class="admin-command-center__guides">
-                    <div class="admin-command-center__scenario-head">
-                        <div>
-                            <p class="admin-toolbar__eyebrow">Пошаговые подсказки</p>
-                            <h3>Пошаговые маршруты для частых правок</h3>
-                        </div>
-                        <span>Открой подсказку, иди по шагам и переходи сразу в нужные блоки формы.</span>
-                    </div>
-                    <div class="admin-guides-grid">
-                        ${guides.map((guide, index) => `
-                            <button class="admin-guide-card" type="button" data-guide-index="${index}">
-                                <span class="admin-guide-card__icon"><i class="fas ${guide.icon}" aria-hidden="true"></i></span>
-                                <strong>${guide.title}</strong>
-                                <p>${guide.summary}</p>
-                                <div class="admin-guide-card__meta">
-                                    <span><i class="fas fa-list-ol" aria-hidden="true"></i> ${guide.steps.length} шага</span>
-                                    <span><i class="fas fa-location-dot" aria-hidden="true"></i> Открыть подсказку</span>
-                                </div>
+                    <div class="admin-route-list">
+                        ${routeCards.map((item) => `
+                            <button class="admin-route-chip${item.type === 'guide' ? ' is-guide' : ''}" type="button" data-route-type="${item.type}" data-route-index="${item.index}">
+                                <span class="admin-route-chip__icon"><i class="fas ${item.icon}" aria-hidden="true"></i></span>
+                                <span class="admin-route-chip__copy">
+                                    <strong>${item.title}</strong>
+                                    <span>${item.text}</span>
+                                </span>
+                                <span class="admin-route-chip__meta">${item.meta}</span>
                             </button>
                         `).join('')}
                     </div>
@@ -5670,31 +5706,27 @@
             ` : ''}
         `;
 
-        elements.commandCenter.querySelectorAll('[data-scenario-index]').forEach((button) => {
+        elements.commandCenter.querySelectorAll('[data-focus-type]').forEach((button) => {
             button.addEventListener('click', () => {
-                const index = Number(button.getAttribute('data-scenario-index'));
-                runSectionScenario(scenarios[index]);
-            });
-        });
-
-        elements.commandCenter.querySelectorAll('[data-task-index]').forEach((button) => {
-            button.addEventListener('click', () => {
-                const index = Number(button.getAttribute('data-task-index'));
+                const type = button.getAttribute('data-focus-type');
+                const index = Number(button.getAttribute('data-focus-index'));
+                if (type === 'screen') {
+                    openSimpleScreen(sectionKey, index);
+                    return;
+                }
                 runQuickTask(tasks[index]);
             });
         });
 
-        elements.commandCenter.querySelectorAll('[data-screen-index]').forEach((button) => {
+        elements.commandCenter.querySelectorAll('[data-route-type]').forEach((button) => {
             button.addEventListener('click', () => {
-                const index = Number(button.getAttribute('data-screen-index'));
-                openSimpleScreen(sectionKey, index);
-            });
-        });
-
-        elements.commandCenter.querySelectorAll('[data-guide-index]').forEach((button) => {
-            button.addEventListener('click', () => {
-                const index = Number(button.getAttribute('data-guide-index'));
-                openGuideModal(sectionKey, index);
+                const type = button.getAttribute('data-route-type');
+                const index = Number(button.getAttribute('data-route-index'));
+                if (type === 'guide') {
+                    openGuideModal(sectionKey, index);
+                    return;
+                }
+                runSectionScenario(scenarios[index]);
             });
         });
     }
@@ -6734,7 +6766,7 @@
                                 </div>
                                 <div class="admin-guide-step__meta">
                                     <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${getTopLevelFieldLabel(state.activeGuide.sectionKey, step.sectionKey)}</span>
-                                    ${step.focusLabel ? `<span><i class="fas fa-pen" aria-hidden="true"></i> ${step.focusLabel}</span>` : ''}
+                                    ${step.focusLabel ? `<span><i class="fas fa-heading" aria-hidden="true"></i> ${step.focusLabel}</span>` : ''}
                                 </div>
                                 <div class="admin-guide-step__actions">
                                     <button class="admin-btn admin-btn--primary" type="button" data-guide-step-index="${index}">
@@ -6883,7 +6915,7 @@
                     <i class="fas fa-image" aria-hidden="true"></i> Поменять фото
                 </button>
                 <button class="admin-btn admin-btn--ghost" type="button" data-quick-action="text">
-                    <i class="fas fa-pen" aria-hidden="true"></i> Поменять текст блока
+                    <i class="fas fa-heading" aria-hidden="true"></i> Поменять текст блока
                 </button>
                 <button class="admin-btn admin-btn--ghost" type="button" data-quick-action="contacts">
                     <i class="fas fa-phone" aria-hidden="true"></i> Изменить контакты
@@ -7274,6 +7306,22 @@
             elements.navSearch.value = state.navQuery;
         }
 
+        const buildGroupHead = (label, count) => {
+            const groupHead = document.createElement('div');
+            groupHead.className = 'admin-nav__group-head';
+
+            const groupTitle = document.createElement('h2');
+            groupTitle.className = 'admin-nav__group-title';
+            groupTitle.textContent = label;
+
+            const groupCount = document.createElement('span');
+            groupCount.className = 'admin-nav__group-count';
+            groupCount.textContent = `${count} ${count === 1 ? 'раздел' : count < 5 ? 'раздела' : 'разделов'}`;
+
+            groupHead.append(groupTitle, groupCount);
+            return groupHead;
+        };
+
         const dashboardConfig = contentConfigs.dashboard;
         const dashboardMeta = sectionMeta.dashboard || {};
         const dashboardHaystack = [
@@ -7288,12 +7336,13 @@
             dashboardButton.type = 'button';
             dashboardButton.className = `admin-nav__button${state.activeKey === 'dashboard' ? ' is-active' : ''}`;
             dashboardButton.innerHTML = `
-                <span class="admin-nav__button-icon"><i class="fas ${dashboardMeta.icon || 'fa-rocket'}" aria-hidden="true"></i></span>
+                <span class="admin-nav__button-icon"><i class="fas ${dashboardMeta.icon || 'fa-compass-drafting'}" aria-hidden="true"></i></span>
                 <span class="admin-nav__button-copy">
                     <strong>${dashboardConfig.label}</strong>
                     <span>${dashboardMeta.navHint || dashboardConfig.description}</span>
                     <span class="admin-nav__button-status is-idle">Стартовый экран</span>
                 </span>
+                <span class="admin-nav__button-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
             `;
 
             dashboardButton.addEventListener('click', () => {
@@ -7301,12 +7350,8 @@
             });
 
             const dashboardWrapper = document.createElement('section');
-            dashboardWrapper.className = 'admin-nav__group';
-
-            const groupTitle = document.createElement('h2');
-            groupTitle.className = 'admin-nav__group-title';
-            groupTitle.textContent = 'Старт';
-            dashboardWrapper.appendChild(groupTitle);
+            dashboardWrapper.className = `admin-nav__group${state.activeKey === 'dashboard' ? ' is-active-group' : ''}`;
+            dashboardWrapper.appendChild(buildGroupHead('Старт', 1));
 
             const groupNote = document.createElement('p');
             groupNote.className = 'admin-nav__group-note';
@@ -7322,24 +7367,9 @@
                 return;
             }
 
-            const groupWrapper = document.createElement('section');
-            groupWrapper.className = 'admin-nav__group';
-
-            const groupTitle = document.createElement('h2');
-            groupTitle.className = 'admin-nav__group-title';
-            groupTitle.textContent = group.label;
-            groupWrapper.appendChild(groupTitle);
-
-            if (group.note) {
-                const groupNote = document.createElement('p');
-                groupNote.className = 'admin-nav__group-note';
-                groupNote.textContent = group.note;
-                groupWrapper.appendChild(groupNote);
-            }
-
-            group.items.forEach((key) => {
+            const visibleItems = group.items.filter((key) => {
                 const config = contentConfigs[key];
-                if (!config) return;
+                if (!config) return false;
 
                 const meta = sectionMeta[key] || {};
                 const haystack = [
@@ -7349,22 +7379,42 @@
                     meta.summary
                 ].filter(Boolean).join(' ').toLowerCase();
 
-                if (navQuery && !haystack.includes(navQuery)) {
-                    return;
-                }
+                return !(navQuery && !haystack.includes(navQuery));
+            });
 
+            if (!visibleItems.length) {
+                return;
+            }
+
+            const groupWrapper = document.createElement('section');
+            groupWrapper.className = `admin-nav__group${visibleItems.includes(state.activeKey) ? ' is-active-group' : ''}`;
+            groupWrapper.appendChild(buildGroupHead(group.label, visibleItems.length));
+
+            if (group.note) {
+                const groupNote = document.createElement('p');
+                groupNote.className = 'admin-nav__group-note';
+                groupNote.textContent = group.note;
+                groupWrapper.appendChild(groupNote);
+            }
+
+            visibleItems.forEach((key) => {
+                const config = contentConfigs[key];
+                if (!config) return;
+
+                const meta = sectionMeta[key] || {};
                 const status = getSectionStatus(key);
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = `admin-nav__button${state.activeKey === key ? ' is-active' : ''}`;
 
                 button.innerHTML = `
-                    <span class="admin-nav__button-icon"><i class="fas ${meta.icon || 'fa-pen'}" aria-hidden="true"></i></span>
+                    <span class="admin-nav__button-icon"><i class="fas ${meta.icon || 'fa-rectangle-list'}" aria-hidden="true"></i></span>
                     <span class="admin-nav__button-copy">
                         <strong>${config.label}</strong>
                         <span>${meta.navHint || config.description}</span>
                         <span class="admin-nav__button-status is-${status.tone}">${status.label}</span>
                     </span>
+                    <span class="admin-nav__button-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
                 `;
 
                 button.addEventListener('click', () => {
@@ -7374,9 +7424,7 @@
                 groupWrapper.appendChild(button);
             });
 
-            if (groupWrapper.querySelector('.admin-nav__button')) {
-                elements.nav.appendChild(groupWrapper);
-            }
+            elements.nav.appendChild(groupWrapper);
         };
 
         navGroups.forEach((group) => {
@@ -7646,7 +7694,7 @@
         if (field.key === 'src') {
             const mediaNote = document.createElement('div');
             mediaNote.className = 'admin-field__media-note';
-            mediaNote.innerHTML = '<i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i><span>Фото удобнее менять через библиотеку: так не нужно вручную вводить путь.</span>';
+            mediaNote.innerHTML = '<i class="fas fa-images" aria-hidden="true"></i><span>Фото удобнее менять через библиотеку: так не нужно вручную вводить путь.</span>';
             wrapper.appendChild(mediaNote);
 
             const actions = document.createElement('div');
@@ -8135,7 +8183,9 @@
         renderSectionTabs(key);
 
         if (elements.commandCenter) {
-            elements.commandCenter.hidden = useSectionTabs || Boolean(activeSimpleScreen);
+            const compactContext = useSectionTabs || Boolean(activeSimpleScreen);
+            elements.commandCenter.hidden = false;
+            elements.commandCenter.classList.toggle('is-compact', compactContext);
         }
 
         if (elements.overview) {
@@ -8148,10 +8198,10 @@
             elements.searchCard.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.modeNote) {
-            elements.modeNote.hidden = useSectionTabs || Boolean(activeSimpleScreen);
+            elements.modeNote.hidden = Boolean(activeSimpleScreen);
         }
         if (elements.pageLinks) {
-            elements.pageLinks.hidden = useSectionTabs;
+            elements.pageLinks.hidden = useSectionTabs || Boolean(activeSimpleScreen);
         }
 
         if (!activeSimpleScreen && !useSectionTabs) {
@@ -8196,7 +8246,7 @@
             elements.downloadBtn.disabled = true;
             elements.reloadBtn.disabled = false;
             elements.historyBtn.disabled = true;
-            saveButtonHtml = '<i class="fas fa-rocket" aria-hidden="true"></i> Выберите действие';
+            saveButtonHtml = '<i class="fas fa-compass-drafting" aria-hidden="true"></i> Выберите действие';
             elements.saveBtn.innerHTML = saveButtonHtml;
             updateDirtyBar();
             updateToolbarChrome();
@@ -8646,6 +8696,7 @@
         });
         window.addEventListener('beforeunload', handleBeforeUnload);
         window.addEventListener('keydown', handleGlobalKeydown);
+        window.addEventListener('resize', updateStickyOffsets);
     }
 
     document.addEventListener('DOMContentLoaded', init);
