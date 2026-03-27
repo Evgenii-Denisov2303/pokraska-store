@@ -3599,6 +3599,20 @@
             && ['automationSliding', 'automationSwing', 'automationComponents'].includes(field?.key);
     }
 
+    function shouldUseCompactLocationEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'contacts'
+            && field?.type === 'group'
+            && field?.key === 'location';
+    }
+
+    function shouldUseCompactServicePageEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'servicePages'
+            && field?.type === 'group'
+            && ['powderCoating', 'sandblasting'].includes(field?.key);
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -4243,6 +4257,248 @@
         );
         ctaCard.appendChild(ctaGrid);
         bottomGrid.appendChild(ctaCard);
+
+        panel.appendChild(bottomGrid);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactLocationEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-location';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Карта, ориентиры и действия на странице контактов', 'fa-map-location-dot'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-location-quick';
+        panel.innerHTML = `
+            <div class="admin-location-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран маршрута</p>
+                    <h2>Карта и ориентиры</h2>
+                    <p>Здесь удобно править нижний блок страницы контактов: заголовок, краткое описание, ориентиры, кнопки маршрута и саму карту.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+        const grid = document.createElement('div');
+        grid.className = 'admin-location-quick__grid';
+
+        const textCard = document.createElement('section');
+        textCard.className = 'admin-location-quick__card';
+        textCard.innerHTML = `
+            <div class="admin-location-quick__card-head">
+                <div class="admin-location-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Заголовок и описание</h3>
+                    <p>Надпись, заголовок и поясняющий текст над картой.</p>
+                </div>
+            </div>
+        `;
+        const textGrid = document.createElement('div');
+        textGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            textGrid,
+            ['kicker', 'title', 'text']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        textCard.appendChild(textGrid);
+        grid.appendChild(textCard);
+
+        const mapCard = document.createElement('section');
+        mapCard.className = 'admin-location-quick__card';
+        mapCard.innerHTML = `
+            <div class="admin-location-quick__card-head">
+                <div class="admin-location-quick__card-icon"><i class="fas fa-map" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Карта и быстрые действия</h3>
+                    <p>Ссылка на карту и кнопки вроде «Открыть маршрут» и «Позвонить перед визитом».</p>
+                </div>
+            </div>
+        `;
+        const mapGrid = document.createElement('div');
+        mapGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            mapGrid,
+            ['mapSrc', 'actions']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        mapCard.appendChild(mapGrid);
+        grid.appendChild(mapCard);
+
+        const listsCard = document.createElement('section');
+        listsCard.className = 'admin-location-quick__card is-wide';
+        listsCard.innerHTML = `
+            <div class="admin-location-quick__card-head">
+                <div class="admin-location-quick__card-icon"><i class="fas fa-list-ul" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Бейджи и ориентиры</h3>
+                    <p>Короткие бейджи и список ориентиров, которые помогают найти производство.</p>
+                </div>
+            </div>
+        `;
+        const listsGrid = document.createElement('div');
+        listsGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            listsGrid,
+            ['badges', 'points']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        listsCard.appendChild(listsGrid);
+        grid.appendChild(listsCard);
+
+        panel.appendChild(grid);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactServicePageEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-service-page';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Шапка, услуги, CTA и FAQ сервисной страницы', 'fa-spray-can-sparkles'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-service-page-quick';
+        panel.innerHTML = `
+            <div class="admin-service-page-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран сервисной страницы</p>
+                    <h2>${getDisplayLabel(field)}</h2>
+                    <p>Здесь удобно править шапку страницы, навигацию, карточки услуг, нижний блок связи и FAQ без всей сервисной структуры.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+
+        const topGrid = document.createElement('div');
+        topGrid.className = 'admin-service-page-quick__grid';
+
+        const headerCard = document.createElement('section');
+        headerCard.className = 'admin-service-page-quick__card';
+        headerCard.innerHTML = `
+            <div class="admin-service-page-quick__card-head">
+                <div class="admin-service-page-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Шапка и навигация</h3>
+                    <p>Заголовок страницы, подзаголовок и быстрые ссылки по разделам.</p>
+                </div>
+            </div>
+        `;
+        const headerGrid = document.createElement('div');
+        headerGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            headerGrid,
+            ['header', 'quickNav', 'beforeAfter']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        headerCard.appendChild(headerGrid);
+        topGrid.appendChild(headerCard);
+
+        const sectionsCard = document.createElement('section');
+        sectionsCard.className = 'admin-service-page-quick__card';
+        sectionsCard.innerHTML = `
+            <div class="admin-service-page-quick__card-head">
+                <div class="admin-service-page-quick__card-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Карточки услуг</h3>
+                    <p>Основные разделы страницы: услуги, преимущества, этапы и дополнительные блоки внутри карточек.</p>
+                </div>
+            </div>
+        `;
+        const sectionsGrid = document.createElement('div');
+        sectionsGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            sectionsGrid,
+            ['sections']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        sectionsCard.appendChild(sectionsGrid);
+        topGrid.appendChild(sectionsCard);
+
+        panel.appendChild(topGrid);
+
+        const bottomGrid = document.createElement('div');
+        bottomGrid.className = 'admin-service-page-quick__grid admin-service-page-quick__grid--bottom';
+
+        const ctaCard = document.createElement('section');
+        ctaCard.className = 'admin-service-page-quick__card';
+        ctaCard.innerHTML = `
+            <div class="admin-service-page-quick__card-head">
+                <div class="admin-service-page-quick__card-icon"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Нижний блок связи</h3>
+                    <p>Заголовок, описание, кнопка и телефоны в конце страницы.</p>
+                </div>
+            </div>
+        `;
+        const ctaGrid = document.createElement('div');
+        ctaGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            ctaGrid,
+            ['cta']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        ctaCard.appendChild(ctaGrid);
+        bottomGrid.appendChild(ctaCard);
+
+        const faqCard = document.createElement('section');
+        faqCard.className = 'admin-service-page-quick__card';
+        faqCard.innerHTML = `
+            <div class="admin-service-page-quick__card-head">
+                <div class="admin-service-page-quick__card-icon"><i class="fas fa-circle-question" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Вопросы и ответы</h3>
+                    <p>Частые вопросы, которые закрывают возражения на странице.</p>
+                </div>
+            </div>
+        `;
+        const faqGrid = document.createElement('div');
+        faqGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            faqGrid,
+            ['faq']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        faqCard.appendChild(faqGrid);
+        bottomGrid.appendChild(faqCard);
 
         panel.appendChild(bottomGrid);
         details.appendChild(panel);
@@ -6287,6 +6543,14 @@
         if (field.type === 'group') {
             if (shouldUseCompactContactEditor(contentKey, field)) {
                 return renderCompactContactEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactLocationEditor(contentKey, field)) {
+                return renderCompactLocationEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactServicePageEditor(contentKey, field)) {
+                return renderCompactServicePageEditor(field, value, contentKey);
             }
 
             if (shouldUseCompactAutomationPanelEditor(contentKey, field)) {
