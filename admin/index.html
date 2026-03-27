@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=20260327-01">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260327-02">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -18,12 +18,12 @@
                 <strong>Управление сайтом</strong>
             </a>
 
-            <p class="admin-sidebar__lead">Здесь можно менять тексты, фотографии, ссылки и контакты без ручного редактирования кода. Выберите раздел слева, внесите правки и сохраните изменения.</p>
+            <p class="admin-sidebar__lead">Здесь удобнее идти не от структуры сайта, а от задачи: что хотите поменять сейчас — главную, фото, каталог, телефоны или цены. Выберите нужный маршрут слева, внесите правки и сохраните изменения.</p>
 
             <section class="admin-sidebar-search">
                 <label class="admin-sidebar-search__field">
                     <span class="sr-only">Поиск раздела в админке</span>
-                    <input class="admin-input" type="search" id="adminNavSearch" placeholder="Найти раздел: главная, каталог, контакты">
+                    <input class="admin-input" type="search" id="adminNavSearch" placeholder="Что хотите поменять: главная, фото, телефоны">
                 </label>
                 <button class="admin-btn admin-btn--ghost" type="button" id="adminNavSearchClearBtn">
                     <i class="fas fa-xmark" aria-hidden="true"></i>
@@ -61,6 +61,7 @@
             <header class="admin-toolbar">
                 <div>
                     <p class="admin-toolbar__eyebrow">Редактор контента</p>
+                    <div class="admin-toolbar__path" id="adminToolbarPath" hidden></div>
                     <h1 id="adminTitle">Загрузка...</h1>
                     <p id="adminDescription" class="admin-toolbar__description"></p>
                     <div class="admin-toolbar__meta">

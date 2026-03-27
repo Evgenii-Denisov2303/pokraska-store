@@ -1453,22 +1453,25 @@
 
     const navGroups = [
         {
-            key: 'foundation',
-            label: 'Основа сайта',
-            note: 'Шапка, контакты и главная страница. Это то, что клиент видит в первую очередь.',
-            items: ['site', 'home']
+            key: 'start',
+            label: 'С чего обычно начинают',
+            shortLabel: 'Старт',
+            note: 'Самые частые входы: быстрый старт, главная, каталог карточек и контакты.',
+            items: ['dashboard', 'home', 'catalogPanels', 'contacts']
         },
         {
-            key: 'catalog',
-            label: 'Каталог и выбор',
-            note: 'Структура каталога, внутренние карточки, автоматика и галерея работ.',
-            items: ['catalog', 'catalogPanels', 'automation', 'gallery']
+            key: 'sales',
+            label: 'Фото, каталог и продажи',
+            shortLabel: 'Продажи',
+            note: 'Галерея, каталог, автоматика и страница цен. Всё, что чаще влияет на заявки.',
+            items: ['catalog', 'gallery', 'automation', 'prices']
         },
         {
-            key: 'pages',
-            label: 'Отдельные страницы',
-            note: 'Покраска, пескоструй, цены, оплата и контакты.',
-            items: ['servicePages', 'prices', 'paymentDocuments', 'contacts']
+            key: 'support',
+            label: 'Общие настройки и служебные страницы',
+            shortLabel: 'Настройки',
+            note: 'Шапка сайта, страницы услуг и блок оплаты с документами.',
+            items: ['site', 'servicePages', 'paymentDocuments']
         }
     ];
 
@@ -1738,6 +1741,7 @@
         sidebarFooter: document.getElementById('adminSidebarFooter'),
         form: document.getElementById('adminForm'),
         title: document.getElementById('adminTitle'),
+        toolbarPath: document.getElementById('adminToolbarPath'),
         description: document.getElementById('adminDescription'),
         sectionBadge: document.getElementById('adminSectionBadge'),
         alert: document.getElementById('adminAlert'),
@@ -5240,6 +5244,93 @@
         }
     }
 
+    function getEditorRoleLabel() {
+        if (state.editorRole === 'advanced') return 'Расширенный';
+        if (state.editorRole === 'manager') return 'Менеджер';
+        return 'Заказчик';
+    }
+
+    function getEditingDepthLabel() {
+        return state.quickMode ? 'Быстрые правки' : 'Все поля';
+    }
+
+    function getNavGroupMeta(sectionKey = state.activeKey) {
+        return navGroups.find((group) => group.items.includes(sectionKey)) || null;
+    }
+
+    function getCurrentWorkspaceContext(sectionKey = state.activeKey) {
+        const config = contentConfigs[sectionKey];
+        const group = getNavGroupMeta(sectionKey);
+        const activeSimpleScreen = getActiveSimpleScreen(sectionKey);
+        const activeGuide = state.activeGuide?.sectionKey === sectionKey ? getActiveGuide() : null;
+        const parts = [];
+
+        if (group) {
+            parts.push(group.shortLabel || group.label);
+        }
+
+        if (config?.label) {
+            parts.push(config.label);
+        }
+
+        if (activeGuide) {
+            parts.push(activeGuide.title);
+        } else if (activeSimpleScreen) {
+            parts.push(activeSimpleScreen.title);
+        } else if (shouldUseSectionTabs(sectionKey) && !config?.virtual) {
+            const activeTabKey = getActiveSectionTab(sectionKey);
+            if (activeTabKey) {
+                parts.push(getTopLevelFieldLabel(sectionKey, activeTabKey));
+            }
+        }
+
+        let helperText = 'Сейчас открыт весь раздел целиком.';
+
+        if (config?.virtual) {
+            helperText = 'Стартовый экран с готовыми быстрыми действиями.';
+        } else if (activeGuide) {
+            helperText = 'Сейчас открыт пошаговый маршрут по разделу.';
+        } else if (activeSimpleScreen) {
+            helperText = 'Сейчас открыт простой экран без лишних блоков.';
+        } else if (shouldUseSectionTabs(sectionKey)) {
+            helperText = 'Сейчас открыт один крупный блок внутри раздела.';
+        }
+
+        return {
+            parts,
+            helperText,
+            modeText: `${getEditingDepthLabel()} · ${getEditorRoleLabel()}`
+        };
+    }
+
+    function renderToolbarPath(sectionKey = state.activeKey) {
+        if (!elements.toolbarPath) return;
+
+        const context = getCurrentWorkspaceContext(sectionKey);
+        const parts = context.parts.filter(Boolean);
+
+        if (!parts.length) {
+            elements.toolbarPath.hidden = true;
+            elements.toolbarPath.innerHTML = '';
+            return;
+        }
+
+        elements.toolbarPath.hidden = false;
+        elements.toolbarPath.innerHTML = `
+            <span class="admin-toolbar__path-label">Где вы сейчас</span>
+            <div class="admin-toolbar__path-list" aria-label="Текущий путь в админке">
+                ${parts.map((part, index) => `
+                    ${index ? '<span class="admin-toolbar__path-separator"><i class="fas fa-chevron-right" aria-hidden="true"></i></span>' : ''}
+                    <span class="admin-toolbar__path-item${index === parts.length - 1 ? ' is-current' : ''}">${part}</span>
+                `).join('')}
+            </div>
+            <div class="admin-toolbar__path-meta">
+                <span>${context.helperText}</span>
+                <span class="admin-toolbar__path-mode">${context.modeText}</span>
+            </div>
+        `;
+    }
+
     function updateToolbarChrome() {
         document.body.classList.toggle('admin-customer-layout', state.editorRole === 'customer');
         document.body.classList.toggle('admin-manager-layout', state.editorRole === 'manager');
@@ -5257,6 +5348,7 @@
             }
         }
 
+        renderToolbarPath(state.activeKey);
         updatePreviewPanelUi();
     }
 
@@ -5339,12 +5431,19 @@
 
         const activeConfig = contentConfigs[state.activeKey];
         const status = getSectionStatus(state.activeKey);
+        const context = getCurrentWorkspaceContext(state.activeKey);
 
         elements.sidebarFooter.innerHTML = `
             <div class="admin-sidebar-footer__card">
-                <p class="admin-toolbar__eyebrow">Активный раздел</p>
-                <strong>${activeConfig.label}</strong>
-                <span class="admin-status-badge is-${status.tone}">${status.label}</span>
+                <p class="admin-toolbar__eyebrow">Где вы сейчас</p>
+                <strong>${context.parts[context.parts.length - 1] || activeConfig.label}</strong>
+                <div class="admin-sidebar-footer__crumbs">
+                    ${context.parts.map((part) => `<span>${part}</span>`).join('')}
+                </div>
+                <div class="admin-sidebar-footer__meta">
+                    <span class="admin-status-badge is-${status.tone}">${status.label}</span>
+                    <span class="admin-sidebar-footer__mode">${context.modeText}</span>
+                </div>
             </div>
             <div class="admin-sidebar-footer__links">
                 <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
@@ -6565,6 +6664,8 @@
         if (!options.keepState) {
             state.activeGuide = null;
         }
+        renderToolbarPath(state.activeKey);
+        renderSidebarFooter();
     }
 
     function renderGuideModal() {
@@ -6674,6 +6775,8 @@
         renderGuideModal();
         elements.guideModal.hidden = false;
         document.body.classList.add('admin-guide-open');
+        renderToolbarPath(state.activeKey);
+        renderSidebarFooter();
     }
 
     function runGuideStep(stepIndex) {
@@ -7276,21 +7379,8 @@
             }
         };
 
-        if (state.quickMode) {
-            renderGroup({
-                label: 'Быстрые правки',
-                note: 'Самые частые разделы для ежедневной работы без лишнего поиска.',
-                items: ['home', 'catalogPanels', 'contacts', 'prices']
-            });
-        }
-
         navGroups.forEach((group) => {
-            renderGroup({
-                ...group,
-                items: state.quickMode
-                    ? group.items.filter((itemKey) => !['home', 'catalogPanels', 'contacts', 'prices'].includes(itemKey))
-                    : group.items
-            });
+            renderGroup(group);
         });
 
         if (!elements.nav.children.length) {
