@@ -3592,6 +3592,13 @@
             && field?.itemType === 'object';
     }
 
+    function shouldUseCompactAutomationPanelEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'catalogPanels'
+            && field?.type === 'group'
+            && ['automationSliding', 'automationSwing', 'automationComponents'].includes(field?.key);
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -4099,6 +4106,145 @@
         });
 
         panel.appendChild(list);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactAutomationPanelEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-automation';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Тексты, комплекты и нижний блок автоматики', 'fa-robot'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-automation-quick';
+        panel.innerHTML = `
+            <div class="admin-automation-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран автоматики</p>
+                    <h2>${getDisplayLabel(field)}</h2>
+                    <p>Здесь удобно менять вводный блок, шаги выбора или пояснения, карточки комплектов и нижний призыв без длинной формы карточки каталога.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+        const hasSteps = fieldMap.has('steps');
+        const hasCards = fieldMap.has('cards');
+        const hasSpecGroups = fieldMap.has('specGroups');
+
+        const topGrid = document.createElement('div');
+        topGrid.className = 'admin-automation-quick__grid';
+
+        const heroCard = document.createElement('section');
+        heroCard.className = 'admin-automation-quick__card';
+        heroCard.innerHTML = `
+            <div class="admin-automation-quick__card-head">
+                <div class="admin-automation-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Вводный блок</h3>
+                    <p>Хлебные крошки, заголовок, вводный текст и бейджи сверху.</p>
+                </div>
+            </div>
+        `;
+        const heroGrid = document.createElement('div');
+        heroGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            heroGrid,
+            ['breadcrumb', 'title', 'introTitle', 'paragraphs', 'badges', 'tailParagraphs']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        heroCard.appendChild(heroGrid);
+        topGrid.appendChild(heroCard);
+
+        const logicCard = document.createElement('section');
+        logicCard.className = 'admin-automation-quick__card';
+        logicCard.innerHTML = `
+            <div class="admin-automation-quick__card-head">
+                <div class="admin-automation-quick__card-icon"><i class="fas fa-list-check" aria-hidden="true"></i></div>
+                <div>
+                    <h3>${hasSteps ? 'Шаги выбора' : 'Пояснения и блоки'}</h3>
+                    <p>${hasSteps ? 'Шаги, по которым клиент выбирает автоматику.' : 'Вспомогательные карточки и пояснения внутри блока автоматики.'}</p>
+                </div>
+            </div>
+        `;
+        const logicGrid = document.createElement('div');
+        logicGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            logicGrid,
+            ['sectionHeading', 'steps', 'cards', 'specGroups']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        logicCard.appendChild(logicGrid);
+        topGrid.appendChild(logicCard);
+
+        panel.appendChild(topGrid);
+
+        const bottomGrid = document.createElement('div');
+        bottomGrid.className = 'admin-automation-quick__grid admin-automation-quick__grid--bottom';
+
+        const productsCard = document.createElement('section');
+        productsCard.className = 'admin-automation-quick__card';
+        productsCard.innerHTML = `
+            <div class="admin-automation-quick__card-head">
+                <div class="admin-automation-quick__card-icon"><i class="fas fa-box-open" aria-hidden="true"></i></div>
+                <div>
+                    <h3>${field.key === 'automationComponents' ? 'Комплектующие и аксессуары' : 'Готовые комплекты'}</h3>
+                    <p>${field.key === 'automationComponents' ? 'Карточки аксессуаров и комплектующих с ссылками на подробные страницы.' : 'Карточки комплектов, которые открывает посетитель в каталоге.'}</p>
+                </div>
+            </div>
+        `;
+        const productsGrid = document.createElement('div');
+        productsGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            productsGrid,
+            ['products']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        productsCard.appendChild(productsGrid);
+        bottomGrid.appendChild(productsCard);
+
+        const ctaCard = document.createElement('section');
+        ctaCard.className = 'admin-automation-quick__card';
+        ctaCard.innerHTML = `
+            <div class="admin-automation-quick__card-head">
+                <div class="admin-automation-quick__card-icon"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Нижний блок связи</h3>
+                    <p>Финальный призыв и короткое пояснение под карточкой автоматики.</p>
+                </div>
+            </div>
+        `;
+        const ctaGrid = document.createElement('div');
+        ctaGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            ctaGrid,
+            ['cta']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        ctaCard.appendChild(ctaGrid);
+        bottomGrid.appendChild(ctaCard);
+
+        panel.appendChild(bottomGrid);
         details.appendChild(panel);
         return details;
     }
@@ -6141,6 +6287,10 @@
         if (field.type === 'group') {
             if (shouldUseCompactContactEditor(contentKey, field)) {
                 return renderCompactContactEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactAutomationPanelEditor(contentKey, field)) {
+                return renderCompactAutomationPanelEditor(field, value, contentKey);
             }
 
             if (shouldUseCompactHomeHeroEditor(contentKey, field)) {
