@@ -3599,6 +3599,13 @@
             && ['automationSliding', 'automationSwing', 'automationComponents'].includes(field?.key);
     }
 
+    function shouldUseCompactGarageProtectionPanelEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'catalogPanels'
+            && field?.type === 'group'
+            && ['sectional', 'roller', 'shutters', 'grilles'].includes(field?.key);
+    }
+
     function shouldUseCompactLocationEditor(contentKey, field) {
         return shouldUseSectionTabs(contentKey)
             && contentKey === 'contacts'
@@ -4242,6 +4249,140 @@
                 <div>
                     <h3>Нижний блок связи</h3>
                     <p>Финальный призыв и короткое пояснение под карточкой автоматики.</p>
+                </div>
+            </div>
+        `;
+        const ctaGrid = document.createElement('div');
+        ctaGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            ctaGrid,
+            ['cta']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        ctaCard.appendChild(ctaGrid);
+        bottomGrid.appendChild(ctaCard);
+
+        panel.appendChild(bottomGrid);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactGarageProtectionPanelEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-garage';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Тексты, характеристики, цвета и нижний блок раздела', 'fa-shield-halved'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-garage-quick';
+        panel.innerHTML = `
+            <div class="admin-garage-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран гаража и защиты</p>
+                    <h2>${getDisplayLabel(field)}</h2>
+                    <p>Здесь удобно менять вводный текст, характеристики, цвета и нижний призыв без всей длинной карточки каталога.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+        const extraFields = ['sectionHeading', 'specGroups', 'palette', 'faq']
+            .map((key) => fieldMap.get(key))
+            .filter(Boolean);
+
+        const topGrid = document.createElement('div');
+        topGrid.className = 'admin-garage-quick__grid';
+
+        const heroCard = document.createElement('section');
+        heroCard.className = 'admin-garage-quick__card';
+        heroCard.innerHTML = `
+            <div class="admin-garage-quick__card-head">
+                <div class="admin-garage-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Вводный блок</h3>
+                    <p>Хлебные крошки, заголовок, описание, бейджи и дополнительные абзацы сверху.</p>
+                </div>
+            </div>
+        `;
+        const heroGrid = document.createElement('div');
+        heroGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            heroGrid,
+            ['breadcrumb', 'title', 'introTitle', 'paragraphs', 'badges', 'tailParagraphs']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        heroCard.appendChild(heroGrid);
+        topGrid.appendChild(heroCard);
+
+        const cardsCard = document.createElement('section');
+        cardsCard.className = 'admin-garage-quick__card';
+        cardsCard.innerHTML = `
+            <div class="admin-garage-quick__card-head">
+                <div class="admin-garage-quick__card-icon"><i class="fas fa-table-list" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Характеристики и карточки</h3>
+                    <p>Основные смысловые карточки раздела: характеристики, применение, варианты панелей и другие ключевые блоки.</p>
+                </div>
+            </div>
+        `;
+        const cardsGrid = document.createElement('div');
+        cardsGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            cardsGrid,
+            ['cards']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        cardsCard.appendChild(cardsGrid);
+        topGrid.appendChild(cardsCard);
+
+        panel.appendChild(topGrid);
+
+        const bottomGrid = document.createElement('div');
+        bottomGrid.className = 'admin-garage-quick__grid admin-garage-quick__grid--bottom';
+
+        if (extraFields.length) {
+            const extraCard = document.createElement('section');
+            extraCard.className = 'admin-garage-quick__card';
+            extraCard.innerHTML = `
+                <div class="admin-garage-quick__card-head">
+                    <div class="admin-garage-quick__card-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></div>
+                    <div>
+                        <h3>Дополнительные блоки</h3>
+                        <p>Палитра, схемы, вопросы и другие дополняющие элементы этого раздела.</p>
+                    </div>
+                </div>
+            `;
+            const extraGrid = document.createElement('div');
+            extraGrid.className = 'admin-grid';
+            renderFieldsIntoContainer(extraGrid, extraFields, value, contentKey);
+            extraCard.appendChild(extraGrid);
+            bottomGrid.appendChild(extraCard);
+        }
+
+        const ctaCard = document.createElement('section');
+        ctaCard.className = `admin-garage-quick__card${extraFields.length ? '' : ' is-wide'}`;
+        ctaCard.innerHTML = `
+            <div class="admin-garage-quick__card-head">
+                <div class="admin-garage-quick__card-icon"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Нижний блок связи</h3>
+                    <p>Финальный призыв и короткий текст, который завершает карточку каталога.</p>
                 </div>
             </div>
         `;
@@ -6555,6 +6696,10 @@
 
             if (shouldUseCompactAutomationPanelEditor(contentKey, field)) {
                 return renderCompactAutomationPanelEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactGarageProtectionPanelEditor(contentKey, field)) {
+                return renderCompactGarageProtectionPanelEditor(field, value, contentKey);
             }
 
             if (shouldUseCompactHomeHeroEditor(contentKey, field)) {
