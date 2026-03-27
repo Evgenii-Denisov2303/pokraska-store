@@ -3570,6 +3570,13 @@
             && field?.key === 'request';
     }
 
+    function shouldUseCompactCatalogCtaEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'catalog'
+            && field?.type === 'group'
+            && field?.key === 'cta';
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -3821,6 +3828,89 @@
 
         panel.appendChild(bottomGrid);
 
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactCatalogCtaEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-catalog-cta';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Нижний призыв и контакты в каталоге', 'fa-bullhorn'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-catalog-cta-quick';
+        panel.innerHTML = `
+            <div class="admin-catalog-cta-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран CTA каталога</p>
+                    <h2>Нижний блок связи каталога</h2>
+                    <p>Здесь удобно менять завершающий призыв и контакты внизу каталога без всей страницы каталога и карточек.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+
+        const grid = document.createElement('div');
+        grid.className = 'admin-catalog-cta-quick__grid';
+
+        const textCard = document.createElement('section');
+        textCard.className = 'admin-catalog-cta-quick__card';
+        textCard.innerHTML = `
+            <div class="admin-catalog-cta-quick__card-head">
+                <div class="admin-catalog-cta-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Текст нижнего блока</h3>
+                    <p>Заголовок и пояснение, которые видит человек перед контактами.</p>
+                </div>
+            </div>
+        `;
+        const textGrid = document.createElement('div');
+        textGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            textGrid,
+            ['title', 'text']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        textCard.appendChild(textGrid);
+        grid.appendChild(textCard);
+
+        const contactsCard = document.createElement('section');
+        contactsCard.className = 'admin-catalog-cta-quick__card';
+        contactsCard.innerHTML = `
+            <div class="admin-catalog-cta-quick__card-head">
+                <div class="admin-catalog-cta-quick__card-icon"><i class="fas fa-address-book" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Контакты снизу каталога</h3>
+                    <p>Телефоны и почта, которые выводятся в завершающем блоке.</p>
+                </div>
+            </div>
+        `;
+        const contactsGrid = document.createElement('div');
+        contactsGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            contactsGrid,
+            ['contacts']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        contactsCard.appendChild(contactsGrid);
+        grid.appendChild(contactsCard);
+
+        panel.appendChild(grid);
         details.appendChild(panel);
         return details;
     }
@@ -5867,6 +5957,10 @@
 
             if (shouldUseCompactRequestEditor(contentKey, field)) {
                 return renderCompactRequestEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactCatalogCtaEditor(contentKey, field)) {
+                return renderCompactCatalogCtaEditor(field, value, contentKey);
             }
 
             const details = document.createElement('details');
