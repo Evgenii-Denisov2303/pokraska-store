@@ -195,47 +195,34 @@
                 </div>
             </details>
 
-            <div class="admin-workspace">
-                <div class="admin-editor-column">
-                    <div class="admin-editor-canvas">
-                        <form class="admin-form" id="adminForm"></form>
+            <section class="admin-card admin-live-preview-panel" id="adminLivePreviewPanel" hidden>
+                <div class="admin-live-preview-panel__header">
+                    <div>
+                        <p class="admin-toolbar__eyebrow">Предпросмотр страницы</p>
+                        <h2>Живой просмотр страницы</h2>
+                        <p>Здесь страница открывается в широком формате, чтобы её было удобно проверять без тесной правой колонки.</p>
+                    </div>
+                    <div class="admin-preview-card__actions">
+                        <button class="admin-btn admin-btn--ghost" type="button" id="adminLivePreviewRefreshBtn">
+                            <i class="fas fa-rotate-right" aria-hidden="true"></i> Обновить
+                        </button>
+                        <a class="admin-btn admin-btn--primary" href="../index.html" target="_blank" rel="noopener noreferrer" id="adminLivePreviewOpenBtn">
+                            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
+                        </a>
                     </div>
                 </div>
-                <aside class="admin-preview-panel" id="adminPreviewPanel">
-                    <div class="admin-preview-panel__top">
-                        <div class="admin-preview-panel__intro">
-                            <p class="admin-toolbar__eyebrow">Рабочая панель</p>
-                            <strong>Статус, действия и предпросмотр</strong>
-                            <span>Переключай нужный вид, чтобы справа оставалось только одно спокойное окно.</span>
-                        </div>
-                        <div class="admin-preview-switcher" id="adminPreviewSwitcher" role="tablist" aria-label="Рабочая панель">
-                            <button class="admin-preview-switcher__button is-active" type="button" data-preview-card="actions">Действия</button>
-                            <button class="admin-preview-switcher__button" type="button" data-preview-card="status">Статус</button>
-                            <button class="admin-preview-switcher__button" type="button" data-preview-card="summary">Коротко</button>
-                            <button class="admin-preview-switcher__button" type="button" data-preview-card="live">Страница</button>
-                        </div>
-                    </div>
-                    <section class="admin-card admin-preview-card" id="adminStatusCard" data-preview-panel="status"></section>
-                    <section class="admin-card admin-preview-card" id="adminQuickActionsCard" data-preview-panel="actions"></section>
-                    <section class="admin-card admin-preview-card" id="adminMiniPreviewCard" data-preview-panel="summary"></section>
-                    <section class="admin-card admin-preview-card" id="adminLivePreviewCard" data-preview-panel="live">
-                        <div class="admin-preview-card__header">
-                            <div>
-                                <p class="admin-toolbar__eyebrow">Предпросмотр страницы</p>
-                                <h2>Живой просмотр</h2>
-                            </div>
-                            <div class="admin-preview-card__actions">
-                                <button class="admin-btn admin-btn--ghost" type="button" id="adminLivePreviewRefreshBtn">
-                                    <i class="fas fa-rotate-right" aria-hidden="true"></i> Обновить
-                                </button>
-                                <a class="admin-btn admin-btn--primary" href="../index.html" target="_blank" rel="noopener noreferrer" id="adminLivePreviewOpenBtn">
-                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
-                                </a>
-                            </div>
-                        </div>
-                        <iframe class="admin-live-preview__frame" id="adminLivePreviewFrame" title="Предпросмотр страницы"></iframe>
-                    </section>
-                </aside>
+                <iframe class="admin-live-preview__frame" id="adminLivePreviewFrame" title="Предпросмотр страницы"></iframe>
+            </section>
+
+            <div class="admin-editor-shell">
+                <div class="admin-editor-helpers" id="adminEditorHelpers">
+                    <section class="admin-card admin-preview-card admin-helper-card admin-helper-card--wide" id="adminQuickActionsCard"></section>
+                    <section class="admin-card admin-preview-card admin-helper-card" id="adminStatusCard"></section>
+                    <section class="admin-card admin-preview-card admin-helper-card" id="adminMiniPreviewCard"></section>
+                </div>
+                <div class="admin-editor-canvas">
+                    <form class="admin-form" id="adminForm"></form>
+                </div>
             </div>
         </main>
     </div>

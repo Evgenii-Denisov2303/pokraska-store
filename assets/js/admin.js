@@ -1749,6 +1749,7 @@
         screenCard: document.getElementById('adminScreenCard'),
         sectionTabs: document.getElementById('adminSectionTabs'),
         assistPanel: document.getElementById('adminAssistPanel'),
+        editorHelpers: document.getElementById('adminEditorHelpers'),
         connection: document.getElementById('adminConnection'),
         previewToggleBtn: document.getElementById('adminPreviewToggleBtn'),
         previewSwitcher: document.getElementById('adminPreviewSwitcher'),
@@ -1803,6 +1804,7 @@
         statusCard: document.getElementById('adminStatusCard'),
         quickActionsCard: document.getElementById('adminQuickActionsCard'),
         miniPreviewCard: document.getElementById('adminMiniPreviewCard'),
+        livePreviewPanel: document.getElementById('adminLivePreviewPanel'),
         livePreviewFrame: document.getElementById('adminLivePreviewFrame'),
         livePreviewOpenBtn: document.getElementById('adminLivePreviewOpenBtn'),
         livePreviewRefreshBtn: document.getElementById('adminLivePreviewRefreshBtn'),
@@ -5155,20 +5157,25 @@
     }
 
     function updatePreviewPanelUi() {
-        const previewVisible = Boolean(state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual);
+        const hasEditorPreview = !contentConfigs[state.activeKey]?.virtual;
+        const livePreviewVisible = Boolean(state.previewPanelOpen && hasEditorPreview);
 
-        document.body.classList.toggle('admin-preview-open', previewVisible);
-        document.body.classList.toggle('admin-preview-closed', !previewVisible);
+        document.body.classList.toggle('admin-preview-open', livePreviewVisible);
+        document.body.classList.toggle('admin-preview-closed', !livePreviewVisible);
 
         if (elements.previewPanel) {
-            elements.previewPanel.hidden = !previewVisible;
+            elements.previewPanel.hidden = !hasEditorPreview;
+        }
+
+        if (elements.livePreviewPanel) {
+            elements.livePreviewPanel.hidden = !livePreviewVisible;
         }
 
         if (elements.previewToggleBtn) {
             elements.previewToggleBtn.hidden = Boolean(contentConfigs[state.activeKey]?.virtual);
-            elements.previewToggleBtn.classList.toggle('admin-btn--primary', previewVisible);
-            elements.previewToggleBtn.classList.toggle('admin-btn--ghost', !previewVisible);
-            elements.previewToggleBtn.innerHTML = previewVisible
+            elements.previewToggleBtn.classList.toggle('admin-btn--primary', livePreviewVisible);
+            elements.previewToggleBtn.classList.toggle('admin-btn--ghost', !livePreviewVisible);
+            elements.previewToggleBtn.innerHTML = livePreviewVisible
                 ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть предпросмотр'
                 : '<i class="fas fa-eye" aria-hidden="true"></i> Показать предпросмотр';
         }
@@ -5199,29 +5206,29 @@
     }
 
     function updatePreviewCardsUi() {
-        const previewVisible = Boolean(state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual);
-        const activeCard = ['actions', 'status', 'summary', 'live'].includes(state.activePreviewCard)
-            ? state.activePreviewCard
-            : 'actions';
-
-        state.activePreviewCard = activeCard;
+        const previewVisible = !contentConfigs[state.activeKey]?.virtual;
 
         if (elements.previewSwitcher) {
-            elements.previewSwitcher.hidden = !previewVisible;
-            elements.previewSwitcher.querySelectorAll('[data-preview-card]').forEach((button) => {
-                const isActive = button.getAttribute('data-preview-card') === activeCard;
-                button.classList.toggle('is-active', isActive);
-                button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-            });
+            elements.previewSwitcher.hidden = true;
         }
 
-        document.querySelectorAll('[data-preview-panel]').forEach((panel) => {
-            panel.hidden = !previewVisible || panel.getAttribute('data-preview-panel') !== activeCard;
-        });
+        if (elements.editorHelpers) {
+            elements.editorHelpers.hidden = !previewVisible;
+        }
+
+        if (elements.quickActionsCard) {
+            elements.quickActionsCard.hidden = !previewVisible;
+        }
+        if (elements.statusCard) {
+            elements.statusCard.hidden = !previewVisible;
+        }
+        if (elements.miniPreviewCard) {
+            elements.miniPreviewCard.hidden = !previewVisible;
+        }
     }
 
     function setActivePreviewCard(nextCard) {
-        if (!['actions', 'status', 'summary', 'live'].includes(nextCard)) return;
+        if (!['actions', 'status', 'summary'].includes(nextCard)) return;
 
         state.activePreviewCard = nextCard;
 
@@ -5232,10 +5239,6 @@
         }
 
         updatePreviewCardsUi();
-
-        if (nextCard === 'live' && state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual) {
-            refreshLivePreview();
-        }
     }
 
     function closeToolbarMore() {
@@ -5376,7 +5379,7 @@
         updateToolbarChrome();
 
         if (state.previewPanelOpen && !options.keepActiveCard) {
-            setActivePreviewCard('live');
+            setActivePreviewCard('summary');
         }
 
         if (state.previewPanelOpen) {
@@ -5386,7 +5389,7 @@
         if (!options.silent && !contentConfigs[state.activeKey]?.virtual) {
             showAlert(
                 state.previewPanelOpen
-                    ? 'Предпросмотр открыт под формой.'
+                    ? 'Предпросмотр открыт над формой.'
                     : 'Предпросмотр скрыт, чтобы осталось больше места для редактирования.',
                 'info'
             );
@@ -7130,6 +7133,12 @@
 
         if (elements.previewPanel) {
             elements.previewPanel.hidden = true;
+        }
+        if (elements.editorHelpers) {
+            elements.editorHelpers.hidden = true;
+        }
+        if (elements.livePreviewPanel) {
+            elements.livePreviewPanel.hidden = true;
         }
         if (elements.sectionTabs) {
             elements.sectionTabs.hidden = true;
