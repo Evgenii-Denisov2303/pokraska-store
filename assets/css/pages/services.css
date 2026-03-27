@@ -2357,6 +2357,10 @@
     grid-template-columns: 1fr;
 }
 
+.catalog-palette-card__gallery--swatches {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .catalog-palette-card__item {
     display: flex;
     align-items: center;
@@ -2387,6 +2391,55 @@
     height: auto;
     object-fit: contain;
     padding: 10px;
+}
+
+.catalog-palette-swatch {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid var(--catalog-accent-border);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.catalog-palette-swatch__sample {
+    position: relative;
+    min-height: 110px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.26), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.14)),
+        repeating-linear-gradient(180deg, var(--swatch-line) 0 2px, transparent 2px 18px),
+        linear-gradient(135deg, var(--swatch-base), var(--swatch-deep));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.catalog-palette-swatch__sample::after {
+    content: "";
+    position: absolute;
+    inset: 16% 10%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.catalog-palette-swatch__label {
+    display: grid;
+    gap: 4px;
+}
+
+.catalog-palette-swatch__label strong {
+    color: #1f2f45;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.catalog-palette-swatch__label span {
+    color: #5a6c7d;
+    font-size: 12px;
+    line-height: 1.45;
 }
 
 .catalog-panel__palette-note {
@@ -2843,5 +2896,9 @@
 
     .catalog-palette-card__gallery--single {
         grid-template-columns: 1fr;
+    }
+
+    .catalog-palette-card__gallery--swatches {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

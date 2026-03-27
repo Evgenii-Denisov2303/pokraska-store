@@ -5176,8 +5176,8 @@
             elements.previewToggleBtn.classList.toggle('admin-btn--primary', livePreviewVisible);
             elements.previewToggleBtn.classList.toggle('admin-btn--ghost', !livePreviewVisible);
             elements.previewToggleBtn.innerHTML = livePreviewVisible
-                ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть предпросмотр'
-                : '<i class="fas fa-eye" aria-hidden="true"></i> Показать предпросмотр';
+                ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть просмотр'
+                : '<i class="fas fa-eye" aria-hidden="true"></i> Просмотр';
         }
 
         updatePreviewCardsUi();
@@ -5307,7 +5307,7 @@
         return {
             parts,
             helperText,
-            modeText: `${getEditingDepthLabel()} · ${getEditorRoleLabel()}`
+            modeText: `${getEditorRoleLabel()} · ${getEditingDepthLabel()}`
         };
     }
 
@@ -5325,7 +5325,6 @@
 
         elements.toolbarPath.hidden = false;
         elements.toolbarPath.innerHTML = `
-            <span class="admin-toolbar__path-label">Где вы сейчас</span>
             <div class="admin-toolbar__path-list" aria-label="Текущий путь в админке">
                 ${parts.map((part, index) => `
                     ${index ? '<span class="admin-toolbar__path-separator"><i class="fas fa-chevron-right" aria-hidden="true"></i></span>' : ''}
@@ -5333,7 +5332,6 @@
                 `).join('')}
             </div>
             <div class="admin-toolbar__path-meta">
-                <span>${context.helperText}</span>
                 <span class="admin-toolbar__path-mode">${context.modeText}</span>
             </div>
         `;
@@ -7289,16 +7287,16 @@
 
     function updateConnectionState() {
         if (state.apiAvailable && state.authRequired && state.authenticated) {
-            elements.connection.textContent = `Редактирование доступно · вход выполнен${state.username ? `: ${state.username}` : ''}`;
+            elements.connection.textContent = state.username ? `Можно сохранять · ${state.username}` : 'Можно сохранять';
             elements.connection.className = 'admin-connection is-live';
         } else if (state.apiAvailable && state.authRequired) {
-            elements.connection.textContent = 'Редактирование доступно · нужен вход';
+            elements.connection.textContent = 'Нужен вход';
             elements.connection.className = 'admin-connection is-live';
         } else if (state.apiAvailable) {
-            elements.connection.textContent = 'Локальный режим редактирования';
+            elements.connection.textContent = 'Локальное редактирование';
             elements.connection.className = 'admin-connection is-live';
         } else {
-            elements.connection.textContent = 'Только просмотр: сервер сохранения не найден';
+            elements.connection.textContent = 'Только просмотр';
             elements.connection.className = 'admin-connection is-readonly';
         }
 
@@ -8262,7 +8260,7 @@
 
     function updateToolbarState() {
         const activeConfig = contentConfigs[state.activeKey];
-        let saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
+        let saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить';
 
         if (activeConfig?.virtual) {
             elements.saveBtn.disabled = true;
@@ -8295,13 +8293,13 @@
         }
 
         if (canSave) {
-            saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
+            saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить';
             updateDirtyBar();
         } else if (!hasChanges) {
             saveButtonHtml = '<i class="fas fa-check" aria-hidden="true"></i> Сохранено';
             updateDirtyBar();
         } else if (!state.apiAvailable) {
-            saveButtonHtml = '<i class="fas fa-server" aria-hidden="true"></i> Нет сервера сохранения';
+            saveButtonHtml = '<i class="fas fa-server" aria-hidden="true"></i> Только просмотр';
             updateDirtyBar();
         } else if (state.authRequired && !state.authenticated) {
             saveButtonHtml = '<i class="fas fa-lock" aria-hidden="true"></i> Нужен вход';
