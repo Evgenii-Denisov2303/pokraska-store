@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=20260326-20">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260327-01">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -135,40 +135,66 @@
 
             <section class="admin-card admin-card--intro admin-section-tabs" id="adminSectionTabs" hidden></section>
 
-            <div class="admin-links" id="adminPageLinks">
-                <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть главную</a>
-                <a href="../pages/services.html" target="_blank" rel="noopener noreferrer">Открыть каталог</a>
-                <a href="../pages/contacts.html" target="_blank" rel="noopener noreferrer">Открыть контакты</a>
-            </div>
+            <details class="admin-card admin-card--intro admin-assist-panel" id="adminAssistPanel" hidden>
+                <summary class="admin-assist-panel__summary">
+                    <span class="admin-assist-panel__summary-copy">
+                        <strong>Подсказки и быстрые переходы</strong>
+                        <span>Здесь собраны поиск по разделу, ссылки на страницы и вспомогательные подсказки.</span>
+                    </span>
+                    <span class="admin-assist-panel__summary-icon">
+                        <i class="fas fa-circle-chevron-down" aria-hidden="true"></i>
+                    </span>
+                </summary>
+                <div class="admin-assist-panel__body">
+                    <div class="admin-links" id="adminPageLinks">
+                        <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть главную</a>
+                        <a href="../pages/services.html" target="_blank" rel="noopener noreferrer">Открыть каталог</a>
+                        <a href="../pages/contacts.html" target="_blank" rel="noopener noreferrer">Открыть контакты</a>
+                    </div>
 
-            <section class="admin-card admin-card--intro admin-overview" id="adminOverview"></section>
+                    <section class="admin-card admin-card--intro admin-overview" id="adminOverview"></section>
 
-            <section class="admin-card admin-card--intro admin-jumpbar" id="adminJumpbar" hidden></section>
+                    <section class="admin-card admin-card--intro admin-jumpbar" id="adminJumpbar" hidden></section>
 
-            <section class="admin-card admin-card--intro admin-search-card" id="adminSearchCard">
-                <h2>Поиск по текущему разделу</h2>
-                <p class="admin-search-card__lead">Начни вводить название блока, например: “первый экран”, “футер”, “контакты”, “вопросы”, “нижний блок связи”, “палитра”, “кнопки”.</p>
-                <div class="admin-search-card__controls">
-                    <label class="admin-search-card__field">
-                        <span class="sr-only">Поиск по разделу</span>
-                        <input class="admin-input" type="search" id="adminSectionSearch" placeholder="Найти блок в этом разделе">
-                    </label>
-                    <button class="admin-btn admin-btn--ghost" type="button" id="adminSearchClearBtn">
-                        <i class="fas fa-xmark" aria-hidden="true"></i> Сбросить
-                    </button>
+                    <section class="admin-card admin-card--intro admin-search-card" id="adminSearchCard">
+                        <h2>Поиск по текущему разделу</h2>
+                        <p class="admin-search-card__lead">Начни вводить название блока, например: “первый экран”, “футер”, “контакты”, “вопросы”, “нижний блок связи”, “палитра”, “кнопки”.</p>
+                        <div class="admin-search-card__controls">
+                            <label class="admin-search-card__field">
+                                <span class="sr-only">Поиск по разделу</span>
+                                <input class="admin-input" type="search" id="adminSectionSearch" placeholder="Найти блок в этом разделе">
+                            </label>
+                            <button class="admin-btn admin-btn--ghost" type="button" id="adminSearchClearBtn">
+                                <i class="fas fa-xmark" aria-hidden="true"></i> Сбросить
+                            </button>
+                        </div>
+                        <p class="admin-search-card__status" id="adminSearchStatus">Показываются все блоки раздела.</p>
+                    </section>
                 </div>
-                <p class="admin-search-card__status" id="adminSearchStatus">Показываются все блоки раздела.</p>
-            </section>
+            </details>
 
             <div class="admin-workspace">
                 <div class="admin-editor-column">
                     <form class="admin-form" id="adminForm"></form>
                 </div>
                 <aside class="admin-preview-panel" id="adminPreviewPanel">
-                    <section class="admin-card admin-preview-card" id="adminStatusCard"></section>
-                    <section class="admin-card admin-preview-card" id="adminQuickActionsCard"></section>
-                    <section class="admin-card admin-preview-card" id="adminMiniPreviewCard"></section>
-                    <section class="admin-card admin-preview-card" id="adminLivePreviewCard">
+                    <div class="admin-preview-panel__top">
+                        <div class="admin-preview-panel__intro">
+                            <p class="admin-toolbar__eyebrow">Рабочая панель</p>
+                            <strong>Статус, действия и предпросмотр</strong>
+                            <span>Переключай нужный вид, чтобы справа оставалось только одно спокойное окно.</span>
+                        </div>
+                        <div class="admin-preview-switcher" id="adminPreviewSwitcher" role="tablist" aria-label="Рабочая панель">
+                            <button class="admin-preview-switcher__button is-active" type="button" data-preview-card="actions">Действия</button>
+                            <button class="admin-preview-switcher__button" type="button" data-preview-card="status">Статус</button>
+                            <button class="admin-preview-switcher__button" type="button" data-preview-card="summary">Коротко</button>
+                            <button class="admin-preview-switcher__button" type="button" data-preview-card="live">Страница</button>
+                        </div>
+                    </div>
+                    <section class="admin-card admin-preview-card" id="adminStatusCard" data-preview-panel="status"></section>
+                    <section class="admin-card admin-preview-card" id="adminQuickActionsCard" data-preview-panel="actions"></section>
+                    <section class="admin-card admin-preview-card" id="adminMiniPreviewCard" data-preview-panel="summary"></section>
+                    <section class="admin-card admin-preview-card" id="adminLivePreviewCard" data-preview-panel="live">
                         <div class="admin-preview-card__header">
                             <div>
                                 <p class="admin-toolbar__eyebrow">Предпросмотр страницы</p>

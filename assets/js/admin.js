@@ -1725,6 +1725,7 @@
         activeGroupScreens: {},
         livePreviewHref: '',
         previewPanelOpen: getInitialPreviewPanelOpen(),
+        activePreviewCard: getInitialActivePreviewCard(),
         lastFocusedField: null
     };
 
@@ -1743,8 +1744,10 @@
         commandCenter: document.getElementById('adminCommandCenter'),
         screenCard: document.getElementById('adminScreenCard'),
         sectionTabs: document.getElementById('adminSectionTabs'),
+        assistPanel: document.getElementById('adminAssistPanel'),
         connection: document.getElementById('adminConnection'),
         previewToggleBtn: document.getElementById('adminPreviewToggleBtn'),
+        previewSwitcher: document.getElementById('adminPreviewSwitcher'),
         reloadBtn: document.getElementById('adminReloadBtn'),
         historyBtn: document.getElementById('adminHistoryBtn'),
         downloadBtn: document.getElementById('adminDownloadBtn'),
@@ -1831,6 +1834,19 @@
         }
 
         return false;
+    }
+
+    function getInitialActivePreviewCard() {
+        try {
+            const storedValue = window.localStorage.getItem('admin-preview-card');
+            if (['actions', 'status', 'summary', 'live'].includes(storedValue)) {
+                return storedValue;
+            }
+        } catch (error) {
+            // Ignore storage failures and keep fallback below.
+        }
+
+        return 'actions';
     }
 
     function hasLocalAuthBypass() {
@@ -4734,6 +4750,70 @@
                 ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть предпросмотр'
                 : '<i class="fas fa-eye" aria-hidden="true"></i> Показать предпросмотр';
         }
+
+        updatePreviewCardsUi();
+    }
+
+    function updateAssistPanelUi(options = {}) {
+        if (!elements.assistPanel) return;
+
+        const hasVisibleContent = Boolean(
+            (elements.pageLinks && !elements.pageLinks.hidden && elements.pageLinks.querySelector('a'))
+            || (elements.overview && !elements.overview.hidden && elements.overview.innerHTML.trim())
+            || (elements.jumpbar && !elements.jumpbar.hidden && elements.jumpbar.innerHTML.trim())
+            || (elements.searchCard && !elements.searchCard.hidden)
+        );
+
+        elements.assistPanel.hidden = !hasVisibleContent;
+
+        if (!hasVisibleContent) {
+            elements.assistPanel.open = false;
+            return;
+        }
+
+        if (typeof options.open === 'boolean') {
+            elements.assistPanel.open = options.open;
+        }
+    }
+
+    function updatePreviewCardsUi() {
+        const previewVisible = Boolean(state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual);
+        const activeCard = ['actions', 'status', 'summary', 'live'].includes(state.activePreviewCard)
+            ? state.activePreviewCard
+            : 'actions';
+
+        state.activePreviewCard = activeCard;
+
+        if (elements.previewSwitcher) {
+            elements.previewSwitcher.hidden = !previewVisible;
+            elements.previewSwitcher.querySelectorAll('[data-preview-card]').forEach((button) => {
+                const isActive = button.getAttribute('data-preview-card') === activeCard;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        }
+
+        document.querySelectorAll('[data-preview-panel]').forEach((panel) => {
+            panel.hidden = !previewVisible || panel.getAttribute('data-preview-panel') !== activeCard;
+        });
+    }
+
+    function setActivePreviewCard(nextCard) {
+        if (!['actions', 'status', 'summary', 'live'].includes(nextCard)) return;
+
+        state.activePreviewCard = nextCard;
+
+        try {
+            window.localStorage.setItem('admin-preview-card', nextCard);
+        } catch (error) {
+            // Ignore storage failures and keep in-memory state.
+        }
+
+        updatePreviewCardsUi();
+
+        if (nextCard === 'live' && state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual) {
+            refreshLivePreview();
+        }
     }
 
     function updateToolbarChrome() {
@@ -6435,8 +6515,9 @@
             elements.modeNote.hidden = true;
         }
         if (elements.pageLinks) {
-            elements.pageLinks.hidden = false;
+            elements.pageLinks.hidden = true;
         }
+        updateAssistPanelUi({ open: false });
 
         updateToolbarChrome();
     }
@@ -7437,7 +7518,7 @@
         renderSectionTabs(key);
 
         if (elements.commandCenter) {
-            elements.commandCenter.hidden = useSectionTabs;
+            elements.commandCenter.hidden = useSectionTabs || Boolean(activeSimpleScreen);
         }
 
         if (elements.overview) {
@@ -7450,7 +7531,7 @@
             elements.searchCard.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.modeNote) {
-            elements.modeNote.hidden = useSectionTabs;
+            elements.modeNote.hidden = useSectionTabs || Boolean(activeSimpleScreen);
         }
         if (elements.pageLinks) {
             elements.pageLinks.hidden = useSectionTabs;
@@ -7460,6 +7541,8 @@
             renderOverview(key);
             renderJumpbar(key);
         }
+
+        updateAssistPanelUi({ open: state.editorRole === 'advanced' && !activeSimpleScreen });
 
         visibleFields.forEach((field, index) => {
             const fieldNode = renderField(field, state.data[key], key);
@@ -7819,6 +7902,11 @@
         elements.saveBtn.addEventListener('click', saveActiveSection);
         elements.previewToggleBtn?.addEventListener('click', () => {
             setPreviewPanelOpen(!state.previewPanelOpen, { silent: false });
+        });
+        elements.previewSwitcher?.querySelectorAll('[data-preview-card]').forEach((button) => {
+            button.addEventListener('click', () => {
+                setActivePreviewCard(button.getAttribute('data-preview-card') || 'actions');
+            });
         });
         elements.publishBtn?.addEventListener('click', publishActiveSection);
         elements.dirtySaveBtn?.addEventListener('click', saveActiveSection);
