@@ -1721,7 +1721,9 @@
         historyOpen: false,
         activeGuide: null,
         activeSimpleScreen: null,
+        activeFieldTabs: {},
         livePreviewHref: '',
+        previewPanelOpen: getInitialPreviewPanelOpen(),
         lastFocusedField: null
     };
 
@@ -1735,10 +1737,13 @@
         form: document.getElementById('adminForm'),
         title: document.getElementById('adminTitle'),
         description: document.getElementById('adminDescription'),
+        sectionBadge: document.getElementById('adminSectionBadge'),
         alert: document.getElementById('adminAlert'),
         commandCenter: document.getElementById('adminCommandCenter'),
         screenCard: document.getElementById('adminScreenCard'),
+        sectionTabs: document.getElementById('adminSectionTabs'),
         connection: document.getElementById('adminConnection'),
+        previewToggleBtn: document.getElementById('adminPreviewToggleBtn'),
         reloadBtn: document.getElementById('adminReloadBtn'),
         historyBtn: document.getElementById('adminHistoryBtn'),
         downloadBtn: document.getElementById('adminDownloadBtn'),
@@ -1752,6 +1757,7 @@
         modeNote: document.getElementById('adminModeNote'),
         modeNoteTitle: document.getElementById('adminModeNoteTitle'),
         modeNoteText: document.getElementById('adminModeNoteText'),
+        pageLinks: document.getElementById('adminPageLinks'),
         collapseBtn: document.getElementById('adminCollapseBtn'),
         expandBtn: document.getElementById('adminExpandBtn'),
         jumpbar: document.getElementById('adminJumpbar'),
@@ -1810,6 +1816,18 @@
         } catch (error) {
             return 'customer';
         }
+    }
+
+    function getInitialPreviewPanelOpen() {
+        try {
+            const storedValue = window.localStorage.getItem('admin-preview-open');
+            if (storedValue === '1') return true;
+            if (storedValue === '0') return false;
+        } catch (error) {
+            // Ignore storage failures and keep fallback below.
+        }
+
+        return false;
     }
 
     function hasLocalAuthBypass() {
@@ -2075,6 +2093,8 @@
                 elements.modeNoteText.textContent = 'Показываются все поля без упрощения: контент, ссылки, иконки, размеры изображений, служебные ID и другие технические параметры.';
             }
         }
+
+        updateToolbarChrome();
     }
 
     function updateSearchUi() {
@@ -2540,6 +2560,20 @@
             <div class="admin-field__preview-bar">
                 <span>${getFileNameFromPath(value)}</span>
                 <a href="${previewUrl}" target="_blank" rel="noopener noreferrer">Открыть фото</a>
+            </div>
+        `;
+
+        return preview;
+    }
+
+    function createMediaPlaceholder(label) {
+        const preview = document.createElement('div');
+        preview.className = 'admin-field__preview is-empty';
+        preview.innerHTML = `
+            <div class="admin-field__preview-empty">
+                <span class="admin-field__preview-empty-icon"><i class="fas fa-image" aria-hidden="true"></i></span>
+                <strong>${label || 'Фото пока не выбрано'}</strong>
+                <span>Выберите изображение из библиотеки или вставьте путь к файлу ниже.</span>
             </div>
         `;
 
@@ -3322,6 +3356,191 @@
             title: 'Шаг 1 из 3: начни редактирование',
             text: 'Выбери нужный блок, внеси правки и сохрани раздел. Если правок пока нет, этот статус будет оставаться нейтральным.'
         };
+    }
+
+    function shouldUseSectionTabs(sectionKey = state.activeKey) {
+        const config = contentConfigs[sectionKey];
+        return Boolean(config && !config.virtual && state.editorRole === 'customer');
+    }
+
+    function getSectionTabFields(sectionKey = state.activeKey) {
+        return contentConfigs[sectionKey]?.schema?.fields || [];
+    }
+
+    function getSectionTabMeta(field) {
+        if (field?.type === 'group') {
+            return {
+                icon: 'fa-layer-group',
+                text: `${Array.isArray(field.fields) ? field.fields.length : 0} подпунктов`
+            };
+        }
+
+        if (field?.type === 'array') {
+            return {
+                icon: 'fa-table-cells-large',
+                text: field.itemLabel ? `Список: ${field.itemLabel.toLowerCase()}` : 'Список карточек и пунктов'
+            };
+        }
+
+        return {
+            icon: 'fa-pen',
+            text: 'Текстовые и служебные поля'
+        };
+    }
+
+    function getActiveSectionTab(sectionKey = state.activeKey) {
+        const fields = getSectionTabFields(sectionKey);
+        if (!fields.length) return '';
+
+        const storedValue = state.activeFieldTabs[sectionKey];
+        if (storedValue && fields.some((field) => field.key === storedValue)) {
+            return storedValue;
+        }
+
+        const fallbackValue = fields[0].key;
+        state.activeFieldTabs[sectionKey] = fallbackValue;
+        return fallbackValue;
+    }
+
+    function setActiveSectionTab(sectionKey, fieldKey, options = {}) {
+        const fields = getSectionTabFields(sectionKey);
+        if (!fields.some((field) => field.key === fieldKey)) return;
+
+        state.activeFieldTabs[sectionKey] = fieldKey;
+        state.activeSimpleScreen = null;
+        state.searchQuery = '';
+        renderActiveSection();
+
+        if (!options.silent) {
+            showAlert(`Открыт блок «${getTopLevelFieldLabel(sectionKey, fieldKey)}».`, 'info');
+        }
+    }
+
+    function openEditorSection(contentKey, fieldKey) {
+        if (shouldUseSectionTabs(contentKey)) {
+            const activeTab = getActiveSectionTab(contentKey);
+            if (fieldKey && activeTab !== fieldKey) {
+                state.activeFieldTabs[contentKey] = fieldKey;
+                renderActiveSection();
+            }
+        }
+
+        const details = document.getElementById(getTopLevelSectionId(contentKey, fieldKey));
+        if (!(details instanceof HTMLDetailsElement)) return null;
+
+        details.open = true;
+        details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return details;
+    }
+
+    function updatePreviewPanelUi() {
+        const previewVisible = Boolean(state.previewPanelOpen && !contentConfigs[state.activeKey]?.virtual);
+
+        document.body.classList.toggle('admin-preview-open', previewVisible);
+        document.body.classList.toggle('admin-preview-closed', !previewVisible);
+
+        if (elements.previewPanel) {
+            elements.previewPanel.hidden = !previewVisible;
+        }
+
+        if (elements.previewToggleBtn) {
+            elements.previewToggleBtn.hidden = Boolean(contentConfigs[state.activeKey]?.virtual);
+            elements.previewToggleBtn.classList.toggle('admin-btn--primary', previewVisible);
+            elements.previewToggleBtn.classList.toggle('admin-btn--ghost', !previewVisible);
+            elements.previewToggleBtn.innerHTML = previewVisible
+                ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть предпросмотр'
+                : '<i class="fas fa-eye" aria-hidden="true"></i> Показать предпросмотр';
+        }
+    }
+
+    function updateToolbarChrome() {
+        document.body.classList.toggle('admin-customer-layout', state.editorRole === 'customer');
+        document.body.classList.toggle('admin-manager-layout', state.editorRole === 'manager');
+        document.body.classList.toggle('admin-advanced-layout', state.editorRole === 'advanced');
+
+        if (elements.sectionBadge) {
+            const activeConfig = contentConfigs[state.activeKey];
+            if (activeConfig?.virtual) {
+                elements.sectionBadge.className = 'admin-status-badge is-idle';
+                elements.sectionBadge.textContent = 'Стартовый экран';
+            } else {
+                const status = getSectionStatus(state.activeKey);
+                elements.sectionBadge.className = `admin-status-badge is-${status.tone}`;
+                elements.sectionBadge.textContent = status.label;
+            }
+        }
+
+        updatePreviewPanelUi();
+    }
+
+    function setPreviewPanelOpen(open, options = {}) {
+        state.previewPanelOpen = Boolean(open);
+
+        try {
+            window.localStorage.setItem('admin-preview-open', state.previewPanelOpen ? '1' : '0');
+        } catch (error) {
+            // Ignore storage failures and keep in-memory state.
+        }
+
+        updateToolbarChrome();
+
+        if (state.previewPanelOpen) {
+            refreshLivePreview();
+        }
+
+        if (!options.silent && !contentConfigs[state.activeKey]?.virtual) {
+            showAlert(
+                state.previewPanelOpen
+                    ? 'Предпросмотр открыт под формой.'
+                    : 'Предпросмотр скрыт, чтобы осталось больше места для редактирования.',
+                'info'
+            );
+        }
+    }
+
+    function renderSectionTabs(sectionKey) {
+        if (!elements.sectionTabs) return;
+
+        if (!shouldUseSectionTabs(sectionKey)) {
+            elements.sectionTabs.hidden = true;
+            elements.sectionTabs.innerHTML = '';
+            return;
+        }
+
+        const fields = getSectionTabFields(sectionKey);
+        const activeFieldKey = getActiveSectionTab(sectionKey);
+
+        elements.sectionTabs.hidden = false;
+        elements.sectionTabs.innerHTML = `
+            <div class="admin-section-tabs__head">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Работаем по крупным блокам</p>
+                    <h2>Что именно хотите поменять в этом разделе?</h2>
+                    <p>Заказчику не нужно листать всю форму. Выберите нужный блок, внесите правки и сохраните раздел.</p>
+                </div>
+                <span class="admin-status-badge is-idle">${fields.length} блоков</span>
+            </div>
+            <div class="admin-section-tabs__list">
+                ${fields.map((field) => {
+                    const meta = getSectionTabMeta(field);
+                    return `
+                        <button class="admin-section-tabs__button ${field.key === activeFieldKey ? 'is-active' : ''}" type="button" data-section-tab="${field.key}">
+                            <span class="admin-section-tabs__button-icon"><i class="fas ${meta.icon}" aria-hidden="true"></i></span>
+                            <span class="admin-section-tabs__button-copy">
+                                <strong>${getTopLevelFieldLabel(sectionKey, field.key)}</strong>
+                                <span>${meta.text}</span>
+                            </span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>
+        `;
+
+        elements.sectionTabs.querySelectorAll('[data-section-tab]').forEach((button) => {
+            button.addEventListener('click', () => {
+                setActiveSectionTab(sectionKey, button.getAttribute('data-section-tab') || '', { silent: true });
+            });
+        });
     }
 
     function renderSidebarFooter() {
@@ -4379,7 +4598,7 @@
 
     function findScopedContainer(target) {
         if (!target?.sectionKey) return elements.form;
-        return openTopLevelSection(state.activeKey, target.sectionKey) || elements.form;
+        return openEditorSection(state.activeKey, target.sectionKey) || elements.form;
     }
 
     function openMediaPickerForTarget(target) {
@@ -4412,7 +4631,7 @@
 
         let scopedContainer = null;
         if (target.sectionKey) {
-            scopedContainer = openTopLevelSection(state.activeKey, target.sectionKey);
+            scopedContainer = openEditorSection(state.activeKey, target.sectionKey);
         }
 
         if (Array.isArray(target.focusKeys) && target.focusKeys.length) {
@@ -4908,6 +5127,10 @@
         if (elements.previewPanel) {
             elements.previewPanel.hidden = true;
         }
+        if (elements.sectionTabs) {
+            elements.sectionTabs.hidden = true;
+            elements.sectionTabs.innerHTML = '';
+        }
         if (elements.overview) {
             elements.overview.hidden = true;
             elements.overview.innerHTML = '';
@@ -4926,6 +5149,11 @@
         if (elements.modeNote) {
             elements.modeNote.hidden = true;
         }
+        if (elements.pageLinks) {
+            elements.pageLinks.hidden = false;
+        }
+
+        updateToolbarChrome();
     }
 
     function renderMiniPreview(sectionKey) {
@@ -5044,6 +5272,8 @@
             elements.connection.textContent = 'Только просмотр: сервер сохранения не найден';
             elements.connection.className = 'admin-connection is-readonly';
         }
+
+        updateToolbarChrome();
     }
 
     function updateAuthUi() {
@@ -5263,6 +5493,9 @@
         wrapper.dataset.fieldKey = field.key;
         wrapper.dataset.fieldLabel = getDisplayLabel(field);
         wrapper.dataset.contentKey = contentKey;
+        if (field.key === 'src') {
+            wrapper.classList.add('admin-field--media');
+        }
 
         const label = document.createElement('label');
         label.textContent = getDisplayLabel(field);
@@ -5321,11 +5554,14 @@
                 previewNode = null;
             }
 
-            if (field.key === 'src' || (typeof nextValue === 'string' && isImageLikeValue(nextValue))) {
+            if (field.key === 'src') {
+                previewNode = createImagePreview(nextValue) || createMediaPlaceholder(getDisplayLabel(field));
+            } else if (typeof nextValue === 'string' && isImageLikeValue(nextValue)) {
                 previewNode = createImagePreview(nextValue);
-                if (previewNode) {
-                    wrapper.appendChild(previewNode);
-                }
+            }
+
+            if (previewNode) {
+                wrapper.appendChild(previewNode);
             }
         }
 
@@ -5351,11 +5587,16 @@
         }
 
         if (field.key === 'src') {
+            const mediaNote = document.createElement('div');
+            mediaNote.className = 'admin-field__media-note';
+            mediaNote.innerHTML = '<i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i><span>Фото удобнее менять через библиотеку: так не нужно вручную вводить путь.</span>';
+            wrapper.appendChild(mediaNote);
+
             const actions = document.createElement('div');
             actions.className = 'admin-field__media-actions';
             actions.innerHTML = `
-                <button class="admin-btn admin-btn--ghost" type="button">
-                    <i class="fas fa-images" aria-hidden="true"></i> Выбрать из библиотеки
+                <button class="admin-btn admin-btn--primary" type="button">
+                    <i class="fas fa-images" aria-hidden="true"></i> Выбрать фото
                 </button>
                 <button class="admin-btn admin-btn--ghost" type="button">
                     <i class="fas fa-eraser" aria-hidden="true"></i> Очистить поле
@@ -5511,18 +5752,34 @@
                     const { primaryFields, secondaryFields, advancedFields } = splitFieldsForMode(field.fields);
                     const itemTitle = getArrayItemTitle(field, itemObject, index);
                     const itemMeta = getArrayItemMeta(field, itemObject);
+                    const imageField = Array.isArray(field.fields)
+                        ? field.fields.find((childField) => childField.key === 'src')
+                        : null;
+                    const imageValue = imageField && typeof itemObject.src === 'string'
+                        ? itemObject.src.trim()
+                        : '';
+                    const hasImagePreview = isImageLikeValue(imageValue);
 
                     const details = document.createElement('details');
                     details.className = 'admin-array-card__details';
+                    if (hasImagePreview) {
+                        details.classList.add('admin-array-card__details--media');
+                    }
                     details.open = !state.simpleMode && index === 0;
                     card.appendChild(details);
 
                     const summary = document.createElement('summary');
+                    const thumbMarkup = hasImagePreview
+                        ? `<div class="admin-array-card__thumb"><img src="${getPreviewUrl(imageValue)}" alt="Миниатюра" loading="lazy"></div>`
+                        : '';
                     summary.innerHTML = `
                         <div class="admin-array-card__header">
-                            <div>
-                                <div class="admin-array-card__title">${itemTitle}</div>
-                                ${itemMeta ? `<div class="admin-array-card__meta">${itemMeta}</div>` : ''}
+                            <div class="admin-array-card__summary-main">
+                                ${thumbMarkup}
+                                <div class="admin-array-card__summary-copy">
+                                    <div class="admin-array-card__title">${itemTitle}</div>
+                                    ${itemMeta ? `<div class="admin-array-card__meta">${itemMeta}</div>` : ''}
+                                </div>
                             </div>
                             <div class="admin-array-card__actions">
                                 <button type="button" class="admin-icon-btn" aria-label="Поднять вверх"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
@@ -5585,6 +5842,67 @@
                     const body = document.createElement('div');
                     body.className = 'admin-array-card__body';
                     details.appendChild(body);
+
+                    if (imageField) {
+                        const mediaQuickBar = document.createElement('div');
+                        mediaQuickBar.className = 'admin-array-card__quick';
+
+                        const pickButton = document.createElement('button');
+                        pickButton.type = 'button';
+                        pickButton.className = 'admin-btn admin-btn--primary';
+                        pickButton.innerHTML = '<i class="fas fa-images" aria-hidden="true"></i> Выбрать фото';
+                        pickButton.addEventListener('click', () => {
+                            openMediaPicker({
+                                title: itemTitle ? `Выбрать фото для «${itemTitle}»` : 'Выбрать фото',
+                                directory: getMediaDefaultDirectory(contentKey),
+                                apply: (selectedValue) => {
+                                    itemObject.src = selectedValue;
+                                    markDirty();
+                                    rerenderList();
+                                }
+                            });
+                        });
+                        mediaQuickBar.appendChild(pickButton);
+
+                        if (hasImagePreview) {
+                            const openButton = document.createElement('a');
+                            openButton.className = 'admin-btn admin-btn--ghost';
+                            openButton.href = getPreviewUrl(imageValue);
+                            openButton.target = '_blank';
+                            openButton.rel = 'noopener noreferrer';
+                            openButton.innerHTML = '<i class="fas fa-up-right-from-square" aria-hidden="true"></i> Открыть';
+                            mediaQuickBar.appendChild(openButton);
+                        }
+
+                        if (field.allowReorder !== false && index > 0) {
+                            const pinButton = document.createElement('button');
+                            pinButton.type = 'button';
+                            pinButton.className = 'admin-btn admin-btn--ghost';
+                            pinButton.innerHTML = '<i class="fas fa-arrow-up" aria-hidden="true"></i> Сделать первым';
+                            pinButton.addEventListener('click', () => {
+                                const [movedItem] = array.splice(index, 1);
+                                array.unshift(movedItem);
+                                markDirty();
+                                rerenderList();
+                            });
+                            mediaQuickBar.appendChild(pinButton);
+                        }
+
+                        if (imageValue) {
+                            const clearButton = document.createElement('button');
+                            clearButton.type = 'button';
+                            clearButton.className = 'admin-btn admin-btn--ghost';
+                            clearButton.innerHTML = '<i class="fas fa-trash" aria-hidden="true"></i> Убрать фото';
+                            clearButton.addEventListener('click', () => {
+                                itemObject.src = '';
+                                markDirty();
+                                rerenderList();
+                            });
+                            mediaQuickBar.appendChild(clearButton);
+                        }
+
+                        body.appendChild(mediaQuickBar);
+                    }
 
                     const grid = document.createElement('div');
                     grid.className = 'admin-grid admin-grid--two';
@@ -5699,39 +6017,51 @@
             updateDirtyBar();
             return;
         }
+
         const activeSimpleScreen = getActiveSimpleScreen(key);
+        const useSectionTabs = shouldUseSectionTabs(key) && !activeSimpleScreen;
+        const activeTabKey = useSectionTabs ? getActiveSectionTab(key) : '';
         const visibleFields = activeSimpleScreen
             ? config.schema.fields.filter((field) => activeSimpleScreen.fieldKeys.includes(field.key))
-            : config.schema.fields;
+            : useSectionTabs
+                ? config.schema.fields.filter((field) => field.key === activeTabKey)
+                : config.schema.fields;
+
         if (state.activeGuide && state.activeGuide.sectionKey !== key) {
             closeGuideModal();
         } else if (state.activeGuide && state.activeGuide.sectionKey === key && !elements.guideModal?.hidden) {
             renderGuideModal();
         }
+
         elements.title.textContent = config.label;
         elements.description.textContent = meta.navHint || config.description;
         elements.form.innerHTML = '';
         state.lastFocusedField = null;
         renderCommandCenter(key);
         renderScreenCard(key);
-        if (elements.previewPanel) {
-            elements.previewPanel.hidden = false;
+        renderSectionTabs(key);
+
+        if (elements.commandCenter) {
+            elements.commandCenter.hidden = useSectionTabs;
         }
 
         if (elements.overview) {
-            elements.overview.hidden = Boolean(activeSimpleScreen);
+            elements.overview.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.jumpbar) {
-            elements.jumpbar.hidden = Boolean(activeSimpleScreen);
+            elements.jumpbar.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.searchCard) {
-            elements.searchCard.hidden = Boolean(activeSimpleScreen);
+            elements.searchCard.hidden = Boolean(activeSimpleScreen || useSectionTabs);
         }
         if (elements.modeNote) {
-            elements.modeNote.hidden = false;
+            elements.modeNote.hidden = useSectionTabs;
+        }
+        if (elements.pageLinks) {
+            elements.pageLinks.hidden = useSectionTabs;
         }
 
-        if (!activeSimpleScreen) {
+        if (!activeSimpleScreen && !useSectionTabs) {
             renderOverview(key);
             renderJumpbar(key);
         }
@@ -5754,21 +6084,27 @@
         renderStatusCard(key);
         renderQuickActions(key);
         renderMiniPreview(key);
-        refreshLivePreview();
+        if (state.previewPanelOpen) {
+            refreshLivePreview();
+        }
         updateToolbarState();
         updateDirtyBar();
     }
 
     function updateToolbarState() {
         const activeConfig = contentConfigs[state.activeKey];
+        let saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
+
         if (activeConfig?.virtual) {
             elements.saveBtn.disabled = true;
             elements.publishBtn.disabled = true;
             elements.downloadBtn.disabled = true;
             elements.reloadBtn.disabled = false;
             elements.historyBtn.disabled = true;
-            elements.saveBtn.innerHTML = '<i class="fas fa-rocket" aria-hidden="true"></i> Выберите действие';
+            saveButtonHtml = '<i class="fas fa-rocket" aria-hidden="true"></i> Выберите действие';
+            elements.saveBtn.innerHTML = saveButtonHtml;
             updateDirtyBar();
+            updateToolbarChrome();
             return;
         }
 
@@ -5782,36 +6118,31 @@
             && Boolean(getSectionAdminState(state.activeKey)?.lastSavedAt);
 
         elements.saveBtn.disabled = !canSave;
+        elements.downloadBtn.disabled = false;
+        elements.reloadBtn.disabled = false;
+        elements.historyBtn.disabled = false;
         if (elements.publishBtn) {
             elements.publishBtn.disabled = !canPublish;
         }
 
         if (canSave) {
-            elements.saveBtn.innerHTML = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
+            saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
             updateDirtyBar();
-            return;
+        } else if (!hasChanges) {
+            saveButtonHtml = '<i class="fas fa-check" aria-hidden="true"></i> Изменений пока нет';
+            updateDirtyBar();
+        } else if (!state.apiAvailable) {
+            saveButtonHtml = '<i class="fas fa-server" aria-hidden="true"></i> Нет сервера сохранения';
+            updateDirtyBar();
+        } else if (state.authRequired && !state.authenticated) {
+            saveButtonHtml = '<i class="fas fa-lock" aria-hidden="true"></i> Нужен вход';
+            updateDirtyBar();
+        } else {
+            updateDirtyBar();
         }
 
-        if (!hasChanges) {
-            elements.saveBtn.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i> Изменений пока нет';
-            updateDirtyBar();
-            return;
-        }
-
-        if (!state.apiAvailable) {
-            elements.saveBtn.innerHTML = '<i class="fas fa-server" aria-hidden="true"></i> Нет сервера сохранения';
-            updateDirtyBar();
-            return;
-        }
-
-        if (state.authRequired && !state.authenticated) {
-            elements.saveBtn.innerHTML = '<i class="fas fa-lock" aria-hidden="true"></i> Нужен вход';
-            updateDirtyBar();
-            return;
-        }
-
-        elements.saveBtn.innerHTML = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить изменения';
-        updateDirtyBar();
+        elements.saveBtn.innerHTML = saveButtonHtml;
+        updateToolbarChrome();
     }
 
     async function saveActiveSection() {
@@ -6069,6 +6400,9 @@
         }
 
         elements.saveBtn.addEventListener('click', saveActiveSection);
+        elements.previewToggleBtn?.addEventListener('click', () => {
+            setPreviewPanelOpen(!state.previewPanelOpen, { silent: false });
+        });
         elements.publishBtn?.addEventListener('click', publishActiveSection);
         elements.dirtySaveBtn?.addEventListener('click', saveActiveSection);
         elements.dirtyResetBtn?.addEventListener('click', resetActiveSection);
