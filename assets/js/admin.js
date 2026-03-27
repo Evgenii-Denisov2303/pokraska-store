@@ -3556,6 +3556,131 @@
         }
     }
 
+    function shouldUseCompactContactEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'site'
+            && field?.type === 'group'
+            && field?.key === 'contact';
+    }
+
+    function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
+        if (!childField) return null;
+
+        const card = document.createElement('section');
+        card.className = `admin-contact-quick__card${options.wide ? ' is-wide' : ''}`;
+        card.innerHTML = `
+            <div class="admin-contact-quick__card-head">
+                <div class="admin-contact-quick__card-icon"><i class="fas ${options.icon || 'fa-pen'}" aria-hidden="true"></i></div>
+                <div>
+                    <h3>${options.title || getDisplayLabel(childField)}</h3>
+                    ${options.text ? `<p>${options.text}</p>` : ''}
+                </div>
+            </div>
+        `;
+
+        const body = document.createElement('div');
+        body.className = 'admin-contact-quick__card-body';
+
+        if (childField.type === 'group') {
+            const targetValue = targetObject[childField.key] ?? createDefaultValue(childField);
+            targetObject[childField.key] = targetValue;
+            const grid = document.createElement('div');
+            grid.className = 'admin-grid admin-grid--two';
+            renderFieldsIntoContainer(grid, childField.fields, targetValue, contentKey);
+            body.appendChild(grid);
+        } else {
+            const grid = document.createElement('div');
+            grid.className = options.singleColumn ? 'admin-grid' : 'admin-grid admin-grid--two';
+            renderFieldsIntoContainer(grid, [childField], targetObject, contentKey);
+            body.appendChild(grid);
+        }
+
+        card.appendChild(body);
+        return card;
+    }
+
+    function renderCompactContactEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-contact';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Телефоны, мессенджеры и адрес сайта', 'fa-phone'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-contact-quick';
+        panel.innerHTML = `
+            <div class="admin-contact-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Быстрое редактирование контактов</p>
+                    <h2>Телефоны и контакты сайта</h2>
+                    <p>Здесь удобно менять основные номера, мессенджеры, адрес, почту и режим работы без перехода по общей структуре сайта.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Компактный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+        const cards = [
+            createCompactContactCard(fieldMap.get('primaryPhone'), value, contentKey, {
+                icon: 'fa-phone',
+                title: 'Основной телефон',
+                text: 'Главный номер в шапке и основных блоках связи.'
+            }),
+            createCompactContactCard(fieldMap.get('secondaryPhone'), value, contentKey, {
+                icon: 'fa-mobile-screen-button',
+                title: 'Второй телефон',
+                text: 'Дополнительный номер для каталога и контактов.'
+            }),
+            createCompactContactCard(fieldMap.get('telegram'), value, contentKey, {
+                icon: 'fa-paper-plane',
+                title: 'Telegram',
+                text: 'Подпись и ссылка на быстрый переход в мессенджер.'
+            }),
+            createCompactContactCard(fieldMap.get('max'), value, contentKey, {
+                icon: 'fa-comments',
+                title: 'Max',
+                text: 'Второй канал быстрой связи, если нужен заказчику.'
+            })
+        ].filter(Boolean);
+
+        const cardGrid = document.createElement('div');
+        cardGrid.className = 'admin-contact-quick__grid';
+        cards.forEach((card) => cardGrid.appendChild(card));
+        panel.appendChild(cardGrid);
+
+        const detailsCard = document.createElement('div');
+        detailsCard.className = 'admin-contact-quick__details';
+        const secondaryCards = [
+            createCompactContactCard(fieldMap.get('address'), value, contentKey, {
+                icon: 'fa-location-dot',
+                title: 'Адрес',
+                text: 'Показывается в контактах и в общих блоках сайта.',
+                wide: true,
+                singleColumn: true
+            }),
+            createCompactContactCard(fieldMap.get('email'), value, contentKey, {
+                icon: 'fa-envelope',
+                title: 'Почта',
+                text: 'Рабочий email для связи и заявок.'
+            }),
+            createCompactContactCard(fieldMap.get('hours'), value, contentKey, {
+                icon: 'fa-clock',
+                title: 'Режим работы',
+                text: 'Часы работы, которые видит клиент.'
+            })
+        ].filter(Boolean);
+        secondaryCards.forEach((card) => detailsCard.appendChild(card));
+        panel.appendChild(detailsCard);
+
+        details.appendChild(panel);
+        return details;
+    }
+
     function syncGroupEditorScreenForTarget(contentKey, fieldKey, focusKeys = []) {
         if (!Array.isArray(focusKeys) || !focusKeys.length) return;
 
@@ -5592,6 +5717,10 @@
         parentObject[field.key] = value;
 
         if (field.type === 'group') {
+            if (shouldUseCompactContactEditor(contentKey, field)) {
+                return renderCompactContactEditor(field, value, contentKey);
+            }
+
             const details = document.createElement('details');
             details.className = 'admin-section';
             details.open = !field.startCollapsed;
