@@ -1722,6 +1722,7 @@
         activeGuide: null,
         activeSimpleScreen: null,
         activeFieldTabs: {},
+        activeGroupScreens: {},
         livePreviewHref: '',
         previewPanelOpen: getInitialPreviewPanelOpen(),
         lastFocusedField: null
@@ -3471,6 +3472,105 @@
         }
     }
 
+    function getGroupEditorScreenStateKey(contentKey, field) {
+        return `${contentKey}:${field.key}`;
+    }
+
+    function getGroupEditorScreens(contentKey, field) {
+        if (!shouldUseSectionTabs(contentKey) || contentKey !== 'catalogPanels' || field?.type !== 'group' || !Array.isArray(field.fields)) {
+            return [];
+        }
+
+        const availableKeys = new Set(field.fields.map((childField) => childField.key));
+        const screenTemplates = [
+            {
+                key: 'text',
+                icon: 'fa-pen',
+                title: 'Текст и заголовки',
+                text: 'Хлебные крошки, заголовки, абзацы и бейджи.',
+                fieldKeys: ['breadcrumb', 'title', 'introTitle', 'paragraphs', 'badges', 'tailParagraphs', 'sectionHeading']
+            },
+            {
+                key: 'cards',
+                icon: 'fa-table-cells-large',
+                title: 'Карточки и списки',
+                text: 'Информационные карточки и блоки характеристик.',
+                fieldKeys: ['cards', 'specGroups']
+            },
+            {
+                key: 'faq-palette',
+                icon: 'fa-swatchbook',
+                title: 'Вопросы и цвета',
+                text: 'FAQ, палитры и цветовые блоки.',
+                fieldKeys: ['faq', 'palette']
+            },
+            {
+                key: 'products',
+                icon: 'fa-box-open',
+                title: 'Товары и шаги',
+                text: 'Шаги выбора и карточки товаров или комплектов.',
+                fieldKeys: ['steps', 'products']
+            },
+            {
+                key: 'cta',
+                icon: 'fa-bullhorn',
+                title: 'Нижний блок связи',
+                text: 'Финальный призыв и нижний CTA.',
+                fieldKeys: ['cta']
+            }
+        ];
+
+        return screenTemplates
+            .map((screen) => ({
+                ...screen,
+                fieldKeys: screen.fieldKeys.filter((fieldKey) => availableKeys.has(fieldKey))
+            }))
+            .filter((screen) => screen.fieldKeys.length);
+    }
+
+    function getActiveGroupEditorScreen(contentKey, field) {
+        const screens = getGroupEditorScreens(contentKey, field);
+        if (!screens.length) return null;
+
+        const stateKey = getGroupEditorScreenStateKey(contentKey, field);
+        const storedValue = state.activeGroupScreens[stateKey];
+        const matchedScreen = screens.find((screen) => screen.key === storedValue);
+        if (matchedScreen) {
+            return matchedScreen;
+        }
+
+        state.activeGroupScreens[stateKey] = screens[0].key;
+        return screens[0];
+    }
+
+    function setActiveGroupEditorScreen(contentKey, field, screenKey, options = {}) {
+        const screens = getGroupEditorScreens(contentKey, field);
+        if (!screens.some((screen) => screen.key === screenKey)) return;
+
+        state.activeGroupScreens[getGroupEditorScreenStateKey(contentKey, field)] = screenKey;
+        renderActiveSection();
+
+        if (!options.silent) {
+            const activeScreen = screens.find((screen) => screen.key === screenKey);
+            showAlert(`Открыт экран «${activeScreen?.title || 'Блок'}» в карточке «${getDisplayLabel(field)}».`, 'info');
+        }
+    }
+
+    function syncGroupEditorScreenForTarget(contentKey, fieldKey, focusKeys = []) {
+        if (!Array.isArray(focusKeys) || !focusKeys.length) return;
+
+        const field = contentConfigs[contentKey]?.schema?.fields?.find((item) => item.key === fieldKey);
+        if (!field) return;
+
+        const screens = getGroupEditorScreens(contentKey, field);
+        if (!screens.length) return;
+
+        const matchedScreen = screens.find((screen) => focusKeys.some((focusKey) => screen.fieldKeys.includes(focusKey)));
+        if (!matchedScreen) return;
+
+        state.activeGroupScreens[getGroupEditorScreenStateKey(contentKey, field)] = matchedScreen.key;
+    }
+
     function openEditorSection(contentKey, fieldKey) {
         if (shouldUseSectionTabs(contentKey)) {
             const activeTab = getActiveSectionTab(contentKey);
@@ -4653,6 +4753,7 @@
 
     function findScopedContainer(target) {
         if (!target?.sectionKey) return elements.form;
+        syncGroupEditorScreenForTarget(state.activeKey, target.sectionKey, target.focusKeys);
         return openEditorSection(state.activeKey, target.sectionKey) || elements.form;
     }
 
@@ -4686,6 +4787,7 @@
 
         let scopedContainer = null;
         if (target.sectionKey) {
+            syncGroupEditorScreenForTarget(state.activeKey, target.sectionKey, target.focusKeys);
             scopedContainer = openEditorSection(state.activeKey, target.sectionKey);
         }
 
@@ -5497,7 +5599,13 @@
             details.dataset.fieldKey = field.key;
             details.dataset.fieldLabel = getDisplayLabel(field);
 
-            const { primaryFields, secondaryFields, advancedFields } = splitFieldsForMode(field.fields);
+            const groupEditorScreens = getGroupEditorScreens(contentKey, field);
+            const activeGroupScreen = groupEditorScreens.length ? getActiveGroupEditorScreen(contentKey, field) : null;
+            const groupFields = activeGroupScreen
+                ? field.fields.filter((childField) => activeGroupScreen.fieldKeys.includes(childField.key))
+                : field.fields;
+
+            const { primaryFields, secondaryFields, advancedFields } = splitFieldsForMode(groupFields);
             const visibleFieldCount = primaryFields.length + secondaryFields.length + advancedFields.length;
 
             const summary = document.createElement('summary');
@@ -5512,6 +5620,39 @@
             }
             summary.appendChild(summaryNode);
             details.appendChild(summary);
+
+            if (activeGroupScreen) {
+                const groupScreenCard = document.createElement('div');
+                groupScreenCard.className = 'admin-group-screens';
+                groupScreenCard.innerHTML = `
+                    <div class="admin-group-screens__head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Редактирование карточки каталога</p>
+                            <h3>${getDisplayLabel(field)}</h3>
+                            <p>${activeGroupScreen.text}</p>
+                        </div>
+                        <span class="admin-status-badge is-idle">${groupEditorScreens.length} экранов</span>
+                    </div>
+                    <div class="admin-group-screens__list">
+                        ${groupEditorScreens.map((screen) => `
+                            <button class="admin-group-screens__button ${screen.key === activeGroupScreen.key ? 'is-active' : ''}" type="button" data-group-screen="${screen.key}">
+                                <span class="admin-group-screens__button-icon"><i class="fas ${screen.icon}" aria-hidden="true"></i></span>
+                                <span class="admin-group-screens__button-copy">
+                                    <strong>${screen.title}</strong>
+                                    <span>${screen.text}</span>
+                                </span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                details.appendChild(groupScreenCard);
+
+                groupScreenCard.querySelectorAll('[data-group-screen]').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        setActiveGroupEditorScreen(contentKey, field, button.getAttribute('data-group-screen') || '', { silent: true });
+                    });
+                });
+            }
 
             const grid = document.createElement('div');
             grid.className = 'admin-grid admin-grid--two';
