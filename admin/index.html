@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=20260327-05">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=20260327-11">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -18,17 +18,18 @@
                 <strong>Управление сайтом</strong>
             </a>
 
-            <p class="admin-sidebar__lead">Здесь удобнее идти не от структуры сайта, а от задачи: что хотите поменять сейчас — главную, фото, каталог, телефоны или цены. Выберите нужный маршрут слева, внесите правки и сохраните изменения.</p>
+            <p class="admin-sidebar__lead">Слева задачи и разделы сайта: главная, каталог, фото, контакты и цены. Начни с частых правок или выбери нужный раздел ниже.</p>
 
-            <section class="admin-sidebar-search">
-                <label class="admin-sidebar-search__field">
-                    <span class="sr-only">Поиск раздела в админке</span>
-                    <input class="admin-input" type="search" id="adminNavSearch" placeholder="Что хотите поменять: главная, фото, телефоны">
-                </label>
-                <button class="admin-btn admin-btn--ghost" type="button" id="adminNavSearchClearBtn">
-                    <i class="fas fa-xmark" aria-hidden="true"></i>
-                </button>
-            </section>
+            <div class="admin-sidebar-sticky">
+                <section class="admin-sidebar-search">
+                    <label class="admin-sidebar-search__field">
+                        <span class="sr-only">Поиск раздела в админке</span>
+                        <input class="admin-input" type="search" id="adminNavSearch" placeholder="Главная, каталог, фото...">
+                    </label>
+                </section>
+
+                <section class="admin-sidebar-shortcuts" id="adminSidebarShortcuts" hidden></section>
+            </div>
 
             <nav class="admin-nav" id="adminNav" aria-label="Разделы админки"></nav>
 
@@ -36,7 +37,7 @@
                 <summary class="admin-help__summary">
                     <span class="admin-help__summary-copy">
                         <strong>Короткая инструкция</strong>
-                        <span>Три шага для обычной работы и ссылка на развёрнутую публикацию.</span>
+                        <span>Коротко: как открыть раздел, что поменять и как сохранить.</span>
                     </span>
                     <span class="admin-help__summary-icon">
                         <i class="fas fa-circle-chevron-down" aria-hidden="true"></i>
@@ -60,7 +61,6 @@
         <main class="admin-main">
             <header class="admin-toolbar">
                 <div>
-                    <p class="admin-toolbar__eyebrow admin-toolbar__eyebrow--header">Редактор контента</p>
                     <div class="admin-toolbar__path" id="adminToolbarPath" hidden></div>
                     <h1 id="adminTitle">Загрузка...</h1>
                     <p id="adminDescription" class="admin-toolbar__description"></p>
@@ -176,11 +176,9 @@
 
                     <section class="admin-card admin-card--intro admin-overview" id="adminOverview"></section>
 
-                    <section class="admin-card admin-card--intro admin-jumpbar" id="adminJumpbar" hidden></section>
-
                     <section class="admin-card admin-card--intro admin-search-card" id="adminSearchCard">
-                        <h2>Поиск по текущему разделу</h2>
-                        <p class="admin-search-card__lead">Начни вводить название блока, например: “первый экран”, “футер”, “контакты”, “вопросы”, “нижний блок связи”, “палитра”, “кнопки”.</p>
+                        <h2>Найти блок в разделе</h2>
+                        <p class="admin-search-card__lead">Например: первый экран, контакты, палитра, кнопки, нижний блок.</p>
                         <div class="admin-search-card__controls">
                             <label class="admin-search-card__field">
                                 <span class="sr-only">Поиск по разделу</span>
@@ -200,7 +198,7 @@
                     <div>
                         <p class="admin-toolbar__eyebrow">Предпросмотр страницы</p>
                         <h2>Живой просмотр страницы</h2>
-                        <p>Здесь страница открывается в широком формате, чтобы её было удобно проверять без тесной правой колонки.</p>
+                        <p>Широкий просмотр страницы без боковой колонки и лишних блоков.</p>
                     </div>
                     <div class="admin-preview-card__actions">
                         <button class="admin-btn admin-btn--ghost" type="button" id="adminLivePreviewRefreshBtn">
@@ -213,6 +211,8 @@
                 </div>
                 <iframe class="admin-live-preview__frame" id="adminLivePreviewFrame" title="Предпросмотр страницы"></iframe>
             </section>
+
+            <section class="admin-card admin-card--intro admin-jumpbar" id="adminJumpbar" hidden></section>
 
             <div class="admin-editor-shell">
                 <div class="admin-preview-switcher" id="adminPreviewSwitcher" hidden>
@@ -346,6 +346,6 @@
         </div>
     </div>
 
-    <script src="../assets/js/admin.js?v=20260326-20" defer></script>
+    <script src="../assets/js/admin.js?v=20260327-08" defer></script>
 </body>
 </html>

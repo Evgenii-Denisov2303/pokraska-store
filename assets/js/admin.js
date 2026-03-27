@@ -1737,7 +1737,7 @@
         main: document.querySelector('.admin-main'),
         nav: document.getElementById('adminNav'),
         navSearch: document.getElementById('adminNavSearch'),
-        navSearchClearBtn: document.getElementById('adminNavSearchClearBtn'),
+        sidebarShortcuts: document.getElementById('adminSidebarShortcuts'),
         sidebarFooter: document.getElementById('adminSidebarFooter'),
         form: document.getElementById('adminForm'),
         title: document.getElementById('adminTitle'),
@@ -2144,20 +2144,20 @@
             elements.modeNote.hidden = false;
 
             if (state.quickMode && state.editorRole === 'customer') {
-                elements.modeNoteTitle.textContent = 'Быстрые правки для заказчика включены';
-                elements.modeNoteText.textContent = 'Показываются только самые нужные поля: заголовки, тексты, фото, кнопки и контакты. Это самый спокойный режим для обычной работы.';
+                elements.modeNoteTitle.textContent = 'Быстрые правки · Заказчик';
+                elements.modeNoteText.textContent = 'Видны только тексты, фото, кнопки и контакты.';
             } else if (state.quickMode && state.editorRole === 'manager') {
-                elements.modeNoteTitle.textContent = 'Быстрые правки для менеджера включены';
-                elements.modeNoteText.textContent = 'Видны тексты, фото, ссылки и формы без лишней глубины. Если нужно открыть всё, переключитесь на “Все поля”.';
+                elements.modeNoteTitle.textContent = 'Быстрые правки · Менеджер';
+                elements.modeNoteText.textContent = 'Видны контент, ссылки, формы и фото без глубокой технички.';
             } else if (state.editorRole === 'customer') {
-                elements.modeNoteTitle.textContent = 'Режим заказчика включён';
-                elements.modeNoteText.textContent = 'Показываются только основные поля: тексты, фото, кнопки и контакты. Всё лишнее для обычной работы скрыто.';
+                elements.modeNoteTitle.textContent = 'Режим заказчика';
+                elements.modeNoteText.textContent = 'Показываются только основные поля для обычной работы.';
             } else if (state.editorRole === 'manager') {
-                elements.modeNoteTitle.textContent = 'Режим менеджера включён';
-                elements.modeNoteText.textContent = 'Показываются контент и рабочие поля: ссылки, карты и формы. Служебные ID, иконки и глубоко технические настройки всё ещё скрыты.';
+                elements.modeNoteTitle.textContent = 'Режим менеджера';
+                elements.modeNoteText.textContent = 'Видны контент, ссылки, карты и формы без служебной глубины.';
             } else {
-                elements.modeNoteTitle.textContent = 'Расширенный режим включён';
-                elements.modeNoteText.textContent = 'Показываются все поля без упрощения: контент, ссылки, иконки, размеры изображений, служебные ID и другие настройки.';
+                elements.modeNoteTitle.textContent = 'Расширенный режим';
+                elements.modeNoteText.textContent = 'Открыты все поля и служебные настройки раздела.';
             }
         }
 
@@ -3235,8 +3235,13 @@
 
         elements.jumpbar.hidden = false;
         elements.jumpbar.innerHTML = `
-            <h2>Быстрые переходы по разделу</h2>
-            <p class="admin-jumpbar__lead">Нажми на нужный блок, чтобы сразу перейти к нему, а не прокручивать всю форму вручную.</p>
+            <div class="admin-jumpbar__head">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Навигация по форме</p>
+                    <h2>Куда быстро перейти</h2>
+                </div>
+                <span>${jumpItems.length} блоков</span>
+            </div>
             <div class="admin-jumpbar__list">
                 ${jumpItems.map((item) => `
                     <a class="admin-jumpbar__link" href="#${item.id}">
@@ -5189,7 +5194,6 @@
         const hasVisibleContent = Boolean(
             (elements.pageLinks && !elements.pageLinks.hidden && elements.pageLinks.querySelector('a'))
             || (elements.overview && !elements.overview.hidden && elements.overview.innerHTML.trim())
-            || (elements.jumpbar && !elements.jumpbar.hidden && elements.jumpbar.innerHTML.trim())
             || (elements.searchCard && !elements.searchCard.hidden)
         );
 
@@ -5450,23 +5454,22 @@
         const activeConfig = contentConfigs[state.activeKey];
         const status = getSectionStatus(state.activeKey);
         const context = getCurrentWorkspaceContext(state.activeKey);
+        const currentLabel = context.parts[context.parts.length - 1] || activeConfig.label;
+        const pathLabel = context.parts.join(' / ');
 
         elements.sidebarFooter.innerHTML = `
             <div class="admin-sidebar-footer__card">
-                <p class="admin-toolbar__eyebrow">Где вы сейчас</p>
-                <strong>${context.parts[context.parts.length - 1] || activeConfig.label}</strong>
-                <div class="admin-sidebar-footer__crumbs">
-                    ${context.parts.map((part) => `<span>${part}</span>`).join('')}
-                </div>
-                <div class="admin-sidebar-footer__meta">
+                <div class="admin-sidebar-footer__top">
+                    <p class="admin-toolbar__eyebrow">Сейчас открыт</p>
                     <span class="admin-status-badge is-${status.tone}">${status.label}</span>
-                    <span class="admin-sidebar-footer__mode">${context.modeText}</span>
                 </div>
-            </div>
-            <div class="admin-sidebar-footer__links">
-                <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
-                <a href="../admin/" target="_blank" rel="noopener noreferrer">Открыть админку в новой вкладке</a>
-                <a href="../docs/admin-deploy.md" target="_blank" rel="noopener noreferrer">Инструкция по публикации</a>
+                <strong>${currentLabel}</strong>
+                <p class="admin-sidebar-footer__path">${pathLabel}</p>
+                <div class="admin-sidebar-footer__meta">
+                    <span class="admin-sidebar-footer__mode">${context.modeText}</span>
+                    <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+                    <a href="../docs/admin-deploy.md" target="_blank" rel="noopener noreferrer">Инструкция</a>
+                </div>
             </div>
         `;
     }
@@ -5553,13 +5556,10 @@
                 <div class="admin-command-center__hero">
                     <div class="admin-command-center__hero-copy">
                     <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
-                    <div class="admin-command-center__eyebrow">Быстрый старт</div>
+                    <div class="admin-command-center__eyebrow">Старт</div>
                     <h2>${config.label}</h2>
                     <p>${meta.summary || config.description}</p>
-                    <div class="admin-command-center__flow">
-                        <strong>Выбери задачу и сразу перейди к правке</strong>
-                        <span>Этот экран нужен, чтобы не вспоминать структуру сайта. Просто нажмите нужное действие, и админка сама откроет нужный блок.</span>
-                    </div>
+                    ${(meta.previewLinks || []).length ? `
                         <div class="admin-command-center__actions">
                             ${(meta.previewLinks || []).map((link) => `
                                 <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
@@ -5567,40 +5567,23 @@
                                 </a>
                             `).join('')}
                         </div>
+                    ` : ''}
                     </div>
                     <div class="admin-command-center__hero-side">
                         <span class="admin-status-badge is-idle">Стартовый экран</span>
-                    <div class="admin-command-center__hero-note">Здесь нет длинной формы и лишних полей, только готовые действия для быстрого старта.</div>
+                    <div class="admin-command-center__hero-note">Быстрые входы без лишних шагов.</div>
                 </div>
             </div>
-                <div class="admin-command-center__stats">
-                    <article class="admin-command-stat">
-                        <strong>${dashboardActions.length}</strong>
-                        <span>Готовых действий</span>
-                    </article>
-                    <article class="admin-command-stat">
-                        <strong>${Object.keys(contentConfigs).length - 1}</strong>
-                        <span>Рабочих разделов</span>
-                    </article>
-                    <article class="admin-command-stat">
-                        <strong>1 клик</strong>
-                        <span>До нужного блока</span>
-                    </article>
-                    <article class="admin-command-stat">
-                        <strong>0</strong>
-                        <span>Лишних полей на старте</span>
-                    </article>
-                </div>
                 <div class="admin-command-center__routes admin-command-center__routes--dashboard">
                     <div class="admin-command-center__section-head">
                         <div>
                             <p class="admin-toolbar__eyebrow">С чего начать</p>
-                            <h3>Самые частые действия</h3>
+                            <h3>Что меняют чаще</h3>
                         </div>
-                        <span>Если нужно быстро сменить телефоны, фото или текст на главной, начните отсюда.</span>
+                        <span>Быстрые входы без поиска по разделам.</span>
                     </div>
                     <div class="admin-route-list">
-                        ${dashboardActions.slice(0, 6).map((action, index) => `
+                        ${dashboardActions.slice(0, 4).map((action, index) => `
                             <button class="admin-route-chip admin-route-chip--feature" type="button" data-dashboard-route-index="${index}">
                                 <span class="admin-route-chip__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
                                 <span class="admin-route-chip__copy">
@@ -5627,52 +5610,32 @@
             <div class="admin-command-center__hero">
                 <div class="admin-command-center__hero-copy">
                     <span class="admin-command-center__icon"><i class="fas ${activeIcon}" aria-hidden="true"></i></span>
-                    <div class="admin-command-center__eyebrow">Текущий раздел</div>
+                    <div class="admin-command-center__eyebrow">Раздел</div>
                     <h2>${config.label}</h2>
                     <p>${meta.summary || config.description}</p>
-                    <div class="admin-command-center__flow">
-                        <strong>${workflow.title}</strong>
-                        <span>${workflow.text}</span>
-                    </div>
-                    <div class="admin-command-center__actions">
-                        ${previewLinks.map((link) => `
-                            <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
-                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
-                            </a>
-                        `).join('')}
-                    </div>
+                    ${previewLinks.length ? `
+                        <div class="admin-command-center__actions">
+                            ${previewLinks.map((link) => `
+                                <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
+                                </a>
+                            `).join('')}
+                        </div>
+                    ` : ''}
                 </div>
                 <div class="admin-command-center__hero-side">
                     <span class="admin-status-badge is-${status.tone}">${status.label}</span>
                     <div class="admin-command-center__hero-note">${status.description}</div>
                 </div>
             </div>
-            <div class="admin-command-center__stats">
-                <article class="admin-command-stat">
-                    <strong>${stats.textCount}</strong>
-                    <span>Текстовых блоков</span>
-                </article>
-                <article class="admin-command-stat">
-                    <strong>${stats.imageCount}</strong>
-                    <span>Изображений</span>
-                </article>
-                <article class="admin-command-stat">
-                    <strong>${stats.linkCount}</strong>
-                    <span>Ссылок и форм</span>
-                </article>
-                    <article class="admin-command-stat">
-                        <strong>${stats.arrayCount}</strong>
-                        <span>Списков и карточек</span>
-                    </article>
-                </div>
             ${focusCards.length ? `
                 <div class="admin-command-center__focus">
                     <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">С чего удобнее начать</p>
-                            <h3>Главные действия</h3>
+                            <p class="admin-toolbar__eyebrow">С чего начать</p>
+                            <h3>Что меняют чаще</h3>
                         </div>
-                        <span>Открой действие или спокойный экран, и админка сфокусируется только на нужной части раздела.</span>
+                        <span>Открой действие или нужный экран этого раздела.</span>
                     </div>
                     <div class="admin-focus-grid">
                         ${focusCards.map((item) => `
@@ -5691,10 +5654,10 @@
                 <div class="admin-command-center__routes">
                     <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Быстрые маршруты</p>
-                            <h3>Куда перейти одним нажатием</h3>
+                            <p class="admin-toolbar__eyebrow">Переходы</p>
+                            <h3>Куда перейти</h3>
                         </div>
-                        <span>Здесь собраны частые переходы и пошаговые подсказки без лишних промежуточных блоков.</span>
+                        <span>Частые переходы и подсказки без лишних шагов.</span>
                     </div>
                     <div class="admin-route-list">
                         ${routeCards.map((item) => `
@@ -7072,13 +7035,18 @@
         }
 
         const labels = activeScreen.fieldKeys.map((fieldKey) => getTopLevelFieldLabel(sectionKey, fieldKey));
+        const visibleLabels = labels.slice(0, 3);
+        const extraLabels = labels.length - visibleLabels.length;
+        const summaryText = activeScreen.text.length > 120
+            ? `${activeScreen.text.slice(0, 117).trim()}…`
+            : activeScreen.text;
         elements.screenCard.hidden = false;
         elements.screenCard.innerHTML = `
             <div class="admin-screen-card__head">
                 <div>
-                    <p class="admin-toolbar__eyebrow">Сейчас включён простой экран</p>
+                    <p class="admin-toolbar__eyebrow">Экран</p>
                     <h2>${activeScreen.title}</h2>
-                    <p>${activeScreen.text}</p>
+                    <p class="admin-screen-card__lead">${summaryText}</p>
                 </div>
                 <div class="admin-screen-card__actions">
                     <button class="admin-btn admin-btn--ghost" type="button" id="adminScreenBackBtn">
@@ -7087,7 +7055,8 @@
                 </div>
             </div>
             <div class="admin-screen-card__chips">
-                ${labels.map((label) => `<span><i class="fas fa-layer-group" aria-hidden="true"></i> ${label}</span>`).join('')}
+                ${visibleLabels.map((label) => `<span>${label}</span>`).join('')}
+                ${extraLabels > 0 ? `<span class="is-muted">+ ещё ${extraLabels}</span>` : ''}
             </div>
         `;
 
@@ -7328,6 +7297,8 @@
             elements.navSearch.value = state.navQuery;
         }
 
+        renderSidebarShortcuts(navQuery);
+
         const buildGroupHead = (label, count) => {
             const groupHead = document.createElement('div');
             groupHead.className = 'admin-nav__group-head';
@@ -7458,6 +7429,52 @@
         }
 
         renderSidebarFooter();
+    }
+
+    function renderSidebarShortcuts(navQuery = '') {
+        if (!elements.sidebarShortcuts) return;
+
+        if (navQuery) {
+            elements.sidebarShortcuts.hidden = true;
+            elements.sidebarShortcuts.innerHTML = '';
+            return;
+        }
+
+        const actions = getDashboardHomeActions().slice(0, 4);
+        if (!actions.length) {
+            elements.sidebarShortcuts.hidden = true;
+            elements.sidebarShortcuts.innerHTML = '';
+            return;
+        }
+
+        elements.sidebarShortcuts.hidden = false;
+        elements.sidebarShortcuts.innerHTML = `
+            <div class="admin-sidebar-shortcuts__head">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Часто меняют</p>
+                    <h2>Быстрый вход</h2>
+                </div>
+                <span>4 действия</span>
+            </div>
+            <div class="admin-sidebar-shortcuts__list">
+                ${actions.map((action, index) => `
+                    <button class="admin-sidebar-shortcut" type="button" data-sidebar-shortcut-index="${index}">
+                        <span class="admin-sidebar-shortcut__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
+                        <span class="admin-sidebar-shortcut__copy">
+                            <strong>${action.title}</strong>
+                            <span>${contentConfigs[action.sectionKey]?.label || 'Раздел сайта'}</span>
+                        </span>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        elements.sidebarShortcuts.querySelectorAll('[data-sidebar-shortcut-index]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const index = Number(button.getAttribute('data-sidebar-shortcut-index'));
+                runDashboardAction(actions[index]);
+            });
+        });
     }
 
     function renderField(field, parentObject, contentKey) {
@@ -8640,14 +8657,6 @@
         });
         elements.navSearch?.addEventListener('input', () => {
             state.navQuery = elements.navSearch.value;
-            renderNav();
-        });
-        elements.navSearchClearBtn?.addEventListener('click', () => {
-            state.navQuery = '';
-            if (elements.navSearch) {
-                elements.navSearch.value = '';
-                elements.navSearch.focus();
-            }
             renderNav();
         });
         elements.searchClearBtn?.addEventListener('click', () => {
