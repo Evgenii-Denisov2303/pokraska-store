@@ -3675,6 +3675,35 @@
             && ['powderCoating', 'sandblasting'].includes(field?.key);
     }
 
+    function shouldUseCompactGalleryEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'gallery'
+            && (
+                (field?.type === 'group' && ['header', 'counter', 'cta'].includes(field?.key))
+                || (field?.type === 'array' && field?.key === 'filters')
+            );
+    }
+
+    function shouldUseCompactPricesEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'prices'
+            && field?.type === 'group'
+            && ['header', 'factors', 'calculator', 'guarantee', 'cta', 'faq'].includes(field?.key);
+    }
+
+    function shouldUseCompactPaymentDocumentsEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'paymentDocuments'
+            && field?.type === 'group'
+            && ['hero', 'benefits', 'workflow', 'cta'].includes(field?.key);
+    }
+
+    function shouldHideStandaloneCompactField(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'gallery'
+            && field?.key === 'showMoreLabel';
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -4699,6 +4728,394 @@
         panel.appendChild(bottomGrid);
         details.appendChild(panel);
         return details;
+    }
+
+    function createCompactQuickShell(field, contentKey, options = {}) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-service-page';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, options.summary || '', options.summaryIcon || 'fa-pen'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-service-page-quick';
+        panel.innerHTML = `
+            <div class="admin-service-page-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">${options.eyebrow || 'Удобный режим'}</p>
+                    <h2>${options.title || getDisplayLabel(field)}</h2>
+                    <p>${options.text || 'Здесь удобно менять основные тексты и блоки без длинной формы.'}</p>
+                </div>
+                <span class="admin-status-badge is-idle">${options.badge || 'Удобный режим'}</span>
+            </div>
+        `;
+
+        return { details, panel };
+    }
+
+    function createCompactQuickCard(options = {}) {
+        const card = document.createElement('section');
+        card.className = `admin-service-page-quick__card${options.wide ? ' is-wide' : ''}`;
+        card.innerHTML = `
+            <div class="admin-service-page-quick__card-head">
+                <div class="admin-service-page-quick__card-icon"><i class="fas ${options.icon || 'fa-pen'}" aria-hidden="true"></i></div>
+                <div>
+                    <h3>${options.title || 'Блок'}</h3>
+                    ${options.text ? `<p>${options.text}</p>` : ''}
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    function renderConfiguredCompactGroupEditor(field, value, contentKey, config) {
+        const { details, panel } = createCompactQuickShell(field, contentKey, config);
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+        const rows = config.rows || [config.cards || []];
+
+        rows.forEach((row, rowIndex) => {
+            const resolvedCards = row
+                .map((cardConfig) => {
+                    const fields = (cardConfig.fieldKeys || [])
+                        .map((fieldKey) => fieldMap.get(fieldKey))
+                        .filter(Boolean);
+
+                    if (!fields.length) return null;
+
+                    return { cardConfig, fields };
+                })
+                .filter(Boolean);
+
+            if (!resolvedCards.length) return;
+
+            const rowNode = document.createElement('div');
+            rowNode.className = rowIndex === 0
+                ? 'admin-service-page-quick__grid'
+                : 'admin-service-page-quick__grid admin-service-page-quick__grid--bottom';
+
+            resolvedCards.forEach(({ cardConfig, fields }) => {
+                const card = createCompactQuickCard(cardConfig);
+                const grid = document.createElement('div');
+                grid.className = cardConfig.gridClass || 'admin-grid admin-grid--two';
+                renderFieldsIntoContainer(grid, fields, value, contentKey);
+                card.appendChild(grid);
+                rowNode.appendChild(card);
+            });
+
+            panel.appendChild(rowNode);
+        });
+
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactGalleryEditor(field, parentObject, contentKey) {
+        if (field.type === 'array' && field.key === 'filters') {
+            const showMoreField = contentConfigs[contentKey]?.schema?.fields?.find((schemaField) => schemaField.key === 'showMoreLabel');
+            const { details, panel } = createCompactQuickShell(field, contentKey, {
+                summary: 'Фильтры галереи и кнопка показа работ',
+                summaryIcon: 'fa-filter',
+                eyebrow: 'Удобный режим галереи',
+                title: 'Фильтры и кнопка “Показать еще”',
+                text: 'Здесь удобно менять подписи фильтров, их иконки и текст кнопки показа дополнительных работ.'
+            });
+
+            const topGrid = document.createElement('div');
+            topGrid.className = 'admin-service-page-quick__grid';
+
+            const filtersCard = createCompactQuickCard({
+                icon: 'fa-filter',
+                title: 'Фильтры',
+                text: 'Названия фильтров, значения и иконки, которые помогают быстро переключаться между типами работ.',
+                wide: true
+            });
+            filtersCard.appendChild(renderArrayField(field, parentObject, contentKey));
+            topGrid.appendChild(filtersCard);
+            panel.appendChild(topGrid);
+
+            if (showMoreField) {
+                const bottomGrid = document.createElement('div');
+                bottomGrid.className = 'admin-service-page-quick__grid admin-service-page-quick__grid--bottom';
+                const buttonCard = createCompactQuickCard({
+                    icon: 'fa-arrow-down-short-wide',
+                    title: 'Кнопка показа работ',
+                    text: 'Короткая подпись для кнопки, которая открывает дополнительные работы внизу галереи.'
+                });
+                const buttonGrid = document.createElement('div');
+                buttonGrid.className = 'admin-grid';
+                const previousBypassCompactHide = state.bypassCompactFieldHide;
+                state.bypassCompactFieldHide = true;
+                renderFieldsIntoContainer(buttonGrid, [showMoreField], parentObject, contentKey);
+                state.bypassCompactFieldHide = previousBypassCompactHide;
+                buttonCard.appendChild(buttonGrid);
+                bottomGrid.appendChild(buttonCard);
+                panel.appendChild(bottomGrid);
+            }
+
+            details.appendChild(panel);
+            return details;
+        }
+
+        const configMap = {
+            header: {
+                summary: 'Заголовок и подзаголовок страницы работ',
+                summaryIcon: 'fa-heading',
+                eyebrow: 'Удобный режим галереи',
+                title: 'Шапка галереи',
+                text: 'Здесь удобно менять главный заголовок страницы работ и короткое пояснение под ним.',
+                rows: [[{
+                    icon: 'fa-heading',
+                    title: 'Заголовок и подзаголовок',
+                    text: 'То, что человек видит первым на странице галереи.',
+                    fieldKeys: ['title', 'subtitle'],
+                    wide: true
+                }]]
+            },
+            counter: {
+                summary: 'Счётчик выполненных работ',
+                summaryIcon: 'fa-chart-line',
+                eyebrow: 'Удобный режим галереи',
+                title: 'Счётчик и подпись',
+                text: 'Здесь удобно менять число выполненных работ и поясняющий текст рядом с ним.',
+                rows: [[{
+                    icon: 'fa-chart-line',
+                    title: 'Число и пояснение',
+                    text: 'Короткий блок доверия рядом со счётчиком.',
+                    fieldKeys: ['value', 'text'],
+                    wide: true
+                }]]
+            },
+            cta: {
+                summary: 'Нижние кнопки страницы работ',
+                summaryIcon: 'fa-bullhorn',
+                eyebrow: 'Удобный режим галереи',
+                title: 'Нижний блок действий',
+                text: 'Здесь удобно менять две кнопки внизу галереи без всей страницы.',
+                rows: [[
+                    {
+                        icon: 'fa-calculator',
+                        title: 'Главная кнопка',
+                        text: 'Основное действие для расчёта или заявки.',
+                        fieldKeys: ['primary']
+                    },
+                    {
+                        icon: 'fa-phone',
+                        title: 'Вторичная кнопка',
+                        text: 'Дополнительный переход для связи или консультации.',
+                        fieldKeys: ['secondary']
+                    }
+                ]]
+            }
+        };
+
+        const config = configMap[field.key];
+        return config ? renderConfiguredCompactGroupEditor(field, parentObject[field.key], contentKey, config) : null;
+    }
+
+    function renderCompactPricesEditor(field, value, contentKey) {
+        const configMap = {
+            header: {
+                summary: 'Заголовок и подзаголовок страницы цен',
+                summaryIcon: 'fa-heading',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Шапка страницы цен',
+                text: 'Здесь удобно менять верхний заголовок страницы и пояснение про расчёт стоимости.',
+                rows: [[{
+                    icon: 'fa-heading',
+                    title: 'Основной текст',
+                    text: 'Первый экран страницы цен и короткое объяснение, как формируется стоимость.',
+                    fieldKeys: ['title', 'subtitle'],
+                    wide: true
+                }]]
+            },
+            factors: {
+                summary: 'Факторы, которые влияют на стоимость',
+                summaryIcon: 'fa-tags',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Факторы стоимости',
+                text: 'Здесь удобно обновлять заголовок блока и карточки с тем, из чего складывается цена.',
+                rows: [[{
+                    icon: 'fa-layer-group',
+                    title: 'Заголовок и карточки факторов',
+                    text: 'Список факторов, который помогает человеку понять, почему цена считается индивидуально.',
+                    fieldKeys: ['title', 'items'],
+                    wide: true,
+                    gridClass: 'admin-grid'
+                }]]
+            },
+            calculator: {
+                summary: 'Калькулятор, кнопка и телефоны для расчёта',
+                summaryIcon: 'fa-calculator',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Калькулятор и звонок',
+                text: 'Здесь удобно менять приглашение к расчёту, кнопку и телефоны рядом.',
+                rows: [
+                    [
+                        {
+                            icon: 'fa-file-invoice',
+                            title: 'Заголовок и описание',
+                            text: 'Основной призыв отправить заявку на расчёт.',
+                            fieldKeys: ['title', 'text']
+                        },
+                        {
+                            icon: 'fa-bolt',
+                            title: 'Кнопка и подпись',
+                            text: 'Кнопка для расчёта и подпись перед телефонами.',
+                            fieldKeys: ['action', 'contactLabel'],
+                            gridClass: 'admin-grid'
+                        }
+                    ],
+                    [{
+                        icon: 'fa-phone',
+                        title: 'Телефоны',
+                        text: 'Номера, на которые можно позвонить для быстрого расчёта.',
+                        fieldKeys: ['phones'],
+                        wide: true,
+                        gridClass: 'admin-grid'
+                    }]
+                ]
+            },
+            guarantee: {
+                summary: 'Гарантия на изготовление и монтаж',
+                summaryIcon: 'fa-shield-heart',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Блок гарантии',
+                text: 'Здесь удобно менять плашку гарантии и короткое обещание качества.',
+                rows: [[{
+                    icon: 'fa-shield-heart',
+                    title: 'Плашка и текст гарантии',
+                    text: 'Небольшой доверительный блок перед вопросами и кнопками.',
+                    fieldKeys: ['badge', 'title', 'text'],
+                    wide: true
+                }]]
+            },
+            cta: {
+                summary: 'Нижние кнопки страницы цен',
+                summaryIcon: 'fa-bullhorn',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Нижние кнопки',
+                text: 'Здесь удобно менять основные действия внизу страницы цен.',
+                rows: [[
+                    {
+                        icon: 'fa-calculator',
+                        title: 'Главная кнопка',
+                        text: 'Основной переход для заявки или расчёта.',
+                        fieldKeys: ['primary']
+                    },
+                    {
+                        icon: 'fa-phone',
+                        title: 'Вторичная кнопка',
+                        text: 'Дополнительная кнопка для консультации и связи.',
+                        fieldKeys: ['secondary']
+                    }
+                ]]
+            },
+            faq: {
+                summary: 'Частые вопросы о стоимости',
+                summaryIcon: 'fa-circle-question',
+                eyebrow: 'Удобный режим страницы цен',
+                title: 'Вопросы и ответы',
+                text: 'Здесь удобно обновлять популярные вопросы про цену и объяснения к ним.',
+                rows: [[{
+                    icon: 'fa-circle-question',
+                    title: 'Заголовок и список вопросов',
+                    text: 'Блок помогает снять частые возражения про стоимость и расчёт.',
+                    fieldKeys: ['title', 'subtitle', 'items'],
+                    wide: true,
+                    gridClass: 'admin-grid'
+                }]]
+            }
+        };
+
+        const config = configMap[field.key];
+        return config ? renderConfiguredCompactGroupEditor(field, value, contentKey, config) : null;
+    }
+
+    function renderCompactPaymentDocumentsEditor(field, value, contentKey) {
+        const configMap = {
+            hero: {
+                summary: 'Первый экран про оплату и документы',
+                summaryIcon: 'fa-file-signature',
+                eyebrow: 'Удобный режим страницы оплаты',
+                title: 'Первый экран оплаты и документов',
+                text: 'Здесь удобно менять основной текст доверия, чипы и две карточки рядом с первым экраном.',
+                rows: [[
+                    {
+                        icon: 'fa-heading',
+                        title: 'Тексты первого экрана',
+                        text: 'Заголовок, короткий лид, описание и чипы над первым блоком.',
+                        fieldKeys: ['eyebrow', 'title', 'lead', 'text', 'chips']
+                    },
+                    {
+                        icon: 'fa-id-card',
+                        title: 'Карточки справа',
+                        text: 'Акцентная карточка и список с правой стороны первого экрана.',
+                        fieldKeys: ['accentCard', 'sideCard'],
+                        gridClass: 'admin-grid'
+                    }
+                ]]
+            },
+            benefits: {
+                summary: 'Преимущества и официальное оформление',
+                summaryIcon: 'fa-shield-heart',
+                eyebrow: 'Удобный режим страницы оплаты',
+                title: 'Преимущества',
+                text: 'Здесь удобно менять заголовок блока и карточки про договор, оплату и документы.',
+                rows: [[{
+                    icon: 'fa-shield-heart',
+                    title: 'Заголовок и карточки преимуществ',
+                    text: 'Блок помогает спокойно объяснить, как оформляется заказ.',
+                    fieldKeys: ['title', 'subtitle', 'items'],
+                    wide: true,
+                    gridClass: 'admin-grid'
+                }]]
+            },
+            workflow: {
+                summary: 'Этапы оформления и сопровождения заказа',
+                summaryIcon: 'fa-list-check',
+                eyebrow: 'Удобный режим страницы оплаты',
+                title: 'Этапы работы',
+                text: 'Здесь удобно менять шаги оформления, оплаты и передачи документов.',
+                rows: [[{
+                    icon: 'fa-list-check',
+                    title: 'Заголовок и шаги',
+                    text: 'Пошаговый блок, который объясняет, что происходит от согласования до закрывающих документов.',
+                    fieldKeys: ['title', 'subtitle', 'steps'],
+                    wide: true,
+                    gridClass: 'admin-grid'
+                }]]
+            },
+            cta: {
+                summary: 'Нижний блок связи страницы оплаты',
+                summaryIcon: 'fa-phone-volume',
+                eyebrow: 'Удобный режим страницы оплаты',
+                title: 'Нижний блок связи',
+                text: 'Здесь удобно менять финальный призыв и кнопки для связи по оплате и документам.',
+                rows: [[
+                    {
+                        icon: 'fa-bullhorn',
+                        title: 'Заголовок и описание',
+                        text: 'Финальный текстовый блок перед кнопками связи.',
+                        fieldKeys: ['title', 'text']
+                    },
+                    {
+                        icon: 'fa-phone-volume',
+                        title: 'Кнопки связи',
+                        text: 'Основная и вторичная кнопка для связи и заявки.',
+                        fieldKeys: ['primary', 'secondary'],
+                        gridClass: 'admin-grid'
+                    }
+                ]]
+            }
+        };
+
+        const config = configMap[field.key];
+        return config ? renderConfiguredCompactGroupEditor(field, value, contentKey, config) : null;
     }
 
     function syncGroupEditorScreenForTarget(contentKey, fieldKey, focusKeys = []) {
@@ -6892,8 +7309,20 @@
                 return renderCompactContactEditor(field, value, contentKey);
             }
 
+            if (shouldUseCompactGalleryEditor(contentKey, field)) {
+                return renderCompactGalleryEditor(field, parentObject, contentKey);
+            }
+
             if (shouldUseCompactLocationEditor(contentKey, field)) {
                 return renderCompactLocationEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactPricesEditor(contentKey, field)) {
+                return renderCompactPricesEditor(field, value, contentKey);
+            }
+
+            if (shouldUseCompactPaymentDocumentsEditor(contentKey, field)) {
+                return renderCompactPaymentDocumentsEditor(field, value, contentKey);
             }
 
             if (shouldUseCompactServicePageEditor(contentKey, field)) {
@@ -7009,10 +7438,21 @@
         }
 
         if (field.type === 'array') {
+            if (shouldUseCompactGalleryEditor(contentKey, field)) {
+                return renderCompactGalleryEditor(field, parentObject, contentKey);
+            }
             if (shouldUseCompactCatalogGroupsEditor(contentKey, field)) {
                 return renderCompactCatalogGroupsEditor(field, parentObject, contentKey);
             }
             return renderArrayField(field, parentObject, contentKey);
+        }
+
+        if (shouldHideStandaloneCompactField(contentKey, field)) {
+            if (!state.bypassCompactFieldHide) {
+                return null;
+            }
+
+            state.bypassCompactFieldHide = false;
         }
 
         const wrapper = document.createElement('div');
