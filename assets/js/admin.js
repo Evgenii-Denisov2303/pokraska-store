@@ -3577,6 +3577,21 @@
             && field?.key === 'cta';
     }
 
+    function shouldUseCompactHomeHeroEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'home'
+            && field?.type === 'group'
+            && field?.key === 'hero';
+    }
+
+    function shouldUseCompactCatalogGroupsEditor(contentKey, field) {
+        return shouldUseSectionTabs(contentKey)
+            && contentKey === 'catalog'
+            && field?.type === 'array'
+            && field?.key === 'groups'
+            && field?.itemType === 'object';
+    }
+
     function createCompactContactCard(childField, targetObject, contentKey, options = {}) {
         if (!childField) return null;
 
@@ -3911,6 +3926,179 @@
         grid.appendChild(contactsCard);
 
         panel.appendChild(grid);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactHomeHeroEditor(field, value, contentKey) {
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-home-hero';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Главный экран, преимущества и главная кнопка', 'fa-house'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-home-hero-quick';
+        panel.innerHTML = `
+            <div class="admin-home-hero-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран первого экрана</p>
+                    <h2>Главный блок на главной странице</h2>
+                    <p>Здесь удобно менять главный заголовок, подзаголовок, короткий список, преимущества и основную кнопку без всей главной страницы.</p>
+                </div>
+                <span class="admin-status-badge is-idle">Отдельный экран</span>
+            </div>
+        `;
+
+        const fieldMap = new Map(field.fields.map((childField) => [childField.key, childField]));
+
+        const grid = document.createElement('div');
+        grid.className = 'admin-home-hero-quick__grid';
+
+        const textCard = document.createElement('section');
+        textCard.className = 'admin-home-hero-quick__card';
+        textCard.innerHTML = `
+            <div class="admin-home-hero-quick__card-head">
+                <div class="admin-home-hero-quick__card-icon"><i class="fas fa-heading" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Главный текст</h3>
+                    <p>Основной заголовок, подзаголовок и сильная подпись.</p>
+                </div>
+            </div>
+        `;
+        const textGrid = document.createElement('div');
+        textGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            textGrid,
+            ['titleMain', 'titleSub', 'subtitleStrong']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        textCard.appendChild(textGrid);
+        grid.appendChild(textCard);
+
+        const listCard = document.createElement('section');
+        listCard.className = 'admin-home-hero-quick__card';
+        listCard.innerHTML = `
+            <div class="admin-home-hero-quick__card-head">
+                <div class="admin-home-hero-quick__card-icon"><i class="fas fa-list-check" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Пункты и преимущества</h3>
+                    <p>Короткий список услуг и три преимущества рядом с первым экраном.</p>
+                </div>
+            </div>
+        `;
+        const listGrid = document.createElement('div');
+        listGrid.className = 'admin-grid';
+        renderFieldsIntoContainer(
+            listGrid,
+            ['bulletPoints', 'features']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        listCard.appendChild(listGrid);
+        grid.appendChild(listCard);
+
+        const actionCard = document.createElement('section');
+        actionCard.className = 'admin-home-hero-quick__card is-wide';
+        actionCard.innerHTML = `
+            <div class="admin-home-hero-quick__card-head">
+                <div class="admin-home-hero-quick__card-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+                <div>
+                    <h3>Главная кнопка</h3>
+                    <p>Главное действие в первом экране: подпись, ссылка и иконка.</p>
+                </div>
+            </div>
+        `;
+        const actionGrid = document.createElement('div');
+        actionGrid.className = 'admin-grid admin-grid--two';
+        renderFieldsIntoContainer(
+            actionGrid,
+            ['primaryAction']
+                .map((key) => fieldMap.get(key))
+                .filter(Boolean),
+            value,
+            contentKey
+        );
+        actionCard.appendChild(actionGrid);
+        grid.appendChild(actionCard);
+
+        panel.appendChild(grid);
+        details.appendChild(panel);
+        return details;
+    }
+
+    function renderCompactCatalogGroupsEditor(field, parentObject, contentKey) {
+        const array = Array.isArray(parentObject[field.key]) ? parentObject[field.key] : [];
+        parentObject[field.key] = array;
+
+        const details = document.createElement('details');
+        details.className = 'admin-section admin-section--compact-catalog-groups';
+        details.open = true;
+        details.id = `admin-top-${contentKey}-${slugifyLabel(field.key || field.label)}`;
+        details.dataset.fieldKey = field.key;
+        details.dataset.fieldLabel = getDisplayLabel(field);
+
+        const summary = document.createElement('summary');
+        summary.appendChild(createSectionSummary(field.label || field.key, 'Основные группы каталога и ссылки внутри них', 'fa-folder-tree'));
+        details.appendChild(summary);
+
+        const panel = document.createElement('div');
+        panel.className = 'admin-catalog-groups-quick';
+        panel.innerHTML = `
+            <div class="admin-catalog-groups-quick__intro">
+                <div>
+                    <p class="admin-toolbar__eyebrow">Компактный экран групп каталога</p>
+                    <h2>Группы на странице каталога</h2>
+                    <p>Здесь удобно менять названия групп, короткие описания и список ссылок внутри каждой группы без длинной общей формы каталога.</p>
+                </div>
+                <span class="admin-status-badge is-idle">${array.length} группы</span>
+            </div>
+        `;
+
+        const list = document.createElement('div');
+        list.className = 'admin-catalog-groups-quick__list';
+
+        const visibleFields = ['eyebrow', 'title', 'text', 'links'];
+
+        array.forEach((item, index) => {
+            const itemObject = item && typeof item === 'object' ? item : {};
+            array[index] = itemObject;
+
+            const card = document.createElement('section');
+            card.className = 'admin-catalog-groups-quick__card';
+            card.innerHTML = `
+                <div class="admin-catalog-groups-quick__card-head">
+                    <div class="admin-catalog-groups-quick__card-icon"><i class="fas fa-layer-group" aria-hidden="true"></i></div>
+                    <div>
+                        <h3>${itemObject.title || `${field.itemLabel || 'Группа'} ${index + 1}`}</h3>
+                        <p>${itemObject.key ? `Ключ группы: ${itemObject.key}` : 'Название, короткое описание и ссылки внутри группы.'}</p>
+                    </div>
+                </div>
+            `;
+
+            const grid = document.createElement('div');
+            grid.className = 'admin-grid';
+            renderFieldsIntoContainer(
+                grid,
+                field.fields.filter((childField) => visibleFields.includes(childField.key)),
+                itemObject,
+                contentKey
+            );
+            card.appendChild(grid);
+            list.appendChild(card);
+        });
+
+        panel.appendChild(list);
         details.appendChild(panel);
         return details;
     }
@@ -5955,6 +6143,10 @@
                 return renderCompactContactEditor(field, value, contentKey);
             }
 
+            if (shouldUseCompactHomeHeroEditor(contentKey, field)) {
+                return renderCompactHomeHeroEditor(field, value, contentKey);
+            }
+
             if (shouldUseCompactRequestEditor(contentKey, field)) {
                 return renderCompactRequestEditor(field, value, contentKey);
             }
@@ -6052,6 +6244,9 @@
         }
 
         if (field.type === 'array') {
+            if (shouldUseCompactCatalogGroupsEditor(contentKey, field)) {
+                return renderCompactCatalogGroupsEditor(field, parentObject, contentKey);
+            }
             return renderArrayField(field, parentObject, contentKey);
         }
 
