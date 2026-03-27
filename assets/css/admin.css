@@ -451,17 +451,17 @@ body.admin-page.admin-customer-layout .admin-help {
 .admin-toolbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 0;
     position: sticky;
     top: -32px;
     z-index: 10;
-    padding: 16px 18px 14px;
+    padding: 12px 14px 12px;
     border: 1px solid rgba(33, 61, 98, 0.1);
-    border-radius: 20px;
+    border-radius: 18px;
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(14px);
-    box-shadow: 0 14px 28px rgba(30, 52, 88, 0.07);
+    box-shadow: 0 12px 24px rgba(30, 52, 88, 0.06);
 }
 
 .admin-toolbar__eyebrow {
@@ -473,10 +473,16 @@ body.admin-page.admin-customer-layout .admin-help {
     font-size: 11px;
 }
 
+.admin-toolbar__eyebrow--header {
+    display: none;
+}
+
 .admin-toolbar__path {
-    display: grid;
-    gap: 6px;
-    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    margin-bottom: 6px;
 }
 
 .admin-toolbar__path-label {
@@ -491,7 +497,7 @@ body.admin-page.admin-customer-layout .admin-help {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .admin-toolbar__path-separator {
@@ -502,13 +508,13 @@ body.admin-page.admin-customer-layout .admin-help {
 .admin-toolbar__path-item {
     display: inline-flex;
     align-items: center;
-    min-height: 28px;
-    padding: 6px 10px;
+    min-height: 24px;
+    padding: 4px 8px;
     border-radius: 999px;
     border: 1px solid var(--admin-border);
     background: rgba(255, 255, 255, 0.94);
     color: var(--admin-text-soft);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
 }
 
@@ -531,37 +537,37 @@ body.admin-page.admin-customer-layout .admin-help {
 .admin-toolbar__path-mode {
     display: inline-flex;
     align-items: center;
-    min-height: 26px;
-    padding: 5px 10px;
+    min-height: 22px;
+    padding: 4px 8px;
     border-radius: 999px;
     background: rgba(47, 111, 199, 0.08);
     color: var(--admin-accent);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
 }
 
 .admin-toolbar h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 24px;
     line-height: 1.05;
     font-family: "Manrope", sans-serif;
     font-weight: 800;
 }
 
 .admin-toolbar__description {
-    margin: 6px 0 0;
-    max-width: 620px;
+    margin: 4px 0 0;
+    max-width: 520px;
     color: var(--admin-text-soft);
-    line-height: 1.45;
-    font-size: 14px;
+    line-height: 1.35;
+    font-size: 13px;
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
 }
 
 .admin-toolbar__meta {
-    margin-top: 10px;
+    margin-top: 6px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -572,9 +578,9 @@ body.admin-page.admin-customer-layout .admin-help {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 8px;
-    align-items: flex-start;
-    align-content: flex-start;
+    gap: 6px;
+    align-items: center;
+    align-content: center;
 }
 
 .admin-mode-switch {
@@ -615,6 +621,14 @@ body.admin-page.admin-customer-layout .admin-help {
     background: var(--admin-surface);
     font-size: 12px;
     color: var(--admin-text-soft);
+}
+
+.admin-toolbar .admin-status-badge,
+.admin-toolbar .admin-connection {
+    min-height: 24px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 11px;
 }
 
 .admin-connection.is-live {
@@ -3837,20 +3851,20 @@ body.admin-page {
 
 .admin-toolbar {
     top: -24px;
-    padding: 18px 20px 16px;
+    padding: 14px 16px 14px;
     border-color: rgba(31, 46, 74, 0.08);
-    border-radius: 24px;
+    border-radius: 20px;
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 16px 30px rgba(20, 31, 53, 0.07);
+    box-shadow: 0 14px 24px rgba(20, 31, 53, 0.06);
 }
 
 .admin-toolbar h1 {
-    font-size: 30px;
+    font-size: 26px;
     line-height: 1.06;
 }
 
 .admin-toolbar__description {
-    max-width: 660px;
+    max-width: 560px;
 }
 
 .admin-toolbar__actions {
@@ -3858,7 +3872,7 @@ body.admin-page {
 }
 
 .admin-toolbar .admin-btn {
-    min-height: 40px;
+    min-height: 36px;
     border-radius: 14px;
     font-weight: 700;
 }
