@@ -1216,7 +1216,7 @@
             <div class="p-inline-toolbar" hidden>
                 <div class="p-inline-toolbar__top">
                     <div>
-                        <span class="p-inline-toolbar__eyebrow">Визуальный редактор</span>
+                        <span class="p-inline-toolbar__eyebrow">Правка на сайте</span>
                         <h2 class="p-inline-toolbar__title">Правка</h2>
                         <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото.</p>
                         <div class="p-inline-toolbar__jumpbar" hidden></div>
@@ -1227,7 +1227,7 @@
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="reset" hidden>Сбросить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Войти</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Панель входа</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
             </div>
@@ -1772,7 +1772,7 @@
         }
 
         if (!state.apiAvailable) {
-            ui.toolbarTitle.textContent = 'Нужен admin-server';
+            ui.toolbarTitle.textContent = 'Нужен сервер сохранения';
             ui.toolbarMeta.textContent = 'Откройте сайт через локальный сервер visual-редактирования, чтобы сохранять изменения прямо на странице.';
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
@@ -1787,7 +1787,7 @@
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Кнопка входа откроется справа только в этом состоянии.';
             if (ui.adminBtn) {
-                ui.adminBtn.textContent = 'Войти';
+                ui.adminBtn.textContent = 'Панель входа';
             }
             renderToolbarJumpbar();
             renderOverviewPanel();
@@ -1807,7 +1807,7 @@
                     ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
                     : 'Нажмите на текст, кнопку или фото.'));
         if (ui.adminBtn) {
-            ui.adminBtn.textContent = 'Войти';
+            ui.adminBtn.textContent = 'Панель входа';
         }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
@@ -1899,9 +1899,9 @@
         renderToolbar();
 
         if (!state.apiAvailable) {
-            showToast('Сейчас открыт обычный сервер. Для сохранения нужен admin-server.');
+            showToast('Сейчас открыт обычный сервер. Для сохранения нужен сервер сохранения.');
         } else if (state.authEnabled && !state.authenticated) {
-            showToast('Сначала войдите в полную админку.');
+            showToast('Сначала откройте панель входа и авторизуйтесь.');
         } else {
             const openedFromFocus = await openRequestedFocusBinding();
             const openedFromResume = !openedFromFocus && await openRequestedResumeBinding();
@@ -2317,23 +2317,14 @@
         const collectionActions = document.createElement('div');
         collectionActions.className = 'p-inline-panel__collection-actions';
 
-        const actionSet = binding.type === 'image'
-            ? [
-                { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
-                { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
-                { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
-                { action: 'duplicate', label: nouns.duplicate, disabled: false },
-                { action: 'add', label: nouns.add, disabled: false },
-                { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
-            ]
-            : [
-                { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
-                { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
-                { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
-                { action: 'duplicate', label: nouns.duplicate, disabled: false },
-                { action: 'add', label: nouns.add, disabled: false },
-                { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
-            ];
+        const actionSet = [
+            { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
+            { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
+            { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
+            { action: 'duplicate', label: nouns.duplicate, disabled: false },
+            { action: 'add', label: nouns.add, disabled: false },
+            { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
+        ];
 
         actionSet.forEach((item) => {
             const button = document.createElement('button');
@@ -2499,12 +2490,12 @@
             if (!binding) return;
 
             if (!state.apiAvailable) {
-                showToast('Для редактирования с сохранением откройте сайт через admin-server.');
+                showToast('Для редактирования с сохранением откройте сайт через сервер сохранения.');
                 return;
             }
 
             if (state.authEnabled && !state.authenticated) {
-                showToast('Сначала войдите в полную админку.');
+                showToast('Сначала откройте панель входа и авторизуйтесь.');
                 return;
             }
 

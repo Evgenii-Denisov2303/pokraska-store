@@ -14,7 +14,7 @@
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260328-inline-mobile-polish`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260328-inline-copy-polish`;
         document.head.appendChild(script);
     }
 
