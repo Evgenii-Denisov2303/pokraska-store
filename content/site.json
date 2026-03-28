@@ -62,7 +62,7 @@
       "icon": "fas fa-receipt"
     },
     {
-      "label": "Работы",
+      "label": "Галерея",
       "href": "/pages/gallery.html",
       "icon": "fas fa-images"
     },

@@ -369,7 +369,7 @@
         queueInlineBindings({
             fileName: 'gallery',
             sectionKey: 'gallery',
-            sectionLabel: 'Галерея работ',
+            sectionLabel: 'Галерея',
             bindings
         });
     }

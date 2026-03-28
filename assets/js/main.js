@@ -370,8 +370,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openPaletteModal(src, alt) {
         if (!paletteModal || !paletteModalImage || !src) return;
+        paletteModalImage.hidden = false;
         paletteModalImage.src = src;
-        paletteModalImage.alt = alt || '';
+        paletteModalImage.alt = alt || 'Просмотр палитры';
         paletteLastFocus = document.activeElement;
         paletteModal.setAttribute('aria-hidden', 'false');
         paletteModal.classList.add('is-open');
@@ -386,6 +387,11 @@ document.addEventListener('DOMContentLoaded', function() {
         paletteModal.classList.remove('is-open');
         paletteModal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
+        if (paletteModalImage) {
+            paletteModalImage.hidden = true;
+            paletteModalImage.removeAttribute('src');
+            paletteModalImage.alt = '';
+        }
         if (paletteLastFocus && typeof paletteLastFocus.focus === 'function') {
             paletteLastFocus.focus();
         }
@@ -468,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="fas fa-chevron-right" aria-hidden="true"></i>
                     </button>
                     <figure class="lightbox-modal__figure">
-                        <img class="lightbox-modal__image" src="" alt="">
+                        <img class="lightbox-modal__image" alt="Просмотр изображения" hidden>
                         <figcaption class="lightbox-modal__caption"></figcaption>
                     </figure>
                 </div>
@@ -502,6 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!href) return;
             const caption = getLinkCaption(link);
             const altText = getLinkedImageAlt(link) || caption || 'Изображение';
+            lightboxImage.hidden = false;
             lightboxImage.src = href;
             lightboxImage.alt = altText;
             if (lightboxCaption) {
@@ -539,6 +546,11 @@ document.addEventListener('DOMContentLoaded', function() {
             lightboxModal.classList.remove('is-open');
             lightboxModal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('modal-open');
+            if (lightboxImage) {
+                lightboxImage.hidden = true;
+                lightboxImage.removeAttribute('src');
+                lightboxImage.alt = '';
+            }
             if (lightboxLastFocus && typeof lightboxLastFocus.focus === 'function') {
                 lightboxLastFocus.focus();
             }
