@@ -431,6 +431,34 @@
                 background: #fff;
             }
 
+            .p-inline-panel__upload-zone {
+                display: grid;
+                gap: 8px;
+                padding: 14px;
+                border: 1px dashed rgba(59, 130, 246, 0.34);
+                border-radius: 14px;
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(248, 250, 252, 0.98));
+                transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+            }
+
+            .p-inline-panel__upload-zone.is-dragover {
+                border-color: rgba(37, 99, 235, 0.72);
+                background: linear-gradient(180deg, rgba(219, 234, 254, 0.96), rgba(239, 246, 255, 0.98));
+                box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-panel__upload-title {
+                font-size: 14px;
+                font-weight: 800;
+                color: #1e3a8a;
+            }
+
+            .p-inline-panel__upload-meta {
+                font-size: 12px;
+                line-height: 1.45;
+                color: #64748b;
+            }
+
             .p-inline-overview {
                 position: fixed;
                 top: 24px;
@@ -2186,22 +2214,76 @@
             image.src = value?.src || '';
             preview.appendChild(image);
 
+            const uploadZone = document.createElement('div');
+            uploadZone.className = 'p-inline-panel__upload-zone';
+
+            const uploadTitle = document.createElement('div');
+            uploadTitle.className = 'p-inline-panel__upload-title';
+            uploadTitle.textContent = 'Выбрать или перетащить фото';
+            uploadZone.appendChild(uploadTitle);
+
+            const uploadMeta = document.createElement('div');
+            uploadMeta.className = 'p-inline-panel__upload-meta';
+            uploadMeta.textContent = 'Файл можно выбрать обычным способом или просто перетащить сюда.';
+            uploadZone.appendChild(uploadMeta);
+
             const fileInput = document.createElement('input');
             fileInput.className = 'p-inline-panel__control';
             fileInput.type = 'file';
             fileInput.accept = 'image/*';
             fileInput.name = '__imageUpload';
-            fileInput.addEventListener('change', () => {
-                const nextFile = fileInput.files?.[0];
+
+            const updatePreviewFromFile = (nextFile) => {
                 if (!nextFile) return;
                 image.src = URL.createObjectURL(nextFile);
+            };
+
+            fileInput.addEventListener('change', () => {
+                const nextFile = fileInput.files?.[0];
+                updatePreviewFromFile(nextFile);
             });
-            preview.appendChild(fileInput);
+
+            const preventTransferDefaults = (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+            };
+
+            ['dragenter', 'dragover'].forEach((eventName) => {
+                uploadZone.addEventListener(eventName, (event) => {
+                    preventTransferDefaults(event);
+                    uploadZone.classList.add('is-dragover');
+                });
+            });
+
+            ['dragleave', 'dragend', 'drop'].forEach((eventName) => {
+                uploadZone.addEventListener(eventName, (event) => {
+                    preventTransferDefaults(event);
+                    if (eventName !== 'drop') {
+                        uploadZone.classList.remove('is-dragover');
+                    }
+                });
+            });
+
+            uploadZone.addEventListener('drop', (event) => {
+                uploadZone.classList.remove('is-dragover');
+                const nextFile = extractImageFileFromTransfer(event.dataTransfer);
+                if (!nextFile) {
+                    showToast('Перетащите файл изображения');
+                    return;
+                }
+                if (!assignUploadFile(fileInput, nextFile)) {
+                    showToast('Не удалось подставить файл');
+                    return;
+                }
+                updatePreviewFromFile(nextFile);
+            });
+            uploadZone.appendChild(fileInput);
+            preview.appendChild(uploadZone);
             ui.panelForm.appendChild(preview);
 
             const imageHint = document.createElement('p');
             imageHint.className = 'p-inline-panel__hint';
-            imageHint.textContent = 'Загрузи новое изображение и при необходимости поправь alt или подпись ниже.';
+            imageHint.textContent = 'После замены можно сразу поправить alt или подпись ниже.';
             ui.panelForm.appendChild(imageHint);
 
         }
@@ -2356,6 +2438,36 @@
 
         const payload = await response.json();
         return payload.path;
+    }
+
+    function extractImageFileFromTransfer(source) {
+        if (!source) return null;
+
+        const fileList = Array.from(source.files || []);
+        const directMatch = fileList.find((file) => /^image\//i.test(file.type));
+        if (directMatch) return directMatch;
+
+        const items = Array.from(source.items || []);
+        for (const item of items) {
+            if (item?.kind === 'file' && /^image\//i.test(item.type || '')) {
+                const file = item.getAsFile?.();
+                if (file) return file;
+            }
+        }
+
+        return null;
+    }
+
+    function assignUploadFile(input, file) {
+        if (!input || !file) return false;
+        try {
+            const transfer = new DataTransfer();
+            transfer.items.add(file);
+            input.files = transfer.files;
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     async function collectPanelValue(binding) {
