@@ -995,7 +995,8 @@
                 [
                     { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
                     { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
-                    { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 }
+                    { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
+                    { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
                 ].forEach((item) => {
                     const button = document.createElement('button');
                     button.type = 'button';
@@ -1124,6 +1125,42 @@
         }
 
         return nextValue;
+    }
+
+    async function removeActiveBindingFromCollection() {
+        try {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (!binding) return;
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+            if (!collectionState || collectionState.total <= 1) {
+                showToast('Нельзя удалить последнее фото');
+                return;
+            }
+
+            collectionState.items.splice(collectionState.index, 1);
+
+            fileState.dirty = true;
+            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            refreshCollectionBindings(binding, fileState);
+            renderToolbar();
+
+            const nextIndex = Math.min(collectionState.index, collectionState.items.length - 1);
+            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`);
+            if (nextBinding) {
+                state.activeBindingId = nextBinding.id;
+                clearActiveMarks();
+                nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+                fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+            } else {
+                closePanel();
+            }
+
+            showToast('Фото удалено из галереи');
+        } catch (error) {
+            showToast(error.message || 'Не удалось удалить фото');
+        }
     }
 
     async function moveActiveBindingInCollection(direction) {
@@ -1316,6 +1353,10 @@
         const moveButton = event.target.closest?.('[data-inline-panel-move]');
         if (!moveButton) return;
         event.preventDefault();
+        if (moveButton.dataset.inlinePanelMove === 'remove') {
+            removeActiveBindingFromCollection();
+            return;
+        }
         moveActiveBindingInCollection(moveButton.dataset.inlinePanelMove);
     }
 
