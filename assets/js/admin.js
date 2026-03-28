@@ -3422,6 +3422,19 @@
         return String(link?.label || 'страницу').replace(/^Открыть\s+/i, '').trim() || 'страницу';
     }
 
+    function getSectionPreviewHref(sectionKey = state.activeKey, options = {}) {
+        const previewLink = getPrimaryPreviewLink(sectionKey);
+        if (!previewLink?.href) return '';
+        return options.inline ? buildInlineEditHref(previewLink.href) : previewLink.href;
+    }
+
+    function openSectionPreview(sectionKey = state.activeKey, options = {}) {
+        const href = getSectionPreviewHref(sectionKey, options);
+        if (!href) return false;
+        window.open(href, '_blank', 'noopener');
+        return true;
+    }
+
     function getSectionEditingHint(sectionKey = state.activeKey) {
         const config = contentConfigs[sectionKey];
         const previewLink = getPrimaryPreviewLink(sectionKey);
@@ -5236,26 +5249,27 @@
 
     function updatePreviewPanelUi() {
         const hasEditorPreview = !contentConfigs[state.activeKey]?.virtual;
-        const livePreviewVisible = Boolean(state.previewPanelOpen && hasEditorPreview);
+        const previewHref = getSectionPreviewHref(state.activeKey);
 
-        document.body.classList.toggle('admin-preview-open', livePreviewVisible);
-        document.body.classList.toggle('admin-preview-closed', !livePreviewVisible);
+        document.body.classList.remove('admin-preview-open');
+        document.body.classList.add('admin-preview-closed');
 
         if (elements.previewPanel) {
-            elements.previewPanel.hidden = !hasEditorPreview;
+            elements.previewPanel.hidden = true;
         }
 
         if (elements.livePreviewPanel) {
-            elements.livePreviewPanel.hidden = !livePreviewVisible;
+            elements.livePreviewPanel.hidden = true;
         }
 
         if (elements.previewToggleBtn) {
-            elements.previewToggleBtn.hidden = Boolean(contentConfigs[state.activeKey]?.virtual);
-            elements.previewToggleBtn.classList.toggle('admin-btn--primary', livePreviewVisible);
-            elements.previewToggleBtn.classList.toggle('admin-btn--ghost', !livePreviewVisible);
-            elements.previewToggleBtn.innerHTML = livePreviewVisible
-                ? '<i class="fas fa-eye-slash" aria-hidden="true"></i> Скрыть просмотр'
-                : '<i class="fas fa-eye" aria-hidden="true"></i> Просмотр';
+            elements.previewToggleBtn.hidden = !previewHref;
+            elements.previewToggleBtn.classList.remove('admin-btn--primary');
+            elements.previewToggleBtn.classList.add('admin-btn--ghost');
+            if (previewHref) {
+                elements.previewToggleBtn.innerHTML = '<i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу';
+                elements.previewToggleBtn.title = `Открыть ${getPreviewLinkLabel(getPrimaryPreviewLink(state.activeKey))}`;
+            }
         }
 
         updatePreviewCardsUi();
@@ -7186,25 +7200,47 @@
                         <div>
                             <p class="admin-toolbar__eyebrow">Домашний экран админки</p>
                             <h2>Что хотите изменить на сайте?</h2>
-                            <p>Выберите готовое действие, и админка сама откроет нужный раздел, подсказку или простой экран без поиска по всей форме.</p>
+                            <p>Для большинства задач теперь удобнее открыть страницу и править её прямо на сайте. Админка остаётся быстрым входом в разделы, точечные поля и служебные настройки.</p>
                         </div>
                         <div class="admin-dashboard-home__hero-note">
-                            <strong>Понятный путь</strong>
-                            <span>Нажали действие → открылся нужный блок → сохранили изменения → проверили страницу.</span>
+                            <strong>Лучший путь для заказчика</strong>
+                            <span>Открыли страницу → нажали на текст или фото → сохранили → проверили результат прямо там же.</span>
                         </div>
+                    </div>
+                    <div class="admin-dashboard-home__section-head">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Лучше на сайте</p>
+                            <h3>Визуальная правка знакомых страниц</h3>
+                        </div>
+                        <span>Главный путь для текстов, фото, карточек и вопросов.</span>
                     </div>
                     <div class="admin-dashboard-home__grid">
                         ${actions.map((action, index) => `
-                            <button class="admin-dashboard-action" type="button" data-dashboard-action-index="${index}">
+                            <article class="admin-dashboard-action">
                                 <span class="admin-dashboard-action__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
                                 <strong>${action.title}</strong>
                                 <p>${action.text}</p>
                                 <div class="admin-dashboard-action__footer">
                                     <span><i class="fas fa-layer-group" aria-hidden="true"></i> ${contentConfigs[action.sectionKey].label}</span>
-                                    <span><i class="fas fa-arrow-right" aria-hidden="true"></i> Открыть</span>
+                                    <span><i class="fas fa-pen-to-square" aria-hidden="true"></i> Визуально</span>
                                 </div>
-                            </button>
+                                <div class="admin-dashboard-action__actions">
+                                    <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(action.previewHref)}" target="_blank" rel="noopener noreferrer">
+                                        <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
+                                    </a>
+                                    <button class="admin-btn admin-btn--ghost" type="button" data-dashboard-action-index="${index}">
+                                        <i class="fas fa-sliders" aria-hidden="true"></i> Через поля
+                                    </button>
+                                </div>
+                            </article>
                         `).join('')}
+                    </div>
+                    <div class="admin-dashboard-home__section-head admin-dashboard-home__section-head--secondary">
+                        <div>
+                            <p class="admin-toolbar__eyebrow">Быстрые ссылки</p>
+                            <h3>Открыть знакомую страницу сразу</h3>
+                        </div>
+                        <span>Если не нужна форма админки, а хочется сразу перейти на страницу.</span>
                     </div>
                     <div class="admin-dashboard-home__links">
                         ${actions.map((action) => `
@@ -8732,7 +8768,9 @@
             window.open(href, '_blank', 'noopener');
         });
         elements.previewToggleBtn?.addEventListener('click', () => {
-            setPreviewPanelOpen(!state.previewPanelOpen, { silent: false });
+            if (!openSectionPreview(state.activeKey)) {
+                showAlert('Для этого раздела пока нет отдельной страницы для обычного просмотра.', 'info');
+            }
         });
         elements.previewSwitcher?.querySelectorAll('[data-preview-card]').forEach((button) => {
             button.addEventListener('click', () => {
