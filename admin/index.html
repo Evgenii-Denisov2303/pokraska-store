@@ -86,20 +86,19 @@
         .status-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
             gap: 10px;
-            align-items: flex-start;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
         }
 
         .hero-link {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 44px;
             padding: 0 16px;
             border-radius: 999px;
@@ -136,7 +135,8 @@
             font-size: 13px;
             font-weight: 700;
             color: var(--muted);
-            white-space: nowrap;
+            white-space: normal;
+            text-wrap: balance;
         }
 
         .badge strong {
@@ -192,7 +192,7 @@
         }
 
         .subsection-title {
-            margin: 24px 0 10px;
+            margin: 22px 0 10px;
             font-size: 13px;
             font-weight: 800;
             letter-spacing: 0.04em;
@@ -279,6 +279,7 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--blue-dark);
+            text-wrap: balance;
         }
 
         .recent-link__badges {
@@ -492,23 +493,23 @@
                 Главный сценарий теперь простой: открыть нужную страницу, включить режим правки и менять текст или фото прямо на сайте.
             </p>
             <div class="status-bar">
-                <span class="badge" id="sessionBadge"><strong>Проверяем</strong> доступ…</span>
-                <span class="badge" id="returnBadge" hidden><strong>Возврат</strong> готов</span>
-                <span class="badge" id="draftBadge" hidden><strong>Черновики</strong> есть</span>
+                <span class="badge" id="sessionBadge">Проверяем доступ…</span>
+                <span class="badge" id="returnBadge" hidden>Можно вернуться</span>
+                <span class="badge" id="draftBadge" hidden>Есть черновики</span>
             </div>
             <div class="hero-actions">
                 <a class="hero-link hero-link--primary" href="/?edit=1">Править главную</a>
                 <a class="hero-link" href="/pages/services.html?edit=1">Править каталог</a>
                 <a class="hero-link" href="/pages/gallery.html?edit=1">Править галерею</a>
                 <a class="hero-link" href="/pages/contacts.html?edit=1">Править контакты</a>
-                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить</a>
+                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить правку</a>
             </div>
         </section>
 
         <section class="layout">
             <article class="card" id="launcherCard" hidden>
-                <span class="section-kicker">Быстрый старт</span>
-                <h2>Куда перейти</h2>
+                <span class="section-kicker">Страницы</span>
+                <h2>Быстрый запуск</h2>
                 <p>Открой нужную страницу сразу в режиме правки и меняй всё прямо на месте.</p>
 
                 <div class="launch-grid" id="launchGrid">
@@ -531,7 +532,7 @@
                 </div>
 
                 <div id="recentWrap" hidden>
-                    <h3 class="subsection-title">Продолжить с места</h3>
+                    <h3 class="subsection-title">Недавние страницы</h3>
                     <div class="recent-grid" id="recentGrid"></div>
                 </div>
 
@@ -545,8 +546,8 @@
             </article>
 
             <article class="card" id="loginCard" hidden>
-                <span class="section-kicker">Вход</span>
-                <h2>Вход для правки</h2>
+                <span class="section-kicker">Доступ</span>
+                <h2>Вход</h2>
                 <p>Если на сервере включён вход, сначала авторизуйтесь здесь. После этого правки на сайте можно будет сохранять.</p>
 
                 <form class="login-form" id="loginForm">
@@ -567,7 +568,7 @@
             </article>
 
             <aside class="card">
-                <span class="section-kicker">Как это работает</span>
+                <span class="section-kicker">Как править</span>
                 <h2>Минимум шагов</h2>
                 <p>Эта страница теперь нужна только для входа и запуска. Всё основное редактирование идёт уже на самом сайте.</p>
 
@@ -680,7 +681,7 @@
                 draftBadge.hidden = !draftCount;
                 clearDraftsButton.hidden = !draftCount;
                 if (draftCount) {
-                    draftBadge.innerHTML = `<strong>Черновики</strong> ${draftCount}`;
+                    draftBadge.textContent = `Черновики: ${draftCount}`;
                 }
                 recentHeroLink.hidden = !first;
                 if (first) {
@@ -707,7 +708,7 @@
                                 ${hasDraft ? '<span class="recent-link__badge recent-link__badge--draft">Черновик</span>' : ''}
                                 ${item.sectionLabel ? `<span class="recent-link__badge">${item.sectionLabel}</span>` : ''}
                             </span>
-                            ${when ? `<span class="recent-link__time">Правка: ${when}</span>` : ''}
+                            ${when ? `<span class="recent-link__time">${when}</span>` : ''}
                         </a>
                     `;
                 }).join('');
@@ -739,18 +740,18 @@
 
             function updateBadges(session) {
                 if (!session.authEnabled) {
-                    sessionBadge.innerHTML = '<strong>Доступ</strong> без входа';
+                    sessionBadge.textContent = 'Можно править без входа';
                     logoutButton.hidden = true;
                     return;
                 }
 
                 if (session.authenticated) {
-                    sessionBadge.innerHTML = '<strong>Доступ</strong> вход выполнен';
+                    sessionBadge.textContent = 'Вход выполнен';
                     logoutButton.hidden = false;
                     return;
                 }
 
-                sessionBadge.innerHTML = '<strong>Доступ</strong> нужен вход';
+                sessionBadge.textContent = 'Нужен вход';
                 logoutButton.hidden = true;
             }
 
@@ -765,7 +766,7 @@
                         showLogin('');
                     }
                 } catch (error) {
-                    sessionBadge.innerHTML = '<strong>Ошибка</strong> нет связи с сервером';
+                    sessionBadge.textContent = 'Нет связи с сервером';
                     showLogin('Проверьте, что visual-редактор открыт через сервер сохранения.');
                 }
             }

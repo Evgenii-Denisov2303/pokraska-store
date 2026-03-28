@@ -127,8 +127,7 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: auto;
-                max-width: min(680px, calc(100vw - 32px));
+                width: min(760px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -136,10 +135,13 @@
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__top {
                 align-items: center;
                 gap: 14px;
+                flex-wrap: wrap;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__eyebrow {
-                display: none;
+                margin-bottom: 2px;
+                font-size: 10px;
+                color: #94a3b8;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__title {
@@ -153,9 +155,9 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
                 margin-top: 0;
-                margin-left: auto;
+                margin-left: 0;
                 width: 100%;
-                justify-content: flex-start;
+                justify-content: flex-end;
                 flex-wrap: wrap;
             }
 
@@ -248,12 +250,12 @@
                 display: inline-flex;
                 align-items: center;
                 flex: 0 0 auto;
-                gap: 8px;
-                padding: 8px 12px;
+                gap: 6px;
+                padding: 8px 11px;
                 border: 1px solid rgba(148, 163, 184, 0.22);
                 border-radius: 999px;
-                background: rgba(148, 163, 184, 0.1);
-                color: #dbeafe;
+                background: rgba(148, 163, 184, 0.08);
+                color: #e2e8f0;
                 font: inherit;
                 font-size: 12px;
                 font-weight: 700;
@@ -279,13 +281,13 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 22px;
-                height: 22px;
-                padding: 0 6px;
-                border-radius: 999px;
-                background: rgba(15, 23, 42, 0.42);
-                color: #e2e8f0;
-                font-size: 12px;
+                min-width: auto;
+                height: auto;
+                padding: 0;
+                border-radius: 0;
+                background: transparent;
+                color: #93c5fd;
+                font-size: 11px;
                 font-weight: 800;
             }
 
@@ -301,7 +303,7 @@
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
-                white-space: normal;
+                white-space: nowrap;
                 text-align: center;
                 text-wrap: balance;
                 line-height: 1.2;
@@ -1276,9 +1278,9 @@
             <div class="p-inline-toolbar" hidden>
                 <div class="p-inline-toolbar__top">
                     <div>
-                        <span class="p-inline-toolbar__eyebrow">Правка на сайте</span>
-                        <h2 class="p-inline-toolbar__title">Правка</h2>
-                        <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото.</p>
+                        <span class="p-inline-toolbar__eyebrow">Режим</span>
+                        <h2 class="p-inline-toolbar__title">Правка страницы</h2>
+                        <p class="p-inline-toolbar__meta">Кликните по нужному блоку, фото или кнопке.</p>
                         <div class="p-inline-toolbar__jumpbar" hidden></div>
                     </div>
                 </div>
@@ -1299,8 +1301,8 @@
         panel.innerHTML = `
             <div class="p-inline-panel__head">
                 <div>
-                    <span class="p-inline-panel__kicker">Правка на странице</span>
-                    <h2 class="p-inline-panel__title">Редактирование</h2>
+                    <span class="p-inline-panel__kicker">На странице</span>
+                    <h2 class="p-inline-panel__title">Изменить блок</h2>
                     <p class="p-inline-panel__meta"></p>
                 </div>
                 <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
@@ -1320,9 +1322,9 @@
             <div class="p-inline-overview__sticky">
                 <div class="p-inline-overview__head">
                     <div>
-                        <span class="p-inline-panel__kicker">Структура страницы</span>
+                        <span class="p-inline-panel__kicker">Секции</span>
                         <h2 class="p-inline-overview__title">Обзор страницы</h2>
-                        <p class="p-inline-overview__meta">Откройте нужное место напрямую. Ctrl+K — быстрый поиск.</p>
+                        <p class="p-inline-overview__meta">Найдите нужный блок и откройте его. Ctrl+K — быстрый поиск.</p>
                     </div>
                     <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
@@ -1332,7 +1334,7 @@
                 </div>
                 <div class="p-inline-overview__filters"></div>
                 <div class="p-inline-overview__search-row">
-                    <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
+                    <input class="p-inline-overview__search" type="search" placeholder="Найти секцию, текст, фото или связь">
                     <button class="p-inline-overview__search-clear" type="button" hidden>Очистить</button>
                 </div>
             </div>
@@ -1511,7 +1513,7 @@
         const definitions = [
             { focus: 'text', label: 'Текст' },
             { focus: 'image', label: 'Фото' },
-            { focus: 'contacts', label: 'Контакты' },
+            { focus: 'contacts', label: 'Связь' },
             { focus: 'collection', label: 'Секции' }
         ];
         if (getBindingsForFocus('dirty').length) {
@@ -1590,7 +1592,7 @@
             dirty: 'Правки',
             text: 'Текст',
             image: 'Фото',
-            contacts: 'Контакты',
+            contacts: 'Связь',
             collection: 'Секции'
         };
 
@@ -1840,7 +1842,7 @@
             ? 'Применить и сохранить'
             : (dirtyCount
                 ? `Сохранить ${formatCompactCount(dirtyCount)}`
-                : (hasIssue ? 'Сохранить' : 'Сохранено'));
+                : (hasIssue ? 'Сохранить' : 'Готово'));
         if (ui.resetBtn) {
             ui.resetBtn.hidden = !dirtyCount;
         }
@@ -1877,8 +1879,8 @@
         }
 
         ui.toolbarTitle.textContent = dirtyCount
-            ? `Есть правки: ${dirtyCount}`
-            : 'Правка';
+            ? `Правки: ${dirtyCount}`
+            : 'Правка страницы';
         ui.toolbarMeta.textContent = activeSummary
             ? (dirtyCount
                 ? `Сейчас: ${activeSummary}. Сохраните изменения, когда закончите.`
