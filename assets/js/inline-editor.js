@@ -123,7 +123,7 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact {
                 width: auto;
-                max-width: min(620px, calc(100vw - 32px));
+                max-width: min(520px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -946,7 +946,7 @@
                 <div class="p-inline-toolbar__top">
                     <div>
                         <span class="p-inline-toolbar__eyebrow">Визуальный редактор</span>
-                        <h2 class="p-inline-toolbar__title">Правка на сайте</h2>
+                        <h2 class="p-inline-toolbar__title">Правка</h2>
                         <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото.</p>
                         <div class="p-inline-toolbar__jumpbar" hidden></div>
                     </div>
@@ -955,7 +955,7 @@
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin">Админка</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Админка</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
             </div>
@@ -1025,6 +1025,7 @@
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
         ui.toolbarJumpbar = root.querySelector('.p-inline-toolbar__jumpbar');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
+        ui.adminBtn = root.querySelector('[data-inline-action="admin"]');
         ui.panel = panel;
         ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
@@ -1414,6 +1415,9 @@
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         ui.saveBtn.disabled = !canSave || !dirtyCount;
+        if (ui.adminBtn) {
+            ui.adminBtn.hidden = !hasIssue;
+        }
 
         if (!state.enabled) {
             renderOverviewPanel();
@@ -1442,7 +1446,7 @@
 
         ui.toolbarTitle.textContent = dirtyCount
             ? `Есть правки: ${dirtyCount}`
-            : 'Правка на сайте';
+            : 'Правка';
         ui.toolbarMeta.textContent = dirtyCount
             ? 'Сохраните изменения, когда закончите.'
             : 'Нажмите на текст, кнопку или фото.';
@@ -2392,7 +2396,7 @@
             saveDirtyFiles();
         });
 
-        ui.root.querySelector('[data-inline-action="admin"]').addEventListener('click', () => {
+        ui.adminBtn?.addEventListener('click', () => {
             const binding = getPreferredAdminBinding();
             window.open(getAdminHrefForBinding(binding), '_blank', 'noopener');
         });
