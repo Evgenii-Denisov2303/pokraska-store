@@ -395,6 +395,11 @@
                 resize: vertical;
             }
 
+            .p-inline-panel__textarea--autosize {
+                resize: none;
+                overflow-y: hidden;
+            }
+
             .p-inline-panel__hint {
                 margin: -2px 0 0;
                 font-size: 12px;
@@ -556,6 +561,37 @@
                 background: #f8fafc;
                 color: #0f172a;
                 font: inherit;
+            }
+
+            .p-inline-overview__search-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .p-inline-overview__search-clear {
+                flex: 0 0 auto;
+                min-width: 38px;
+                height: 38px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                border-radius: 12px;
+                background: #fff;
+                color: #475569;
+                font: inherit;
+                font-size: 14px;
+                font-weight: 800;
+                cursor: pointer;
+                transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+            }
+
+            .p-inline-overview__search-clear:hover {
+                border-color: rgba(59, 130, 246, 0.34);
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .p-inline-overview__search-clear[hidden] {
+                display: none;
             }
 
             .p-inline-overview__summary {
@@ -938,6 +974,15 @@
                     margin: 16px -16px -12px;
                     padding: 12px 16px;
                 }
+
+                .p-inline-overview__search-row {
+                    align-items: stretch;
+                }
+
+                .p-inline-overview__search-clear {
+                    min-width: 42px;
+                    height: auto;
+                }
             }
 
             @media (hover: none), (pointer: coarse) {
@@ -1271,7 +1316,10 @@
                     <span class="p-inline-overview__summary-hint"></span>
                 </div>
                 <div class="p-inline-overview__filters"></div>
-                <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
+                <div class="p-inline-overview__search-row">
+                    <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
+                    <button class="p-inline-overview__search-clear" type="button" hidden>Сброс</button>
+                </div>
             </div>
             <div class="p-inline-overview__body"></div>
         `;
@@ -1309,6 +1357,7 @@
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
         ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
+        ui.overviewSearchClear = overview.querySelector('.p-inline-overview__search-clear');
         ui.overviewSummaryCount = overview.querySelector('.p-inline-overview__summary-count');
         ui.overviewSummaryHint = overview.querySelector('.p-inline-overview__summary-hint');
         ui.overviewFilters = overview.querySelector('.p-inline-overview__filters');
@@ -1331,6 +1380,19 @@
         const normalized = String(value || '').replace(/\s+/g, ' ').trim();
         if (normalized.length <= maxLength) return normalized;
         return `${normalized.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
+    }
+
+    function getCurrentPageLabel() {
+        const rawTitle = String(document.title || '').replace(/\s+/g, ' ').trim();
+        if (!rawTitle) return 'Текущая страница';
+        const [mainTitle] = rawTitle.split('|').map((part) => part.trim()).filter(Boolean);
+        return mainTitle || rawTitle;
+    }
+
+    function autosizeTextarea(control) {
+        if (!control || control.tagName !== 'TEXTAREA') return;
+        control.style.height = 'auto';
+        control.style.height = `${Math.max(control.scrollHeight, 124)}px`;
     }
 
     function matchesRequestedFocus(binding, focus) {
@@ -1661,7 +1723,7 @@
         const focusPart = filterLabels[state.overviewFocus] || 'блоки';
         ui.overviewSummaryHint.textContent = state.overviewQuery
             ? `Найдено: ${focusPart} в ${groupPart}`
-            : `Сейчас показаны ${focusPart} в ${groupPart}`;
+            : `${getCurrentPageLabel()} · ${focusPart} в ${groupPart}`;
     }
 
     function renderOverviewPanel() {
@@ -1673,6 +1735,9 @@
 
         if (ui.overviewSearch) {
             ui.overviewSearch.value = state.overviewQuery;
+        }
+        if (ui.overviewSearchClear) {
+            ui.overviewSearchClear.hidden = !state.overviewQuery;
         }
 
         renderOverviewFilters();
@@ -1773,7 +1838,7 @@
 
         if (!state.apiAvailable) {
             ui.toolbarTitle.textContent = 'Нужен сервер сохранения';
-            ui.toolbarMeta.textContent = 'Откройте сайт через локальный сервер visual-редактирования, чтобы сохранять изменения прямо на странице.';
+            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте страницу через сервер сохранения, чтобы правки можно было сохранить.`;
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
             renderToolbarJumpbar();
@@ -1783,7 +1848,7 @@
 
         if (state.authEnabled && !state.authenticated) {
             ui.toolbarTitle.textContent = 'Нужен вход';
-            ui.toolbarMeta.textContent = 'Откройте панель входа, войдите и вернитесь на страницу. После этого visual-режим сможет сохранять правки.';
+            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте панель входа, войдите и вернитесь на страницу.`;
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Кнопка входа откроется справа только в этом состоянии.';
             if (ui.adminBtn) {
@@ -1805,7 +1870,7 @@
                 ? 'Сохраните изменения, когда закончите.'
                 : (state.lastSavedAt
                     ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-                    : 'Нажмите на текст, кнопку или фото.'));
+                    : `${getCurrentPageLabel()} · нажмите на текст, кнопку или фото.`));
         if (ui.adminBtn) {
             ui.adminBtn.textContent = 'Панель входа';
         }
@@ -2080,10 +2145,12 @@
         let control;
         if (field.type === 'textarea' || field.type === 'html' || field.type === 'list') {
             control = document.createElement('textarea');
-            control.className = 'p-inline-panel__textarea';
+            control.className = 'p-inline-panel__textarea p-inline-panel__textarea--autosize';
             control.value = field.type === 'list'
                 ? (Array.isArray(value) ? value.join('\n') : '')
                 : (value ?? '');
+            control.addEventListener('input', () => autosizeTextarea(control));
+            window.requestAnimationFrame(() => autosizeTextarea(control));
         } else {
             control = document.createElement('input');
             control.className = 'p-inline-panel__control';
@@ -2343,7 +2410,7 @@
     function fillPanel(binding, value) {
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
-        ui.panelMeta.textContent = `${binding.sectionLabel} · ${binding.fileName}.json · Ctrl+Enter — применить`;
+        ui.panelMeta.textContent = `${binding.sectionLabel} · Ctrl+Enter — применить`;
         ui.panelForm.innerHTML = '';
         if (ui.panelRevertBtn) {
             ui.panelRevertBtn.hidden = !bindingIsDirty(binding) || !canRevertBinding(binding);
@@ -3162,6 +3229,11 @@
         ui.overviewSearch.addEventListener('input', (event) => {
             state.overviewQuery = event.target.value || '';
             renderOverviewPanel();
+        });
+        ui.overviewSearchClear?.addEventListener('click', () => {
+            state.overviewQuery = '';
+            renderOverviewPanel();
+            ui.overviewSearch?.focus();
         });
         ui.overviewSearch.addEventListener('keydown', (event) => {
             if (event.key !== 'Enter') return;
