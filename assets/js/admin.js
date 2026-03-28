@@ -5484,6 +5484,10 @@
         const context = getCurrentWorkspaceContext(state.activeKey);
         const currentLabel = context.parts[context.parts.length - 1] || activeConfig.label;
         const pathLabel = context.parts.join(' / ');
+        const previewLink = getPrimaryPreviewLink(state.activeKey);
+        const inlineLinkHtml = previewLink
+            ? `<a href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">Править на сайте</a>`
+            : '';
 
         elements.sidebarFooter.innerHTML = `
             <div class="admin-sidebar-footer__card">
@@ -5495,7 +5499,8 @@
                 <p class="admin-sidebar-footer__path">${pathLabel}</p>
                 <div class="admin-sidebar-footer__meta">
                     <span class="admin-sidebar-footer__mode">${context.modeText}</span>
-                    <a href="../index.html" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+                    ${inlineLinkHtml}
+                    <a href="../index.html" target="_blank" rel="noopener noreferrer">Главная</a>
                     <a href="../docs/admin-deploy.md" target="_blank" rel="noopener noreferrer">Инструкция</a>
                 </div>
             </div>

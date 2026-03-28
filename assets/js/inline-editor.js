@@ -543,12 +543,22 @@
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
         ui.panel = panel;
+        ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.toast = toast;
         ui.hover = hover;
+    }
+
+    function getBindingKindLabel(binding) {
+        if (!binding) return 'Правка на странице';
+        if (binding.type === 'image') return 'Фото на странице';
+        if (binding.type === 'list') return 'Список на странице';
+        if (binding.type === 'object') return 'Кнопка и ссылка';
+        if (binding.type === 'html') return 'Текстовый блок';
+        return 'Текст на странице';
     }
 
     function renderToolbar() {
@@ -585,7 +595,7 @@
             ? `Есть несохранённые правки: ${dirtyCount}`
             : 'Можно править прямо на сайте';
         ui.toolbarMeta.textContent = dirtyCount
-            ? 'Нажмите «Сохранить», когда закончите. Правки попадут в те же JSON-файлы, что и в полной админке.'
+            ? 'Нажмите «Сохранить», когда закончите. Можно быстро сохранить сочетанием Ctrl+S.'
             : 'Нажмите на текст, кнопку или фото. Для сложных блоков всегда можно открыть полный редактор.';
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
@@ -832,8 +842,9 @@
     }
 
     function fillPanel(binding, value) {
+        ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
-        ui.panelMeta.textContent = `${binding.sectionLabel} · ${binding.fileName}.json`;
+        ui.panelMeta.textContent = `${binding.sectionLabel} · ${binding.fileName}.json · Ctrl+Enter — применить`;
         ui.panelForm.innerHTML = '';
 
         const editorFields = getBindingEditorFields(binding);
@@ -851,8 +862,18 @@
             fileInput.type = 'file';
             fileInput.accept = 'image/*';
             fileInput.name = '__imageUpload';
+            fileInput.addEventListener('change', () => {
+                const nextFile = fileInput.files?.[0];
+                if (!nextFile) return;
+                image.src = URL.createObjectURL(nextFile);
+            });
             preview.appendChild(fileInput);
             ui.panelForm.appendChild(preview);
+
+            const imageHint = document.createElement('p');
+            imageHint.className = 'p-inline-panel__hint';
+            imageHint.textContent = 'Загрузи новое изображение и при необходимости поправь alt или подпись ниже.';
+            ui.panelForm.appendChild(imageHint);
         }
 
         editorFields.forEach((field) => {
@@ -861,6 +882,16 @@
                 : value?.[field.key];
             ui.panelForm.appendChild(createFieldGroup(field, fieldValue));
         });
+
+        const firstControl = ui.panelForm.querySelector('input, textarea');
+        if (firstControl) {
+            window.setTimeout(() => {
+                firstControl.focus();
+                if (firstControl instanceof HTMLInputElement || firstControl instanceof HTMLTextAreaElement) {
+                    firstControl.setSelectionRange?.(firstControl.value.length, firstControl.value.length);
+                }
+            }, 0);
+        }
     }
 
     async function openBinding(bindingId) {
@@ -1043,7 +1074,10 @@
     function showHoverLabel(target) {
         if (!ui.hover || !state.enabled || !target) return;
         const rect = target.getBoundingClientRect();
-        ui.hover.textContent = target.dataset.inlineEditLabel || 'Редактировать';
+        const binding = state.bindingMap.get(target.dataset.inlineEditId || '');
+        const kind = getBindingKindLabel(binding).replace(/ на странице$/i, '');
+        const label = target.dataset.inlineEditLabel || 'Редактировать';
+        ui.hover.textContent = `${kind} · ${label}`;
         ui.hover.hidden = false;
         ui.hover.style.top = `${Math.max(12, rect.top - 14)}px`;
         ui.hover.style.left = `${Math.min(window.innerWidth - 240, Math.max(12, rect.left))}px`;
@@ -1075,9 +1109,22 @@
     }
 
     function handleKeydown(event) {
+        if (!state.enabled) return;
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            saveDirtyFiles();
+            return;
+        }
+
+        if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !ui.panel.hidden) {
+            event.preventDefault();
+            applyActiveBinding();
+            return;
+        }
+
         if (event.key !== 'Escape') return;
 
-        if (!state.enabled) return;
         if (!ui.panel.hidden) {
             closePanel();
             return;
