@@ -6,6 +6,8 @@
     const DIRTY_CLASS = 'p-inline-dirty';
     const REVEAL_CLASS = 'p-inline-reveal';
     const MODE_CLASS = 'p-inline-mode';
+    const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
+    const MAX_RECENT_PAGES = 6;
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
@@ -873,6 +875,60 @@
             : `/content/${fileName}.json${suffix}`;
     }
 
+    function readStoredJson(key, fallback) {
+        try {
+            const raw = window.localStorage?.getItem(key);
+            if (!raw) return fallback;
+            const parsed = JSON.parse(raw);
+            return parsed ?? fallback;
+        } catch (error) {
+            return fallback;
+        }
+    }
+
+    function writeStoredJson(key, value) {
+        try {
+            window.localStorage?.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            // ignore storage failures
+        }
+    }
+
+    function getCurrentEditHref() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('edit', '1');
+        url.searchParams.delete('focus');
+        return `${url.pathname}${url.search}`;
+    }
+
+    function getCurrentPageTitle() {
+        return String(document.title || 'Страница')
+            .replace(/\s*\|\s*POKRASKA\.STORE\s*$/i, '')
+            .trim() || 'Страница';
+    }
+
+    function rememberEditingContext(binding = null) {
+        const href = getCurrentEditHref();
+        const pageTitle = getCurrentPageTitle();
+        const focus = binding ? getBindingPrimaryFocus(binding) : '';
+        const nextEntry = {
+            href,
+            title: pageTitle,
+            sectionLabel: binding?.sectionLabel || '',
+            bindingLabel: binding?.label || '',
+            fileName: binding?.fileName || '',
+            path: binding?.path || '',
+            focus,
+            updatedAt: Date.now()
+        };
+
+        const nextPages = [nextEntry]
+            .concat(readStoredJson(RECENT_PAGES_STORAGE_KEY, []).filter((item) => item && item.href && item.href !== href))
+            .slice(0, MAX_RECENT_PAGES);
+
+        writeStoredJson(RECENT_PAGES_STORAGE_KEY, nextPages);
+    }
+
     const state = {
         enabled: false,
         apiAvailable: false,
@@ -1385,6 +1441,9 @@
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         ui.saveBtn.disabled = !canSave || !dirtyCount;
+        ui.saveBtn.textContent = dirtyCount
+            ? `Сохранить ${formatCompactCount(dirtyCount)}`
+            : (hasIssue ? 'Сохранить' : 'Сохранено');
         if (ui.adminBtn) {
             ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
@@ -1468,18 +1527,23 @@
     }
 
     function exitEditMode() {
+        const dirtyBeforeExit = hasDirtyFiles();
         state.overviewOpen = false;
         state.overviewQuery = '';
         state.enabled = false;
         closePanel();
         document.body.classList.remove(MODE_CLASS);
         renderToolbar();
+        if (dirtyBeforeExit) {
+            showToast('Правки не пропадут, пока вкладка открыта. Сохраните их перед выходом.');
+        }
     }
 
     async function enterEditMode() {
         await refreshEnvironment();
         state.enabled = true;
         document.body.classList.add(MODE_CLASS);
+        rememberEditingContext();
         renderToolbar();
 
         if (!state.apiAvailable) {
@@ -1940,6 +2004,7 @@
             pulseBindingElements(binding);
 
             fillPanel(binding, value);
+            rememberEditingContext(binding);
             renderToolbar();
             ui.panel.hidden = false;
         } catch (error) {
@@ -2231,14 +2296,20 @@
             }
 
             clearDirtyMarks();
+            rememberEditingContext(state.bindingMap.get(state.activeBindingId) || null);
             renderToolbar();
             showToast('Изменения сохранены');
         } catch (error) {
             showToast(error.message || 'Ошибка сохранения');
         } finally {
-            ui.saveBtn.textContent = 'Сохранить';
-            ui.saveBtn.disabled = !hasDirtyFiles();
+            renderToolbar();
         }
+    }
+
+    function handleBeforeUnload(event) {
+        if (!hasDirtyFiles()) return;
+        event.preventDefault();
+        event.returnValue = '';
     }
 
     function handleDocumentClick(event) {
@@ -2426,6 +2497,7 @@
         document.addEventListener('keydown', handleKeydown);
         window.addEventListener('scroll', hideHoverLabel, true);
         window.addEventListener('resize', hideHoverLabel);
+        window.addEventListener('beforeunload', handleBeforeUnload);
         refreshEnvironment();
 
         if (autoEnable) {

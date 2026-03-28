@@ -184,6 +184,15 @@
             margin-top: 22px;
         }
 
+        .subsection-title {
+            margin: 24px 0 10px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
         .launch-link {
             display: grid;
             gap: 5px;
@@ -219,6 +228,46 @@
 
         .primary-link span {
             color: rgba(255, 255, 255, 0.82);
+        }
+
+        .recent-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .recent-link {
+            display: grid;
+            gap: 6px;
+            padding: 16px 18px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--text);
+            text-decoration: none;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .recent-link:hover {
+            transform: translateY(-2px);
+            border-color: rgba(37, 99, 235, 0.32);
+            box-shadow: 0 16px 30px rgba(37, 99, 235, 0.12);
+        }
+
+        .recent-link strong {
+            font-size: 16px;
+        }
+
+        .recent-link span {
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
+        .recent-link__time {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--blue-dark);
         }
 
         .tips {
@@ -383,6 +432,7 @@
                 <a class="hero-link" href="/pages/services.html?edit=1">Править каталог</a>
                 <a class="hero-link" href="/pages/gallery.html?edit=1">Править галерею</a>
                 <a class="hero-link" href="/pages/contacts.html?edit=1">Править контакты</a>
+                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить правку</a>
             </div>
         </section>
 
@@ -409,6 +459,11 @@
                         <strong>Контакты</strong>
                         <span>Телефоны, режим работы, менеджер и схема проезда</span>
                     </a>
+                </div>
+
+                <div id="recentWrap" hidden>
+                    <h3 class="subsection-title">Продолжить с места</h3>
+                    <div class="recent-grid" id="recentGrid"></div>
                 </div>
 
                 <div class="actions">
@@ -472,13 +527,73 @@
             const loginError = document.getElementById('loginError');
             const launcherMessage = document.getElementById('launcherMessage');
             const logoutButton = document.getElementById('logoutButton');
+            const recentWrap = document.getElementById('recentWrap');
+            const recentGrid = document.getElementById('recentGrid');
+            const recentHeroLink = document.getElementById('recentHeroLink');
             const params = new URLSearchParams(window.location.search);
             const requestedReturn = params.get('return') || '';
+            const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
 
             if (requestedReturn) {
                 returnBadge.hidden = false;
                 returnLink.hidden = false;
                 returnLink.href = requestedReturn;
+            }
+
+            function readRecentPages() {
+                try {
+                    const raw = window.localStorage.getItem(RECENT_PAGES_STORAGE_KEY);
+                    if (!raw) return [];
+                    const parsed = JSON.parse(raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function formatRecentDate(timestamp) {
+                if (!timestamp) return '';
+                try {
+                    const date = new Date(timestamp);
+                    const now = new Date();
+                    const sameDay = date.toDateString() === now.toDateString();
+                    return sameDay
+                        ? date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+                        : date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                } catch (error) {
+                    return '';
+                }
+            }
+
+            function renderRecentLaunches() {
+                const pages = readRecentPages().filter((item) => item && item.href && item.title);
+                const first = pages[0] || null;
+
+                recentWrap.hidden = !pages.length;
+                recentHeroLink.hidden = !first;
+                if (first) {
+                    recentHeroLink.href = first.href;
+                    recentHeroLink.textContent = `Продолжить: ${first.title}`;
+                }
+
+                if (!pages.length) {
+                    recentGrid.innerHTML = '';
+                    return;
+                }
+
+                recentGrid.innerHTML = pages.slice(0, 4).map((item) => {
+                    const blockHint = item.bindingLabel
+                        ? `Последний блок: ${item.bindingLabel}`
+                        : (item.sectionLabel || 'Откроется страница в режиме правки');
+                    const when = formatRecentDate(item.updatedAt);
+                    return `
+                        <a class="recent-link" href="${item.href}">
+                            <strong>${item.title}</strong>
+                            <span>${blockHint}</span>
+                            ${when ? `<span class="recent-link__time">Последняя правка: ${when}</span>` : ''}
+                        </a>
+                    `;
+                }).join('');
             }
 
             async function readSession() {
@@ -495,6 +610,7 @@
                 loginError.hidden = true;
                 launcherMessage.hidden = !message;
                 launcherMessage.textContent = message || '';
+                renderRecentLaunches();
             }
 
             function showLogin(message) {
