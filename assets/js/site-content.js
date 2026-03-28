@@ -14,7 +14,7 @@
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-home-fixes`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-revert-visible`;
         document.head.appendChild(script);
     }
 
