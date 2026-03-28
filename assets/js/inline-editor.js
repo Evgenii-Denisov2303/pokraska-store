@@ -7,6 +7,7 @@
     const REVEAL_CLASS = 'p-inline-reveal';
     const MODE_CLASS = 'p-inline-mode';
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
+    const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
@@ -958,6 +959,23 @@
         writeStoredJson(RECENT_PAGES_STORAGE_KEY, nextPages);
     }
 
+    function readStoredDraftFiles() {
+        const value = readStoredJson(DRAFT_FILES_STORAGE_KEY, {});
+        return value && typeof value === 'object' ? value : {};
+    }
+
+    function writeStoredDraftFiles(payload) {
+        if (!payload || !Object.keys(payload).length) {
+            try {
+                window.localStorage?.removeItem(DRAFT_FILES_STORAGE_KEY);
+            } catch (error) {
+                // ignore storage failures
+            }
+            return;
+        }
+        writeStoredJson(DRAFT_FILES_STORAGE_KEY, payload);
+    }
+
     const state = {
         enabled: false,
         apiAvailable: false,
@@ -965,6 +983,7 @@
         authenticated: false,
         username: '',
         lastSavedAt: 0,
+        restoredDrafts: 0,
         requestedFocus,
         overviewOpen: false,
         overviewQuery: '',
@@ -1048,6 +1067,7 @@
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="reset" hidden>Сбросить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Войти</button>
                 </div>
@@ -1119,6 +1139,7 @@
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
         ui.toolbarJumpbar = root.querySelector('.p-inline-toolbar__jumpbar');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
+        ui.resetBtn = root.querySelector('[data-inline-action="reset"]');
         ui.adminBtn = root.querySelector('[data-inline-action="admin"]');
         ui.panel = panel;
         ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
@@ -1181,6 +1202,42 @@
 
     function bindingIsDirty(binding) {
         return Boolean(binding?.elements?.some((element) => element?.classList?.contains(DIRTY_CLASS)));
+    }
+
+    function collectDirtyPathsForFile(fileName) {
+        const paths = state.bindings
+            .filter((binding) => binding.fileName === fileName && bindingIsDirty(binding))
+            .map((binding) => binding.path);
+        return Array.from(new Set(paths));
+    }
+
+    function persistDraftFiles() {
+        const payload = readStoredDraftFiles();
+        state.files.forEach((entry, fileName) => {
+            if (payload[fileName]) {
+                delete payload[fileName];
+            }
+        });
+        state.files.forEach((entry, fileName) => {
+            if (!entry?.dirty) return;
+            payload[fileName] = {
+                data: cloneData(entry.data),
+                sectionLabel: entry.sectionLabel || fileName,
+                updatedAt: Date.now(),
+                dirtyPaths: collectDirtyPathsForFile(fileName)
+            };
+        });
+        writeStoredDraftFiles(payload);
+    }
+
+    function applyStoredDirtyMarks(fileName) {
+        const entry = state.files.get(fileName);
+        if (!entry?.dirty || !Array.isArray(entry.draftPaths) || !entry.draftPaths.length) return;
+        state.bindings.forEach((binding) => {
+            if (binding.fileName === fileName && entry.draftPaths.includes(binding.path)) {
+                markBindingDirty(binding);
+            }
+        });
     }
 
     function getBindingsForFocus(focus) {
@@ -1500,6 +1557,9 @@
         ui.saveBtn.textContent = dirtyCount
             ? `Сохранить ${formatCompactCount(dirtyCount)}`
             : (hasIssue ? 'Сохранить' : 'Сохранено');
+        if (ui.resetBtn) {
+            ui.resetBtn.hidden = !dirtyCount;
+        }
         if (ui.adminBtn) {
             ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
@@ -1558,6 +1618,33 @@
         renderToolbar();
     }
 
+    async function restoreDraftsForVisibleBindings() {
+        const draftFiles = readStoredDraftFiles();
+        const fileNames = Object.keys(draftFiles);
+        if (!fileNames.length) return 0;
+
+        const visibleFileNames = Array.from(new Set(
+            getVisibleBindings()
+                .map((binding) => binding.fileName)
+                .filter(Boolean)
+        ));
+
+        let restored = 0;
+        for (const fileName of visibleFileNames) {
+            if (!draftFiles[fileName]) continue;
+            const entry = await ensureFileState(fileName, draftFiles[fileName].sectionLabel || fileName);
+            state.bindings.forEach((binding) => {
+                if (binding.fileName === fileName) {
+                    renderBinding(binding);
+                }
+            });
+            applyStoredDirtyMarks(fileName);
+            if (entry.dirty) restored += 1;
+        }
+
+        return restored;
+    }
+
     function closePanel() {
         if (!ui.panel) return;
         ui.panel.hidden = true;
@@ -1602,6 +1689,7 @@
         state.enabled = true;
         document.body.classList.add(MODE_CLASS);
         rememberEditingContext();
+        state.restoredDrafts = await restoreDraftsForVisibleBindings();
         renderToolbar();
 
         if (!state.apiAvailable) {
@@ -1612,7 +1700,11 @@
             const openedFromFocus = await openRequestedFocusBinding();
             const openedFromResume = !openedFromFocus && await openRequestedResumeBinding();
             if (!openedFromResume) {
-                showToast('Режим редактирования включён');
+                if (state.restoredDrafts) {
+                    showToast(`Восстановлены черновики: ${state.restoredDrafts}`);
+                } else {
+                    showToast('Режим редактирования включён');
+                }
             }
         }
     }
@@ -1628,13 +1720,18 @@
         }
 
         const rawData = await response.json();
-        const data = applyPageDefaults(fileName, rawData);
+        const originalData = applyPageDefaults(fileName, rawData);
+        const draftFiles = readStoredDraftFiles();
+        const draftEntry = draftFiles[fileName];
+        const data = draftEntry?.data ? cloneData(draftEntry.data) : cloneData(originalData);
         const entry = {
             fileName,
             sectionKey: fileName,
             sectionLabel: sectionLabel || fileName,
             data,
-            dirty: false
+            originalData: cloneData(originalData),
+            dirty: Boolean(draftEntry?.data),
+            draftPaths: Array.isArray(draftEntry?.dirtyPaths) ? draftEntry.dirtyPaths : []
         };
 
         state.files.set(fileName, entry);
@@ -1748,6 +1845,7 @@
         bindings.forEach((binding) => {
             state.bindingMap.set(binding.id, binding);
             state.bindings.push(binding);
+            applyStoredDirtyMarks(binding.fileName);
         });
 
         if (state.enabled) {
@@ -2214,6 +2312,7 @@
             refreshCollectionBindings(binding, fileState);
             registerMissingCollectionBindings(binding, collectionState.items.length);
             markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            persistDraftFiles();
             renderToolbar();
 
             const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`);
@@ -2250,6 +2349,7 @@
             refreshCollectionBindings(binding, fileState);
             registerMissingCollectionBindings(binding, collectionState.items.length);
             markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            persistDraftFiles();
             renderToolbar();
 
             const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`);
@@ -2283,6 +2383,7 @@
             fileState.dirty = true;
             markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
             refreshCollectionBindings(binding, fileState);
+            persistDraftFiles();
             renderToolbar();
 
             const nextIndex = Math.min(collectionState.index, collectionState.items.length - 1);
@@ -2334,6 +2435,7 @@
             fileState.dirty = true;
             markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
             refreshCollectionBindings(binding, fileState);
+            persistDraftFiles();
             renderToolbar();
 
             const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`) || binding;
@@ -2364,6 +2466,7 @@
             fileState.dirty = true;
             markBindingDirty(binding);
             rerenderBindingsForPath(binding.fileName, binding.path);
+            persistDraftFiles();
             renderToolbar();
             closePanel();
             showToast('Правка применена');
@@ -2404,11 +2507,14 @@
                 }
 
                 entry.dirty = false;
+                entry.originalData = cloneData(entry.data);
+                entry.draftPaths = [];
             }
 
             clearDirtyMarks();
             rememberEditingContext(state.bindingMap.get(state.activeBindingId) || null);
             state.lastSavedAt = Date.now();
+            persistDraftFiles();
             renderToolbar();
             showToast('Изменения сохранены');
         } catch (error) {
@@ -2422,6 +2528,22 @@
         if (!hasDirtyFiles()) return;
         event.preventDefault();
         event.returnValue = '';
+    }
+
+    function discardDraftChanges() {
+        if (!hasDirtyFiles()) return;
+        const confirmed = window.confirm('Сбросить все несохранённые правки на этой странице?');
+        if (!confirmed) return;
+
+        const payload = readStoredDraftFiles();
+        state.files.forEach((entry, fileName) => {
+            if (payload[fileName]) {
+                delete payload[fileName];
+            }
+        });
+        writeStoredDraftFiles(payload);
+        const cleanHref = getCurrentEditHref();
+        window.location.href = cleanHref;
     }
 
     function handleDocumentClick(event) {
@@ -2557,6 +2679,10 @@
 
         ui.saveBtn.addEventListener('click', () => {
             saveDirtyFiles();
+        });
+
+        ui.resetBtn?.addEventListener('click', () => {
+            discardDraftChanges();
         });
 
         ui.adminBtn?.addEventListener('click', () => {

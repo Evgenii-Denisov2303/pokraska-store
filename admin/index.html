@@ -426,6 +426,7 @@
             <div class="status-bar">
                 <span class="badge" id="sessionBadge"><strong>Проверка</strong> состояния доступа…</span>
                 <span class="badge" id="returnBadge" hidden><strong>Возврат</strong> к текущей странице готов</span>
+                <span class="badge" id="draftBadge" hidden><strong>Черновики</strong> есть незавершённые правки</span>
             </div>
             <div class="hero-actions">
                 <a class="hero-link hero-link--primary" href="/?edit=1">Править главную</a>
@@ -468,6 +469,7 @@
 
                 <div class="actions">
                     <a class="button button--primary" id="returnLink" href="/" hidden>Вернуться к странице</a>
+                    <button class="button" id="clearDraftsButton" type="button" hidden>Очистить черновики</button>
                     <button class="button" id="logoutButton" type="button" hidden>Выйти</button>
                 </div>
 
@@ -520,6 +522,7 @@
         (function() {
             const sessionBadge = document.getElementById('sessionBadge');
             const returnBadge = document.getElementById('returnBadge');
+            const draftBadge = document.getElementById('draftBadge');
             const launcherCard = document.getElementById('launcherCard');
             const loginCard = document.getElementById('loginCard');
             const returnLink = document.getElementById('returnLink');
@@ -527,12 +530,14 @@
             const loginError = document.getElementById('loginError');
             const launcherMessage = document.getElementById('launcherMessage');
             const logoutButton = document.getElementById('logoutButton');
+            const clearDraftsButton = document.getElementById('clearDraftsButton');
             const recentWrap = document.getElementById('recentWrap');
             const recentGrid = document.getElementById('recentGrid');
             const recentHeroLink = document.getElementById('recentHeroLink');
             const params = new URLSearchParams(window.location.search);
             const requestedReturn = params.get('return') || '';
             const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
+            const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
 
             if (requestedReturn) {
                 returnBadge.hidden = false;
@@ -548,6 +553,17 @@
                     return Array.isArray(parsed) ? parsed : [];
                 } catch (error) {
                     return [];
+                }
+            }
+
+            function readDraftFiles() {
+                try {
+                    const raw = window.localStorage.getItem(DRAFT_FILES_STORAGE_KEY);
+                    if (!raw) return {};
+                    const parsed = JSON.parse(raw);
+                    return parsed && typeof parsed === 'object' ? parsed : {};
+                } catch (error) {
+                    return {};
                 }
             }
 
@@ -581,8 +597,14 @@
             function renderRecentLaunches() {
                 const pages = readRecentPages().filter((item) => item && item.href && item.title);
                 const first = pages[0] || null;
+                const draftCount = Object.keys(readDraftFiles()).length;
 
                 recentWrap.hidden = !pages.length;
+                draftBadge.hidden = !draftCount;
+                clearDraftsButton.hidden = !draftCount;
+                if (draftCount) {
+                    draftBadge.innerHTML = `<strong>Черновики</strong> ${draftCount}`;
+                }
                 recentHeroLink.hidden = !first;
                 if (first) {
                     recentHeroLink.href = buildRecentHref(first);
@@ -706,6 +728,13 @@
                 } finally {
                     await refresh();
                 }
+            });
+
+            clearDraftsButton.addEventListener('click', () => {
+                const confirmed = window.confirm('Удалить все локальные черновики visual-редактирования?');
+                if (!confirmed) return;
+                window.localStorage.removeItem(DRAFT_FILES_STORAGE_KEY);
+                renderRecentLaunches();
             });
 
             refresh();
