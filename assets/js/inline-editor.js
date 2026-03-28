@@ -1177,6 +1177,12 @@
         return 'Текст на странице';
     }
 
+    function truncateInlineLabel(value, maxLength = 68) {
+        const normalized = String(value || '').replace(/\s+/g, ' ').trim();
+        if (normalized.length <= maxLength) return normalized;
+        return `${normalized.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
+    }
+
     function matchesRequestedFocus(binding, focus) {
         if (!binding || !focus) return false;
 
@@ -1559,6 +1565,10 @@
         const dirtyCount = Array.from(state.files.values()).filter((entry) => entry.dirty).length;
         const canSave = canSaveInline();
         const hasIssue = !state.apiAvailable || (state.authEnabled && !state.authenticated);
+        const activeBinding = state.bindingMap.get(state.activeBindingId) || null;
+        const activeSummary = activeBinding
+            ? `${getBindingKindLabel(activeBinding)} · ${truncateInlineLabel(activeBinding.label, 62)}`
+            : '';
 
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
@@ -1605,11 +1615,15 @@
         ui.toolbarTitle.textContent = dirtyCount
             ? `Есть правки: ${dirtyCount}`
             : 'Правка';
-        ui.toolbarMeta.textContent = dirtyCount
-            ? 'Сохраните изменения, когда закончите.'
-            : (state.lastSavedAt
-                ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-                : 'Нажмите на текст, кнопку или фото.');
+        ui.toolbarMeta.textContent = activeSummary
+            ? (dirtyCount
+                ? `Сейчас: ${activeSummary}. Сохраните изменения, когда закончите.`
+                : `Сейчас: ${activeSummary}.`)
+            : (dirtyCount
+                ? 'Сохраните изменения, когда закончите.'
+                : (state.lastSavedAt
+                    ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
+                    : 'Нажмите на текст, кнопку или фото.'));
         if (ui.adminBtn) {
             ui.adminBtn.textContent = 'Войти';
         }
