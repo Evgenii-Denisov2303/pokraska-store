@@ -141,7 +141,7 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__eyebrow {
                 margin-bottom: 2px;
-                font-size: 10px;
+                font-size: 12px;
                 color: #94a3b8;
             }
 
@@ -177,10 +177,10 @@
             .p-inline-panel__kicker {
                 display: block;
                 margin-bottom: 4px;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                text-transform: none;
             }
 
             .p-inline-toolbar__eyebrow { color: #93c5fd; }
@@ -200,7 +200,7 @@
             .p-inline-toolbar__meta,
             .p-inline-panel__meta {
                 margin: 6px 0 0;
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 1.5;
                 overflow-wrap: anywhere;
                 text-wrap: pretty;
@@ -242,9 +242,10 @@
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
-                white-space: nowrap;
+                white-space: normal;
                 text-align: center;
                 text-wrap: balance;
+                overflow-wrap: anywhere;
                 line-height: 1.2;
             }
 
@@ -271,7 +272,7 @@
                 padding: 12px 14px;
                 border-radius: 14px;
                 background: rgba(148, 163, 184, 0.14);
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 1.5;
                 color: #dbeafe;
             }
@@ -362,7 +363,7 @@
 
             .p-inline-panel__hint {
                 margin: -2px 0 0;
-                font-size: 12px;
+                font-size: 13px;
                 line-height: 1.45;
                 color: #64748b;
             }
@@ -379,7 +380,7 @@
 
             .p-inline-panel__collection-meta {
                 margin: 0;
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 1.45;
                 color: #475569;
             }
@@ -430,7 +431,7 @@
             }
 
             .p-inline-panel__upload-meta {
-                font-size: 12px;
+                font-size: 13px;
                 line-height: 1.45;
                 color: #64748b;
             }
@@ -444,7 +445,7 @@
                 border-radius: 999px;
                 background: rgba(37, 99, 235, 0.1);
                 color: #1d4ed8;
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 800;
                 overflow-wrap: anywhere;
             }
@@ -569,14 +570,14 @@
             }
 
             .p-inline-overview__summary-count {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 800;
                 color: #0f172a;
                 overflow-wrap: anywhere;
             }
 
             .p-inline-overview__summary-hint {
-                font-size: 12px;
+                font-size: 13px;
                 line-height: 1.4;
                 color: #64748b;
                 text-align: right;
@@ -599,7 +600,7 @@
                 background: #fff;
                 color: #334155;
                 font: inherit;
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 700;
                 cursor: pointer;
                 transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
@@ -628,7 +629,7 @@
                 border-radius: 999px;
                 background: rgba(15, 23, 42, 0.06);
                 color: inherit;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
             }
 
@@ -648,10 +649,10 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 10px;
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 800;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                text-transform: none;
                 color: #64748b;
             }
 
@@ -672,7 +673,7 @@
                 border-radius: 999px;
                 background: #eff6ff;
                 color: #1d4ed8;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
                 letter-spacing: normal;
                 text-transform: none;
@@ -688,7 +689,7 @@
                 border-radius: 999px;
                 background: rgba(5, 150, 105, 0.12);
                 color: #047857;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
                 letter-spacing: normal;
                 text-transform: none;
@@ -770,7 +771,7 @@
                 border-radius: 999px;
                 background: rgba(5, 150, 105, 0.12);
                 color: #047857;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
             }
 
@@ -785,7 +786,7 @@
                 background: rgba(5, 150, 105, 0.12);
                 color: #047857;
                 font: inherit;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
                 cursor: pointer;
                 transition: background-color 0.18s ease, transform 0.18s ease;
@@ -797,7 +798,7 @@
             }
 
             .p-inline-overview__item-meta {
-                font-size: 12px;
+                font-size: 13px;
                 line-height: 1.45;
                 color: #64748b;
                 overflow-wrap: anywhere;
@@ -819,7 +820,7 @@
                 border-radius: 16px;
                 background: #f8fafc;
                 color: #64748b;
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 1.5;
             }
 
@@ -846,7 +847,7 @@
                 border-radius: 999px;
                 background: rgba(15, 23, 42, 0.94);
                 color: #fff;
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 700;
                 line-height: 1.3;
                 white-space: normal;
