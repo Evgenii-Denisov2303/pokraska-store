@@ -964,6 +964,7 @@
         authEnabled: false,
         authenticated: false,
         username: '',
+        lastSavedAt: 0,
         requestedFocus,
         overviewOpen: false,
         overviewQuery: '',
@@ -1184,6 +1185,9 @@
 
     function getBindingsForFocus(focus) {
         if (!focus) return [];
+        if (focus === 'dirty') {
+            return getVisibleBindings().filter((binding) => bindingIsDirty(binding));
+        }
         return getVisibleBindings().filter((binding) => matchesRequestedFocus(binding, focus));
     }
 
@@ -1204,12 +1208,16 @@
     }
 
     function getToolbarJumpDefinitions() {
-        return [
+        const definitions = [
             { focus: 'text', label: 'Текст' },
             { focus: 'image', label: 'Фото' },
             { focus: 'contacts', label: 'Контакты' },
             { focus: 'collection', label: 'Блоки' }
         ];
+        if (getBindingsForFocus('dirty').length) {
+            definitions.unshift({ focus: 'dirty', label: 'Правки' });
+        }
+        return definitions;
     }
 
     function formatCompactCount(count) {
@@ -1279,6 +1287,7 @@
         await openBinding(binding.id);
 
         const labels = {
+            dirty: 'Правки',
             text: 'Текст',
             image: 'Фото',
             contacts: 'Контакты',
@@ -1528,7 +1537,9 @@
             : 'Правка';
         ui.toolbarMeta.textContent = dirtyCount
             ? 'Сохраните изменения, когда закончите.'
-            : 'Нажмите на текст, кнопку или фото.';
+            : (state.lastSavedAt
+                ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
+                : 'Нажмите на текст, кнопку или фото.');
         if (ui.adminBtn) {
             ui.adminBtn.textContent = 'Войти';
         }
@@ -1913,6 +1924,7 @@
                 { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
                 { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
                 { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'duplicate', label: 'Дублировать фото', disabled: false },
                 { action: 'add', label: 'Добавить фото после текущего', disabled: false },
                 { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
             ]
@@ -1920,6 +1932,7 @@
                 { action: 'first', label: 'Сделать первой', disabled: collectionState.index === 0 },
                 { action: 'prev', label: 'Сдвинуть выше', disabled: collectionState.index === 0 },
                 { action: 'next', label: 'Сдвинуть ниже', disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'duplicate', label: 'Дублировать карточку', disabled: false },
                 { action: 'add', label: 'Добавить карточку после текущей', disabled: false },
                 { action: 'remove', label: 'Удалить карточку', disabled: collectionState.total <= 1 }
             ];
@@ -2217,6 +2230,42 @@
         }
     }
 
+    async function duplicateActiveBindingInCollection() {
+        try {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (!binding) return;
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+            if (!collectionState) {
+                showToast('Этот элемент не относится к коллекции');
+                return;
+            }
+
+            const nextValue = cloneData(resolveBindingValue(fileState, binding));
+            const nextIndex = Math.min(collectionState.index + 1, collectionState.items.length);
+            collectionState.items.splice(nextIndex, 0, nextValue);
+
+            fileState.dirty = true;
+            refreshCollectionBindings(binding, fileState);
+            registerMissingCollectionBindings(binding, collectionState.items.length);
+            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            renderToolbar();
+
+            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`);
+            if (nextBinding) {
+                state.activeBindingId = nextBinding.id;
+                clearActiveMarks();
+                nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+                fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+            }
+
+            showToast(binding.type === 'image' ? 'Фото дублировано' : 'Карточка дублирована');
+        } catch (error) {
+            showToast(error.message || 'Не удалось дублировать элемент');
+        }
+    }
+
     async function removeActiveBindingFromCollection() {
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
@@ -2359,6 +2408,7 @@
 
             clearDirtyMarks();
             rememberEditingContext(state.bindingMap.get(state.activeBindingId) || null);
+            state.lastSavedAt = Date.now();
             renderToolbar();
             showToast('Изменения сохранены');
         } catch (error) {
@@ -2475,6 +2525,10 @@
         event.preventDefault();
         if (moveButton.dataset.inlinePanelMove === 'add') {
             addItemToActiveCollection();
+            return;
+        }
+        if (moveButton.dataset.inlinePanelMove === 'duplicate') {
+            duplicateActiveBindingInCollection();
             return;
         }
         if (moveButton.dataset.inlinePanelMove === 'remove') {
