@@ -380,6 +380,134 @@
                 background: #fff;
             }
 
+            .p-inline-overview {
+                position: fixed;
+                top: 24px;
+                right: 24px;
+                width: min(400px, calc(100vw - 32px));
+                max-height: calc(100vh - 48px);
+                overflow: auto;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 24px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
+                padding: 18px;
+                z-index: 5001;
+            }
+
+            .p-inline-overview__head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+
+            .p-inline-overview__title {
+                margin: 0;
+                font-size: 20px;
+                line-height: 1.15;
+                color: #0f172a;
+            }
+
+            .p-inline-overview__meta {
+                margin: 6px 0 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
+            .p-inline-overview__close {
+                width: 40px;
+                height: 40px;
+                border: 0;
+                border-radius: 999px;
+                background: #eef2ff;
+                color: #1e3a8a;
+                font-size: 18px;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-overview__search {
+                width: 100%;
+                margin-bottom: 14px;
+                padding: 11px 14px;
+                border: 1px solid rgba(148, 163, 184, 0.32);
+                border-radius: 14px;
+                background: #f8fafc;
+                color: #0f172a;
+                font: inherit;
+            }
+
+            .p-inline-overview__body {
+                display: grid;
+                gap: 14px;
+            }
+
+            .p-inline-overview__section {
+                display: grid;
+                gap: 8px;
+            }
+
+            .p-inline-overview__section-title {
+                margin: 0;
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #64748b;
+            }
+
+            .p-inline-overview__item {
+                width: 100%;
+                display: grid;
+                gap: 4px;
+                padding: 12px 14px;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                border-radius: 16px;
+                background: #fff;
+                color: #0f172a;
+                text-align: left;
+                font: inherit;
+                cursor: pointer;
+                transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+            }
+
+            .p-inline-overview__item:hover {
+                transform: translateY(-1px);
+                border-color: rgba(96, 165, 250, 0.4);
+                box-shadow: 0 12px 28px rgba(37, 99, 235, 0.1);
+            }
+
+            .p-inline-overview__item--active {
+                border-color: rgba(59, 130, 246, 0.5);
+                background: #eff6ff;
+                box-shadow: 0 12px 28px rgba(37, 99, 235, 0.14);
+            }
+
+            .p-inline-overview__item-title {
+                font-size: 14px;
+                font-weight: 800;
+                line-height: 1.35;
+                color: #0f172a;
+            }
+
+            .p-inline-overview__item-meta {
+                font-size: 12px;
+                line-height: 1.45;
+                color: #64748b;
+            }
+
+            .p-inline-overview__empty {
+                padding: 18px 14px;
+                border-radius: 16px;
+                background: #f8fafc;
+                color: #64748b;
+                font-size: 13px;
+                line-height: 1.5;
+            }
+
             .p-inline-toast {
                 position: fixed;
                 left: 50%;
@@ -449,6 +577,14 @@
                 }
 
                 .p-inline-panel {
+                    top: auto;
+                    right: 12px;
+                    bottom: 88px;
+                    width: calc(100vw - 24px);
+                    max-height: calc(100vh - 120px);
+                }
+
+                .p-inline-overview {
                     top: auto;
                     right: 12px;
                     bottom: 88px;
@@ -525,6 +661,8 @@
         authenticated: false,
         username: '',
         requestedFocus,
+        overviewOpen: false,
+        overviewQuery: '',
         bindings: [],
         bindingMap: new Map(),
         files: new Map(),
@@ -617,6 +755,7 @@
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Выйти</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Все блоки</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin">Полный редактор</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
@@ -642,6 +781,22 @@
             </div>
         `;
 
+        const overview = document.createElement('aside');
+        overview.className = 'p-inline-overview';
+        overview.hidden = true;
+        overview.innerHTML = `
+            <div class="p-inline-overview__head">
+                <div>
+                    <span class="p-inline-panel__kicker">Структура страницы</span>
+                    <h2 class="p-inline-overview__title">Все редактируемые блоки</h2>
+                    <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице.</p>
+                </div>
+                <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
+            </div>
+            <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
+            <div class="p-inline-overview__body"></div>
+        `;
+
         const toast = document.createElement('div');
         toast.className = 'p-inline-toast';
         toast.hidden = true;
@@ -652,6 +807,7 @@
 
         document.body.appendChild(root);
         document.body.appendChild(panel);
+        document.body.appendChild(overview);
         document.body.appendChild(toast);
         document.body.appendChild(hover);
 
@@ -669,6 +825,9 @@
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
+        ui.overview = overview;
+        ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
+        ui.overviewBody = overview.querySelector('.p-inline-overview__body');
         ui.toast = toast;
         ui.hover = hover;
     }
@@ -712,9 +871,13 @@
         return Boolean(binding?.elements?.some((element) => element?.isConnected));
     }
 
+    function getVisibleBindings() {
+        return state.bindings.filter((binding) => bindingHasLiveElements(binding));
+    }
+
     function getBindingsForFocus(focus) {
         if (!focus) return [];
-        return state.bindings.filter((binding) => bindingHasLiveElements(binding) && matchesRequestedFocus(binding, focus));
+        return getVisibleBindings().filter((binding) => matchesRequestedFocus(binding, focus));
     }
 
     function findBindingByRequestedFocus(focus) {
@@ -795,6 +958,108 @@
         showToast(`${labels[focus] || 'Блок'}: ${nextIndex + 1} из ${matches.length}`);
     }
 
+    function getBindingOverviewLabel(binding) {
+        const indexed = parseIndexedPath(binding?.path);
+        if (indexed && binding?.collectionPath) {
+            const noun = binding.type === 'image'
+                ? 'Фото'
+                : (binding.type === 'object' ? 'Карточка' : 'Элемент');
+            return `${binding.label} · ${noun} ${indexed.index + 1}`;
+        }
+
+        return binding?.label || 'Блок';
+    }
+
+    function getBindingOverviewMeta(binding) {
+        const parts = [];
+        const kindLabel = getBindingKindLabel(binding).replace(/ на странице$/i, '');
+        if (kindLabel) parts.push(kindLabel);
+        if (binding?.fileName) parts.push(`${binding.fileName}.json`);
+        return parts.join(' · ');
+    }
+
+    function getBindingOverviewGroups(queryValue = '') {
+        const queryText = String(queryValue || '').trim().toLowerCase();
+        const groups = [];
+        const groupMap = new Map();
+
+        getVisibleBindings().forEach((binding) => {
+            const searchText = [
+                binding.sectionLabel,
+                binding.label,
+                binding.path,
+                binding.hint,
+                getBindingKindLabel(binding)
+            ].join(' ').toLowerCase();
+
+            if (queryText && !searchText.includes(queryText)) {
+                return;
+            }
+
+            const key = binding.sectionLabel || binding.fileName || 'Страница';
+            if (!groupMap.has(key)) {
+                const group = { key, title: key, items: [] };
+                groupMap.set(key, group);
+                groups.push(group);
+            }
+
+            groupMap.get(key).items.push(binding);
+        });
+
+        return groups;
+    }
+
+    function renderOverviewPanel() {
+        if (!ui.overview) return;
+
+        const shouldShow = state.enabled && state.overviewOpen;
+        ui.overview.hidden = !shouldShow;
+        if (!shouldShow) return;
+
+        if (ui.overviewSearch) {
+            ui.overviewSearch.value = state.overviewQuery;
+        }
+
+        const groups = getBindingOverviewGroups(state.overviewQuery);
+        if (!ui.overviewBody) return;
+
+        if (!groups.length) {
+            ui.overviewBody.innerHTML = '<div class="p-inline-overview__empty">Ничего не найдено. Попробуйте другое слово или очистите поиск.</div>';
+            return;
+        }
+
+        ui.overviewBody.innerHTML = groups.map((group) => `
+            <section class="p-inline-overview__section">
+                <h3 class="p-inline-overview__section-title">${escapeHtml(group.title)}</h3>
+                ${group.items.map((binding) => `
+                    <button
+                        class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}"
+                        type="button"
+                        data-inline-binding-id="${binding.id}"
+                    >
+                        <span class="p-inline-overview__item-title">${escapeHtml(getBindingOverviewLabel(binding))}</span>
+                        <span class="p-inline-overview__item-meta">${escapeHtml(getBindingOverviewMeta(binding))}</span>
+                    </button>
+                `).join('')}
+            </section>
+        `).join('');
+    }
+
+    function toggleOverview(forceState) {
+        state.overviewOpen = typeof forceState === 'boolean'
+            ? forceState
+            : !state.overviewOpen;
+
+        renderOverviewPanel();
+
+        if (state.overviewOpen && ui.overviewSearch) {
+            window.setTimeout(() => {
+                ui.overviewSearch.focus();
+                ui.overviewSearch.select?.();
+            }, 0);
+        }
+    }
+
     function getAdminTargetForBinding(binding) {
         if (!binding) {
             return { section: '', field: '' };
@@ -853,7 +1118,10 @@
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         ui.saveBtn.disabled = !canSave || !dirtyCount;
 
-        if (!state.enabled) return;
+        if (!state.enabled) {
+            renderOverviewPanel();
+            return;
+        }
 
         if (!state.apiAvailable) {
             ui.toolbarTitle.textContent = 'Редактор доступен только через admin-server';
@@ -861,6 +1129,7 @@
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
             renderToolbarJumpbar();
+            renderOverviewPanel();
             return;
         }
 
@@ -870,6 +1139,7 @@
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Полный редактор откроется в новой вкладке по кнопке справа.';
             renderToolbarJumpbar();
+            renderOverviewPanel();
             return;
         }
 
@@ -882,6 +1152,7 @@
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         renderToolbarJumpbar();
+        renderOverviewPanel();
     }
 
     async function refreshEnvironment() {
@@ -920,6 +1191,8 @@
     }
 
     function exitEditMode() {
+        state.overviewOpen = false;
+        state.overviewQuery = '';
         state.enabled = false;
         closePanel();
         document.body.classList.remove(MODE_CLASS);
@@ -1353,6 +1626,7 @@
                 ? resolveBindingDefault(binding)
                 : cloneData(storedValue);
 
+            state.overviewOpen = false;
             state.activeBindingId = binding.id;
             clearActiveMarks();
             binding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
@@ -1728,6 +2002,11 @@
             return;
         }
 
+        if (ui.overview && !ui.overview.hidden) {
+            toggleOverview(false);
+            return;
+        }
+
         exitEditMode();
     }
 
@@ -1772,6 +2051,10 @@
             window.open(getAdminHrefForBinding(binding), '_blank', 'noopener');
         });
 
+        ui.root.querySelector('[data-inline-action="overview"]').addEventListener('click', () => {
+            toggleOverview();
+        });
+
         ui.toolbar.addEventListener('click', (event) => {
             const jumpButton = event.target.closest('[data-inline-focus]');
             if (!jumpButton) return;
@@ -1785,6 +2068,19 @@
             applyActiveBinding();
         });
         ui.panel.addEventListener('click', handlePanelClick);
+        ui.overview.querySelector('.p-inline-overview__close').addEventListener('click', () => {
+            toggleOverview(false);
+        });
+        ui.overviewSearch.addEventListener('input', (event) => {
+            state.overviewQuery = event.target.value || '';
+            renderOverviewPanel();
+        });
+        ui.overviewBody.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-inline-binding-id]');
+            if (!button) return;
+            event.preventDefault();
+            openBinding(button.dataset.inlineBindingId || '');
+        });
 
         document.addEventListener('click', handleDocumentClick, true);
         document.addEventListener('pointermove', handlePointerMove, true);
