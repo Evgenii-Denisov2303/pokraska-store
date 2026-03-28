@@ -647,12 +647,37 @@
                 box-shadow: 0 12px 28px rgba(37, 99, 235, 0.14);
             }
 
+            .p-inline-overview__item--dirty {
+                border-color: rgba(16, 185, 129, 0.3);
+                background: rgba(236, 253, 245, 0.8);
+            }
+
+            .p-inline-overview__item-top {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
             .p-inline-overview__item-title {
                 font-size: 14px;
                 font-weight: 800;
                 line-height: 1.35;
                 color: #0f172a;
                 overflow-wrap: anywhere;
+            }
+
+            .p-inline-overview__item-state {
+                flex-shrink: 0;
+                display: inline-flex;
+                align-items: center;
+                min-height: 22px;
+                padding: 0 9px;
+                border-radius: 999px;
+                background: rgba(5, 150, 105, 0.12);
+                color: #047857;
+                font-size: 11px;
+                font-weight: 800;
             }
 
             .p-inline-overview__item-meta {
@@ -1153,6 +1178,10 @@
         return state.bindings.filter((binding) => bindingHasLiveElements(binding));
     }
 
+    function bindingIsDirty(binding) {
+        return Boolean(binding?.elements?.some((element) => element?.classList?.contains(DIRTY_CLASS)));
+    }
+
     function getBindingsForFocus(focus) {
         if (!focus) return [];
         return getVisibleBindings().filter((binding) => matchesRequestedFocus(binding, focus));
@@ -1190,8 +1219,10 @@
     }
 
     function getOverviewFilterDefinitions() {
+        const dirtyBindings = getVisibleBindings().filter((binding) => bindingIsDirty(binding));
         return [
             { focus: 'all', label: 'Все', bindings: getVisibleBindings() },
+            ...(dirtyBindings.length ? [{ focus: 'dirty', label: 'Правки', bindings: dirtyBindings }] : []),
             ...getToolbarJumpDefinitions().map((item) => ({
                 ...item,
                 bindings: getBindingsForFocus(item.focus)
@@ -1283,7 +1314,11 @@
         const groupMap = new Map();
 
         getVisibleBindings().forEach((binding) => {
-            if (focus && focus !== 'all' && !matchesRequestedFocus(binding, focus)) {
+            if (focus === 'dirty' && !bindingIsDirty(binding)) {
+                return;
+            }
+
+            if (focus && focus !== 'all' && focus !== 'dirty' && !matchesRequestedFocus(binding, focus)) {
                 return;
             }
 
@@ -1345,6 +1380,7 @@
         const totalGroups = groups.length;
         const filterLabels = {
             all: 'все блоки',
+            dirty: 'изменённые блоки',
             text: 'текст',
             image: 'фото',
             contacts: 'контакты',
@@ -1397,11 +1433,14 @@
                 </h3>
                 ${group.items.map((binding) => `
                     <button
-                        class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}"
+                        class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}${bindingIsDirty(binding) ? ' p-inline-overview__item--dirty' : ''}"
                         type="button"
                         data-inline-binding-id="${binding.id}"
                     >
-                        <span class="p-inline-overview__item-title">${escapeHtml(getBindingOverviewLabel(binding))}</span>
+                        <span class="p-inline-overview__item-top">
+                            <span class="p-inline-overview__item-title">${escapeHtml(getBindingOverviewLabel(binding))}</span>
+                            ${bindingIsDirty(binding) ? '<span class="p-inline-overview__item-state">Правка</span>' : ''}
+                        </span>
                         <span class="p-inline-overview__item-meta">${escapeHtml(getBindingOverviewMeta(binding))}</span>
                     </button>
                 `).join('')}
