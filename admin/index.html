@@ -565,6 +565,19 @@
                 }
             }
 
+            function buildRecentHref(item) {
+                try {
+                    const url = new URL(item.href, window.location.origin);
+                    if (item.fileName && item.path) {
+                        url.searchParams.set('resumeFile', item.fileName);
+                        url.searchParams.set('resumePath', item.path);
+                    }
+                    return `${url.pathname}${url.search}`;
+                } catch (error) {
+                    return item.href || '/?edit=1';
+                }
+            }
+
             function renderRecentLaunches() {
                 const pages = readRecentPages().filter((item) => item && item.href && item.title);
                 const first = pages[0] || null;
@@ -572,7 +585,7 @@
                 recentWrap.hidden = !pages.length;
                 recentHeroLink.hidden = !first;
                 if (first) {
-                    recentHeroLink.href = first.href;
+                    recentHeroLink.href = buildRecentHref(first);
                     recentHeroLink.textContent = `Продолжить: ${first.title}`;
                 }
 
@@ -587,7 +600,7 @@
                         : (item.sectionLabel || 'Откроется страница в режиме правки');
                     const when = formatRecentDate(item.updatedAt);
                     return `
-                        <a class="recent-link" href="${item.href}">
+                        <a class="recent-link" href="${buildRecentHref(item)}">
                             <strong>${item.title}</strong>
                             <span>${blockHint}</span>
                             ${when ? `<span class="recent-link__time">Последняя правка: ${when}</span>` : ''}

@@ -11,6 +11,8 @@
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
+    const requestedResumeFile = (query.get('resumeFile') || '').trim();
+    const requestedResumePath = (query.get('resumePath') || '').trim();
     const wantsInlineEditor = query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
         || window.location.port === '4173';
@@ -898,6 +900,8 @@
         const url = new URL(window.location.href);
         url.searchParams.set('edit', '1');
         url.searchParams.delete('focus');
+        url.searchParams.delete('resumeFile');
+        url.searchParams.delete('resumePath');
         return `${url.pathname}${url.search}`;
     }
 
@@ -1157,6 +1161,11 @@
     function findBindingByRequestedFocus(focus) {
         if (!focus) return null;
         return getBindingsForFocus(focus)[0] || null;
+    }
+
+    function findBindingByResumeTarget(fileName, path) {
+        if (!fileName || !path) return null;
+        return getVisibleBindings().find((binding) => binding.fileName === fileName && binding.path === path) || null;
     }
 
     function getBindingPrimaryFocus(binding) {
@@ -1423,10 +1432,9 @@
     }
 
     function getLauncherHref() {
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('edit', '1');
+        const currentHref = getCurrentEditHref();
         const params = new URLSearchParams();
-        params.set('return', `${currentUrl.pathname}${currentUrl.search}`);
+        params.set('return', currentHref);
         return `/admin/?${params.toString()}`;
     }
 
@@ -1551,8 +1559,11 @@
         } else if (state.authEnabled && !state.authenticated) {
             showToast('Сначала войдите в полную админку.');
         } else {
-            showToast('Режим редактирования включён');
-            await openRequestedFocusBinding();
+            const openedFromFocus = await openRequestedFocusBinding();
+            const openedFromResume = !openedFromFocus && await openRequestedResumeBinding();
+            if (!openedFromResume) {
+                showToast('Режим редактирования включён');
+            }
         }
     }
 
@@ -2013,11 +2024,11 @@
     }
 
     async function openRequestedFocusBinding() {
-        if (!state.requestedFocus) return;
+        if (!state.requestedFocus) return false;
 
         const binding = findBindingByRequestedFocus(state.requestedFocus);
         if (!binding) {
-            return;
+            return false;
         }
 
         await openBinding(binding.id);
@@ -2034,6 +2045,18 @@
         }
 
         state.requestedFocus = '';
+        return true;
+    }
+
+    async function openRequestedResumeBinding() {
+        if (!requestedResumeFile || !requestedResumePath) return false;
+
+        const binding = findBindingByResumeTarget(requestedResumeFile, requestedResumePath);
+        if (!binding) return false;
+
+        await openBinding(binding.id);
+        showToast(`Продолжили с блока: ${binding.label}`);
+        return true;
     }
 
     async function uploadImage(file, directory) {
