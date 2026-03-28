@@ -3411,11 +3411,16 @@
         return previewLinks[0] || null;
     }
 
-    function buildInlineEditHref(href) {
+    function buildInlineEditHref(href, options = {}) {
         if (!href) return '';
         const [pathPart, hashPart] = String(href).split('#');
+        const params = new URLSearchParams();
+        params.set('edit', '1');
+        if (options.focus) {
+            params.set('focus', String(options.focus));
+        }
         const separator = pathPart.includes('?') ? '&' : '?';
-        return `${pathPart}${separator}edit=1${hashPart ? `#${hashPart}` : ''}`;
+        return `${pathPart}${separator}${params.toString()}${hashPart ? `#${hashPart}` : ''}`;
     }
 
     function getPreviewLinkLabel(link) {
@@ -7085,6 +7090,30 @@
             button.addEventListener('click', () => {
                 const action = button.getAttribute('data-quick-action');
 
+                if (previewLink) {
+                    const inlineFocusMap = {
+                        image: 'image',
+                        text: 'text',
+                        contacts: 'contacts',
+                        add: 'collection'
+                    };
+                    const focus = inlineFocusMap[action || ''];
+                    if (focus) {
+                        window.open(buildInlineEditHref(previewLink.href, { focus }), '_blank', 'noopener');
+                        showAlert(
+                            action === 'image'
+                                ? 'Открыта страница для правки фото.'
+                                : action === 'text'
+                                    ? 'Открыта страница для правки текста.'
+                                    : action === 'contacts'
+                                        ? 'Открыта страница для правки контактов.'
+                                        : 'Открыта страница для работы с карточками и коллекциями.',
+                            'info'
+                        );
+                        return;
+                    }
+                }
+
                 if (action === 'image') {
                     const firstImageAction = elements.form?.querySelector('.admin-field[data-field-key="src"] .admin-field__media-actions button');
                     if (firstImageAction instanceof HTMLButtonElement) {
@@ -7608,14 +7637,24 @@
             </div>
             <div class="admin-sidebar-shortcuts__list">
                 ${actions.map((action, index) => `
-                    <button class="admin-sidebar-shortcut" type="button" data-sidebar-shortcut-index="${index}">
+                    <article class="admin-sidebar-shortcut">
                         <span class="admin-sidebar-shortcut__icon"><i class="fas ${action.icon}" aria-hidden="true"></i></span>
                         <span class="admin-sidebar-shortcut__copy">
                             <strong>${action.title}</strong>
                             <span>${contentConfigs[action.sectionKey]?.label || 'Раздел сайта'}</span>
                             <span class="admin-sidebar-shortcut__meta">${action.previewHref ? 'Есть визуальная правка' : 'Через админку'}</span>
                         </span>
-                    </button>
+                        <span class="admin-sidebar-shortcut__actions">
+                            ${action.previewHref ? `
+                                <a class="admin-sidebar-shortcut__link admin-sidebar-shortcut__link--primary" href="${buildInlineEditHref(action.previewHref)}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fas fa-pen-to-square" aria-hidden="true"></i> На сайте
+                                </a>
+                            ` : ''}
+                            <button class="admin-sidebar-shortcut__link" type="button" data-sidebar-shortcut-index="${index}">
+                                <i class="fas fa-sliders" aria-hidden="true"></i> Через поля
+                            </button>
+                        </span>
+                    </article>
                 `).join('')}
             </div>
         `;

@@ -7,6 +7,7 @@
     const MODE_CLASS = 'p-inline-mode';
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
+    const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
     const wantsInlineEditor = query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
         || window.location.port === '4173';
@@ -456,6 +457,7 @@
         authEnabled: false,
         authenticated: false,
         username: '',
+        requestedFocus,
         bindings: [],
         bindingMap: new Map(),
         files: new Map(),
@@ -599,6 +601,36 @@
         return 'Текст на странице';
     }
 
+    function matchesRequestedFocus(binding, focus) {
+        if (!binding || !focus) return false;
+
+        const label = `${binding.label || ''} ${binding.path || ''} ${binding.hint || ''}`.toLowerCase();
+        const hasCollection = Boolean(binding.collectionPath);
+
+        if (focus === 'image') {
+            return binding.type === 'image';
+        }
+
+        if (focus === 'text') {
+            return binding.type === 'text' || binding.type === 'html' || binding.type === 'list';
+        }
+
+        if (focus === 'contacts') {
+            return /phone|address|email|contact|hours|manager|connect|quickactions|quick_actions|actions/.test(label);
+        }
+
+        if (focus === 'collection') {
+            return hasCollection || binding.type === 'object' || binding.type === 'list';
+        }
+
+        return false;
+    }
+
+    function findBindingByRequestedFocus(focus) {
+        if (!focus) return null;
+        return state.bindings.find((binding) => matchesRequestedFocus(binding, focus)) || null;
+    }
+
     function renderToolbar() {
         if (!ui.launcher) return;
 
@@ -692,6 +724,7 @@
             showToast('Сначала войдите в полную админку.');
         } else {
             showToast('Режим редактирования включён');
+            await openRequestedFocusBinding();
         }
     }
 
@@ -1111,6 +1144,30 @@
         } catch (error) {
             showToast(error.message || 'Не удалось открыть редактор');
         }
+    }
+
+    async function openRequestedFocusBinding() {
+        if (!state.requestedFocus) return;
+
+        const binding = findBindingByRequestedFocus(state.requestedFocus);
+        if (!binding) {
+            return;
+        }
+
+        await openBinding(binding.id);
+
+        const focusMessages = {
+            image: 'Открыта первая доступная правка фото.',
+            text: 'Открыта первая доступная правка текста.',
+            contacts: 'Открыт первый доступный контактный блок.',
+            collection: 'Открыт первый доступный составной блок.'
+        };
+
+        if (focusMessages[state.requestedFocus]) {
+            showToast(focusMessages[state.requestedFocus]);
+        }
+
+        state.requestedFocus = '';
     }
 
     async function uploadImage(file, directory) {

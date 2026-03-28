@@ -191,7 +191,6 @@ body.admin-page.admin-customer-layout .admin-help {
     grid-template-columns: auto minmax(0, 1fr);
     gap: 12px;
     text-align: left;
-    cursor: pointer;
     transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
@@ -249,6 +248,46 @@ body.admin-page.admin-customer-layout .admin-help {
     font-size: 10px !important;
     font-weight: 700;
     letter-spacing: 0.02em;
+}
+
+.admin-sidebar-shortcut__actions {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-sidebar-shortcut__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.08);
+    color: #f4f7fb;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-sidebar-shortcut__link--primary {
+    border-color: rgba(143, 183, 255, 0.18);
+    background: rgba(143, 183, 255, 0.18);
+    color: #e6efff;
+}
+
+.admin-sidebar-shortcut__link:hover {
+    border-color: rgba(124, 165, 255, 0.24);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.admin-sidebar-shortcut__link--primary:hover {
+    border-color: rgba(143, 183, 255, 0.28);
+    background: rgba(143, 183, 255, 0.24);
 }
 
 .admin-nav {
