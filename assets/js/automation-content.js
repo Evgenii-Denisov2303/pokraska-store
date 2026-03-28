@@ -33,6 +33,85 @@
         anchor.innerHTML = `<i class="fas fa-arrow-left" aria-hidden="true"></i> ${escapeHtml(label || '')}`;
     }
 
+    function extractDirectoryFromSrc(src, fallback = 'assets/images/catalog/automation') {
+        const cleanSrc = String(src || '').split('?')[0];
+        const withoutDots = cleanSrc.replace(/^(\.\.\/)+/, '');
+        const lastSlashIndex = withoutDots.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? withoutDots.slice(0, lastSlashIndex) : fallback;
+    }
+
+    function extractLinkedImageValue(image, link) {
+        if (!image) return { src: '', alt: '', title: '', width: null, height: null };
+        return {
+            src: link?.getAttribute('href') || image.getAttribute('src') || '',
+            alt: image.getAttribute('alt') || '',
+            title: link?.getAttribute('title') || image.getAttribute('alt') || '',
+            width: Number(image.getAttribute('width')) || null,
+            height: Number(image.getAttribute('height')) || null
+        };
+    }
+
+    function applyLinkedImageValue(image, link, value) {
+        if (!image || !value) return;
+        if (link) {
+            link.href = value.src || '';
+            link.title = value.title || value.alt || '';
+        }
+        image.src = value.src || '';
+        image.alt = value.alt || '';
+        if (value.width) image.setAttribute('width', Number(value.width));
+        if (value.height) image.setAttribute('height', Number(value.height));
+    }
+
+    function extractAutomationGalleryItem(button) {
+        if (!button) return { src: '', alt: '', title: '', width: null, height: null };
+        const image = button.querySelector('img');
+        return {
+            src: button.dataset.thumbSrc || image?.getAttribute('src') || '',
+            alt: button.dataset.thumbAlt || image?.getAttribute('alt') || '',
+            title: button.dataset.thumbAlt || image?.getAttribute('alt') || '',
+            width: Number(image?.getAttribute('width')) || null,
+            height: Number(image?.getAttribute('height')) || null
+        };
+    }
+
+    function applyAutomationGalleryItem(button, item) {
+        if (!button || !item) return;
+        const image = button.querySelector('img');
+        button.dataset.thumbSrc = item.src || '';
+        button.dataset.thumbAlt = item.alt || '';
+        if (image) {
+            image.src = item.src || '';
+            image.alt = item.alt || '';
+            if (item.width) image.setAttribute('width', Number(item.width));
+            if (item.height) image.setAttribute('height', Number(item.height));
+        }
+    }
+
+    function syncAutomationGallery(gallery, items) {
+        if (!gallery || !Array.isArray(items) || !items.length) return;
+
+        const mainLink = gallery.querySelector('[data-main-link]');
+        const mainImage = gallery.querySelector('[data-main-image]');
+        const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
+        const thumbs = Array.from(gallery.querySelectorAll('.automation-product-thumb'));
+
+        thumbs.forEach((thumb, index) => {
+            const item = items[index];
+            thumb.hidden = !item;
+            thumb.classList.toggle('is-active', index === 0 && Boolean(item));
+            if (item) {
+                applyAutomationGalleryItem(thumb, item);
+            }
+        });
+
+        applyLinkedImageValue(mainImage, mainLink, items[0]);
+
+        if (thumbsWrap) {
+            thumbsWrap.style.display = items.length > 1 ? '' : 'none';
+        }
+    }
+
     function getPageKey() {
         return (window.location.pathname.split('/').pop() || '').replace('.html', '');
     }
@@ -77,6 +156,11 @@
                 action.innerHTML = `<i class="fas fa-external-link-alt" aria-hidden="true"></i> ${escapeHtml(product.cta?.label || '')}`;
                 action.setAttribute('href', product.cta?.href || '#');
             }
+
+            const gallery = card.querySelector('.automation-product-gallery');
+            if (gallery && Array.isArray(product.gallery) && product.gallery.length) {
+                syncAutomationGallery(gallery, product.gallery);
+            }
         });
 
         const guide = document.querySelector('.automation-guide');
@@ -95,6 +179,17 @@
             if (subheading) subheading.textContent = content.guide?.subheading || '';
             if (text) {
                 text.innerHTML = (content.guide?.paragraphs || []).map((item) => `<p>${escapeHtml(item)}</p>`).join('');
+            }
+
+            const figures = guide.querySelectorAll('.automation-guide__figure');
+            if (Array.isArray(content.guide?.gallery) && content.guide.gallery.length) {
+                figures.forEach((figure, index) => {
+                    const item = content.guide.gallery[index];
+                    if (!item) return;
+                    const link = figure.querySelector('a');
+                    const image = figure.querySelector('img');
+                    applyLinkedImageValue(image, link, item);
+                });
             }
         }
 
@@ -131,6 +226,10 @@
         if (meta) meta.textContent = content.meta || '';
         if (title) title.textContent = content.title || '';
         if (description) description.textContent = content.description || '';
+        const gallery = document.querySelector('.automation-product-gallery');
+        if (gallery && Array.isArray(content.gallery) && content.gallery.length) {
+            syncAutomationGallery(gallery, content.gallery);
+        }
 
         (content.sections || []).forEach((sectionContent, index) => {
             const section = sections[index];
@@ -168,6 +267,10 @@
         if (description) description.textContent = content.description || '';
         if (specs) {
             specs.innerHTML = (content.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+        }
+        const gallery = document.querySelector('.automation-product-gallery');
+        if (gallery && Array.isArray(content.gallery) && content.gallery.length) {
+            syncAutomationGallery(gallery, content.gallery);
         }
         if (cta) {
             cta.innerHTML = [
@@ -210,6 +313,7 @@
                 const description = card.querySelector('.automation-product-description');
                 const specs = card.querySelector('.automation-product-specs');
                 const action = card.querySelector('.automation-product-cta .btn');
+                const gallery = card.querySelector('.automation-product-gallery');
 
                 if (meta) bindings.push({ path: `swingLanding.products.${index}.meta`, type: 'text', label: `Карточка автоматики ${index + 1}: артикул`, element: meta });
                 if (title) bindings.push({ path: `swingLanding.products.${index}.title`, type: 'text', label: `Карточка автоматики ${index + 1}: заголовок`, element: title });
@@ -228,6 +332,26 @@
                         render(value, binding) {
                             binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-primary'));
                         }
+                    });
+                }
+
+                if (gallery) {
+                    gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                        bindings.push({
+                            path: `swingLanding.products.${index}.gallery.${thumbIndex}`,
+                            type: 'image',
+                            label: `Карточка автоматики ${index + 1}: фото ${thumbIndex + 1}`,
+                            element: thumb,
+                            defaultValue: () => extractAutomationGalleryItem(thumb),
+                            directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
+                            render(value, binding) {
+                                binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
+                                const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))
+                                    .filter((button) => !button.hidden)
+                                    .map((button) => extractAutomationGalleryItem(button));
+                                syncAutomationGallery(gallery, items);
+                            }
+                        });
                     });
                 }
             });
@@ -257,6 +381,26 @@
                         }
                     });
                 }
+
+                guide.querySelectorAll('.automation-guide__figure').forEach((figure, figureIndex) => {
+                    const link = figure.querySelector('a');
+                    const image = figure.querySelector('img');
+                    if (!link || !image) return;
+                    bindings.push({
+                        path: `swingLanding.guide.gallery.${figureIndex}`,
+                        type: 'image',
+                        label: `Блок подбора автоматики: фото ${figureIndex + 1}`,
+                        element: image,
+                        defaultValue: () => extractLinkedImageValue(image, link),
+                        directory: extractDirectoryFromSrc(link.getAttribute('href') || image.getAttribute('src')),
+                        render(value, binding) {
+                            binding.elements.forEach((element) => {
+                                const currentLink = element.closest('a');
+                                applyLinkedImageValue(element, currentLink, value);
+                            });
+                        }
+                    });
+                });
             }
 
             if (cta) {
@@ -303,6 +447,7 @@
             const description = document.querySelector('.automation-product-description');
             const sections = document.querySelectorAll('.automation-product-section');
             const ctaButtons = document.querySelectorAll('.automation-product-cta a');
+            const gallery = document.querySelector('.automation-product-gallery');
 
             if (backLink) {
                 bindings.push({
@@ -324,6 +469,27 @@
                 if (sectionTitle) bindings.push({ path: `slidingComponentsPage.sections.${index}.title`, type: 'text', label: `Раздел комплектующих ${index + 1}: заголовок`, element: sectionTitle });
                 if (list) bindings.push({ path: `slidingComponentsPage.sections.${index}.items`, type: 'list', label: `Раздел комплектующих ${index + 1}: список`, element: list });
             });
+
+            if (gallery) {
+                gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                    bindings.push({
+                        path: `slidingComponentsPage.gallery.${thumbIndex}`,
+                        type: 'image',
+                        label: `Комплектующие: фото ${thumbIndex + 1}`,
+                        element: thumb,
+                        defaultValue: () => extractAutomationGalleryItem(thumb),
+                        directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src'), 'assets/images/catalog'),
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
+                            const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))
+                                .filter((button) => !button.hidden)
+                                .map((button) => extractAutomationGalleryItem(button));
+                            syncAutomationGallery(gallery, items);
+                        }
+                    });
+                });
+            }
+
             if (ctaButtons[0]) {
                 bindings.push({
                     path: 'sharedActions.primary',
@@ -370,6 +536,7 @@
         const description = document.querySelector('.automation-product-description');
         const specs = document.querySelector('.automation-product-specs');
         const ctaButtons = document.querySelectorAll('.automation-product-cta a');
+        const gallery = document.querySelector('.automation-product-gallery');
         const productIndex = (content.productPages || []).findIndex((item) => item.pageKey === pageKey);
         if (productIndex === -1) return;
 
@@ -388,6 +555,25 @@
         if (title) bindings.push({ path: `productPages.${productIndex}.title`, type: 'text', label: 'Заголовок карточки автоматики', element: title });
         if (description) bindings.push({ path: `productPages.${productIndex}.description`, type: 'textarea', label: 'Описание карточки автоматики', element: description });
         if (specs) bindings.push({ path: `productPages.${productIndex}.specs`, type: 'list', label: 'Характеристики карточки автоматики', element: specs });
+        if (gallery) {
+            gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                bindings.push({
+                    path: `productPages.${productIndex}.gallery.${thumbIndex}`,
+                    type: 'image',
+                    label: `Карточка автоматики: фото ${thumbIndex + 1}`,
+                    element: thumb,
+                    defaultValue: () => extractAutomationGalleryItem(thumb),
+                    directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
+                        const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))
+                            .filter((button) => !button.hidden)
+                            .map((button) => extractAutomationGalleryItem(button));
+                        syncAutomationGallery(gallery, items);
+                    }
+                });
+            });
+        }
         if (ctaButtons[0]) {
             bindings.push({
                 path: 'sharedActions.primary',

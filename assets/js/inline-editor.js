@@ -683,11 +683,26 @@
         });
     }
 
+    function resolveBindingDefault(binding) {
+        if (binding.defaultValue === undefined) {
+            return undefined;
+        }
+
+        const value = typeof binding.defaultValue === 'function'
+            ? binding.defaultValue(binding)
+            : binding.defaultValue;
+
+        return cloneData(value);
+    }
+
     function renderBinding(binding) {
         const fileState = state.files.get(binding.fileName);
         if (!fileState) return;
 
-        const nextValue = cloneData(getByPath(fileState.data, binding.path));
+        const storedValue = getByPath(fileState.data, binding.path);
+        const nextValue = storedValue === undefined
+            ? resolveBindingDefault(binding)
+            : cloneData(storedValue);
 
         if (typeof binding.render === 'function') {
             binding.render(nextValue, binding);
@@ -727,6 +742,7 @@
             fields: config.fields || [],
             elements,
             render: config.render || null,
+            defaultValue: config.defaultValue,
             directory: config.directory || 'assets/images/catalog'
         };
 
@@ -863,7 +879,10 @@
             }
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
-            const value = cloneData(getByPath(fileState.data, binding.path));
+            const storedValue = getByPath(fileState.data, binding.path);
+            const value = storedValue === undefined
+                ? resolveBindingDefault(binding)
+                : cloneData(storedValue);
 
             state.activeBindingId = binding.id;
             clearActiveMarks();
@@ -906,7 +925,10 @@
 
     async function collectPanelValue(binding) {
         const currentFile = state.files.get(binding.fileName);
-        const currentValue = cloneData(getByPath(currentFile.data, binding.path));
+        const storedValue = getByPath(currentFile.data, binding.path);
+        const currentValue = storedValue === undefined
+            ? resolveBindingDefault(binding)
+            : cloneData(storedValue);
         const nextValue = binding.fields.length || binding.type === 'image' ? { ...(currentValue || {}) } : currentValue;
         const fields = getBindingEditorFields(binding);
 

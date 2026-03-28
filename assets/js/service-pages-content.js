@@ -32,6 +32,32 @@
         element.innerHTML = `<i class="${escapeHtml(iconClass || '')}"></i> ${escapeHtml(text || '')}`;
     }
 
+    function extractDirectoryFromSrc(src, fallback = 'assets/images/works') {
+        const cleanSrc = String(src || '').split('?')[0];
+        const withoutDots = cleanSrc.replace(/^(\.\.\/)+/, '');
+        const lastSlashIndex = withoutDots.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? withoutDots.slice(0, lastSlashIndex) : fallback;
+    }
+
+    function extractImageValue(image, link) {
+        if (!image) return { src: '', alt: '', title: '', width: null, height: null };
+        return {
+            src: image.getAttribute('src') || '',
+            alt: image.getAttribute('alt') || '',
+            title: link?.getAttribute('title') || image.getAttribute('alt') || '',
+            width: Number(image.getAttribute('width')) || null,
+            height: Number(image.getAttribute('height')) || null
+        };
+    }
+
+    function applyImageValue(image, value) {
+        if (!image || !value) return;
+        image.src = value.src || '';
+        image.alt = value.alt || '';
+        if (value.width) image.setAttribute('width', Number(value.width));
+        if (value.height) image.setAttribute('height', Number(value.height));
+    }
+
     function getPageKey() {
         const fileName = window.location.pathname.split('/').pop() || '';
         if (fileName === 'powder-coating.html') return 'powderCoating';
@@ -77,6 +103,15 @@
         if (title) title.textContent = pageContent.beforeAfter.title || '';
         if (subtitle) subtitle.textContent = pageContent.beforeAfter.subtitle || '';
         if (note) note.textContent = pageContent.beforeAfter.note || '';
+
+        const afterImage = section.querySelector('.before-after__image--after');
+        const beforeImage = section.querySelector('.before-after__image--before');
+        if (afterImage && pageContent.beforeAfter.images?.after) {
+            applyImageValue(afterImage, pageContent.beforeAfter.images.after);
+        }
+        if (beforeImage && pageContent.beforeAfter.images?.before) {
+            applyImageValue(beforeImage, pageContent.beforeAfter.images.before);
+        }
     }
 
     function applySharedCardCta(card, sharedCta) {
@@ -157,6 +192,24 @@
                         paletteAction.outerHTML = renderButton(sectionContent.paletteCard.action, 'btn btn-secondary');
                     }
                 }
+
+                const paletteImageLink = paletteCard.querySelector('.palette-main a, .palette-card__media a');
+                const paletteImage = paletteImageLink?.querySelector('img');
+                if (paletteImage && sectionContent.paletteCard.image) {
+                    paletteImageLink.href = sectionContent.paletteCard.image.src || '';
+                    paletteImageLink.title = sectionContent.paletteCard.image.title || sectionContent.paletteCard.image.alt || '';
+                    applyImageValue(paletteImage, sectionContent.paletteCard.image);
+                }
+            }
+
+            const sectionImages = Array.from(card.querySelectorAll('.service-image img'));
+            if (sectionImages.length && Array.isArray(sectionContent.images) && sectionContent.images.length) {
+                sectionImages.forEach((image, imageIndex) => {
+                    const nextImage = sectionContent.images[imageIndex];
+                    if (nextImage) {
+                        applyImageValue(image, nextImage);
+                    }
+                });
             }
 
             applySharedCardCta(card, sharedCta);
@@ -254,9 +307,37 @@
             const beforeAfterTitle = document.querySelector('.before-after-section .section-title');
             const beforeAfterSubtitle = document.querySelector('.before-after-section .section-subtitle');
             const beforeAfterNote = document.querySelector('.before-after__note');
+            const afterImage = document.querySelector('.before-after__image--after');
+            const beforeImage = document.querySelector('.before-after__image--before');
             if (beforeAfterTitle) bindings.push({ path: `${pageKey}.beforeAfter.title`, type: 'text', label: 'Заголовок блока до/после', element: beforeAfterTitle });
             if (beforeAfterSubtitle) bindings.push({ path: `${pageKey}.beforeAfter.subtitle`, type: 'textarea', label: 'Подзаголовок блока до/после', element: beforeAfterSubtitle });
             if (beforeAfterNote) bindings.push({ path: `${pageKey}.beforeAfter.note`, type: 'textarea', label: 'Подпись под блоком до/после', element: beforeAfterNote });
+            if (afterImage) {
+                bindings.push({
+                    path: `${pageKey}.beforeAfter.images.after`,
+                    type: 'image',
+                    label: 'Изображение после пескоструйной обработки',
+                    element: afterImage,
+                    defaultValue: () => extractImageValue(afterImage),
+                    directory: extractDirectoryFromSrc(afterImage.getAttribute('src')),
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyImageValue(element, value));
+                    }
+                });
+            }
+            if (beforeImage) {
+                bindings.push({
+                    path: `${pageKey}.beforeAfter.images.before`,
+                    type: 'image',
+                    label: 'Изображение до пескоструйной обработки',
+                    element: beforeImage,
+                    defaultValue: () => extractImageValue(beforeImage),
+                    directory: extractDirectoryFromSrc(beforeImage.getAttribute('src')),
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyImageValue(element, value));
+                    }
+                });
+            }
         }
 
         (pageContent.sections || []).forEach((sectionContent, index) => {
@@ -272,6 +353,9 @@
             const paletteText = card.querySelector('.palette-card__info p');
             const paletteList = card.querySelector('.palette-card__info ul');
             const paletteAction = card.querySelector('.palette-card__info .btn');
+            const sectionImages = Array.from(card.querySelectorAll('.service-image img'));
+            const paletteImageLink = card.querySelector('.palette-main a, .palette-card__media a');
+            const paletteImage = paletteImageLink?.querySelector('img');
 
             if (title) bindings.push({ path: `${pageKey}.sections.${index}.title`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: заголовок`, element: title });
             if (badge) bindings.push({ path: `${pageKey}.sections.${index}.badge`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: бейдж`, element: badge });
@@ -337,6 +421,41 @@
                     ],
                     render(value, binding) {
                         binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-secondary'));
+                    }
+                });
+            }
+
+            sectionImages.forEach((image, imageIndex) => {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.images.${imageIndex}`,
+                    type: 'image',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: изображение ${imageIndex + 1}`,
+                    element: image,
+                    defaultValue: () => extractImageValue(image),
+                    directory: extractDirectoryFromSrc(image.getAttribute('src')),
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyImageValue(element, value));
+                    }
+                });
+            });
+
+            if (paletteImage && paletteImageLink) {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.paletteCard.image`,
+                    type: 'image',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: изображение палитры`,
+                    element: paletteImage,
+                    defaultValue: () => extractImageValue(paletteImage, paletteImageLink),
+                    directory: extractDirectoryFromSrc(paletteImage.getAttribute('src')),
+                    render(value, binding) {
+                        binding.elements.forEach((element) => {
+                            applyImageValue(element, value);
+                            const link = element.closest('a');
+                            if (link) {
+                                link.href = value?.src || '';
+                                link.title = value?.title || value?.alt || '';
+                            }
+                        });
                     }
                 });
             }

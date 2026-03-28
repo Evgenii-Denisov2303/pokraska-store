@@ -50,6 +50,100 @@
             .join('');
     }
 
+    function extractDirectoryFromSrc(src, fallback = 'assets/images/catalog') {
+        const cleanSrc = String(src || '').split('?')[0];
+        const withoutDots = cleanSrc.replace(/^(\.\.\/)+/, '');
+        const lastSlashIndex = withoutDots.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? withoutDots.slice(0, lastSlashIndex) : fallback;
+    }
+
+    function extractImageValue(image, link) {
+        if (!image) return { src: '', alt: '', title: '', width: null, height: null };
+        return {
+            src: image.getAttribute('src') || '',
+            alt: image.getAttribute('alt') || '',
+            title: link?.getAttribute('title') || image.getAttribute('alt') || '',
+            width: Number(image.getAttribute('width')) || null,
+            height: Number(image.getAttribute('height')) || null
+        };
+    }
+
+    function extractCatalogGalleryItem(button) {
+        if (!button) return { src: '', alt: '', title: '', width: null, height: null };
+        const image = button.querySelector('img');
+        return {
+            src: button.dataset.gallerySrc || image?.getAttribute('src') || '',
+            alt: button.dataset.galleryAlt || image?.getAttribute('alt') || '',
+            title: button.dataset.galleryTitle || image?.getAttribute('alt') || '',
+            width: Number(image?.getAttribute('width')) || null,
+            height: Number(image?.getAttribute('height')) || null
+        };
+    }
+
+    function applyCatalogGalleryItem(button, item) {
+        if (!button || !item) return;
+        const image = button.querySelector('img');
+        button.dataset.gallerySrc = item.src || '';
+        button.dataset.galleryAlt = item.alt || '';
+        button.dataset.galleryTitle = item.title || item.alt || '';
+        if (image) {
+            image.src = item.src || '';
+            image.alt = item.alt || '';
+            if (item.width) image.setAttribute('width', Number(item.width));
+            if (item.height) image.setAttribute('height', Number(item.height));
+        }
+    }
+
+    function updateCatalogMainMedia(gallery, item) {
+        if (!gallery || !item) return;
+        const mainLink = gallery.querySelector('[data-gallery-main-link]');
+        const mainImage = gallery.querySelector('[data-gallery-main-image]');
+        if (mainLink) {
+            mainLink.href = item.src || '';
+            mainLink.title = item.title || item.alt || '';
+        }
+        if (mainImage) {
+            mainImage.src = item.src || '';
+            mainImage.alt = item.alt || '';
+            if (item.width) mainImage.setAttribute('width', Number(item.width));
+            if (item.height) mainImage.setAttribute('height', Number(item.height));
+        }
+    }
+
+    function syncCatalogGalleryState(gallery, items) {
+        if (!gallery || !Array.isArray(items) || !items.length) return;
+
+        const thumbs = Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb'));
+        const hiddenLinks = Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]'));
+        const prevBtn = gallery.querySelector('.catalog-panel__media-nav--prev');
+        const nextBtn = gallery.querySelector('.catalog-panel__media-nav--next');
+        const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
+
+        thumbs.forEach((thumb, index) => {
+            const item = items[index];
+            thumb.hidden = !item;
+            thumb.classList.toggle('is-active', index === 0 && Boolean(item));
+            if (item) {
+                applyCatalogGalleryItem(thumb, item);
+            }
+        });
+
+        hiddenLinks.forEach((link, index) => {
+            const item = items[index];
+            link.hidden = !item;
+            if (item) {
+                link.href = item.src || '';
+                link.title = item.title || item.alt || '';
+            }
+        });
+
+        updateCatalogMainMedia(gallery, items[0]);
+
+        if (prevBtn) prevBtn.style.display = items.length > 1 ? '' : 'none';
+        if (nextBtn) nextBtn.style.display = items.length > 1 ? '' : 'none';
+        if (thumbsWrap) thumbsWrap.style.display = items.length > 1 ? '' : 'none';
+    }
+
     function renderContactNode(anchor, contact) {
         if (!anchor) return;
         const icon = anchor.querySelector('i');
@@ -147,6 +241,17 @@
         if (note && palette.note) {
             note.innerHTML = `<em>${escapeHtml(palette.note)}</em>`;
         }
+
+        const paletteImageLink = panelElement.querySelector('.catalog-palette-card__gallery .catalog-palette-card__item');
+        const paletteImage = paletteImageLink?.querySelector('img');
+        if (palette.image && paletteImageLink && paletteImage) {
+            paletteImageLink.href = palette.image.src || '';
+            paletteImageLink.title = palette.image.title || palette.image.alt || '';
+            paletteImage.src = palette.image.src || '';
+            paletteImage.alt = palette.image.alt || '';
+            if (palette.image.width) paletteImage.setAttribute('width', Number(palette.image.width));
+            if (palette.image.height) paletteImage.setAttribute('height', Number(palette.image.height));
+        }
     }
 
     function applySpecGroups(panelElement, panelContent) {
@@ -220,6 +325,17 @@
                 cta.href = product.href;
             }
         }
+
+        const zoom = cardElement.querySelector('.automation-card__zoom');
+        const image = zoom?.querySelector('img');
+        if (zoom && image && product.image) {
+            zoom.href = product.image.src || '';
+            zoom.title = product.image.title || product.image.alt || '';
+            image.src = product.image.src || '';
+            image.alt = product.image.alt || '';
+            if (product.image.width) image.setAttribute('width', Number(product.image.width));
+            if (product.image.height) image.setAttribute('height', Number(product.image.height));
+        }
     }
 
     function applyProducts(panelElement, panelContent) {
@@ -268,6 +384,11 @@
         applySectionHeading(panelElement, panelContent);
         applyProducts(panelElement, panelContent);
         applyPanelCta(panelElement, panelContent);
+
+        const gallery = panelElement.querySelector('[data-catalog-gallery]');
+        if (gallery && Array.isArray(panelContent.gallery) && panelContent.gallery.length) {
+            syncCatalogGalleryState(gallery, panelContent.gallery);
+        }
     }
 
     function registerInlineBindings(content, panelContent) {
@@ -409,6 +530,39 @@
                 });
             }
 
+            const gallery = panelElement.querySelector('[data-catalog-gallery]');
+            if (gallery) {
+                const mainImage = gallery.querySelector('[data-gallery-main-image]');
+                Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb')).forEach((thumb, index) => {
+                    const thumbImage = thumb.querySelector('img');
+                    const hiddenLink = gallery.querySelector(`[data-gallery-lightbox-link="${index}"]`);
+                    if (!thumbImage) return;
+
+                    panelBindings.push({
+                        path: `${panelKey}.gallery.${index}`,
+                        type: 'image',
+                        label: `${panel.title || panelKey}: фото ${index + 1}`,
+                        element: index === 0 && mainImage ? [mainImage, thumbImage] : thumbImage,
+                        defaultValue: () => extractCatalogGalleryItem(thumb),
+                        directory: extractDirectoryFromSrc(thumb.dataset.gallerySrc || thumbImage.getAttribute('src') || ''),
+                        fields: [
+                            { key: 'alt', label: 'Alt', type: 'text' },
+                            { key: 'title', label: 'Подпись/название', type: 'text' }
+                        ],
+                        render(value) {
+                            applyCatalogGalleryItem(thumb, value || {});
+                            if (hiddenLink) {
+                                hiddenLink.href = value?.src || '';
+                                hiddenLink.title = value?.title || value?.alt || '';
+                            }
+                            if (thumb.classList.contains('is-active') || index === 0) {
+                                updateCatalogMainMedia(gallery, value || {});
+                            }
+                        }
+                    });
+                });
+            }
+
             panelElement.querySelectorAll('.catalog-info-grid .catalog-info-card').forEach((card, cardIndex) => {
                 const cardTitle = card.querySelector('h3');
                 const items = card.querySelector('ul');
@@ -436,6 +590,8 @@
                 const paletteText = paletteInfo.querySelector('p');
                 const paletteItems = paletteInfo.querySelector('ul');
                 const paletteAction = paletteInfo.querySelector('.btn');
+                const paletteImageLink = panelElement.querySelector('.catalog-palette-card__gallery .catalog-palette-card__item');
+                const paletteImage = paletteImageLink?.querySelector('img');
                 const paletteNote = panelElement.querySelector('.catalog-panel__palette-note');
                 if (paletteTitle) panelBindings.push({ path: `${panelKey}.palette.title`, type: 'text', label: `${panel.title || panelKey}: палитра — заголовок`, element: paletteTitle });
                 if (paletteText) panelBindings.push({ path: `${panelKey}.palette.text`, type: 'textarea', label: `${panel.title || panelKey}: палитра — текст`, element: paletteText });
@@ -452,6 +608,28 @@
                         ],
                         render(value, binding) {
                             binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-primary'));
+                        }
+                    });
+                }
+                if (paletteImage && paletteImageLink) {
+                    panelBindings.push({
+                        path: `${panelKey}.palette.image`,
+                        type: 'image',
+                        label: `${panel.title || panelKey}: палитра — картинка`,
+                        element: paletteImage,
+                        defaultValue: () => extractImageValue(paletteImage, paletteImageLink),
+                        directory: extractDirectoryFromSrc(paletteImage.getAttribute('src') || ''),
+                        fields: [
+                            { key: 'alt', label: 'Alt', type: 'text' },
+                            { key: 'title', label: 'Подпись/название', type: 'text' }
+                        ],
+                        render(value) {
+                            paletteImageLink.href = value?.src || '';
+                            paletteImageLink.title = value?.title || value?.alt || '';
+                            paletteImage.src = value?.src || '';
+                            paletteImage.alt = value?.alt || '';
+                            if (value?.width) paletteImage.setAttribute('width', Number(value.width));
+                            if (value?.height) paletteImage.setAttribute('height', Number(value.height));
                         }
                     });
                 }
@@ -493,11 +671,35 @@
                 const cardTitle = card.querySelector('.automation-card__title');
                 const description = card.querySelector('.automation-card__description');
                 const specs = card.querySelector('.automation-card__specs');
+                const mediaLink = card.querySelector('.automation-card__zoom');
+                const mediaImage = mediaLink?.querySelector('img');
                 const action = card.querySelector('.automation-card__cta');
                 if (meta) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.meta`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — артикул`, element: meta });
                 if (cardTitle) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — заголовок`, element: cardTitle });
                 if (description) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.description`, type: 'textarea', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — описание`, element: description });
                 if (specs) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.specs`, type: 'list', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — характеристики`, element: specs });
+                if (mediaImage && mediaLink) {
+                    panelBindings.push({
+                        path: `${panelKey}.products.${cardIndex}.image`,
+                        type: 'image',
+                        label: `${panel.title || panelKey}: товар ${cardIndex + 1} — фото`,
+                        element: mediaImage,
+                        defaultValue: () => extractImageValue(mediaImage, mediaLink),
+                        directory: extractDirectoryFromSrc(mediaImage.getAttribute('src') || ''),
+                        fields: [
+                            { key: 'alt', label: 'Alt', type: 'text' },
+                            { key: 'title', label: 'Подпись/название', type: 'text' }
+                        ],
+                        render(value) {
+                            mediaLink.href = value?.src || '';
+                            mediaLink.title = value?.title || value?.alt || '';
+                            mediaImage.src = value?.src || '';
+                            mediaImage.alt = value?.alt || '';
+                            if (value?.width) mediaImage.setAttribute('width', Number(value.width));
+                            if (value?.height) mediaImage.setAttribute('height', Number(value.height));
+                        }
+                    });
+                }
                 if (action) {
                     panelBindings.push({
                         path: `${panelKey}.products.${cardIndex}`,
