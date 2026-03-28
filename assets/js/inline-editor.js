@@ -254,6 +254,12 @@
                 color: #fff;
             }
 
+            .p-inline-toolbar__btn--soft {
+                background: rgba(255, 255, 255, 0.12);
+                color: #e2e8f0;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+            }
+
             .p-inline-toolbar__btn:disabled,
             .p-inline-panel__btn:disabled {
                 opacity: 0.55;
@@ -691,15 +697,12 @@
             .p-inline-overview__item {
                 width: 100%;
                 display: grid;
-                gap: 5px;
+                gap: 10px;
                 padding: 13px 14px;
                 border: 1px solid rgba(148, 163, 184, 0.2);
                 border-radius: 16px;
                 background: #fff;
                 color: #0f172a;
-                text-align: left;
-                font: inherit;
-                cursor: pointer;
                 overflow: hidden;
                 transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
             }
@@ -728,12 +731,34 @@
                 gap: 10px;
             }
 
+            .p-inline-overview__item-main {
+                flex: 1 1 auto;
+                display: grid;
+                gap: 5px;
+                padding: 0;
+                border: 0;
+                background: transparent;
+                color: inherit;
+                text-align: left;
+                font: inherit;
+                cursor: pointer;
+            }
+
             .p-inline-overview__item-title {
                 font-size: 14px;
                 font-weight: 800;
                 line-height: 1.35;
                 color: #0f172a;
                 overflow-wrap: anywhere;
+            }
+
+            .p-inline-overview__item-actions {
+                flex-shrink: 0;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
             }
 
             .p-inline-overview__item-state {
@@ -747,6 +772,28 @@
                 color: #047857;
                 font-size: 11px;
                 font-weight: 800;
+            }
+
+            .p-inline-overview__item-revert {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 24px;
+                padding: 0 10px;
+                border: 0;
+                border-radius: 999px;
+                background: rgba(5, 150, 105, 0.12);
+                color: #047857;
+                font: inherit;
+                font-size: 11px;
+                font-weight: 800;
+                cursor: pointer;
+                transition: background-color 0.18s ease, transform 0.18s ease;
+            }
+
+            .p-inline-overview__item-revert:hover {
+                background: rgba(5, 150, 105, 0.2);
+                transform: translateY(-1px);
             }
 
             .p-inline-overview__item-meta {
@@ -1209,7 +1256,7 @@
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="revert" hidden>Отменить правки</button>
+                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Отменить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
@@ -1667,17 +1714,24 @@
                     </span>
                 </h3>
                 ${group.items.map((binding) => `
-                    <button
-                        class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}${bindingIsDirty(binding) ? ' p-inline-overview__item--dirty' : ''}"
-                        type="button"
-                        data-inline-binding-id="${binding.id}"
-                    >
-                        <span class="p-inline-overview__item-top">
-                            <span class="p-inline-overview__item-title">${escapeHtml(getBindingOverviewLabel(binding))}</span>
-                            ${bindingIsDirty(binding) ? '<span class="p-inline-overview__item-state">Правка</span>' : ''}
-                        </span>
-                        <span class="p-inline-overview__item-meta">${escapeHtml(getBindingOverviewMeta(binding))}</span>
-                    </button>
+                    <div class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}${bindingIsDirty(binding) ? ' p-inline-overview__item--dirty' : ''}">
+                        <div class="p-inline-overview__item-top">
+                            <button
+                                class="p-inline-overview__item-main"
+                                type="button"
+                                data-inline-binding-id="${binding.id}"
+                            >
+                                <span class="p-inline-overview__item-title">${escapeHtml(getBindingOverviewLabel(binding))}</span>
+                                <span class="p-inline-overview__item-meta">${escapeHtml(getBindingOverviewMeta(binding))}</span>
+                            </button>
+                            ${bindingIsDirty(binding) ? `
+                                <span class="p-inline-overview__item-actions">
+                                    <span class="p-inline-overview__item-state">Правка</span>
+                                    <button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Отменить</button>
+                                </span>
+                            ` : ''}
+                        </div>
+                    </div>
                 `).join('')}
             </section>
         `).join('');
@@ -2935,9 +2989,11 @@
         }
     }
 
-    async function revertActiveBindingToSaved() {
+    async function revertBindingToSaved(bindingTarget = state.activeBindingId) {
         try {
-            const binding = state.bindingMap.get(state.activeBindingId);
+            const binding = typeof bindingTarget === 'string'
+                ? state.bindingMap.get(bindingTarget)
+                : bindingTarget;
             if (!binding || !canRevertBinding(binding)) return;
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
@@ -2955,12 +3011,19 @@
                 state.lastSavedAt = 0;
             }
             persistDraftFiles();
-            fillPanel(binding, nextValue);
+            if (state.activeBindingId === binding.id && !ui.panel.hidden) {
+                fillPanel(binding, nextValue);
+            }
             renderToolbar();
+            renderOverviewPanel();
             showToast(`Возвращено: ${truncateInlineLabel(binding.label, 44)}`);
         } catch (error) {
             showToast(error.message || 'Не удалось вернуть сохранённую версию');
         }
+    }
+
+    async function revertActiveBindingToSaved() {
+        return revertBindingToSaved(state.activeBindingId);
     }
 
     async function saveDirtyFiles() {
@@ -3290,6 +3353,14 @@
             renderOverviewPanel();
         });
         ui.overviewBody.addEventListener('click', (event) => {
+            const revertButton = event.target.closest('[data-inline-overview-revert]');
+            if (revertButton) {
+                event.preventDefault();
+                event.stopPropagation();
+                revertBindingToSaved(revertButton.dataset.inlineOverviewRevert || '');
+                return;
+            }
+
             const button = event.target.closest('[data-inline-binding-id]');
             if (!button) return;
             event.preventDefault();
