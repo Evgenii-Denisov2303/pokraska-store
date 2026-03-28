@@ -123,9 +123,9 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact {
                 width: auto;
-                max-width: min(560px, calc(100vw - 32px));
-                padding: 10px 12px;
-                border-radius: 999px;
+                max-width: min(620px, calc(100vw - 32px));
+                padding: 12px 14px;
+                border-radius: 22px;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__top {
@@ -138,8 +138,8 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__title {
-                font-size: 14px;
-                white-space: nowrap;
+                font-size: 16px;
+                white-space: normal;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__meta {
@@ -149,12 +149,12 @@
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
                 margin-top: 0;
                 margin-left: auto;
-                flex-wrap: nowrap;
+                flex-wrap: wrap;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__btn {
-                padding: 10px 12px;
-                font-size: 13px;
+                padding: 11px 14px;
+                font-size: 14px;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jumpbar {
@@ -162,8 +162,8 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jump {
-                padding: 7px 10px;
-                font-size: 11px;
+                padding: 8px 11px;
+                font-size: 13px;
             }
 
             .p-inline-toolbar__top {
@@ -262,7 +262,7 @@
                 border-radius: 999px;
                 background: rgba(15, 23, 42, 0.42);
                 color: #e2e8f0;
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: 800;
             }
 
@@ -946,16 +946,16 @@
                 <div class="p-inline-toolbar__top">
                     <div>
                         <span class="p-inline-toolbar__eyebrow">Визуальный редактор</span>
-                        <h2 class="p-inline-toolbar__title">Можно править прямо на сайте</h2>
-                        <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото, чтобы изменить их на месте.</p>
+                        <h2 class="p-inline-toolbar__title">Правка на сайте</h2>
+                        <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото.</p>
                         <div class="p-inline-toolbar__jumpbar" hidden></div>
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Выйти</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Все блоки</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin">Полный редактор</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin">Админка</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
             </div>
@@ -1109,6 +1109,12 @@
         ];
     }
 
+    function formatCompactCount(count) {
+        const value = Number(count) || 0;
+        if (value > 99) return '99+';
+        return String(value);
+    }
+
     function getOverviewFilterDefinitions() {
         return [
             { focus: 'all', label: 'Все', bindings: getVisibleBindings() },
@@ -1147,7 +1153,7 @@
                 title="Открыть следующий блок: ${item.label.toLowerCase()}"
             >
                 <span>${item.label}</span>
-                <span class="p-inline-toolbar__jump-count">${item.bindings.length}</span>
+                <span class="p-inline-toolbar__jump-count">${formatCompactCount(item.bindings.length)}</span>
             </button>
         `).join('');
     }
@@ -1243,7 +1249,7 @@
                 data-inline-overview-focus="${item.focus}"
             >
                 <span>${item.label}</span>
-                <span class="p-inline-overview__filter-count">${item.bindings.length}</span>
+                <span class="p-inline-overview__filter-count">${formatCompactCount(item.bindings.length)}</span>
             </button>
         `).join('');
     }
@@ -1435,11 +1441,11 @@
         }
 
         ui.toolbarTitle.textContent = dirtyCount
-            ? `Есть несохранённые правки: ${dirtyCount}`
-            : 'Можно править прямо на сайте';
+            ? `Есть правки: ${dirtyCount}`
+            : 'Правка на сайте';
         ui.toolbarMeta.textContent = dirtyCount
-            ? 'Нажмите «Сохранить», когда закончите. Можно быстро сохранить сочетанием Ctrl+S.'
-            : 'Нажмите на текст, кнопку или фото. Для сложных блоков всегда можно открыть полный редактор.';
+            ? 'Сохраните изменения, когда закончите.'
+            : 'Нажмите на текст, кнопку или фото.';
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         renderToolbarJumpbar();
