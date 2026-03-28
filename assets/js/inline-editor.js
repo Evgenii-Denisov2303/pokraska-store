@@ -25,6 +25,7 @@
                 outline: 2px solid transparent;
                 outline-offset: 4px;
                 border-radius: 14px;
+                scroll-margin-top: 108px;
                 transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
             }
 
@@ -290,6 +291,8 @@
                 width: min(420px, calc(100vw - 32px));
                 max-height: calc(100vh - 48px);
                 overflow: auto;
+                overscroll-behavior: contain;
+                scrollbar-gutter: stable;
                 background: #ffffff;
                 border-radius: 24px;
                 border: 1px solid rgba(148, 163, 184, 0.24);
@@ -400,6 +403,8 @@
                 width: min(400px, calc(100vw - 32px));
                 max-height: calc(100vh - 48px);
                 overflow: auto;
+                overscroll-behavior: contain;
+                scrollbar-gutter: stable;
                 background: rgba(255, 255, 255, 0.98);
                 border-radius: 24px;
                 border: 1px solid rgba(148, 163, 184, 0.24);
@@ -408,12 +413,24 @@
                 z-index: 5001;
             }
 
+            .p-inline-overview__sticky {
+                position: sticky;
+                top: -18px;
+                z-index: 2;
+                margin: -18px -18px 14px;
+                padding: 18px 18px 14px;
+                border-radius: 24px 24px 18px 18px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(255, 255, 255, 0.96));
+                border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+                backdrop-filter: blur(12px);
+            }
+
             .p-inline-overview__head {
                 display: flex;
                 align-items: flex-start;
                 justify-content: space-between;
                 gap: 10px;
-                margin-bottom: 14px;
+                margin-bottom: 12px;
             }
 
             .p-inline-overview__title {
@@ -445,13 +462,38 @@
 
             .p-inline-overview__search {
                 width: 100%;
-                margin-bottom: 14px;
                 padding: 11px 14px;
                 border: 1px solid rgba(148, 163, 184, 0.32);
                 border-radius: 14px;
                 background: #f8fafc;
                 color: #0f172a;
                 font: inherit;
+            }
+
+            .p-inline-overview__summary {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 12px;
+                padding: 10px 12px;
+                border-radius: 14px;
+                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.16);
+            }
+
+            .p-inline-overview__summary-count {
+                font-size: 13px;
+                font-weight: 800;
+                color: #0f172a;
+                overflow-wrap: anywhere;
+            }
+
+            .p-inline-overview__summary-hint {
+                font-size: 12px;
+                line-height: 1.4;
+                color: #64748b;
+                text-align: right;
             }
 
             .p-inline-overview__body {
@@ -466,11 +508,31 @@
 
             .p-inline-overview__section-title {
                 margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
                 font-size: 12px;
                 font-weight: 800;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
                 color: #64748b;
+            }
+
+            .p-inline-overview__section-count {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 22px;
+                height: 22px;
+                padding: 0 8px;
+                border-radius: 999px;
+                background: #eff6ff;
+                color: #1d4ed8;
+                font-size: 11px;
+                font-weight: 800;
+                letter-spacing: normal;
+                text-transform: none;
             }
 
             .p-inline-overview__item {
@@ -805,15 +867,21 @@
         overview.className = 'p-inline-overview';
         overview.hidden = true;
         overview.innerHTML = `
-            <div class="p-inline-overview__head">
-                <div>
-                    <span class="p-inline-panel__kicker">Структура страницы</span>
-                    <h2 class="p-inline-overview__title">Все редактируемые блоки</h2>
-                    <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице.</p>
+            <div class="p-inline-overview__sticky">
+                <div class="p-inline-overview__head">
+                    <div>
+                        <span class="p-inline-panel__kicker">Структура страницы</span>
+                        <h2 class="p-inline-overview__title">Все редактируемые блоки</h2>
+                        <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице.</p>
+                    </div>
+                    <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
-                <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
+                <div class="p-inline-overview__summary">
+                    <span class="p-inline-overview__summary-count"></span>
+                    <span class="p-inline-overview__summary-hint"></span>
+                </div>
+                <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
             </div>
-            <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
             <div class="p-inline-overview__body"></div>
         `;
 
@@ -847,6 +915,8 @@
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
         ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
+        ui.overviewSummaryCount = overview.querySelector('.p-inline-overview__summary-count');
+        ui.overviewSummaryHint = overview.querySelector('.p-inline-overview__summary-hint');
         ui.overviewBody = overview.querySelector('.p-inline-overview__body');
         ui.toast = toast;
         ui.hover = hover;
@@ -1029,6 +1099,37 @@
         return groups;
     }
 
+    function getCountLabel(count, one, few, many) {
+        const absolute = Math.abs(Number(count) || 0);
+        const remainder10 = absolute % 10;
+        const remainder100 = absolute % 100;
+
+        if (remainder10 === 1 && remainder100 !== 11) return one;
+        if (remainder10 >= 2 && remainder10 <= 4 && !(remainder100 >= 12 && remainder100 <= 14)) return few;
+        return many;
+    }
+
+    function updateOverviewSummary(groups) {
+        if (!ui.overviewSummaryCount || !ui.overviewSummaryHint) return;
+
+        const totalItems = groups.reduce((sum, group) => sum + group.items.length, 0);
+        const totalGroups = groups.length;
+
+        ui.overviewSummaryCount.textContent = totalItems
+            ? `${totalItems} ${getCountLabel(totalItems, 'блок', 'блока', 'блоков')}`
+            : '0 блоков';
+
+        if (!totalItems) {
+            ui.overviewSummaryHint.textContent = 'Попробуйте другое слово';
+            return;
+        }
+
+        const groupPart = `${totalGroups} ${getCountLabel(totalGroups, 'разделе', 'разделах', 'разделах')}`;
+        ui.overviewSummaryHint.textContent = state.overviewQuery
+            ? `Найдено в ${groupPart}`
+            : `На этой странице в ${groupPart}`;
+    }
+
     function renderOverviewPanel() {
         if (!ui.overview) return;
 
@@ -1042,6 +1143,7 @@
 
         const groups = getBindingOverviewGroups(state.overviewQuery);
         if (!ui.overviewBody) return;
+        updateOverviewSummary(groups);
 
         if (!groups.length) {
             ui.overviewBody.innerHTML = '<div class="p-inline-overview__empty">Ничего не найдено. Попробуйте другое слово или очистите поиск.</div>';
@@ -1050,7 +1152,10 @@
 
         ui.overviewBody.innerHTML = groups.map((group) => `
             <section class="p-inline-overview__section">
-                <h3 class="p-inline-overview__section-title">${escapeHtml(group.title)}</h3>
+                <h3 class="p-inline-overview__section-title">
+                    <span>${escapeHtml(group.title)}</span>
+                    <span class="p-inline-overview__section-count">${group.items.length}</span>
+                </h3>
                 ${group.items.map((binding) => `
                     <button
                         class="p-inline-overview__item${state.activeBindingId === binding.id ? ' p-inline-overview__item--active' : ''}"
@@ -1063,6 +1168,13 @@
                 `).join('')}
             </section>
         `).join('');
+
+        const activeItem = ui.overviewBody.querySelector('.p-inline-overview__item--active');
+        if (activeItem) {
+            window.requestAnimationFrame(() => {
+                activeItem.scrollIntoView({ block: 'nearest' });
+            });
+        }
     }
 
     function toggleOverview(forceState) {
@@ -1625,6 +1737,22 @@
         }
     }
 
+    function revealBindingElement(element) {
+        if (!element?.getBoundingClientRect) return;
+
+        const rect = element.getBoundingClientRect();
+        const viewportTop = 96;
+        const viewportBottom = window.innerHeight - 96;
+        const isMostlyVisible = rect.top >= viewportTop && rect.bottom <= viewportBottom;
+
+        if (isMostlyVisible) return;
+
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: rect.top < viewportTop ? 'start' : 'center'
+        });
+    }
+
     async function openBinding(bindingId) {
         try {
             const binding = state.bindingMap.get(bindingId);
@@ -1650,7 +1778,7 @@
             state.activeBindingId = binding.id;
             clearActiveMarks();
             binding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
-            binding.elements[0]?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+            revealBindingElement(binding.elements[0]);
 
             fillPanel(binding, value);
             renderToolbar();
@@ -2107,6 +2235,13 @@
         ui.overviewSearch.addEventListener('input', (event) => {
             state.overviewQuery = event.target.value || '';
             renderOverviewPanel();
+        });
+        ui.overviewSearch.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter') return;
+            const firstItem = ui.overviewBody.querySelector('[data-inline-binding-id]');
+            if (!firstItem) return;
+            event.preventDefault();
+            openBinding(firstItem.dataset.inlineBindingId || '');
         });
         ui.overviewBody.addEventListener('click', (event) => {
             const button = event.target.closest('[data-inline-binding-id]');
