@@ -591,6 +591,7 @@
 
     function getBindingKindLabel(binding) {
         if (!binding) return 'Правка на странице';
+        if (binding.editorKindLabel) return binding.editorKindLabel;
         if (binding.type === 'image') return 'Фото на странице';
         if (binding.type === 'list') return 'Список на странице';
         if (binding.type === 'object') return 'Кнопка и ссылка';
@@ -791,6 +792,7 @@
             type: config.type || 'text',
             label: config.label || config.path,
             hint: config.hint || '',
+            editorKindLabel: config.editorKindLabel || '',
             fileName: sectionConfig.fileName,
             sectionKey: sectionConfig.sectionKey || sectionConfig.fileName,
             sectionLabel: sectionConfig.sectionLabel || sectionConfig.fileName,
@@ -802,7 +804,8 @@
             directory: config.directory || 'assets/images/catalog',
             collectionPath: config.collectionPath || '',
             collectionRender: config.collectionRender || null,
-            collectionItemFactory: config.collectionItemFactory || null
+            collectionItemFactory: config.collectionItemFactory || null,
+            collectionCreateValue: config.collectionCreateValue
         };
 
         elements.forEach((element) => {
@@ -970,6 +973,55 @@
         }
     }
 
+    function appendCollectionControls(binding, collectionState) {
+        const isImage = binding.type === 'image';
+        const collectionBox = document.createElement('div');
+        collectionBox.className = 'p-inline-panel__collection';
+
+        const collectionMeta = document.createElement('p');
+        collectionMeta.className = 'p-inline-panel__collection-meta';
+        collectionMeta.textContent = isImage
+            ? (collectionState.index === 0
+                ? `Сейчас это главное фото в наборе. Всего изображений: ${collectionState.total}.`
+                : `Позиция в наборе: ${collectionState.index + 1} из ${collectionState.total}.`)
+            : (collectionState.index === 0
+                ? `Сейчас это первая карточка в блоке. Всего карточек: ${collectionState.total}.`
+                : `Позиция карточки: ${collectionState.index + 1} из ${collectionState.total}.`);
+        collectionBox.appendChild(collectionMeta);
+
+        const collectionActions = document.createElement('div');
+        collectionActions.className = 'p-inline-panel__collection-actions';
+
+        const actionSet = isImage
+            ? [
+                { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
+                { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
+                { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'add', label: 'Добавить фото после текущего', disabled: false },
+                { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
+            ]
+            : [
+                { action: 'first', label: 'Сделать первой', disabled: collectionState.index === 0 },
+                { action: 'prev', label: 'Сдвинуть выше', disabled: collectionState.index === 0 },
+                { action: 'next', label: 'Сдвинуть ниже', disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'add', label: 'Добавить карточку после текущей', disabled: false },
+                { action: 'remove', label: 'Удалить карточку', disabled: collectionState.total <= 1 }
+            ];
+
+        actionSet.forEach((item) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'p-inline-panel__btn';
+            button.dataset.inlinePanelMove = item.action;
+            button.textContent = item.label;
+            button.disabled = item.disabled;
+            collectionActions.appendChild(button);
+        });
+
+        collectionBox.appendChild(collectionActions);
+        ui.panelForm.appendChild(collectionBox);
+    }
+
     function fillPanel(binding, value) {
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
@@ -1004,40 +1056,6 @@
             imageHint.textContent = 'Загрузи новое изображение и при необходимости поправь alt или подпись ниже.';
             ui.panelForm.appendChild(imageHint);
 
-            const collectionState = getBindingCollectionState(binding);
-            if (collectionState && collectionState.total > 1) {
-                const collectionBox = document.createElement('div');
-                collectionBox.className = 'p-inline-panel__collection';
-
-                const collectionMeta = document.createElement('p');
-                collectionMeta.className = 'p-inline-panel__collection-meta';
-                collectionMeta.textContent = collectionState.index === 0
-                    ? `Сейчас это главное фото в наборе. Всего изображений: ${collectionState.total}.`
-                    : `Позиция в наборе: ${collectionState.index + 1} из ${collectionState.total}.`;
-                collectionBox.appendChild(collectionMeta);
-
-                const collectionActions = document.createElement('div');
-                collectionActions.className = 'p-inline-panel__collection-actions';
-
-                [
-                    { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
-                    { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
-                    { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
-                    { action: 'add', label: 'Добавить фото после текущего', disabled: false },
-                    { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
-                ].forEach((item) => {
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = 'p-inline-panel__btn';
-                    button.dataset.inlinePanelMove = item.action;
-                    button.textContent = item.label;
-                    button.disabled = item.disabled;
-                    collectionActions.appendChild(button);
-                });
-
-                collectionBox.appendChild(collectionActions);
-                ui.panelForm.appendChild(collectionBox);
-            }
         }
 
         editorFields.forEach((field) => {
@@ -1046,6 +1064,11 @@
                 : getByPath(value, field.key);
             ui.panelForm.appendChild(createFieldGroup(field, fieldValue));
         });
+
+        const collectionState = getBindingCollectionState(binding);
+        if (collectionState && (binding.type === 'image' || binding.type === 'object')) {
+            appendCollectionControls(binding, collectionState);
+        }
 
         const firstControl = ui.panelForm.querySelector('input, textarea');
         if (firstControl) {
@@ -1155,25 +1178,31 @@
         return nextValue;
     }
 
-    async function addImageToActiveCollection() {
+    async function addItemToActiveCollection() {
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
 
-            const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
-            if (!uploadControl?.files?.[0]) {
-                showToast('Сначала выберите новый файл изображения');
-                return;
-            }
-
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState) {
-                showToast('Это фото не относится к галерее');
+                showToast('Этот элемент не относится к коллекции');
                 return;
             }
 
-            const nextValue = await collectPanelValue(binding);
+            let nextValue;
+            if (binding.type === 'image') {
+                const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
+                if (!uploadControl?.files?.[0]) {
+                    showToast('Сначала выберите новый файл изображения');
+                    return;
+                }
+                nextValue = await collectPanelValue(binding);
+            } else if (typeof binding.collectionCreateValue === 'function') {
+                nextValue = cloneData(binding.collectionCreateValue(resolveBindingValue(fileState, binding), binding));
+            } else {
+                nextValue = cloneData(resolveBindingValue(fileState, binding));
+            }
             const nextIndex = Math.min(collectionState.index + 1, collectionState.items.length);
             collectionState.items.splice(nextIndex, 0, nextValue);
 
@@ -1191,9 +1220,9 @@
                 fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
             }
 
-            showToast('Фото добавлено в галерею');
+            showToast(binding.type === 'image' ? 'Фото добавлено в галерею' : 'Карточка добавлена');
         } catch (error) {
-            showToast(error.message || 'Не удалось добавить фото');
+            showToast(error.message || 'Не удалось добавить элемент');
         }
     }
 
@@ -1205,7 +1234,7 @@
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState || collectionState.total <= 1) {
-                showToast('Нельзя удалить последнее фото');
+                showToast(binding.type === 'image' ? 'Нельзя удалить последнее фото' : 'Нельзя удалить последнюю карточку');
                 return;
             }
 
@@ -1227,9 +1256,9 @@
                 closePanel();
             }
 
-            showToast('Фото удалено из галереи');
+            showToast(binding.type === 'image' ? 'Фото удалено из галереи' : 'Карточка удалена');
         } catch (error) {
-            showToast(error.message || 'Не удалось удалить фото');
+            showToast(error.message || 'Не удалось удалить элемент');
         }
     }
 
@@ -1237,11 +1266,12 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            const isImage = binding.type === 'image';
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState || collectionState.total < 2) {
-                showToast('В этом блоке только одно фото');
+                showToast(isImage ? 'В этом блоке только одно фото' : 'В этом блоке только одна карточка');
                 return;
             }
 
@@ -1272,9 +1302,14 @@
             nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
             fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
 
-            showToast(nextIndex === 0 ? 'Фото стало первым в галерее' : 'Порядок фото обновлён');
+            showToast(nextIndex === 0
+                ? (isImage ? 'Фото стало первым в галерее' : 'Карточка стала первой в блоке')
+                : (isImage ? 'Порядок фото обновлён' : 'Порядок карточек обновлён'));
         } catch (error) {
-            showToast(error.message || 'Не удалось переставить фото');
+            const activeBinding = state.bindingMap.get(state.activeBindingId);
+            showToast(error.message || (activeBinding?.type === 'image'
+                ? 'Не удалось переставить фото'
+                : 'Не удалось переставить карточку'));
         }
     }
 
@@ -1424,7 +1459,7 @@
         if (!moveButton) return;
         event.preventDefault();
         if (moveButton.dataset.inlinePanelMove === 'add') {
-            addImageToActiveCollection();
+            addItemToActiveCollection();
             return;
         }
         if (moveButton.dataset.inlinePanelMove === 'remove') {

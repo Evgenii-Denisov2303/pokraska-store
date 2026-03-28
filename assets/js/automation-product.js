@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-product-gallery]').forEach((gallery) => {
+(() => {
+    function initProductGallery(gallery) {
+        if (!gallery || gallery.dataset.productGalleryBound === '1') {
+            return;
+        }
+        gallery.dataset.productGalleryBound = '1';
+
         const mainImage = gallery.querySelector('[data-main-image]');
         const mainLink = gallery.querySelector('[data-main-link]');
         const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
@@ -23,14 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevButton = gallery.querySelector('[data-gallery-prev]') || createNavButton('prev', 'Предыдущее фото', 'fa-chevron-left');
         const nextButton = gallery.querySelector('[data-gallery-next]') || createNavButton('next', 'Следующее фото', 'fa-chevron-right');
 
-        if (getThumbs().length === 1) {
-            prevButton.style.display = 'none';
-            nextButton.style.display = 'none';
-
-            if (thumbsWrap) {
-                thumbsWrap.style.display = 'none';
+        const syncNavVisibility = () => {
+            const thumbs = getThumbs();
+            if (thumbs.length <= 1) {
+                prevButton.style.display = 'none';
+                nextButton.style.display = 'none';
+                if (thumbsWrap) thumbsWrap.style.display = 'none';
+                return;
             }
-        }
+
+            prevButton.style.display = '';
+            nextButton.style.display = '';
+            if (thumbsWrap) thumbsWrap.style.display = '';
+        };
 
         const normalizeIndex = (index) => {
             const thumbs = getThumbs();
@@ -57,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbs.forEach((item) => item.classList.remove('is-active'));
             button.classList.add('is-active');
             currentIndex = normalizeIndex(index);
+            syncNavVisibility();
         };
 
         const setActiveByIndex = (index) => {
@@ -87,6 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
             setActiveByIndex(currentIndex + 1);
         });
 
+        syncNavVisibility();
         setActiveByIndex(currentIndex);
+    }
+
+    window.PokraskaAutomationProductGallery = {
+        init: initProductGallery
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[data-product-gallery]').forEach((gallery) => {
+            initProductGallery(gallery);
+        });
     });
-});
+})();

@@ -120,6 +120,18 @@
         }
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
     function getPageKey() {
         return (window.location.pathname.split('/').pop() || '').replace('.html', '');
     }
@@ -143,10 +155,23 @@
             if (title) title.textContent = content.listingHeader?.title || '';
         }
 
-        const cards = document.querySelectorAll('.automation-products .automation-product-card');
-        (content.products || []).forEach((product, index) => {
-            const card = cards[index];
-            if (!card) return;
+        const wrapper = document.querySelector('.automation-products');
+        const cards = wrapper ? Array.from(wrapper.querySelectorAll('.automation-product-card')) : [];
+        if (wrapper && cards.length) {
+            const template = cards[0];
+            while (wrapper.querySelectorAll('.automation-product-card').length < (content.products || []).length) {
+                const clone = template.cloneNode(true);
+                resetInlineMarkers(clone);
+                clone.hidden = false;
+                wrapper.appendChild(clone);
+            }
+        }
+
+        const nextCards = wrapper ? Array.from(wrapper.querySelectorAll('.automation-product-card')) : [];
+        nextCards.forEach((card, index) => {
+            const product = (content.products || [])[index];
+            card.hidden = !product;
+            if (!product) return;
 
             const meta = card.querySelector('.automation-product-meta');
             const title = card.querySelector('.automation-product-title');
@@ -168,6 +193,7 @@
             const gallery = card.querySelector('.automation-product-gallery');
             if (gallery && Array.isArray(product.gallery) && product.gallery.length) {
                 syncAutomationGallery(gallery, product.gallery);
+                window.PokraskaAutomationProductGallery?.init?.(gallery);
             }
         });
 
@@ -315,6 +341,47 @@
                 if (title) bindings.push({ path: 'swingLanding.listingHeader.title', type: 'text', label: 'Заголовок блока комплектов', element: title });
             }
 
+            const buildCardBinding = (targetCard, targetIndex) => ({
+                path: `swingLanding.products.${targetIndex}`,
+                type: 'object',
+                editorKindLabel: 'Карточка на странице',
+                label: `Карточка автоматики ${targetIndex + 1} целиком`,
+                element: targetCard,
+                collectionPath: 'swingLanding.products',
+                collectionItemFactory(nextIndex) {
+                    const nextCard = document.querySelectorAll('.automation-products .automation-product-card')[nextIndex];
+                    if (!nextCard) return null;
+                    return buildCardBinding(nextCard, nextIndex);
+                },
+                fields: [
+                    { key: 'meta', label: 'Артикул / метка', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'description', label: 'Описание', type: 'textarea' },
+                    { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
+                    { key: 'cta.label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'cta.href', label: 'Ссылка кнопки', type: 'text' }
+                ],
+                render(value) {
+                    const nextValue = value || {};
+                    const meta = targetCard.querySelector('.automation-product-meta');
+                    const title = targetCard.querySelector('.automation-product-title');
+                    const description = targetCard.querySelector('.automation-product-description');
+                    const specs = targetCard.querySelector('.automation-product-specs');
+                    const action = targetCard.querySelector('.automation-product-cta .btn');
+                    const gallery = targetCard.querySelector('.automation-product-gallery');
+
+                    if (meta) meta.textContent = nextValue.meta || '';
+                    if (title) title.textContent = nextValue.title || '';
+                    if (description) description.textContent = nextValue.description || '';
+                    if (specs) specs.innerHTML = (nextValue.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                    if (action) renderButtonNode(action, nextValue.cta || {}, 'btn btn-primary');
+                    if (gallery && Array.isArray(nextValue.gallery) && nextValue.gallery.length) {
+                        syncAutomationGallery(gallery, nextValue.gallery);
+                        window.PokraskaAutomationProductGallery?.init?.(gallery);
+                    }
+                }
+            });
+
             document.querySelectorAll('.automation-products .automation-product-card').forEach((card, index) => {
                 const meta = card.querySelector('.automation-product-meta');
                 const title = card.querySelector('.automation-product-title');
@@ -323,30 +390,7 @@
                 const action = card.querySelector('.automation-product-cta .btn');
                 const gallery = card.querySelector('.automation-product-gallery');
 
-                bindings.push({
-                    path: `swingLanding.products.${index}`,
-                    type: 'object',
-                    label: `Карточка автоматики ${index + 1} целиком`,
-                    element: card,
-                    fields: [
-                        { key: 'meta', label: 'Артикул / метка', type: 'text' },
-                        { key: 'title', label: 'Заголовок', type: 'text' },
-                        { key: 'description', label: 'Описание', type: 'textarea' },
-                        { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
-                        { key: 'cta.label', label: 'Текст кнопки', type: 'text' },
-                        { key: 'cta.href', label: 'Ссылка кнопки', type: 'text' }
-                    ],
-                    render(value) {
-                        const nextValue = value || {};
-                        if (meta) meta.textContent = nextValue.meta || '';
-                        if (title) title.textContent = nextValue.title || '';
-                        if (description) description.textContent = nextValue.description || '';
-                        if (specs) specs.innerHTML = (nextValue.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
-                        if (action) {
-                            renderButtonNode(action, nextValue.cta || {}, 'btn btn-primary');
-                        }
-                    }
-                });
+                bindings.push(buildCardBinding(card, index));
 
                 if (meta) bindings.push({ path: `swingLanding.products.${index}.meta`, type: 'text', label: `Карточка автоматики ${index + 1}: артикул`, element: meta });
                 if (title) bindings.push({ path: `swingLanding.products.${index}.title`, type: 'text', label: `Карточка автоматики ${index + 1}: заголовок`, element: title });

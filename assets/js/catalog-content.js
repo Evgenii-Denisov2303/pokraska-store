@@ -355,12 +355,38 @@
         }
     }
 
-    function applyProducts(panelElement, panelContent) {
-        const cards = Array.from(panelElement.querySelectorAll('.automation-products .automation-card'));
-        if (!cards.length || !Array.isArray(panelContent.products) || !panelContent.products.length) return;
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
 
-        panelContent.products.forEach((product, index) => {
-            applyProductCard(cards[index], product);
+    function applyProducts(panelElement, panelContent) {
+        const wrapper = panelElement.querySelector('.automation-products');
+        const cards = wrapper ? Array.from(wrapper.querySelectorAll('.automation-card')) : [];
+        if (!wrapper || !cards.length || !Array.isArray(panelContent.products) || !panelContent.products.length) return;
+
+        const template = cards[0];
+        while (wrapper.querySelectorAll('.automation-card').length < panelContent.products.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            wrapper.appendChild(clone);
+        }
+
+        const nextCards = Array.from(wrapper.querySelectorAll('.automation-card'));
+        nextCards.forEach((card, index) => {
+            const product = panelContent.products[index];
+            card.hidden = !product;
+            if (product) {
+                applyProductCard(card, product);
+            }
         });
     }
 
@@ -696,6 +722,31 @@
                 });
             }
 
+            const buildProductCardBinding = (targetCard, targetIndex) => ({
+                path: `${panelKey}.products.${targetIndex}`,
+                type: 'object',
+                editorKindLabel: 'Карточка на странице',
+                label: `${panel.title || panelKey}: товар ${targetIndex + 1} — карточка целиком`,
+                element: targetCard,
+                collectionPath: `${panelKey}.products`,
+                collectionItemFactory(nextIndex) {
+                    const nextCard = panelElement.querySelectorAll('.automation-products .automation-card')[nextIndex];
+                    if (!nextCard) return null;
+                    return buildProductCardBinding(nextCard, nextIndex);
+                },
+                fields: [
+                    { key: 'meta', label: 'Артикул / метка', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'description', label: 'Описание', type: 'textarea' },
+                    { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
+                    { key: 'cta', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка кнопки', type: 'text' }
+                ],
+                render(value) {
+                    applyProductCard(targetCard, value || {});
+                }
+            });
+
             panelElement.querySelectorAll('.automation-products .automation-card').forEach((card, cardIndex) => {
                 const meta = card.querySelector('.automation-card__meta');
                 const cardTitle = card.querySelector('.automation-card__title');
@@ -730,23 +781,7 @@
                         }
                     });
                 }
-                panelBindings.push({
-                    path: `${panelKey}.products.${cardIndex}`,
-                    type: 'object',
-                    label: `${panel.title || panelKey}: товар ${cardIndex + 1} — карточка целиком`,
-                    element: card,
-                    fields: [
-                        { key: 'meta', label: 'Артикул / метка', type: 'text' },
-                        { key: 'title', label: 'Заголовок', type: 'text' },
-                        { key: 'description', label: 'Описание', type: 'textarea' },
-                        { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
-                        { key: 'cta', label: 'Текст кнопки', type: 'text' },
-                        { key: 'href', label: 'Ссылка кнопки', type: 'text' }
-                    ],
-                    render(value) {
-                        applyProductCard(card, value || {});
-                    }
-                });
+                panelBindings.push(buildProductCardBinding(card, cardIndex));
                 if (action) {
                     panelBindings.push({
                         path: `${panelKey}.products.${cardIndex}`,
