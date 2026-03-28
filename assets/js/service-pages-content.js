@@ -58,6 +58,83 @@
         if (value.height) image.setAttribute('height', Number(value.height));
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyAdvantageItem(itemElement, item) {
+        if (!itemElement || !item) return;
+        const icon = itemElement.querySelector('i');
+        const text = itemElement.querySelector('span');
+        if (icon) icon.className = item.icon || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncAdvantages(card, items) {
+        const grid = card?.querySelector('.advantages-grid');
+        if (!grid) return;
+        syncCollection(grid, '.advantage-item', items, applyAdvantageItem);
+    }
+
+    function applyProcessStep(stepElement, step) {
+        if (!stepElement || !step) return;
+        const title = stepElement.querySelector('h4');
+        const text = stepElement.querySelector('p');
+        if (title) title.textContent = step.title || '';
+        if (text) text.textContent = step.text || '';
+    }
+
+    function syncProcessSteps(card, items) {
+        const list = card?.querySelector('.process-steps');
+        if (!list) return;
+        syncCollection(list, '.process-step', items, applyProcessStep);
+    }
+
+    function applyFaqItem(itemElement, item) {
+        if (!itemElement || !item) return;
+        const question = itemElement.querySelector('.faq-question');
+        const answer = itemElement.querySelector('.faq-answer p');
+        if (question) question.textContent = item.question || '';
+        if (answer) answer.textContent = item.answer || '';
+    }
+
+    function syncFaqItems(section, items) {
+        const list = section?.querySelector('.faq-list');
+        if (!list) return;
+        syncCollection(list, '.faq-item', items, applyFaqItem);
+    }
+
     function getPageKey() {
         const fileName = window.location.pathname.split('/').pop() || '';
         if (fileName === 'powder-coating.html') return 'powderCoating';
@@ -149,23 +226,13 @@
                 }
 
                 if (advantagesGrid && Array.isArray(sectionContent.advantages)) {
-                    advantagesGrid.innerHTML = sectionContent.advantages.map((item) => `
-                        <div class="advantage-item">
-                            <i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i>
-                            <span>${escapeHtml(item.text || '')}</span>
-                        </div>
-                    `).join('');
+                    syncAdvantages(card, sectionContent.advantages);
                 }
             }
 
             const processSteps = card.querySelector('.process-steps');
             if (processSteps && Array.isArray(sectionContent.processSteps)) {
-                processSteps.innerHTML = sectionContent.processSteps.map((step) => `
-                    <div class="process-step">
-                        <h4>${escapeHtml(step.title || '')}</h4>
-                        <p>${escapeHtml(step.text || '')}</p>
-                    </div>
-                `).join('');
+                syncProcessSteps(card, sectionContent.processSteps);
             }
 
             const paletteCard = card.querySelector('.palette-card');
@@ -249,16 +316,7 @@
 
         if (title) title.textContent = pageContent.faq.title || '';
         if (subtitle) subtitle.textContent = pageContent.faq.subtitle || '';
-        if (list) {
-            list.innerHTML = (pageContent.faq.items || []).map((item) => `
-                <details class="faq-item">
-                    <summary class="faq-question">${escapeHtml(item.question || '')}</summary>
-                    <div class="faq-answer">
-                        <p>${escapeHtml(item.answer || '')}</p>
-                    </div>
-                </details>
-            `).join('');
-        }
+        if (list) syncFaqItems(faqSection, pageContent.faq.items || []);
     }
 
     function registerInlineBindings(pageKey, pageContent) {
@@ -377,6 +435,36 @@
 
             card.querySelectorAll('.advantages-grid .advantage-item').forEach((item, itemIndex) => {
                 const span = item.querySelector('span');
+                const buildAdvantageBinding = (targetItem, targetItemIndex) => ({
+                    path: `${pageKey}.sections.${index}.advantages.${targetItemIndex}`,
+                    type: 'object',
+                    editorKindLabel: 'Пункт на странице',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: преимущество ${targetItemIndex + 1}`,
+                    element: targetItem,
+                    collectionPath: `${pageKey}.sections.${index}.advantages`,
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = card.querySelectorAll('.advantages-grid .advantage-item')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildAdvantageBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return {
+                            icon: 'fas fa-check',
+                            text: 'Новый пункт'
+                        };
+                    },
+                    fields: [
+                        { key: 'icon', label: 'Класс иконки', type: 'text' },
+                        { key: 'text', label: 'Текст пункта', type: 'text' }
+                    ],
+                    collectionRender(items) {
+                        syncAdvantages(card, Array.isArray(items) ? items : []);
+                    },
+                    render(value) {
+                        applyAdvantageItem(targetItem, value || {});
+                    }
+                });
+                bindings.push(buildAdvantageBinding(item, itemIndex));
                 if (span) {
                     bindings.push({
                         path: `${pageKey}.sections.${index}.advantages.${itemIndex}.text`,
@@ -390,6 +478,36 @@
             processSteps.forEach((step, stepIndex) => {
                 const stepTitle = step.querySelector('h4');
                 const stepText = step.querySelector('p');
+                const buildProcessStepBinding = (targetStep, targetStepIndex) => ({
+                    path: `${pageKey}.sections.${index}.processSteps.${targetStepIndex}`,
+                    type: 'object',
+                    editorKindLabel: 'Шаг на странице',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: шаг ${targetStepIndex + 1} целиком`,
+                    element: targetStep,
+                    collectionPath: `${pageKey}.sections.${index}.processSteps`,
+                    collectionItemFactory(nextIndex) {
+                        const nextStep = card.querySelectorAll('.process-steps .process-step')[nextIndex];
+                        if (!nextStep) return null;
+                        return buildProcessStepBinding(nextStep, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return {
+                            title: 'Новый шаг',
+                            text: 'Короткое описание шага.'
+                        };
+                    },
+                    fields: [
+                        { key: 'title', label: 'Заголовок шага', type: 'text' },
+                        { key: 'text', label: 'Описание шага', type: 'textarea' }
+                    ],
+                    collectionRender(items) {
+                        syncProcessSteps(card, Array.isArray(items) ? items : []);
+                    },
+                    render(value) {
+                        applyProcessStep(targetStep, value || {});
+                    }
+                });
+                bindings.push(buildProcessStepBinding(step, stepIndex));
                 if (stepTitle) bindings.push({ path: `${pageKey}.sections.${index}.processSteps.${stepIndex}.title`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: шаг ${stepIndex + 1}`, element: stepTitle });
                 if (stepText) bindings.push({ path: `${pageKey}.sections.${index}.processSteps.${stepIndex}.text`, type: 'textarea', label: `${sectionContent.title || `Услуга ${index + 1}`}: описание шага ${stepIndex + 1}`, element: stepText });
             });
@@ -542,9 +660,39 @@
             const faqSubtitle = faqSection.querySelector('.section-subtitle');
             if (faqTitle) bindings.push({ path: `${pageKey}.faq.title`, type: 'text', label: 'Заголовок FAQ услуг', element: faqTitle });
             if (faqSubtitle) bindings.push({ path: `${pageKey}.faq.subtitle`, type: 'textarea', label: 'Подзаголовок FAQ услуг', element: faqSubtitle });
+            const buildFaqBinding = (targetItem, index) => ({
+                path: `${pageKey}.faq.items.${index}`,
+                type: 'object',
+                editorKindLabel: 'FAQ на странице',
+                label: `Вопрос FAQ ${index + 1} целиком`,
+                element: targetItem,
+                collectionPath: `${pageKey}.faq.items`,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = faqSection.querySelectorAll('.faq-list .faq-item')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildFaqBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        question: 'Новый вопрос',
+                        answer: 'Новый ответ'
+                    };
+                },
+                fields: [
+                    { key: 'question', label: 'Вопрос', type: 'text' },
+                    { key: 'answer', label: 'Ответ', type: 'textarea' }
+                ],
+                collectionRender(items) {
+                    syncFaqItems(faqSection, Array.isArray(items) ? items : []);
+                },
+                render(value) {
+                    applyFaqItem(targetItem, value || {});
+                }
+            });
             faqSection.querySelectorAll('.faq-list .faq-item').forEach((item, index) => {
                 const question = item.querySelector('.faq-question');
                 const answer = item.querySelector('.faq-answer p');
+                bindings.push(buildFaqBinding(item, index));
                 if (question) bindings.push({ path: `${pageKey}.faq.items.${index}.question`, type: 'text', label: `Вопрос FAQ ${index + 1}`, element: question });
                 if (answer) bindings.push({ path: `${pageKey}.faq.items.${index}.answer`, type: 'textarea', label: `Ответ FAQ ${index + 1}`, element: answer });
             });

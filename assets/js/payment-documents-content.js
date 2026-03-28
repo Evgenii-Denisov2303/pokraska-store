@@ -27,6 +27,73 @@
         anchor.innerHTML = `<i class="${escapeHtml(action?.icon || '')}"></i> ${escapeHtml(action?.label || '')}`;
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyBenefitCard(card, item) {
+        if (!card || !item) return;
+        const icon = card.querySelector('.payment-docs-card__icon i');
+        const title = card.querySelector('h3');
+        const text = card.querySelector('p');
+        if (icon) icon.className = item.icon || '';
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncBenefitsGrid(section, items) {
+        const grid = section?.querySelector('.payment-docs-grid');
+        if (!grid) return;
+        syncCollection(grid, '.payment-docs-card', items, applyBenefitCard);
+    }
+
+    function applyWorkflowStep(step, item) {
+        if (!step || !item) return;
+        const number = step.querySelector('.payment-docs-step__number');
+        const title = step.querySelector('h3');
+        const text = step.querySelector('p');
+        if (number) number.textContent = item.number || '';
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncWorkflowSteps(section, items) {
+        const steps = section?.querySelector('.payment-docs-steps');
+        if (!steps) return;
+        syncCollection(steps, '.payment-docs-step', items, applyWorkflowStep);
+    }
+
     function registerInlineBindings(content) {
         if (!window.PokraskaQueueInlineBindings) return;
 
@@ -77,9 +144,42 @@
             if (title) bindings.push({ path: 'benefits.title', type: 'text', label: 'Заголовок блока преимуществ оплаты', element: title });
             if (subtitle) bindings.push({ path: 'benefits.subtitle', type: 'textarea', label: 'Подзаголовок блока преимуществ оплаты', element: subtitle });
 
+            const buildBenefitBinding = (targetCard, index) => ({
+                path: `benefits.items.${index}`,
+                type: 'object',
+                editorKindLabel: 'Карточка на странице',
+                label: `Преимущество ${index + 1} целиком`,
+                element: targetCard,
+                collectionPath: 'benefits.items',
+                collectionItemFactory(nextIndex) {
+                    const nextCard = document.querySelectorAll('.payment-docs-grid .payment-docs-card')[nextIndex];
+                    if (!nextCard) return null;
+                    return buildBenefitBinding(nextCard, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        icon: 'fas fa-check-circle',
+                        title: 'Новое преимущество',
+                        text: 'Короткое описание преимущества.'
+                    };
+                },
+                fields: [
+                    { key: 'icon', label: 'Класс иконки', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'text', label: 'Описание', type: 'textarea' }
+                ],
+                collectionRender(items) {
+                    syncBenefitsGrid(document.querySelector('#payment-benefits-title')?.closest('.payment-docs-section'), Array.isArray(items) ? items : []);
+                },
+                render(value) {
+                    applyBenefitCard(targetCard, value || {});
+                }
+            });
+
             benefitsSection.querySelectorAll('.payment-docs-grid .payment-docs-card').forEach((card, index) => {
                 const cardTitle = card.querySelector('h3');
                 const cardText = card.querySelector('p');
+                bindings.push(buildBenefitBinding(card, index));
                 if (cardTitle) bindings.push({ path: `benefits.items.${index}.title`, type: 'text', label: `Преимущество ${index + 1}: заголовок`, element: cardTitle });
                 if (cardText) bindings.push({ path: `benefits.items.${index}.text`, type: 'textarea', label: `Преимущество ${index + 1}: описание`, element: cardText });
             });
@@ -91,9 +191,42 @@
             if (title) bindings.push({ path: 'workflow.title', type: 'text', label: 'Заголовок блока этапов оплаты', element: title });
             if (subtitle) bindings.push({ path: 'workflow.subtitle', type: 'textarea', label: 'Подзаголовок блока этапов оплаты', element: subtitle });
 
+            const buildWorkflowBinding = (targetStep, index) => ({
+                path: `workflow.steps.${index}`,
+                type: 'object',
+                editorKindLabel: 'Шаг на странице',
+                label: `Этап оплаты ${index + 1} целиком`,
+                element: targetStep,
+                collectionPath: 'workflow.steps',
+                collectionItemFactory(nextIndex) {
+                    const nextStep = document.querySelectorAll('.payment-docs-steps .payment-docs-step')[nextIndex];
+                    if (!nextStep) return null;
+                    return buildWorkflowBinding(nextStep, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        number: String(index + 2),
+                        title: 'Новый этап',
+                        text: 'Короткое описание этапа.'
+                    };
+                },
+                fields: [
+                    { key: 'number', label: 'Номер шага', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'text', label: 'Описание', type: 'textarea' }
+                ],
+                collectionRender(items) {
+                    syncWorkflowSteps(document.querySelector('#payment-flow-title')?.closest('.payment-docs-section'), Array.isArray(items) ? items : []);
+                },
+                render(value) {
+                    applyWorkflowStep(targetStep, value || {});
+                }
+            });
+
             workflowSection.querySelectorAll('.payment-docs-steps .payment-docs-step').forEach((step, index) => {
                 const stepTitle = step.querySelector('h3');
                 const stepText = step.querySelector('p');
+                bindings.push(buildWorkflowBinding(step, index));
                 if (stepTitle) bindings.push({ path: `workflow.steps.${index}.title`, type: 'text', label: `Этап оплаты ${index + 1}: заголовок`, element: stepTitle });
                 if (stepText) bindings.push({ path: `workflow.steps.${index}.text`, type: 'textarea', label: `Этап оплаты ${index + 1}: описание`, element: stepText });
             });
@@ -194,38 +327,18 @@
             if (benefitsSection) {
                 const title = benefitsSection.querySelector('.payment-docs-section__heading h2');
                 const subtitle = benefitsSection.querySelector('.payment-docs-section__heading p');
-                const grid = benefitsSection.querySelector('.payment-docs-grid');
                 if (title) title.textContent = content.benefits?.title || '';
                 if (subtitle) subtitle.textContent = content.benefits?.subtitle || '';
-                if (grid) {
-                    grid.innerHTML = (content.benefits?.items || []).map((item) => `
-                        <article class="payment-docs-card">
-                            <div class="payment-docs-card__icon" aria-hidden="true">
-                                <i class="${escapeHtml(item.icon || '')}"></i>
-                            </div>
-                            <h3>${escapeHtml(item.title || '')}</h3>
-                            <p>${escapeHtml(item.text || '')}</p>
-                        </article>
-                    `).join('');
-                }
+                syncBenefitsGrid(benefitsSection, content.benefits?.items || []);
             }
 
             const workflowSection = document.querySelector('#payment-flow-title')?.closest('.payment-docs-section');
             if (workflowSection) {
                 const title = workflowSection.querySelector('.payment-docs-section__heading h2');
                 const subtitle = workflowSection.querySelector('.payment-docs-section__heading p');
-                const steps = workflowSection.querySelector('.payment-docs-steps');
                 if (title) title.textContent = content.workflow?.title || '';
                 if (subtitle) subtitle.textContent = content.workflow?.subtitle || '';
-                if (steps) {
-                    steps.innerHTML = (content.workflow?.steps || []).map((item) => `
-                        <article class="payment-docs-step">
-                            <span class="payment-docs-step__number">${escapeHtml(item.number || '')}</span>
-                            <h3>${escapeHtml(item.title || '')}</h3>
-                            <p>${escapeHtml(item.text || '')}</p>
-                        </article>
-                    `).join('');
-                }
+                syncWorkflowSteps(workflowSection, content.workflow?.steps || []);
             }
 
             const cta = document.querySelector('.payment-docs-cta');

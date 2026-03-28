@@ -189,6 +189,37 @@
             .join('');
     }
 
+    function applyInfoCard(cardElement, card, headingTag = 'h3') {
+        if (!cardElement || !card) return;
+        const title = cardElement.querySelector(headingTag);
+        const list = cardElement.querySelector('ul');
+        if (title) title.textContent = card.title || '';
+        if (list) list.innerHTML = renderListItems(card.items);
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
     function applyTextBlock(panelElement, panelContent) {
         const textBlock = panelElement.querySelector('.catalog-panel__grid .catalog-panel__text');
         if (!textBlock) return;
@@ -213,8 +244,23 @@
     function applyInfoGrid(panelElement, panelContent) {
         const infoGrid = panelElement.querySelector('.catalog-info-grid');
         if (!infoGrid || !Array.isArray(panelContent.cards)) return;
+        syncCollection(infoGrid, '.catalog-info-card', panelContent.cards, (cardElement, card) => {
+            applyInfoCard(cardElement, card, 'h3');
+        });
+    }
 
-        infoGrid.innerHTML = renderInfoCards(panelContent.cards, 'h3');
+    function applyFaqItem(itemElement, item) {
+        if (!itemElement || !item) return;
+        const question = itemElement.querySelector('.faq-question');
+        const answer = itemElement.querySelector('.faq-answer p');
+        if (question) question.textContent = item.question || '';
+        if (answer) answer.textContent = item.answer || '';
+    }
+
+    function syncFaqItems(panelElement, items) {
+        const list = panelElement?.querySelector('.faq-list');
+        if (!list) return;
+        syncCollection(list, '.faq-item', items, applyFaqItem);
     }
 
     function applyFaq(panelElement, panelContent) {
@@ -222,20 +268,11 @@
         const faq = panelContent.faq;
         if (!faqSection || !faq || !faq.title) return;
 
-        faqSection.innerHTML = `
-            <h3 class="section-title">${escapeHtml(faq.title)}</h3>
-            ${faq.subtitle ? `<p class="section-subtitle">${escapeHtml(faq.subtitle)}</p>` : ''}
-            <div class="faq-list">
-                ${(faq.items || []).map((item) => `
-                    <details class="faq-item">
-                        <summary class="faq-question">${escapeHtml(item.question || '')}</summary>
-                        <div class="faq-answer">
-                            <p>${escapeHtml(item.answer || '')}</p>
-                        </div>
-                    </details>
-                `).join('')}
-            </div>
-        `;
+        const title = faqSection.querySelector('.section-title');
+        const subtitle = faqSection.querySelector('.section-subtitle');
+        if (title) title.textContent = faq.title || '';
+        if (subtitle) subtitle.textContent = faq.subtitle || '';
+        syncFaqItems(panelElement, faq.items || []);
     }
 
     function applyPalette(panelElement, panelContent) {
@@ -295,14 +332,14 @@
     function applySteps(panelElement, panelContent) {
         const steps = panelElement.querySelector('.automation-steps');
         if (!steps || !Array.isArray(panelContent.steps) || !panelContent.steps.length) return;
-
-        steps.innerHTML = panelContent.steps.map((step) => `
-            <article class="automation-step">
-                <span class="automation-step__number">${escapeHtml(step.number || '')}</span>
-                <h3>${escapeHtml(step.title || '')}</h3>
-                <p>${escapeHtml(step.text || '')}</p>
-            </article>
-        `).join('');
+        syncCollection(steps, '.automation-step', panelContent.steps, (stepElement, step) => {
+            const number = stepElement.querySelector('.automation-step__number');
+            const title = stepElement.querySelector('h3');
+            const text = stepElement.querySelector('p');
+            if (number) number.textContent = step.number || '';
+            if (title) title.textContent = step.title || '';
+            if (text) text.textContent = step.text || '';
+        });
     }
 
     function applySectionHeading(panelElement, panelContent) {
@@ -622,6 +659,53 @@
             panelElement.querySelectorAll('.catalog-info-grid .catalog-info-card').forEach((card, cardIndex) => {
                 const cardTitle = card.querySelector('h3');
                 const items = card.querySelector('ul');
+                panelBindings.push({
+                    path: `${panelKey}.cards.${cardIndex}`,
+                    type: 'object',
+                    editorKindLabel: 'Карточка на странице',
+                    label: `${panel.title || panelKey}: карточка ${cardIndex + 1} целиком`,
+                    element: card,
+                    collectionPath: `${panelKey}.cards`,
+                    collectionItemFactory(nextIndex) {
+                        const nextCard = panelElement.querySelectorAll('.catalog-info-grid .catalog-info-card')[nextIndex];
+                        if (!nextCard) return null;
+                        return {
+                            path: `${panelKey}.cards.${nextIndex}`,
+                            type: 'object',
+                            editorKindLabel: 'Карточка на странице',
+                            label: `${panel.title || panelKey}: карточка ${nextIndex + 1} целиком`,
+                            element: nextCard,
+                            collectionPath: `${panelKey}.cards`,
+                            collectionItemFactory: this.collectionItemFactory,
+                            collectionCreateValue() {
+                                return { title: 'Новая карточка', items: ['Новый пункт'] };
+                            },
+                            fields: [
+                                { key: 'title', label: 'Заголовок', type: 'text' },
+                                { key: 'items', label: 'Список', type: 'list', hint: 'Каждый пункт с новой строки.' }
+                            ],
+                            collectionRender(values) {
+                                applyInfoGrid(panelElement, { cards: Array.isArray(values) ? values : [] });
+                            },
+                            render(value) {
+                                applyInfoCard(nextCard, value || {}, 'h3');
+                            }
+                        };
+                    },
+                    collectionCreateValue() {
+                        return { title: 'Новая карточка', items: ['Новый пункт'] };
+                    },
+                    fields: [
+                        { key: 'title', label: 'Заголовок', type: 'text' },
+                        { key: 'items', label: 'Список', type: 'list', hint: 'Каждый пункт с новой строки.' }
+                    ],
+                    collectionRender(values) {
+                        applyInfoGrid(panelElement, { cards: Array.isArray(values) ? values : [] });
+                    },
+                    render(value) {
+                        applyInfoCard(card, value || {}, 'h3');
+                    }
+                });
                 if (cardTitle) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — заголовок`, element: cardTitle });
                 if (items) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.items`, type: 'list', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — список`, element: items });
             });
@@ -635,6 +719,53 @@
                 faqSection.querySelectorAll('.faq-list .faq-item').forEach((item, faqIndex) => {
                     const question = item.querySelector('.faq-question');
                     const answer = item.querySelector('.faq-answer p');
+                    panelBindings.push({
+                        path: `${panelKey}.faq.items.${faqIndex}`,
+                        type: 'object',
+                        editorKindLabel: 'FAQ на странице',
+                        label: `${panel.title || panelKey}: FAQ ${faqIndex + 1} целиком`,
+                        element: item,
+                        collectionPath: `${panelKey}.faq.items`,
+                        collectionItemFactory(nextIndex) {
+                            const nextItem = faqSection.querySelectorAll('.faq-list .faq-item')[nextIndex];
+                            if (!nextItem) return null;
+                            return {
+                                path: `${panelKey}.faq.items.${nextIndex}`,
+                                type: 'object',
+                                editorKindLabel: 'FAQ на странице',
+                                label: `${panel.title || panelKey}: FAQ ${nextIndex + 1} целиком`,
+                                element: nextItem,
+                                collectionPath: `${panelKey}.faq.items`,
+                                collectionItemFactory: this.collectionItemFactory,
+                                collectionCreateValue() {
+                                    return { question: 'Новый вопрос', answer: 'Новый ответ' };
+                                },
+                                fields: [
+                                    { key: 'question', label: 'Вопрос', type: 'text' },
+                                    { key: 'answer', label: 'Ответ', type: 'textarea' }
+                                ],
+                                collectionRender(values) {
+                                    syncFaqItems(panelElement, Array.isArray(values) ? values : []);
+                                },
+                                render(value) {
+                                    applyFaqItem(nextItem, value || {});
+                                }
+                            };
+                        },
+                        collectionCreateValue() {
+                            return { question: 'Новый вопрос', answer: 'Новый ответ' };
+                        },
+                        fields: [
+                            { key: 'question', label: 'Вопрос', type: 'text' },
+                            { key: 'answer', label: 'Ответ', type: 'textarea' }
+                        ],
+                        collectionRender(values) {
+                            syncFaqItems(panelElement, Array.isArray(values) ? values : []);
+                        },
+                        render(value) {
+                            applyFaqItem(item, value || {});
+                        }
+                    });
                     if (question) panelBindings.push({ path: `${panelKey}.faq.items.${faqIndex}.question`, type: 'text', label: `${panel.title || panelKey}: FAQ ${faqIndex + 1} — вопрос`, element: question });
                     if (answer) panelBindings.push({ path: `${panelKey}.faq.items.${faqIndex}.answer`, type: 'textarea', label: `${panel.title || panelKey}: FAQ ${faqIndex + 1} — ответ`, element: answer });
                 });
@@ -717,6 +848,63 @@
                 steps.querySelectorAll('.automation-step').forEach((step, stepIndex) => {
                     const stepTitle = step.querySelector('h3');
                     const stepText = step.querySelector('p');
+                    panelBindings.push({
+                        path: `${panelKey}.steps.${stepIndex}`,
+                        type: 'object',
+                        editorKindLabel: 'Шаг на странице',
+                        label: `${panel.title || panelKey}: шаг ${stepIndex + 1} целиком`,
+                        element: step,
+                        collectionPath: `${panelKey}.steps`,
+                        collectionItemFactory(nextIndex) {
+                            const nextStep = steps.querySelectorAll('.automation-step')[nextIndex];
+                            if (!nextStep) return null;
+                            return {
+                                path: `${panelKey}.steps.${nextIndex}`,
+                                type: 'object',
+                                editorKindLabel: 'Шаг на странице',
+                                label: `${panel.title || panelKey}: шаг ${nextIndex + 1} целиком`,
+                                element: nextStep,
+                                collectionPath: `${panelKey}.steps`,
+                                collectionItemFactory: this.collectionItemFactory,
+                                collectionCreateValue() {
+                                    return { number: String(nextIndex + 1), title: 'Новый шаг', text: 'Короткое описание шага.' };
+                                },
+                                fields: [
+                                    { key: 'number', label: 'Номер', type: 'text' },
+                                    { key: 'title', label: 'Заголовок', type: 'text' },
+                                    { key: 'text', label: 'Описание', type: 'textarea' }
+                                ],
+                                collectionRender(values) {
+                                    applySteps(panelElement, { steps: Array.isArray(values) ? values : [] });
+                                },
+                                render(value) {
+                                    const number = nextStep.querySelector('.automation-step__number');
+                                    const title = nextStep.querySelector('h3');
+                                    const text = nextStep.querySelector('p');
+                                    if (number) number.textContent = value?.number || '';
+                                    if (title) title.textContent = value?.title || '';
+                                    if (text) text.textContent = value?.text || '';
+                                }
+                            };
+                        },
+                        collectionCreateValue() {
+                            return { number: String(stepIndex + 2), title: 'Новый шаг', text: 'Короткое описание шага.' };
+                        },
+                        fields: [
+                            { key: 'number', label: 'Номер', type: 'text' },
+                            { key: 'title', label: 'Заголовок', type: 'text' },
+                            { key: 'text', label: 'Описание', type: 'textarea' }
+                        ],
+                        collectionRender(values) {
+                            applySteps(panelElement, { steps: Array.isArray(values) ? values : [] });
+                        },
+                        render(value) {
+                            const number = step.querySelector('.automation-step__number');
+                            if (number) number.textContent = value?.number || '';
+                            if (stepTitle) stepTitle.textContent = value?.title || '';
+                            if (stepText) stepText.textContent = value?.text || '';
+                        }
+                    });
                     if (stepTitle) panelBindings.push({ path: `${panelKey}.steps.${stepIndex}.title`, type: 'text', label: `${panel.title || panelKey}: шаг ${stepIndex + 1}`, element: stepTitle });
                     if (stepText) panelBindings.push({ path: `${panelKey}.steps.${stepIndex}.text`, type: 'textarea', label: `${panel.title || panelKey}: описание шага ${stepIndex + 1}`, element: stepText });
                 });

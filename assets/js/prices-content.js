@@ -33,6 +33,71 @@
         element.innerHTML = `<i class="${escapeHtml(iconClass || '')}"></i> ${escapeHtml(text || '')}`;
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyFactorCard(card, item) {
+        if (!card || !item) return;
+        const icon = card.querySelector('i');
+        const title = card.querySelector('h3');
+        const text = card.querySelector('p');
+        if (icon) icon.className = item.icon || '';
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncFactorCards(section, items) {
+        const grid = section?.querySelector('.factors-grid');
+        if (!grid) return;
+        syncCollection(grid, '.factor-card', items, applyFactorCard);
+    }
+
+    function applyFaqItem(itemElement, item) {
+        if (!itemElement || !item) return;
+        const question = itemElement.querySelector('.faq-question');
+        const answer = itemElement.querySelector('.faq-answer p');
+        if (question) question.textContent = item.question || '';
+        if (answer) answer.textContent = item.answer || '';
+    }
+
+    function syncFaqItems(section, items) {
+        const list = section?.querySelector('.faq-list');
+        if (!list) return;
+        syncCollection(list, '.faq-item', items, applyFaqItem);
+    }
+
     function registerInlineBindings(content) {
         if (!window.PokraskaQueueInlineBindings) return;
 
@@ -77,9 +142,42 @@
             });
         }
 
+        const buildFactorBinding = (targetCard, index) => ({
+            path: `factors.items.${index}`,
+            type: 'object',
+            editorKindLabel: 'Карточка на странице',
+            label: `Карточка фактора ${index + 1} целиком`,
+            element: targetCard,
+            collectionPath: 'factors.items',
+            collectionItemFactory(nextIndex) {
+                const nextCard = document.querySelectorAll('.factors-grid .factor-card')[nextIndex];
+                if (!nextCard) return null;
+                return buildFactorBinding(nextCard, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-star',
+                    title: 'Новый фактор',
+                    text: 'Короткое описание фактора.'
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Класс иконки', type: 'text' },
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'text', label: 'Описание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                syncFactorCards(document.querySelector('.price-factors'), Array.isArray(items) ? items : []);
+            },
+            render(value) {
+                applyFactorCard(targetCard, value || {});
+            }
+        });
+
         document.querySelectorAll('.factors-grid .factor-card').forEach((card, index) => {
             const title = card.querySelector('h3');
             const text = card.querySelector('p');
+            bindings.push(buildFactorBinding(card, index));
             if (title) bindings.push({ path: `factors.items.${index}.title`, type: 'text', label: `Карточка фактора ${index + 1}: заголовок`, element: title });
             if (text) bindings.push({ path: `factors.items.${index}.text`, type: 'textarea', label: `Карточка фактора ${index + 1}: описание`, element: text });
         });
@@ -167,9 +265,39 @@
 
         if (faqTitle) bindings.push({ path: 'faq.title', type: 'text', label: 'Заголовок FAQ по ценам', element: faqTitle });
         if (faqSubtitle) bindings.push({ path: 'faq.subtitle', type: 'textarea', label: 'Подзаголовок FAQ по ценам', element: faqSubtitle });
+        const buildFaqBinding = (targetItem, index) => ({
+            path: `faq.items.${index}`,
+            type: 'object',
+            editorKindLabel: 'FAQ на странице',
+            label: `Вопрос FAQ ${index + 1} целиком`,
+            element: targetItem,
+            collectionPath: 'faq.items',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.faq-list .faq-item')[nextIndex];
+                if (!nextItem) return null;
+                return buildFaqBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    question: 'Новый вопрос',
+                    answer: 'Новый ответ'
+                };
+            },
+            fields: [
+                { key: 'question', label: 'Вопрос', type: 'text' },
+                { key: 'answer', label: 'Ответ', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                syncFaqItems(document.querySelector('#prices-faq-title')?.closest('section'), Array.isArray(items) ? items : []);
+            },
+            render(value) {
+                applyFaqItem(targetItem, value || {});
+            }
+        });
         document.querySelectorAll('.faq-list .faq-item').forEach((item, index) => {
             const question = item.querySelector('.faq-question');
             const answer = item.querySelector('.faq-answer p');
+            bindings.push(buildFaqBinding(item, index));
             if (question) bindings.push({ path: `faq.items.${index}.question`, type: 'text', label: `Вопрос FAQ ${index + 1}`, element: question });
             if (answer) bindings.push({ path: `faq.items.${index}.answer`, type: 'textarea', label: `Ответ FAQ ${index + 1}`, element: answer });
         });
@@ -206,19 +334,10 @@
             const factors = document.querySelector('.price-factors');
             if (factors) {
                 const title = factors.querySelector('h2');
-                const grid = factors.querySelector('.factors-grid');
                 if (title) {
                     title.innerHTML = `<i class="fas fa-chart-line"></i> ${escapeHtml(content.factors?.title || '')}`;
                 }
-                if (grid) {
-                    grid.innerHTML = (content.factors?.items || []).map((item) => `
-                        <div class="factor-card">
-                            <i class="${escapeHtml(item.icon || '')}"></i>
-                            <h3>${escapeHtml(item.title || '')}</h3>
-                            <p>${escapeHtml(item.text || '')}</p>
-                        </div>
-                    `).join('');
-                }
+                syncFactorCards(factors, content.factors?.items || []);
             }
 
             const calculator = document.querySelector('.calculator-section');
@@ -267,19 +386,9 @@
             if (faqSection) {
                 const title = faqSection.querySelector('.section-title');
                 const subtitle = faqSection.querySelector('.section-subtitle');
-                const list = faqSection.querySelector('.faq-list');
                 if (title) title.textContent = content.faq?.title || '';
                 if (subtitle) subtitle.textContent = content.faq?.subtitle || '';
-                if (list) {
-                    list.innerHTML = (content.faq?.items || []).map((item) => `
-                        <details class="faq-item">
-                            <summary class="faq-question">${escapeHtml(item.question || '')}</summary>
-                            <div class="faq-answer">
-                                <p>${escapeHtml(item.answer || '')}</p>
-                            </div>
-                        </details>
-                    `).join('');
-                }
+                syncFaqItems(faqSection, content.faq?.items || []);
             }
 
             registerInlineBindings(content);
