@@ -46,6 +46,41 @@
         }
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
     function renderPhoneLink(anchor, phone) {
         if (!anchor || !phone) return;
         anchor.setAttribute('href', phone.href || '#');
@@ -74,6 +109,33 @@
         } else {
             anchor.textContent = item.label || '';
         }
+    }
+
+    function applyNavigationItem(anchor, item, currentPath) {
+        if (!anchor || !item) return;
+        updateAnchorWithIcon(anchor, item);
+        const isActive = normalizePath(item.href || '/index.html') === currentPath;
+        anchor.classList.toggle('active', isActive);
+        if (isActive) {
+            anchor.setAttribute('aria-current', 'page');
+        } else {
+            anchor.removeAttribute('aria-current');
+        }
+    }
+
+    function syncNavigationList(navList, items, currentPath) {
+        if (!navList) return;
+        syncCollection(navList, 'a', Array.isArray(items) ? items : [], (anchor, item) => {
+            applyNavigationItem(anchor, item, currentPath);
+        });
+    }
+
+    function applyUsefulLinkItem(itemElement, item) {
+        if (!itemElement || !item) return;
+        const anchor = itemElement.querySelector('a');
+        if (!anchor) return;
+        anchor.textContent = item.label || '';
+        anchor.setAttribute('href', item.href || '#');
     }
 
     function applyHeader(site) {
@@ -116,21 +178,7 @@
 
         const currentPath = normalizePath(window.location.pathname);
         document.querySelectorAll('.nav-list').forEach((navList) => {
-            const links = navList.querySelectorAll('a');
-            links.forEach((anchor, index) => {
-                const item = site.navigation?.[index];
-                if (!item) return;
-
-                updateAnchorWithIcon(anchor, item);
-
-                const isActive = normalizePath(item.href || '/index.html') === currentPath;
-                anchor.classList.toggle('active', isActive);
-                if (isActive) {
-                    anchor.setAttribute('aria-current', 'page');
-                } else {
-                    anchor.removeAttribute('aria-current');
-                }
-            });
+            syncNavigationList(navList, site.navigation || [], currentPath);
         });
     }
 
@@ -177,9 +225,7 @@
             }
 
             if (list) {
-                list.innerHTML = (site.footer?.usefulLinks || []).map((item) => `
-                    <li><a href="${escapeHtml(item.href || '#')}">${escapeHtml(item.label || '')}</a></li>
-                `).join('');
+                syncCollection(list, 'li', site.footer?.usefulLinks || [], applyUsefulLinkItem);
             }
         }
 
@@ -201,10 +247,11 @@
         }
     }
 
-    function registerInlineBindings() {
+    function registerInlineBindings(site) {
         if (!window.PokraskaQueueInlineBindings) return;
 
         const bindings = [];
+        const currentPath = normalizePath(window.location.pathname);
         const taglineNodes = Array.from(document.querySelectorAll('.logo-tagline'));
         if (taglineNodes.length) {
             bindings.push({
@@ -264,6 +311,51 @@
             });
         }
 
+        const buildNavigationBinding = (index) => {
+            const elements = Array.from(document.querySelectorAll('.nav-list')).map((list) => list.querySelectorAll('a')[index]).filter(Boolean);
+            if (!elements.length) return null;
+
+            return {
+                path: `navigation.${index}`,
+                type: 'object',
+                editorKindLabel: 'Ссылка в меню',
+                label: `Пункт меню ${index + 1}`,
+                element: elements,
+                collectionPath: 'navigation',
+                collectionItemFactory(nextIndex) {
+                    return buildNavigationBinding(nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        label: 'Новый пункт',
+                        href: '/index.html',
+                        icon: 'fas fa-circle'
+                    };
+                },
+                fields: [
+                    { key: 'label', label: 'Название пункта', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' }
+                ],
+                collectionRender(items) {
+                    document.querySelectorAll('.nav-list').forEach((navList) => {
+                        syncNavigationList(navList, Array.isArray(items) ? items : [], currentPath);
+                    });
+                },
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyNavigationItem(element, value || {}, currentPath));
+                }
+            };
+        };
+
+        const navigationLength = Array.isArray(site?.navigation)
+            ? site.navigation.length
+            : Array.from(document.querySelectorAll('.nav-list a')).length;
+        for (let index = 0; index < navigationLength; index += 1) {
+            const binding = buildNavigationBinding(index);
+            if (binding) bindings.push(binding);
+        }
+
         const footerCompanyTitle = document.querySelector('.footer-column--company h4');
         if (footerCompanyTitle) {
             bindings.push({
@@ -294,6 +386,156 @@
             });
         }
 
+        const footerUsefulTitle = Array.from(document.querySelectorAll('.footer-column h4')).find((node) => /Полезное/i.test(node.textContent));
+        if (footerUsefulTitle) {
+            bindings.push({
+                path: 'footer.usefulTitle',
+                type: 'text',
+                label: 'Заголовок полезных ссылок в подвале',
+                element: footerUsefulTitle
+            });
+        }
+
+        const usefulList = Array.from(document.querySelectorAll('.footer-column')).find((column) => {
+            const heading = column.querySelector('h4');
+            return heading && /Полезное/i.test(heading.textContent);
+        })?.querySelector('ul');
+
+        const buildUsefulLinkBinding = (index) => {
+            const element = usefulList?.querySelectorAll('li')[index];
+            if (!element) return null;
+
+            return {
+                path: `footer.usefulLinks.${index}`,
+                type: 'object',
+                editorKindLabel: 'Ссылка в подвале',
+                label: `Полезная ссылка ${index + 1}`,
+                element,
+                collectionPath: 'footer.usefulLinks',
+                collectionItemFactory(nextIndex) {
+                    return buildUsefulLinkBinding(nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        label: 'Новая ссылка',
+                        href: '/index.html'
+                    };
+                },
+                fields: [
+                    { key: 'label', label: 'Название ссылки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                collectionRender(items) {
+                    if (usefulList) {
+                        syncCollection(usefulList, 'li', Array.isArray(items) ? items : [], applyUsefulLinkItem);
+                    }
+                },
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyUsefulLinkItem(element, value || {}));
+                }
+            };
+        };
+
+        const usefulLinksLength = Array.isArray(site?.footer?.usefulLinks)
+            ? site.footer.usefulLinks.length
+            : usefulList?.querySelectorAll('li').length || 0;
+        for (let index = 0; index < usefulLinksLength; index += 1) {
+            const binding = buildUsefulLinkBinding(index);
+            if (binding) bindings.push(binding);
+        }
+
+        const footerEmail = document.querySelector('.footer .contact-list a[href^="mailto:"]');
+        if (footerEmail) {
+            bindings.push({
+                path: 'contact.email',
+                type: 'text',
+                label: 'Почта в подвале',
+                element: footerEmail,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.textContent = value || '';
+                        element.setAttribute('href', `mailto:${value || ''}`);
+                    });
+                }
+            });
+        }
+
+        const footerHoursItem = Array.from(document.querySelectorAll('.footer .contact-list li')).find((item) => item.querySelector('.fa-clock'));
+        if (footerHoursItem) {
+            bindings.push({
+                path: 'contact.hours',
+                type: 'text',
+                label: 'Режим работы в подвале',
+                element: footerHoursItem,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i> ${escapeHtml(value || '')}`;
+                    });
+                }
+            });
+        }
+
+        const footerTelegram = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent));
+        if (footerTelegram) {
+            bindings.push({
+                path: 'contact.telegram',
+                type: 'object',
+                label: 'Telegram в подвале',
+                element: footerTelegram,
+                fields: [
+                    { key: 'label', label: 'Подпись', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.setAttribute('href', value?.href || '#');
+                        element.innerHTML = `<i class="fab fa-telegram-plane" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Telegram')}`;
+                    });
+                }
+            });
+        }
+
+        const footerMax = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent));
+        if (footerMax) {
+            bindings.push({
+                path: 'contact.max',
+                type: 'object',
+                label: 'Max в подвале',
+                element: footerMax,
+                fields: [
+                    { key: 'label', label: 'Подпись', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.setAttribute('href', value?.href || '#');
+                        element.innerHTML = `<i class="fas fa-comment-dots" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Max')}`;
+                    });
+                }
+            });
+        }
+
+        const footerPolicy = document.querySelector('.footer-bottom p:last-child a');
+        if (footerPolicy) {
+            bindings.push({
+                path: 'footer.policyLabel',
+                type: 'text',
+                label: 'Текст ссылки на политику',
+                element: footerPolicy
+            });
+            bindings.push({
+                path: 'footer.policyHref',
+                type: 'text',
+                label: 'Ссылка на политику',
+                element: footerPolicy,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.setAttribute('href', value || '#');
+                    });
+                }
+            });
+        }
+
         if (!bindings.length) return;
 
         window.PokraskaQueueInlineBindings({
@@ -311,7 +553,7 @@
             const site = await window.PokraskaContent.loadContentFile('site');
             applyHeader(site);
             applyFooter(site);
-            registerInlineBindings();
+            registerInlineBindings(site);
         } catch (error) {
             console.warn('Failed to apply site content', error);
         }

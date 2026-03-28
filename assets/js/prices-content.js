@@ -98,6 +98,15 @@
         syncCollection(list, '.faq-item', items, applyFaqItem);
     }
 
+    function renderCalculatorContactLine(container, label, phones) {
+        if (!container) return;
+        container.dataset.inlineContactLabel = label || '';
+        const links = (Array.isArray(phones) ? phones : []).map((item) => `
+            <a href="${escapeHtml(item.href || '#')}">${escapeHtml(item.label || '')}</a>
+        `).join(', ');
+        container.innerHTML = `<i class="fas fa-phone"></i> ${escapeHtml(label || '')} ${links}`.trim();
+    }
+
     function registerInlineBindings(content) {
         if (!window.PokraskaQueueInlineBindings) return;
 
@@ -108,6 +117,7 @@
         const calculatorTitle = document.querySelector('.calculator-section h2');
         const calculatorText = document.querySelector('.calculator-section p');
         const calculatorAction = document.querySelector('.calculator-section .btn.btn-primary');
+        const calculatorContact = document.querySelector('.calculator-contact');
         const calculatorPhones = document.querySelectorAll('.calculator-contact a');
         const guaranteeBadge = document.querySelector('.guarantee-badge span');
         const guaranteeTitle = document.querySelector('.guarantee-title');
@@ -194,6 +204,7 @@
             });
         }
         if (calculatorText) bindings.push({ path: 'calculator.text', type: 'textarea', label: 'Описание блока расчета', element: calculatorText });
+        if (calculatorContact) bindings.push({ path: 'calculator.contactLabel', type: 'text', label: 'Подпись перед телефонами в блоке расчета', element: calculatorContact, render(value) { renderCalculatorContactLine(calculatorContact, value, content.calculator?.phones || []); } });
         if (calculatorAction) {
             bindings.push({
                 path: 'calculator.action',
@@ -209,23 +220,45 @@
                 }
             });
         }
+        const buildCalculatorPhoneBinding = (targetPhone, index) => ({
+            path: `calculator.phones.${index}`,
+            type: 'object',
+            editorKindLabel: 'Контакт на странице',
+            label: `Телефон в блоке расчета ${index + 1}`,
+            element: targetPhone,
+            collectionPath: 'calculator.phones',
+            collectionItemFactory(nextIndex) {
+                const nextPhone = document.querySelectorAll('.calculator-contact a')[nextIndex];
+                if (!nextPhone) return null;
+                return buildCalculatorPhoneBinding(nextPhone, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новый телефон',
+                    href: 'tel:+70000000000'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст телефона', type: 'text' },
+                { key: 'href', label: 'Ссылка tel:', type: 'text' }
+            ],
+            collectionRender(items) {
+                renderCalculatorContactLine(
+                    calculatorContact,
+                    calculatorContact?.dataset.inlineContactLabel || content.calculator?.contactLabel || '',
+                    Array.isArray(items) ? items : []
+                );
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => {
+                    element.textContent = value?.label || '';
+                    element.setAttribute('href', value?.href || '#');
+                });
+            }
+        });
+
         calculatorPhones.forEach((phone, index) => {
-            bindings.push({
-                path: `calculator.phones.${index}`,
-                type: 'object',
-                label: `Телефон в блоке расчета ${index + 1}`,
-                element: phone,
-                fields: [
-                    { key: 'label', label: 'Текст телефона', type: 'text' },
-                    { key: 'href', label: 'Ссылка tel:', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => {
-                        element.textContent = value?.label || '';
-                        element.setAttribute('href', value?.href || '#');
-                    });
-                }
-            });
+            bindings.push(buildCalculatorPhoneBinding(phone, index));
         });
 
         if (guaranteeBadge) bindings.push({ path: 'guarantee.badge', type: 'text', label: 'Плашка гарантии', element: guaranteeBadge });
@@ -357,10 +390,7 @@
                     actionWrap.outerHTML = renderButton(content.calculator.action, 'btn btn-primary');
                 }
                 if (contact) {
-                    const phones = (content.calculator?.phones || []).map((item) => `
-                        <a href="${escapeHtml(item.href || '#')}">${escapeHtml(item.label || '')}</a>
-                    `).join(', ');
-                    contact.innerHTML = `<i class="fas fa-phone"></i> ${escapeHtml(content.calculator?.contactLabel || '')} ${phones}`;
+                    renderCalculatorContactLine(contact, content.calculator?.contactLabel || '', content.calculator?.phones || []);
                 }
             }
 

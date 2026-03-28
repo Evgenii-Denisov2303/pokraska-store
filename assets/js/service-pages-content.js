@@ -135,6 +135,26 @@
         syncCollection(list, '.faq-item', items, applyFaqItem);
     }
 
+    function applyQuickNavItem(link, item) {
+        if (!link || !item) return;
+        link.setAttribute('href', `#${item.id || ''}`);
+        link.innerHTML = `<i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.label || '')}`;
+    }
+
+    function syncQuickNavItems(items) {
+        const nav = document.getElementById('service-nav');
+        if (!nav) return;
+        syncCollection(nav, '.service-nav-link', Array.isArray(items) ? items : [], applyQuickNavItem);
+    }
+
+    function renderCtaPhoneLine(container, phones) {
+        if (!container) return;
+        const links = (Array.isArray(phones) ? phones : []).map((phone) => `
+            <a href="${escapeHtml(phone.href || '#')}">${escapeHtml(phone.label || '')}</a>
+        `).join(' и ');
+        container.innerHTML = `<i class="fas fa-phone"></i> Или позвоните: ${links}`;
+    }
+
     function getPageKey() {
         const fileName = window.location.pathname.split('/').pop() || '';
         if (fileName === 'powder-coating.html') return 'powderCoating';
@@ -161,12 +181,7 @@
     function applyQuickNav(pageContent) {
         const nav = document.getElementById('service-nav');
         if (!nav) return;
-
-        nav.innerHTML = (pageContent.quickNav || []).map((item) => `
-            <a href="#${escapeHtml(item.id || '')}" class="service-nav-link">
-                <i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.label || '')}
-            </a>
-        `).join('');
+        syncQuickNavItems(pageContent.quickNav || []);
     }
 
     function applyBeforeAfter(pageContent) {
@@ -299,10 +314,7 @@
         }
 
         if (phoneLine) {
-            const phones = (pageContent.cta.phones || []).map((phone) => `
-                <a href="${escapeHtml(phone.href || '#')}">${escapeHtml(phone.label || '')}</a>
-            `);
-            phoneLine.innerHTML = `<i class="fas fa-phone"></i> Или позвоните: ${phones.join(' и ')}`;
+            renderCtaPhoneLine(phoneLine, pageContent.cta.phones || []);
         }
     }
 
@@ -343,22 +355,40 @@
         }
         if (headerSubtitle) bindings.push({ path: `${pageKey}.header.subtitle`, type: 'textarea', label: 'Подзаголовок страницы услуг', element: headerSubtitle });
 
+        const buildQuickNavBinding = (targetLink, index) => ({
+            path: `${pageKey}.quickNav.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Пункт навигации ${index + 1}`,
+            element: targetLink,
+            collectionPath: `${pageKey}.quickNav`,
+            collectionItemFactory(nextIndex) {
+                const nextLink = document.querySelectorAll('#service-nav .service-nav-link')[nextIndex];
+                if (!nextLink) return null;
+                return buildQuickNavBinding(nextLink, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    id: 'new-section',
+                    icon: 'fas fa-circle',
+                    label: 'Новый пункт'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Название', type: 'text' },
+                { key: 'id', label: 'Якорь секции', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncQuickNavItems(Array.isArray(items) ? items : []);
+            },
+            render(value) {
+                applyQuickNavItem(targetLink, value || {});
+            }
+        });
+
         document.querySelectorAll('#service-nav .service-nav-link').forEach((link, index) => {
-            bindings.push({
-                path: `${pageKey}.quickNav.${index}.label`,
-                type: 'text',
-                label: `Пункт навигации ${index + 1}`,
-                element: link,
-                render(value, binding) {
-                    binding.elements.forEach((element) => {
-                        const icon = element.querySelector('i');
-                        const iconHtml = icon ? icon.outerHTML : '';
-                        const href = element.getAttribute('href') || '#';
-                        element.innerHTML = `${iconHtml} ${escapeHtml(value || '')}`.trim();
-                        element.setAttribute('href', href);
-                    });
-                }
-            });
+            bindings.push(buildQuickNavBinding(link, index));
         });
 
         if (pageKey === 'sandblasting' && pageContent.beforeAfter) {
@@ -636,15 +666,31 @@
                 });
             }
             phones.forEach((phone, index) => {
-                bindings.push({
-                    path: `${pageKey}.cta.phones.${index}`,
+                const buildCtaPhoneBinding = (targetPhone, phoneIndex) => ({
+                    path: `${pageKey}.cta.phones.${phoneIndex}`,
                     type: 'object',
-                    label: `Телефон в нижнем блоке услуг ${index + 1}`,
-                    element: phone,
+                    editorKindLabel: 'Контакт на странице',
+                    label: `Телефон в нижнем блоке услуг ${phoneIndex + 1}`,
+                    element: targetPhone,
+                    collectionPath: `${pageKey}.cta.phones`,
+                    collectionItemFactory(nextIndex) {
+                        const nextPhone = finalCta.querySelectorAll('.cta-phone a')[nextIndex];
+                        if (!nextPhone) return null;
+                        return buildCtaPhoneBinding(nextPhone, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return {
+                            label: 'Новый телефон',
+                            href: 'tel:+70000000000'
+                        };
+                    },
                     fields: [
                         { key: 'label', label: 'Текст телефона', type: 'text' },
                         { key: 'href', label: 'Ссылка tel:', type: 'text' }
                     ],
+                    collectionRender(items) {
+                        renderCtaPhoneLine(finalCta.querySelector('.cta-phone'), Array.isArray(items) ? items : []);
+                    },
                     render(value, binding) {
                         binding.elements.forEach((element) => {
                             element.textContent = value?.label || '';
@@ -652,6 +698,7 @@
                         });
                     }
                 });
+                bindings.push(buildCtaPhoneBinding(phone, index));
             });
         }
 
