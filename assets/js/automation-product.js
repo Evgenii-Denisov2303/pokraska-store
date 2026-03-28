@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-product-gallery]').forEach((gallery) => {
         const mainImage = gallery.querySelector('[data-main-image]');
         const mainLink = gallery.querySelector('[data-main-link]');
-        const thumbs = Array.from(gallery.querySelectorAll('[data-thumb-src]'));
         const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
+        const getThumbs = () => Array.from(gallery.querySelectorAll('[data-thumb-src]')).filter((button) => !button.hidden);
 
-        if (!mainImage || !mainLink || !thumbs.length) {
+        if (!mainImage || !mainLink || !getThumbs().length) {
             return;
         }
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevButton = gallery.querySelector('[data-gallery-prev]') || createNavButton('prev', 'Предыдущее фото', 'fa-chevron-left');
         const nextButton = gallery.querySelector('[data-gallery-next]') || createNavButton('next', 'Следующее фото', 'fa-chevron-right');
 
-        if (thumbs.length === 1) {
+        if (getThumbs().length === 1) {
             prevButton.style.display = 'none';
             nextButton.style.display = 'none';
 
@@ -33,13 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const normalizeIndex = (index) => {
+            const thumbs = getThumbs();
             if (!thumbs.length) {
                 return 0;
             }
             return (index + thumbs.length) % thumbs.length;
         };
 
-        let currentIndex = Math.max(thumbs.findIndex((button) => button.classList.contains('is-active')), 0);
+        let currentIndex = Math.max(getThumbs().findIndex((button) => button.classList.contains('is-active')), 0);
 
         const setActive = (button, index) => {
             const src = button.getAttribute('data-thumb-src');
@@ -52,12 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             mainLink.href = src;
 
+            const thumbs = getThumbs();
             thumbs.forEach((item) => item.classList.remove('is-active'));
             button.classList.add('is-active');
             currentIndex = normalizeIndex(index);
         };
 
         const setActiveByIndex = (index) => {
+            const thumbs = getThumbs();
             const normalizedIndex = normalizeIndex(index);
             const button = thumbs[normalizedIndex];
             if (!button) {
@@ -66,8 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
             setActive(button, normalizedIndex);
         };
 
-        thumbs.forEach((button, index) => {
-            button.addEventListener('click', () => setActive(button, index));
+        gallery.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-thumb-src]');
+            if (!button || !gallery.contains(button) || button.hidden) {
+                return;
+            }
+
+            const thumbs = getThumbs();
+            setActive(button, thumbs.indexOf(button));
         });
 
         prevButton.addEventListener('click', () => {

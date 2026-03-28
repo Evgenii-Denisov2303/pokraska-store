@@ -91,9 +91,17 @@
     function syncAutomationGallery(gallery, items) {
         if (!gallery || !Array.isArray(items) || !items.length) return;
 
+        const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
+        const thumbTemplate = gallery.querySelector('.automation-product-thumb');
+        while (thumbsWrap && thumbTemplate && gallery.querySelectorAll('.automation-product-thumb').length < items.length) {
+            const thumbClone = thumbTemplate.cloneNode(true);
+            thumbClone.classList.remove('is-active');
+            thumbClone.hidden = false;
+            thumbsWrap.appendChild(thumbClone);
+        }
+
         const mainLink = gallery.querySelector('[data-main-link]');
         const mainImage = gallery.querySelector('[data-main-image]');
-        const thumbsWrap = gallery.querySelector('.automation-product-thumbs');
         const thumbs = Array.from(gallery.querySelectorAll('.automation-product-thumb'));
 
         thumbs.forEach((thumb, index) => {
@@ -361,13 +369,16 @@
                 }
 
                 if (gallery) {
-                    gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
-                        bindings.push({
+                    const buildGalleryBinding = (thumbIndex) => {
+                        const thumb = gallery.querySelectorAll('.automation-product-thumb')[thumbIndex];
+                        if (!thumb) return null;
+                        return {
                             path: `swingLanding.products.${index}.gallery.${thumbIndex}`,
                             type: 'image',
                             label: `Карточка автоматики ${index + 1}: фото ${thumbIndex + 1}`,
                             element: thumb,
                             collectionPath: `swingLanding.products.${index}.gallery`,
+                            collectionItemFactory: buildGalleryBinding,
                             defaultValue: () => extractAutomationGalleryItem(thumb),
                             directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
                             collectionRender(items) {
@@ -380,7 +391,13 @@
                                     .map((button) => extractAutomationGalleryItem(button));
                                 syncAutomationGallery(gallery, items);
                             }
-                        });
+                        };
+                    };
+                    gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                        const binding = buildGalleryBinding(thumbIndex);
+                        if (binding) {
+                            bindings.push(binding);
+                        }
                     });
                 }
             });
@@ -527,13 +544,16 @@
             });
 
             if (gallery) {
-                gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
-                    bindings.push({
+                const buildGalleryBinding = (thumbIndex) => {
+                    const thumb = gallery.querySelectorAll('.automation-product-thumb')[thumbIndex];
+                    if (!thumb) return null;
+                    return {
                         path: `slidingComponentsPage.gallery.${thumbIndex}`,
                         type: 'image',
                         label: `Комплектующие: фото ${thumbIndex + 1}`,
                         element: thumb,
                         collectionPath: 'slidingComponentsPage.gallery',
+                        collectionItemFactory: buildGalleryBinding,
                         defaultValue: () => extractAutomationGalleryItem(thumb),
                         directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src'), 'assets/images/catalog'),
                         collectionRender(items) {
@@ -546,7 +566,13 @@
                                 .map((button) => extractAutomationGalleryItem(button));
                             syncAutomationGallery(gallery, items);
                         }
-                    });
+                    };
+                };
+                gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                    const binding = buildGalleryBinding(thumbIndex);
+                    if (binding) {
+                        bindings.push(binding);
+                    }
                 });
             }
 
@@ -635,13 +661,16 @@
         if (description) bindings.push({ path: `productPages.${productIndex}.description`, type: 'textarea', label: 'Описание карточки автоматики', element: description });
         if (specs) bindings.push({ path: `productPages.${productIndex}.specs`, type: 'list', label: 'Характеристики карточки автоматики', element: specs });
         if (gallery) {
-            gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
-                bindings.push({
+            const buildGalleryBinding = (thumbIndex) => {
+                const thumb = gallery.querySelectorAll('.automation-product-thumb')[thumbIndex];
+                if (!thumb) return null;
+                return {
                     path: `productPages.${productIndex}.gallery.${thumbIndex}`,
                     type: 'image',
                     label: `Карточка автоматики: фото ${thumbIndex + 1}`,
                     element: thumb,
                     collectionPath: `productPages.${productIndex}.gallery`,
+                    collectionItemFactory: buildGalleryBinding,
                     defaultValue: () => extractAutomationGalleryItem(thumb),
                     directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
                     collectionRender(items) {
@@ -654,7 +683,13 @@
                             .map((button) => extractAutomationGalleryItem(button));
                         syncAutomationGallery(gallery, items);
                     }
-                });
+                };
+            };
+            gallery.querySelectorAll('.automation-product-thumb').forEach((thumb, thumbIndex) => {
+                const binding = buildGalleryBinding(thumbIndex);
+                if (binding) {
+                    bindings.push(binding);
+                }
             });
         }
         if (ctaButtons[0]) {

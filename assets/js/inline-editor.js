@@ -801,7 +801,8 @@
             defaultValue: config.defaultValue,
             directory: config.directory || 'assets/images/catalog',
             collectionPath: config.collectionPath || '',
-            collectionRender: config.collectionRender || null
+            collectionRender: config.collectionRender || null,
+            collectionItemFactory: config.collectionItemFactory || null
         };
 
         elements.forEach((element) => {
@@ -943,6 +944,32 @@
         rerenderBindingsForCollection(binding.fileName, collectionState.collectionPath);
     }
 
+    function registerMissingCollectionBindings(binding, total) {
+        if (typeof binding.collectionItemFactory !== 'function') {
+            return;
+        }
+
+        const sectionConfig = {
+            fileName: binding.fileName,
+            sectionKey: binding.sectionKey,
+            sectionLabel: binding.sectionLabel
+        };
+
+        for (let index = 0; index < total; index += 1) {
+            const path = `${binding.collectionPath}.${index}`;
+            if (findBinding(binding.fileName, path)) continue;
+
+            const config = binding.collectionItemFactory(index);
+            if (!config) continue;
+
+            const nextBinding = normalizeBinding(config, sectionConfig, state.bindings.length);
+            if (!nextBinding) continue;
+
+            state.bindingMap.set(nextBinding.id, nextBinding);
+            state.bindings.push(nextBinding);
+        }
+    }
+
     function fillPanel(binding, value) {
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
@@ -996,6 +1023,7 @@
                     { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
                     { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
                     { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
+                    { action: 'add', label: 'Добавить фото после текущего', disabled: false },
                     { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
                 ].forEach((item) => {
                     const button = document.createElement('button');
@@ -1125,6 +1153,48 @@
         }
 
         return nextValue;
+    }
+
+    async function addImageToActiveCollection() {
+        try {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (!binding) return;
+
+            const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
+            if (!uploadControl?.files?.[0]) {
+                showToast('Сначала выберите новый файл изображения');
+                return;
+            }
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+            if (!collectionState) {
+                showToast('Это фото не относится к галерее');
+                return;
+            }
+
+            const nextValue = await collectPanelValue(binding);
+            const nextIndex = Math.min(collectionState.index + 1, collectionState.items.length);
+            collectionState.items.splice(nextIndex, 0, nextValue);
+
+            fileState.dirty = true;
+            refreshCollectionBindings(binding, fileState);
+            registerMissingCollectionBindings(binding, collectionState.items.length);
+            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            renderToolbar();
+
+            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`);
+            if (nextBinding) {
+                state.activeBindingId = nextBinding.id;
+                clearActiveMarks();
+                nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+                fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+            }
+
+            showToast('Фото добавлено в галерею');
+        } catch (error) {
+            showToast(error.message || 'Не удалось добавить фото');
+        }
     }
 
     async function removeActiveBindingFromCollection() {
@@ -1353,6 +1423,10 @@
         const moveButton = event.target.closest?.('[data-inline-panel-move]');
         if (!moveButton) return;
         event.preventDefault();
+        if (moveButton.dataset.inlinePanelMove === 'add') {
+            addImageToActiveCollection();
+            return;
+        }
         if (moveButton.dataset.inlinePanelMove === 'remove') {
             removeActiveBindingFromCollection();
             return;

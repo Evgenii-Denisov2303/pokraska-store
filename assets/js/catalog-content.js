@@ -113,16 +113,32 @@
     function syncCatalogGalleryState(gallery, items) {
         if (!gallery || !Array.isArray(items) || !items.length) return;
 
+        const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
+        const hiddenLinksWrap = gallery.querySelector('.catalog-panel__media-lightbox-links') || gallery;
+        const thumbTemplate = gallery.querySelector('.catalog-panel__media-thumb');
+        const hiddenLinkTemplate = gallery.querySelector('[data-gallery-lightbox-link]');
+        while (thumbsWrap && thumbTemplate && gallery.querySelectorAll('.catalog-panel__media-thumb').length < items.length) {
+            const thumbClone = thumbTemplate.cloneNode(true);
+            thumbClone.classList.remove('is-active');
+            thumbClone.hidden = false;
+            thumbsWrap.appendChild(thumbClone);
+        }
+        while (hiddenLinkTemplate && gallery.querySelectorAll('[data-gallery-lightbox-link]').length < items.length) {
+            const hiddenLinkClone = hiddenLinkTemplate.cloneNode(true);
+            hiddenLinkClone.hidden = false;
+            hiddenLinksWrap.appendChild(hiddenLinkClone);
+        }
+
         const thumbs = Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb'));
         const hiddenLinks = Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]'));
         const prevBtn = gallery.querySelector('.catalog-panel__media-nav--prev');
         const nextBtn = gallery.querySelector('.catalog-panel__media-nav--next');
-        const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
 
         thumbs.forEach((thumb, index) => {
             const item = items[index];
             thumb.hidden = !item;
             thumb.classList.toggle('is-active', index === 0 && Boolean(item));
+            thumb.dataset.galleryIndex = String(index);
             if (item) {
                 applyCatalogGalleryItem(thumb, item);
             }
@@ -131,6 +147,7 @@
         hiddenLinks.forEach((link, index) => {
             const item = items[index];
             link.hidden = !item;
+            link.dataset.galleryLightboxLink = String(index);
             if (item) {
                 link.href = item.src || '';
                 link.title = item.title || item.alt || '';
@@ -533,17 +550,19 @@
             const gallery = panelElement.querySelector('[data-catalog-gallery]');
             if (gallery) {
                 const mainImage = gallery.querySelector('[data-gallery-main-image]');
-                Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb')).forEach((thumb, index) => {
-                    const thumbImage = thumb.querySelector('img');
+                const buildGalleryBinding = (index) => {
+                    const thumb = gallery.querySelectorAll('.catalog-panel__media-thumb')[index];
+                    const thumbImage = thumb?.querySelector('img');
                     const hiddenLink = gallery.querySelector(`[data-gallery-lightbox-link="${index}"]`);
-                    if (!thumbImage) return;
+                    if (!thumb || !thumbImage) return null;
 
-                    panelBindings.push({
+                    return {
                         path: `${panelKey}.gallery.${index}`,
                         type: 'image',
                         label: `${panel.title || panelKey}: фото ${index + 1}`,
                         element: index === 0 && mainImage ? [mainImage, thumbImage] : thumbImage,
                         collectionPath: `${panelKey}.gallery`,
+                        collectionItemFactory: buildGalleryBinding,
                         defaultValue: () => extractCatalogGalleryItem(thumb),
                         directory: extractDirectoryFromSrc(thumb.dataset.gallerySrc || thumbImage.getAttribute('src') || ''),
                         fields: [
@@ -563,7 +582,14 @@
                                 updateCatalogMainMedia(gallery, value || {});
                             }
                         }
-                    });
+                    };
+                };
+
+                Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb')).forEach((thumb, index) => {
+                    const binding = buildGalleryBinding(index);
+                    if (binding) {
+                        panelBindings.push(binding);
+                    }
                 });
             }
 

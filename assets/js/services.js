@@ -269,23 +269,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-catalog-gallery]').forEach((gallery) => {
         const mainLink = gallery.querySelector('[data-gallery-main-link]');
         const mainImage = gallery.querySelector('[data-gallery-main-image]');
-        const thumbs = Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb'));
-        const hiddenLinks = Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]'));
         const prevBtn = gallery.querySelector('.catalog-panel__media-nav--prev');
         const nextBtn = gallery.querySelector('.catalog-panel__media-nav--next');
         const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
 
-        if (!mainLink || !mainImage || !thumbs.length) {
+        const getThumbs = () => Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb')).filter((thumb) => !thumb.hidden);
+        const getHiddenLinks = () => Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]')).filter((link) => !link.hidden);
+
+        if (!mainLink || !mainImage || !getThumbs().length) {
             return;
         }
 
-        let activeIndex = thumbs.findIndex((thumb) => thumb.classList.contains('is-active'));
+        let activeIndex = getThumbs().findIndex((thumb) => thumb.classList.contains('is-active'));
         if (activeIndex < 0) {
             activeIndex = 0;
-            thumbs[0].classList.add('is-active');
+            getThumbs()[0]?.classList.add('is-active');
         }
 
-        if (thumbs.length === 1) {
+        if (getThumbs().length === 1) {
             if (prevBtn) {
                 prevBtn.style.display = 'none';
             }
@@ -300,6 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const syncGallery = (index) => {
+            const thumbs = getThumbs();
             const thumb = thumbs[index];
             if (!thumb) {
                 return;
@@ -339,12 +341,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         };
 
-        thumbs.forEach((thumb, index) => {
-            thumb.addEventListener('click', () => syncGallery(index));
+        gallery.addEventListener('click', (event) => {
+            const thumb = event.target.closest('.catalog-panel__media-thumb');
+            if (!thumb || !gallery.contains(thumb) || thumb.hidden) {
+                return;
+            }
+
+            const thumbs = getThumbs();
+            syncGallery(thumbs.indexOf(thumb));
         });
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
+                const thumbs = getThumbs();
                 const nextIndex = (activeIndex - 1 + thumbs.length) % thumbs.length;
                 syncGallery(nextIndex);
             });
@@ -352,12 +361,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
+                const thumbs = getThumbs();
                 const nextIndex = (activeIndex + 1) % thumbs.length;
                 syncGallery(nextIndex);
             });
         }
 
         mainLink.addEventListener('click', (event) => {
+            const hiddenLinks = getHiddenLinks();
             const hiddenLink = hiddenLinks[activeIndex];
             if (!hiddenLink) {
                 return;
