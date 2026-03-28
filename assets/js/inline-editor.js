@@ -1209,6 +1209,7 @@
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="revert" hidden>Отменить правки</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
@@ -1284,6 +1285,7 @@
         ui.toolbarTitle = root.querySelector('.p-inline-toolbar__title');
         ui.toolbarMeta = root.querySelector('.p-inline-toolbar__meta');
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
+        ui.toolbarRevertBtn = root.querySelector('[data-inline-action="revert"]');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
         ui.adminBtn = root.querySelector('[data-inline-action="admin"]');
         ui.panel = panel;
@@ -1721,10 +1723,16 @@
         const activeSummary = activeBinding
             ? `${getBindingKindLabel(activeBinding)} · ${truncateInlineLabel(activeBinding.label, 62)}`
             : '';
+        const canShowToolbarRevert = Boolean(activeBinding && canRevertBinding(activeBinding));
+        const canUseToolbarRevert = Boolean(activeBinding && (bindingIsDirty(activeBinding) || hasPendingPanelChanges()));
 
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
+        if (ui.toolbarRevertBtn) {
+            ui.toolbarRevertBtn.hidden = !canShowToolbarRevert;
+            ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
+        }
         ui.saveBtn.disabled = !canSave || (!dirtyCount && !pendingPanel);
         ui.saveBtn.textContent = pendingPanel
             ? 'Сохранить всё'
@@ -3200,6 +3208,10 @@
 
         ui.saveBtn.addEventListener('click', () => {
             saveDirtyFiles();
+        });
+
+        ui.toolbarRevertBtn?.addEventListener('click', () => {
+            revertActiveBindingToSaved();
         });
 
         ui.adminBtn?.addEventListener('click', () => {
