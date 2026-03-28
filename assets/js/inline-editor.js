@@ -2133,8 +2133,7 @@
     }
 
     function canRevertBinding(binding) {
-        if (!binding) return false;
-        return !getBindingCollectionState(binding);
+        return Boolean(binding?.path);
     }
 
     function markBindingsDirtyForCollection(fileName, collectionPath) {
