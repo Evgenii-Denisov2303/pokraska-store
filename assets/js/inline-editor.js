@@ -127,7 +127,7 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: min(760px, calc(100vw - 32px));
+                width: min(620px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -156,7 +156,6 @@
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
                 margin-top: 0;
                 margin-left: 0;
-                width: 100%;
                 justify-content: flex-end;
                 flex-wrap: wrap;
             }
@@ -240,10 +239,7 @@
             }
 
             .p-inline-toolbar__jumpbar {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 12px;
+                display: none;
             }
 
             .p-inline-toolbar__jump {
@@ -1278,16 +1274,14 @@
             <div class="p-inline-toolbar" hidden>
                 <div class="p-inline-toolbar__top">
                     <div>
-                        <span class="p-inline-toolbar__eyebrow">Режим</span>
-                        <h2 class="p-inline-toolbar__title">Правка страницы</h2>
-                        <p class="p-inline-toolbar__meta">Кликните по нужному блоку, фото или кнопке.</p>
-                        <div class="p-inline-toolbar__jumpbar" hidden></div>
+                        <span class="p-inline-toolbar__eyebrow">Правка</span>
+                        <h2 class="p-inline-toolbar__title">Нажмите на блок</h2>
+                        <p class="p-inline-toolbar__meta">Текст, фото, кнопка или секция.</p>
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="reset" hidden>Сброс</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
                 </div>
@@ -1361,9 +1355,7 @@
         ui.toolbarTitle = root.querySelector('.p-inline-toolbar__title');
         ui.toolbarMeta = root.querySelector('.p-inline-toolbar__meta');
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
-        ui.toolbarJumpbar = root.querySelector('.p-inline-toolbar__jumpbar');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
-        ui.resetBtn = root.querySelector('[data-inline-action="reset"]');
         ui.adminBtn = root.querySelector('[data-inline-action="admin"]');
         ui.panel = panel;
         ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
@@ -1541,36 +1533,7 @@
     }
 
     function renderToolbarJumpbar() {
-        if (!ui.toolbarJumpbar) return;
-
-        const jumpDefinitions = getToolbarJumpDefinitions()
-            .map((item) => ({
-                ...item,
-                bindings: getBindingsForFocus(item.focus)
-            }))
-            .filter((item) => item.bindings.length);
-
-        if (!state.enabled || !state.apiAvailable || (state.authEnabled && !state.authenticated) || !jumpDefinitions.length) {
-            ui.toolbarJumpbar.hidden = true;
-            ui.toolbarJumpbar.innerHTML = '';
-            return;
-        }
-
-        const activeBinding = state.bindingMap.get(state.activeBindingId);
-        const activeFocus = getBindingPrimaryFocus(activeBinding);
-
-        ui.toolbarJumpbar.hidden = false;
-        ui.toolbarJumpbar.innerHTML = jumpDefinitions.map((item) => `
-            <button
-                class="p-inline-toolbar__jump${activeFocus === item.focus ? ' p-inline-toolbar__jump--active' : ''}"
-                type="button"
-                data-inline-focus="${item.focus}"
-                title="Открыть следующий блок: ${item.label.toLowerCase()}"
-            >
-                <span>${item.label}</span>
-                <span class="p-inline-toolbar__jump-count">${formatCompactCount(item.bindings.length)}</span>
-            </button>
-        `).join('');
+        return;
     }
 
     async function jumpToBindingFocus(focus) {
@@ -1843,9 +1806,6 @@
             : (dirtyCount
                 ? `Сохранить ${formatCompactCount(dirtyCount)}`
                 : (hasIssue ? 'Сохранить' : 'Готово'));
-        if (ui.resetBtn) {
-            ui.resetBtn.hidden = !dirtyCount;
-        }
         if (ui.adminBtn) {
             ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
@@ -1880,7 +1840,7 @@
 
         ui.toolbarTitle.textContent = dirtyCount
             ? `Правки: ${dirtyCount}`
-            : 'Правка страницы';
+            : 'Нажмите на блок';
         ui.toolbarMeta.textContent = activeSummary
             ? (dirtyCount
                 ? `Сейчас: ${activeSummary}. Сохраните изменения, когда закончите.`
@@ -1889,7 +1849,7 @@
                 ? 'Сохраните изменения, когда закончите.'
                 : (state.lastSavedAt
                     ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-                    : `${getCurrentPageLabel()} · нажмите на текст, кнопку или фото.`));
+                    : `${getCurrentPageLabel()} · выберите нужное место.`));
         if (ui.adminBtn) {
             ui.adminBtn.textContent = 'Вход';
         }
@@ -3319,10 +3279,6 @@
 
         ui.saveBtn.addEventListener('click', () => {
             saveDirtyFiles();
-        });
-
-        ui.resetBtn?.addEventListener('click', () => {
-            discardDraftChanges();
         });
 
         ui.adminBtn?.addEventListener('click', () => {
