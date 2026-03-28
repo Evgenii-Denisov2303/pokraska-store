@@ -94,6 +94,28 @@
         syncCollection(steps, '.payment-docs-step', items, applyWorkflowStep);
     }
 
+    function applyHeroChip(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncHeroChips(hero, items) {
+        const container = hero?.querySelector('.payment-docs-hero__chips');
+        if (!container) return;
+        syncCollection(container, 'span', items, applyHeroChip);
+    }
+
+    function applySideCardItem(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncSideCardItems(hero, items) {
+        const container = hero?.querySelector('.payment-docs-panel:not(.payment-docs-panel--accent) .payment-docs-panel__list');
+        if (!container) return;
+        syncCollection(container, 'li', items, applySideCardItem);
+    }
+
     function registerInlineBindings(content) {
         if (!window.PokraskaQueueInlineBindings) return;
 
@@ -119,23 +141,68 @@
             if (lead) bindings.push({ path: 'hero.lead', type: 'textarea', label: 'Лид страницы оплаты', element: lead });
             if (text) bindings.push({ path: 'hero.text', type: 'textarea', label: 'Описание в первом экране оплаты', element: text });
             if (chips) {
-                bindings.push({
-                    path: 'hero.chips',
-                    type: 'list',
-                    label: 'Короткие плашки в первом экране оплаты',
-                    element: chips,
+                const buildChipBinding = (targetItem, index) => ({
+                    path: `hero.chips.${index}`,
+                    type: 'text',
+                    editorKindLabel: 'Плашка на странице',
+                    collectionItemLabel: 'элемент',
+                    collectionItemLabelPlural: 'элементов',
+                    label: `Плашка в первом экране оплаты ${index + 1}`,
+                    element: targetItem,
+                    collectionPath: 'hero.chips',
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = hero.querySelectorAll('.payment-docs-hero__chips span')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildChipBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return 'Новая плашка';
+                    },
+                    collectionRender(items) {
+                        syncHeroChips(hero, Array.isArray(items) ? items : []);
+                    },
                     render(value, binding) {
-                        const items = Array.isArray(value) ? value : [];
-                        binding.elements.forEach((element) => {
-                            element.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
-                        });
+                        binding.elements.forEach((element) => applyHeroChip(element, value || ''));
                     }
+                });
+
+                chips.querySelectorAll('span').forEach((item, index) => {
+                    bindings.push(buildChipBinding(item, index));
                 });
             }
             if (accentTitle) bindings.push({ path: 'hero.accentCard.title', type: 'text', label: 'Заголовок акцентной карточки оплаты', element: accentTitle });
             if (accentText) bindings.push({ path: 'hero.accentCard.text', type: 'textarea', label: 'Текст акцентной карточки оплаты', element: accentText });
             if (sideMeta) bindings.push({ path: 'hero.sideCard.meta', type: 'text', label: 'Подпись боковой карточки оплаты', element: sideMeta });
-            if (sideList) bindings.push({ path: 'hero.sideCard.items', type: 'list', label: 'Список в боковой карточке оплаты', element: sideList });
+            if (sideList) {
+                const buildSideItemBinding = (targetItem, index) => ({
+                    path: `hero.sideCard.items.${index}`,
+                    type: 'text',
+                    editorKindLabel: 'Пункт на странице',
+                    collectionItemLabel: 'пункт',
+                    collectionItemLabelPlural: 'пунктов',
+                    label: `Пункт в боковой карточке оплаты ${index + 1}`,
+                    element: targetItem,
+                    collectionPath: 'hero.sideCard.items',
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = hero.querySelectorAll('.payment-docs-panel:not(.payment-docs-panel--accent) .payment-docs-panel__list li')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildSideItemBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return 'Новый пункт';
+                    },
+                    collectionRender(items) {
+                        syncSideCardItems(hero, Array.isArray(items) ? items : []);
+                    },
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applySideCardItem(element, value || ''));
+                    }
+                });
+
+                sideList.querySelectorAll('li').forEach((item, index) => {
+                    bindings.push(buildSideItemBinding(item, index));
+                });
+            }
         }
 
         if (benefitsSection) {
@@ -303,7 +370,7 @@
                 if (lead) lead.textContent = content.hero?.lead || '';
                 if (text) text.textContent = content.hero?.text || '';
                 if (chips) {
-                    chips.innerHTML = (content.hero?.chips || []).map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+                    syncHeroChips(hero, content.hero?.chips || []);
                 }
                 if (accent) {
                     const icon = accent.querySelector('.payment-docs-panel__icon i');
@@ -317,9 +384,7 @@
                     const meta = side.querySelector('.payment-docs-panel__meta');
                     const list = side.querySelector('.payment-docs-panel__list');
                     if (meta) meta.textContent = content.hero?.sideCard?.meta || '';
-                    if (list) {
-                        list.innerHTML = (content.hero?.sideCard?.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
-                    }
+                    if (list) syncSideCardItems(hero, content.hero?.sideCard?.items || []);
                 }
             }
 

@@ -133,6 +133,28 @@
         syncCollection(container, '.feature', items, applyHeroFeature);
     }
 
+    function applyHeroBullet(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncHeroBullets(items) {
+        const container = document.querySelector('.hero-list');
+        if (!container) return;
+        syncCollection(container, 'li', items, applyHeroBullet);
+    }
+
+    function applyDirectionMediaTag(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncDirectionMediaTags(featureElement, items) {
+        const container = featureElement?.querySelector('.direction-feature__media-tags');
+        if (!container) return;
+        syncCollection(container, 'span', items, applyDirectionMediaTag);
+    }
+
     function applyProcessFact(node, fact) {
         if (!node || !fact) return;
         const value = node.querySelector('strong');
@@ -221,6 +243,18 @@
         syncCollection(container, '.request-fact', items, applyRequestFact);
     }
 
+    function applyRequestAdvantage(node, item) {
+        if (!node) return;
+        const text = node.querySelector('span');
+        if (text) text.textContent = item || '';
+    }
+
+    function syncRequestAdvantages(items) {
+        const container = document.querySelector('.advantages');
+        if (!container) return;
+        syncCollection(container, '.advantage', items, applyRequestAdvantage);
+    }
+
     function applyRequestQuickAction(node, action) {
         if (!node || !action) return;
         const external = action.href?.startsWith('http');
@@ -288,9 +322,7 @@
         if (subtitleStrong) subtitleStrong.textContent = hero.subtitleStrong || '';
 
         if (heroList) {
-            heroList.innerHTML = (hero.bulletPoints || []).map((item) => `
-                <li>${escapeHtml(item)}</li>
-            `).join('');
+            syncHeroBullets(hero.bulletPoints || []);
         }
 
         if (heroFeatures) {
@@ -324,7 +356,7 @@
         const showcase = article.querySelector('[data-direction-showcase]');
 
         if (mediaTags) {
-            mediaTags.innerHTML = (data.mediaTags || []).map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+            syncDirectionMediaTags(article, data.mediaTags || []);
         }
 
         if (viewport) {
@@ -508,12 +540,7 @@
             }
 
             if (advantages) {
-                advantages.innerHTML = (request.advantages || []).map((item) => `
-                    <div class="advantage">
-                        <i class="fas fa-check-circle" aria-hidden="true"></i>
-                        <span>${escapeHtml(item)}</span>
-                    </div>
-                `).join('');
+                syncRequestAdvantages(request.advantages || []);
             }
 
             if (contactTitle) contactTitle.textContent = request.contactTitle || '';
@@ -591,18 +618,33 @@
         }
 
         if (heroList) {
-            bindings.push({
-                path: 'hero.bulletPoints',
-                type: 'list',
-                label: 'Короткий список под заголовком',
-                hint: 'Каждый пункт с новой строки.',
-                element: heroList,
+            const buildHeroBulletBinding = (targetItem, index) => ({
+                path: `hero.bulletPoints.${index}`,
+                type: 'text',
+                editorKindLabel: 'Пункт на странице',
+                collectionItemLabel: 'пункт',
+                collectionItemLabelPlural: 'пунктов',
+                label: `Пункт под заголовком ${index + 1}`,
+                element: targetItem,
+                collectionPath: 'hero.bulletPoints',
+                collectionItemFactory(nextIndex) {
+                    const nextItem = document.querySelectorAll('.hero-list li')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildHeroBulletBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return 'Новый пункт';
+                },
+                collectionRender(items) {
+                    syncHeroBullets(Array.isArray(items) ? items : []);
+                },
                 render(value, binding) {
-                    const items = Array.isArray(value) ? value : [];
-                    binding.elements.forEach((element) => {
-                        element.innerHTML = items.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
-                    });
+                    binding.elements.forEach((element) => applyHeroBullet(element, value || ''));
                 }
+            });
+
+            heroList.querySelectorAll('li').forEach((item, index) => {
+                bindings.push(buildHeroBulletBinding(item, index));
             });
         }
 
@@ -694,17 +736,33 @@
             const trust = feature?.querySelector('.direction-feature__trust');
 
             if (mediaTags) {
-                bindings.push({
-                    path: `directions.${key}.mediaTags`,
-                    type: 'list',
-                    label: `${key === 'gates' ? 'Плашки ворот' : 'Плашки покраски'}`,
-                    element: mediaTags,
+                const buildMediaTagBinding = (targetItem, index) => ({
+                    path: `directions.${key}.mediaTags.${index}`,
+                    type: 'text',
+                    editorKindLabel: 'Плашка на странице',
+                    collectionItemLabel: 'элемент',
+                    collectionItemLabelPlural: 'элементов',
+                    label: `${key === 'gates' ? 'Плашка ворот' : 'Плашка покраски'} ${index + 1}`,
+                    element: targetItem,
+                    collectionPath: `directions.${key}.mediaTags`,
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = feature?.querySelectorAll('.direction-feature__media-tags span')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildMediaTagBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return 'Новая плашка';
+                    },
+                    collectionRender(items) {
+                        syncDirectionMediaTags(feature, Array.isArray(items) ? items : []);
+                    },
                     render(value, binding) {
-                        const items = Array.isArray(value) ? value : [];
-                        binding.elements.forEach((element) => {
-                            element.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
-                        });
+                        binding.elements.forEach((element) => applyDirectionMediaTag(element, value || ''));
                     }
+                });
+
+                mediaTags.querySelectorAll('span').forEach((item, index) => {
+                    bindings.push(buildMediaTagBinding(item, index));
                 });
             }
             if (eyebrow) bindings.push({ path: `directions.${key}.eyebrow`, type: 'text', label: `${key === 'gates' ? 'Надзаголовок ворот' : 'Надзаголовок покраски'}`, element: eyebrow });
@@ -1101,23 +1159,33 @@
 
         const requestAdvantages = document.querySelector('.advantages');
         if (requestAdvantages) {
-            bindings.push({
-                path: 'request.advantages',
-                type: 'list',
-                label: 'Список направлений в блоке заявки',
-                hint: 'Каждый пункт с новой строки.',
-                element: requestAdvantages,
+            const buildRequestAdvantageBinding = (targetItem, index) => ({
+                path: `request.advantages.${index}`,
+                type: 'text',
+                editorKindLabel: 'Пункт на странице',
+                collectionItemLabel: 'пункт',
+                collectionItemLabelPlural: 'пунктов',
+                label: `Пункт в блоке заявки ${index + 1}`,
+                element: targetItem,
+                collectionPath: 'request.advantages',
+                collectionItemFactory(nextIndex) {
+                    const nextItem = document.querySelectorAll('.advantages .advantage')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildRequestAdvantageBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return 'Новый пункт';
+                },
+                collectionRender(items) {
+                    syncRequestAdvantages(Array.isArray(items) ? items : []);
+                },
                 render(value, binding) {
-                    const items = Array.isArray(value) ? value : [];
-                    binding.elements.forEach((element) => {
-                        element.innerHTML = items.map((item) => `
-                            <div class="advantage">
-                                <i class="fas fa-check-circle" aria-hidden="true"></i>
-                                <span>${escapeHtml(item)}</span>
-                            </div>
-                        `).join('');
-                    });
+                    binding.elements.forEach((element) => applyRequestAdvantage(element, value || ''));
                 }
+            });
+
+            requestAdvantages.querySelectorAll('.advantage').forEach((item, index) => {
+                bindings.push(buildRequestAdvantageBinding(item, index));
             });
         }
 

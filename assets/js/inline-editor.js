@@ -2013,41 +2013,130 @@
         }
     }
 
+    function getCollectionItemNouns(binding) {
+        if (binding?.type === 'image') {
+            return {
+                singular: 'фото',
+                plural: 'фото',
+                duplicate: 'Дублировать фото',
+                add: 'Добавить фото после текущего',
+                remove: 'Удалить фото',
+                movePrev: 'Сдвинуть левее',
+                moveNext: 'Сдвинуть правее',
+                makeFirst: 'Сделать первым'
+            };
+        }
+
+        if (binding?.type === 'object') {
+            const label = (binding.editorKindLabel || '').toLowerCase();
+            if (/ссылк|кнопк/.test(label)) {
+                return {
+                    singular: 'ссылка',
+                    plural: 'ссылок',
+                    duplicate: 'Дублировать ссылку',
+                    add: 'Добавить ссылку после текущей',
+                    remove: 'Удалить ссылку',
+                    movePrev: 'Сдвинуть выше',
+                    moveNext: 'Сдвинуть ниже',
+                    makeFirst: 'Сделать первой'
+                };
+            }
+
+            return {
+                singular: 'карточка',
+                plural: 'карточек',
+                duplicate: 'Дублировать карточку',
+                add: 'Добавить карточку после текущей',
+                remove: 'Удалить карточку',
+                movePrev: 'Сдвинуть выше',
+                moveNext: 'Сдвинуть ниже',
+                makeFirst: 'Сделать первой'
+            };
+        }
+
+        const itemLabel = String(binding?.collectionItemLabel || '').trim().toLowerCase();
+        const singular = itemLabel || 'пункт';
+        const plural = binding?.collectionItemLabelPlural || 'пунктов';
+        return {
+            singular,
+            plural,
+            duplicate: `Дублировать ${singular}`,
+            add: `Добавить ${singular} после текущего`,
+            remove: `Удалить ${singular}`,
+            movePrev: 'Сдвинуть выше',
+            moveNext: 'Сдвинуть ниже',
+            makeFirst: singular.endsWith('а') ? 'Сделать первой' : 'Сделать первым'
+        };
+    }
+
+    function getCollectionToastLabels(binding) {
+        const nouns = getCollectionItemNouns(binding);
+        if (binding?.type === 'image') {
+            return {
+                onlyOne: 'В этом блоке только одно фото',
+                removeLast: 'Нельзя удалить последнее фото',
+                added: 'Фото добавлено в галерею',
+                duplicated: 'Фото дублировано',
+                removed: 'Фото удалено из галереи',
+                moved: 'Порядок фото обновлён',
+                movedFirst: 'Фото стало первым в галерее',
+                moveError: 'Не удалось переставить фото',
+                duplicateError: 'Не удалось дублировать фото',
+                removeError: 'Не удалось удалить фото',
+                addError: 'Не удалось добавить фото'
+            };
+        }
+
+        return {
+            onlyOne: `В этом блоке только ${nouns.singular}`,
+            removeLast: `Нельзя удалить последний ${nouns.singular}`,
+            added: 'Элемент добавлен',
+            duplicated: 'Элемент дублирован',
+            removed: 'Элемент удалён',
+            moved: `Порядок ${nouns.plural} обновлён`,
+            movedFirst: 'Элемент перенесён в начало',
+            moveError: `Не удалось переставить ${nouns.singular}`,
+            duplicateError: `Не удалось дублировать ${nouns.singular}`,
+            removeError: `Не удалось удалить ${nouns.singular}`,
+            addError: `Не удалось добавить ${nouns.singular}`
+        };
+    }
+
     function appendCollectionControls(binding, collectionState) {
-        const isImage = binding.type === 'image';
+        const nouns = getCollectionItemNouns(binding);
         const collectionBox = document.createElement('div');
         collectionBox.className = 'p-inline-panel__collection';
 
         const collectionMeta = document.createElement('p');
         collectionMeta.className = 'p-inline-panel__collection-meta';
-        collectionMeta.textContent = isImage
+        collectionMeta.textContent = binding.type === 'image'
             ? (collectionState.index === 0
                 ? `Сейчас это главное фото в наборе. Всего изображений: ${collectionState.total}.`
                 : `Позиция в наборе: ${collectionState.index + 1} из ${collectionState.total}.`)
             : (collectionState.index === 0
-                ? `Сейчас это первая карточка в блоке. Всего карточек: ${collectionState.total}.`
-                : `Позиция карточки: ${collectionState.index + 1} из ${collectionState.total}.`);
+                ? `Сейчас это первый ${nouns.singular} в блоке. Всего ${nouns.plural}: ${collectionState.total}.`
+                : `Позиция: ${collectionState.index + 1} из ${collectionState.total}.`);
         collectionBox.appendChild(collectionMeta);
 
         const collectionActions = document.createElement('div');
         collectionActions.className = 'p-inline-panel__collection-actions';
 
-        const actionSet = isImage
+        const actionSet = binding.type === 'image'
             ? [
-                { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
-                { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
-                { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 },
-                { action: 'duplicate', label: 'Дублировать фото', disabled: false },
-                { action: 'add', label: 'Добавить фото после текущего', disabled: false },
-                { action: 'remove', label: 'Удалить фото', disabled: collectionState.total <= 1 }
+                { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
+                { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
+                { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'duplicate', label: nouns.duplicate, disabled: false },
+                { action: 'add', label: nouns.add, disabled: false },
+                { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
             ]
             : [
-                { action: 'first', label: 'Сделать первой', disabled: collectionState.index === 0 },
-                { action: 'prev', label: 'Сдвинуть выше', disabled: collectionState.index === 0 },
-                { action: 'next', label: 'Сдвинуть ниже', disabled: collectionState.index >= collectionState.total - 1 },
-                { action: 'duplicate', label: 'Дублировать карточку', disabled: false },
-                { action: 'add', label: 'Добавить карточку после текущей', disabled: false },
-                { action: 'remove', label: 'Удалить карточку', disabled: collectionState.total <= 1 }
+                { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
+                { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
+                { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
+                { action: 'duplicate', label: nouns.duplicate, disabled: false },
+                { action: 'add', label: nouns.add, disabled: false },
+                { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
             ];
 
         actionSet.forEach((item) => {
@@ -2111,7 +2200,7 @@
         });
 
         const collectionState = getBindingCollectionState(binding);
-        if (collectionState && (binding.type === 'image' || binding.type === 'object')) {
+        if (collectionState && (binding.type === 'image' || binding.type === 'object' || binding.type === 'text')) {
             appendCollectionControls(binding, collectionState);
         }
 
@@ -2302,6 +2391,7 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
@@ -2341,9 +2431,10 @@
                 fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
             }
 
-            showToast(binding.type === 'image' ? 'Фото добавлено в галерею' : 'Карточка добавлена');
+            showToast(toastLabels.added);
         } catch (error) {
-            showToast(error.message || 'Не удалось добавить элемент');
+            const binding = state.bindingMap.get(state.activeBindingId);
+            showToast(error.message || getCollectionToastLabels(binding).addError);
         }
     }
 
@@ -2351,6 +2442,7 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
@@ -2378,9 +2470,10 @@
                 fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
             }
 
-            showToast(binding.type === 'image' ? 'Фото дублировано' : 'Карточка дублирована');
+            showToast(toastLabels.duplicated);
         } catch (error) {
-            showToast(error.message || 'Не удалось дублировать элемент');
+            const binding = state.bindingMap.get(state.activeBindingId);
+            showToast(error.message || getCollectionToastLabels(binding).duplicateError);
         }
     }
 
@@ -2388,11 +2481,12 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState || collectionState.total <= 1) {
-                showToast(binding.type === 'image' ? 'Нельзя удалить последнее фото' : 'Нельзя удалить последнюю карточку');
+                showToast(toastLabels.removeLast);
                 return;
             }
 
@@ -2415,9 +2509,10 @@
                 closePanel();
             }
 
-            showToast(binding.type === 'image' ? 'Фото удалено из галереи' : 'Карточка удалена');
+            showToast(toastLabels.removed);
         } catch (error) {
-            showToast(error.message || 'Не удалось удалить элемент');
+            const binding = state.bindingMap.get(state.activeBindingId);
+            showToast(error.message || getCollectionToastLabels(binding).removeError);
         }
     }
 
@@ -2425,12 +2520,12 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
-            const isImage = binding.type === 'image';
+            const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState || collectionState.total < 2) {
-                showToast(isImage ? 'В этом блоке только одно фото' : 'В этом блоке только одна карточка');
+                showToast(toastLabels.onlyOne);
                 return;
             }
 
@@ -2462,14 +2557,10 @@
             nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
             fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
 
-            showToast(nextIndex === 0
-                ? (isImage ? 'Фото стало первым в галерее' : 'Карточка стала первой в блоке')
-                : (isImage ? 'Порядок фото обновлён' : 'Порядок карточек обновлён'));
+            showToast(nextIndex === 0 ? toastLabels.movedFirst : toastLabels.moved);
         } catch (error) {
             const activeBinding = state.bindingMap.get(state.activeBindingId);
-            showToast(error.message || (activeBinding?.type === 'image'
-                ? 'Не удалось переставить фото'
-                : 'Не удалось переставить карточку'));
+            showToast(error.message || getCollectionToastLabels(activeBinding).moveError);
         }
     }
 
