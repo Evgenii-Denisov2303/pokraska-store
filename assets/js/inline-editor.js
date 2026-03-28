@@ -1232,7 +1232,7 @@
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
-                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть</button>
+                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить правки</button>
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="cancel">Закрыть</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
             </div>

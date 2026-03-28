@@ -950,8 +950,9 @@ body.modal-open {
 }
 
 .header-contact-stack .contact-address {
-    max-width: 250px;
-    white-space: nowrap;
+    max-width: 290px;
+    align-items: flex-start;
+    gap: 8px;
 }
 
 .header-contact-stack .contact-address i {
@@ -960,9 +961,13 @@ body.modal-open {
 }
 
 .header-contact-stack .contact-address span {
+    display: -webkit-box;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    white-space: normal;
+    line-height: 1.25;
 }
 
 .contacts-social {
