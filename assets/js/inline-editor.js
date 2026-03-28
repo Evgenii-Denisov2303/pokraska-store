@@ -2320,7 +2320,7 @@
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
         if (ui.panelRevertBtn) {
-            ui.panelRevertBtn.hidden = !bindingIsDirty(binding) || !canRevertBinding(binding);
+            ui.panelRevertBtn.hidden = !canRevertBinding(binding);
         }
 
         const editorFields = getBindingEditorFields(binding);

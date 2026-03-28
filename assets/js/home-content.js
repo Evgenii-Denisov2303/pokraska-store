@@ -891,18 +891,21 @@
                     label: `${key === 'gates' ? 'Фото ворот' : 'Фото покраски'} ${index + 1}`,
                     hint: 'Можно заменить фото, alt и подпись кадра.',
                     directory: 'assets/images/catalog',
-                    element: image,
+                    element: slide,
                     fields: [
                         { key: 'alt', label: 'Alt', type: 'text' },
                         { key: 'caption', label: 'Подпись кадра', type: 'text' }
                     ],
                     render(value, binding) {
                         binding.elements.forEach((element) => {
-                            const figure = element.closest('figure');
-                            element.src = value?.src || '';
-                            element.alt = value?.alt || '';
-                            if (value?.width) element.width = Number(value.width) || element.width;
-                            if (value?.height) element.height = Number(value.height) || element.height;
+                            const figure = element.matches('figure') ? element : element.closest('figure');
+                            const targetImage = figure?.querySelector('img');
+                            if (targetImage) {
+                                targetImage.src = value?.src || '';
+                                targetImage.alt = value?.alt || '';
+                                if (value?.width) targetImage.width = Number(value.width) || targetImage.width;
+                                if (value?.height) targetImage.height = Number(value.height) || targetImage.height;
+                            }
                             const caption = figure?.querySelector('figcaption');
                             if (caption) caption.textContent = value?.caption || '';
                         });
