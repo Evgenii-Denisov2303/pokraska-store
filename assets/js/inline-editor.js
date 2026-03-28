@@ -22,18 +22,29 @@
         style.textContent = `
             body.${MODE_CLASS} [data-inline-edit-id] {
                 cursor: pointer;
+                outline: 2px solid transparent;
+                outline-offset: 4px;
+                border-radius: 14px;
                 transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
             }
 
             body.${MODE_CLASS} [data-inline-edit-id]:hover,
             body.${MODE_CLASS} [data-inline-edit-id].${ACTIVE_CLASS} {
                 outline-color: rgba(37, 99, 235, 0.75);
-                box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.08);
+                background-color: rgba(37, 99, 235, 0.05);
+                box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18) inset, 0 0 0 8px rgba(37, 99, 235, 0.12);
+            }
+
+            body.${MODE_CLASS} [data-inline-edit-id].${ACTIVE_CLASS} {
+                outline-color: rgba(37, 99, 235, 0.9);
+                background-color: rgba(37, 99, 235, 0.08);
+                box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.26) inset, 0 0 0 10px rgba(37, 99, 235, 0.15);
             }
 
             body.${MODE_CLASS} [data-inline-edit-id].${DIRTY_CLASS} {
                 outline-color: rgba(5, 150, 105, 0.82);
-                box-shadow: 0 0 0 8px rgba(5, 150, 105, 0.1);
+                background-color: rgba(5, 150, 105, 0.07);
+                box-shadow: 0 0 0 1px rgba(5, 150, 105, 0.22) inset, 0 0 0 10px rgba(5, 150, 105, 0.15);
             }
 
             .p-inline-root {
@@ -158,6 +169,7 @@
             .p-inline-panel__title {
                 margin: 0;
                 line-height: 1.15;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
@@ -168,6 +180,7 @@
                 margin: 6px 0 0;
                 font-size: 13px;
                 line-height: 1.5;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-toolbar__meta { color: #cbd5e1; }
@@ -415,6 +428,7 @@
                 font-size: 13px;
                 line-height: 1.5;
                 color: #64748b;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-overview__close {
@@ -471,6 +485,7 @@
                 text-align: left;
                 font: inherit;
                 cursor: pointer;
+                overflow: hidden;
                 transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
             }
 
@@ -491,12 +506,14 @@
                 font-weight: 800;
                 line-height: 1.35;
                 color: #0f172a;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-overview__item-meta {
                 font-size: 12px;
                 line-height: 1.45;
                 color: #64748b;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-overview__empty {
@@ -526,13 +543,16 @@
             .p-inline-hover {
                 position: fixed;
                 z-index: 5003;
+                max-width: min(320px, calc(100vw - 24px));
                 padding: 8px 12px;
                 border-radius: 999px;
                 background: rgba(15, 23, 42, 0.94);
                 color: #fff;
                 font-size: 12px;
                 font-weight: 700;
-                line-height: 1;
+                line-height: 1.3;
+                white-space: normal;
+                overflow-wrap: anywhere;
                 pointer-events: none;
                 box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
                 transform: translateY(-8px);
