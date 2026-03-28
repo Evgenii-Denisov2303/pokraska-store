@@ -154,6 +154,8 @@
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
                 margin-top: 0;
                 margin-left: auto;
+                width: 100%;
+                justify-content: flex-start;
                 flex-wrap: wrap;
             }
 
@@ -294,11 +296,15 @@
                 justify-content: center;
                 flex: 0 0 auto;
                 gap: 8px;
+                min-height: 42px;
                 padding: 11px 14px;
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
-                white-space: nowrap;
+                white-space: normal;
+                text-align: center;
+                text-wrap: balance;
+                line-height: 1.2;
             }
 
             .p-inline-toolbar__btn--primary,
@@ -1279,9 +1285,9 @@
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="reset" hidden>Сбросить</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Панель входа</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="reset" hidden>Сброс</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
             </div>
@@ -1864,7 +1870,7 @@
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Кнопка входа откроется справа только в этом состоянии.';
             if (ui.adminBtn) {
-                ui.adminBtn.textContent = 'Панель входа';
+                ui.adminBtn.textContent = 'Вход';
             }
             renderToolbarJumpbar();
             renderOverviewPanel();
@@ -1884,7 +1890,7 @@
                     ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
                     : `${getCurrentPageLabel()} · нажмите на текст, кнопку или фото.`));
         if (ui.adminBtn) {
-            ui.adminBtn.textContent = 'Панель входа';
+            ui.adminBtn.textContent = 'Вход';
         }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
