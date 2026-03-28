@@ -1,4 +1,8 @@
 (function() {
+    function queueInlineBindings(config) {
+        window.PokraskaQueueInlineBindings?.(config);
+    }
+
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -16,6 +20,76 @@
                 <i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}
             </a>
         `;
+    }
+
+    function renderActionNode(anchor, action) {
+        if (!anchor) return;
+        const className = action.style === 'primary' ? 'btn btn-primary' : 'btn btn-outline';
+        const external = action.href?.startsWith('http');
+
+        anchor.className = className;
+        anchor.setAttribute('href', action.href || '#');
+        if (external) {
+            anchor.setAttribute('target', '_blank');
+            anchor.setAttribute('rel', 'noopener noreferrer');
+        } else {
+            anchor.removeAttribute('target');
+            anchor.removeAttribute('rel');
+        }
+
+        anchor.innerHTML = `<i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}`;
+    }
+
+    function registerInlineBindings() {
+        if (!window.PokraskaQueueInlineBindings) return;
+
+        const bindings = [];
+        const heroTitle = document.querySelector('.contacts-title');
+        const heroSubtitle = document.querySelector('.contacts-subtitle');
+        const heroEyebrow = document.querySelector('.contacts-eyebrow');
+        const connectTitle = document.querySelector('.contact-form-card .contacts-card-header h2');
+        const connectNotice = document.querySelector('.contact-form-card .form-notice');
+        const overviewTitle = document.querySelector('.contact-info-card .contacts-card-header h2');
+        const overviewText = document.querySelector('.contact-info-card .contacts-card-header p:last-of-type');
+        const locationTitle = document.querySelector('.contacts-location-card .contacts-location-copy h2');
+        const locationText = document.querySelector('.contacts-location-card .contacts-location-copy > p:last-of-type');
+
+        if (heroTitle) bindings.push({ path: 'hero.title', type: 'text', label: 'Заголовок страницы контактов', element: heroTitle });
+        if (heroSubtitle) bindings.push({ path: 'hero.subtitle', type: 'textarea', label: 'Подзаголовок страницы контактов', element: heroSubtitle });
+        if (heroEyebrow) bindings.push({ path: 'hero.eyebrow', type: 'text', label: 'Надзаголовок контактов', element: heroEyebrow });
+        if (overviewTitle) bindings.push({ path: 'overview.title', type: 'text', label: 'Заголовок основного блока контактов', element: overviewTitle });
+        if (overviewText) bindings.push({ path: 'overview.text', type: 'textarea', label: 'Описание в основном блоке контактов', element: overviewText });
+        if (connectTitle) bindings.push({ path: 'connect.title', type: 'text', label: 'Заголовок блока быстрой связи', element: connectTitle });
+        if (connectNotice) bindings.push({ path: 'connect.notice', type: 'textarea', label: 'Пояснение над формой', element: connectNotice });
+        if (locationTitle) bindings.push({ path: 'location.title', type: 'text', label: 'Заголовок блока схемы проезда', element: locationTitle });
+        if (locationText) bindings.push({ path: 'location.text', type: 'textarea', label: 'Описание блока схемы проезда', element: locationText });
+
+        document.querySelectorAll('.contact-form-card .quick-actions a').forEach((anchor, index) => {
+            bindings.push({
+                path: `connect.actions.${index}`,
+                type: 'object',
+                label: `Кнопка быстрой связи ${index + 1}`,
+                element: anchor,
+                fields: [
+                    { key: 'label', label: 'Текст', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}));
+                }
+            });
+        });
+
+        if (!bindings.length) return;
+
+        queueInlineBindings({
+            fileName: 'contacts',
+            sectionKey: 'contacts',
+            sectionLabel: 'Страница контактов',
+            bindings
+        });
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -160,6 +234,8 @@
                     map.setAttribute('src', content.location.mapSrc);
                 }
             }
+
+            registerInlineBindings();
         } catch (error) {
             console.warn('Failed to apply contacts content', error);
         }

@@ -1,4 +1,8 @@
 (function() {
+    function queueInlineBindings(config) {
+        window.PokraskaQueueInlineBindings?.(config);
+    }
+
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -14,6 +18,18 @@
                 <i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}
             </a>
         `;
+    }
+
+    function renderButtonNode(anchor, action, className) {
+        if (!anchor) return;
+        anchor.className = className;
+        anchor.setAttribute('href', action?.href || '#');
+        anchor.innerHTML = `<i class="${escapeHtml(action?.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action?.label || '')}`;
+    }
+
+    function renderHeadingWithIcon(element, iconClass, text) {
+        if (!element) return;
+        element.innerHTML = `<i class="${escapeHtml(iconClass || '')}"></i> ${escapeHtml(text || '')}`;
     }
 
     function getPageKey() {
@@ -192,6 +208,239 @@
         }
     }
 
+    function registerInlineBindings(pageKey, pageContent) {
+        if (!window.PokraskaQueueInlineBindings) return;
+
+        const bindings = [];
+        const headerTitle = document.querySelector('.services-header h1');
+        const headerSubtitle = document.querySelector('.services-header .subtitle');
+        const finalCta = document.querySelector('.services-cta');
+        const faqSection = document.querySelector('#services-faq-title')?.closest('section');
+        const fileSectionLabel = pageKey === 'powderCoating' ? 'Порошковая покраска' : 'Пескоструйная обработка';
+        const headerIcon = pageContent.header?.icon || '';
+
+        if (headerTitle) {
+            bindings.push({
+                path: `${pageKey}.header.title`,
+                type: 'text',
+                label: 'Заголовок страницы услуг',
+                element: headerTitle,
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderHeadingWithIcon(element, headerIcon, value));
+                }
+            });
+        }
+        if (headerSubtitle) bindings.push({ path: `${pageKey}.header.subtitle`, type: 'textarea', label: 'Подзаголовок страницы услуг', element: headerSubtitle });
+
+        document.querySelectorAll('#service-nav .service-nav-link').forEach((link, index) => {
+            bindings.push({
+                path: `${pageKey}.quickNav.${index}.label`,
+                type: 'text',
+                label: `Пункт навигации ${index + 1}`,
+                element: link,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        const icon = element.querySelector('i');
+                        const iconHtml = icon ? icon.outerHTML : '';
+                        const href = element.getAttribute('href') || '#';
+                        element.innerHTML = `${iconHtml} ${escapeHtml(value || '')}`.trim();
+                        element.setAttribute('href', href);
+                    });
+                }
+            });
+        });
+
+        if (pageKey === 'sandblasting' && pageContent.beforeAfter) {
+            const beforeAfterTitle = document.querySelector('.before-after-section .section-title');
+            const beforeAfterSubtitle = document.querySelector('.before-after-section .section-subtitle');
+            const beforeAfterNote = document.querySelector('.before-after__note');
+            if (beforeAfterTitle) bindings.push({ path: `${pageKey}.beforeAfter.title`, type: 'text', label: 'Заголовок блока до/после', element: beforeAfterTitle });
+            if (beforeAfterSubtitle) bindings.push({ path: `${pageKey}.beforeAfter.subtitle`, type: 'textarea', label: 'Подзаголовок блока до/после', element: beforeAfterSubtitle });
+            if (beforeAfterNote) bindings.push({ path: `${pageKey}.beforeAfter.note`, type: 'textarea', label: 'Подпись под блоком до/после', element: beforeAfterNote });
+        }
+
+        (pageContent.sections || []).forEach((sectionContent, index) => {
+            const card = document.getElementById(sectionContent.id);
+            if (!card) return;
+
+            const title = card.querySelector('.service-header h2');
+            const badge = card.querySelector('.service-id');
+            const description = card.querySelector('.service-description');
+            const advantagesTitle = card.querySelector('.service-advantages h3');
+            const processSteps = card.querySelectorAll('.process-step');
+            const paletteTitle = card.querySelector('.palette-card__info h3');
+            const paletteText = card.querySelector('.palette-card__info p');
+            const paletteList = card.querySelector('.palette-card__info ul');
+            const paletteAction = card.querySelector('.palette-card__info .btn');
+
+            if (title) bindings.push({ path: `${pageKey}.sections.${index}.title`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: заголовок`, element: title });
+            if (badge) bindings.push({ path: `${pageKey}.sections.${index}.badge`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: бейдж`, element: badge });
+            if (description) bindings.push({ path: `${pageKey}.sections.${index}.description`, type: 'textarea', label: `${sectionContent.title || `Услуга ${index + 1}`}: описание`, element: description });
+
+            if (advantagesTitle && sectionContent.advantagesTitle) {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.advantagesTitle`,
+                    type: 'text',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: заголовок преимуществ`,
+                    element: advantagesTitle,
+                    render(value, binding) {
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = `<i class="${escapeHtml(sectionContent.advantagesIcon || '')}"></i> ${escapeHtml(value || '')}`;
+                        });
+                    }
+                });
+            }
+
+            card.querySelectorAll('.advantages-grid .advantage-item').forEach((item, itemIndex) => {
+                const span = item.querySelector('span');
+                if (span) {
+                    bindings.push({
+                        path: `${pageKey}.sections.${index}.advantages.${itemIndex}.text`,
+                        type: 'text',
+                        label: `${sectionContent.title || `Услуга ${index + 1}`}: пункт ${itemIndex + 1}`,
+                        element: span
+                    });
+                }
+            });
+
+            processSteps.forEach((step, stepIndex) => {
+                const stepTitle = step.querySelector('h4');
+                const stepText = step.querySelector('p');
+                if (stepTitle) bindings.push({ path: `${pageKey}.sections.${index}.processSteps.${stepIndex}.title`, type: 'text', label: `${sectionContent.title || `Услуга ${index + 1}`}: шаг ${stepIndex + 1}`, element: stepTitle });
+                if (stepText) bindings.push({ path: `${pageKey}.sections.${index}.processSteps.${stepIndex}.text`, type: 'textarea', label: `${sectionContent.title || `Услуга ${index + 1}`}: описание шага ${stepIndex + 1}`, element: stepText });
+            });
+
+            if (paletteTitle) {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.paletteCard.title`,
+                    type: 'text',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: заголовок палитры`,
+                    element: paletteTitle,
+                    render(value, binding) {
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = `<i class="${escapeHtml(sectionContent.paletteCard?.icon || '')}"></i> ${escapeHtml(value || '')}`;
+                        });
+                    }
+                });
+            }
+            if (paletteText) bindings.push({ path: `${pageKey}.sections.${index}.paletteCard.text`, type: 'textarea', label: `${sectionContent.title || `Услуга ${index + 1}`}: текст палитры`, element: paletteText });
+            if (paletteList) bindings.push({ path: `${pageKey}.sections.${index}.paletteCard.points`, type: 'list', label: `${sectionContent.title || `Услуга ${index + 1}`}: список палитры`, element: paletteList });
+            if (paletteAction) {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.paletteCard.action`,
+                    type: 'object',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: кнопка палитры`,
+                    element: paletteAction,
+                    fields: [
+                        { key: 'label', label: 'Текст кнопки', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-secondary'));
+                    }
+                });
+            }
+        });
+
+        const sharedPrimaryButtons = Array.from(document.querySelectorAll('.service-cta .btn-primary'));
+        const sharedSecondaryButtons = Array.from(document.querySelectorAll('.service-cta .btn-secondary'));
+        if (sharedPrimaryButtons.length) {
+            bindings.push({
+                path: 'sharedCta.primary',
+                type: 'object',
+                label: 'Основная кнопка внутри карточек услуг',
+                element: sharedPrimaryButtons,
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-primary'));
+                }
+            });
+        }
+        if (sharedSecondaryButtons.length) {
+            bindings.push({
+                path: 'sharedCta.secondary',
+                type: 'object',
+                label: 'Вторая кнопка внутри карточек услуг',
+                element: sharedSecondaryButtons,
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-secondary'));
+                }
+            });
+        }
+
+        if (finalCta) {
+            const ctaTitle = finalCta.querySelector('h2');
+            const ctaText = finalCta.querySelector('.cta-text');
+            const ctaAction = finalCta.querySelector('.btn.btn-primary');
+            const phones = finalCta.querySelectorAll('.cta-phone a');
+
+            if (ctaTitle) bindings.push({ path: `${pageKey}.cta.title`, type: 'text', label: 'Заголовок нижнего блока услуг', element: ctaTitle });
+            if (ctaText) bindings.push({ path: `${pageKey}.cta.text`, type: 'textarea', label: 'Описание нижнего блока услуг', element: ctaText });
+            if (ctaAction) {
+                bindings.push({
+                    path: `${pageKey}.cta.action`,
+                    type: 'object',
+                    label: 'Кнопка нижнего блока услуг',
+                    element: ctaAction,
+                    fields: [
+                        { key: 'label', label: 'Текст кнопки', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-primary'));
+                    }
+                });
+            }
+            phones.forEach((phone, index) => {
+                bindings.push({
+                    path: `${pageKey}.cta.phones.${index}`,
+                    type: 'object',
+                    label: `Телефон в нижнем блоке услуг ${index + 1}`,
+                    element: phone,
+                    fields: [
+                        { key: 'label', label: 'Текст телефона', type: 'text' },
+                        { key: 'href', label: 'Ссылка tel:', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => {
+                            element.textContent = value?.label || '';
+                            element.setAttribute('href', value?.href || '#');
+                        });
+                    }
+                });
+            });
+        }
+
+        if (faqSection) {
+            const faqTitle = faqSection.querySelector('.section-title');
+            const faqSubtitle = faqSection.querySelector('.section-subtitle');
+            if (faqTitle) bindings.push({ path: `${pageKey}.faq.title`, type: 'text', label: 'Заголовок FAQ услуг', element: faqTitle });
+            if (faqSubtitle) bindings.push({ path: `${pageKey}.faq.subtitle`, type: 'textarea', label: 'Подзаголовок FAQ услуг', element: faqSubtitle });
+            faqSection.querySelectorAll('.faq-list .faq-item').forEach((item, index) => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer p');
+                if (question) bindings.push({ path: `${pageKey}.faq.items.${index}.question`, type: 'text', label: `Вопрос FAQ ${index + 1}`, element: question });
+                if (answer) bindings.push({ path: `${pageKey}.faq.items.${index}.answer`, type: 'textarea', label: `Ответ FAQ ${index + 1}`, element: answer });
+            });
+        }
+
+        if (!bindings.length) return;
+
+        queueInlineBindings({
+            fileName: 'service-pages',
+            sectionKey: pageKey,
+            sectionLabel: fileSectionLabel,
+            bindings
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
         if (!window.PokraskaContent?.loadContentFile) return;
         if (!document.querySelector('.services-page')) return;
@@ -210,6 +459,7 @@
             applyServiceSections(pageContent, content.sharedCta || {});
             applyFinalCta(pageContent);
             applyFaq(pageContent);
+            registerInlineBindings(pageKey, pageContent);
         } catch (error) {
             console.warn('Failed to apply service page content', error);
         }

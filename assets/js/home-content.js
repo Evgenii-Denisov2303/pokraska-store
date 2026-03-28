@@ -1,4 +1,8 @@
 (function() {
+    function queueInlineBindings(config) {
+        window.PokraskaQueueInlineBindings?.(config);
+    }
+
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -18,6 +22,21 @@
                 <i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}
             </a>
         `;
+    }
+
+    function renderActionNode(anchor, action, className) {
+        if (!anchor) return;
+        const external = action.href?.startsWith('http');
+        anchor.className = className;
+        anchor.setAttribute('href', action.href || '#');
+        if (external) {
+            anchor.setAttribute('target', '_blank');
+            anchor.setAttribute('rel', 'noopener noreferrer');
+        } else {
+            anchor.removeAttribute('target');
+            anchor.removeAttribute('rel');
+        }
+        anchor.innerHTML = `<i class="${escapeHtml(action.icon || '')}"></i> ${escapeHtml(action.label || '')}`;
     }
 
     function applyHero(hero) {
@@ -313,6 +332,144 @@
         }
     }
 
+    function registerInlineBindings() {
+        if (!window.PokraskaQueueInlineBindings) return;
+
+        const bindings = [];
+        const heroTitleMain = document.querySelector('.hero-title-main');
+        const heroTitleSub = document.querySelector('.hero-title-sub');
+        const heroSubtitleStrong = document.querySelector('.hero-subtitle-strong');
+        const heroList = document.querySelector('.hero-list');
+        const heroAction = document.querySelector('.hero-actions .btn-primary');
+
+        if (heroTitleMain) {
+            bindings.push({ path: 'hero.titleMain', type: 'text', label: 'Главный заголовок', element: heroTitleMain });
+        }
+
+        if (heroTitleSub) {
+            bindings.push({ path: 'hero.titleSub', type: 'text', label: 'Вторая строка заголовка', element: heroTitleSub });
+        }
+
+        if (heroSubtitleStrong) {
+            bindings.push({ path: 'hero.subtitleStrong', type: 'text', label: 'Акцент под заголовком', element: heroSubtitleStrong });
+        }
+
+        if (heroList) {
+            bindings.push({
+                path: 'hero.bulletPoints',
+                type: 'list',
+                label: 'Короткий список под заголовком',
+                hint: 'Каждый пункт с новой строки.',
+                element: heroList,
+                render(value, binding) {
+                    const items = Array.isArray(value) ? value : [];
+                    binding.elements.forEach((element) => {
+                        element.innerHTML = items.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                    });
+                }
+            });
+        }
+
+        if (heroAction) {
+            bindings.push({
+                path: 'hero.primaryAction',
+                type: 'object',
+                label: 'Главная кнопка в первом экране',
+                element: heroAction,
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}, 'btn btn-primary'));
+                }
+            });
+        }
+
+        const directionsTitle = document.querySelector('.directions-section .section-title');
+        const directionsSubtitle = document.querySelector('.directions-section .section-subtitle');
+        if (directionsTitle) {
+            bindings.push({ path: 'directions.sectionTitle', type: 'text', label: 'Заголовок блока направлений', element: directionsTitle });
+        }
+        if (directionsSubtitle) {
+            bindings.push({ path: 'directions.sectionSubtitle', type: 'text', label: 'Подзаголовок блока направлений', element: directionsSubtitle });
+        }
+
+        ['gates', 'coating'].forEach((key) => {
+            const selector = `.direction-feature--${key === 'gates' ? 'gates' : 'coating'} [data-direction-showcase-slide]`;
+            document.querySelectorAll(selector).forEach((slide, index) => {
+                const image = slide.querySelector('img');
+                if (!image) return;
+
+                bindings.push({
+                    path: `directions.${key}.slides.${index}`,
+                    type: 'image',
+                    label: `${key === 'gates' ? 'Фото ворот' : 'Фото покраски'} ${index + 1}`,
+                    hint: 'Можно заменить фото, alt и подпись кадра.',
+                    directory: 'assets/images/catalog',
+                    element: image,
+                    fields: [
+                        { key: 'alt', label: 'Alt', type: 'text' },
+                        { key: 'caption', label: 'Подпись кадра', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => {
+                            const figure = element.closest('figure');
+                            element.src = value?.src || '';
+                            element.alt = value?.alt || '';
+                            if (value?.width) element.width = Number(value.width) || element.width;
+                            if (value?.height) element.height = Number(value.height) || element.height;
+                            const caption = figure?.querySelector('figcaption');
+                            if (caption) caption.textContent = value?.caption || '';
+                        });
+                    }
+                });
+            });
+        });
+
+        const requestTitle = document.querySelector('#request-title');
+        const requestLead = document.querySelector('.request-lead');
+        const requestFormTitle = document.querySelector('.request-form--compact h3');
+        const requestFormNotice = document.querySelector('.request-form--compact .form-notice');
+
+        if (requestTitle) {
+            bindings.push({
+                path: 'request.titleHtml',
+                type: 'html',
+                label: 'Главный заголовок блока заявки',
+                hint: 'Можно использовать перенос строки через <br>.',
+                element: requestTitle,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.innerHTML = value || '';
+                    });
+                }
+            });
+        }
+
+        if (requestLead) {
+            bindings.push({ path: 'request.lead', type: 'textarea', label: 'Описание блока заявки', element: requestLead });
+        }
+
+        if (requestFormTitle) {
+            bindings.push({ path: 'request.formTitle', type: 'text', label: 'Заголовок формы заявки', element: requestFormTitle });
+        }
+
+        if (requestFormNotice) {
+            bindings.push({ path: 'request.formNotice', type: 'textarea', label: 'Пояснение над формой', element: requestFormNotice });
+        }
+
+        if (!bindings.length) return;
+
+        queueInlineBindings({
+            fileName: 'home',
+            sectionKey: 'home',
+            sectionLabel: 'Главная страница',
+            bindings
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
         if (!window.PokraskaContent?.loadContentFile) return;
 
@@ -323,6 +480,7 @@
             applyProcess(home.process || {});
             applyTrust(home.trust || {});
             applyRequest(home.request || {});
+            registerInlineBindings();
         } catch (error) {
             console.warn('Failed to apply home content', error);
         }

@@ -1,4 +1,8 @@
 (function() {
+    function queueInlineBindings(config) {
+        window.PokraskaQueueInlineBindings?.(config);
+    }
+
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -23,6 +27,12 @@
             .join('');
     }
 
+    function renderParagraphBlock(paragraphs, dataAttr) {
+        const items = renderParagraphs(paragraphs);
+        if (!items) return '';
+        return `<div class="catalog-panel__paragraph-stack" data-catalog-inline="${dataAttr}">${items}</div>`;
+    }
+
     function renderBadges(badges) {
         if (!Array.isArray(badges) || !badges.length) return '';
 
@@ -38,6 +48,21 @@
             .filter(Boolean)
             .map((item) => `<li>${String(item)}</li>`)
             .join('');
+    }
+
+    function renderContactNode(anchor, contact) {
+        if (!anchor) return;
+        const icon = anchor.querySelector('i');
+        const iconHtml = icon ? icon.outerHTML : '';
+        anchor.innerHTML = `${iconHtml} ${escapeHtml(contact?.label || '')}`.trim();
+        anchor.setAttribute('href', contact?.href || '#');
+    }
+
+    function renderButtonNode(anchor, action, className) {
+        if (!anchor) return;
+        anchor.className = className;
+        anchor.setAttribute('href', action?.href || '#');
+        anchor.innerHTML = `<i class="fas fa-palette"></i> ${escapeHtml(action?.actionLabel || action?.label || '')}`;
     }
 
     function renderInfoCards(cards, headingTag = 'h3') {
@@ -66,11 +91,11 @@
 
         const parts = [];
         if (panelContent.introTitle) {
-            parts.push(`<h3>${escapeHtml(panelContent.introTitle)}</h3>`);
+            parts.push(`<h3 data-catalog-inline="intro">${escapeHtml(panelContent.introTitle)}</h3>`);
         }
-        parts.push(renderParagraphs(panelContent.paragraphs));
+        parts.push(renderParagraphBlock(panelContent.paragraphs, 'paragraphs'));
         parts.push(renderBadges(panelContent.badges));
-        parts.push(renderParagraphs(panelContent.tailParagraphs));
+        parts.push(renderParagraphBlock(panelContent.tailParagraphs, 'tail-paragraphs'));
         textBlock.innerHTML = parts.filter(Boolean).join('');
     }
 
@@ -245,6 +270,291 @@
         applyPanelCta(panelElement, panelContent);
     }
 
+    function registerInlineBindings(content, panelContent) {
+        if (!window.PokraskaQueueInlineBindings) return;
+
+        const catalogBindings = [];
+        const partnersTitle = document.querySelector('.catalog-partners h3');
+        const cta = document.querySelector('.catalog-cta');
+
+        (content.groups || []).forEach((group, groupIndex) => {
+            const tab = document.querySelector(`[data-catalog-group="${group.key}"]`);
+            const panel = document.querySelector(`[data-catalog-group-panel="${group.key}"]`);
+
+            const tabTitle = tab?.querySelector('.catalog-group-tab__title');
+            const eyebrow = panel?.querySelector('.catalog-group-panel__eyebrow');
+            const title = panel?.querySelector('.catalog-group-panel__intro h3');
+            const text = panel?.querySelector('.catalog-group-panel__intro p');
+
+            if (tabTitle) catalogBindings.push({ path: `groups.${groupIndex}.title`, type: 'text', label: `Группа каталога ${groupIndex + 1}: название`, element: tabTitle });
+            if (eyebrow) catalogBindings.push({ path: `groups.${groupIndex}.eyebrow`, type: 'text', label: `Группа каталога ${groupIndex + 1}: надзаголовок`, element: eyebrow });
+            if (title) catalogBindings.push({ path: `groups.${groupIndex}.title`, type: 'text', label: `Группа каталога ${groupIndex + 1}: заголовок панели`, element: title });
+            if (text) catalogBindings.push({ path: `groups.${groupIndex}.text`, type: 'textarea', label: `Группа каталога ${groupIndex + 1}: описание`, element: text });
+
+            panel?.querySelectorAll('.catalog-group-panel__links [data-catalog-tab]').forEach((button, linkIndex) => {
+                catalogBindings.push({
+                    path: `groups.${groupIndex}.links.${linkIndex}.label`,
+                    type: 'text',
+                    label: `Группа каталога ${groupIndex + 1}: кнопка ${linkIndex + 1}`,
+                    element: button
+                });
+            });
+        });
+
+        if (partnersTitle) {
+            catalogBindings.push({
+                path: 'partners.title',
+                type: 'text',
+                label: 'Заголовок блока брендов',
+                element: partnersTitle,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        element.innerHTML = `<i class="fas fa-handshake"></i> ${escapeHtml(value || '')}`;
+                    });
+                }
+            });
+        }
+
+        if (cta) {
+            const title = cta.querySelector('h3');
+            const text = cta.querySelector('p');
+            const contacts = cta.querySelectorAll('.catalog-contact-list a');
+            if (title) catalogBindings.push({ path: 'cta.title', type: 'text', label: 'Нижний CTA каталога: заголовок', element: title });
+            if (text) catalogBindings.push({ path: 'cta.text', type: 'textarea', label: 'Нижний CTA каталога: текст', element: text });
+            contacts.forEach((contact, index) => {
+                catalogBindings.push({
+                    path: `cta.contacts.${index}`,
+                    type: 'object',
+                    label: `Нижний CTA каталога: контакт ${index + 1}`,
+                    element: contact,
+                    fields: [
+                        { key: 'label', label: 'Текст', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => renderContactNode(element, value || {}));
+                    }
+                });
+            });
+        }
+
+        if (catalogBindings.length) {
+            queueInlineBindings({
+                fileName: 'catalog',
+                sectionKey: 'catalog',
+                sectionLabel: 'Каталог',
+                bindings: catalogBindings
+            });
+        }
+
+        const panelBindings = [];
+        Object.entries(panelContent || {}).forEach(([panelKey, panel]) => {
+            if (!panel || typeof panel !== 'object' || !panel.panelId) return;
+
+            const panelElement = document.getElementById(panel.panelId);
+            if (!panelElement) return;
+
+            const breadcrumbs = panelElement.querySelector('.catalog-breadcrumbs');
+            const title = panelElement.querySelector('.catalog-panel__header h2');
+            const intro = panelElement.querySelector('[data-catalog-inline="intro"]');
+            const paragraphs = panelElement.querySelector('[data-catalog-inline="paragraphs"]');
+            const badges = panelElement.querySelector('.catalog-panel__badges');
+            const tailParagraphs = panelElement.querySelector('[data-catalog-inline="tail-paragraphs"]');
+
+            if (breadcrumbs) panelBindings.push({ path: `${panelKey}.breadcrumb`, type: 'text', label: `${panel.title || panelKey}: хлебные крошки`, element: breadcrumbs });
+            if (title) panelBindings.push({ path: `${panelKey}.title`, type: 'text', label: `${panel.title || panelKey}: заголовок`, element: title });
+            if (intro) panelBindings.push({ path: `${panelKey}.introTitle`, type: 'text', label: `${panel.title || panelKey}: подзаголовок`, element: intro });
+            if (paragraphs) {
+                panelBindings.push({
+                    path: `${panelKey}.paragraphs`,
+                    type: 'list',
+                    label: `${panel.title || panelKey}: основной текст`,
+                    hint: 'Каждый абзац с новой строки.',
+                    element: paragraphs,
+                    render(value, binding) {
+                        const items = Array.isArray(value) ? value : [];
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = items.map((item) => `<p>${escapeHtml(item)}</p>`).join('');
+                        });
+                    }
+                });
+            }
+            if (badges) {
+                panelBindings.push({
+                    path: `${panelKey}.badges`,
+                    type: 'list',
+                    label: `${panel.title || panelKey}: плашки`,
+                    element: badges,
+                    render(value, binding) {
+                        const items = Array.isArray(value) ? value : [];
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+                        });
+                    }
+                });
+            }
+            if (tailParagraphs) {
+                panelBindings.push({
+                    path: `${panelKey}.tailParagraphs`,
+                    type: 'list',
+                    label: `${panel.title || panelKey}: дополнительный текст`,
+                    hint: 'Каждый абзац с новой строки.',
+                    element: tailParagraphs,
+                    render(value, binding) {
+                        const items = Array.isArray(value) ? value : [];
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = items.map((item) => `<p>${escapeHtml(item)}</p>`).join('');
+                        });
+                    }
+                });
+            }
+
+            panelElement.querySelectorAll('.catalog-info-grid .catalog-info-card').forEach((card, cardIndex) => {
+                const cardTitle = card.querySelector('h3');
+                const items = card.querySelector('ul');
+                if (cardTitle) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — заголовок`, element: cardTitle });
+                if (items) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.items`, type: 'list', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — список`, element: items });
+            });
+
+            const faqSection = panelElement.querySelector('.faq-section');
+            if (faqSection) {
+                const faqTitle = faqSection.querySelector('.section-title');
+                const faqSubtitle = faqSection.querySelector('.section-subtitle');
+                if (faqTitle) panelBindings.push({ path: `${panelKey}.faq.title`, type: 'text', label: `${panel.title || panelKey}: FAQ — заголовок`, element: faqTitle });
+                if (faqSubtitle) panelBindings.push({ path: `${panelKey}.faq.subtitle`, type: 'textarea', label: `${panel.title || panelKey}: FAQ — подзаголовок`, element: faqSubtitle });
+                faqSection.querySelectorAll('.faq-list .faq-item').forEach((item, faqIndex) => {
+                    const question = item.querySelector('.faq-question');
+                    const answer = item.querySelector('.faq-answer p');
+                    if (question) panelBindings.push({ path: `${panelKey}.faq.items.${faqIndex}.question`, type: 'text', label: `${panel.title || panelKey}: FAQ ${faqIndex + 1} — вопрос`, element: question });
+                    if (answer) panelBindings.push({ path: `${panelKey}.faq.items.${faqIndex}.answer`, type: 'textarea', label: `${panel.title || panelKey}: FAQ ${faqIndex + 1} — ответ`, element: answer });
+                });
+            }
+
+            const paletteInfo = panelElement.querySelector('.catalog-palette-card__info');
+            if (paletteInfo) {
+                const paletteTitle = paletteInfo.querySelector('h3');
+                const paletteText = paletteInfo.querySelector('p');
+                const paletteItems = paletteInfo.querySelector('ul');
+                const paletteAction = paletteInfo.querySelector('.btn');
+                const paletteNote = panelElement.querySelector('.catalog-panel__palette-note');
+                if (paletteTitle) panelBindings.push({ path: `${panelKey}.palette.title`, type: 'text', label: `${panel.title || panelKey}: палитра — заголовок`, element: paletteTitle });
+                if (paletteText) panelBindings.push({ path: `${panelKey}.palette.text`, type: 'textarea', label: `${panel.title || panelKey}: палитра — текст`, element: paletteText });
+                if (paletteItems) panelBindings.push({ path: `${panelKey}.palette.items`, type: 'list', label: `${panel.title || panelKey}: палитра — список`, element: paletteItems });
+                if (paletteAction) {
+                    panelBindings.push({
+                        path: `${panelKey}.palette`,
+                        type: 'object',
+                        label: `${panel.title || panelKey}: палитра — кнопка`,
+                        element: paletteAction,
+                        fields: [
+                            { key: 'actionLabel', label: 'Текст кнопки', type: 'text' },
+                            { key: 'actionHref', label: 'Ссылка', type: 'text' }
+                        ],
+                        render(value, binding) {
+                            binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'btn btn-primary'));
+                        }
+                    });
+                }
+                if (paletteNote) panelBindings.push({ path: `${panelKey}.palette.note`, type: 'textarea', label: `${panel.title || panelKey}: палитра — примечание`, element: paletteNote });
+            }
+
+            panelElement.querySelectorAll('.catalog-spec-group').forEach((groupSection, groupIndex) => {
+                const groupTitle = groupSection.querySelector(':scope > h3');
+                if (groupTitle) panelBindings.push({ path: `${panelKey}.specGroups.${groupIndex}.title`, type: 'text', label: `${panel.title || panelKey}: блок характеристик ${groupIndex + 1}`, element: groupTitle });
+
+                groupSection.querySelectorAll('.catalog-panel__spec-cards .catalog-info-card').forEach((card, cardIndex) => {
+                    const cardTitle = card.querySelector('h4');
+                    const list = card.querySelector('ul');
+                    if (cardTitle) panelBindings.push({ path: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: карточка спецификаций ${groupIndex + 1}.${cardIndex + 1}`, element: cardTitle });
+                    if (list) panelBindings.push({ path: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.items`, type: 'list', label: `${panel.title || panelKey}: список спецификаций ${groupIndex + 1}.${cardIndex + 1}`, element: list });
+                });
+            });
+
+            const sectionHeading = panelElement.querySelector('.catalog-panel__section-heading');
+            if (sectionHeading) {
+                const headingTitle = sectionHeading.querySelector('h3');
+                const headingText = sectionHeading.querySelector('p');
+                if (headingTitle) panelBindings.push({ path: `${panelKey}.sectionHeading.title`, type: 'text', label: `${panel.title || panelKey}: заголовок секции`, element: headingTitle });
+                if (headingText) panelBindings.push({ path: `${panelKey}.sectionHeading.text`, type: 'textarea', label: `${panel.title || panelKey}: описание секции`, element: headingText });
+            }
+
+            const steps = panelElement.querySelector('.automation-steps');
+            if (steps) {
+                steps.querySelectorAll('.automation-step').forEach((step, stepIndex) => {
+                    const stepTitle = step.querySelector('h3');
+                    const stepText = step.querySelector('p');
+                    if (stepTitle) panelBindings.push({ path: `${panelKey}.steps.${stepIndex}.title`, type: 'text', label: `${panel.title || panelKey}: шаг ${stepIndex + 1}`, element: stepTitle });
+                    if (stepText) panelBindings.push({ path: `${panelKey}.steps.${stepIndex}.text`, type: 'textarea', label: `${panel.title || panelKey}: описание шага ${stepIndex + 1}`, element: stepText });
+                });
+            }
+
+            panelElement.querySelectorAll('.automation-products .automation-card').forEach((card, cardIndex) => {
+                const meta = card.querySelector('.automation-card__meta');
+                const cardTitle = card.querySelector('.automation-card__title');
+                const description = card.querySelector('.automation-card__description');
+                const specs = card.querySelector('.automation-card__specs');
+                const action = card.querySelector('.automation-card__cta');
+                if (meta) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.meta`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — артикул`, element: meta });
+                if (cardTitle) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — заголовок`, element: cardTitle });
+                if (description) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.description`, type: 'textarea', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — описание`, element: description });
+                if (specs) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.specs`, type: 'list', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — характеристики`, element: specs });
+                if (action) {
+                    panelBindings.push({
+                        path: `${panelKey}.products.${cardIndex}`,
+                        type: 'object',
+                        label: `${panel.title || panelKey}: товар ${cardIndex + 1} — кнопка`,
+                        element: action,
+                        fields: [
+                            { key: 'cta', label: 'Текст кнопки', type: 'text' },
+                            { key: 'href', label: 'Ссылка', type: 'text' }
+                        ],
+                        render(value, binding) {
+                            binding.elements.forEach((element) => {
+                                element.textContent = value?.cta || '';
+                                if (element.tagName === 'A') {
+                                    element.setAttribute('href', value?.href || '#');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            const panelCta = panelElement.querySelector('.catalog-panel__cta');
+            if (panelCta) {
+                const ctaTitle = panelCta.querySelector('h3');
+                const ctaText = panelCta.querySelector('p');
+                const contacts = panelCta.querySelectorAll('.catalog-contact-list a');
+                if (ctaTitle) panelBindings.push({ path: `${panelKey}.cta.title`, type: 'text', label: `${panel.title || panelKey}: CTA — заголовок`, element: ctaTitle });
+                if (ctaText) panelBindings.push({ path: `${panelKey}.cta.text`, type: 'textarea', label: `${panel.title || panelKey}: CTA — текст`, element: ctaText });
+                contacts.forEach((contact, contactIndex) => {
+                    panelBindings.push({
+                        path: `${panelKey}.cta.contacts.${contactIndex}`,
+                        type: 'object',
+                        label: `${panel.title || panelKey}: CTA — контакт ${contactIndex + 1}`,
+                        element: contact,
+                        fields: [
+                            { key: 'label', label: 'Текст', type: 'text' },
+                            { key: 'href', label: 'Ссылка', type: 'text' }
+                        ],
+                        render(value, binding) {
+                            binding.elements.forEach((element) => renderContactNode(element, value || {}));
+                        }
+                    });
+                });
+            }
+        });
+
+        if (panelBindings.length) {
+            queueInlineBindings({
+                fileName: 'catalog-panels',
+                sectionKey: 'catalog-panels',
+                sectionLabel: 'Карточки каталога',
+                bindings: panelBindings
+            });
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
         if (!window.PokraskaContent?.loadContentFile) return;
         if (!document.querySelector('[data-catalog-layout]')) return;
@@ -312,6 +622,8 @@
                     contacts.innerHTML = (content.cta?.contacts || []).map(renderContact).join('');
                 }
             }
+
+            registerInlineBindings(content, panelContent);
         } catch (error) {
             console.warn('Failed to apply catalog content', error);
         }

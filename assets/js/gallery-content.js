@@ -1,4 +1,8 @@
 (function() {
+    function queueInlineBindings(config) {
+        window.PokraskaQueueInlineBindings?.(config);
+    }
+
     function escapeHtml(value) {
         return String(value ?? '')
             .replace(/&/g, '&amp;')
@@ -14,6 +18,116 @@
                 <i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}
             </a>
         `;
+    }
+
+    function renderActionNode(anchor, action, className) {
+        if (!anchor) return;
+
+        anchor.className = className;
+        anchor.setAttribute('href', action?.href || '#');
+        anchor.innerHTML = `<i class="${escapeHtml(action?.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action?.label || '')}`;
+    }
+
+    function renderHeadingWithIcon(element, iconClass, text) {
+        if (!element) return;
+        element.innerHTML = `<i class="${escapeHtml(iconClass || '')}" aria-hidden="true"></i> ${escapeHtml(text || '')}`;
+    }
+
+    function registerInlineBindings(content) {
+        if (!window.PokraskaQueueInlineBindings) return;
+
+        const bindings = [];
+        const headerTitle = document.querySelector('.gallery-header h1');
+        const headerSubtitle = document.querySelector('.gallery-header .subtitle');
+        const showMoreButton = document.querySelector('.gallery-show-more');
+        const counterNumber = document.querySelector('.counter-number');
+        const counterText = document.querySelector('.counter-text');
+        const ctaButtons = document.querySelectorAll('.order-cta a');
+
+        if (headerTitle) {
+            bindings.push({
+                path: 'header.title',
+                type: 'text',
+                label: 'Заголовок галереи',
+                element: headerTitle,
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderHeadingWithIcon(element, 'fas fa-images', value));
+                }
+            });
+        }
+
+        if (headerSubtitle) {
+            bindings.push({ path: 'header.subtitle', type: 'textarea', label: 'Подзаголовок галереи', element: headerSubtitle });
+        }
+
+        document.querySelectorAll('.gallery-filters .filter-btn').forEach((button, index) => {
+            bindings.push({
+                path: `filters.${index}.label`,
+                type: 'text',
+                label: `Название фильтра ${index + 1}`,
+                element: button,
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        const icon = element.querySelector('i');
+                        const iconHtml = icon ? icon.outerHTML : '';
+                        element.innerHTML = `${iconHtml} ${escapeHtml(value || '')}`.trim();
+                    });
+                }
+            });
+        });
+
+        if (showMoreButton) {
+            bindings.push({ path: 'showMoreLabel', type: 'text', label: 'Текст кнопки "Показать еще"', element: showMoreButton });
+        }
+
+        if (counterNumber) {
+            bindings.push({ path: 'counter.value', type: 'text', label: 'Число в счетчике галереи', element: counterNumber });
+        }
+
+        if (counterText) {
+            bindings.push({ path: 'counter.text', type: 'textarea', label: 'Описание под счетчиком галереи', element: counterText });
+        }
+
+        if (ctaButtons[0]) {
+            bindings.push({
+                path: 'cta.primary',
+                type: 'object',
+                label: 'Главная кнопка под галереей',
+                element: ctaButtons[0],
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}, 'btn btn-primary'));
+                }
+            });
+        }
+
+        if (ctaButtons[1]) {
+            bindings.push({
+                path: 'cta.secondary',
+                type: 'object',
+                label: 'Вторая кнопка под галереей',
+                element: ctaButtons[1],
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}, 'btn btn-secondary'));
+                }
+            });
+        }
+
+        if (!bindings.length) return;
+
+        queueInlineBindings({
+            fileName: 'gallery',
+            sectionKey: 'gallery',
+            sectionLabel: 'Галерея работ',
+            bindings
+        });
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -61,6 +175,8 @@
                     renderButton(content.cta?.secondary || {}, 'btn btn-secondary')
                 ].join('');
             }
+
+            registerInlineBindings(content);
         } catch (error) {
             console.warn('Failed to apply gallery content', error);
         }
