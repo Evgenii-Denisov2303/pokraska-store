@@ -1307,7 +1307,7 @@
                     <div>
                         <span class="p-inline-panel__kicker">Структура страницы</span>
                         <h2 class="p-inline-overview__title">Все редактируемые блоки</h2>
-                        <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице.</p>
+                        <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице. Ctrl+K — быстрый поиск.</p>
                     </div>
                     <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
@@ -1318,7 +1318,7 @@
                 <div class="p-inline-overview__filters"></div>
                 <div class="p-inline-overview__search-row">
                     <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
-                    <button class="p-inline-overview__search-clear" type="button" hidden>Сброс</button>
+                    <button class="p-inline-overview__search-clear" type="button" hidden>Очистить</button>
                 </div>
             </div>
             <div class="p-inline-overview__body"></div>
@@ -2410,7 +2410,9 @@
     function fillPanel(binding, value) {
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
-        ui.panelMeta.textContent = `${binding.sectionLabel} · Ctrl+Enter — применить`;
+        ui.panelMeta.textContent = bindingIsDirty(binding)
+            ? `${binding.sectionLabel} · Есть несохранённые правки · Ctrl+Enter — применить`
+            : `${binding.sectionLabel} · Ctrl+Enter — применить`;
         ui.panelForm.innerHTML = '';
         if (ui.panelRevertBtn) {
             ui.panelRevertBtn.hidden = !bindingIsDirty(binding) || !canRevertBinding(binding);
@@ -2928,7 +2930,7 @@
             persistDraftFiles();
             renderToolbar();
             closePanel();
-            showToast('Правка применена');
+            showToast(`Изменено: ${truncateInlineLabel(binding.label, 44)}`);
         } catch (error) {
             showToast(error.message || 'Не удалось применить правку');
         }
@@ -2956,7 +2958,7 @@
             persistDraftFiles();
             fillPanel(binding, nextValue);
             renderToolbar();
-            showToast('Блок возвращён к сохранённому виду');
+            showToast(`Возвращено: ${truncateInlineLabel(binding.label, 44)}`);
         } catch (error) {
             showToast(error.message || 'Не удалось вернуть сохранённую версию');
         }
@@ -2973,6 +2975,7 @@
             showToast('Нечего сохранять');
             return;
         }
+        const dirtyFilesCount = dirtyEntries.length;
 
         ui.saveBtn.disabled = true;
         ui.saveBtn.textContent = 'Сохраняю...';
@@ -3003,7 +3006,7 @@
             state.lastSavedAt = Date.now();
             persistDraftFiles();
             renderToolbar();
-            showToast('Изменения сохранены');
+            showToast(`Сохранено: ${dirtyFilesCount} ${getCountLabel(dirtyFilesCount, 'файл', 'файла', 'файлов')}`);
         } catch (error) {
             showToast(error.message || 'Ошибка сохранения');
         } finally {
@@ -3100,6 +3103,15 @@
 
     function handleKeydown(event) {
         if (!state.enabled) return;
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
+            if (!state.overviewOpen) {
+                state.overviewFocus = hasDirtyFiles() ? 'dirty' : 'all';
+            }
+            toggleOverview(true);
+            return;
+        }
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
             event.preventDefault();
@@ -3236,6 +3248,16 @@
             ui.overviewSearch?.focus();
         });
         ui.overviewSearch.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                if (state.overviewQuery) {
+                    state.overviewQuery = '';
+                    renderOverviewPanel();
+                    return;
+                }
+                toggleOverview(false);
+                return;
+            }
             if (event.key !== 'Enter') return;
             const firstItem = ui.overviewBody.querySelector('[data-inline-binding-id]');
             if (!firstItem) return;
