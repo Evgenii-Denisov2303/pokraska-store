@@ -428,7 +428,15 @@
                 if (title) bindings.push({ path: `swingLanding.products.${index}.title`, type: 'text', label: `Карточка автоматики ${index + 1}: заголовок`, element: title });
                 if (description) bindings.push({ path: `swingLanding.products.${index}.description`, type: 'textarea', label: `Карточка автоматики ${index + 1}: описание`, element: description });
                 if (specs) {
-                    bindings.push({ path: `swingLanding.products.${index}.specs`, type: 'list', label: `Карточка автоматики ${index + 1}: характеристики`, element: specs });
+                    bindings.push({
+                        path: `swingLanding.products.${index}.specs`,
+                        type: 'list',
+                        label: `Карточка автоматики ${index + 1}: характеристики`,
+                        element: specs,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
                     const buildSpecBinding = (targetItem, specIndex) => ({
                         path: `swingLanding.products.${index}.specs.${specIndex}`,
                         type: 'text',
@@ -516,7 +524,15 @@
                 if (title) bindings.push({ path: 'swingLanding.guide.title', type: 'text', label: 'Заголовок блока подбора автоматики', element: title });
                 if (intro) bindings.push({ path: 'swingLanding.guide.intro', type: 'textarea', label: 'Вводный текст блока подбора автоматики', element: intro });
                 if (list) {
-                    bindings.push({ path: 'swingLanding.guide.list', type: 'list', label: 'Список в блоке подбора автоматики', element: list });
+                    bindings.push({
+                        path: 'swingLanding.guide.list',
+                        type: 'list',
+                        label: 'Список в блоке подбора автоматики',
+                        element: list,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
                     const buildGuideListBinding = (targetItem, itemIndex) => ({
                         path: `swingLanding.guide.list.${itemIndex}`,
                         type: 'text',
@@ -702,7 +718,15 @@
                 const list = section.querySelector('.automation-product-specs');
                 if (sectionTitle) bindings.push({ path: `slidingComponentsPage.sections.${index}.title`, type: 'text', label: `Раздел комплектующих ${index + 1}: заголовок`, element: sectionTitle });
                 if (list) {
-                    bindings.push({ path: `slidingComponentsPage.sections.${index}.items`, type: 'list', label: `Раздел комплектующих ${index + 1}: список`, element: list });
+                    bindings.push({
+                        path: `slidingComponentsPage.sections.${index}.items`,
+                        type: 'list',
+                        label: `Раздел комплектующих ${index + 1}: список`,
+                        element: list,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
                     const buildSectionItemBinding = (targetItem, itemIndex) => ({
                         path: `slidingComponentsPage.sections.${index}.items.${itemIndex}`,
                         type: 'text',
@@ -850,7 +874,15 @@
         if (title) bindings.push({ path: `productPages.${productIndex}.title`, type: 'text', label: 'Заголовок карточки автоматики', element: title });
         if (description) bindings.push({ path: `productPages.${productIndex}.description`, type: 'textarea', label: 'Описание карточки автоматики', element: description });
         if (specs) {
-            bindings.push({ path: `productPages.${productIndex}.specs`, type: 'list', label: 'Характеристики карточки автоматики', element: specs });
+            bindings.push({
+                path: `productPages.${productIndex}.specs`,
+                type: 'list',
+                label: 'Характеристики карточки автоматики',
+                element: specs,
+                render(value, binding) {
+                    binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                }
+            });
             const buildProductSpecBinding = (targetItem, itemIndex) => ({
                 path: `productPages.${productIndex}.specs.${itemIndex}`,
                 type: 'text',

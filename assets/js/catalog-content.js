@@ -216,7 +216,7 @@
         const title = cardElement.querySelector(headingTag);
         const list = cardElement.querySelector('ul');
         if (title) title.textContent = card.title || '';
-        if (list) list.innerHTML = renderListItems(card.items);
+        if (list) syncTextList(list, 'li', card.items || []);
     }
 
     function syncCollection(container, itemSelector, items, applyItem) {
@@ -240,6 +240,16 @@
                 applyItem(node, item, index);
             }
         });
+    }
+
+    function applyTextListItem(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncTextList(container, itemSelector, items) {
+        if (!container) return;
+        syncCollection(container, itemSelector, items, applyTextListItem);
     }
 
     function applyTextBlock(panelElement, panelContent) {
@@ -393,7 +403,7 @@
         if (meta) meta.textContent = product.meta || '';
         if (title) title.textContent = product.title || '';
         if (description) description.textContent = product.description || '';
-        if (specs) specs.innerHTML = renderListItems(product.specs);
+        if (specs) syncTextList(specs, 'li', product.specs || []);
 
         if (cta) {
             cta.textContent = product.cta || '';
@@ -622,6 +632,53 @@
             const panelElement = document.getElementById(panel.panelId);
             if (!panelElement) return;
 
+            const buildTextCollectionBinding = ({
+                targetElement,
+                index,
+                collectionPath,
+                labelForIndex,
+                getItem,
+                collectionRender,
+                createValue = 'Новый пункт',
+                editorKindLabel = 'Пункт на странице',
+                collectionItemLabel = 'пункт',
+                collectionItemLabelPlural = 'пунктов'
+            }) => ({
+                path: `${collectionPath}.${index}`,
+                type: 'text',
+                editorKindLabel,
+                collectionItemLabel,
+                collectionItemLabelPlural,
+                label: labelForIndex(index),
+                element: targetElement,
+                collectionPath,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = getItem(nextIndex);
+                    if (!nextItem) return null;
+                    return buildTextCollectionBinding({
+                        targetElement: nextItem,
+                        index: nextIndex,
+                        collectionPath,
+                        labelForIndex,
+                        getItem,
+                        collectionRender,
+                        createValue,
+                        editorKindLabel,
+                        collectionItemLabel,
+                        collectionItemLabelPlural
+                    });
+                },
+                collectionCreateValue() {
+                    return typeof createValue === 'function' ? createValue(index) : createValue;
+                },
+                collectionRender(items) {
+                    collectionRender(Array.isArray(items) ? items : []);
+                },
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                }
+            });
+
             const breadcrumbs = panelElement.querySelector('.catalog-breadcrumbs');
             const title = panelElement.querySelector('.catalog-panel__header h2');
             const intro = panelElement.querySelector('[data-catalog-inline="intro"]');
@@ -646,6 +703,20 @@
                         });
                     }
                 });
+                paragraphs.querySelectorAll('p').forEach((item, itemIndex) => {
+                    panelBindings.push(buildTextCollectionBinding({
+                        targetElement: item,
+                        index: itemIndex,
+                        collectionPath: `${panelKey}.paragraphs`,
+                        labelForIndex: (index) => `${panel.title || panelKey}: основной текст — абзац ${index + 1}`,
+                        getItem: (index) => paragraphs.querySelectorAll('p')[index],
+                        collectionRender: (items) => syncTextList(paragraphs, 'p', items),
+                        createValue: 'Новый абзац',
+                        editorKindLabel: 'Абзац на странице',
+                        collectionItemLabel: 'абзац',
+                        collectionItemLabelPlural: 'абзацев'
+                    }));
+                });
             }
             if (badges) {
                 panelBindings.push({
@@ -659,6 +730,20 @@
                             element.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
                         });
                     }
+                });
+                badges.querySelectorAll('span').forEach((item, itemIndex) => {
+                    panelBindings.push(buildTextCollectionBinding({
+                        targetElement: item,
+                        index: itemIndex,
+                        collectionPath: `${panelKey}.badges`,
+                        labelForIndex: (index) => `${panel.title || panelKey}: плашка ${index + 1}`,
+                        getItem: (index) => badges.querySelectorAll('span')[index],
+                        collectionRender: (items) => syncTextList(badges, 'span', items),
+                        createValue: 'Новая плашка',
+                        editorKindLabel: 'Плашка на странице',
+                        collectionItemLabel: 'элемент',
+                        collectionItemLabelPlural: 'элементов'
+                    }));
                 });
             }
             if (tailParagraphs) {
@@ -674,6 +759,20 @@
                             element.innerHTML = items.map((item) => `<p>${escapeHtml(item)}</p>`).join('');
                         });
                     }
+                });
+                tailParagraphs.querySelectorAll('p').forEach((item, itemIndex) => {
+                    panelBindings.push(buildTextCollectionBinding({
+                        targetElement: item,
+                        index: itemIndex,
+                        collectionPath: `${panelKey}.tailParagraphs`,
+                        labelForIndex: (index) => `${panel.title || panelKey}: дополнительный текст — абзац ${index + 1}`,
+                        getItem: (index) => tailParagraphs.querySelectorAll('p')[index],
+                        collectionRender: (items) => syncTextList(tailParagraphs, 'p', items),
+                        createValue: 'Новый абзац',
+                        editorKindLabel: 'Абзац на странице',
+                        collectionItemLabel: 'абзац',
+                        collectionItemLabelPlural: 'абзацев'
+                    }));
                 });
             }
 
@@ -781,7 +880,28 @@
                     }
                 });
                 if (cardTitle) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — заголовок`, element: cardTitle });
-                if (items) panelBindings.push({ path: `${panelKey}.cards.${cardIndex}.items`, type: 'list', label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — список`, element: items });
+                if (items) {
+                    panelBindings.push({
+                        path: `${panelKey}.cards.${cardIndex}.items`,
+                        type: 'list',
+                        label: `${panel.title || panelKey}: карточка ${cardIndex + 1} — список`,
+                        element: items,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
+                    items.querySelectorAll('li').forEach((item, itemIndex) => {
+                        panelBindings.push(buildTextCollectionBinding({
+                            targetElement: item,
+                            index: itemIndex,
+                            collectionPath: `${panelKey}.cards.${cardIndex}.items`,
+                            labelForIndex: (index) => `${panel.title || panelKey}: карточка ${cardIndex + 1} — пункт ${index + 1}`,
+                            getItem: (index) => card.querySelectorAll('ul li')[index],
+                            collectionRender: (values) => syncTextList(items, 'li', values),
+                            createValue: 'Новый пункт'
+                        }));
+                    });
+                }
             });
 
             const faqSection = panelElement.querySelector('.faq-section');
@@ -856,7 +976,28 @@
                 const paletteNote = panelElement.querySelector('.catalog-panel__palette-note');
                 if (paletteTitle) panelBindings.push({ path: `${panelKey}.palette.title`, type: 'text', label: `${panel.title || panelKey}: палитра — заголовок`, element: paletteTitle });
                 if (paletteText) panelBindings.push({ path: `${panelKey}.palette.text`, type: 'textarea', label: `${panel.title || panelKey}: палитра — текст`, element: paletteText });
-                if (paletteItems) panelBindings.push({ path: `${panelKey}.palette.items`, type: 'list', label: `${panel.title || panelKey}: палитра — список`, element: paletteItems });
+                if (paletteItems) {
+                    panelBindings.push({
+                        path: `${panelKey}.palette.items`,
+                        type: 'list',
+                        label: `${panel.title || panelKey}: палитра — список`,
+                        element: paletteItems,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
+                    paletteItems.querySelectorAll('li').forEach((item, itemIndex) => {
+                        panelBindings.push(buildTextCollectionBinding({
+                            targetElement: item,
+                            index: itemIndex,
+                            collectionPath: `${panelKey}.palette.items`,
+                            labelForIndex: (index) => `${panel.title || panelKey}: палитра — пункт ${index + 1}`,
+                            getItem: (index) => paletteItems.querySelectorAll('li')[index],
+                            collectionRender: (values) => syncTextList(paletteItems, 'li', values),
+                            createValue: 'Новый пункт'
+                        }));
+                    });
+                }
                 if (paletteAction) {
                     panelBindings.push({
                         path: `${panelKey}.palette`,
@@ -905,7 +1046,28 @@
                     const cardTitle = card.querySelector('h4');
                     const list = card.querySelector('ul');
                     if (cardTitle) panelBindings.push({ path: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: карточка спецификаций ${groupIndex + 1}.${cardIndex + 1}`, element: cardTitle });
-                    if (list) panelBindings.push({ path: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.items`, type: 'list', label: `${panel.title || panelKey}: список спецификаций ${groupIndex + 1}.${cardIndex + 1}`, element: list });
+                    if (list) {
+                        panelBindings.push({
+                            path: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.items`,
+                            type: 'list',
+                            label: `${panel.title || panelKey}: список спецификаций ${groupIndex + 1}.${cardIndex + 1}`,
+                            element: list,
+                            render(value, binding) {
+                                binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                            }
+                        });
+                        list.querySelectorAll('li').forEach((item, itemIndex) => {
+                            panelBindings.push(buildTextCollectionBinding({
+                                targetElement: item,
+                                index: itemIndex,
+                                collectionPath: `${panelKey}.specGroups.${groupIndex}.cards.${cardIndex}.items`,
+                                labelForIndex: (index) => `${panel.title || panelKey}: спецификация ${groupIndex + 1}.${cardIndex + 1} — пункт ${index + 1}`,
+                                getItem: (index) => list.querySelectorAll('li')[index],
+                                collectionRender: (values) => syncTextList(list, 'li', values),
+                                createValue: 'Новый пункт'
+                            }));
+                        });
+                    }
                 });
             });
 
@@ -1034,7 +1196,28 @@
                 if (meta) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.meta`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — артикул`, element: meta });
                 if (cardTitle) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.title`, type: 'text', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — заголовок`, element: cardTitle });
                 if (description) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.description`, type: 'textarea', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — описание`, element: description });
-                if (specs) panelBindings.push({ path: `${panelKey}.products.${cardIndex}.specs`, type: 'list', label: `${panel.title || panelKey}: товар ${cardIndex + 1} — характеристики`, element: specs });
+                if (specs) {
+                    panelBindings.push({
+                        path: `${panelKey}.products.${cardIndex}.specs`,
+                        type: 'list',
+                        label: `${panel.title || panelKey}: товар ${cardIndex + 1} — характеристики`,
+                        element: specs,
+                        render(value, binding) {
+                            binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                        }
+                    });
+                    specs.querySelectorAll('li').forEach((item, itemIndex) => {
+                        panelBindings.push(buildTextCollectionBinding({
+                            targetElement: item,
+                            index: itemIndex,
+                            collectionPath: `${panelKey}.products.${cardIndex}.specs`,
+                            labelForIndex: (index) => `${panel.title || panelKey}: товар ${cardIndex + 1} — характеристика ${index + 1}`,
+                            getItem: (index) => specs.querySelectorAll('li')[index],
+                            collectionRender: (values) => syncTextList(specs, 'li', values),
+                            createValue: 'Новая характеристика'
+                        }));
+                    });
+                }
                 if (mediaImage && mediaLink) {
                     panelBindings.push({
                         path: `${panelKey}.products.${cardIndex}.image`,
