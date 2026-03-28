@@ -31,7 +31,7 @@
                 outline: 2px solid transparent;
                 outline-offset: 4px;
                 border-radius: 14px;
-                scroll-margin-top: 108px;
+                scroll-margin-top: 80px;
                 transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
             }
 
@@ -166,15 +166,6 @@
                 font-size: 14px;
             }
 
-            .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jumpbar {
-                margin-top: 8px;
-            }
-
-            .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jump {
-                padding: 8px 11px;
-                font-size: 13px;
-            }
-
             .p-inline-toolbar__top {
                 display: flex;
                 align-items: flex-start;
@@ -237,55 +228,6 @@
                 border-top: 1px solid rgba(148, 163, 184, 0.16);
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
                 backdrop-filter: blur(12px);
-            }
-
-            .p-inline-toolbar__jumpbar {
-                display: none;
-            }
-
-            .p-inline-toolbar__jump {
-                display: inline-flex;
-                align-items: center;
-                flex: 0 0 auto;
-                gap: 6px;
-                padding: 8px 11px;
-                border: 1px solid rgba(148, 163, 184, 0.22);
-                border-radius: 999px;
-                background: rgba(148, 163, 184, 0.08);
-                color: #e2e8f0;
-                font: inherit;
-                font-size: 12px;
-                font-weight: 700;
-                white-space: nowrap;
-                cursor: pointer;
-                transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
-            }
-
-            .p-inline-toolbar__jump:hover {
-                transform: translateY(-1px);
-                background: rgba(59, 130, 246, 0.16);
-                border-color: rgba(96, 165, 250, 0.34);
-                color: #eff6ff;
-            }
-
-            .p-inline-toolbar__jump--active {
-                background: rgba(59, 130, 246, 0.22);
-                border-color: rgba(96, 165, 250, 0.5);
-                color: #fff;
-            }
-
-            .p-inline-toolbar__jump-count {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-width: auto;
-                height: auto;
-                padding: 0;
-                border-radius: 0;
-                background: transparent;
-                color: #93c5fd;
-                font-size: 11px;
-                font-weight: 800;
             }
 
             .p-inline-toolbar__btn,
@@ -914,14 +856,6 @@
                     flex-wrap: wrap;
                 }
 
-                .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jumpbar {
-                    margin-top: 12px;
-                }
-
-                .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jump {
-                    font-size: 12px;
-                }
-
                 .p-inline-panel {
                     top: auto;
                     left: 12px;
@@ -952,18 +886,6 @@
 
                 .p-inline-toolbar__btn {
                     flex: 1 1 calc(50% - 6px);
-                }
-
-                .p-inline-toolbar__jumpbar {
-                    overflow-x: auto;
-                    flex-wrap: nowrap;
-                    padding-bottom: 2px;
-                    scrollbar-width: thin;
-                }
-
-                .p-inline-toolbar__jump {
-                    flex: 0 0 auto;
-                    white-space: nowrap;
                 }
 
                 .p-inline-panel,
@@ -1533,10 +1455,6 @@
         ].filter((item) => item.bindings.length || item.focus === 'all');
     }
 
-    function renderToolbarJumpbar() {
-        return;
-    }
-
     async function jumpToBindingFocus(focus) {
         const matches = getBindingsForFocus(focus);
         if (!matches.length) {
@@ -1821,7 +1739,6 @@
             ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте страницу через сервер сохранения, чтобы правки можно было сохранить.`;
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
-            renderToolbarJumpbar();
             renderOverviewPanel();
             return;
         }
@@ -1834,7 +1751,6 @@
             if (ui.adminBtn) {
                 ui.adminBtn.textContent = 'Вход';
             }
-            renderToolbarJumpbar();
             renderOverviewPanel();
             return;
         }
@@ -1856,7 +1772,6 @@
         }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
-        renderToolbarJumpbar();
         renderOverviewPanel();
     }
 

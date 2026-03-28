@@ -108,7 +108,9 @@
             border: 1px solid var(--line);
             font-size: 14px;
             font-weight: 800;
-            white-space: nowrap;
+            white-space: normal;
+            text-wrap: balance;
+            line-height: 1.25;
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
@@ -292,13 +294,14 @@
             display: inline-flex;
             align-items: center;
             min-height: 22px;
-            padding: 0 9px;
+            padding: 4px 9px;
             border-radius: 999px;
             background: rgba(37, 99, 235, 0.1);
             color: var(--blue-dark);
             font-size: 11px;
             font-weight: 800;
-            white-space: nowrap;
+            white-space: normal;
+            text-wrap: balance;
         }
 
         .recent-link__badge--draft {
@@ -370,7 +373,9 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 800;
-            white-space: nowrap;
+            white-space: normal;
+            text-wrap: balance;
+            line-height: 1.25;
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
@@ -431,7 +436,9 @@
             background: #fff;
             color: var(--text);
             border: 1px solid var(--line);
-            white-space: nowrap;
+            white-space: normal;
+            text-wrap: balance;
+            line-height: 1.25;
         }
 
         .button--primary {
@@ -686,7 +693,12 @@
                 recentHeroLink.hidden = !first;
                 if (first) {
                     recentHeroLink.href = buildRecentHref(first);
-                    recentHeroLink.textContent = `Продолжить: ${first.title}`;
+                    recentHeroLink.textContent = 'Продолжить';
+                    recentHeroLink.title = first.title;
+                    recentHeroLink.setAttribute('aria-label', `Продолжить: ${first.title}`);
+                } else {
+                    recentHeroLink.removeAttribute('title');
+                    recentHeroLink.removeAttribute('aria-label');
                 }
 
                 if (!pages.length) {
