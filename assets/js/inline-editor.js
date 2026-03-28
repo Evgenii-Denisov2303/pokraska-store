@@ -890,19 +890,6 @@
         toastTimer: 0
     };
 
-    const ADMIN_SECTION_MAP = {
-        site: 'site',
-        home: 'home',
-        catalog: 'catalog',
-        'catalog-panels': 'catalogPanels',
-        'service-pages': 'servicePages',
-        automation: 'automation',
-        gallery: 'gallery',
-        prices: 'prices',
-        'payment-documents': 'paymentDocuments',
-        contacts: 'contacts'
-    };
-
     const ui = {};
 
     async function checkApiAvailability() {
@@ -976,7 +963,7 @@
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Блоки</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Админка</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Войти</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
             </div>
@@ -1379,50 +1366,12 @@
         }
     }
 
-    function getAdminTargetForBinding(binding) {
-        if (!binding) {
-            return { section: '', field: '' };
-        }
-
-        const section = ADMIN_SECTION_MAP[binding.fileName] || ADMIN_SECTION_MAP[binding.sectionKey] || '';
-        if (!section) {
-            return { section: '', field: '' };
-        }
-
-        let field = '';
-        if (binding.fileName === 'automation' || binding.fileName === 'service-pages') {
-            field = binding.sectionKey || '';
-        } else {
-            field = String(binding.path || '').split('.')[0] || '';
-        }
-
-        return { section, field };
-    }
-
-    function getAdminHrefForBinding(binding) {
-        const target = getAdminTargetForBinding(binding);
-        if (!target.section) return '/admin/';
-
+    function getLauncherHref() {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('edit', '1');
         const params = new URLSearchParams();
-        params.set('section', target.section);
-        if (target.field) {
-            params.set('field', target.field);
-        }
+        params.set('return', `${currentUrl.pathname}${currentUrl.search}`);
         return `/admin/?${params.toString()}`;
-    }
-
-    function getPreferredAdminBinding() {
-        if (state.activeBindingId) {
-            const activeBinding = state.bindingMap.get(state.activeBindingId);
-            if (activeBinding) return activeBinding;
-        }
-
-        if (state.requestedFocus) {
-            const focusedBinding = findBindingByRequestedFocus(state.requestedFocus);
-            if (focusedBinding) return focusedBinding;
-        }
-
-        return state.bindings[0] || null;
     }
 
     function renderToolbar() {
@@ -1437,7 +1386,7 @@
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         ui.saveBtn.disabled = !canSave || !dirtyCount;
         if (ui.adminBtn) {
-            ui.adminBtn.hidden = !hasIssue;
+            ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
 
         if (!state.enabled) {
@@ -1446,8 +1395,8 @@
         }
 
         if (!state.apiAvailable) {
-            ui.toolbarTitle.textContent = 'Редактор доступен только через admin-server';
-            ui.toolbarMeta.textContent = 'Откройте сайт через локальный сервер админки, чтобы сохранять изменения прямо на странице.';
+            ui.toolbarTitle.textContent = 'Нужен admin-server';
+            ui.toolbarMeta.textContent = 'Откройте сайт через локальный сервер visual-редактирования, чтобы сохранять изменения прямо на странице.';
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
             renderToolbarJumpbar();
@@ -1456,10 +1405,13 @@
         }
 
         if (state.authEnabled && !state.authenticated) {
-            ui.toolbarTitle.textContent = 'Нужен вход в админку';
-            ui.toolbarMeta.textContent = 'Откройте полный редактор, войдите и вернитесь на сайт — после этого визуальное редактирование сохранит правки.';
+            ui.toolbarTitle.textContent = 'Нужен вход';
+            ui.toolbarMeta.textContent = 'Откройте панель входа, войдите и вернитесь на страницу. После этого visual-режим сможет сохранять правки.';
             ui.toolbarNotice.hidden = false;
-            ui.toolbarNotice.textContent = 'Полный редактор откроется в новой вкладке по кнопке справа.';
+            ui.toolbarNotice.textContent = 'Кнопка входа откроется справа только в этом состоянии.';
+            if (ui.adminBtn) {
+                ui.adminBtn.textContent = 'Войти';
+            }
             renderToolbarJumpbar();
             renderOverviewPanel();
             return;
@@ -1471,6 +1423,9 @@
         ui.toolbarMeta.textContent = dirtyCount
             ? 'Сохраните изменения, когда закончите.'
             : 'Нажмите на текст, кнопку или фото.';
+        if (ui.adminBtn) {
+            ui.adminBtn.textContent = 'Войти';
+        }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         renderToolbarJumpbar();
@@ -2418,8 +2373,7 @@
         });
 
         ui.adminBtn?.addEventListener('click', () => {
-            const binding = getPreferredAdminBinding();
-            window.open(getAdminHrefForBinding(binding), '_blank', 'noopener');
+            window.open(getLauncherHref(), '_blank', 'noopener');
         });
 
         ui.root.querySelector('[data-inline-action="overview"]').addEventListener('click', () => {

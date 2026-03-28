@@ -903,7 +903,7 @@ const server = http.createServer(async (request, response) => {
 server.listen(PORT, HOST, () => {
     const displayHost = HOST === '0.0.0.0' ? 'localhost' : HOST;
     console.log(`POKRASKA.STORE admin server is running on http://${displayHost}:${PORT}`);
-    console.log(`Open the admin panel at http://${displayHost}:${PORT}/admin/`);
+    console.log(`Open the visual editing launcher at http://${displayHost}:${PORT}/admin/`);
     console.log(`Auth mode: ${AUTH_ENABLED ? 'enabled' : 'disabled'}`);
     console.log(`Trust proxy: ${TRUST_PROXY ? 'enabled' : 'disabled'}`);
     console.log(`Force HTTPS: ${FORCE_HTTPS ? 'enabled' : 'disabled'}`);
