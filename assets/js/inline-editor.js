@@ -127,7 +127,8 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: min(620px, calc(100vw - 32px));
+                width: auto;
+                max-width: min(520px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
