@@ -492,16 +492,16 @@
                 Главный сценарий теперь простой: открыть нужную страницу, включить режим правки и менять текст или фото прямо на сайте.
             </p>
             <div class="status-bar">
-                <span class="badge" id="sessionBadge"><strong>Проверка</strong> состояния доступа…</span>
-                <span class="badge" id="returnBadge" hidden><strong>Возврат</strong> к текущей странице готов</span>
-                <span class="badge" id="draftBadge" hidden><strong>Черновики</strong> есть незавершённые правки</span>
+                <span class="badge" id="sessionBadge"><strong>Проверяем</strong> доступ…</span>
+                <span class="badge" id="returnBadge" hidden><strong>Возврат</strong> готов</span>
+                <span class="badge" id="draftBadge" hidden><strong>Черновики</strong> есть</span>
             </div>
             <div class="hero-actions">
                 <a class="hero-link hero-link--primary" href="/?edit=1">Править главную</a>
                 <a class="hero-link" href="/pages/services.html?edit=1">Править каталог</a>
                 <a class="hero-link" href="/pages/gallery.html?edit=1">Править галерею</a>
                 <a class="hero-link" href="/pages/contacts.html?edit=1">Править контакты</a>
-                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить правку</a>
+                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить</a>
             </div>
         </section>
 
@@ -546,8 +546,8 @@
 
             <article class="card" id="loginCard" hidden>
                 <span class="section-kicker">Вход</span>
-                <h2>Вход для сохранения</h2>
-                <p>Если на сервере включён вход по логину и паролю, сначала войдите здесь. После этого визуальное редактирование сможет сохранять изменения.</p>
+                <h2>Вход для правки</h2>
+                <p>Если на сервере включён вход, сначала авторизуйтесь здесь. После этого правки на сайте можно будет сохранять.</p>
 
                 <form class="login-form" id="loginForm">
                     <div class="field">
@@ -704,10 +704,10 @@
                             <strong>${item.title}</strong>
                             <span>${blockHint}</span>
                             <span class="recent-link__badges">
-                                ${hasDraft ? '<span class="recent-link__badge recent-link__badge--draft">Есть черновик</span>' : ''}
+                                ${hasDraft ? '<span class="recent-link__badge recent-link__badge--draft">Черновик</span>' : ''}
                                 ${item.sectionLabel ? `<span class="recent-link__badge">${item.sectionLabel}</span>` : ''}
                             </span>
-                            ${when ? `<span class="recent-link__time">Последняя правка: ${when}</span>` : ''}
+                            ${when ? `<span class="recent-link__time">Правка: ${when}</span>` : ''}
                         </a>
                     `;
                 }).join('');
@@ -739,7 +739,7 @@
 
             function updateBadges(session) {
                 if (!session.authEnabled) {
-                    sessionBadge.innerHTML = '<strong>Доступ</strong> вход не требуется';
+                    sessionBadge.innerHTML = '<strong>Доступ</strong> без входа';
                     logoutButton.hidden = true;
                     return;
                 }
@@ -750,7 +750,7 @@
                     return;
                 }
 
-                sessionBadge.innerHTML = '<strong>Доступ</strong> нужен вход для сохранения';
+                sessionBadge.innerHTML = '<strong>Доступ</strong> нужен вход';
                 logoutButton.hidden = true;
             }
 
@@ -765,7 +765,7 @@
                         showLogin('');
                     }
                 } catch (error) {
-                    sessionBadge.innerHTML = '<strong>Ошибка</strong> не удалось подключиться к серверу';
+                    sessionBadge.innerHTML = '<strong>Ошибка</strong> нет связи с сервером';
                     showLogin('Проверьте, что visual-редактор открыт через сервер сохранения.');
                 }
             }

@@ -1321,8 +1321,8 @@
                 <div class="p-inline-overview__head">
                     <div>
                         <span class="p-inline-panel__kicker">Структура страницы</span>
-                        <h2 class="p-inline-overview__title">Все редактируемые блоки</h2>
-                        <p class="p-inline-overview__meta">Откройте нужный блок напрямую, без ручного поиска по странице. Ctrl+K — быстрый поиск.</p>
+                        <h2 class="p-inline-overview__title">Обзор страницы</h2>
+                        <p class="p-inline-overview__meta">Откройте нужное место напрямую. Ctrl+K — быстрый поиск.</p>
                     </div>
                     <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
@@ -1384,11 +1384,11 @@
     function getBindingKindLabel(binding) {
         if (!binding) return 'Правка на странице';
         if (binding.editorKindLabel) return binding.editorKindLabel;
-        if (binding.type === 'image') return 'Фото на странице';
-        if (binding.type === 'list') return 'Список на странице';
+        if (binding.type === 'image') return 'Фото';
+        if (binding.type === 'list') return 'Список';
         if (binding.type === 'object') return 'Кнопка и ссылка';
         if (binding.type === 'html') return 'Текстовый блок';
-        return 'Текст на странице';
+        return 'Текст';
     }
 
     function truncateInlineLabel(value, maxLength = 68) {
@@ -1512,7 +1512,7 @@
             { focus: 'text', label: 'Текст' },
             { focus: 'image', label: 'Фото' },
             { focus: 'contacts', label: 'Контакты' },
-            { focus: 'collection', label: 'Блоки' }
+            { focus: 'collection', label: 'Секции' }
         ];
         if (getBindingsForFocus('dirty').length) {
             definitions.unshift({ focus: 'dirty', label: 'Правки' });
@@ -1591,7 +1591,7 @@
             text: 'Текст',
             image: 'Фото',
             contacts: 'Контакты',
-            collection: 'Блоки'
+            collection: 'Секции'
         };
 
         showToast(`${labels[focus] || 'Блок'}: ${nextIndex + 1} из ${matches.length}`);
@@ -1611,9 +1611,8 @@
 
     function getBindingOverviewMeta(binding) {
         const parts = [];
-        const kindLabel = getBindingKindLabel(binding).replace(/ на странице$/i, '');
+        const kindLabel = getBindingKindLabel(binding);
         if (kindLabel) parts.push(kindLabel);
-        if (binding?.fileName) parts.push(`${binding.fileName}.json`);
         return parts.join(' · ');
     }
 
