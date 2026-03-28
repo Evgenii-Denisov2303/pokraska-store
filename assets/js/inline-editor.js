@@ -4,6 +4,7 @@
     const STYLE_ID = 'pokraska-inline-editor-style';
     const ACTIVE_CLASS = 'p-inline-active';
     const DIRTY_CLASS = 'p-inline-dirty';
+    const REVEAL_CLASS = 'p-inline-reveal';
     const MODE_CLASS = 'p-inline-mode';
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
@@ -46,6 +47,25 @@
                 outline-color: rgba(5, 150, 105, 0.82);
                 background-color: rgba(5, 150, 105, 0.07);
                 box-shadow: 0 0 0 1px rgba(5, 150, 105, 0.22) inset, 0 0 0 10px rgba(5, 150, 105, 0.15);
+            }
+
+            body.${MODE_CLASS} [data-inline-edit-id].${REVEAL_CLASS} {
+                animation: p-inline-reveal-pulse 0.9s ease;
+            }
+
+            @keyframes p-inline-reveal-pulse {
+                0% {
+                    outline-color: rgba(37, 99, 235, 0.18);
+                    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+                }
+                35% {
+                    outline-color: rgba(37, 99, 235, 0.98);
+                    box-shadow: 0 0 0 14px rgba(37, 99, 235, 0.2);
+                }
+                100% {
+                    outline-color: rgba(37, 99, 235, 0.75);
+                    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.12);
+                }
             }
 
             .p-inline-root {
@@ -496,6 +516,56 @@
                 text-align: right;
             }
 
+            .p-inline-overview__filters {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+
+            .p-inline-overview__filter {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 11px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                border-radius: 999px;
+                background: #fff;
+                color: #334155;
+                font: inherit;
+                font-size: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            }
+
+            .p-inline-overview__filter:hover {
+                transform: translateY(-1px);
+                border-color: rgba(59, 130, 246, 0.34);
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .p-inline-overview__filter--active {
+                border-color: rgba(59, 130, 246, 0.45);
+                background: #dbeafe;
+                color: #1d4ed8;
+            }
+
+            .p-inline-overview__filter-count {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 20px;
+                height: 20px;
+                padding: 0 6px;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.06);
+                color: inherit;
+                font-size: 11px;
+                font-weight: 800;
+            }
+
             .p-inline-overview__body {
                 display: grid;
                 gap: 14px;
@@ -745,6 +815,7 @@
         requestedFocus,
         overviewOpen: false,
         overviewQuery: '',
+        overviewFocus: 'all',
         bindings: [],
         bindingMap: new Map(),
         files: new Map(),
@@ -880,6 +951,7 @@
                     <span class="p-inline-overview__summary-count"></span>
                     <span class="p-inline-overview__summary-hint"></span>
                 </div>
+                <div class="p-inline-overview__filters"></div>
                 <input class="p-inline-overview__search" type="search" placeholder="Найти блок, текст, фото или контакты">
             </div>
             <div class="p-inline-overview__body"></div>
@@ -917,6 +989,7 @@
         ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
         ui.overviewSummaryCount = overview.querySelector('.p-inline-overview__summary-count');
         ui.overviewSummaryHint = overview.querySelector('.p-inline-overview__summary-hint');
+        ui.overviewFilters = overview.querySelector('.p-inline-overview__filters');
         ui.overviewBody = overview.querySelector('.p-inline-overview__body');
         ui.toast = toast;
         ui.hover = hover;
@@ -988,6 +1061,16 @@
             { focus: 'contacts', label: 'Контакты' },
             { focus: 'collection', label: 'Блоки' }
         ];
+    }
+
+    function getOverviewFilterDefinitions() {
+        return [
+            { focus: 'all', label: 'Все', bindings: getVisibleBindings() },
+            ...getToolbarJumpDefinitions().map((item) => ({
+                ...item,
+                bindings: getBindingsForFocus(item.focus)
+            }))
+        ].filter((item) => item.bindings.length || item.focus === 'all');
     }
 
     function renderToolbarJumpbar() {
@@ -1068,12 +1151,16 @@
         return parts.join(' · ');
     }
 
-    function getBindingOverviewGroups(queryValue = '') {
+    function getBindingOverviewGroups(queryValue = '', focus = 'all') {
         const queryText = String(queryValue || '').trim().toLowerCase();
         const groups = [];
         const groupMap = new Map();
 
         getVisibleBindings().forEach((binding) => {
+            if (focus && focus !== 'all' && !matchesRequestedFocus(binding, focus)) {
+                return;
+            }
+
             const searchText = [
                 binding.sectionLabel,
                 binding.label,
@@ -1099,6 +1186,22 @@
         return groups;
     }
 
+    function renderOverviewFilters() {
+        if (!ui.overviewFilters) return;
+
+        const definitions = getOverviewFilterDefinitions();
+        ui.overviewFilters.innerHTML = definitions.map((item) => `
+            <button
+                class="p-inline-overview__filter${state.overviewFocus === item.focus ? ' p-inline-overview__filter--active' : ''}"
+                type="button"
+                data-inline-overview-focus="${item.focus}"
+            >
+                <span>${item.label}</span>
+                <span class="p-inline-overview__filter-count">${item.bindings.length}</span>
+            </button>
+        `).join('');
+    }
+
     function getCountLabel(count, one, few, many) {
         const absolute = Math.abs(Number(count) || 0);
         const remainder10 = absolute % 10;
@@ -1114,6 +1217,13 @@
 
         const totalItems = groups.reduce((sum, group) => sum + group.items.length, 0);
         const totalGroups = groups.length;
+        const filterLabels = {
+            all: 'все блоки',
+            text: 'текст',
+            image: 'фото',
+            contacts: 'контакты',
+            collection: 'составные блоки'
+        };
 
         ui.overviewSummaryCount.textContent = totalItems
             ? `${totalItems} ${getCountLabel(totalItems, 'блок', 'блока', 'блоков')}`
@@ -1125,9 +1235,10 @@
         }
 
         const groupPart = `${totalGroups} ${getCountLabel(totalGroups, 'разделе', 'разделах', 'разделах')}`;
+        const focusPart = filterLabels[state.overviewFocus] || 'блоки';
         ui.overviewSummaryHint.textContent = state.overviewQuery
-            ? `Найдено в ${groupPart}`
-            : `На этой странице в ${groupPart}`;
+            ? `Найдено: ${focusPart} в ${groupPart}`
+            : `Сейчас показаны ${focusPart} в ${groupPart}`;
     }
 
     function renderOverviewPanel() {
@@ -1141,7 +1252,9 @@
             ui.overviewSearch.value = state.overviewQuery;
         }
 
-        const groups = getBindingOverviewGroups(state.overviewQuery);
+        renderOverviewFilters();
+
+        const groups = getBindingOverviewGroups(state.overviewQuery, state.overviewFocus);
         if (!ui.overviewBody) return;
         updateOverviewSummary(groups);
 
@@ -1753,6 +1866,18 @@
         });
     }
 
+    function pulseBindingElements(binding) {
+        binding?.elements?.forEach((element) => {
+            if (!element?.classList) return;
+            element.classList.remove(REVEAL_CLASS);
+            void element.offsetWidth;
+            element.classList.add(REVEAL_CLASS);
+            window.setTimeout(() => {
+                element.classList.remove(REVEAL_CLASS);
+            }, 950);
+        });
+    }
+
     async function openBinding(bindingId) {
         try {
             const binding = state.bindingMap.get(bindingId);
@@ -1779,6 +1904,7 @@
             clearActiveMarks();
             binding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
             revealBindingElement(binding.elements[0]);
+            pulseBindingElements(binding);
 
             fillPanel(binding, value);
             renderToolbar();
@@ -2242,6 +2368,13 @@
             if (!firstItem) return;
             event.preventDefault();
             openBinding(firstItem.dataset.inlineBindingId || '');
+        });
+        ui.overviewFilters.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-inline-overview-focus]');
+            if (!button) return;
+            event.preventDefault();
+            state.overviewFocus = button.dataset.inlineOverviewFocus || 'all';
+            renderOverviewPanel();
         });
         ui.overviewBody.addEventListener('click', (event) => {
             const button = event.target.closest('[data-inline-binding-id]');
