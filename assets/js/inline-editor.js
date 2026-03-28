@@ -459,6 +459,20 @@
                 color: #64748b;
             }
 
+            .p-inline-panel__upload-file {
+                display: inline-flex;
+                align-items: center;
+                width: fit-content;
+                max-width: 100%;
+                padding: 6px 10px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 12px;
+                font-weight: 800;
+                overflow-wrap: anywhere;
+            }
+
             .p-inline-overview {
                 position: fixed;
                 top: 24px;
@@ -632,6 +646,13 @@
                 color: #64748b;
             }
 
+            .p-inline-overview__section-stats {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
             .p-inline-overview__section-count {
                 display: inline-flex;
                 align-items: center;
@@ -642,6 +663,22 @@
                 border-radius: 999px;
                 background: #eff6ff;
                 color: #1d4ed8;
+                font-size: 11px;
+                font-weight: 800;
+                letter-spacing: normal;
+                text-transform: none;
+            }
+
+            .p-inline-overview__section-dirty {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 22px;
+                height: 22px;
+                padding: 0 8px;
+                border-radius: 999px;
+                background: rgba(5, 150, 105, 0.12);
+                color: #047857;
                 font-size: 11px;
                 font-weight: 800;
                 letter-spacing: normal;
@@ -1418,6 +1455,16 @@
         return parts.join(' · ');
     }
 
+    function getOverviewBindingPriority(binding) {
+        if (!binding) return 999;
+        if (state.activeBindingId === binding.id) return 0;
+        if (bindingIsDirty(binding)) return 1;
+        if (binding.type === 'image') return 2;
+        if (binding.type === 'object') return 3;
+        if (binding.type === 'list') return 4;
+        return 5;
+    }
+
     function getBindingOverviewGroups(queryValue = '', focus = 'all') {
         const queryText = String(queryValue || '').trim().toLowerCase();
         const groups = [];
@@ -1446,12 +1493,31 @@
 
             const key = binding.sectionLabel || binding.fileName || 'Страница';
             if (!groupMap.has(key)) {
-                const group = { key, title: key, items: [] };
+                const group = { key, title: key, items: [], dirtyCount: 0 };
                 groupMap.set(key, group);
                 groups.push(group);
             }
 
-            groupMap.get(key).items.push(binding);
+            const group = groupMap.get(key);
+            group.items.push(binding);
+            if (bindingIsDirty(binding)) {
+                group.dirtyCount += 1;
+            }
+        });
+
+        groups.forEach((group) => {
+            group.items.sort((left, right) => {
+                const priorityDiff = getOverviewBindingPriority(left) - getOverviewBindingPriority(right);
+                if (priorityDiff !== 0) return priorityDiff;
+                return getBindingOverviewLabel(left).localeCompare(getBindingOverviewLabel(right), 'ru');
+            });
+        });
+
+        groups.sort((left, right) => {
+            const leftScore = (left.items.some((binding) => state.activeBindingId === binding.id) ? -10 : 0) - left.dirtyCount;
+            const rightScore = (right.items.some((binding) => state.activeBindingId === binding.id) ? -10 : 0) - right.dirtyCount;
+            if (leftScore !== rightScore) return leftScore - rightScore;
+            return left.title.localeCompare(right.title, 'ru');
         });
 
         return groups;
@@ -1539,7 +1605,10 @@
             <section class="p-inline-overview__section">
                 <h3 class="p-inline-overview__section-title">
                     <span>${escapeHtml(group.title)}</span>
-                    <span class="p-inline-overview__section-count">${group.items.length}</span>
+                    <span class="p-inline-overview__section-stats">
+                        ${group.dirtyCount ? `<span class="p-inline-overview__section-dirty">Правки ${group.dirtyCount}</span>` : ''}
+                        <span class="p-inline-overview__section-count">${group.items.length}</span>
+                    </span>
                 </h3>
                 ${group.items.map((binding) => `
                     <button
@@ -2224,8 +2293,13 @@
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Файл можно выбрать обычным способом или просто перетащить сюда.';
+            uploadMeta.textContent = 'Файл можно выбрать, перетащить сюда или вставить из буфера.';
             uploadZone.appendChild(uploadMeta);
+
+            const uploadFile = document.createElement('div');
+            uploadFile.className = 'p-inline-panel__upload-file';
+            uploadFile.hidden = true;
+            uploadZone.appendChild(uploadFile);
 
             const fileInput = document.createElement('input');
             fileInput.className = 'p-inline-panel__control';
@@ -2233,14 +2307,9 @@
             fileInput.accept = 'image/*';
             fileInput.name = '__imageUpload';
 
-            const updatePreviewFromFile = (nextFile) => {
-                if (!nextFile) return;
-                image.src = URL.createObjectURL(nextFile);
-            };
-
             fileInput.addEventListener('change', () => {
                 const nextFile = fileInput.files?.[0];
-                updatePreviewFromFile(nextFile);
+                updateImagePreviewFromFile(nextFile, image, uploadFile);
             });
 
             const preventTransferDefaults = (event) => {
@@ -2275,7 +2344,7 @@
                     showToast('Не удалось подставить файл');
                     return;
                 }
-                updatePreviewFromFile(nextFile);
+                updateImagePreviewFromFile(nextFile, image, uploadFile);
             });
             uploadZone.appendChild(fileInput);
             preview.appendChild(uploadZone);
@@ -2467,6 +2536,18 @@
             return true;
         } catch (error) {
             return false;
+        }
+    }
+
+    function updateImagePreviewFromFile(file, previewImage, fileBadge) {
+        if (!file) return;
+        if (previewImage) {
+            previewImage.src = URL.createObjectURL(file);
+        }
+        if (fileBadge) {
+            const sizeKb = Math.max(1, Math.round((file.size || 0) / 1024));
+            fileBadge.textContent = `${file.name} · ${sizeKb} KB`;
+            fileBadge.hidden = false;
         }
     }
 
@@ -2904,6 +2985,30 @@
         exitEditMode();
     }
 
+    function handlePaste(event) {
+        if (!state.enabled || ui.panel?.hidden) return;
+
+        const binding = state.bindingMap.get(state.activeBindingId);
+        if (!binding || binding.type !== 'image') return;
+
+        const nextFile = extractImageFileFromTransfer(event.clipboardData);
+        if (!nextFile) return;
+
+        const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
+        const previewImage = ui.panelForm.querySelector('.p-inline-panel__preview img');
+        const fileBadge = ui.panelForm.querySelector('.p-inline-panel__upload-file');
+        if (!uploadControl) return;
+
+        event.preventDefault();
+        if (!assignUploadFile(uploadControl, nextFile)) {
+            showToast('Не удалось вставить изображение');
+            return;
+        }
+
+        updateImagePreviewFromFile(nextFile, previewImage, fileBadge);
+        showToast('Изображение вставлено из буфера');
+    }
+
     function handlePanelClick(event) {
         const moveButton = event.target.closest?.('[data-inline-panel-move]');
         if (!moveButton) return;
@@ -3006,6 +3111,7 @@
         document.addEventListener('click', handleDocumentClick, true);
         document.addEventListener('pointermove', handlePointerMove, true);
         document.addEventListener('keydown', handleKeydown);
+        document.addEventListener('paste', handlePaste, true);
         window.addEventListener('scroll', hideHoverLabel, true);
         window.addEventListener('resize', hideHoverLabel);
         window.addEventListener('beforeunload', handleBeforeUnload);
