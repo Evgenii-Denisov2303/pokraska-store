@@ -312,6 +312,35 @@
             color: var(--text);
         }
 
+        .mini-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .mini-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 14px;
+            border-radius: 999px;
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .mini-action:hover {
+            transform: translateY(-1px);
+            border-color: rgba(37, 99, 235, 0.32);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.1);
+        }
+
         .login-form {
             display: grid;
             gap: 12px;
@@ -508,6 +537,14 @@
                     <li><strong>Длинные страницы:</strong> кнопка <strong>Блоки</strong> помогает быстро найти нужное место.</li>
                     <li><strong>Сохранение:</strong> правки уходят в те же JSON-файлы и сразу синхронны с сайтом.</li>
                 </ul>
+
+                <h3 class="subsection-title">Частые действия</h3>
+                <div class="mini-actions">
+                    <a class="mini-action" href="/?edit=1&focus=text">Главная: текст</a>
+                    <a class="mini-action" href="/?edit=1&focus=image">Главная: фото</a>
+                    <a class="mini-action" href="/pages/services.html?edit=1&focus=collection">Каталог: блоки</a>
+                    <a class="mini-action" href="/pages/contacts.html?edit=1&focus=contacts">Контакты: телефоны</a>
+                </div>
 
                 <div class="tips">
                     <div class="tip"><strong>Если страница уже открыта:</strong> после обновлений достаточно нажать <strong>Ctrl+F5</strong>.</div>
