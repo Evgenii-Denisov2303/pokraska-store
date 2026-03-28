@@ -117,7 +117,7 @@
             }
 
             .p-inline-toolbar {
-                width: min(360px, calc(100vw - 32px));
+                width: min(500px, calc(100vw - 32px));
                 background: rgba(15, 23, 42, 0.96);
                 color: #e2e8f0;
                 border-radius: 20px;
@@ -128,7 +128,7 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact {
                 width: auto;
-                max-width: min(520px, calc(100vw - 32px));
+                max-width: min(680px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -196,6 +196,7 @@
                 margin: 0;
                 line-height: 1.15;
                 overflow-wrap: anywhere;
+                text-wrap: balance;
             }
 
             .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
@@ -207,6 +208,7 @@
                 font-size: 13px;
                 line-height: 1.5;
                 overflow-wrap: anywhere;
+                text-wrap: pretty;
             }
 
             .p-inline-toolbar__meta { color: #cbd5e1; }
@@ -216,6 +218,7 @@
             .p-inline-panel__actions {
                 display: flex;
                 flex-wrap: wrap;
+                align-items: center;
                 justify-content: flex-end;
                 gap: 8px;
                 margin-top: 14px;
@@ -242,6 +245,7 @@
             .p-inline-toolbar__jump {
                 display: inline-flex;
                 align-items: center;
+                flex: 0 0 auto;
                 gap: 8px;
                 padding: 8px 12px;
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -251,6 +255,7 @@
                 font: inherit;
                 font-size: 12px;
                 font-weight: 700;
+                white-space: nowrap;
                 cursor: pointer;
                 transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
             }
@@ -287,11 +292,13 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
+                flex: 0 0 auto;
                 gap: 8px;
                 padding: 11px 14px;
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
+                white-space: nowrap;
             }
 
             .p-inline-toolbar__btn--primary,
@@ -531,6 +538,7 @@
                 font-size: 20px;
                 line-height: 1.15;
                 color: #0f172a;
+                text-wrap: balance;
             }
 
             .p-inline-overview__meta {
@@ -539,6 +547,7 @@
                 line-height: 1.5;
                 color: #64748b;
                 overflow-wrap: anywhere;
+                text-wrap: pretty;
             }
 
             .p-inline-overview__close {

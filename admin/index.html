@@ -71,6 +71,7 @@
             margin: 0;
             font-size: clamp(30px, 6vw, 48px);
             line-height: 1.02;
+            text-wrap: balance;
         }
 
         .lead {
@@ -79,6 +80,7 @@
             font-size: clamp(16px, 2vw, 18px);
             line-height: 1.58;
             color: var(--muted);
+            text-wrap: pretty;
         }
 
         .status-bar {
@@ -91,6 +93,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            align-items: flex-start;
         }
 
         .hero-link {
@@ -106,6 +109,7 @@
             border: 1px solid var(--line);
             font-size: 14px;
             font-weight: 800;
+            white-space: nowrap;
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
@@ -132,6 +136,7 @@
             font-size: 13px;
             font-weight: 700;
             color: var(--muted);
+            white-space: nowrap;
         }
 
         .badge strong {
@@ -156,6 +161,7 @@
         .card h2 {
             margin: 0 0 10px;
             font-size: 24px;
+            text-wrap: balance;
         }
 
         .section-kicker {
@@ -176,6 +182,7 @@
             margin: 0;
             color: var(--muted);
             line-height: 1.6;
+            text-wrap: pretty;
         }
 
         .launch-grid {
@@ -213,11 +220,13 @@
 
         .launch-link strong {
             font-size: 17px;
+            text-wrap: balance;
         }
 
         .launch-link span {
             color: var(--muted);
             font-size: 14px;
+            text-wrap: pretty;
         }
 
         .primary-link {
@@ -256,12 +265,14 @@
 
         .recent-link strong {
             font-size: 16px;
+            text-wrap: balance;
         }
 
         .recent-link span {
             font-size: 14px;
             line-height: 1.55;
             color: var(--muted);
+            text-wrap: pretty;
         }
 
         .recent-link__time {
@@ -286,6 +297,7 @@
             color: var(--blue-dark);
             font-size: 11px;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .recent-link__badge--draft {
@@ -307,6 +319,7 @@
             font-size: 14px;
             line-height: 1.55;
             color: var(--muted);
+            text-wrap: pretty;
         }
 
         .tip strong {
@@ -329,6 +342,7 @@
             color: var(--muted);
             font-size: 14px;
             line-height: 1.55;
+            text-wrap: pretty;
         }
 
         .mini-list strong {
@@ -355,6 +369,7 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 800;
+            white-space: nowrap;
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
@@ -415,6 +430,7 @@
             background: #fff;
             color: var(--text);
             border: 1px solid var(--line);
+            white-space: nowrap;
         }
 
         .button--primary {
