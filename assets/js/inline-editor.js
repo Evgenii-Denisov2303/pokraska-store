@@ -314,6 +314,26 @@
                 backdrop-filter: blur(12px);
             }
 
+            .p-inline-panel__head-actions {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-panel__back {
+                min-height: 40px;
+                padding: 0 14px;
+                border-radius: 999px;
+                border: 1px solid rgba(148, 163, 184, 0.26);
+                background: #f8fafc;
+                color: #334155;
+                font: inherit;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
             .p-inline-panel__close {
                 width: 40px;
                 height: 40px;
@@ -400,12 +420,62 @@
                 border: 1px solid rgba(148, 163, 184, 0.2);
             }
 
+            .p-inline-panel__preview-frame {
+                position: relative;
+            }
+
             .p-inline-panel__preview img {
                 width: 100%;
                 max-height: 240px;
                 object-fit: contain;
                 border-radius: 14px;
                 background: #fff;
+            }
+
+            .p-inline-panel__preview-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 42px;
+                height: 42px;
+                border: 0;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.82);
+                color: #fff;
+                font-size: 20px;
+                line-height: 1;
+                cursor: pointer;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+            }
+
+            .p-inline-panel__preview-nav:disabled {
+                opacity: 0.38;
+                cursor: not-allowed;
+            }
+
+            .p-inline-panel__preview-nav--prev {
+                left: 10px;
+            }
+
+            .p-inline-panel__preview-nav--next {
+                right: 10px;
+            }
+
+            .p-inline-panel__preview-index {
+                position: absolute;
+                left: 50%;
+                bottom: 10px;
+                transform: translateX(-50%);
+                display: inline-flex;
+                align-items: center;
+                min-height: 28px;
+                padding: 0 10px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.92);
+                color: #334155;
+                font-size: 13px;
+                font-weight: 800;
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
             }
 
             .p-inline-panel__upload-zone {
@@ -1169,6 +1239,7 @@
         username: '',
         lastSavedAt: 0,
         restoredDrafts: 0,
+        panelReturnToOverview: false,
         requestedFocus,
         overviewOpen: false,
         overviewQuery: '',
@@ -1285,7 +1356,10 @@
                     <h2 class="p-inline-panel__title">Изменить блок</h2>
                     <p class="p-inline-panel__meta"></p>
                 </div>
-                <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
+                <div class="p-inline-panel__head-actions">
+                    <button class="p-inline-panel__back" type="button" data-inline-panel-action="back" hidden>Назад</button>
+                    <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
+                </div>
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
@@ -1349,6 +1423,7 @@
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
+        ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
         ui.panelRevertBtn = panel.querySelector('[data-inline-panel-action="revert"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
@@ -1896,6 +1971,7 @@
         }
         ui.panel.hidden = true;
         state.activeBindingId = '';
+        state.panelReturnToOverview = false;
         state.bindings.forEach((binding) => {
             binding.elements.forEach((element) => element.classList.remove(ACTIVE_CLASS));
         });
@@ -2390,6 +2466,9 @@
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
+        if (ui.panelBackBtn) {
+            ui.panelBackBtn.hidden = !state.panelReturnToOverview;
+        }
         if (ui.panelRevertBtn) {
             ui.panelRevertBtn.hidden = !canRevertBinding(binding);
         }
@@ -2399,10 +2478,38 @@
         if (binding.type === 'image') {
             const preview = document.createElement('div');
             preview.className = 'p-inline-panel__preview';
+            const previewFrame = document.createElement('div');
+            previewFrame.className = 'p-inline-panel__preview-frame';
             const image = document.createElement('img');
             image.alt = value?.alt || binding.label;
             image.src = value?.src || '';
-            preview.appendChild(image);
+            previewFrame.appendChild(image);
+
+            const imageNavigation = getImageBindingsNavigation(binding);
+            if (imageNavigation && imageNavigation.total > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.type = 'button';
+                prevButton.className = 'p-inline-panel__preview-nav p-inline-panel__preview-nav--prev';
+                prevButton.dataset.inlinePanelNav = 'prev-image';
+                prevButton.textContent = '‹';
+                prevButton.disabled = !imageNavigation.prev;
+                previewFrame.appendChild(prevButton);
+
+                const nextButton = document.createElement('button');
+                nextButton.type = 'button';
+                nextButton.className = 'p-inline-panel__preview-nav p-inline-panel__preview-nav--next';
+                nextButton.dataset.inlinePanelNav = 'next-image';
+                nextButton.textContent = '›';
+                nextButton.disabled = !imageNavigation.next;
+                previewFrame.appendChild(nextButton);
+
+                const indexBadge = document.createElement('div');
+                indexBadge.className = 'p-inline-panel__preview-index';
+                indexBadge.textContent = `${imageNavigation.index + 1} из ${imageNavigation.total}`;
+                previewFrame.appendChild(indexBadge);
+            }
+
+            preview.appendChild(previewFrame);
 
             const uploadZone = document.createElement('div');
             uploadZone.className = 'p-inline-panel__upload-zone';
@@ -2531,7 +2638,19 @@
         });
     }
 
-    async function openBinding(bindingId) {
+    function returnToOverview() {
+        if (!state.panelReturnToOverview) return;
+        if (!confirmDiscardPanelChanges()) return;
+        ui.panel.hidden = true;
+        state.panelReturnToOverview = false;
+        state.overviewOpen = true;
+        renderToolbar();
+        window.setTimeout(() => {
+            ui.overviewSearch?.focus();
+        }, 0);
+    }
+
+    async function openBinding(bindingId, options = {}) {
         try {
             const binding = state.bindingMap.get(bindingId);
             if (!binding) return;
@@ -2558,6 +2677,11 @@
                 ? resolveBindingDefault(binding)
                 : cloneData(storedValue);
 
+            const shouldReturnToOverview = typeof options.fromOverview === 'boolean'
+                ? options.fromOverview
+                : (ui.panel.hidden ? state.overviewOpen : state.panelReturnToOverview);
+
+            state.panelReturnToOverview = shouldReturnToOverview;
             state.overviewOpen = false;
             state.activeBindingId = binding.id;
             clearActiveMarks();
@@ -2796,6 +2920,20 @@
         ui.panelMeta.textContent = hasPendingPanelChanges()
             ? `${binding.sectionLabel} · Есть неприменённые правки · Ctrl+Enter — применить`
             : `${binding.sectionLabel} · Ctrl+Enter — применить`;
+    }
+
+    function getImageBindingsNavigation(binding) {
+        if (!binding || binding.type !== 'image') return null;
+        const items = getVisibleBindings().filter((item) => item.type === 'image');
+        const index = items.findIndex((item) => item.id === binding.id);
+        if (index < 0) return null;
+        return {
+            items,
+            index,
+            total: items.length,
+            prev: items[index - 1] || null,
+            next: items[index + 1] || null
+        };
     }
 
     async function addItemToActiveCollection() {
@@ -3244,6 +3382,21 @@
     }
 
     function handlePanelClick(event) {
+        const navButton = event.target.closest?.('[data-inline-panel-nav]');
+        if (navButton) {
+            event.preventDefault();
+            const binding = state.bindingMap.get(state.activeBindingId);
+            const navigation = getImageBindingsNavigation(binding);
+            if (!navigation) return;
+            const nextBinding = navButton.dataset.inlinePanelNav === 'prev-image'
+                ? navigation.prev
+                : navigation.next;
+            if (nextBinding) {
+                openBinding(nextBinding.id, { fromOverview: state.panelReturnToOverview });
+            }
+            return;
+        }
+
         const moveButton = event.target.closest?.('[data-inline-panel-move]');
         if (!moveButton) return;
         event.preventDefault();
@@ -3306,6 +3459,7 @@
         });
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
+        ui.panelBackBtn?.addEventListener('click', returnToOverview);
         ui.panel.querySelector('[data-inline-panel-action="cancel"]').addEventListener('click', closePanel);
         ui.panelRevertBtn?.addEventListener('click', () => {
             revertActiveBindingToSaved();
@@ -3353,7 +3507,7 @@
             const firstItem = ui.overviewBody.querySelector('[data-inline-binding-id]');
             if (!firstItem) return;
             event.preventDefault();
-            openBinding(firstItem.dataset.inlineBindingId || '');
+            openBinding(firstItem.dataset.inlineBindingId || '', { fromOverview: true });
         });
         ui.overviewFilters.addEventListener('click', (event) => {
             const button = event.target.closest('[data-inline-overview-focus]');
@@ -3374,7 +3528,7 @@
             const button = event.target.closest('[data-inline-binding-id]');
             if (!button) return;
             event.preventDefault();
-            openBinding(button.dataset.inlineBindingId || '');
+            openBinding(button.dataset.inlineBindingId || '', { fromOverview: true });
         });
 
         document.addEventListener('click', handleDocumentClick, true);
