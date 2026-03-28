@@ -465,6 +465,19 @@
         toastTimer: 0
     };
 
+    const ADMIN_SECTION_MAP = {
+        site: 'site',
+        home: 'home',
+        catalog: 'catalog',
+        'catalog-panels': 'catalogPanels',
+        'service-pages': 'servicePages',
+        automation: 'automation',
+        gallery: 'gallery',
+        prices: 'prices',
+        'payment-documents': 'paymentDocuments',
+        contacts: 'contacts'
+    };
+
     const ui = {};
 
     async function checkApiAvailability() {
@@ -629,6 +642,52 @@
     function findBindingByRequestedFocus(focus) {
         if (!focus) return null;
         return state.bindings.find((binding) => matchesRequestedFocus(binding, focus)) || null;
+    }
+
+    function getAdminTargetForBinding(binding) {
+        if (!binding) {
+            return { section: '', field: '' };
+        }
+
+        const section = ADMIN_SECTION_MAP[binding.fileName] || ADMIN_SECTION_MAP[binding.sectionKey] || '';
+        if (!section) {
+            return { section: '', field: '' };
+        }
+
+        let field = '';
+        if (binding.fileName === 'automation' || binding.fileName === 'service-pages') {
+            field = binding.sectionKey || '';
+        } else {
+            field = String(binding.path || '').split('.')[0] || '';
+        }
+
+        return { section, field };
+    }
+
+    function getAdminHrefForBinding(binding) {
+        const target = getAdminTargetForBinding(binding);
+        if (!target.section) return '/admin/';
+
+        const params = new URLSearchParams();
+        params.set('section', target.section);
+        if (target.field) {
+            params.set('field', target.field);
+        }
+        return `/admin/?${params.toString()}`;
+    }
+
+    function getPreferredAdminBinding() {
+        if (state.activeBindingId) {
+            const activeBinding = state.bindingMap.get(state.activeBindingId);
+            if (activeBinding) return activeBinding;
+        }
+
+        if (state.requestedFocus) {
+            const focusedBinding = findBindingByRequestedFocus(state.requestedFocus);
+            if (focusedBinding) return focusedBinding;
+        }
+
+        return state.bindings[0] || null;
     }
 
     function renderToolbar() {
@@ -1138,6 +1197,7 @@
             state.activeBindingId = binding.id;
             clearActiveMarks();
             binding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+            binding.elements[0]?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
 
             fillPanel(binding, value);
             ui.panel.hidden = false;
@@ -1548,7 +1608,8 @@
         });
 
         ui.root.querySelector('[data-inline-action="admin"]').addEventListener('click', () => {
-            window.open('/admin/', '_blank', 'noopener');
+            const binding = getPreferredAdminBinding();
+            window.open(getAdminHrefForBinding(binding), '_blank', 'noopener');
         });
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);

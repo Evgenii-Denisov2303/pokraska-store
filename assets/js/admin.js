@@ -1866,6 +1866,14 @@
         return params.get('local') === '1' || params.get('bypassAuth') === '1';
     }
 
+    function getLaunchContextFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            section: String(params.get('section') || '').trim(),
+            field: String(params.get('field') || '').trim()
+        };
+    }
+
     function deepClone(value) {
         return JSON.parse(JSON.stringify(value));
     }
@@ -5594,6 +5602,25 @@
         return true;
     }
 
+    function applyLaunchContextFromUrl() {
+        const { section, field } = getLaunchContextFromUrl();
+        if (!section || !contentConfigs[section]) return false;
+
+        state.activeKey = section;
+        state.activeSimpleScreen = null;
+        state.activeGuide = null;
+        state.searchQuery = '';
+
+        if (field) {
+            const availableFields = getSectionTabFields(section);
+            if (availableFields.some((entry) => entry.key === field)) {
+                state.activeFieldTabs[section] = field;
+            }
+        }
+
+        return true;
+    }
+
     function renderCommandCenter(sectionKey) {
         if (!elements.commandCenter) return;
         elements.commandCenter.classList.remove('is-compact');
@@ -8794,6 +8821,7 @@
 
         try {
             await loadAllContent();
+            applyLaunchContextFromUrl();
             renderNav();
             renderActiveSection();
         } catch (error) {
