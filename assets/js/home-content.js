@@ -39,6 +39,216 @@
         anchor.innerHTML = `<i class="${escapeHtml(action.icon || '')}"></i> ${escapeHtml(action.label || '')}`;
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyDirectionFact(node, fact) {
+        if (!node || !fact) return;
+        const value = node.querySelector('strong');
+        const text = node.querySelector('span');
+        if (value) value.textContent = fact.value || '';
+        if (text) text.textContent = fact.text || '';
+    }
+
+    function syncDirectionFacts(featureElement, items) {
+        const container = featureElement?.querySelector('.direction-feature__facts');
+        if (!container) return;
+        syncCollection(container, '.direction-fact', items, applyDirectionFact);
+    }
+
+    function applyDirectionItem(node, item) {
+        if (!node || !item) return;
+        const title = node.querySelector('strong');
+        const text = node.querySelector('span:not(.direction-item__arrow)');
+        const arrow = node.querySelector('.direction-item__arrow');
+        node.setAttribute('href', item.href || '#');
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+        if (arrow) arrow.textContent = item.arrowLabel || '';
+    }
+
+    function syncDirectionItems(featureElement, items) {
+        const container = featureElement?.querySelector('.direction-feature__items');
+        if (!container) return;
+        syncCollection(container, '.direction-item', items, applyDirectionItem);
+    }
+
+    function applyHeroFeature(node, feature) {
+        if (!node || !feature) return;
+        const icon = node.querySelector('i');
+        const text = node.querySelector('span');
+        if (icon) icon.className = feature.icon || '';
+        if (text) text.textContent = feature.text || '';
+    }
+
+    function syncHeroFeatures(items) {
+        const container = document.querySelector('.hero-features');
+        if (!container) return;
+        syncCollection(container, '.feature', items, applyHeroFeature);
+    }
+
+    function applyProcessFact(node, fact) {
+        if (!node || !fact) return;
+        const value = node.querySelector('strong');
+        const text = node.querySelector('span');
+        if (value) value.textContent = fact.value || '';
+        if (text) text.textContent = fact.text || '';
+    }
+
+    function syncProcessFacts(items) {
+        const container = document.querySelector('.process-facts');
+        if (!container) return;
+        syncCollection(container, '.process-fact', items, applyProcessFact);
+    }
+
+    function applyTimelineStep(node, step) {
+        if (!node || !step) return;
+        const number = node.querySelector('.process-step__number');
+        const icon = node.querySelector('.process-icon i');
+        const title = node.querySelector('h3');
+        const text = node.querySelector('p');
+        if (number) number.textContent = step.number || '';
+        if (icon) icon.className = step.icon || '';
+        if (title) title.textContent = step.title || '';
+        if (text) text.textContent = step.text || '';
+    }
+
+    function syncTimelineSteps(items) {
+        const container = document.querySelector('.process-timeline');
+        if (!container) return;
+        syncCollection(container, '.process-step', items, applyTimelineStep);
+    }
+
+    function applyTrustHighlight(node, item) {
+        if (!node || !item) return;
+        const value = node.querySelector('strong');
+        const text = node.querySelector('span');
+        if (value) value.textContent = item.value || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncTrustHighlights(items) {
+        const container = document.querySelector('.trust-highlights');
+        if (!container) return;
+        syncCollection(container, '.trust-highlight', items, applyTrustHighlight);
+    }
+
+    function applyTrustCard(node, item) {
+        if (!node || !item) return;
+        const icon = node.querySelector('i');
+        const title = node.querySelector('h3');
+        const text = node.querySelector('p');
+        if (icon) icon.className = item.icon || '';
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncTrustCards(items) {
+        const container = document.querySelector('.trust-grid');
+        if (!container) return;
+        syncCollection(container, '.trust-card', items, applyTrustCard);
+    }
+
+    function applyRequestFact(node, fact) {
+        if (!node || !fact) return;
+        const value = node.querySelector('strong');
+        const text = node.querySelector('span');
+        if (value) value.textContent = fact.value || '';
+        if (text) text.textContent = fact.text || '';
+    }
+
+    function syncRequestFacts(items) {
+        const container = document.querySelector('.request-facts');
+        if (!container) return;
+        syncCollection(container, '.request-fact', items, applyRequestFact);
+    }
+
+    function applyRequestQuickAction(node, action) {
+        if (!node || !action) return;
+        const external = action.href?.startsWith('http');
+        node.className = 'btn btn-outline';
+        node.setAttribute('href', action.href || '#');
+        if (external) {
+            node.setAttribute('target', '_blank');
+            node.setAttribute('rel', 'noopener noreferrer');
+        } else {
+            node.removeAttribute('target');
+            node.removeAttribute('rel');
+        }
+        node.innerHTML = `<i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}`;
+    }
+
+    function syncRequestQuickActions(items) {
+        const container = document.querySelector('.request-form--compact .quick-actions');
+        if (!container) return;
+        syncCollection(container, 'a', items, applyRequestQuickAction);
+    }
+
+    function applyRequestContactLine(node, item) {
+        if (!node || !item) return;
+        const note = item.note ? ` <span class="contact-note">${escapeHtml(item.note)}</span>` : '';
+        node.innerHTML = `
+            <i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i>
+            <a href="${escapeHtml(item.href || '#')}">${escapeHtml(item.label || '')}</a>${note}
+        `.trim();
+    }
+
+    function syncRequestContactLines(items) {
+        const container = document.querySelector('.contact-info');
+        if (!container) return;
+        const lineNodes = Array.from(container.querySelectorAll('p:not(.contact-info__intro)'));
+        if (!lineNodes.length) return;
+
+        const template = lineNodes[0];
+        while (container.querySelectorAll('p:not(.contact-info__intro)').length < (Array.isArray(items) ? items.length : 0)) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll('p:not(.contact-info__intro)'));
+        const safeItems = Array.isArray(items) ? items : [];
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyRequestContactLine(node, item);
+            }
+        });
+    }
+
     function applyHero(hero) {
         const titleMain = document.querySelector('.hero-title-main');
         const titleSub = document.querySelector('.hero-title-sub');
@@ -387,6 +597,59 @@
             });
         }
 
+        document.querySelectorAll('.hero-features .feature').forEach((featureElement, index) => {
+            const text = featureElement.querySelector('span');
+            bindings.push({
+                path: `hero.features.${index}`,
+                type: 'object',
+                editorKindLabel: 'Преимущество на странице',
+                label: `Преимущество в первом экране ${index + 1}`,
+                element: featureElement,
+                collectionPath: 'hero.features',
+                collectionItemFactory(nextIndex) {
+                    const nextElement = document.querySelectorAll('.hero-features .feature')[nextIndex];
+                    if (!nextElement) return null;
+                    return {
+                        path: `hero.features.${nextIndex}`,
+                        type: 'object',
+                        editorKindLabel: 'Преимущество на странице',
+                        label: `Преимущество в первом экране ${nextIndex + 1}`,
+                        element: nextElement,
+                        collectionPath: 'hero.features',
+                        fields: [
+                            { key: 'icon', label: 'Иконка', type: 'text' },
+                            { key: 'text', label: 'Текст', type: 'text' }
+                        ],
+                        collectionCreateValue() {
+                            return { icon: 'fas fa-check-circle', text: 'Новое преимущество' };
+                        },
+                        collectionRender(items) {
+                            syncHeroFeatures(items);
+                        },
+                        render(value) {
+                            applyHeroFeature(nextElement, value || {});
+                        }
+                    };
+                },
+                collectionCreateValue() {
+                    return { icon: 'fas fa-check-circle', text: 'Новое преимущество' };
+                },
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'text', label: 'Текст', type: 'text' }
+                ],
+                collectionRender(items) {
+                    syncHeroFeatures(items);
+                },
+                render(value) {
+                    applyHeroFeature(featureElement, value || {});
+                }
+            });
+            if (text) {
+                bindings.push({ path: `hero.features.${index}.text`, type: 'text', label: `Преимущество ${index + 1}: текст`, element: text });
+            }
+        });
+
         const directionsTitle = document.querySelector('.directions-section .section-title');
         const directionsSubtitle = document.querySelector('.directions-section .section-subtitle');
         if (directionsTitle) {
@@ -397,6 +660,53 @@
         }
 
         ['gates', 'coating'].forEach((key) => {
+            const feature = document.querySelector(`.direction-feature--${key === 'gates' ? 'gates' : 'coating'}`);
+            const mediaTags = feature?.querySelector('.direction-feature__media-tags');
+            const eyebrow = feature?.querySelector('.direction-feature__eyebrow');
+            const title = feature?.querySelector('.direction-feature__content h3');
+            const lead = feature?.querySelector('.direction-feature__lead');
+            const trust = feature?.querySelector('.direction-feature__trust');
+
+            if (mediaTags) {
+                bindings.push({
+                    path: `directions.${key}.mediaTags`,
+                    type: 'list',
+                    label: `${key === 'gates' ? 'Плашки ворот' : 'Плашки покраски'}`,
+                    element: mediaTags,
+                    render(value, binding) {
+                        const items = Array.isArray(value) ? value : [];
+                        binding.elements.forEach((element) => {
+                            element.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+                        });
+                    }
+                });
+            }
+            if (eyebrow) bindings.push({ path: `directions.${key}.eyebrow`, type: 'text', label: `${key === 'gates' ? 'Надзаголовок ворот' : 'Надзаголовок покраски'}`, element: eyebrow });
+            if (title) bindings.push({ path: `directions.${key}.title`, type: 'text', label: `${key === 'gates' ? 'Заголовок карточки ворот' : 'Заголовок карточки покраски'}`, element: title });
+            if (lead) bindings.push({ path: `directions.${key}.lead`, type: 'textarea', label: `${key === 'gates' ? 'Описание карточки ворот' : 'Описание карточки покраски'}`, element: lead });
+            if (trust) bindings.push({ path: `directions.${key}.trust`, type: 'textarea', label: `${key === 'gates' ? 'Подсказка под воротами' : 'Подсказка под покраской'}`, element: trust });
+
+            feature?.querySelectorAll('.direction-feature__actions a').forEach((action, index) => {
+                bindings.push({
+                    path: `directions.${key}.actions.${index}`,
+                    type: 'object',
+                    label: `${key === 'gates' ? 'Кнопка ворот' : 'Кнопка покраски'} ${index + 1}`,
+                    element: action,
+                    fields: [
+                        { key: 'label', label: 'Текст кнопки', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' },
+                        { key: 'icon', label: 'Иконка', type: 'text' },
+                        { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        const className = value?.style === 'secondary'
+                            ? 'direction-action direction-action--secondary'
+                            : 'direction-action direction-action--primary';
+                        binding.elements.forEach((element) => renderActionNode(element, value || {}, className));
+                    }
+                });
+            });
+
             const selector = `.direction-feature--${key === 'gates' ? 'gates' : 'coating'} [data-direction-showcase-slide]`;
             document.querySelectorAll(selector).forEach((slide, index) => {
                 const image = slide.querySelector('img');
@@ -428,9 +738,46 @@
             });
         });
 
+        const processEyebrow = document.querySelector('.process-eyebrow');
+        const processTitle = document.querySelector('.process-section .section-title');
+        const processSubtitle = document.querySelector('.process-section .section-subtitle');
+        if (processEyebrow) bindings.push({ path: 'process.eyebrow', type: 'text', label: 'Надзаголовок блока процесса', element: processEyebrow });
+        if (processTitle) bindings.push({ path: 'process.title', type: 'text', label: 'Заголовок блока процесса', element: processTitle });
+        if (processSubtitle) bindings.push({ path: 'process.subtitle', type: 'textarea', label: 'Подзаголовок блока процесса', element: processSubtitle });
+
+        document.querySelectorAll('.process-section .btn-group a').forEach((action, index) => {
+            bindings.push({
+                path: `process.actions.${index}`,
+                type: 'object',
+                label: `Кнопка блока процесса ${index + 1}`,
+                element: action,
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
+                ],
+                render(value, binding) {
+                    const className = value?.style === 'secondary' ? 'btn btn-outline' : 'btn btn-primary';
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}, className));
+                }
+            });
+        });
+
+        const trustEyebrow = document.querySelector('.trust-eyebrow');
+        const trustTitle = document.querySelector('.trust-section .section-title');
+        const trustSubtitle = document.querySelector('.trust-section .section-subtitle');
+        if (trustEyebrow) bindings.push({ path: 'trust.eyebrow', type: 'text', label: 'Надзаголовок блока доверия', element: trustEyebrow });
+        if (trustTitle) bindings.push({ path: 'trust.title', type: 'text', label: 'Заголовок блока доверия', element: trustTitle });
+        if (trustSubtitle) bindings.push({ path: 'trust.subtitle', type: 'textarea', label: 'Подзаголовок блока доверия', element: trustSubtitle });
+
         const requestTitle = document.querySelector('#request-title');
         const requestLead = document.querySelector('.request-lead');
+        const requestEyebrow = document.querySelector('.request-eyebrow');
+        const requestContactTitle = document.querySelector('.contact-info h3');
+        const requestContactIntro = document.querySelector('.contact-info__intro');
         const requestFormTitle = document.querySelector('.request-form--compact h3');
+        const requestFormEyebrow = document.querySelector('.request-form__eyebrow');
         const requestFormNotice = document.querySelector('.request-form--compact .form-notice');
 
         if (requestTitle) {
@@ -452,13 +799,87 @@
             bindings.push({ path: 'request.lead', type: 'textarea', label: 'Описание блока заявки', element: requestLead });
         }
 
+        if (requestEyebrow) {
+            bindings.push({ path: 'request.eyebrow', type: 'text', label: 'Надзаголовок блока заявки', element: requestEyebrow });
+        }
+
+        if (requestContactTitle) {
+            bindings.push({ path: 'request.contactTitle', type: 'text', label: 'Заголовок блока быстрого контакта', element: requestContactTitle });
+        }
+
+        if (requestContactIntro) {
+            bindings.push({ path: 'request.contactIntro', type: 'textarea', label: 'Описание блока быстрого контакта', element: requestContactIntro });
+        }
+
         if (requestFormTitle) {
             bindings.push({ path: 'request.formTitle', type: 'text', label: 'Заголовок формы заявки', element: requestFormTitle });
+        }
+
+        if (requestFormEyebrow) {
+            bindings.push({ path: 'request.formEyebrow', type: 'text', label: 'Надзаголовок формы заявки', element: requestFormEyebrow });
         }
 
         if (requestFormNotice) {
             bindings.push({ path: 'request.formNotice', type: 'textarea', label: 'Пояснение над формой', element: requestFormNotice });
         }
+
+        const requestAdvantages = document.querySelector('.advantages');
+        if (requestAdvantages) {
+            bindings.push({
+                path: 'request.advantages',
+                type: 'list',
+                label: 'Список направлений в блоке заявки',
+                hint: 'Каждый пункт с новой строки.',
+                element: requestAdvantages,
+                render(value, binding) {
+                    const items = Array.isArray(value) ? value : [];
+                    binding.elements.forEach((element) => {
+                        element.innerHTML = items.map((item) => `
+                            <div class="advantage">
+                                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                                <span>${escapeHtml(item)}</span>
+                            </div>
+                        `).join('');
+                    });
+                }
+            });
+        }
+
+        document.querySelectorAll('.contact-info p:not(.contact-info__intro)').forEach((lineElement, index) => {
+            bindings.push({
+                path: `request.contactLines.${index}`,
+                type: 'object',
+                editorKindLabel: 'Контакт на странице',
+                label: `Контакт в блоке заявки ${index + 1}`,
+                element: lineElement,
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'label', label: 'Текст', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'note', label: 'Подпись', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyRequestContactLine(element, value || {}));
+                }
+            });
+        });
+
+        document.querySelectorAll('.request-form--compact .quick-actions a').forEach((actionElement, index) => {
+            bindings.push({
+                path: `request.quickActions.${index}`,
+                type: 'object',
+                label: `Быстрая кнопка в форме заявки ${index + 1}`,
+                element: actionElement,
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyRequestQuickAction(element, value || {}));
+                }
+            });
+        });
 
         if (!bindings.length) return;
 

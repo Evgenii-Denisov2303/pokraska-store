@@ -40,6 +40,98 @@
         anchor.innerHTML = `<i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}`;
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyHeroFact(node, item) {
+        if (!node || !item) return;
+        const label = node.querySelector('.contacts-fact__label');
+        const title = node.querySelector('strong');
+        const text = node.querySelector('p');
+        if (label) label.textContent = item.label || '';
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function applyOverviewItem(node, item) {
+        if (!node || !item) return;
+        const icon = node.querySelector('.contact-icon i');
+        const title = node.querySelector('.contact-details h3');
+        const value = node.querySelector('.contact-details p');
+        const noteIcon = node.querySelector('.contact-note i');
+        const noteText = node.querySelector('.contact-note span');
+        if (icon) icon.className = item.icon || '';
+        if (title) title.textContent = item.title || '';
+        if (value) value.innerHTML = item.valueHtml || '';
+        if (noteIcon) noteIcon.className = item.noteIcon || '';
+        if (noteText) noteText.textContent = item.note || '';
+    }
+
+    function applyHoursItem(node, item) {
+        if (!node || !item) return;
+        const day = node.querySelector('.day');
+        const time = node.querySelector('.time');
+        if (day) {
+            day.innerHTML = `${item.icon ? `<i class="${escapeHtml(item.icon)}"></i> ` : ''}${escapeHtml(item.day || '')}`;
+        }
+        if (time) time.textContent = item.time || '';
+    }
+
+    function applyTrustItem(node, item) {
+        if (!node || !item) return;
+        const icon = node.querySelector('i');
+        const text = node.querySelector('span');
+        if (icon) icon.className = item.icon || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function applyLocationBadge(node, item) {
+        if (!node || !item) return;
+        const icon = node.querySelector('i');
+        if (icon) icon.className = item.icon || '';
+        node.innerHTML = `<i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.text || '')}`;
+    }
+
+    function applyLocationPoint(node, item) {
+        if (!node || !item) return;
+        const title = node.querySelector('h3');
+        const text = node.querySelector('p');
+        if (title) title.textContent = item.title || '';
+        if (text) text.textContent = item.text || '';
+    }
+
     function registerInlineBindings() {
         if (!window.PokraskaQueueInlineBindings) return;
 
@@ -64,11 +156,151 @@
         if (locationTitle) bindings.push({ path: 'location.title', type: 'text', label: 'Заголовок блока схемы проезда', element: locationTitle });
         if (locationText) bindings.push({ path: 'location.text', type: 'textarea', label: 'Описание блока схемы проезда', element: locationText });
 
+        document.querySelectorAll('.contacts-facts .contacts-fact').forEach((factElement, index) => {
+            const title = factElement.querySelector('strong');
+            const text = factElement.querySelector('p');
+            bindings.push({
+                path: `hero.facts.${index}`,
+                type: 'object',
+                editorKindLabel: 'Факт на странице',
+                label: `Факт в первом экране контактов ${index + 1}`,
+                element: factElement,
+                fields: [
+                    { key: 'label', label: 'Метка', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'text', label: 'Описание', type: 'textarea' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyHeroFact(element, value || {}));
+                }
+            });
+            if (title) bindings.push({ path: `hero.facts.${index}.title`, type: 'text', label: `Факт контактов ${index + 1}: заголовок`, element: title });
+            if (text) bindings.push({ path: `hero.facts.${index}.text`, type: 'textarea', label: `Факт контактов ${index + 1}: описание`, element: text });
+        });
+
+        document.querySelectorAll('.contacts-overview-list .contact-item').forEach((itemElement, index) => {
+            const title = itemElement.querySelector('.contact-details h3');
+            bindings.push({
+                path: `overview.items.${index}`,
+                type: 'object',
+                editorKindLabel: 'Контакт на странице',
+                label: `Карточка контакта ${index + 1}`,
+                element: itemElement,
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'valueHtml', label: 'Основной текст / HTML', type: 'html' },
+                    { key: 'noteIcon', label: 'Иконка примечания', type: 'text' },
+                    { key: 'note', label: 'Примечание', type: 'textarea' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyOverviewItem(element, value || {}));
+                }
+            });
+            if (title) bindings.push({ path: `overview.items.${index}.title`, type: 'text', label: `Карточка контакта ${index + 1}: заголовок`, element: title });
+        });
+
+        const managerKicker = document.querySelector('.contact-manager-card .contacts-card-kicker');
+        const managerTitle = document.querySelector('.contact-manager-card h3');
+        const managerText = document.querySelector('.contact-manager-card p:last-of-type');
+        if (managerKicker) bindings.push({ path: 'overview.manager.kicker', type: 'text', label: 'Подпись блока менеджера', element: managerKicker });
+        if (managerTitle) bindings.push({ path: 'overview.manager.title', type: 'text', label: 'Имя менеджера', element: managerTitle });
+        if (managerText) bindings.push({ path: 'overview.manager.text', type: 'textarea', label: 'Описание менеджера', element: managerText });
+
+        const hoursTitle = document.querySelector('.working-hours h3');
+        if (hoursTitle) bindings.push({ path: 'overview.hours.title', type: 'text', label: 'Заголовок режима работы', element: hoursTitle });
+        document.querySelectorAll('.hours-list li').forEach((itemElement, index) => {
+            bindings.push({
+                path: `overview.hours.items.${index}`,
+                type: 'object',
+                editorKindLabel: 'Пункт на странице',
+                label: `Пункт режима работы ${index + 1}`,
+                element: itemElement,
+                fields: [
+                    { key: 'day', label: 'День / подпись', type: 'text' },
+                    { key: 'time', label: 'Время / текст', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyHoursItem(element, value || {}));
+                }
+            });
+        });
+
         document.querySelectorAll('.contact-form-card .quick-actions a').forEach((anchor, index) => {
             bindings.push({
                 path: `connect.actions.${index}`,
                 type: 'object',
                 label: `Кнопка быстрой связи ${index + 1}`,
+                element: anchor,
+                fields: [
+                    { key: 'label', label: 'Текст', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderActionNode(element, value || {}));
+                }
+            });
+        });
+
+        document.querySelectorAll('.contact-trust .contact-trust__item').forEach((itemElement, index) => {
+            bindings.push({
+                path: `connect.trustItems.${index}`,
+                type: 'object',
+                editorKindLabel: 'Пункт на странице',
+                label: `Пункт доверия ${index + 1}`,
+                element: itemElement,
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'text', label: 'Текст', type: 'textarea' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyTrustItem(element, value || {}));
+                }
+            });
+        });
+
+        const locationKicker = document.querySelector('.contacts-location-copy .contacts-card-kicker');
+        if (locationKicker) bindings.push({ path: 'location.kicker', type: 'text', label: 'Надзаголовок блока схемы проезда', element: locationKicker });
+        document.querySelectorAll('.location-badges .location-badge').forEach((badgeElement, index) => {
+            bindings.push({
+                path: `location.badges.${index}`,
+                type: 'object',
+                editorKindLabel: 'Плашка на странице',
+                label: `Плашка локации ${index + 1}`,
+                element: badgeElement,
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'text', label: 'Текст', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyLocationBadge(element, value || {}));
+                }
+            });
+        });
+        document.querySelectorAll('.location-points .location-point').forEach((pointElement, index) => {
+            bindings.push({
+                path: `location.points.${index}`,
+                type: 'object',
+                editorKindLabel: 'Точка на странице',
+                label: `Точка маршрута ${index + 1}`,
+                element: pointElement,
+                fields: [
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'text', label: 'Описание', type: 'textarea' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyLocationPoint(element, value || {}));
+                }
+            });
+        });
+        document.querySelectorAll('.location-actions a').forEach((anchor, index) => {
+            bindings.push({
+                path: `location.actions.${index}`,
+                type: 'object',
+                label: `Кнопка маршрута ${index + 1}`,
                 element: anchor,
                 fields: [
                     { key: 'label', label: 'Текст', type: 'text' },
