@@ -40,6 +40,59 @@
         element.innerHTML = `${iconHtml} ${escapeHtml(text || '')}`.trim();
     }
 
+    function resetInlineMarkers(root) {
+        if (!root) return;
+        root.removeAttribute('data-inline-edit-id');
+        root.removeAttribute('data-inline-edit-label');
+        root.classList.remove('p-inline-active', 'p-inline-dirty');
+        root.querySelectorAll('[data-inline-edit-id]').forEach((element) => {
+            element.removeAttribute('data-inline-edit-id');
+            element.removeAttribute('data-inline-edit-label');
+            element.classList.remove('p-inline-active', 'p-inline-dirty');
+        });
+    }
+
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function emitGalleryUpdated() {
+        document.dispatchEvent(new CustomEvent('pokraska:gallery-updated'));
+    }
+
+    function applyFilterButton(button, filter, index) {
+        if (!button || !filter) return;
+        button.dataset.filter = filter.value || '';
+        button.classList.toggle('active', (filter.value || '') === 'all' || index === 0 && !filter.value);
+        button.innerHTML = `<i class="${escapeHtml(filter.icon || '')}" aria-hidden="true"></i> ${escapeHtml(filter.label || '')}`;
+    }
+
+    function syncGalleryFilters(items) {
+        const container = document.querySelector('.gallery-filters');
+        if (!container) return;
+        syncCollection(container, '.filter-btn', items, applyFilterButton);
+        emitGalleryUpdated();
+    }
+
     function extractGalleryImageData(itemElement) {
         const image = itemElement?.querySelector('.gallery-image img');
         const zoomLink = itemElement?.querySelector('.zoom-btn');
@@ -111,12 +164,10 @@
     }
 
     function syncGalleryItems(items) {
-        if (!Array.isArray(items) || !items.length) return;
-        document.querySelectorAll('.gallery-grid .gallery-item').forEach((itemElement, index) => {
-            const itemData = items[index];
-            if (!itemData) return;
-            applyGalleryItem(itemElement, itemData);
-        });
+        const container = document.querySelector('.gallery-grid');
+        if (!container || !Array.isArray(items) || !items.length) return;
+        syncCollection(container, '.gallery-item', items, applyGalleryItem);
+        emitGalleryUpdated();
     }
 
     function registerInlineBindings(content) {
@@ -146,20 +197,40 @@
             bindings.push({ path: 'header.subtitle', type: 'textarea', label: 'Подзаголовок галереи', element: headerSubtitle });
         }
 
+        const buildFilterBinding = (targetButton, index) => ({
+            path: `filters.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Фильтр галереи ${index + 1}`,
+            element: targetButton,
+            collectionPath: 'filters',
+            collectionItemFactory(nextIndex) {
+                const nextButton = document.querySelectorAll('.gallery-filters .filter-btn')[nextIndex];
+                if (!nextButton) return null;
+                return buildFilterBinding(nextButton, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    value: 'new-category',
+                    label: 'Новый фильтр',
+                    icon: 'fas fa-layer-group'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Название', type: 'text' },
+                { key: 'value', label: 'Ключ фильтра', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncGalleryFilters(Array.isArray(items) ? items : []);
+            },
+            render(value) {
+                applyFilterButton(targetButton, value || {}, index);
+            }
+        });
+
         document.querySelectorAll('.gallery-filters .filter-btn').forEach((button, index) => {
-            bindings.push({
-                path: `filters.${index}.label`,
-                type: 'text',
-                label: `Название фильтра ${index + 1}`,
-                element: button,
-                render(value, binding) {
-                    binding.elements.forEach((element) => {
-                        const icon = element.querySelector('i');
-                        const iconHtml = icon ? icon.outerHTML : '';
-                        element.innerHTML = `${iconHtml} ${escapeHtml(value || '')}`.trim();
-                    });
-                }
-            });
+            bindings.push(buildFilterBinding(button, index));
         });
 
         if (showMoreButton) {
@@ -220,24 +291,54 @@
             const defaultItem = extractedItems[index];
             if (!defaultItem) return;
 
-            bindings.push({
-                path: `items.${index}`,
-                type: 'object',
-                label: `Карточка галереи ${index + 1}`,
-                hint: `${defaultItem.categoryLabel || 'Работа'} · ${defaultItem.title || 'Без названия'}`,
-                editorKindLabel: 'Карточка на странице',
-                element: itemElement,
-                defaultValue: defaultItem,
-                fields: [
-                    { key: 'categoryLabel', label: 'Название категории', type: 'text' },
-                    { key: 'title', label: 'Название работы', type: 'text' },
-                    { key: 'image.alt', label: 'Alt изображения', type: 'text' },
-                    { key: 'image.zoomTitle', label: 'Подпись при открытии', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyGalleryItem(element, value || defaultItem));
-                }
-            });
+            const buildGalleryItemBinding = (targetItem, targetIndex) => {
+                const currentDefault = extractedItems[targetIndex] || defaultItem;
+                return {
+                    path: `items.${targetIndex}`,
+                    type: 'object',
+                    label: `Карточка галереи ${targetIndex + 1}`,
+                    hint: `${currentDefault?.categoryLabel || 'Работа'} · ${currentDefault?.title || 'Без названия'}`,
+                    editorKindLabel: 'Карточка на странице',
+                    element: targetItem,
+                    defaultValue: currentDefault,
+                    collectionPath: 'items',
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = document.querySelectorAll('.gallery-grid .gallery-item')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildGalleryItemBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue(currentValue) {
+                        const base = currentValue && typeof currentValue === 'object'
+                            ? JSON.parse(JSON.stringify(currentValue))
+                            : JSON.parse(JSON.stringify(currentDefault));
+                        return {
+                            category: base?.category || 'new-category',
+                            categoryLabel: base?.categoryLabel || 'Новая категория',
+                            title: 'Новая работа',
+                            image: {
+                                ...(base?.image || {}),
+                                alt: 'Новая работа',
+                                zoomTitle: 'Новая работа'
+                            }
+                        };
+                    },
+                    fields: [
+                        { key: 'category', label: 'Ключ категории', type: 'text' },
+                        { key: 'categoryLabel', label: 'Название категории', type: 'text' },
+                        { key: 'title', label: 'Название работы', type: 'text' },
+                        { key: 'image.alt', label: 'Alt изображения', type: 'text' },
+                        { key: 'image.zoomTitle', label: 'Подпись при открытии', type: 'text' }
+                    ],
+                    collectionRender(items) {
+                        syncGalleryItems(Array.isArray(items) ? items : []);
+                    },
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyGalleryItem(element, value || currentDefault));
+                    }
+                };
+            };
+
+            bindings.push(buildGalleryItemBinding(itemElement, index));
 
             if (imageElement) {
                 bindings.push({
@@ -294,11 +395,7 @@
 
             const filters = document.querySelector('.gallery-filters');
             if (filters) {
-                filters.innerHTML = (content.filters || []).map((filter) => `
-                    <button class="filter-btn${filter.value === 'all' ? ' active' : ''}" data-filter="${escapeHtml(filter.value || 'all')}">
-                        <i class="${escapeHtml(filter.icon || '')}" aria-hidden="true"></i> ${escapeHtml(filter.label || '')}
-                    </button>
-                `).join('');
+                syncGalleryFilters(content.filters || []);
             }
 
             const showMoreButton = document.querySelector('.gallery-show-more');

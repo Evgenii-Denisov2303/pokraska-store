@@ -164,9 +164,31 @@
     function renderContactNode(anchor, contact) {
         if (!anchor) return;
         const icon = anchor.querySelector('i');
-        const iconHtml = icon ? icon.outerHTML : '';
+        if (icon && contact?.icon) {
+            icon.className = contact.icon;
+        }
+        const iconHtml = icon ? icon.outerHTML : (contact?.icon ? `<i class="${escapeHtml(contact.icon)}" aria-hidden="true"></i>` : '');
         anchor.innerHTML = `${iconHtml} ${escapeHtml(contact?.label || '')}`.trim();
         anchor.setAttribute('href', contact?.href || '#');
+    }
+
+    function syncContactLinks(container, contacts) {
+        if (!container) return;
+        syncCollection(container, 'a', Array.isArray(contacts) ? contacts : [], (anchor, contact) => {
+            renderContactNode(anchor, contact);
+        });
+    }
+
+    function applyCatalogGroupLink(button, link) {
+        if (!button || !link) return;
+        button.dataset.catalogTab = link.panelId || '';
+        button.textContent = link.label || '';
+    }
+
+    function syncCatalogGroupLinks(panel, links) {
+        const container = panel?.querySelector('.catalog-group-panel__links');
+        if (!container) return;
+        syncCollection(container, '[data-catalog-tab]', Array.isArray(links) ? links : [], applyCatalogGroupLink);
     }
 
     function renderButtonNode(anchor, action, className) {
@@ -439,7 +461,7 @@
         if (title) title.textContent = ctaData.title || '';
         if (text) text.textContent = ctaData.text || '';
         if (contacts && Array.isArray(ctaData.contacts) && ctaData.contacts.length) {
-            contacts.innerHTML = ctaData.contacts.map(renderContact).join('');
+            syncContactLinks(contacts, ctaData.contacts);
         }
     }
 
@@ -492,13 +514,38 @@
             if (title) catalogBindings.push({ path: `groups.${groupIndex}.title`, type: 'text', label: `Группа каталога ${groupIndex + 1}: заголовок панели`, element: title });
             if (text) catalogBindings.push({ path: `groups.${groupIndex}.text`, type: 'textarea', label: `Группа каталога ${groupIndex + 1}: описание`, element: text });
 
+            const buildGroupLinkBinding = (targetButton, linkIndex) => ({
+                path: `groups.${groupIndex}.links.${linkIndex}`,
+                type: 'object',
+                editorKindLabel: 'Кнопка на странице',
+                label: `Группа каталога ${groupIndex + 1}: кнопка ${linkIndex + 1}`,
+                element: targetButton,
+                collectionPath: `groups.${groupIndex}.links`,
+                collectionItemFactory(nextIndex) {
+                    const nextButton = panel?.querySelectorAll('.catalog-group-panel__links [data-catalog-tab]')[nextIndex];
+                    if (!nextButton) return null;
+                    return buildGroupLinkBinding(nextButton, nextIndex);
+                },
+                collectionCreateValue(currentValue) {
+                    return {
+                        panelId: currentValue?.panelId || group.links?.[0]?.panelId || '',
+                        label: 'Новая ссылка'
+                    };
+                },
+                fields: [
+                    { key: 'label', label: 'Текст', type: 'text' },
+                    { key: 'panelId', label: 'ID панели', type: 'text' }
+                ],
+                collectionRender(values) {
+                    syncCatalogGroupLinks(panel, Array.isArray(values) ? values : []);
+                },
+                render(value) {
+                    applyCatalogGroupLink(targetButton, value || {});
+                }
+            });
+
             panel?.querySelectorAll('.catalog-group-panel__links [data-catalog-tab]').forEach((button, linkIndex) => {
-                catalogBindings.push({
-                    path: `groups.${groupIndex}.links.${linkIndex}.label`,
-                    type: 'text',
-                    label: `Группа каталога ${groupIndex + 1}: кнопка ${linkIndex + 1}`,
-                    element: button
-                });
+                catalogBindings.push(buildGroupLinkBinding(button, linkIndex));
             });
         });
 
@@ -522,20 +569,40 @@
             const contacts = cta.querySelectorAll('.catalog-contact-list a');
             if (title) catalogBindings.push({ path: 'cta.title', type: 'text', label: 'Нижний CTA каталога: заголовок', element: title });
             if (text) catalogBindings.push({ path: 'cta.text', type: 'textarea', label: 'Нижний CTA каталога: текст', element: text });
+            const buildCatalogCtaContactBinding = (targetContact, index) => ({
+                path: `cta.contacts.${index}`,
+                type: 'object',
+                editorKindLabel: 'Контакт на странице',
+                label: `Нижний CTA каталога: контакт ${index + 1}`,
+                element: targetContact,
+                collectionPath: 'cta.contacts',
+                collectionItemFactory(nextIndex) {
+                    const nextContact = cta.querySelectorAll('.catalog-contact-list a')[nextIndex];
+                    if (!nextContact) return null;
+                    return buildCatalogCtaContactBinding(nextContact, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        icon: 'fas fa-phone',
+                        label: 'Новый контакт',
+                        href: '#'
+                    };
+                },
+                fields: [
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'label', label: 'Текст', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' }
+                ],
+                collectionRender(values) {
+                    syncContactLinks(cta.querySelector('.catalog-contact-list'), Array.isArray(values) ? values : []);
+                },
+                render(value, binding) {
+                    binding.elements.forEach((element) => renderContactNode(element, value || {}));
+                }
+            });
+
             contacts.forEach((contact, index) => {
-                catalogBindings.push({
-                    path: `cta.contacts.${index}`,
-                    type: 'object',
-                    label: `Нижний CTA каталога: контакт ${index + 1}`,
-                    element: contact,
-                    fields: [
-                        { key: 'label', label: 'Текст', type: 'text' },
-                        { key: 'href', label: 'Ссылка', type: 'text' }
-                    ],
-                    render(value, binding) {
-                        binding.elements.forEach((element) => renderContactNode(element, value || {}));
-                    }
-                });
+                catalogBindings.push(buildCatalogCtaContactBinding(contact, index));
             });
         }
 
@@ -626,6 +693,13 @@
                         element: index === 0 && mainImage ? [mainImage, thumbImage] : thumbImage,
                         collectionPath: `${panelKey}.gallery`,
                         collectionItemFactory: buildGalleryBinding,
+                        collectionCreateValue(currentValue) {
+                            return {
+                                ...(currentValue || {}),
+                                alt: currentValue?.alt || 'Новое фото',
+                                title: currentValue?.title || currentValue?.alt || 'Новое фото'
+                            };
+                        },
                         defaultValue: () => extractCatalogGalleryItem(thumb),
                         directory: extractDirectoryFromSrc(thumb.dataset.gallerySrc || thumbImage.getAttribute('src') || ''),
                         fields: [
@@ -922,6 +996,17 @@
                     if (!nextCard) return null;
                     return buildProductCardBinding(nextCard, nextIndex);
                 },
+                collectionCreateValue(currentValue) {
+                    return {
+                        ...(currentValue || {}),
+                        meta: currentValue?.meta || 'Новый комплект',
+                        title: currentValue?.title || 'Новый товар',
+                        description: currentValue?.description || 'Короткое описание товара.',
+                        specs: Array.isArray(currentValue?.specs) && currentValue.specs.length ? currentValue.specs : ['Новая характеристика'],
+                        cta: currentValue?.cta || 'Открыть комплект',
+                        href: currentValue?.href || '#'
+                    };
+                },
                 fields: [
                     { key: 'meta', label: 'Артикул / метка', type: 'text' },
                     { key: 'title', label: 'Заголовок', type: 'text' },
@@ -930,6 +1015,9 @@
                     { key: 'cta', label: 'Текст кнопки', type: 'text' },
                     { key: 'href', label: 'Ссылка кнопки', type: 'text' }
                 ],
+                collectionRender(values) {
+                    applyProducts(panelElement, { products: Array.isArray(values) ? values : [] });
+                },
                 render(value) {
                     applyProductCard(targetCard, value || {});
                 }
@@ -999,20 +1087,40 @@
                 const contacts = panelCta.querySelectorAll('.catalog-contact-list a');
                 if (ctaTitle) panelBindings.push({ path: `${panelKey}.cta.title`, type: 'text', label: `${panel.title || panelKey}: CTA — заголовок`, element: ctaTitle });
                 if (ctaText) panelBindings.push({ path: `${panelKey}.cta.text`, type: 'textarea', label: `${panel.title || panelKey}: CTA — текст`, element: ctaText });
+                const buildPanelCtaContactBinding = (targetContact, contactIndex) => ({
+                    path: `${panelKey}.cta.contacts.${contactIndex}`,
+                    type: 'object',
+                    editorKindLabel: 'Контакт на странице',
+                    label: `${panel.title || panelKey}: CTA — контакт ${contactIndex + 1}`,
+                    element: targetContact,
+                    collectionPath: `${panelKey}.cta.contacts`,
+                    collectionItemFactory(nextIndex) {
+                        const nextContact = panelCta.querySelectorAll('.catalog-contact-list a')[nextIndex];
+                        if (!nextContact) return null;
+                        return buildPanelCtaContactBinding(nextContact, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return {
+                            icon: 'fas fa-phone',
+                            label: 'Новый контакт',
+                            href: '#'
+                        };
+                    },
+                    fields: [
+                        { key: 'icon', label: 'Иконка', type: 'text' },
+                        { key: 'label', label: 'Текст', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' }
+                    ],
+                    collectionRender(values) {
+                        syncContactLinks(panelCta.querySelector('.catalog-contact-list'), Array.isArray(values) ? values : []);
+                    },
+                    render(value, binding) {
+                        binding.elements.forEach((element) => renderContactNode(element, value || {}));
+                    }
+                });
+
                 contacts.forEach((contact, contactIndex) => {
-                    panelBindings.push({
-                        path: `${panelKey}.cta.contacts.${contactIndex}`,
-                        type: 'object',
-                        label: `${panel.title || panelKey}: CTA — контакт ${contactIndex + 1}`,
-                        element: contact,
-                        fields: [
-                            { key: 'label', label: 'Текст', type: 'text' },
-                            { key: 'href', label: 'Ссылка', type: 'text' }
-                        ],
-                        render(value, binding) {
-                            binding.elements.forEach((element) => renderContactNode(element, value || {}));
-                        }
-                    });
+                    panelBindings.push(buildPanelCtaContactBinding(contact, contactIndex));
                 });
             }
         });
@@ -1064,12 +1172,7 @@
                     if (text) text.textContent = group.text || '';
 
                     if (links) {
-                        (group.links || []).forEach((link) => {
-                            const button = links.querySelector(`[data-catalog-tab="${link.panelId}"]`);
-                            if (button) {
-                                button.textContent = link.label || '';
-                            }
-                        });
+                        syncCatalogGroupLinks(panel, group.links || []);
                     }
                 }
             });
@@ -1091,7 +1194,7 @@
                 if (title) title.textContent = content.cta?.title || '';
                 if (text) text.textContent = content.cta?.text || '';
                 if (contacts) {
-                    contacts.innerHTML = (content.cta?.contacts || []).map(renderContact).join('');
+                    syncContactLinks(contacts, content.cta?.contacts || []);
                 }
             }
 
