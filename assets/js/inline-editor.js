@@ -125,6 +125,15 @@
                 font-size: 13px;
             }
 
+            .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jumpbar {
+                margin-top: 8px;
+            }
+
+            .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jump {
+                padding: 7px 10px;
+                font-size: 11px;
+            }
+
             .p-inline-toolbar__top {
                 display: flex;
                 align-items: flex-start;
@@ -171,6 +180,56 @@
                 justify-content: flex-end;
                 gap: 8px;
                 margin-top: 14px;
+            }
+
+            .p-inline-toolbar__jumpbar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 12px;
+            }
+
+            .p-inline-toolbar__jump {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 12px;
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                border-radius: 999px;
+                background: rgba(148, 163, 184, 0.1);
+                color: #dbeafe;
+                font: inherit;
+                font-size: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            }
+
+            .p-inline-toolbar__jump:hover {
+                transform: translateY(-1px);
+                background: rgba(59, 130, 246, 0.16);
+                border-color: rgba(96, 165, 250, 0.34);
+                color: #eff6ff;
+            }
+
+            .p-inline-toolbar__jump--active {
+                background: rgba(59, 130, 246, 0.22);
+                border-color: rgba(96, 165, 250, 0.5);
+                color: #fff;
+            }
+
+            .p-inline-toolbar__jump-count {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 22px;
+                height: 22px;
+                padding: 0 6px;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.42);
+                color: #e2e8f0;
+                font-size: 11px;
+                font-weight: 800;
             }
 
             .p-inline-toolbar__btn,
@@ -381,6 +440,14 @@
                     flex-wrap: wrap;
                 }
 
+                .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jumpbar {
+                    margin-top: 12px;
+                }
+
+                .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__jump {
+                    font-size: 12px;
+                }
+
                 .p-inline-panel {
                     top: auto;
                     right: 12px;
@@ -544,6 +611,7 @@
                         <span class="p-inline-toolbar__eyebrow">Визуальный редактор</span>
                         <h2 class="p-inline-toolbar__title">Можно править прямо на сайте</h2>
                         <p class="p-inline-toolbar__meta">Нажмите на текст, кнопку или фото, чтобы изменить их на месте.</p>
+                        <div class="p-inline-toolbar__jumpbar" hidden></div>
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
@@ -593,6 +661,7 @@
         ui.toolbarTitle = root.querySelector('.p-inline-toolbar__title');
         ui.toolbarMeta = root.querySelector('.p-inline-toolbar__meta');
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
+        ui.toolbarJumpbar = root.querySelector('.p-inline-toolbar__jumpbar');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
         ui.panel = panel;
         ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
@@ -639,9 +708,91 @@
         return false;
     }
 
+    function bindingHasLiveElements(binding) {
+        return Boolean(binding?.elements?.some((element) => element?.isConnected));
+    }
+
+    function getBindingsForFocus(focus) {
+        if (!focus) return [];
+        return state.bindings.filter((binding) => bindingHasLiveElements(binding) && matchesRequestedFocus(binding, focus));
+    }
+
     function findBindingByRequestedFocus(focus) {
         if (!focus) return null;
-        return state.bindings.find((binding) => matchesRequestedFocus(binding, focus)) || null;
+        return getBindingsForFocus(focus)[0] || null;
+    }
+
+    function getBindingPrimaryFocus(binding) {
+        if (!binding) return '';
+        const focusOrder = ['contacts', 'image', 'collection', 'text'];
+        return focusOrder.find((focus) => matchesRequestedFocus(binding, focus)) || '';
+    }
+
+    function getToolbarJumpDefinitions() {
+        return [
+            { focus: 'text', label: 'Текст' },
+            { focus: 'image', label: 'Фото' },
+            { focus: 'contacts', label: 'Контакты' },
+            { focus: 'collection', label: 'Блоки' }
+        ];
+    }
+
+    function renderToolbarJumpbar() {
+        if (!ui.toolbarJumpbar) return;
+
+        const jumpDefinitions = getToolbarJumpDefinitions()
+            .map((item) => ({
+                ...item,
+                bindings: getBindingsForFocus(item.focus)
+            }))
+            .filter((item) => item.bindings.length);
+
+        if (!state.enabled || !state.apiAvailable || (state.authEnabled && !state.authenticated) || !jumpDefinitions.length) {
+            ui.toolbarJumpbar.hidden = true;
+            ui.toolbarJumpbar.innerHTML = '';
+            return;
+        }
+
+        const activeBinding = state.bindingMap.get(state.activeBindingId);
+        const activeFocus = getBindingPrimaryFocus(activeBinding);
+
+        ui.toolbarJumpbar.hidden = false;
+        ui.toolbarJumpbar.innerHTML = jumpDefinitions.map((item) => `
+            <button
+                class="p-inline-toolbar__jump${activeFocus === item.focus ? ' p-inline-toolbar__jump--active' : ''}"
+                type="button"
+                data-inline-focus="${item.focus}"
+                title="Открыть следующий блок: ${item.label.toLowerCase()}"
+            >
+                <span>${item.label}</span>
+                <span class="p-inline-toolbar__jump-count">${item.bindings.length}</span>
+            </button>
+        `).join('');
+    }
+
+    async function jumpToBindingFocus(focus) {
+        const matches = getBindingsForFocus(focus);
+        if (!matches.length) {
+            showToast('На этой странице нет такого типа блоков');
+            return;
+        }
+
+        const activeIndex = matches.findIndex((binding) => binding.id === state.activeBindingId);
+        const nextIndex = activeIndex >= 0
+            ? (activeIndex + 1) % matches.length
+            : 0;
+
+        const binding = matches[nextIndex];
+        await openBinding(binding.id);
+
+        const labels = {
+            text: 'Текст',
+            image: 'Фото',
+            contacts: 'Контакты',
+            collection: 'Блоки'
+        };
+
+        showToast(`${labels[focus] || 'Блок'}: ${nextIndex + 1} из ${matches.length}`);
     }
 
     function getAdminTargetForBinding(binding) {
@@ -709,6 +860,7 @@
             ui.toolbarMeta.textContent = 'Откройте сайт через локальный сервер админки, чтобы сохранять изменения прямо на странице.';
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
+            renderToolbarJumpbar();
             return;
         }
 
@@ -717,6 +869,7 @@
             ui.toolbarMeta.textContent = 'Откройте полный редактор, войдите и вернитесь на сайт — после этого визуальное редактирование сохранит правки.';
             ui.toolbarNotice.hidden = false;
             ui.toolbarNotice.textContent = 'Полный редактор откроется в новой вкладке по кнопке справа.';
+            renderToolbarJumpbar();
             return;
         }
 
@@ -728,6 +881,7 @@
             : 'Нажмите на текст, кнопку или фото. Для сложных блоков всегда можно открыть полный редактор.';
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
+        renderToolbarJumpbar();
     }
 
     async function refreshEnvironment() {
@@ -746,6 +900,7 @@
         state.bindings.forEach((binding) => {
             binding.elements.forEach((element) => element.classList.remove(ACTIVE_CLASS));
         });
+        renderToolbar();
     }
 
     function clearActiveMarks() {
@@ -918,6 +1073,10 @@
             state.bindingMap.set(binding.id, binding);
             state.bindings.push(binding);
         });
+
+        if (state.enabled) {
+            renderToolbar();
+        }
     }
 
     function consumeQueue() {
@@ -1200,6 +1359,7 @@
             binding.elements[0]?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
 
             fillPanel(binding, value);
+            renderToolbar();
             ui.panel.hidden = false;
         } catch (error) {
             showToast(error.message || 'Не удалось открыть редактор');
@@ -1610,6 +1770,13 @@
         ui.root.querySelector('[data-inline-action="admin"]').addEventListener('click', () => {
             const binding = getPreferredAdminBinding();
             window.open(getAdminHrefForBinding(binding), '_blank', 'noopener');
+        });
+
+        ui.toolbar.addEventListener('click', (event) => {
+            const jumpButton = event.target.closest('[data-inline-focus]');
+            if (!jumpButton) return;
+            event.preventDefault();
+            jumpToBindingFocus(jumpButton.dataset.inlineFocus || '');
         });
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
