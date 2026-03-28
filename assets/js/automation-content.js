@@ -315,6 +315,31 @@
                 const action = card.querySelector('.automation-product-cta .btn');
                 const gallery = card.querySelector('.automation-product-gallery');
 
+                bindings.push({
+                    path: `swingLanding.products.${index}`,
+                    type: 'object',
+                    label: `Карточка автоматики ${index + 1} целиком`,
+                    element: card,
+                    fields: [
+                        { key: 'meta', label: 'Артикул / метка', type: 'text' },
+                        { key: 'title', label: 'Заголовок', type: 'text' },
+                        { key: 'description', label: 'Описание', type: 'textarea' },
+                        { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
+                        { key: 'cta.label', label: 'Текст кнопки', type: 'text' },
+                        { key: 'cta.href', label: 'Ссылка кнопки', type: 'text' }
+                    ],
+                    render(value) {
+                        const nextValue = value || {};
+                        if (meta) meta.textContent = nextValue.meta || '';
+                        if (title) title.textContent = nextValue.title || '';
+                        if (description) description.textContent = nextValue.description || '';
+                        if (specs) specs.innerHTML = (nextValue.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                        if (action) {
+                            renderButtonNode(action, nextValue.cta || {}, 'btn btn-primary');
+                        }
+                    }
+                });
+
                 if (meta) bindings.push({ path: `swingLanding.products.${index}.meta`, type: 'text', label: `Карточка автоматики ${index + 1}: артикул`, element: meta });
                 if (title) bindings.push({ path: `swingLanding.products.${index}.title`, type: 'text', label: `Карточка автоматики ${index + 1}: заголовок`, element: title });
                 if (description) bindings.push({ path: `swingLanding.products.${index}.description`, type: 'textarea', label: `Карточка автоматики ${index + 1}: описание`, element: description });
@@ -342,8 +367,12 @@
                             type: 'image',
                             label: `Карточка автоматики ${index + 1}: фото ${thumbIndex + 1}`,
                             element: thumb,
+                            collectionPath: `swingLanding.products.${index}.gallery`,
                             defaultValue: () => extractAutomationGalleryItem(thumb),
                             directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
+                            collectionRender(items) {
+                                syncAutomationGallery(gallery, Array.isArray(items) ? items : []);
+                            },
                             render(value, binding) {
                                 binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
                                 const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))
@@ -448,6 +477,33 @@
             const sections = document.querySelectorAll('.automation-product-section');
             const ctaButtons = document.querySelectorAll('.automation-product-cta a');
             const gallery = document.querySelector('.automation-product-gallery');
+            const productInfo = document.querySelector('.automation-product-info');
+
+            if (productInfo) {
+                const fields = [
+                    { key: 'meta', label: 'Подпись раздела', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'description', label: 'Описание', type: 'textarea' }
+                ];
+
+                (content.slidingComponentsPage?.sections || []).forEach((sectionContent, index) => {
+                    fields.push(
+                        { key: `sections.${index}.title`, label: `Раздел ${index + 1}: заголовок`, type: 'text' },
+                        { key: `sections.${index}.items`, label: `Раздел ${index + 1}: список`, type: 'list', hint: 'Каждый пункт с новой строки.' }
+                    );
+                });
+
+                bindings.push({
+                    path: 'slidingComponentsPage',
+                    type: 'object',
+                    label: 'Карточка комплектующих целиком',
+                    element: productInfo,
+                    fields,
+                    render(value) {
+                        applySlidingComponents(value || {}, content.sharedActions || {});
+                    }
+                });
+            }
 
             if (backLink) {
                 bindings.push({
@@ -477,8 +533,12 @@
                         type: 'image',
                         label: `Комплектующие: фото ${thumbIndex + 1}`,
                         element: thumb,
+                        collectionPath: 'slidingComponentsPage.gallery',
                         defaultValue: () => extractAutomationGalleryItem(thumb),
                         directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src'), 'assets/images/catalog'),
+                        collectionRender(items) {
+                            syncAutomationGallery(gallery, Array.isArray(items) ? items : []);
+                        },
                         render(value, binding) {
                             binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
                             const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))
@@ -537,8 +597,27 @@
         const specs = document.querySelector('.automation-product-specs');
         const ctaButtons = document.querySelectorAll('.automation-product-cta a');
         const gallery = document.querySelector('.automation-product-gallery');
+        const productInfo = document.querySelector('.automation-product-info');
         const productIndex = (content.productPages || []).findIndex((item) => item.pageKey === pageKey);
         if (productIndex === -1) return;
+
+        if (productInfo) {
+            bindings.push({
+                path: `productPages.${productIndex}`,
+                type: 'object',
+                label: 'Карточка автоматики целиком',
+                element: productInfo,
+                fields: [
+                    { key: 'meta', label: 'Подпись / артикул', type: 'text' },
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'description', label: 'Описание', type: 'textarea' },
+                    { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' }
+                ],
+                render(value) {
+                    applyProductPage(value || {}, content.sharedActions || {});
+                }
+            });
+        }
 
         if (backLink) {
             bindings.push({
@@ -562,8 +641,12 @@
                     type: 'image',
                     label: `Карточка автоматики: фото ${thumbIndex + 1}`,
                     element: thumb,
+                    collectionPath: `productPages.${productIndex}.gallery`,
                     defaultValue: () => extractAutomationGalleryItem(thumb),
                     directory: extractDirectoryFromSrc(thumb.dataset.thumbSrc || thumb.querySelector('img')?.getAttribute('src')),
+                    collectionRender(items) {
+                        syncAutomationGallery(gallery, Array.isArray(items) ? items : []);
+                    },
                     render(value, binding) {
                         binding.elements.forEach((element) => applyAutomationGalleryItem(element, value));
                         const items = Array.from(gallery.querySelectorAll('.automation-product-thumb'))

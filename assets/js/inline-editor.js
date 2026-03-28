@@ -280,6 +280,29 @@
                 color: #64748b;
             }
 
+            .p-inline-panel__collection {
+                display: grid;
+                gap: 10px;
+                margin-bottom: 14px;
+                padding: 12px;
+                border-radius: 18px;
+                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+            }
+
+            .p-inline-panel__collection-meta {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.45;
+                color: #475569;
+            }
+
+            .p-inline-panel__collection-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
             .p-inline-panel__preview {
                 display: grid;
                 gap: 10px;
@@ -404,6 +427,20 @@
         }
 
         pointer[segments[segments.length - 1]] = nextValue;
+    }
+
+    function escapeRegExp(value) {
+        return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function parseIndexedPath(path) {
+        const segments = String(path || '').split('.').filter(Boolean);
+        const last = segments[segments.length - 1];
+        if (!segments.length || !/^\d+$/.test(last)) return null;
+        return {
+            parentPath: segments.slice(0, -1).join('.'),
+            index: Number(last)
+        };
     }
 
     function buildContentUrl(fileName, options = {}) {
@@ -735,6 +772,15 @@
         });
     }
 
+    function rerenderBindingsForCollection(fileName, collectionPath) {
+        const pattern = new RegExp(`^${escapeRegExp(collectionPath)}\\.\\d+$`);
+        state.bindings.forEach((binding) => {
+            if (binding.fileName === fileName && pattern.test(binding.path)) {
+                renderBinding(binding);
+            }
+        });
+    }
+
     function normalizeBinding(config, sectionConfig, index) {
         const elements = (Array.isArray(config.element) ? config.element : [config.element]).filter(Boolean);
         if (!elements.length || !config.path) return null;
@@ -753,7 +799,9 @@
             elements,
             render: config.render || null,
             defaultValue: config.defaultValue,
-            directory: config.directory || 'assets/images/catalog'
+            directory: config.directory || 'assets/images/catalog',
+            collectionPath: config.collectionPath || '',
+            collectionRender: config.collectionRender || null
         };
 
         elements.forEach((element) => {
@@ -824,6 +872,10 @@
     function getBindingEditorFields(binding) {
         if (binding.fields.length) return binding.fields;
 
+        if (binding.type === 'image') {
+            return [];
+        }
+
         if (binding.type === 'list') {
             return [{
                 key: '__value',
@@ -839,6 +891,56 @@
             type: binding.type === 'html' ? 'html' : 'textarea',
             hint: binding.hint || ''
         }];
+    }
+
+    function findBinding(fileName, path) {
+        return state.bindings.find((binding) => binding.fileName === fileName && binding.path === path) || null;
+    }
+
+    function resolveBindingValue(fileState, binding) {
+        const storedValue = getByPath(fileState.data, binding.path);
+        return storedValue === undefined
+            ? resolveBindingDefault(binding)
+            : cloneData(storedValue);
+    }
+
+    function getBindingCollectionState(binding, fileState = state.files.get(binding.fileName)) {
+        if (!fileState) return null;
+
+        const indexed = parseIndexedPath(binding.path);
+        const collectionPath = binding.collectionPath || indexed?.parentPath;
+        if (!collectionPath || !indexed) return null;
+
+        const items = getByPath(fileState.data, collectionPath);
+        if (!Array.isArray(items)) return null;
+
+        return {
+            collectionPath,
+            index: indexed.index,
+            total: items.length,
+            items
+        };
+    }
+
+    function markBindingsDirtyForCollection(fileName, collectionPath) {
+        const pattern = new RegExp(`^${escapeRegExp(collectionPath)}\\.\\d+$`);
+        state.bindings.forEach((binding) => {
+            if (binding.fileName === fileName && pattern.test(binding.path)) {
+                markBindingDirty(binding);
+            }
+        });
+    }
+
+    function refreshCollectionBindings(binding, fileState) {
+        const collectionState = getBindingCollectionState(binding, fileState);
+        if (!collectionState) return;
+
+        if (typeof binding.collectionRender === 'function') {
+            binding.collectionRender(cloneData(collectionState.items), binding);
+            return;
+        }
+
+        rerenderBindingsForCollection(binding.fileName, collectionState.collectionPath);
     }
 
     function fillPanel(binding, value) {
@@ -874,12 +976,45 @@
             imageHint.className = 'p-inline-panel__hint';
             imageHint.textContent = 'Загрузи новое изображение и при необходимости поправь alt или подпись ниже.';
             ui.panelForm.appendChild(imageHint);
+
+            const collectionState = getBindingCollectionState(binding);
+            if (collectionState && collectionState.total > 1) {
+                const collectionBox = document.createElement('div');
+                collectionBox.className = 'p-inline-panel__collection';
+
+                const collectionMeta = document.createElement('p');
+                collectionMeta.className = 'p-inline-panel__collection-meta';
+                collectionMeta.textContent = collectionState.index === 0
+                    ? `Сейчас это главное фото в наборе. Всего изображений: ${collectionState.total}.`
+                    : `Позиция в наборе: ${collectionState.index + 1} из ${collectionState.total}.`;
+                collectionBox.appendChild(collectionMeta);
+
+                const collectionActions = document.createElement('div');
+                collectionActions.className = 'p-inline-panel__collection-actions';
+
+                [
+                    { action: 'first', label: 'Сделать первым', disabled: collectionState.index === 0 },
+                    { action: 'prev', label: 'Сдвинуть левее', disabled: collectionState.index === 0 },
+                    { action: 'next', label: 'Сдвинуть правее', disabled: collectionState.index >= collectionState.total - 1 }
+                ].forEach((item) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'p-inline-panel__btn';
+                    button.dataset.inlinePanelMove = item.action;
+                    button.textContent = item.label;
+                    button.disabled = item.disabled;
+                    collectionActions.appendChild(button);
+                });
+
+                collectionBox.appendChild(collectionActions);
+                ui.panelForm.appendChild(collectionBox);
+            }
         }
 
         editorFields.forEach((field) => {
             const fieldValue = field.key === '__value'
                 ? value
-                : value?.[field.key];
+                : getByPath(value, field.key);
             ui.panelForm.appendChild(createFieldGroup(field, fieldValue));
         });
 
@@ -956,11 +1091,10 @@
 
     async function collectPanelValue(binding) {
         const currentFile = state.files.get(binding.fileName);
-        const storedValue = getByPath(currentFile.data, binding.path);
-        const currentValue = storedValue === undefined
-            ? resolveBindingDefault(binding)
-            : cloneData(storedValue);
-        const nextValue = binding.fields.length || binding.type === 'image' ? { ...(currentValue || {}) } : currentValue;
+        const currentValue = resolveBindingValue(currentFile, binding);
+        const nextValue = binding.fields.length || binding.type === 'image'
+            ? (cloneData(currentValue) && typeof currentValue === 'object' ? cloneData(currentValue) : {})
+            : currentValue;
         const fields = getBindingEditorFields(binding);
 
         for (const field of fields) {
@@ -981,7 +1115,7 @@
                 return value;
             }
 
-            nextValue[field.key] = value;
+            setByPath(nextValue, field.key, value);
         }
 
         const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
@@ -990,6 +1124,51 @@
         }
 
         return nextValue;
+    }
+
+    async function moveActiveBindingInCollection(direction) {
+        try {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (!binding) return;
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+            if (!collectionState || collectionState.total < 2) {
+                showToast('В этом блоке только одно фото');
+                return;
+            }
+
+            let nextIndex = collectionState.index;
+            if (direction === 'first') {
+                nextIndex = 0;
+            } else if (direction === 'prev') {
+                nextIndex = Math.max(0, collectionState.index - 1);
+            } else if (direction === 'next') {
+                nextIndex = Math.min(collectionState.total - 1, collectionState.index + 1);
+            }
+
+            if (nextIndex === collectionState.index) {
+                return;
+            }
+
+            const [movedItem] = collectionState.items.splice(collectionState.index, 1);
+            collectionState.items.splice(nextIndex, 0, movedItem);
+
+            fileState.dirty = true;
+            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            refreshCollectionBindings(binding, fileState);
+            renderToolbar();
+
+            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`) || binding;
+            state.activeBindingId = nextBinding.id;
+            clearActiveMarks();
+            nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+            fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+
+            showToast(nextIndex === 0 ? 'Фото стало первым в галерее' : 'Порядок фото обновлён');
+        } catch (error) {
+            showToast(error.message || 'Не удалось переставить фото');
+        }
     }
 
     async function applyActiveBinding() {
@@ -1133,6 +1312,13 @@
         exitEditMode();
     }
 
+    function handlePanelClick(event) {
+        const moveButton = event.target.closest?.('[data-inline-panel-move]');
+        if (!moveButton) return;
+        event.preventDefault();
+        moveActiveBindingInCollection(moveButton.dataset.inlinePanelMove);
+    }
+
     function init() {
         injectStyles();
         createUi();
@@ -1163,6 +1349,7 @@
         ui.panelApplyBtn.addEventListener('click', () => {
             applyActiveBinding();
         });
+        ui.panel.addEventListener('click', handlePanelClick);
 
         document.addEventListener('click', handleDocumentClick, true);
         document.addEventListener('pointermove', handlePointerMove, true);

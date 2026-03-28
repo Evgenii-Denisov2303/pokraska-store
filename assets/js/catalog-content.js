@@ -543,12 +543,16 @@
                         type: 'image',
                         label: `${panel.title || panelKey}: фото ${index + 1}`,
                         element: index === 0 && mainImage ? [mainImage, thumbImage] : thumbImage,
+                        collectionPath: `${panelKey}.gallery`,
                         defaultValue: () => extractCatalogGalleryItem(thumb),
                         directory: extractDirectoryFromSrc(thumb.dataset.gallerySrc || thumbImage.getAttribute('src') || ''),
                         fields: [
                             { key: 'alt', label: 'Alt', type: 'text' },
                             { key: 'title', label: 'Подпись/название', type: 'text' }
                         ],
+                        collectionRender(items) {
+                            syncCatalogGalleryState(gallery, Array.isArray(items) ? items : []);
+                        },
                         render(value) {
                             applyCatalogGalleryItem(thumb, value || {});
                             if (hiddenLink) {
@@ -700,6 +704,23 @@
                         }
                     });
                 }
+                panelBindings.push({
+                    path: `${panelKey}.products.${cardIndex}`,
+                    type: 'object',
+                    label: `${panel.title || panelKey}: товар ${cardIndex + 1} — карточка целиком`,
+                    element: card,
+                    fields: [
+                        { key: 'meta', label: 'Артикул / метка', type: 'text' },
+                        { key: 'title', label: 'Заголовок', type: 'text' },
+                        { key: 'description', label: 'Описание', type: 'textarea' },
+                        { key: 'specs', label: 'Характеристики', type: 'list', hint: 'Каждый пункт с новой строки.' },
+                        { key: 'cta', label: 'Текст кнопки', type: 'text' },
+                        { key: 'href', label: 'Ссылка кнопки', type: 'text' }
+                    ],
+                    render(value) {
+                        applyProductCard(card, value || {});
+                    }
+                });
                 if (action) {
                     panelBindings.push({
                         path: `${panelKey}.products.${cardIndex}`,
