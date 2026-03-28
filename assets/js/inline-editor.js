@@ -1916,14 +1916,18 @@
         return restored;
     }
 
-    function closePanel() {
-        if (!ui.panel) return;
+    function closePanel(options = {}) {
+        if (!ui.panel) return true;
+        if (!options.skipConfirm && !confirmDiscardPanelChanges()) {
+            return false;
+        }
         ui.panel.hidden = true;
         state.activeBindingId = '';
         state.bindings.forEach((binding) => {
             binding.elements.forEach((element) => element.classList.remove(ACTIVE_CLASS));
         });
         renderToolbar();
+        return true;
     }
 
     function clearActiveMarks() {
@@ -1947,7 +1951,10 @@
         state.overviewOpen = false;
         state.overviewQuery = '';
         state.enabled = false;
-        closePanel();
+        if (!closePanel()) {
+            state.enabled = true;
+            return;
+        }
         document.body.classList.remove(MODE_CLASS);
         renderToolbar();
         if (dirtyBeforeExit) {
@@ -2410,9 +2417,6 @@
     function fillPanel(binding, value) {
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
-        ui.panelMeta.textContent = bindingIsDirty(binding)
-            ? `${binding.sectionLabel} · Есть несохранённые правки · Ctrl+Enter — применить`
-            : `${binding.sectionLabel} · Ctrl+Enter — применить`;
         ui.panelForm.innerHTML = '';
         if (ui.panelRevertBtn) {
             ui.panelRevertBtn.hidden = !bindingIsDirty(binding) || !canRevertBinding(binding);
@@ -2523,6 +2527,8 @@
                 }
             }, 0);
         }
+
+        updatePanelMeta(binding);
     }
 
     function revealBindingElement(element) {
@@ -2566,6 +2572,12 @@
             if (state.authEnabled && !state.authenticated) {
                 showToast('Сначала откройте панель входа и авторизуйтесь.');
                 return;
+            }
+
+            if (!ui.panel.hidden && state.activeBindingId && state.activeBindingId !== binding.id) {
+                if (!confirmDiscardPanelChanges()) {
+                    return;
+                }
             }
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
@@ -2739,6 +2751,81 @@
         return nextValue;
     }
 
+    function getComparablePanelFieldValue(field, control) {
+        if (!control) return undefined;
+
+        let value = control.value;
+        if (field.type === 'number') {
+            return value === '' ? null : Number(value);
+        }
+
+        if (field.type === 'list') {
+            return value
+                .split(/\r?\n/)
+                .map((item) => item.trim())
+                .filter(Boolean);
+        }
+
+        return String(value ?? '');
+    }
+
+    function getComparableStoredFieldValue(field, currentValue) {
+        const storedValue = field.key === '__value'
+            ? currentValue
+            : getByPath(currentValue, field.key);
+
+        if (field.type === 'number') {
+            return storedValue == null || storedValue === ''
+                ? null
+                : Number(storedValue);
+        }
+
+        if (field.type === 'list') {
+            return Array.isArray(storedValue) ? storedValue : [];
+        }
+
+        return String(storedValue ?? '');
+    }
+
+    function hasPendingPanelChanges() {
+        if (ui.panel?.hidden) return false;
+
+        const binding = state.bindingMap.get(state.activeBindingId);
+        if (!binding) return false;
+
+        const currentFile = state.files.get(binding.fileName);
+        if (!currentFile) return false;
+
+        const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
+        if (binding.type === 'image' && uploadControl?.files?.[0]) {
+            return true;
+        }
+
+        const currentValue = resolveBindingValue(currentFile, binding);
+        const fields = getBindingEditorFields(binding);
+
+        return fields.some((field) => {
+            const control = ui.panelForm.querySelector(`[name="${field.key}"]`);
+            if (!control) return false;
+
+            const nextValue = getComparablePanelFieldValue(field, control);
+            const storedValue = getComparableStoredFieldValue(field, currentValue);
+            return !isSameData(nextValue, storedValue);
+        });
+    }
+
+    function confirmDiscardPanelChanges() {
+        if (!hasPendingPanelChanges()) return true;
+        return window.confirm('Есть неприменённые изменения в открытой панели. Закрыть их без применения?');
+    }
+
+    function updatePanelMeta(binding) {
+        if (!ui.panelMeta || !binding) return;
+        ui.panelMeta.textContent = hasPendingPanelChanges()
+            ? `${binding.sectionLabel} · Есть неприменённые правки · Ctrl+Enter — применить`
+            : `${binding.sectionLabel} · Ctrl+Enter — применить`;
+    }
+
     async function addItemToActiveCollection() {
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
@@ -2858,7 +2945,7 @@
                 nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
                 fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
             } else {
-                closePanel();
+                closePanel({ skipConfirm: true });
             }
 
             showToast(toastLabels.removed);
@@ -2929,7 +3016,7 @@
             rerenderBindingsForPath(binding.fileName, binding.path);
             persistDraftFiles();
             renderToolbar();
-            closePanel();
+            closePanel({ skipConfirm: true });
             showToast(`Изменено: ${truncateInlineLabel(binding.label, 44)}`);
         } catch (error) {
             showToast(error.message || 'Не удалось применить правку');
@@ -3235,6 +3322,18 @@
             applyActiveBinding();
         });
         ui.panel.addEventListener('click', handlePanelClick);
+        ui.panelForm.addEventListener('input', () => {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (binding) {
+                updatePanelMeta(binding);
+            }
+        });
+        ui.panelForm.addEventListener('change', () => {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (binding) {
+                updatePanelMeta(binding);
+            }
+        });
         ui.overview.querySelector('.p-inline-overview__close').addEventListener('click', () => {
             toggleOverview(false);
         });
