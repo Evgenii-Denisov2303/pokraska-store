@@ -132,6 +132,38 @@
         });
     }
 
+    function syncCollection(container, itemSelector, items, applyItem) {
+        const nodes = container ? Array.from(container.querySelectorAll(itemSelector)) : [];
+        if (!container || !nodes.length) return;
+
+        const safeItems = Array.isArray(items) ? items : [];
+        const template = nodes[0];
+        while (container.querySelectorAll(itemSelector).length < safeItems.length) {
+            const clone = template.cloneNode(true);
+            resetInlineMarkers(clone);
+            clone.hidden = false;
+            container.appendChild(clone);
+        }
+
+        const nextNodes = Array.from(container.querySelectorAll(itemSelector));
+        nextNodes.forEach((node, index) => {
+            const item = safeItems[index];
+            node.hidden = !item;
+            if (item) {
+                applyItem(node, item, index);
+            }
+        });
+    }
+
+    function applyTextListItem(node, item) {
+        if (!node) return;
+        node.textContent = item || '';
+    }
+
+    function syncTextList(container, itemSelector, items) {
+        syncCollection(container, itemSelector, items, applyTextListItem);
+    }
+
     function getPageKey() {
         return (window.location.pathname.split('/').pop() || '').replace('.html', '');
     }
@@ -183,7 +215,7 @@
             if (title) title.textContent = product.title || '';
             if (description) description.textContent = product.description || '';
             if (specs) {
-                specs.innerHTML = (product.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                syncTextList(specs, 'li', product.specs || []);
             }
             if (action) {
                 action.innerHTML = `<i class="fas fa-external-link-alt" aria-hidden="true"></i> ${escapeHtml(product.cta?.label || '')}`;
@@ -208,11 +240,11 @@
             if (title) title.textContent = content.guide?.title || '';
             if (intro) intro.textContent = content.guide?.intro || '';
             if (list) {
-                list.innerHTML = (content.guide?.list || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                syncTextList(list, 'li', content.guide?.list || []);
             }
             if (subheading) subheading.textContent = content.guide?.subheading || '';
             if (text) {
-                text.innerHTML = (content.guide?.paragraphs || []).map((item) => `<p>${escapeHtml(item)}</p>`).join('');
+                syncTextList(text, 'p', content.guide?.paragraphs || []);
             }
 
             const figures = guide.querySelectorAll('.automation-guide__figure');
@@ -272,7 +304,7 @@
             const list = section.querySelector('.automation-product-specs');
             if (sectionTitle) sectionTitle.textContent = sectionContent.title || '';
             if (list) {
-                list.innerHTML = (sectionContent.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                syncTextList(list, 'li', sectionContent.items || []);
             }
         });
 
@@ -300,7 +332,7 @@
         if (title) title.textContent = content.title || '';
         if (description) description.textContent = content.description || '';
         if (specs) {
-            specs.innerHTML = (content.specs || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+            syncTextList(specs, 'li', content.specs || []);
         }
         const gallery = document.querySelector('.automation-product-gallery');
         if (gallery && Array.isArray(content.gallery) && content.gallery.length) {
@@ -395,7 +427,36 @@
                 if (meta) bindings.push({ path: `swingLanding.products.${index}.meta`, type: 'text', label: `Карточка автоматики ${index + 1}: артикул`, element: meta });
                 if (title) bindings.push({ path: `swingLanding.products.${index}.title`, type: 'text', label: `Карточка автоматики ${index + 1}: заголовок`, element: title });
                 if (description) bindings.push({ path: `swingLanding.products.${index}.description`, type: 'textarea', label: `Карточка автоматики ${index + 1}: описание`, element: description });
-                if (specs) bindings.push({ path: `swingLanding.products.${index}.specs`, type: 'list', label: `Карточка автоматики ${index + 1}: характеристики`, element: specs });
+                if (specs) {
+                    bindings.push({ path: `swingLanding.products.${index}.specs`, type: 'list', label: `Карточка автоматики ${index + 1}: характеристики`, element: specs });
+                    const buildSpecBinding = (targetItem, specIndex) => ({
+                        path: `swingLanding.products.${index}.specs.${specIndex}`,
+                        type: 'text',
+                        editorKindLabel: 'Пункт на странице',
+                        collectionItemLabel: 'пункт',
+                        collectionItemLabelPlural: 'пунктов',
+                        label: `Карточка автоматики ${index + 1}: характеристика ${specIndex + 1}`,
+                        element: targetItem,
+                        collectionPath: `swingLanding.products.${index}.specs`,
+                        collectionItemFactory(nextIndex) {
+                            const nextItem = card.querySelectorAll('.automation-product-specs li')[nextIndex];
+                            if (!nextItem) return null;
+                            return buildSpecBinding(nextItem, nextIndex);
+                        },
+                        collectionCreateValue() {
+                            return 'Новая характеристика';
+                        },
+                        collectionRender(items) {
+                            syncTextList(specs, 'li', Array.isArray(items) ? items : []);
+                        },
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                        }
+                    });
+                    specs.querySelectorAll('li').forEach((item, specIndex) => {
+                        bindings.push(buildSpecBinding(item, specIndex));
+                    });
+                }
                 if (action) {
                     bindings.push({
                         path: `swingLanding.products.${index}.cta`,
@@ -454,7 +515,36 @@
                 const text = guide.querySelector('.automation-guide__text');
                 if (title) bindings.push({ path: 'swingLanding.guide.title', type: 'text', label: 'Заголовок блока подбора автоматики', element: title });
                 if (intro) bindings.push({ path: 'swingLanding.guide.intro', type: 'textarea', label: 'Вводный текст блока подбора автоматики', element: intro });
-                if (list) bindings.push({ path: 'swingLanding.guide.list', type: 'list', label: 'Список в блоке подбора автоматики', element: list });
+                if (list) {
+                    bindings.push({ path: 'swingLanding.guide.list', type: 'list', label: 'Список в блоке подбора автоматики', element: list });
+                    const buildGuideListBinding = (targetItem, itemIndex) => ({
+                        path: `swingLanding.guide.list.${itemIndex}`,
+                        type: 'text',
+                        editorKindLabel: 'Пункт на странице',
+                        collectionItemLabel: 'пункт',
+                        collectionItemLabelPlural: 'пунктов',
+                        label: `Блок подбора автоматики: пункт списка ${itemIndex + 1}`,
+                        element: targetItem,
+                        collectionPath: 'swingLanding.guide.list',
+                        collectionItemFactory(nextIndex) {
+                            const nextItem = guide.querySelectorAll('.automation-guide__list li')[nextIndex];
+                            if (!nextItem) return null;
+                            return buildGuideListBinding(nextItem, nextIndex);
+                        },
+                        collectionCreateValue() {
+                            return 'Новый пункт';
+                        },
+                        collectionRender(items) {
+                            syncTextList(list, 'li', Array.isArray(items) ? items : []);
+                        },
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                        }
+                    });
+                    list.querySelectorAll('li').forEach((item, itemIndex) => {
+                        bindings.push(buildGuideListBinding(item, itemIndex));
+                    });
+                }
                 if (subheading) bindings.push({ path: 'swingLanding.guide.subheading', type: 'text', label: 'Подзаголовок в блоке подбора автоматики', element: subheading });
                 if (text) {
                     bindings.push({
@@ -469,6 +559,33 @@
                                 element.innerHTML = paragraphs.map((item) => `<p>${escapeHtml(item)}</p>`).join('');
                             });
                         }
+                    });
+                    const buildGuideParagraphBinding = (targetItem, itemIndex) => ({
+                        path: `swingLanding.guide.paragraphs.${itemIndex}`,
+                        type: 'text',
+                        editorKindLabel: 'Абзац на странице',
+                        collectionItemLabel: 'абзац',
+                        collectionItemLabelPlural: 'абзацев',
+                        label: `Блок подбора автоматики: абзац ${itemIndex + 1}`,
+                        element: targetItem,
+                        collectionPath: 'swingLanding.guide.paragraphs',
+                        collectionItemFactory(nextIndex) {
+                            const nextItem = guide.querySelectorAll('.automation-guide__text p')[nextIndex];
+                            if (!nextItem) return null;
+                            return buildGuideParagraphBinding(nextItem, nextIndex);
+                        },
+                        collectionCreateValue() {
+                            return 'Новый абзац';
+                        },
+                        collectionRender(items) {
+                            syncTextList(text, 'p', Array.isArray(items) ? items : []);
+                        },
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                        }
+                    });
+                    text.querySelectorAll('p').forEach((item, itemIndex) => {
+                        bindings.push(buildGuideParagraphBinding(item, itemIndex));
                     });
                 }
 
@@ -584,7 +701,36 @@
                 const sectionTitle = section.querySelector('.automation-product-section__title');
                 const list = section.querySelector('.automation-product-specs');
                 if (sectionTitle) bindings.push({ path: `slidingComponentsPage.sections.${index}.title`, type: 'text', label: `Раздел комплектующих ${index + 1}: заголовок`, element: sectionTitle });
-                if (list) bindings.push({ path: `slidingComponentsPage.sections.${index}.items`, type: 'list', label: `Раздел комплектующих ${index + 1}: список`, element: list });
+                if (list) {
+                    bindings.push({ path: `slidingComponentsPage.sections.${index}.items`, type: 'list', label: `Раздел комплектующих ${index + 1}: список`, element: list });
+                    const buildSectionItemBinding = (targetItem, itemIndex) => ({
+                        path: `slidingComponentsPage.sections.${index}.items.${itemIndex}`,
+                        type: 'text',
+                        editorKindLabel: 'Пункт на странице',
+                        collectionItemLabel: 'пункт',
+                        collectionItemLabelPlural: 'пунктов',
+                        label: `Раздел комплектующих ${index + 1}: пункт ${itemIndex + 1}`,
+                        element: targetItem,
+                        collectionPath: `slidingComponentsPage.sections.${index}.items`,
+                        collectionItemFactory(nextIndex) {
+                            const nextItem = section.querySelectorAll('.automation-product-specs li')[nextIndex];
+                            if (!nextItem) return null;
+                            return buildSectionItemBinding(nextItem, nextIndex);
+                        },
+                        collectionCreateValue() {
+                            return 'Новый пункт';
+                        },
+                        collectionRender(items) {
+                            syncTextList(list, 'li', Array.isArray(items) ? items : []);
+                        },
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                        }
+                    });
+                    list.querySelectorAll('li').forEach((item, itemIndex) => {
+                        bindings.push(buildSectionItemBinding(item, itemIndex));
+                    });
+                }
             });
 
             if (gallery) {
@@ -703,7 +849,36 @@
         if (meta) bindings.push({ path: `productPages.${productIndex}.meta`, type: 'text', label: 'Подпись на карточке автоматики', element: meta });
         if (title) bindings.push({ path: `productPages.${productIndex}.title`, type: 'text', label: 'Заголовок карточки автоматики', element: title });
         if (description) bindings.push({ path: `productPages.${productIndex}.description`, type: 'textarea', label: 'Описание карточки автоматики', element: description });
-        if (specs) bindings.push({ path: `productPages.${productIndex}.specs`, type: 'list', label: 'Характеристики карточки автоматики', element: specs });
+        if (specs) {
+            bindings.push({ path: `productPages.${productIndex}.specs`, type: 'list', label: 'Характеристики карточки автоматики', element: specs });
+            const buildProductSpecBinding = (targetItem, itemIndex) => ({
+                path: `productPages.${productIndex}.specs.${itemIndex}`,
+                type: 'text',
+                editorKindLabel: 'Пункт на странице',
+                collectionItemLabel: 'пункт',
+                collectionItemLabelPlural: 'пунктов',
+                label: `Карточка автоматики: характеристика ${itemIndex + 1}`,
+                element: targetItem,
+                collectionPath: `productPages.${productIndex}.specs`,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = document.querySelectorAll('.automation-product-specs li')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildProductSpecBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return 'Новая характеристика';
+                },
+                collectionRender(items) {
+                    syncTextList(specs, 'li', Array.isArray(items) ? items : []);
+                },
+                render(value, binding) {
+                    binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                }
+            });
+            specs.querySelectorAll('li').forEach((item, itemIndex) => {
+                bindings.push(buildProductSpecBinding(item, itemIndex));
+            });
+        }
         if (gallery) {
             const buildGalleryBinding = (thumbIndex) => {
                 const thumb = gallery.querySelectorAll('.automation-product-thumb')[thumbIndex];
