@@ -105,6 +105,20 @@
         syncCollection(container, '.direction-item', items, applyDirectionItem);
     }
 
+    function applyDirectionAction(node, action) {
+        if (!node || !action) return;
+        const className = action.style === 'secondary'
+            ? 'direction-action direction-action--secondary'
+            : 'direction-action direction-action--primary';
+        renderActionNode(node, action, className);
+    }
+
+    function syncDirectionActions(featureElement, items) {
+        const container = featureElement?.querySelector('.direction-feature__actions');
+        if (!container) return;
+        syncCollection(container, 'a', items, applyDirectionAction);
+    }
+
     function applyHeroFeature(node, feature) {
         if (!node || !feature) return;
         const icon = node.querySelector('i');
@@ -149,6 +163,18 @@
         const container = document.querySelector('.process-timeline');
         if (!container) return;
         syncCollection(container, '.process-step', items, applyTimelineStep);
+    }
+
+    function applyProcessAction(node, action) {
+        if (!node || !action) return;
+        const className = action.style === 'secondary' ? 'btn btn-outline' : 'btn btn-primary';
+        renderActionNode(node, action, className);
+    }
+
+    function syncProcessActions(items) {
+        const container = document.querySelector('.process-section .btn-group');
+        if (!container) return;
+        syncCollection(container, 'a', items, applyProcessAction);
     }
 
     function applyTrustHighlight(node, item) {
@@ -686,25 +712,114 @@
             if (lead) bindings.push({ path: `directions.${key}.lead`, type: 'textarea', label: `${key === 'gates' ? 'Описание карточки ворот' : 'Описание карточки покраски'}`, element: lead });
             if (trust) bindings.push({ path: `directions.${key}.trust`, type: 'textarea', label: `${key === 'gates' ? 'Подсказка под воротами' : 'Подсказка под покраской'}`, element: trust });
 
-            feature?.querySelectorAll('.direction-feature__actions a').forEach((action, index) => {
-                bindings.push({
-                    path: `directions.${key}.actions.${index}`,
-                    type: 'object',
-                    label: `${key === 'gates' ? 'Кнопка ворот' : 'Кнопка покраски'} ${index + 1}`,
-                    element: action,
-                    fields: [
-                        { key: 'label', label: 'Текст кнопки', type: 'text' },
-                        { key: 'href', label: 'Ссылка', type: 'text' },
-                        { key: 'icon', label: 'Иконка', type: 'text' },
-                        { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
-                    ],
-                    render(value, binding) {
-                        const className = value?.style === 'secondary'
-                            ? 'direction-action direction-action--secondary'
-                            : 'direction-action direction-action--primary';
-                        binding.elements.forEach((element) => renderActionNode(element, value || {}, className));
-                    }
-                });
+            const buildDirectionFactBinding = (targetItem, index) => ({
+                path: `directions.${key}.facts.${index}`,
+                type: 'object',
+                editorKindLabel: 'Факт на странице',
+                label: `${key === 'gates' ? 'Факт ворот' : 'Факт покраски'} ${index + 1}`,
+                element: targetItem,
+                collectionPath: `directions.${key}.facts`,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = feature?.querySelectorAll('.direction-feature__facts .direction-fact')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildDirectionFactBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        value: 'Новый факт',
+                        text: 'Короткое описание'
+                    };
+                },
+                fields: [
+                    { key: 'value', label: 'Значение', type: 'text' },
+                    { key: 'text', label: 'Текст', type: 'text' }
+                ],
+                collectionRender(items) {
+                    syncDirectionFacts(feature, items);
+                },
+                render(value) {
+                    applyDirectionFact(targetItem, value || {});
+                }
+            });
+
+            feature?.querySelectorAll('.direction-feature__facts .direction-fact').forEach((factElement, index) => {
+                bindings.push(buildDirectionFactBinding(factElement, index));
+            });
+
+            const buildDirectionItemBinding = (targetItem, index) => ({
+                path: `directions.${key}.items.${index}`,
+                type: 'object',
+                editorKindLabel: 'Карточка на странице',
+                label: `${key === 'gates' ? 'Пункт ворот' : 'Пункт покраски'} ${index + 1}`,
+                element: targetItem,
+                collectionPath: `directions.${key}.items`,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = feature?.querySelectorAll('.direction-feature__items .direction-item')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildDirectionItemBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        title: 'Новый пункт',
+                        text: 'Короткое описание пункта',
+                        href: '#',
+                        arrowLabel: 'Подробнее'
+                    };
+                },
+                fields: [
+                    { key: 'title', label: 'Заголовок', type: 'text' },
+                    { key: 'text', label: 'Описание', type: 'textarea' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'arrowLabel', label: 'Подпись стрелки', type: 'text' }
+                ],
+                collectionRender(items) {
+                    syncDirectionItems(feature, items);
+                },
+                render(value) {
+                    applyDirectionItem(targetItem, value || {});
+                }
+            });
+
+            feature?.querySelectorAll('.direction-feature__items .direction-item').forEach((itemElement, index) => {
+                bindings.push(buildDirectionItemBinding(itemElement, index));
+            });
+
+            const buildDirectionActionBinding = (targetItem, index) => ({
+                path: `directions.${key}.actions.${index}`,
+                type: 'object',
+                editorKindLabel: 'Кнопка на странице',
+                label: `${key === 'gates' ? 'Кнопка ворот' : 'Кнопка покраски'} ${index + 1}`,
+                element: targetItem,
+                collectionPath: `directions.${key}.actions`,
+                collectionItemFactory(nextIndex) {
+                    const nextItem = feature?.querySelectorAll('.direction-feature__actions a')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildDirectionActionBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        label: 'Новая кнопка',
+                        href: '#',
+                        icon: 'fas fa-link',
+                        style: 'primary'
+                    };
+                },
+                fields: [
+                    { key: 'label', label: 'Текст кнопки', type: 'text' },
+                    { key: 'href', label: 'Ссылка', type: 'text' },
+                    { key: 'icon', label: 'Иконка', type: 'text' },
+                    { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
+                ],
+                collectionRender(items) {
+                    syncDirectionActions(feature, items);
+                },
+                render(value) {
+                    applyDirectionAction(targetItem, value || {});
+                }
+            });
+
+            feature?.querySelectorAll('.direction-feature__actions a').forEach((actionElement, index) => {
+                bindings.push(buildDirectionActionBinding(actionElement, index));
             });
 
             const selector = `.direction-feature--${key === 'gates' ? 'gates' : 'coating'} [data-direction-showcase-slide]`;
@@ -745,23 +860,114 @@
         if (processTitle) bindings.push({ path: 'process.title', type: 'text', label: 'Заголовок блока процесса', element: processTitle });
         if (processSubtitle) bindings.push({ path: 'process.subtitle', type: 'textarea', label: 'Подзаголовок блока процесса', element: processSubtitle });
 
-        document.querySelectorAll('.process-section .btn-group a').forEach((action, index) => {
-            bindings.push({
-                path: `process.actions.${index}`,
-                type: 'object',
-                label: `Кнопка блока процесса ${index + 1}`,
-                element: action,
-                fields: [
-                    { key: 'label', label: 'Текст кнопки', type: 'text' },
-                    { key: 'href', label: 'Ссылка', type: 'text' },
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
-                ],
-                render(value, binding) {
-                    const className = value?.style === 'secondary' ? 'btn btn-outline' : 'btn btn-primary';
-                    binding.elements.forEach((element) => renderActionNode(element, value || {}, className));
-                }
-            });
+        const buildProcessFactBinding = (targetItem, index) => ({
+            path: `process.facts.${index}`,
+            type: 'object',
+            editorKindLabel: 'Факт на странице',
+            label: `Факт процесса ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'process.facts',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.process-facts .process-fact')[nextIndex];
+                if (!nextItem) return null;
+                return buildProcessFactBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    value: '+1',
+                    text: 'Новый факт'
+                };
+            },
+            fields: [
+                { key: 'value', label: 'Значение', type: 'text' },
+                { key: 'text', label: 'Текст', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncProcessFacts(items);
+            },
+            render(value) {
+                applyProcessFact(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.process-facts .process-fact').forEach((factElement, index) => {
+            bindings.push(buildProcessFactBinding(factElement, index));
+        });
+
+        const buildTimelineStepBinding = (targetItem, index) => ({
+            path: `process.steps.${index}`,
+            type: 'object',
+            editorKindLabel: 'Шаг на странице',
+            label: `Шаг процесса ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'process.steps',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.process-timeline .process-step')[nextIndex];
+                if (!nextItem) return null;
+                return buildTimelineStepBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    number: String(index + 2),
+                    icon: 'fas fa-star',
+                    title: 'Новый шаг',
+                    text: 'Короткое описание шага.'
+                };
+            },
+            fields: [
+                { key: 'number', label: 'Номер', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'text', label: 'Описание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                syncTimelineSteps(items);
+            },
+            render(value) {
+                applyTimelineStep(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.process-timeline .process-step').forEach((stepElement, index) => {
+            bindings.push(buildTimelineStepBinding(stepElement, index));
+        });
+
+        const buildProcessActionBinding = (targetItem, index) => ({
+            path: `process.actions.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Кнопка блока процесса ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'process.actions',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.process-section .btn-group a')[nextIndex];
+                if (!nextItem) return null;
+                return buildProcessActionBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая кнопка',
+                    href: '#',
+                    icon: 'fas fa-link',
+                    style: 'primary'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст кнопки', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncProcessActions(items);
+            },
+            render(value) {
+                applyProcessAction(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.process-section .btn-group a').forEach((actionElement, index) => {
+            bindings.push(buildProcessActionBinding(actionElement, index));
         });
 
         const trustEyebrow = document.querySelector('.trust-eyebrow');
@@ -770,6 +976,76 @@
         if (trustEyebrow) bindings.push({ path: 'trust.eyebrow', type: 'text', label: 'Надзаголовок блока доверия', element: trustEyebrow });
         if (trustTitle) bindings.push({ path: 'trust.title', type: 'text', label: 'Заголовок блока доверия', element: trustTitle });
         if (trustSubtitle) bindings.push({ path: 'trust.subtitle', type: 'textarea', label: 'Подзаголовок блока доверия', element: trustSubtitle });
+
+        const buildTrustHighlightBinding = (targetItem, index) => ({
+            path: `trust.highlights.${index}`,
+            type: 'object',
+            editorKindLabel: 'Показатель на странице',
+            label: `Показатель доверия ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'trust.highlights',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.trust-highlights .trust-highlight')[nextIndex];
+                if (!nextItem) return null;
+                return buildTrustHighlightBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    value: '+1',
+                    text: 'Новый показатель'
+                };
+            },
+            fields: [
+                { key: 'value', label: 'Значение', type: 'text' },
+                { key: 'text', label: 'Текст', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncTrustHighlights(items);
+            },
+            render(value) {
+                applyTrustHighlight(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.trust-highlights .trust-highlight').forEach((itemElement, index) => {
+            bindings.push(buildTrustHighlightBinding(itemElement, index));
+        });
+
+        const buildTrustCardBinding = (targetItem, index) => ({
+            path: `trust.cards.${index}`,
+            type: 'object',
+            editorKindLabel: 'Карточка на странице',
+            label: `Карточка доверия ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'trust.cards',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.trust-grid .trust-card')[nextIndex];
+                if (!nextItem) return null;
+                return buildTrustCardBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-shield-alt',
+                    title: 'Новая карточка',
+                    text: 'Короткое описание карточки.'
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'text', label: 'Описание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                syncTrustCards(items);
+            },
+            render(value) {
+                applyTrustCard(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.trust-grid .trust-card').forEach((cardElement, index) => {
+            bindings.push(buildTrustCardBinding(cardElement, index));
+        });
 
         const requestTitle = document.querySelector('#request-title');
         const requestLead = document.querySelector('.request-lead');
@@ -845,40 +1121,112 @@
             });
         }
 
+        const buildRequestFactBinding = (targetItem, index) => ({
+            path: `request.facts.${index}`,
+            type: 'object',
+            editorKindLabel: 'Факт на странице',
+            label: `Факт в блоке заявки ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'request.facts',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.request-facts .request-fact')[nextIndex];
+                if (!nextItem) return null;
+                return buildRequestFactBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    value: '+1',
+                    text: 'Новый факт'
+                };
+            },
+            fields: [
+                { key: 'value', label: 'Значение', type: 'text' },
+                { key: 'text', label: 'Текст', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncRequestFacts(items);
+            },
+            render(value) {
+                applyRequestFact(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.request-facts .request-fact').forEach((factElement, index) => {
+            bindings.push(buildRequestFactBinding(factElement, index));
+        });
+
+        const buildRequestContactLineBinding = (targetItem, index) => ({
+            path: `request.contactLines.${index}`,
+            type: 'object',
+            editorKindLabel: 'Контакт на странице',
+            label: `Контакт в блоке заявки ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'request.contactLines',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.contact-info p:not(.contact-info__intro)')[nextIndex];
+                if (!nextItem) return null;
+                return buildRequestContactLineBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-phone',
+                    label: 'Новый контакт',
+                    href: '#',
+                    note: ''
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'label', label: 'Текст', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'note', label: 'Подпись', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncRequestContactLines(items);
+            },
+            render(value) {
+                applyRequestContactLine(targetItem, value || {});
+            }
+        });
+
         document.querySelectorAll('.contact-info p:not(.contact-info__intro)').forEach((lineElement, index) => {
-            bindings.push({
-                path: `request.contactLines.${index}`,
-                type: 'object',
-                editorKindLabel: 'Контакт на странице',
-                label: `Контакт в блоке заявки ${index + 1}`,
-                element: lineElement,
-                fields: [
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'label', label: 'Текст', type: 'text' },
-                    { key: 'href', label: 'Ссылка', type: 'text' },
-                    { key: 'note', label: 'Подпись', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyRequestContactLine(element, value || {}));
-                }
-            });
+            bindings.push(buildRequestContactLineBinding(lineElement, index));
+        });
+
+        const buildRequestQuickActionBinding = (targetItem, index) => ({
+            path: `request.quickActions.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Быстрая кнопка в форме заявки ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'request.quickActions',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.request-form--compact .quick-actions a')[nextIndex];
+                if (!nextItem) return null;
+                return buildRequestQuickActionBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая кнопка',
+                    href: '#',
+                    icon: 'fas fa-link'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст кнопки', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncRequestQuickActions(items);
+            },
+            render(value) {
+                applyRequestQuickAction(targetItem, value || {});
+            }
         });
 
         document.querySelectorAll('.request-form--compact .quick-actions a').forEach((actionElement, index) => {
-            bindings.push({
-                path: `request.quickActions.${index}`,
-                type: 'object',
-                label: `Быстрая кнопка в форме заявки ${index + 1}`,
-                element: actionElement,
-                fields: [
-                    { key: 'label', label: 'Текст кнопки', type: 'text' },
-                    { key: 'href', label: 'Ссылка', type: 'text' },
-                    { key: 'icon', label: 'Иконка', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyRequestQuickAction(element, value || {}));
-                }
-            });
+            bindings.push(buildRequestQuickActionBinding(actionElement, index));
         });
 
         if (!bindings.length) return;

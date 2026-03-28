@@ -40,6 +40,11 @@
         anchor.innerHTML = `<i class="${escapeHtml(action.icon || '')}" aria-hidden="true"></i> ${escapeHtml(action.label || '')}`;
     }
 
+    function applyActionButton(node, item) {
+        if (!node || !item) return;
+        renderActionNode(node, item);
+    }
+
     function resetInlineMarkers(root) {
         if (!root) return;
         root.removeAttribute('data-inline-edit-id');
@@ -103,6 +108,7 @@
         if (!node || !item) return;
         const day = node.querySelector('.day');
         const time = node.querySelector('.time');
+        node.classList.toggle('special-note', Boolean(item.icon));
         if (day) {
             day.innerHTML = `${item.icon ? `<i class="${escapeHtml(item.icon)}"></i> ` : ''}${escapeHtml(item.day || '')}`;
         }
@@ -126,8 +132,8 @@
 
     function applyLocationPoint(node, item) {
         if (!node || !item) return;
-        const title = node.querySelector('h3');
-        const text = node.querySelector('p');
+        const title = node.querySelector('strong');
+        const text = node.querySelector('span');
         if (title) title.textContent = item.title || '';
         if (text) text.textContent = item.text || '';
     }
@@ -156,47 +162,89 @@
         if (locationTitle) bindings.push({ path: 'location.title', type: 'text', label: 'Заголовок блока схемы проезда', element: locationTitle });
         if (locationText) bindings.push({ path: 'location.text', type: 'textarea', label: 'Описание блока схемы проезда', element: locationText });
 
+        const buildHeroFactBinding = (targetItem, index) => ({
+            path: `hero.facts.${index}`,
+            type: 'object',
+            editorKindLabel: 'Факт на странице',
+            label: `Факт в первом экране контактов ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'hero.facts',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.contacts-facts .contacts-fact')[nextIndex];
+                if (!nextItem) return null;
+                return buildHeroFactBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая метка',
+                    title: 'Новый факт',
+                    text: 'Короткое описание факта.'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Метка', type: 'text' },
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'text', label: 'Описание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.contacts-facts');
+                if (!container) return;
+                syncCollection(container, '.contacts-fact', Array.isArray(items) ? items : [], applyHeroFact);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyHeroFact(element, value || {}));
+            }
+        });
+
         document.querySelectorAll('.contacts-facts .contacts-fact').forEach((factElement, index) => {
             const title = factElement.querySelector('strong');
             const text = factElement.querySelector('p');
-            bindings.push({
-                path: `hero.facts.${index}`,
-                type: 'object',
-                editorKindLabel: 'Факт на странице',
-                label: `Факт в первом экране контактов ${index + 1}`,
-                element: factElement,
-                fields: [
-                    { key: 'label', label: 'Метка', type: 'text' },
-                    { key: 'title', label: 'Заголовок', type: 'text' },
-                    { key: 'text', label: 'Описание', type: 'textarea' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyHeroFact(element, value || {}));
-                }
-            });
+            bindings.push(buildHeroFactBinding(factElement, index));
             if (title) bindings.push({ path: `hero.facts.${index}.title`, type: 'text', label: `Факт контактов ${index + 1}: заголовок`, element: title });
             if (text) bindings.push({ path: `hero.facts.${index}.text`, type: 'textarea', label: `Факт контактов ${index + 1}: описание`, element: text });
         });
 
+        const buildOverviewItemBinding = (targetItem, index) => ({
+            path: `overview.items.${index}`,
+            type: 'object',
+            editorKindLabel: 'Контакт на странице',
+            label: `Карточка контакта ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'overview.items',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.contacts-overview-list .contact-item')[nextIndex];
+                if (!nextItem) return null;
+                return buildOverviewItemBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-phone',
+                    title: 'Новый контакт',
+                    valueHtml: 'Новая контактная информация',
+                    noteIcon: 'fas fa-info-circle',
+                    note: 'Короткая подсказка'
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'valueHtml', label: 'Основной текст / HTML', type: 'html' },
+                { key: 'noteIcon', label: 'Иконка примечания', type: 'text' },
+                { key: 'note', label: 'Примечание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.contacts-overview-list');
+                if (!container) return;
+                syncCollection(container, '.contact-item', Array.isArray(items) ? items : [], applyOverviewItem);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyOverviewItem(element, value || {}));
+            }
+        });
+
         document.querySelectorAll('.contacts-overview-list .contact-item').forEach((itemElement, index) => {
             const title = itemElement.querySelector('.contact-details h3');
-            bindings.push({
-                path: `overview.items.${index}`,
-                type: 'object',
-                editorKindLabel: 'Контакт на странице',
-                label: `Карточка контакта ${index + 1}`,
-                element: itemElement,
-                fields: [
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'title', label: 'Заголовок', type: 'text' },
-                    { key: 'valueHtml', label: 'Основной текст / HTML', type: 'html' },
-                    { key: 'noteIcon', label: 'Иконка примечания', type: 'text' },
-                    { key: 'note', label: 'Примечание', type: 'textarea' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyOverviewItem(element, value || {}));
-                }
-            });
+            bindings.push(buildOverviewItemBinding(itemElement, index));
             if (title) bindings.push({ path: `overview.items.${index}.title`, type: 'text', label: `Карточка контакта ${index + 1}: заголовок`, element: title });
         });
 
@@ -209,109 +257,232 @@
 
         const hoursTitle = document.querySelector('.working-hours h3');
         if (hoursTitle) bindings.push({ path: 'overview.hours.title', type: 'text', label: 'Заголовок режима работы', element: hoursTitle });
+        const buildHoursItemBinding = (targetItem, index) => ({
+            path: `overview.hours.items.${index}`,
+            type: 'object',
+            editorKindLabel: 'Пункт на странице',
+            label: `Пункт режима работы ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'overview.hours.items',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.hours-list li')[nextIndex];
+                if (!nextItem) return null;
+                return buildHoursItemBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    day: 'Новый день',
+                    time: '09:00 - 18:00',
+                    icon: 'fas fa-clock'
+                };
+            },
+            fields: [
+                { key: 'day', label: 'День / подпись', type: 'text' },
+                { key: 'time', label: 'Время / текст', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.hours-list');
+                if (!container) return;
+                syncCollection(container, 'li', Array.isArray(items) ? items : [], applyHoursItem);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyHoursItem(element, value || {}));
+            }
+        });
+
         document.querySelectorAll('.hours-list li').forEach((itemElement, index) => {
-            bindings.push({
-                path: `overview.hours.items.${index}`,
-                type: 'object',
-                editorKindLabel: 'Пункт на странице',
-                label: `Пункт режима работы ${index + 1}`,
-                element: itemElement,
-                fields: [
-                    { key: 'day', label: 'День / подпись', type: 'text' },
-                    { key: 'time', label: 'Время / текст', type: 'text' },
-                    { key: 'icon', label: 'Иконка', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyHoursItem(element, value || {}));
-                }
-            });
+            bindings.push(buildHoursItemBinding(itemElement, index));
+        });
+
+        const buildConnectActionBinding = (targetItem, index) => ({
+            path: `connect.actions.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Кнопка быстрой связи ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'connect.actions',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.contact-form-card .quick-actions a')[nextIndex];
+                if (!nextItem) return null;
+                return buildConnectActionBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая кнопка',
+                    href: '#',
+                    icon: 'fas fa-link',
+                    style: 'outline'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.contact-form-card .quick-actions');
+                if (!container) return;
+                syncCollection(container, 'a', Array.isArray(items) ? items : [], applyActionButton);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => renderActionNode(element, value || {}));
+            }
         });
 
         document.querySelectorAll('.contact-form-card .quick-actions a').forEach((anchor, index) => {
-            bindings.push({
-                path: `connect.actions.${index}`,
-                type: 'object',
-                label: `Кнопка быстрой связи ${index + 1}`,
-                element: anchor,
-                fields: [
-                    { key: 'label', label: 'Текст', type: 'text' },
-                    { key: 'href', label: 'Ссылка', type: 'text' },
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => renderActionNode(element, value || {}));
-                }
-            });
+            bindings.push(buildConnectActionBinding(anchor, index));
+        });
+
+        const buildTrustItemBinding = (targetItem, index) => ({
+            path: `connect.trustItems.${index}`,
+            type: 'object',
+            editorKindLabel: 'Пункт на странице',
+            label: `Пункт доверия ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'connect.trustItems',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.contact-trust .contact-trust__item')[nextIndex];
+                if (!nextItem) return null;
+                return buildTrustItemBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-check-circle',
+                    text: 'Новый пункт доверия'
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'text', label: 'Текст', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.contact-trust');
+                if (!container) return;
+                syncCollection(container, '.contact-trust__item', Array.isArray(items) ? items : [], applyTrustItem);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyTrustItem(element, value || {}));
+            }
         });
 
         document.querySelectorAll('.contact-trust .contact-trust__item').forEach((itemElement, index) => {
-            bindings.push({
-                path: `connect.trustItems.${index}`,
-                type: 'object',
-                editorKindLabel: 'Пункт на странице',
-                label: `Пункт доверия ${index + 1}`,
-                element: itemElement,
-                fields: [
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'text', label: 'Текст', type: 'textarea' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyTrustItem(element, value || {}));
-                }
-            });
+            bindings.push(buildTrustItemBinding(itemElement, index));
         });
 
         const locationKicker = document.querySelector('.contacts-location-copy .contacts-card-kicker');
         if (locationKicker) bindings.push({ path: 'location.kicker', type: 'text', label: 'Надзаголовок блока схемы проезда', element: locationKicker });
+        const buildLocationBadgeBinding = (targetItem, index) => ({
+            path: `location.badges.${index}`,
+            type: 'object',
+            editorKindLabel: 'Плашка на странице',
+            label: `Плашка локации ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'location.badges',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.location-badges .location-badge')[nextIndex];
+                if (!nextItem) return null;
+                return buildLocationBadgeBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    icon: 'fas fa-location-dot',
+                    text: 'Новая плашка'
+                };
+            },
+            fields: [
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'text', label: 'Текст', type: 'text' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.location-badges');
+                if (!container) return;
+                syncCollection(container, '.location-badge', Array.isArray(items) ? items : [], applyLocationBadge);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyLocationBadge(element, value || {}));
+            }
+        });
+
         document.querySelectorAll('.location-badges .location-badge').forEach((badgeElement, index) => {
-            bindings.push({
-                path: `location.badges.${index}`,
-                type: 'object',
-                editorKindLabel: 'Плашка на странице',
-                label: `Плашка локации ${index + 1}`,
-                element: badgeElement,
-                fields: [
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'text', label: 'Текст', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyLocationBadge(element, value || {}));
-                }
-            });
+            bindings.push(buildLocationBadgeBinding(badgeElement, index));
         });
-        document.querySelectorAll('.location-points .location-point').forEach((pointElement, index) => {
-            bindings.push({
-                path: `location.points.${index}`,
-                type: 'object',
-                editorKindLabel: 'Точка на странице',
-                label: `Точка маршрута ${index + 1}`,
-                element: pointElement,
-                fields: [
-                    { key: 'title', label: 'Заголовок', type: 'text' },
-                    { key: 'text', label: 'Описание', type: 'textarea' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => applyLocationPoint(element, value || {}));
-                }
-            });
+
+        const buildLocationPointBinding = (targetItem, index) => ({
+            path: `location.points.${index}`,
+            type: 'object',
+            editorKindLabel: 'Точка на странице',
+            label: `Точка маршрута ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'location.points',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.location-points li')[nextIndex];
+                if (!nextItem) return null;
+                return buildLocationPointBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    title: 'Новая точка',
+                    text: 'Короткое описание маршрута'
+                };
+            },
+            fields: [
+                { key: 'title', label: 'Заголовок', type: 'text' },
+                { key: 'text', label: 'Описание', type: 'textarea' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.location-points');
+                if (!container) return;
+                syncCollection(container, 'li', Array.isArray(items) ? items : [], applyLocationPoint);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => applyLocationPoint(element, value || {}));
+            }
         });
+
+        document.querySelectorAll('.location-points li').forEach((pointElement, index) => {
+            bindings.push(buildLocationPointBinding(pointElement, index));
+        });
+
+        const buildLocationActionBinding = (targetItem, index) => ({
+            path: `location.actions.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Кнопка маршрута ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'location.actions',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.location-actions a')[nextIndex];
+                if (!nextItem) return null;
+                return buildLocationActionBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая кнопка',
+                    href: '#',
+                    icon: 'fas fa-route',
+                    style: 'outline'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
+            ],
+            collectionRender(items) {
+                const container = document.querySelector('.location-actions');
+                if (!container) return;
+                syncCollection(container, 'a', Array.isArray(items) ? items : [], applyActionButton);
+            },
+            render(value, binding) {
+                binding.elements.forEach((element) => renderActionNode(element, value || {}));
+            }
+        });
+
         document.querySelectorAll('.location-actions a').forEach((anchor, index) => {
-            bindings.push({
-                path: `location.actions.${index}`,
-                type: 'object',
-                label: `Кнопка маршрута ${index + 1}`,
-                element: anchor,
-                fields: [
-                    { key: 'label', label: 'Текст', type: 'text' },
-                    { key: 'href', label: 'Ссылка', type: 'text' },
-                    { key: 'icon', label: 'Иконка', type: 'text' },
-                    { key: 'style', label: 'Стиль (primary/outline)', type: 'text' }
-                ],
-                render(value, binding) {
-                    binding.elements.forEach((element) => renderActionNode(element, value || {}));
-                }
-            });
+            bindings.push(buildLocationActionBinding(anchor, index));
         });
 
         if (!bindings.length) return;
@@ -453,7 +624,7 @@
                 }
                 if (points) {
                     points.innerHTML = (content.location?.points || []).map((item) => `
-                        <li>
+                        <li class="location-point">
                             <strong>${escapeHtml(item.title || '')}</strong>
                             <span>${escapeHtml(item.text || '')}</span>
                         </li>
