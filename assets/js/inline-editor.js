@@ -2493,6 +2493,8 @@
                 prevButton.dataset.inlinePanelNav = 'prev-image';
                 prevButton.textContent = '‹';
                 prevButton.disabled = !imageNavigation.prev;
+                prevButton.title = imageNavigation.prev ? `Предыдущее фото: ${imageNavigation.prev.label}` : 'Предыдущего фото нет';
+                prevButton.setAttribute('aria-label', prevButton.title);
                 previewFrame.appendChild(prevButton);
 
                 const nextButton = document.createElement('button');
@@ -2501,6 +2503,8 @@
                 nextButton.dataset.inlinePanelNav = 'next-image';
                 nextButton.textContent = '›';
                 nextButton.disabled = !imageNavigation.next;
+                nextButton.title = imageNavigation.next ? `Следующее фото: ${imageNavigation.next.label}` : 'Следующего фото нет';
+                nextButton.setAttribute('aria-label', nextButton.title);
                 previewFrame.appendChild(nextButton);
 
                 const indexBadge = document.createElement('div');
@@ -2580,7 +2584,9 @@
 
             const imageHint = document.createElement('p');
             imageHint.className = 'p-inline-panel__hint';
-            imageHint.textContent = 'После замены можно сразу поправить alt или подпись ниже.';
+            imageHint.textContent = imageNavigation && imageNavigation.total > 1
+                ? 'После замены можно поправить alt или подпись ниже. Клавиши ← и → листают соседние фото.'
+                : 'После замены можно сразу поправить alt или подпись ниже.';
             ui.panelForm.appendChild(imageHint);
 
         }
@@ -2648,6 +2654,16 @@
         window.setTimeout(() => {
             ui.overviewSearch?.focus();
         }, 0);
+    }
+
+    function navigateAdjacentImageBinding(direction) {
+        const binding = state.bindingMap.get(state.activeBindingId);
+        const navigation = getImageBindingsNavigation(binding);
+        if (!navigation) return false;
+        const nextBinding = direction === 'prev' ? navigation.prev : navigation.next;
+        if (!nextBinding) return false;
+        openBinding(nextBinding.id, { fromOverview: state.panelReturnToOverview });
+        return true;
     }
 
     async function openBinding(bindingId, options = {}) {
@@ -3320,6 +3336,11 @@
 
     function handleKeydown(event) {
         if (!state.enabled) return;
+        const target = event.target;
+        const isTypingTarget = target instanceof HTMLInputElement
+            || target instanceof HTMLTextAreaElement
+            || target instanceof HTMLSelectElement
+            || Boolean(target?.closest?.('[contenteditable="true"]'));
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
             event.preventDefault();
@@ -3342,9 +3363,29 @@
             return;
         }
 
+        if (!ui.panel.hidden && !event.ctrlKey && !event.metaKey && !event.altKey && !isTypingTarget) {
+            if (event.key === 'ArrowLeft') {
+                if (navigateAdjacentImageBinding('prev')) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+
+            if (event.key === 'ArrowRight') {
+                if (navigateAdjacentImageBinding('next')) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+        }
+
         if (event.key !== 'Escape') return;
 
         if (!ui.panel.hidden) {
+            if (state.panelReturnToOverview) {
+                returnToOverview();
+                return;
+            }
             closePanel();
             return;
         }
