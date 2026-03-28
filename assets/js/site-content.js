@@ -81,6 +81,18 @@
         });
     }
 
+    function applyTextItem(element, value) {
+        if (!element) return;
+        element.textContent = value || '';
+    }
+
+    function syncTextCollection(container, itemSelector, items) {
+        if (!container) return;
+        syncCollection(container, itemSelector, Array.isArray(items) ? items : [], (element, value) => {
+            applyTextItem(element, value);
+        });
+    }
+
     function renderPhoneLink(anchor, phone) {
         if (!anchor || !phone) return;
         anchor.setAttribute('href', phone.href || '#');
@@ -186,15 +198,15 @@
         const footerCompany = document.querySelector('.footer-column--company');
         if (footerCompany) {
             const title = footerCompany.querySelector('h4');
-            const paragraphs = footerCompany.querySelectorAll('p');
+            const paragraphs = footerCompany;
 
             if (title) {
                 title.textContent = site.footer?.companyTitle || '';
             }
 
-            paragraphs.forEach((paragraph, index) => {
-                paragraph.textContent = site.footer?.companyParagraphs?.[index] || '';
-            });
+            if (paragraphs) {
+                syncTextCollection(paragraphs, ':scope > p', site.footer?.companyParagraphs || []);
+            }
         }
 
         const contactList = document.querySelector('.footer .contact-list');
@@ -368,6 +380,7 @@
 
         const footerCompany = document.querySelector('.footer-column--company');
         if (footerCompany) {
+            const paragraphContainer = footerCompany;
             bindings.push({
                 path: 'footer.companyParagraphs',
                 type: 'list',
@@ -375,15 +388,44 @@
                 hint: 'Каждый абзац с новой строки.',
                 element: footerCompany,
                 render(value, binding) {
-                    const paragraphs = Array.isArray(value) ? value : [];
                     binding.elements.forEach((element) => {
-                        const nodes = Array.from(element.querySelectorAll('p'));
-                        nodes.forEach((node, index) => {
-                            node.textContent = paragraphs[index] || '';
-                        });
+                        syncTextCollection(element, ':scope > p', Array.isArray(value) ? value : []);
                     });
                 }
             });
+            if (paragraphContainer) {
+                paragraphContainer.querySelectorAll(':scope > p').forEach((paragraph, index) => {
+                    bindings.push({
+                        path: `footer.companyParagraphs.${index}`,
+                        type: 'text',
+                        editorKindLabel: 'Абзац на странице',
+                        collectionPath: 'footer.companyParagraphs',
+                        collectionItemLabel: 'абзац',
+                        collectionItemLabelPlural: 'абзацев',
+                        label: `Описание компании в подвале — абзац ${index + 1}`,
+                        element: paragraph,
+                        collectionItemFactory(nextIndex) {
+                            const nextParagraph = paragraphContainer.querySelectorAll(':scope > p')[nextIndex];
+                            if (!nextParagraph) return null;
+                            return {
+                                ...this,
+                                path: `footer.companyParagraphs.${nextIndex}`,
+                                label: `Описание компании в подвале — абзац ${nextIndex + 1}`,
+                                element: nextParagraph
+                            };
+                        },
+                        collectionCreateValue() {
+                            return 'Новый абзац';
+                        },
+                        collectionRender(items) {
+                            syncTextCollection(paragraphContainer, ':scope > p', Array.isArray(items) ? items : []);
+                        },
+                        render(value, binding) {
+                            binding.elements.forEach((element) => applyTextItem(element, value || ''));
+                        }
+                    });
+                });
+            }
         }
 
         const footerUsefulTitle = Array.from(document.querySelectorAll('.footer-column h4')).find((node) => /Полезное/i.test(node.textContent));

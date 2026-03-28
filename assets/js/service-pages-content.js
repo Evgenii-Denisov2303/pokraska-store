@@ -93,6 +93,18 @@
         });
     }
 
+    function applyTextListItem(element, value) {
+        if (!element) return;
+        element.textContent = value || '';
+    }
+
+    function syncTextList(container, itemSelector, items) {
+        if (!container) return;
+        syncCollection(container, itemSelector, Array.isArray(items) ? items : [], (element, value) => {
+            applyTextListItem(element, value);
+        });
+    }
+
     function applyAdvantageItem(itemElement, item) {
         if (!itemElement || !item) return;
         const icon = itemElement.querySelector('i');
@@ -266,9 +278,7 @@
                         paletteText.textContent = sectionContent.paletteCard.text || '';
                     }
                     if (paletteList) {
-                        paletteList.innerHTML = (sectionContent.paletteCard.points || []).map((item) => `
-                            <li>${escapeHtml(item)}</li>
-                        `).join('');
+                        syncTextList(paletteList, 'li', sectionContent.paletteCard.points || []);
                     }
                     if (paletteAction && sectionContent.paletteCard.action) {
                         paletteAction.outerHTML = renderButton(sectionContent.paletteCard.action, 'btn btn-secondary');
@@ -556,7 +566,46 @@
                 });
             }
             if (paletteText) bindings.push({ path: `${pageKey}.sections.${index}.paletteCard.text`, type: 'textarea', label: `${sectionContent.title || `Услуга ${index + 1}`}: текст палитры`, element: paletteText });
-            if (paletteList) bindings.push({ path: `${pageKey}.sections.${index}.paletteCard.points`, type: 'list', label: `${sectionContent.title || `Услуга ${index + 1}`}: список палитры`, element: paletteList });
+            if (paletteList) {
+                bindings.push({
+                    path: `${pageKey}.sections.${index}.paletteCard.points`,
+                    type: 'list',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: список палитры`,
+                    element: paletteList,
+                    render(value, binding) {
+                        binding.elements.forEach((element) => syncTextList(element, 'li', Array.isArray(value) ? value : []));
+                    }
+                });
+
+                const buildPalettePointBinding = (targetItem, itemIndex) => ({
+                    path: `${pageKey}.sections.${index}.paletteCard.points.${itemIndex}`,
+                    type: 'text',
+                    editorKindLabel: 'Пункт на странице',
+                    collectionItemLabel: 'пункт',
+                    collectionItemLabelPlural: 'пунктов',
+                    label: `${sectionContent.title || `Услуга ${index + 1}`}: палитра — пункт ${itemIndex + 1}`,
+                    element: targetItem,
+                    collectionPath: `${pageKey}.sections.${index}.paletteCard.points`,
+                    collectionItemFactory(nextIndex) {
+                        const nextItem = paletteList.querySelectorAll('li')[nextIndex];
+                        if (!nextItem) return null;
+                        return buildPalettePointBinding(nextItem, nextIndex);
+                    },
+                    collectionCreateValue() {
+                        return 'Новый пункт';
+                    },
+                    collectionRender(items) {
+                        syncTextList(paletteList, 'li', Array.isArray(items) ? items : []);
+                    },
+                    render(value, binding) {
+                        binding.elements.forEach((element) => applyTextListItem(element, value || ''));
+                    }
+                });
+
+                paletteList.querySelectorAll('li').forEach((item, itemIndex) => {
+                    bindings.push(buildPalettePointBinding(item, itemIndex));
+                });
+            }
             if (paletteAction) {
                 bindings.push({
                     path: `${pageKey}.sections.${index}.paletteCard.action`,
