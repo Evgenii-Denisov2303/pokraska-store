@@ -761,6 +761,52 @@
         return value == null ? value : JSON.parse(JSON.stringify(value));
     }
 
+    function mergeMissingData(target, source) {
+        if (source == null) return target;
+
+        if (Array.isArray(source)) {
+            if (!Array.isArray(target) || !target.length) {
+                return cloneData(source);
+            }
+
+            const nextArray = target.slice();
+            source.forEach((item, index) => {
+                if (nextArray[index] === undefined || nextArray[index] === null) {
+                    nextArray[index] = cloneData(item);
+                    return;
+                }
+
+                if (item && typeof item === 'object') {
+                    nextArray[index] = mergeMissingData(nextArray[index], item);
+                }
+            });
+            return nextArray;
+        }
+
+        if (source && typeof source === 'object') {
+            const nextObject = target && typeof target === 'object' ? { ...target } : {};
+            Object.entries(source).forEach(([key, value]) => {
+                if (nextObject[key] === undefined || nextObject[key] === null) {
+                    nextObject[key] = cloneData(value);
+                    return;
+                }
+
+                if (value && typeof value === 'object') {
+                    nextObject[key] = mergeMissingData(nextObject[key], value);
+                }
+            });
+            return nextObject;
+        }
+
+        return target ?? source;
+    }
+
+    function applyPageDefaults(fileName, data) {
+        const defaults = window.PokraskaInlineContentDefaults?.[fileName];
+        if (!defaults) return data;
+        return mergeMissingData(data, defaults);
+    }
+
     function getByPath(source, path) {
         return String(path || '')
             .split('.')
@@ -1470,7 +1516,8 @@
             throw new Error(`Не удалось загрузить ${fileName}.json`);
         }
 
-        const data = await response.json();
+        const rawData = await response.json();
+        const data = applyPageDefaults(fileName, rawData);
         const entry = {
             fileName,
             sectionKey: fileName,
@@ -1998,6 +2045,12 @@
         const uploadControl = ui.panelForm.querySelector('[name="__imageUpload"]');
         if (uploadControl?.files?.[0]) {
             nextValue.src = await uploadImage(uploadControl.files[0], binding.directory);
+            if (Object.prototype.hasOwnProperty.call(nextValue, 'previewSrc')) {
+                nextValue.previewSrc = nextValue.src;
+            }
+            if (Object.prototype.hasOwnProperty.call(nextValue, 'zoomSrc')) {
+                nextValue.zoomSrc = nextValue.src;
+            }
         }
 
         return nextValue;
