@@ -1037,6 +1037,14 @@
         return Array.from(state.files.values()).some((entry) => entry.dirty);
     }
 
+    function isSameData(left, right) {
+        try {
+            return JSON.stringify(left) === JSON.stringify(right);
+        } catch (error) {
+            return false;
+        }
+    }
+
     function showToast(message) {
         if (!ui.toast) return;
         clearTimeout(state.toastTimer);
@@ -1089,6 +1097,7 @@
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
+                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть</button>
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="cancel">Закрыть</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
             </div>
@@ -1146,6 +1155,7 @@
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
+        ui.panelRevertBtn = panel.querySelector('[data-inline-panel-action="revert"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
         ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
@@ -1951,6 +1961,11 @@
         };
     }
 
+    function canRevertBinding(binding) {
+        if (!binding) return false;
+        return !getBindingCollectionState(binding);
+    }
+
     function markBindingsDirtyForCollection(fileName, collectionPath) {
         const pattern = new RegExp(`^${escapeRegExp(collectionPath)}\\.\\d+$`);
         state.bindings.forEach((binding) => {
@@ -2054,6 +2069,9 @@
         ui.panelTitle.textContent = binding.label;
         ui.panelMeta.textContent = `${binding.sectionLabel} · ${binding.fileName}.json · Ctrl+Enter — применить`;
         ui.panelForm.innerHTML = '';
+        if (ui.panelRevertBtn) {
+            ui.panelRevertBtn.hidden = !bindingIsDirty(binding) || !canRevertBinding(binding);
+        }
 
         const editorFields = getBindingEditorFields(binding);
 
@@ -2475,6 +2493,34 @@
         }
     }
 
+    async function revertActiveBindingToSaved() {
+        try {
+            const binding = state.bindingMap.get(state.activeBindingId);
+            if (!binding || !canRevertBinding(binding)) return;
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const originalValue = getByPath(fileState.originalData, binding.path);
+            const nextValue = originalValue === undefined
+                ? resolveBindingDefault(binding)
+                : cloneData(originalValue);
+
+            setByPath(fileState.data, binding.path, cloneData(nextValue));
+            rerenderBindingsForPath(binding.fileName, binding.path);
+
+            binding.elements.forEach((element) => element.classList.remove(DIRTY_CLASS));
+            fileState.dirty = !isSameData(fileState.data, fileState.originalData);
+            if (!fileState.dirty) {
+                state.lastSavedAt = 0;
+            }
+            persistDraftFiles();
+            fillPanel(binding, nextValue);
+            renderToolbar();
+            showToast('Блок возвращён к сохранённому виду');
+        } catch (error) {
+            showToast(error.message || 'Не удалось вернуть сохранённую версию');
+        }
+    }
+
     async function saveDirtyFiles() {
         if (!canSaveInline()) {
             showToast('Сохранение недоступно');
@@ -2690,6 +2736,9 @@
         });
 
         ui.root.querySelector('[data-inline-action="overview"]').addEventListener('click', () => {
+            if (!state.overviewOpen && hasDirtyFiles() && state.overviewFocus === 'all') {
+                state.overviewFocus = 'dirty';
+            }
             toggleOverview();
         });
 
@@ -2702,6 +2751,9 @@
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
         ui.panel.querySelector('[data-inline-panel-action="cancel"]').addEventListener('click', closePanel);
+        ui.panelRevertBtn?.addEventListener('click', () => {
+            revertActiveBindingToSaved();
+        });
         ui.panelApplyBtn.addEventListener('click', () => {
             applyActiveBinding();
         });

@@ -270,6 +270,29 @@
             color: var(--blue-dark);
         }
 
+        .recent-link__badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .recent-link__badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 0 9px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--blue-dark);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .recent-link__badge--draft {
+            background: rgba(5, 150, 105, 0.12);
+            color: #047857;
+        }
+
         .tips {
             display: grid;
             gap: 12px;
@@ -658,10 +681,15 @@
                         ? `Последний блок: ${item.bindingLabel}`
                         : (item.sectionLabel || 'Откроется страница в режиме правки');
                     const when = formatRecentDate(item.updatedAt);
+                    const hasDraft = item.fileName && readDraftFiles()[item.fileName];
                     return `
                         <a class="recent-link" href="${buildRecentHref(item)}">
                             <strong>${item.title}</strong>
                             <span>${blockHint}</span>
+                            <span class="recent-link__badges">
+                                ${hasDraft ? '<span class="recent-link__badge recent-link__badge--draft">Есть черновик</span>' : ''}
+                                ${item.sectionLabel ? `<span class="recent-link__badge">${item.sectionLabel}</span>` : ''}
+                            </span>
                             ${when ? `<span class="recent-link__time">Последняя правка: ${when}</span>` : ''}
                         </a>
                     `;
