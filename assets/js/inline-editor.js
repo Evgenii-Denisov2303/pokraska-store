@@ -886,6 +886,12 @@
 
                 .p-inline-toolbar__btn {
                     flex: 1 1 calc(50% - 6px);
+                    white-space: normal;
+                    text-wrap: balance;
+                }
+
+                .p-inline-toolbar__btn--primary {
+                    flex-basis: 100%;
                 }
 
                 .p-inline-panel,
@@ -1721,7 +1727,7 @@
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         ui.saveBtn.disabled = !canSave || (!dirtyCount && !pendingPanel);
         ui.saveBtn.textContent = pendingPanel
-            ? 'Применить и сохранить'
+            ? 'Сохранить всё'
             : (dirtyCount
                 ? `Сохранить ${formatCompactCount(dirtyCount)}`
                 : (hasIssue ? 'Сохранить' : 'Готово'));

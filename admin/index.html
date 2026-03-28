@@ -141,10 +141,6 @@
             text-wrap: balance;
         }
 
-        .badge strong {
-            color: var(--text);
-        }
-
         .layout {
             display: grid;
             gap: 20px;
@@ -288,6 +284,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            align-self: flex-start;
         }
 
         .recent-link__badge {
@@ -487,6 +484,14 @@
             .card {
                 padding: 20px;
                 border-radius: 24px;
+            }
+
+            .actions {
+                align-items: stretch;
+            }
+
+            .button {
+                width: 100%;
             }
         }
     </style>
