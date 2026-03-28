@@ -47,8 +47,8 @@
                     <h2>Как пользоваться</h2>
                     <ol>
                         <li>Выбери нужный раздел слева.</li>
-                        <li>Измени текст, фото, кнопки или контакты.</li>
-                        <li>Нажми <code>Сохранить изменения</code> и проверь страницу по ссылкам справа.</li>
+                        <li>Либо правь поля в админке, либо открой <code>Править на сайте</code> для визуального режима.</li>
+                        <li>Нажми <code>Сохранить изменения</code> и проверь страницу прямо на сайте.</li>
                     </ol>
                     <p><code>Резервная копия</code> скачивает текущие данные на компьютер, если нужно сохранить отдельную копию перед правками.</p>
                     <p>Если нужно открыть админку заказчику через интернет, можно включить вход по логину и паролю. Подробности: <code>docs/admin-deploy.md</code>.</p>
@@ -70,6 +70,9 @@
                     </div>
                 </div>
                 <div class="admin-toolbar__actions">
+                    <button class="admin-btn admin-btn--ghost" type="button" id="adminVisualEditBtn" hidden>
+                        <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
+                    </button>
                     <button class="admin-btn admin-btn--ghost" type="button" id="adminPreviewToggleBtn">
                         <i class="fas fa-eye" aria-hidden="true"></i> Просмотр
                     </button>

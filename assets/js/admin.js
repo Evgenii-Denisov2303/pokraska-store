@@ -1751,6 +1751,7 @@
         assistPanel: document.getElementById('adminAssistPanel'),
         editorHelpers: document.getElementById('adminEditorHelpers'),
         connection: document.getElementById('adminConnection'),
+        visualEditBtn: document.getElementById('adminVisualEditBtn'),
         previewToggleBtn: document.getElementById('adminPreviewToggleBtn'),
         previewSwitcher: document.getElementById('adminPreviewSwitcher'),
         toolbarMore: document.querySelector('.admin-toolbar__more'),
@@ -3408,6 +3409,33 @@
         const meta = sectionMeta[sectionKey] || {};
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
         return previewLinks[0] || null;
+    }
+
+    function buildInlineEditHref(href) {
+        if (!href) return '';
+        const [pathPart, hashPart] = String(href).split('#');
+        const separator = pathPart.includes('?') ? '&' : '?';
+        return `${pathPart}${separator}edit=1${hashPart ? `#${hashPart}` : ''}`;
+    }
+
+    function getPreviewLinkLabel(link) {
+        return String(link?.label || 'страницу').replace(/^Открыть\s+/i, '').trim() || 'страницу';
+    }
+
+    function updateVisualEditButton(sectionKey = state.activeKey) {
+        if (!elements.visualEditBtn) return;
+
+        const previewLink = getPrimaryPreviewLink(sectionKey);
+        if (!previewLink) {
+            elements.visualEditBtn.hidden = true;
+            elements.visualEditBtn.removeAttribute('data-href');
+            return;
+        }
+
+        elements.visualEditBtn.hidden = false;
+        elements.visualEditBtn.dataset.href = buildInlineEditHref(previewLink.href);
+        elements.visualEditBtn.innerHTML = '<i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте';
+        elements.visualEditBtn.title = `Открыть ${getPreviewLinkLabel(previewLink)} в визуальном режиме`;
     }
 
     function collectSectionStats(value, stats = {
@@ -5561,6 +5589,9 @@
                     <p>${meta.summary || config.description}</p>
                     ${(meta.previewLinks || []).length ? `
                         <div class="admin-command-center__actions">
+                            <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(meta.previewLinks[0].href)}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
+                            </a>
                             ${(meta.previewLinks || []).map((link) => `
                                 <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
                                     <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
@@ -5615,6 +5646,9 @@
                     <p>${meta.summary || config.description}</p>
                     ${previewLinks.length ? `
                         <div class="admin-command-center__actions">
+                            <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(previewLinks[0].href)}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
+                            </a>
                             ${previewLinks.map((link) => `
                                 <a class="admin-btn admin-btn--ghost" href="${link.href}" target="_blank" rel="noopener noreferrer">
                                     <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> ${link.label}
@@ -6893,8 +6927,8 @@
                     <i class="fas fa-plus" aria-hidden="true"></i> Добавить карточку
                 </button>
                 ${previewLink ? `
-                    <a class="admin-btn admin-btn--primary" href="${previewLink.href}" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
+                    <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
                     </a>
                 ` : ''}
                 ${guides.length ? `
@@ -7096,8 +7130,8 @@
                     </div>
                     <div class="admin-dashboard-home__links">
                         ${actions.map((action) => `
-                            <a href="${action.previewHref}" target="_blank" rel="noopener noreferrer">
-                                <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            <a href="${buildInlineEditHref(action.previewHref)}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-pen-to-square" aria-hidden="true"></i>
                                 <span>${action.title}</span>
                             </a>
                         `).join('')}
@@ -7224,9 +7258,9 @@
 
         const previewHtml = previewLinks.length
             ? `<div class="admin-overview__links">${previewLinks.map((link) => `
-                <a href="${link.href}" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                    <span>${link.label}</span>
+                <a href="${buildInlineEditHref(link.href)}" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-pen-to-square" aria-hidden="true"></i>
+                    <span>Править: ${getPreviewLinkLabel(link)}</span>
                 </a>
             `).join('')}</div>`
             : '<p>Для этого раздела пока нет отдельной ссылки предпросмотра.</p>';
@@ -8279,6 +8313,8 @@
         const activeConfig = contentConfigs[state.activeKey];
         let saveButtonHtml = '<i class="fas fa-floppy-disk" aria-hidden="true"></i> Сохранить';
 
+        updateVisualEditButton(state.activeKey);
+
         if (activeConfig?.virtual) {
             elements.saveBtn.disabled = true;
             elements.publishBtn.disabled = true;
@@ -8609,6 +8645,11 @@
         }
 
         elements.saveBtn.addEventListener('click', saveActiveSection);
+        elements.visualEditBtn?.addEventListener('click', () => {
+            const href = elements.visualEditBtn.dataset.href;
+            if (!href) return;
+            window.open(href, '_blank', 'noopener');
+        });
         elements.previewToggleBtn?.addEventListener('click', () => {
             setPreviewPanelOpen(!state.previewPanelOpen, { silent: false });
         });
