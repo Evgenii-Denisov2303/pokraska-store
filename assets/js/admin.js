@@ -3422,6 +3422,51 @@
         return String(link?.label || 'страницу').replace(/^Открыть\s+/i, '').trim() || 'страницу';
     }
 
+    function getSectionEditingHint(sectionKey = state.activeKey) {
+        const config = contentConfigs[sectionKey];
+        const previewLink = getPrimaryPreviewLink(sectionKey);
+
+        if (config?.virtual) {
+            return {
+                mode: 'start',
+                title: 'Проще начать со страницы',
+                text: 'Выбери знакомую страницу ниже и сразу открой её в визуальном режиме. Админка здесь нужна как центр запуска, быстрых входов и статуса.',
+                focusTitle: 'Быстрые входы в разделы',
+                focusText: 'Открой знакомый раздел или стартовый экран для частых задач.',
+                routesTitle: 'Подсказки и переходы',
+                routesText: 'Если нужен точный маршрут по админке или пошаговая подсказка.',
+                quickTitle: 'Основной сценарий',
+                quickText: 'Сначала открой страницу в визуальном режиме, а админку используй для редких и сложных правок.'
+            };
+        }
+
+        if (previewLink) {
+            return {
+                mode: 'inline',
+                title: 'Лучше править прямо на сайте',
+                text: 'Тексты, фото, карточки и вопросы быстрее и понятнее менять в визуальном режиме. В админке остаются быстрые входы, статус и сложные настройки.',
+                focusTitle: 'Если нужен редактор по полям',
+                focusText: 'Ниже быстрые входы в блоки и простые экраны этого раздела.',
+                routesTitle: 'Подсказки и дополнительные переходы',
+                routesText: 'Здесь маршруты, подсказки и точечные входы, когда удобнее остаться в админке.',
+                quickTitle: 'Сначала страница, потом поля',
+                quickText: 'Открой страницу в визуальном режиме, а если нужно найти точный блок или служебную настройку, используй быстрые действия ниже.'
+            };
+        }
+
+        return {
+            mode: 'form',
+            title: 'Этот раздел удобнее править в админке',
+            text: 'Для него нет отдельной визуальной правки на странице, поэтому ниже собраны быстрые входы в поля и готовые маршруты.',
+            focusTitle: 'С чего начать',
+            focusText: 'Открой действие или нужный экран этого раздела.',
+            routesTitle: 'Переходы и подсказки',
+            routesText: 'Частые переходы и пошаговые подсказки без лишних шагов.',
+            quickTitle: 'Работа через поля',
+            quickText: 'Здесь быстрые действия, которые помогают быстрее дойти до нужного блока внутри формы.'
+        };
+    }
+
     function updateVisualEditButton(sectionKey = state.activeKey) {
         if (!elements.visualEditBtn) return;
 
@@ -5485,8 +5530,9 @@
         const currentLabel = context.parts[context.parts.length - 1] || activeConfig.label;
         const pathLabel = context.parts.join(' / ');
         const previewLink = getPrimaryPreviewLink(state.activeKey);
+        const editingHint = getSectionEditingHint(state.activeKey);
         const inlineLinkHtml = previewLink
-            ? `<a href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">Править на сайте</a>`
+            ? `<a class="admin-sidebar-footer__primary-link" href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">Править на сайте</a>`
             : '';
 
         elements.sidebarFooter.innerHTML = `
@@ -5497,9 +5543,10 @@
                 </div>
                 <strong>${currentLabel}</strong>
                 <p class="admin-sidebar-footer__path">${pathLabel}</p>
+                <p class="admin-sidebar-footer__helper">${previewLink ? editingHint.text : context.helperText}</p>
                 <div class="admin-sidebar-footer__meta">
-                    <span class="admin-sidebar-footer__mode">${context.modeText}</span>
                     ${inlineLinkHtml}
+                    <span class="admin-sidebar-footer__mode">${context.modeText}</span>
                     <a href="../index.html" target="_blank" rel="noopener noreferrer">Главная</a>
                     <a href="../docs/admin-deploy.md" target="_blank" rel="noopener noreferrer">Инструкция</a>
                 </div>
@@ -5535,9 +5582,8 @@
         const config = contentConfigs[sectionKey];
         const meta = sectionMeta[sectionKey] || {};
         const status = getSectionStatus(sectionKey);
-        const workflow = getSectionWorkflowStatus(sectionKey);
+        const editingHint = getSectionEditingHint(sectionKey);
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
-        const stats = collectSectionStats(state.data[sectionKey]);
         const activeIcon = meta.icon || 'fa-rectangle-list';
         const tasks = getSectionQuickTasks(sectionKey);
         const simpleScreens = getSectionSimpleScreens(sectionKey);
@@ -5551,7 +5597,7 @@
                 icon: task.icon,
                 title: task.title,
                 text: task.text,
-                meta: 'Открыть нужный блок',
+                meta: editingHint.mode === 'inline' ? 'Через поля' : 'Открыть нужный блок',
                 active: false
             })),
             ...simpleScreens.map((screen, index) => ({
@@ -5560,7 +5606,9 @@
                 icon: screen.icon,
                 title: screen.title,
                 text: screen.text,
-                meta: `${screen.fieldKeys.length} ${screen.fieldKeys.length === 1 ? 'блок' : screen.fieldKeys.length < 5 ? 'блока' : 'блоков'}`,
+                meta: editingHint.mode === 'inline'
+                    ? `Через поля · ${screen.fieldKeys.length} ${screen.fieldKeys.length === 1 ? 'блок' : screen.fieldKeys.length < 5 ? 'блока' : 'блоков'}`
+                    : `${screen.fieldKeys.length} ${screen.fieldKeys.length === 1 ? 'блок' : screen.fieldKeys.length < 5 ? 'блока' : 'блоков'}`,
                 active: Boolean(activeSimpleScreen && state.activeSimpleScreen?.screenIndex === index)
             }))
         ];
@@ -5592,6 +5640,10 @@
                     <div class="admin-command-center__eyebrow">Старт</div>
                     <h2>${config.label}</h2>
                     <p>${meta.summary || config.description}</p>
+                    <div class="admin-command-center__flow">
+                        <strong>${editingHint.title}</strong>
+                        <span>${editingHint.text}</span>
+                    </div>
                     ${(meta.previewLinks || []).length ? `
                         <div class="admin-command-center__actions">
                             <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(meta.previewLinks[0].href)}" target="_blank" rel="noopener noreferrer">
@@ -5613,10 +5665,10 @@
                 <div class="admin-command-center__routes admin-command-center__routes--dashboard">
                     <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">С чего начать</p>
-                            <h3>Что меняют чаще</h3>
+                            <p class="admin-toolbar__eyebrow">Быстрые входы</p>
+                            <h3>${editingHint.focusTitle}</h3>
                         </div>
-                        <span>Быстрые входы без поиска по разделам.</span>
+                        <span>${editingHint.focusText}</span>
                     </div>
                     <div class="admin-route-list">
                         ${dashboardActions.slice(0, 4).map((action, index) => `
@@ -5626,7 +5678,7 @@
                                     <strong>${action.title}</strong>
                                     <span>${action.text}</span>
                                 </span>
-                                <span class="admin-route-chip__meta">Открыть</span>
+                                <span class="admin-route-chip__meta">${action.previewHref ? 'Раздел' : 'Открыть'}</span>
                             </button>
                         `).join('')}
                     </div>
@@ -5649,6 +5701,10 @@
                     <div class="admin-command-center__eyebrow">Раздел</div>
                     <h2>${config.label}</h2>
                     <p>${meta.summary || config.description}</p>
+                    <div class="admin-command-center__flow">
+                        <strong>${editingHint.title}</strong>
+                        <span>${editingHint.text}</span>
+                    </div>
                     ${previewLinks.length ? `
                         <div class="admin-command-center__actions">
                             <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(previewLinks[0].href)}" target="_blank" rel="noopener noreferrer">
@@ -5671,10 +5727,10 @@
                 <div class="admin-command-center__focus">
                     <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">С чего начать</p>
-                            <h3>Что меняют чаще</h3>
+                            <p class="admin-toolbar__eyebrow">${editingHint.mode === 'inline' ? 'Через поля в админке' : 'С чего начать'}</p>
+                            <h3>${editingHint.focusTitle}</h3>
                         </div>
-                        <span>Открой действие или нужный экран этого раздела.</span>
+                        <span>${editingHint.focusText}</span>
                     </div>
                     <div class="admin-focus-grid">
                         ${focusCards.map((item) => `
@@ -5693,10 +5749,10 @@
                 <div class="admin-command-center__routes">
                     <div class="admin-command-center__section-head">
                         <div>
-                            <p class="admin-toolbar__eyebrow">Переходы</p>
-                            <h3>Куда перейти</h3>
+                            <p class="admin-toolbar__eyebrow">${editingHint.mode === 'inline' ? 'Подсказки' : 'Переходы'}</p>
+                            <h3>${editingHint.routesTitle}</h3>
                         </div>
-                        <span>Частые переходы и подсказки без лишних шагов.</span>
+                        <span>${editingHint.routesText}</span>
                     </div>
                     <div class="admin-route-list">
                         ${routeCards.map((item) => `
@@ -6906,6 +6962,7 @@
         if (!elements.quickActionsCard) return;
 
         const previewLink = getPrimaryPreviewLink(sectionKey);
+        const editingHint = getSectionEditingHint(sectionKey);
         const tasks = getSectionQuickTasks(sectionKey).slice(0, 3);
         const simpleScreens = getSectionSimpleScreens(sectionKey).slice(0, 2);
         const scenarios = getSectionScenarios(sectionKey).slice(0, 3);
@@ -6917,6 +6974,27 @@
                     <p class="admin-toolbar__eyebrow">Частые действия</p>
                     <h2>Быстрые действия</h2>
                 </div>
+            </div>
+            ${previewLink ? `
+                <div class="admin-quick-actions__visual">
+                    <div class="admin-quick-actions__visual-copy">
+                        <p class="admin-toolbar__eyebrow">Лучше на сайте</p>
+                        <strong>${editingHint.quickTitle}</strong>
+                        <span>${editingHint.quickText}</span>
+                    </div>
+                    <div class="admin-quick-actions__visual-actions">
+                        <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
+                        </a>
+                        <a class="admin-btn admin-btn--ghost" href="${previewLink.href}" target="_blank" rel="noopener noreferrer">
+                            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Открыть страницу
+                        </a>
+                    </div>
+                </div>
+            ` : ''}
+            <div class="admin-quick-actions__admin-head">
+                <strong>${previewLink ? 'Через поля в админке' : 'Действия в админке'}</strong>
+                <span>${previewLink ? 'Когда нужно найти точный блок, открыть простой экран или использовать служебные настройки.' : editingHint.quickText}</span>
             </div>
             <div class="admin-quick-actions">
                 <button class="admin-btn admin-btn--ghost" type="button" data-quick-action="image">
@@ -6931,11 +7009,6 @@
                 <button class="admin-btn admin-btn--ghost" type="button" data-quick-action="add">
                     <i class="fas fa-plus" aria-hidden="true"></i> Добавить карточку
                 </button>
-                ${previewLink ? `
-                    <a class="admin-btn admin-btn--primary" href="${buildInlineEditHref(previewLink.href)}" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-pen-to-square" aria-hidden="true"></i> Править на сайте
-                    </a>
-                ` : ''}
                 ${guides.length ? `
                     <button class="admin-btn admin-btn--primary" type="button" data-open-guide="0">
                         <i class="fas fa-map-signs" aria-hidden="true"></i> Открыть подсказку
@@ -6945,7 +7018,7 @@
             ${(scenarios.length || tasks.length || simpleScreens.length || guides.length > 1) ? `
                 <details class="admin-quick-actions__extras">
                     <summary>
-                        <span>Ещё переходы и подсказки</span>
+                        <span>${previewLink ? 'Дополнительно в админке' : 'Ещё переходы и подсказки'}</span>
                         <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </summary>
                     <div class="admin-quick-actions__extras-body">
@@ -7249,6 +7322,7 @@
 
         const config = contentConfigs[key];
         const meta = sectionMeta[key] || {};
+        const editingHint = getSectionEditingHint(key);
         const previewLinks = Array.isArray(meta.previewLinks) ? meta.previewLinks : [];
         const bullets = Array.isArray(meta.bullets) ? meta.bullets : [];
         const tips = Array.isArray(meta.tips) ? meta.tips : [];
@@ -7268,7 +7342,7 @@
                     <span>Править: ${getPreviewLinkLabel(link)}</span>
                 </a>
             `).join('')}</div>`
-            : '<p>Для этого раздела пока нет отдельной ссылки предпросмотра.</p>';
+            : '<p>Для этого раздела пока нет отдельной ссылки визуальной правки.</p>';
 
         elements.overview.innerHTML = `
             <div class="admin-overview__header">
@@ -7282,7 +7356,8 @@
                     ${bulletsHtml}
                 </article>
                 <article class="admin-overview__card">
-                    <h3>Где смотреть результат</h3>
+                    <h3>${previewLinks.length ? 'Что удобнее править на сайте' : 'Где смотреть результат'}</h3>
+                    ${previewLinks.length ? `<p class="admin-overview__hint">${editingHint.text}</p>` : ''}
                     ${previewHtml}
                 </article>
                 <article class="admin-overview__card">
@@ -7502,6 +7577,7 @@
                         <span class="admin-sidebar-shortcut__copy">
                             <strong>${action.title}</strong>
                             <span>${contentConfigs[action.sectionKey]?.label || 'Раздел сайта'}</span>
+                            <span class="admin-sidebar-shortcut__meta">${action.previewHref ? 'Есть визуальная правка' : 'Через админку'}</span>
                         </span>
                     </button>
                 `).join('')}
