@@ -1950,10 +1950,15 @@
 
     function handleDocumentClick(event) {
         if (!state.enabled) return;
-        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target)) return;
+        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target)) return;
 
         const target = event.target.closest('[data-inline-edit-id]');
-        if (!target) return;
+        if (!target) {
+            if (state.overviewOpen) {
+                toggleOverview(false);
+            }
+            return;
+        }
 
         const bindingId = target.dataset.inlineEditId;
         if (!bindingId) return;
@@ -1971,8 +1976,16 @@
         const label = target.dataset.inlineEditLabel || 'Редактировать';
         ui.hover.textContent = `${kind} · ${label}`;
         ui.hover.hidden = false;
-        ui.hover.style.top = `${Math.max(12, rect.top - 14)}px`;
-        ui.hover.style.left = `${Math.min(window.innerWidth - 240, Math.max(12, rect.left))}px`;
+        const hoverWidth = ui.hover.offsetWidth || 240;
+        const top = rect.top < 52
+            ? Math.min(window.innerHeight - 48, rect.bottom + 12)
+            : Math.max(12, rect.top - 14);
+        const left = Math.min(
+            Math.max(12, window.innerWidth - hoverWidth - 12),
+            Math.max(12, rect.left)
+        );
+        ui.hover.style.top = `${top}px`;
+        ui.hover.style.left = `${left}px`;
     }
 
     function hideHoverLabel() {
@@ -1986,7 +1999,7 @@
             return;
         }
 
-        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target)) {
+        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target)) {
             hideHoverLabel();
             return;
         }
@@ -2105,6 +2118,8 @@
         document.addEventListener('click', handleDocumentClick, true);
         document.addEventListener('pointermove', handlePointerMove, true);
         document.addEventListener('keydown', handleKeydown);
+        window.addEventListener('scroll', hideHoverLabel, true);
+        window.addEventListener('resize', hideHoverLabel);
         refreshEnvironment();
 
         if (autoEnable) {
