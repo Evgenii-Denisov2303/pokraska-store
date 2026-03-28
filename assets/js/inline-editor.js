@@ -1810,6 +1810,7 @@
         if (!ui.launcher) return;
 
         const dirtyCount = Array.from(state.files.values()).filter((entry) => entry.dirty).length;
+        const pendingPanel = hasPendingPanelChanges();
         const canSave = canSaveInline();
         const hasIssue = !state.apiAvailable || (state.authEnabled && !state.authenticated);
         const activeBinding = state.bindingMap.get(state.activeBindingId) || null;
@@ -1820,10 +1821,12 @@
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
-        ui.saveBtn.disabled = !canSave || !dirtyCount;
-        ui.saveBtn.textContent = dirtyCount
-            ? `Сохранить ${formatCompactCount(dirtyCount)}`
-            : (hasIssue ? 'Сохранить' : 'Сохранено');
+        ui.saveBtn.disabled = !canSave || (!dirtyCount && !pendingPanel);
+        ui.saveBtn.textContent = pendingPanel
+            ? 'Применить и сохранить'
+            : (dirtyCount
+                ? `Сохранить ${formatCompactCount(dirtyCount)}`
+                : (hasIssue ? 'Сохранить' : 'Сохранено'));
         if (ui.resetBtn) {
             ui.resetBtn.hidden = !dirtyCount;
         }
@@ -3003,10 +3006,10 @@
         }
     }
 
-    async function applyActiveBinding() {
+    async function applyActiveBinding(options = {}) {
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
-            if (!binding) return;
+            if (!binding) return false;
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const nextValue = await collectPanelValue(binding);
@@ -3017,9 +3020,13 @@
             persistDraftFiles();
             renderToolbar();
             closePanel({ skipConfirm: true });
-            showToast(`Изменено: ${truncateInlineLabel(binding.label, 44)}`);
+            if (!options.silent) {
+                showToast(`Изменено: ${truncateInlineLabel(binding.label, 44)}`);
+            }
+            return true;
         } catch (error) {
             showToast(error.message || 'Не удалось применить правку');
+            return false;
         }
     }
 
@@ -3055,6 +3062,13 @@
         if (!canSaveInline()) {
             showToast('Сохранение недоступно');
             return;
+        }
+
+        if (!ui.panel.hidden && hasPendingPanelChanges()) {
+            const applied = await applyActiveBinding({ silent: true });
+            if (!applied) {
+                return;
+            }
         }
 
         const dirtyEntries = Array.from(state.files.values()).filter((entry) => entry.dirty);
