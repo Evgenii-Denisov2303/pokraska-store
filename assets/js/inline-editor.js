@@ -1222,6 +1222,14 @@
         return Array.from(state.files.values()).some((entry) => entry.dirty);
     }
 
+    function getDirtyBindings() {
+        return getVisibleBindings().filter((binding) => bindingIsDirty(binding));
+    }
+
+    function hasDirtyBindings() {
+        return getDirtyBindings().length > 0;
+    }
+
     function isSameData(left, right) {
         try {
             return JSON.stringify(left) === JSON.stringify(right);
@@ -1500,7 +1508,7 @@
     }
 
     function getOverviewFilterDefinitions() {
-        const dirtyBindings = getVisibleBindings().filter((binding) => bindingIsDirty(binding));
+        const dirtyBindings = getDirtyBindings();
         return [
             { focus: 'all', label: 'Все', bindings: getVisibleBindings() },
             ...(dirtyBindings.length ? [{ focus: 'dirty', label: 'Правки', bindings: dirtyBindings }] : []),
@@ -1770,7 +1778,8 @@
     function renderToolbar() {
         if (!ui.launcher) return;
 
-        const dirtyCount = Array.from(state.files.values()).filter((entry) => entry.dirty).length;
+        const dirtyFilesCount = Array.from(state.files.values()).filter((entry) => entry.dirty).length;
+        const dirtyCount = getDirtyBindings().length;
         const pendingPanel = hasPendingPanelChanges();
         const canSave = canSaveInline();
         const hasIssue = !state.apiAvailable || (state.authEnabled && !state.authenticated);
@@ -1788,12 +1797,12 @@
             ui.toolbarRevertBtn.hidden = !canShowToolbarRevert;
             ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
         }
-        ui.saveBtn.disabled = !canSave || (!dirtyCount && !pendingPanel);
+        ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = pendingPanel
             ? 'Сохранить всё'
             : (dirtyCount
                 ? `Сохранить ${formatCompactCount(dirtyCount)}`
-                : (hasIssue ? 'Сохранить' : 'Готово'));
+                : ((dirtyFilesCount || hasIssue) ? 'Сохранить' : 'Готово'));
         if (ui.adminBtn) {
             ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
@@ -3177,7 +3186,7 @@
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
             event.preventDefault();
             if (!state.overviewOpen) {
-                state.overviewFocus = hasDirtyFiles() ? 'dirty' : 'all';
+                state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'all';
             }
             toggleOverview(true);
             return;
@@ -3283,7 +3292,7 @@
         });
 
         ui.root.querySelector('[data-inline-action="overview"]').addEventListener('click', () => {
-            if (!state.overviewOpen && hasDirtyFiles() && state.overviewFocus === 'all') {
+            if (!state.overviewOpen && hasDirtyBindings() && state.overviewFocus === 'all') {
                 state.overviewFocus = 'dirty';
             }
             toggleOverview();
