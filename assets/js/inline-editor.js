@@ -317,7 +317,7 @@
                 border-radius: 24px;
                 border: 1px solid rgba(148, 163, 184, 0.24);
                 box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
-                padding: 18px;
+                padding: 18px 18px 14px;
                 z-index: 5001;
             }
 
@@ -326,7 +326,15 @@
                 align-items: flex-start;
                 justify-content: space-between;
                 gap: 10px;
-                margin-bottom: 16px;
+                position: sticky;
+                top: -18px;
+                z-index: 2;
+                margin: -18px -18px 16px;
+                padding: 18px 18px 14px;
+                border-radius: 24px 24px 18px 18px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(255, 255, 255, 0.96));
+                border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+                backdrop-filter: blur(12px);
             }
 
             .p-inline-panel__close {
@@ -348,7 +356,7 @@
             }
 
             .p-inline-panel__label {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 700;
                 color: #334155;
             }
@@ -361,11 +369,13 @@
                 background: #f8fafc;
                 color: #0f172a;
                 font: inherit;
-                padding: 12px 14px;
+                font-size: 15px;
+                line-height: 1.45;
+                padding: 13px 15px;
             }
 
             .p-inline-panel__textarea {
-                min-height: 112px;
+                min-height: 124px;
                 resize: vertical;
             }
 
@@ -380,7 +390,7 @@
                 display: grid;
                 gap: 10px;
                 margin-bottom: 14px;
-                padding: 12px;
+                padding: 13px;
                 border-radius: 18px;
                 background: #f8fafc;
                 border: 1px solid rgba(148, 163, 184, 0.2);
@@ -402,7 +412,7 @@
             .p-inline-panel__preview {
                 display: grid;
                 gap: 10px;
-                padding: 12px;
+                padding: 13px;
                 border-radius: 18px;
                 background: #f8fafc;
                 border: 1px solid rgba(148, 163, 184, 0.2);
@@ -608,8 +618,8 @@
             .p-inline-overview__item {
                 width: 100%;
                 display: grid;
-                gap: 4px;
-                padding: 12px 14px;
+                gap: 5px;
+                padding: 13px 14px;
                 border: 1px solid rgba(148, 163, 184, 0.2);
                 border-radius: 16px;
                 background: #fff;
@@ -646,6 +656,17 @@
                 line-height: 1.45;
                 color: #64748b;
                 overflow-wrap: anywhere;
+            }
+
+            .p-inline-panel__actions {
+                position: sticky;
+                bottom: -14px;
+                z-index: 2;
+                margin: 18px -18px -14px;
+                padding: 14px 18px 16px;
+                border-top: 1px solid rgba(148, 163, 184, 0.14);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
+                backdrop-filter: blur(12px);
             }
 
             .p-inline-overview__empty {
