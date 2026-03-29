@@ -2067,11 +2067,9 @@
         }
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.classList.toggle('is-idle', !dirtyFilesCount && !pendingPanel);
-        ui.saveBtn.textContent = pendingPanel
-            ? 'Сохранить всё'
-            : (dirtyCount
-                ? `Сохранить ${formatCompactCount(dirtyCount)}`
-                : ((dirtyFilesCount || hasIssue) ? 'Сохранить' : 'Готово'));
+        ui.saveBtn.textContent = dirtyCount
+            ? `Сохранить ${formatCompactCount(dirtyCount)}`
+            : ((dirtyFilesCount || pendingPanel || hasIssue) ? 'Сохранить' : 'Готово');
         if (ui.adminBtn) {
             ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
         }
