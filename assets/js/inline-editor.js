@@ -2554,7 +2554,7 @@
         } else if (isIconField(field)) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
-            hint.textContent = 'Можно выбрать иконку из набора ниже или оставить свой класс вручную.';
+            hint.textContent = 'Выберите готовый значок ниже или оставьте блок без значка.';
             wrapper.appendChild(hint);
         }
 
@@ -2568,6 +2568,9 @@
             if (key.includes('phone')) return 'Номер для кнопки';
             if (key.includes('email')) return 'Почта для кнопки';
             return 'Куда вести';
+        }
+        if (isIconField(field)) {
+            return 'Значок рядом с текстом';
         }
         return label || field.key;
     }
@@ -2589,7 +2592,7 @@
         const text = document.createElement('div');
         text.className = 'p-inline-panel__icon-preview-text';
         text.innerHTML = `
-            <span class="p-inline-panel__icon-preview-title">Текущая иконка</span>
+            <span class="p-inline-panel__icon-preview-title">Как выглядит сейчас</span>
             <span class="p-inline-panel__icon-preview-value"></span>
         `;
         preview.appendChild(text);
@@ -2598,16 +2601,17 @@
 
         const render = () => {
             const nextValue = String(control.value || '').trim();
+            const optionLabel = INLINE_ICON_OPTIONS.find((option) => option.value === nextValue)?.label || nextValue;
             badge.innerHTML = '';
             if (nextValue) {
                 const icon = document.createElement('i');
                 icon.className = nextValue;
                 icon.setAttribute('aria-hidden', 'true');
                 badge.appendChild(icon);
-                valueNode.textContent = nextValue;
+                valueNode.textContent = optionLabel;
             } else {
                 badge.textContent = '—';
-                valueNode.textContent = 'Без иконки';
+                valueNode.textContent = 'Без значка';
             }
         };
 
@@ -2734,8 +2738,8 @@
                     fields: linkFields
                 } : null,
                 iconFields.length ? {
-                    title: 'Иконка',
-                    meta: 'Можно выбрать иконку из набора ниже.',
+                    title: 'Значок',
+                    meta: 'Он будет показан рядом с текстом кнопки или ссылки.',
                     fields: iconFields
                 } : null,
                 extraFields.length ? {
