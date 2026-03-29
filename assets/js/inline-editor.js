@@ -3002,9 +3002,9 @@
             pulseBindingElements(binding);
 
             fillPanel(binding, value);
+            ui.panel.hidden = false;
             rememberEditingContext(binding);
             renderToolbar();
-            ui.panel.hidden = false;
         } catch (error) {
             showToast(error.message || 'Не удалось открыть редактор');
         }
