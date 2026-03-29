@@ -486,7 +486,9 @@
                 right: 24px;
                 width: min(420px, calc(100vw - 32px));
                 max-height: calc(100vh - 48px);
-                overflow: auto;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
                 overscroll-behavior: contain;
                 scrollbar-gutter: stable;
                 background: #ffffff;
@@ -549,6 +551,15 @@
                 display: grid;
                 gap: 8px;
                 margin-bottom: 14px;
+            }
+
+            .p-inline-panel__form {
+                flex: 1 1 auto;
+                min-height: 0;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                padding-right: 4px;
+                padding-bottom: 6px;
             }
 
             .p-inline-panel__label {
@@ -1074,8 +1085,7 @@
             }
 
             .p-inline-panel__actions {
-                position: sticky;
-                bottom: -14px;
+                position: static;
                 z-index: 2;
                 margin: 18px -18px -14px;
                 padding: 14px 18px 16px;
