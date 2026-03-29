@@ -154,8 +154,9 @@
             }
 
             .p-inline-toolbar {
-                width: min(420px, calc(100vw - 32px));
-                max-width: none;
+                width: fit-content;
+                min-width: min(360px, calc(100vw - 32px));
+                max-width: min(420px, calc(100vw - 32px));
                 background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.92));
                 color: #e2e8f0;
                 border: 1px solid rgba(96, 165, 250, 0.18);
@@ -166,8 +167,9 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: min(420px, calc(100vw - 32px));
-                max-width: none;
+                width: fit-content;
+                min-width: min(360px, calc(100vw - 32px));
+                max-width: min(420px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -271,12 +273,11 @@
             }
 
             .p-inline-toolbar__actions {
-                display: grid;
-                grid-auto-flow: column;
-                grid-auto-columns: max-content;
+                display: flex;
                 overflow-x: auto;
                 scrollbar-width: none;
                 padding-bottom: 2px;
+                justify-content: flex-end;
             }
 
             .p-inline-toolbar__actions::-webkit-scrollbar {
@@ -1382,6 +1383,7 @@
                     margin-top: 14px;
                     margin-left: 0;
                     flex-wrap: nowrap;
+                    justify-content: flex-start;
                 }
 
                 .p-inline-panel {
@@ -3428,7 +3430,7 @@
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера. Потом нажмите «Сохранить» сверху.';
+            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера. Потом нажмите «Сохранить».';
             uploadZone.appendChild(uploadMeta);
 
             const uploadFile = document.createElement('div');
