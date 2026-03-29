@@ -1,6 +1,8 @@
 (function() {
+    const query = new URLSearchParams(window.location.search);
+    const INLINE_EDITOR_VERSION = '20260329-inline-toolbar-current';
+
     function shouldLoadInlineEditor() {
-        const query = new URLSearchParams(window.location.search);
         return query.get('edit') === '1'
             || ['localhost', '127.0.0.1'].includes(window.location.hostname)
             || window.location.port === '4173';
@@ -11,10 +13,14 @@
         if (document.querySelector('script[data-pokraska-inline-editor]')) return;
 
         const base = (window.PokraskaContent?.baseUrl || '').replace(/\/+$/, '');
+        const freshToken = (query.get('fresh') || query.get('v') || '').trim();
+        const version = freshToken
+            ? `${INLINE_EDITOR_VERSION}-${freshToken}`
+            : INLINE_EDITOR_VERSION;
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-panel-save-restore`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=${encodeURIComponent(version)}`;
         document.head.appendChild(script);
     }
 
