@@ -141,7 +141,8 @@
             }
 
             .p-inline-toolbar {
-                width: min(640px, calc(100vw - 32px));
+                width: fit-content;
+                max-width: min(640px, calc(100vw - 32px));
                 background: rgba(15, 23, 42, 0.96);
                 color: #e2e8f0;
                 border-radius: 20px;
@@ -151,8 +152,8 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: min(640px, calc(100vw - 32px));
-                max-width: none;
+                width: fit-content;
+                max-width: min(640px, calc(100vw - 32px));
                 padding: 12px 14px;
                 border-radius: 22px;
             }
