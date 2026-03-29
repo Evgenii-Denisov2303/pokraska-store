@@ -565,6 +565,31 @@
                 border: 1px solid rgba(148, 163, 184, 0.16);
             }
 
+            .p-inline-panel__section {
+                display: grid;
+                gap: 10px;
+            }
+
+            .p-inline-panel__section-head {
+                display: grid;
+                gap: 4px;
+                padding: 0 2px;
+            }
+
+            .p-inline-panel__section-title {
+                margin: 0;
+                font-size: 15px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__section-meta {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
             .p-inline-panel__form {
                 display: grid;
                 gap: 14px;
@@ -652,6 +677,59 @@
                 background: #ffffff;
                 border: 1px solid rgba(148, 163, 184, 0.18);
                 box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__action-preview {
+                display: grid;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 18px;
+                background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+                border: 1px solid rgba(96, 165, 250, 0.18);
+                box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__action-preview-badge {
+                display: inline-flex;
+                align-items: center;
+                width: fit-content;
+                min-height: 26px;
+                padding: 0 10px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 13px;
+                font-weight: 800;
+            }
+
+            .p-inline-panel__action-preview-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                min-height: 46px;
+                width: fit-content;
+                max-width: 100%;
+                padding: 0 18px;
+                border-radius: 999px;
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: #ffffff;
+                font-size: 15px;
+                font-weight: 800;
+                line-height: 1.2;
+                box-shadow: 0 14px 28px rgba(37, 99, 235, 0.16);
+            }
+
+            .p-inline-panel__action-preview-button i {
+                font-size: 15px;
+            }
+
+            .p-inline-panel__action-preview-link {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #475569;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-panel__preview-frame {
@@ -2556,6 +2634,196 @@
         return picker;
     }
 
+    function isLinkLikeField(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        return ['href', 'url', 'link', 'phone', 'email', 'telegram', 'whatsapp'].some((item) => key.includes(item))
+            || /ссылк|адрес|телефон|почт|telegram|whatsapp/.test(label);
+    }
+
+    function isPrimaryTextField(field) {
+        if (!field || isIconField(field) || isLinkLikeField(field)) return false;
+        const key = String(field.key || '').toLowerCase();
+        const label = String(field.label || '').toLowerCase();
+        return key === '__value'
+            || ['label', 'text', 'title', 'name', 'actionlabel', 'buttontext'].includes(key)
+            || /текст|заголов|название|кнопк|подпись/.test(label);
+    }
+
+    function isImageDescriptionField(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        return ['alt', 'title', 'caption', 'subtitle'].includes(key)
+            || /alt|подпись|описан|заголов/.test(label);
+    }
+
+    function createPanelSection(title, meta = '') {
+        const section = document.createElement('section');
+        section.className = 'p-inline-panel__section';
+
+        const head = document.createElement('div');
+        head.className = 'p-inline-panel__section-head';
+
+        const heading = document.createElement('h3');
+        heading.className = 'p-inline-panel__section-title';
+        heading.textContent = title;
+        head.appendChild(heading);
+
+        if (meta) {
+            const hint = document.createElement('p');
+            hint.className = 'p-inline-panel__section-meta';
+            hint.textContent = meta;
+            head.appendChild(hint);
+        }
+
+        section.appendChild(head);
+        return section;
+    }
+
+    function getFieldGroupsForBinding(binding, editorFields) {
+        if (binding.type === 'image') {
+            const descriptionFields = editorFields.filter(isImageDescriptionField);
+            const extraFields = editorFields.filter((field) => !isImageDescriptionField(field));
+            return [
+                descriptionFields.length ? {
+                    title: 'Подпись и описание',
+                    meta: 'Эти поля помогают понять, что изображено на фото.',
+                    fields: descriptionFields
+                } : null,
+                extraFields.length ? {
+                    title: 'Дополнительно',
+                    meta: 'Редкие параметры этого изображения.',
+                    fields: extraFields
+                } : null
+            ].filter(Boolean);
+        }
+
+        if (binding.type === 'object') {
+            const primaryFields = editorFields.filter(isPrimaryTextField);
+            const linkFields = editorFields.filter(isLinkLikeField);
+            const iconFields = editorFields.filter(isIconField);
+            const extraFields = editorFields.filter((field) => (
+                !isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field)
+            ));
+
+            return [
+                primaryFields.length ? {
+                    title: 'Текст',
+                    meta: 'Главный текст, который увидит посетитель.',
+                    fields: primaryFields
+                } : null,
+                linkFields.length ? {
+                    title: 'Ссылка',
+                    meta: 'Куда поведёт кнопка или ссылка после нажатия.',
+                    fields: linkFields
+                } : null,
+                iconFields.length ? {
+                    title: 'Иконка',
+                    meta: 'Можно выбрать иконку из набора ниже.',
+                    fields: iconFields
+                } : null,
+                extraFields.length ? {
+                    title: 'Дополнительно',
+                    meta: 'Редкие параметры этого блока.',
+                    fields: extraFields
+                } : null
+            ].filter(Boolean);
+        }
+
+        if (binding.type === 'list') {
+            return [{
+                title: 'Список',
+                meta: 'Каждый пункт пишите с новой строки.',
+                fields: editorFields
+            }];
+        }
+
+        return [{
+            title: 'Текст',
+            meta: 'Изменения сразу относятся к выбранному блоку.',
+            fields: editorFields
+        }];
+    }
+
+    function getActionPreviewValues(binding, value) {
+        const objectValue = value && typeof value === 'object' ? value : {};
+        const rawText = objectValue.label
+            || objectValue.text
+            || objectValue.title
+            || objectValue.name
+            || objectValue.actionLabel
+            || binding.label
+            || 'Кнопка';
+        const rawHref = objectValue.href
+            || objectValue.url
+            || objectValue.link
+            || objectValue.phone
+            || objectValue.email
+            || '';
+        const rawIcon = objectValue.icon || '';
+        return {
+            text: String(rawText || 'Кнопка').trim() || 'Кнопка',
+            href: String(rawHref || '').trim(),
+            icon: String(rawIcon || '').trim()
+        };
+    }
+
+    function createActionPreview(binding, value) {
+        const preview = document.createElement('div');
+        preview.className = 'p-inline-panel__action-preview';
+        preview.innerHTML = `
+            <div class="p-inline-panel__action-preview-badge">Как увидит клиент</div>
+            <div class="p-inline-panel__action-preview-button">
+                <i aria-hidden="true" hidden></i>
+                <span></span>
+            </div>
+            <p class="p-inline-panel__action-preview-link"></p>
+        `;
+
+        const iconNode = preview.querySelector('i');
+        const textNode = preview.querySelector('span');
+        const linkNode = preview.querySelector('.p-inline-panel__action-preview-link');
+
+        const render = (nextValue = value) => {
+            const data = getActionPreviewValues(binding, nextValue);
+            textNode.textContent = data.text;
+            if (data.icon) {
+                iconNode.hidden = false;
+                iconNode.className = data.icon;
+            } else {
+                iconNode.hidden = true;
+                iconNode.className = '';
+            }
+            linkNode.textContent = data.href
+                ? `Ссылка: ${data.href}`
+                : 'Ссылка пока не указана';
+        };
+
+        preview.renderPreview = render;
+        render(value);
+        return preview;
+    }
+
+    function updatePanelActionPreview() {
+        const preview = ui.panelForm?.querySelector('.p-inline-panel__action-preview');
+        const binding = state.bindingMap.get(state.activeBindingId);
+        if (!preview || !binding || binding.type !== 'object' || typeof preview.renderPreview !== 'function') {
+            return;
+        }
+
+        const nextValue = {};
+        getBindingEditorFields(binding).forEach((field) => {
+            const control = ui.panelForm.querySelector(`[name="${field.key}"]`);
+            if (!control) return;
+            if (field.key === '__value') {
+                nextValue.label = control.value ?? '';
+                return;
+            }
+            setByPath(nextValue, field.key, control.value ?? '');
+        });
+        preview.renderPreview(nextValue);
+    }
+
     function getBindingEditorFields(binding) {
         if (binding.fields.length) return binding.fields;
 
@@ -2819,6 +3087,7 @@
         }
 
         const editorFields = getBindingEditorFields(binding);
+        const fieldSections = getFieldGroupsForBinding(binding, editorFields);
 
         if (binding.type === 'image') {
             const preview = document.createElement('div');
@@ -2936,11 +3205,19 @@
 
         }
 
-        editorFields.forEach((field) => {
-            const fieldValue = field.key === '__value'
-                ? value
-                : getByPath(value, field.key);
-            ui.panelForm.appendChild(createFieldGroup(field, fieldValue));
+        if (binding.type === 'object') {
+            ui.panelForm.appendChild(createActionPreview(binding, value));
+        }
+
+        fieldSections.forEach((sectionConfig) => {
+            const section = createPanelSection(sectionConfig.title, sectionConfig.meta);
+            sectionConfig.fields.forEach((field) => {
+                const fieldValue = field.key === '__value'
+                    ? value
+                    : getByPath(value, field.key);
+                section.appendChild(createFieldGroup(field, fieldValue));
+            });
+            ui.panelForm.appendChild(section);
         });
 
         const collectionState = getBindingCollectionState(binding);
@@ -3901,6 +4178,7 @@
         ui.panelForm.addEventListener('input', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
+                updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
             }
@@ -3908,6 +4186,7 @@
         ui.panelForm.addEventListener('change', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
+                updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
             }
