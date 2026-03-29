@@ -1582,6 +1582,10 @@
         return String(value);
     }
 
+    function encodeHeaderValue(value) {
+        return encodeURIComponent(String(value ?? ''));
+    }
+
     function getOverviewFilterDefinitions() {
         const dirtyBindings = getDirtyBindings();
         return [
@@ -3220,7 +3224,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Admin-Section-Key': entry.sectionKey || entry.fileName,
-                        'X-Admin-Section-Label': entry.sectionLabel || entry.fileName
+                        'X-Admin-Section-Label': encodeHeaderValue(entry.sectionLabel || entry.fileName)
                     },
                     body: JSON.stringify(entry.data)
                 });

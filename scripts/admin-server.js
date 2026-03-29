@@ -15,6 +15,16 @@ function parseList(value) {
         .filter(Boolean);
 }
 
+function decodeHeaderValue(value) {
+    const normalized = String(value || '').trim();
+    if (!normalized) return '';
+    try {
+        return decodeURIComponent(normalized);
+    } catch (error) {
+        return normalized;
+    }
+}
+
 const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || '127.0.0.1';
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -736,7 +746,7 @@ async function handleContentApi(request, response, pathname) {
             await fs.mkdir(CONTENT_DIR, { recursive: true });
             await fs.writeFile(filePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
             const sectionKey = String(request.headers['x-admin-section-key'] || '').trim() || match[1];
-            const sectionLabel = String(request.headers['x-admin-section-label'] || '').trim() || sectionKey;
+            const sectionLabel = decodeHeaderValue(request.headers['x-admin-section-label']) || sectionKey;
             const actor = getActorName(request);
             const savedAt = new Date().toISOString();
             const adminState = await readAdminState();
