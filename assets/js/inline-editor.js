@@ -249,6 +249,17 @@
                 line-height: 1.2;
             }
 
+            .p-inline-panel__btn {
+                background: #eef2ff;
+                color: #1e3a8a;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+            }
+
+            .p-inline-panel__btn:hover:not(:disabled) {
+                background: #e0e7ff;
+                transform: translateY(-1px);
+            }
+
             .p-inline-toolbar__btn--primary,
             .p-inline-panel__btn--primary {
                 background: linear-gradient(135deg, #3b82f6, #2563eb);
@@ -2475,6 +2486,7 @@
         }
         if (ui.panelRevertBtn) {
             ui.panelRevertBtn.hidden = !canRevertBinding(binding);
+            ui.panelRevertBtn.disabled = !(bindingIsDirty(binding) || hasPendingPanelChanges());
         }
 
         const editorFields = getBindingEditorFields(binding);
@@ -2940,6 +2952,10 @@
         ui.panelMeta.textContent = hasPendingPanelChanges()
             ? `${binding.sectionLabel} · Есть неприменённые правки · Ctrl+Enter — применить`
             : `${binding.sectionLabel} · Ctrl+Enter — применить`;
+        if (ui.panelRevertBtn) {
+            ui.panelRevertBtn.hidden = !canRevertBinding(binding);
+            ui.panelRevertBtn.disabled = !(bindingIsDirty(binding) || hasPendingPanelChanges());
+        }
     }
 
     function getImageBindingsNavigation(binding) {
