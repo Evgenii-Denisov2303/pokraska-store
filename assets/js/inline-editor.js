@@ -236,11 +236,20 @@
             .p-inline-toolbar__actions,
             .p-inline-panel__actions {
                 display: flex;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 align-items: center;
                 justify-content: flex-end;
                 gap: 8px;
                 margin-top: 14px;
+            }
+
+            .p-inline-toolbar__actions {
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .p-inline-toolbar__actions::-webkit-scrollbar {
+                display: none;
             }
 
             .p-inline-panel__actions {
@@ -314,7 +323,13 @@
                 color: #fff;
             }
 
-            .p-inline-toolbar__btn--primary.is-idle,
+            .p-inline-toolbar__btn--primary.is-idle {
+                background: rgba(255, 255, 255, 0.14);
+                color: #e2e8f0;
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                box-shadow: none;
+            }
+
             .p-inline-panel__btn--primary.is-idle {
                 background: linear-gradient(135deg, #94a3b8, #64748b);
                 color: #f8fafc;
@@ -1143,7 +1158,7 @@
                 .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
                     margin-top: 14px;
                     margin-left: 0;
-                    flex-wrap: wrap;
+                    flex-wrap: nowrap;
                 }
 
                 .p-inline-panel {
@@ -1171,17 +1186,11 @@
                 }
 
                 .p-inline-toolbar__actions {
-                    justify-content: stretch;
+                    justify-content: flex-start;
                 }
 
                 .p-inline-toolbar__btn {
-                    flex: 1 1 calc(50% - 6px);
-                    white-space: normal;
-                    text-wrap: balance;
-                }
-
-                .p-inline-toolbar__btn--primary {
-                    flex-basis: 100%;
+                    flex: 0 0 auto;
                 }
 
                 .p-inline-panel,
@@ -3814,12 +3823,14 @@
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
                 updatePanelMeta(binding);
+                renderToolbar();
             }
         });
         ui.panelForm.addEventListener('change', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
                 updatePanelMeta(binding);
+                renderToolbar();
             }
         });
         ui.overview.querySelector('.p-inline-overview__close').addEventListener('click', () => {
