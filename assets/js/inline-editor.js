@@ -2054,7 +2054,6 @@
         const activeSummary = activeBinding
             ? `${getBindingKindLabel(activeBinding)} · ${truncateInlineLabel(activeBinding.label, 62)}`
             : '';
-        const panelOpen = Boolean(ui.panel && !ui.panel.hidden);
         const canShowToolbarRevert = Boolean(panelOpen && activeBinding && canRevertBinding(activeBinding));
         const canUseToolbarRevert = Boolean(panelOpen && hasPendingPanelChanges());
 
