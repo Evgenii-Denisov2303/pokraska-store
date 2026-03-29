@@ -1550,7 +1550,7 @@
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
+                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Сохранить</button>
             </div>
         `;
 
@@ -2044,6 +2044,7 @@
     function renderToolbar() {
         if (!ui.launcher) return;
 
+        const panelOpen = Boolean(ui.panel && !ui.panel.hidden);
         const dirtyFilesCount = Array.from(state.files.values()).filter((entry) => entry.dirty).length;
         const dirtyCount = getDirtyBindings().length;
         const pendingPanel = hasPendingPanelChanges();
@@ -2065,6 +2066,7 @@
             ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
             ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
         }
+        ui.saveBtn.hidden = panelOpen;
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.classList.toggle('is-idle', !dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = dirtyCount
@@ -3221,9 +3223,12 @@
     function updatePanelMeta(binding) {
         if (!ui.panelMeta || !binding) return;
         const hasPending = hasPendingPanelChanges();
+        const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
-            ? `${binding.sectionLabel} · Изменения в блоке ещё не применены · Ctrl+Enter — применить`
-            : `${binding.sectionLabel} · Изменений в блоке пока нет`;
+            ? `${binding.sectionLabel} · Изменения в блоке ещё не сохранены · Ctrl+Enter — сохранить`
+            : (hasUnsaved
+                ? `${binding.sectionLabel} · На странице есть несохранённые изменения · Ctrl+Enter — сохранить`
+                : `${binding.sectionLabel} · Изменений в блоке пока нет`);
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3233,9 +3238,10 @@
             ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Удалить';
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.disabled = !hasPending;
-            ui.panelApplyBtn.classList.toggle('is-active', hasPending);
-            ui.panelApplyBtn.classList.toggle('is-idle', !hasPending);
+            ui.panelApplyBtn.disabled = !hasUnsaved;
+            ui.panelApplyBtn.classList.toggle('is-active', hasUnsaved);
+            ui.panelApplyBtn.classList.toggle('is-idle', !hasUnsaved);
+            ui.panelApplyBtn.textContent = hasUnsaved ? 'Сохранить' : 'Готово';
         }
     }
 
@@ -3673,7 +3679,7 @@
 
         if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !ui.panel.hidden) {
             event.preventDefault();
-            applyActiveBinding();
+            saveDirtyFiles();
             return;
         }
 
@@ -3819,7 +3825,7 @@
             removeActiveBindingFromCollection();
         });
         ui.panelApplyBtn.addEventListener('click', () => {
-            applyActiveBinding();
+            saveDirtyFiles();
         });
         ui.panel.addEventListener('click', handlePanelClick);
         ui.panelForm.addEventListener('input', () => {
