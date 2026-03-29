@@ -1,6 +1,6 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260329-inline-panel-save-lower';
+    const INLINE_EDITOR_VERSION = '20260329-inline-panel-save-force';
 
     function shouldLoadInlineEditor() {
         return query.get('edit') === '1'

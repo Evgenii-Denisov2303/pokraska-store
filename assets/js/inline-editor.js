@@ -1092,6 +1092,7 @@
                 border-top: 1px solid rgba(148, 163, 184, 0.14);
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
                 backdrop-filter: blur(12px);
+                min-height: 72px;
             }
 
             .p-inline-overview__empty {
@@ -2775,6 +2776,12 @@
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
+        if (ui.panelActions) {
+            ui.panelActions.hidden = false;
+        }
+        if (ui.panelApplyBtn) {
+            ui.panelApplyBtn.hidden = false;
+        }
         if (ui.panelBackBtn) {
             ui.panelBackBtn.hidden = !state.panelReturnToOverview;
         }
