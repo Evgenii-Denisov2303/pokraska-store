@@ -1545,7 +1545,6 @@
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Отменить блок</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
@@ -1569,6 +1568,7 @@
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
+                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить блок</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
             </div>
@@ -1630,6 +1630,7 @@
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelActions = panel.querySelector('.p-inline-panel__actions');
         ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
+        ui.panelRevertBtn = panel.querySelector('[data-inline-panel-action="revert"]');
         ui.panelRemoveBtn = panel.querySelector('[data-inline-panel-action="remove"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
@@ -2075,16 +2076,13 @@
         const activeSummary = activeBinding
             ? `${getBindingKindLabel(activeBinding)} · ${truncateInlineLabel(activeBinding.label, 62)}`
             : '';
-        const canShowToolbarRevert = Boolean(panelOpen && activeBinding && canRevertBinding(activeBinding));
-        const canUseToolbarRevert = Boolean(panelOpen && hasPendingPanelChanges());
-
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
         if (ui.toolbarRevertBtn) {
-            ui.toolbarRevertBtn.hidden = !canShowToolbarRevert;
-            ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
-            ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
+            ui.toolbarRevertBtn.hidden = true;
+            ui.toolbarRevertBtn.disabled = true;
+            ui.toolbarRevertBtn.classList.remove('is-active');
         }
         ui.saveBtn.hidden = false;
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
@@ -2779,7 +2777,10 @@
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
         if (ui.panelActions) {
-            ui.panelActions.hidden = true;
+            ui.panelActions.hidden = false;
+        }
+        if (ui.panelRevertBtn) {
+            ui.panelRevertBtn.hidden = false;
         }
         if (ui.panelApplyBtn) {
             ui.panelApplyBtn.hidden = true;
@@ -3256,6 +3257,14 @@
                 ? `${binding.sectionLabel} · На странице есть несохранённые изменения · Ctrl+Enter — сохранить`
                 : `${binding.sectionLabel} · Изменений в блоке пока нет`);
         let hasVisibleAction = false;
+        if (ui.panelRevertBtn) {
+            const canRevert = canRevertBinding(binding);
+            ui.panelRevertBtn.hidden = !canRevert;
+            ui.panelRevertBtn.disabled = !hasPending;
+            ui.panelRevertBtn.classList.toggle('is-active', hasPending);
+            ui.panelRevertBtn.classList.toggle('is-idle', !hasPending);
+            hasVisibleAction = hasVisibleAction || canRevert;
+        }
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3827,10 +3836,6 @@
             saveDirtyFiles();
         });
 
-        ui.toolbarRevertBtn?.addEventListener('click', () => {
-            revertActiveBindingToSaved();
-        });
-
         ui.adminBtn?.addEventListener('click', () => {
             window.open(getLauncherHref(), '_blank', 'noopener');
         });
@@ -3851,6 +3856,9 @@
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
         ui.panelBackBtn?.addEventListener('click', returnToOverview);
+        ui.panelRevertBtn?.addEventListener('click', () => {
+            revertActiveBindingToSaved();
+        });
         ui.panelRemoveBtn?.addEventListener('click', () => {
             removeActiveBindingFromCollection();
         });
