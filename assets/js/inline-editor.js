@@ -1505,8 +1505,7 @@
             <div class="p-inline-panel__actions">
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить правки</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
-                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="cancel">Закрыть</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
+                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить правки</button>
             </div>
         `;
 
@@ -3752,7 +3751,6 @@
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
         ui.panelBackBtn?.addEventListener('click', returnToOverview);
-        ui.panel.querySelector('[data-inline-panel-action="cancel"]').addEventListener('click', closePanel);
         ui.panelRevertBtn?.addEventListener('click', () => {
             revertActiveBindingToSaved();
         });
