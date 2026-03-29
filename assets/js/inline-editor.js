@@ -1956,7 +1956,9 @@
                             ${bindingIsDirty(binding) ? `
                                 <span class="p-inline-overview__item-actions">
                                     <span class="p-inline-overview__item-state">Правка</span>
-                                    <button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Отменить</button>
+                                    ${isNewUnsavedCollectionBinding(binding)
+                                        ? `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-remove="${binding.id}">Удалить</button>`
+                                        : `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Отменить</button>`}
                                 </span>
                             ` : ''}
                         </div>
@@ -2513,8 +2515,19 @@
         };
     }
 
+    function getOriginalBindingValue(binding, fileState = state.files.get(binding.fileName)) {
+        if (!fileState || !binding?.path) return undefined;
+        return getByPath(fileState.originalData, binding.path);
+    }
+
+    function isNewUnsavedCollectionBinding(binding, fileState = state.files.get(binding.fileName)) {
+        const collectionState = getBindingCollectionState(binding, fileState);
+        if (!collectionState) return false;
+        return getOriginalBindingValue(binding, fileState) === undefined;
+    }
+
     function canRevertBinding(binding) {
-        return Boolean(binding?.path);
+        return Boolean(binding?.path) && !isNewUnsavedCollectionBinding(binding);
     }
 
     function markBindingsDirtyForCollection(fileName, collectionPath) {
@@ -3287,9 +3300,11 @@
         }
     }
 
-    async function removeActiveBindingFromCollection() {
+    async function removeBindingFromCollection(bindingTarget = state.activeBindingId) {
         try {
-            const binding = state.bindingMap.get(state.activeBindingId);
+            const binding = typeof bindingTarget === 'string'
+                ? state.bindingMap.get(bindingTarget)
+                : bindingTarget;
             if (!binding) return;
             const toastLabels = getCollectionToastLabels(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3326,9 +3341,15 @@
 
             showToast(`${toastLabels.removed}. Нажмите «Сохранить», чтобы закрепить.`);
         } catch (error) {
-            const binding = state.bindingMap.get(state.activeBindingId);
+            const binding = typeof bindingTarget === 'string'
+                ? state.bindingMap.get(bindingTarget)
+                : bindingTarget;
             showToast(error.message || getCollectionToastLabels(binding).removeError);
         }
+    }
+
+    async function removeActiveBindingFromCollection() {
+        return removeBindingFromCollection(state.activeBindingId);
     }
 
     async function moveActiveBindingInCollection(direction) {
@@ -3815,6 +3836,14 @@
                 event.preventDefault();
                 event.stopPropagation();
                 revertBindingToSaved(revertButton.dataset.inlineOverviewRevert || '');
+                return;
+            }
+
+            const removeButton = event.target.closest('[data-inline-overview-remove]');
+            if (removeButton) {
+                event.preventDefault();
+                event.stopPropagation();
+                removeBindingFromCollection(removeButton.dataset.inlineOverviewRemove || '');
                 return;
             }
 
