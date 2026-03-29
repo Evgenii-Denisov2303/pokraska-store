@@ -156,11 +156,12 @@
             .p-inline-toolbar {
                 width: fit-content;
                 max-width: min(640px, calc(100vw - 32px));
-                background: rgba(15, 23, 42, 0.96);
-                color: #e2e8f0;
-                border-radius: 20px;
-                padding: 14px;
-                box-shadow: 0 20px 46px rgba(15, 23, 42, 0.24);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(246, 250, 255, 0.97));
+                color: #334155;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                border-radius: 22px;
+                padding: 14px 16px;
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
                 backdrop-filter: blur(18px);
             }
 
@@ -179,8 +180,6 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__eyebrow {
                 margin-bottom: 2px;
-                font-size: 12px;
-                color: #94a3b8;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__title {
@@ -221,7 +220,14 @@
                 text-transform: none;
             }
 
-            .p-inline-toolbar__eyebrow { color: #93c5fd; }
+            .p-inline-toolbar__eyebrow {
+                width: fit-content;
+                padding: 0 10px;
+                min-height: 24px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.08);
+                color: #1d4ed8;
+            }
             .p-inline-panel__kicker {
                 width: fit-content;
                 padding: 0 10px;
@@ -239,7 +245,7 @@
                 text-wrap: balance;
             }
 
-            .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
+            .p-inline-toolbar__title { font-size: 17px; color: #0f172a; }
             .p-inline-panel__title { font-size: 24px; font-weight: 800; color: #0f172a; }
 
             .p-inline-toolbar__meta,
@@ -251,7 +257,7 @@
                 text-wrap: pretty;
             }
 
-            .p-inline-toolbar__meta { color: #cbd5e1; }
+            .p-inline-toolbar__meta { color: #64748b; }
             .p-inline-panel__meta { color: #64748b; }
 
             .p-inline-toolbar__actions,
@@ -297,12 +303,13 @@
                 gap: 8px;
                 min-height: 42px;
                 padding: 11px 14px;
-                background: rgba(255, 255, 255, 0.08);
-                color: #f8fafc;
+                background: #eef2ff;
+                color: #1e3a8a;
                 font-weight: 700;
                 font-size: 15px;
                 text-align: center;
                 line-height: 1.2;
+                border: 1px solid rgba(148, 163, 184, 0.2);
             }
 
             .p-inline-toolbar__btn {
@@ -315,12 +322,6 @@
                 white-space: nowrap;
                 text-wrap: nowrap;
                 overflow-wrap: normal;
-            }
-
-            .p-inline-panel__btn {
-                background: #eef2ff;
-                color: #1e3a8a;
-                border: 1px solid rgba(148, 163, 184, 0.24);
             }
 
             .p-inline-panel__btn--danger {
@@ -350,9 +351,9 @@
             }
 
             .p-inline-toolbar__btn--primary.is-idle {
-                background: rgba(255, 255, 255, 0.14);
-                color: #e2e8f0;
-                border: 1px solid rgba(148, 163, 184, 0.22);
+                background: #f1f5f9;
+                color: #64748b;
+                border: 1px solid rgba(148, 163, 184, 0.18);
                 box-shadow: none;
             }
 
@@ -364,19 +365,6 @@
 
             .p-inline-panel__btn--primary.is-active {
                 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
-            }
-
-            .p-inline-toolbar__btn--soft {
-                background: rgba(255, 255, 255, 0.12);
-                color: #e2e8f0;
-                border: 1px solid rgba(148, 163, 184, 0.24);
-            }
-
-            .p-inline-toolbar__btn--soft.is-active {
-                background: rgba(96, 165, 250, 0.24);
-                color: #eff6ff;
-                border-color: rgba(147, 197, 253, 0.5);
-                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.16);
             }
 
             .p-inline-toolbar__btn:disabled,
@@ -484,10 +472,11 @@
                 margin-top: 12px;
                 padding: 12px 14px;
                 border-radius: 14px;
-                background: rgba(148, 163, 184, 0.14);
+                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.16);
                 font-size: 14px;
                 line-height: 1.5;
-                color: #dbeafe;
+                color: #475569;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__notice {
@@ -2286,13 +2275,11 @@
             : 'Выберите блок';
         ui.toolbarMeta.textContent = activeSummary
             ? (dirtyCount
-                ? `Сейчас: ${activeSummary}. Сохраните изменения, когда закончите.`
-                : `Сейчас: ${activeSummary}.`)
+                ? `Сейчас открыт блок: ${activeSummary}. Сохраните изменения, когда закончите.`
+                : `Сейчас открыт блок: ${activeSummary}.`)
             : (dirtyCount
                 ? 'Сохраните изменения, когда закончите.'
-                : (state.lastSavedAt
-                    ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
-                    : `${getCurrentPageLabel()} · выберите нужное место.`));
+                : 'Нажмите на текст, фото или кнопку на странице.');
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         updateDockOffset();
@@ -2758,8 +2745,8 @@
             const extraFields = editorFields.filter((field) => !isImageDescriptionField(field));
             return [
                 descriptionFields.length ? {
-                    title: 'Подпись и описание',
-                    meta: 'Эти поля помогают понять, что изображено на фото.',
+                    title: 'Что видно на фото',
+                    meta: 'Подпись и описание для этого изображения.',
                     fields: descriptionFields
                 } : null,
                 extraFields.length ? {
@@ -2780,8 +2767,8 @@
 
             return [
                 primaryFields.length ? {
-                    title: 'Текст',
-                    meta: 'Главный текст, который увидит посетитель.',
+                    title: 'Что увидит клиент',
+                    meta: 'Главный текст этой кнопки или ссылки.',
                     fields: primaryFields
                 } : null,
                 linkFields.length ? {
@@ -2791,7 +2778,7 @@
                 } : null,
                 iconFields.length ? {
                     title: 'Значок',
-                    meta: 'Он будет показан рядом с текстом кнопки или ссылки.',
+                    meta: 'Маленький значок рядом с текстом.',
                     fields: iconFields
                 } : null,
                 extraFields.length ? {
@@ -2805,14 +2792,14 @@
         if (binding.type === 'list') {
             return [{
                 title: 'Список',
-                meta: 'Каждый пункт пишите с новой строки.',
+                meta: 'Каждая строка станет отдельным пунктом.',
                 fields: editorFields
             }];
         }
 
         return [{
             title: 'Текст',
-            meta: 'Изменения сразу относятся к выбранному блоку.',
+            meta: 'То, что будет видно посетителю на странице.',
             fields: editorFields
         }];
     }

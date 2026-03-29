@@ -1,6 +1,6 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260329-inline-panel-hierarchy';
+    const INLINE_EDITOR_VERSION = '20260329-inline-toolbar-harmony';
 
     function shouldLoadInlineEditor() {
         return query.get('edit') === '1'
