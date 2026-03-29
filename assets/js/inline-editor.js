@@ -2514,7 +2514,7 @@
 
         const label = document.createElement('label');
         label.className = 'p-inline-panel__label';
-        label.textContent = field.label || field.key;
+        label.textContent = getFieldDisplayLabel(field);
         wrapper.appendChild(label);
 
         let control;
@@ -2546,6 +2546,11 @@
             hint.className = 'p-inline-panel__hint';
             hint.textContent = field.hint;
             wrapper.appendChild(hint);
+        } else if (isLinkLikeField(field)) {
+            const hint = document.createElement('p');
+            hint.className = 'p-inline-panel__hint';
+            hint.textContent = 'Примеры: /pages/services.html, #contacts, tel:+79376154629, https://t.me/...';
+            wrapper.appendChild(hint);
         } else if (isIconField(field)) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
@@ -2554,6 +2559,17 @@
         }
 
         return wrapper;
+    }
+
+    function getFieldDisplayLabel(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').trim();
+        if (isLinkLikeField(field)) {
+            if (key.includes('phone')) return 'Номер для кнопки';
+            if (key.includes('email')) return 'Почта для кнопки';
+            return 'Куда вести';
+        }
+        return label || field.key;
     }
 
     function isIconField(field) {
@@ -2713,8 +2729,8 @@
                     fields: primaryFields
                 } : null,
                 linkFields.length ? {
-                    title: 'Ссылка',
-                    meta: 'Куда поведёт кнопка или ссылка после нажатия.',
+                    title: 'Куда вести',
+                    meta: 'Укажите, что должно открываться после нажатия.',
                     fields: linkFields
                 } : null,
                 iconFields.length ? {

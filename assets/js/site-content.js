@@ -1,6 +1,6 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260329-inline-panel-sections';
+    const INLINE_EDITOR_VERSION = '20260329-inline-link-help';
 
     function shouldLoadInlineEditor() {
         return query.get('edit') === '1'
