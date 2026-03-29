@@ -14,7 +14,7 @@
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-hide-idle-panel-save`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-panel-save-only-when-needed`;
         document.head.appendChild(script);
     }
 
