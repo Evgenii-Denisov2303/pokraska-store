@@ -2073,7 +2073,7 @@
             ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
             ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
         }
-        ui.saveBtn.hidden = panelOpen;
+        ui.saveBtn.hidden = panelOpen || Boolean(activeBinding);
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.classList.toggle('is-idle', !dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = dirtyCount
