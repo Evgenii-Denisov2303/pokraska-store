@@ -656,6 +656,13 @@
                 box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
             }
 
+            .p-inline-panel__collection-title {
+                margin: 0;
+                font-size: 15px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
             .p-inline-panel__collection-meta {
                 margin: 0;
                 font-size: 15px;
@@ -2964,12 +2971,12 @@
             return {
                 singular: 'фото',
                 plural: 'фото',
-                duplicate: 'Дублировать фото',
-                add: 'Добавить фото после текущего',
+                duplicate: 'Сделать копию',
+                add: 'Добавить рядом',
                 remove: 'Удалить фото',
-                movePrev: 'Сдвинуть левее',
-                moveNext: 'Сдвинуть правее',
-                makeFirst: 'Сделать первым'
+                movePrev: 'Левее',
+                moveNext: 'Правее',
+                makeFirst: 'Сделать главным'
             };
         }
 
@@ -2979,24 +2986,24 @@
                 return {
                     singular: 'ссылка',
                     plural: 'ссылок',
-                    duplicate: 'Дублировать ссылку',
-                    add: 'Добавить ссылку после текущей',
+                    duplicate: 'Сделать копию',
+                    add: 'Добавить ниже',
                     remove: 'Удалить ссылку',
-                    movePrev: 'Сдвинуть выше',
-                    moveNext: 'Сдвинуть ниже',
-                    makeFirst: 'Сделать первой'
+                    movePrev: 'Выше',
+                    moveNext: 'Ниже',
+                    makeFirst: 'В начало'
                 };
             }
 
             return {
                 singular: 'карточка',
                 plural: 'карточек',
-                duplicate: 'Дублировать карточку',
-                add: 'Добавить карточку после текущей',
+                duplicate: 'Сделать копию',
+                add: 'Добавить ниже',
                 remove: 'Удалить карточку',
-                movePrev: 'Сдвинуть выше',
-                moveNext: 'Сдвинуть ниже',
-                makeFirst: 'Сделать первой'
+                movePrev: 'Выше',
+                moveNext: 'Ниже',
+                makeFirst: 'В начало'
             };
         }
 
@@ -3006,12 +3013,12 @@
         return {
             singular,
             plural,
-            duplicate: `Дублировать ${singular}`,
-            add: `Добавить ${singular} после текущего`,
+            duplicate: 'Сделать копию',
+            add: 'Добавить ниже',
             remove: `Удалить ${singular}`,
-            movePrev: 'Сдвинуть выше',
-            moveNext: 'Сдвинуть ниже',
-            makeFirst: singular.endsWith('а') ? 'Сделать первой' : 'Сделать первым'
+            movePrev: 'Выше',
+            moveNext: 'Ниже',
+            makeFirst: 'В начало'
         };
     }
 
@@ -3053,15 +3060,22 @@
         const collectionBox = document.createElement('div');
         collectionBox.className = 'p-inline-panel__collection';
 
+        const collectionTitle = document.createElement('h3');
+        collectionTitle.className = 'p-inline-panel__collection-title';
+        collectionTitle.textContent = binding.type === 'image'
+            ? 'Порядок и набор фото'
+            : 'Порядок и состав блока';
+        collectionBox.appendChild(collectionTitle);
+
         const collectionMeta = document.createElement('p');
         collectionMeta.className = 'p-inline-panel__collection-meta';
         collectionMeta.textContent = binding.type === 'image'
             ? (collectionState.index === 0
-                ? `Сейчас это главное фото в наборе. Всего изображений: ${collectionState.total}.`
-                : `Позиция в наборе: ${collectionState.index + 1} из ${collectionState.total}.`)
+                ? `Сейчас это главное фото. Всего в наборе: ${collectionState.total}.`
+                : `Фото ${collectionState.index + 1} из ${collectionState.total}.`)
             : (collectionState.index === 0
-                ? `Сейчас это первый ${nouns.singular} в блоке. Всего ${nouns.plural}: ${collectionState.total}.`
-                : `Позиция: ${collectionState.index + 1} из ${collectionState.total}.`);
+                ? `Сейчас это первый ${nouns.singular}. Всего в блоке: ${collectionState.total}.`
+                : `${nouns.singular.charAt(0).toUpperCase() + nouns.singular.slice(1)} ${collectionState.index + 1} из ${collectionState.total}.`);
         collectionBox.appendChild(collectionMeta);
 
         const collectionActions = document.createElement('div');
