@@ -1198,11 +1198,37 @@
                 position: static;
                 z-index: 2;
                 margin: 20px -20px -16px;
+                display: grid;
+                gap: 12px;
                 padding: 14px 20px 18px;
                 border-top: 1px solid rgba(148, 163, 184, 0.14);
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
                 backdrop-filter: blur(12px);
                 min-height: 72px;
+            }
+
+            .p-inline-panel__actions-head {
+                display: grid;
+                gap: 4px;
+            }
+
+            .p-inline-panel__actions-title {
+                font-size: 14px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__actions-meta {
+                font-size: 13px;
+                line-height: 1.45;
+                color: #64748b;
+            }
+
+            .p-inline-panel__actions-row {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
             }
 
             .p-inline-overview__empty {
@@ -1659,8 +1685,14 @@
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
-                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить блок</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
+                <div class="p-inline-panel__actions-head">
+                    <strong class="p-inline-panel__actions-title">Действия с блоком</strong>
+                    <span class="p-inline-panel__actions-meta">Здесь можно вернуть изменения или убрать этот элемент со страницы.</span>
+                </div>
+                <div class="p-inline-panel__actions-row">
+                    <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть как было</button>
+                    <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Убрать</button>
+                </div>
             </div>
         `;
 
@@ -2973,7 +3005,7 @@
                 plural: 'фото',
                 duplicate: 'Сделать копию',
                 add: 'Добавить рядом',
-                remove: 'Удалить фото',
+                remove: 'Убрать фото',
                 movePrev: 'Левее',
                 moveNext: 'Правее',
                 makeFirst: 'Сделать главным'
@@ -2988,7 +3020,7 @@
                     plural: 'ссылок',
                     duplicate: 'Сделать копию',
                     add: 'Добавить ниже',
-                    remove: 'Удалить ссылку',
+                    remove: 'Убрать ссылку',
                     movePrev: 'Выше',
                     moveNext: 'Ниже',
                     makeFirst: 'В начало'
@@ -3000,7 +3032,7 @@
                 plural: 'карточек',
                 duplicate: 'Сделать копию',
                 add: 'Добавить ниже',
-                remove: 'Удалить карточку',
+                remove: 'Убрать карточку',
                 movePrev: 'Выше',
                 moveNext: 'Ниже',
                 makeFirst: 'В начало'
@@ -3015,7 +3047,7 @@
             plural,
             duplicate: 'Сделать копию',
             add: 'Добавить ниже',
-            remove: `Удалить ${singular}`,
+            remove: `Убрать ${singular}`,
             movePrev: 'Выше',
             moveNext: 'Ниже',
             makeFirst: 'В начало'
@@ -3611,7 +3643,7 @@
             const canRemove = Boolean(collectionState && collectionState.total > 1);
             ui.panelRemoveBtn.hidden = !canRemove;
             ui.panelRemoveBtn.disabled = !canRemove;
-            ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Удалить';
+            ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Убрать';
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
