@@ -3230,9 +3230,12 @@
     function updatePanelMeta(binding) {
         if (!ui.panelMeta || !binding) return;
         const hasPending = hasPendingPanelChanges();
+        const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
             ? `${binding.sectionLabel} · Изменения в блоке ещё не сохранены · Ctrl+Enter — сохранить`
-            : `${binding.sectionLabel} · Изменений в блоке пока нет`;
+            : (hasUnsaved
+                ? `${binding.sectionLabel} · На странице есть несохранённые изменения · Ctrl+Enter — сохранить`
+                : `${binding.sectionLabel} · Изменений в блоке пока нет`);
         let hasVisibleAction = false;
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
@@ -3244,12 +3247,12 @@
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.hidden = !hasPending;
-            ui.panelApplyBtn.disabled = !hasPending;
-            ui.panelApplyBtn.classList.toggle('is-active', hasPending);
-            ui.panelApplyBtn.classList.toggle('is-idle', !hasPending);
+            ui.panelApplyBtn.hidden = !hasUnsaved;
+            ui.panelApplyBtn.disabled = !hasUnsaved;
+            ui.panelApplyBtn.classList.toggle('is-active', hasUnsaved);
+            ui.panelApplyBtn.classList.toggle('is-idle', !hasUnsaved);
             ui.panelApplyBtn.textContent = 'Сохранить';
-            hasVisibleAction = hasVisibleAction || hasPending;
+            hasVisibleAction = hasVisibleAction || hasUnsaved;
         }
         if (ui.panelActions) {
             ui.panelActions.hidden = !hasVisibleAction;
