@@ -9,6 +9,7 @@
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
+    const OVERVIEW_ENABLED = false;
     const INLINE_ICON_OPTIONS = [
         { value: '', label: 'Без иконки', preview: '—' },
         { value: 'fas fa-phone', label: 'Телефон' },
@@ -1542,12 +1543,10 @@
                     <div>
                         <span class="p-inline-toolbar__eyebrow">Правка</span>
                         <h2 class="p-inline-toolbar__title">Выберите блок</h2>
-                        <p class="p-inline-toolbar__meta">Текст, фото, ссылки и блоки.</p>
+                        <p class="p-inline-toolbar__meta">Нажмите на текст, фото или кнопку на странице.</p>
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
@@ -1566,7 +1565,6 @@
                     <p class="p-inline-panel__meta"></p>
                 </div>
                 <div class="p-inline-panel__head-actions">
-                    <button class="p-inline-panel__back" type="button" data-inline-panel-action="back" hidden>К обзору</button>
                     <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
             </div>
@@ -1574,7 +1572,6 @@
             <div class="p-inline-panel__actions">
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить блок</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
             </div>
         `;
 
@@ -1979,7 +1976,10 @@
     }
 
     function renderOverviewPanel() {
-        if (!ui.overview) return;
+        if (!ui.overview || !OVERVIEW_ENABLED) {
+            if (ui.overview) ui.overview.hidden = true;
+            return;
+        }
 
         const shouldShow = state.enabled && state.overviewOpen;
         ui.overview.hidden = !shouldShow;
@@ -2046,6 +2046,12 @@
     }
 
     function toggleOverview(forceState) {
+        if (!OVERVIEW_ENABLED) {
+            state.overviewOpen = false;
+            renderOverviewPanel();
+            return;
+        }
+
         state.overviewOpen = typeof forceState === 'boolean'
             ? forceState
             : !state.overviewOpen;
@@ -2115,7 +2121,7 @@
             ? `Сохранить ${formatCompactCount(dirtyCount)}`
             : ((dirtyFilesCount || pendingPanel || hasIssue) ? 'Сохранить' : 'Готово');
         if (ui.adminBtn) {
-            ui.adminBtn.hidden = !(state.apiAvailable && state.authEnabled && !state.authenticated);
+            ui.adminBtn.hidden = true;
         }
 
         if (!state.enabled) {
@@ -2134,12 +2140,9 @@
 
         if (state.authEnabled && !state.authenticated) {
             ui.toolbarTitle.textContent = 'Нужен вход';
-            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте панель входа, войдите и вернитесь на страницу.`;
+            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте /admin/, выполните вход и вернитесь на страницу.`;
             ui.toolbarNotice.hidden = false;
-            ui.toolbarNotice.textContent = 'Кнопка входа откроется справа только в этом состоянии.';
-            if (ui.adminBtn) {
-                ui.adminBtn.textContent = 'Вход';
-            }
+            ui.toolbarNotice.textContent = 'Вход выполняется через панель запуска /admin/.';
             renderOverviewPanel();
             return;
         }
@@ -2156,9 +2159,6 @@
                 : (state.lastSavedAt
                     ? `Последнее сохранение: ${new Date(state.lastSavedAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`
                     : `${getCurrentPageLabel()} · выберите нужное место.`));
-        if (ui.adminBtn) {
-            ui.adminBtn.textContent = 'Вход';
-        }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         updateDockOffset();
@@ -2986,7 +2986,7 @@
     }
 
     function returnToOverview() {
-        if (!state.panelReturnToOverview) return;
+        if (!OVERVIEW_ENABLED || !state.panelReturnToOverview) return;
         if (!confirmDiscardPanelChanges()) return;
         ui.panel.hidden = true;
         state.panelReturnToOverview = false;
@@ -3018,7 +3018,7 @@
             }
 
             if (state.authEnabled && !state.authenticated) {
-                showToast('Сначала откройте панель входа и авторизуйтесь.');
+                showToast('Сначала откройте /admin/ и выполните вход.');
                 return;
             }
 
@@ -3034,9 +3034,9 @@
                 ? resolveBindingDefault(binding)
                 : cloneData(storedValue);
 
-            const shouldReturnToOverview = typeof options.fromOverview === 'boolean'
+            const shouldReturnToOverview = OVERVIEW_ENABLED && (typeof options.fromOverview === 'boolean'
                 ? options.fromOverview
-                : (ui.panel.hidden ? state.overviewOpen : state.panelReturnToOverview);
+                : (ui.panel.hidden ? state.overviewOpen : state.panelReturnToOverview));
 
             state.panelReturnToOverview = shouldReturnToOverview;
             state.overviewOpen = false;
@@ -3727,12 +3727,14 @@
             || Boolean(target?.closest?.('[contenteditable="true"]'));
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
-            event.preventDefault();
-            if (!state.overviewOpen) {
-                state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'all';
+            if (OVERVIEW_ENABLED) {
+                event.preventDefault();
+                if (!state.overviewOpen) {
+                    state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'all';
+                }
+                toggleOverview(true);
+                return;
             }
-            toggleOverview(true);
-            return;
         }
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
@@ -3865,7 +3867,7 @@
             window.open(getLauncherHref(), '_blank', 'noopener');
         });
 
-        ui.root.querySelector('[data-inline-action="overview"]').addEventListener('click', () => {
+        ui.root.querySelector('[data-inline-action="overview"]')?.addEventListener('click', () => {
             if (!state.overviewOpen && hasDirtyBindings() && state.overviewFocus === 'all') {
                 state.overviewFocus = 'dirty';
             }
@@ -3887,7 +3889,7 @@
         ui.panelRemoveBtn?.addEventListener('click', () => {
             removeActiveBindingFromCollection();
         });
-        ui.panelApplyBtn.addEventListener('click', () => {
+        ui.panelApplyBtn?.addEventListener('click', () => {
             saveDirtyFiles();
         });
         ui.panel.addEventListener('click', handlePanelClick);
