@@ -476,7 +476,7 @@ async function handleAuthApi(request, response, pathname) {
         sendJson(request, response, 200, {
             ok: true,
             authEnabled: AUTH_ENABLED,
-            authenticated: AUTH_ENABLED ? Boolean(session) : true,
+            authenticated: AUTH_ENABLED ? Boolean(session) : false,
             username: session?.username || null
         });
         return true;
