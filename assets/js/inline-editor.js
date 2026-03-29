@@ -1508,7 +1508,6 @@
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
-                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Сбросить блок</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
             </div>
@@ -1569,7 +1568,6 @@
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
-        ui.panelRevertBtn = panel.querySelector('[data-inline-panel-action="revert"]');
         ui.panelRemoveBtn = panel.querySelector('[data-inline-panel-action="remove"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
@@ -2719,10 +2717,6 @@
         if (ui.panelBackBtn) {
             ui.panelBackBtn.hidden = !state.panelReturnToOverview;
         }
-        if (ui.panelRevertBtn) {
-            ui.panelRevertBtn.hidden = !canRevertBinding(binding);
-            ui.panelRevertBtn.disabled = !(bindingIsDirty(binding) || hasPendingPanelChanges());
-        }
 
         const editorFields = getBindingEditorFields(binding);
 
@@ -3187,10 +3181,6 @@
         ui.panelMeta.textContent = hasPendingPanelChanges()
             ? `${binding.sectionLabel} · Есть неприменённые правки · Ctrl+Enter — применить`
             : `${binding.sectionLabel} · Ctrl+Enter — применить`;
-        if (ui.panelRevertBtn) {
-            ui.panelRevertBtn.hidden = !canRevertBinding(binding);
-            ui.panelRevertBtn.disabled = !(bindingIsDirty(binding) || hasPendingPanelChanges());
-        }
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3777,9 +3767,6 @@
 
         ui.panel.querySelector('.p-inline-panel__close').addEventListener('click', closePanel);
         ui.panelBackBtn?.addEventListener('click', returnToOverview);
-        ui.panelRevertBtn?.addEventListener('click', () => {
-            revertActiveBindingToSaved();
-        });
         ui.panelRemoveBtn?.addEventListener('click', () => {
             removeActiveBindingFromCollection();
         });
