@@ -3247,12 +3247,12 @@
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.hidden = !hasUnsaved;
+            ui.panelApplyBtn.hidden = false;
             ui.panelApplyBtn.disabled = !hasUnsaved;
             ui.panelApplyBtn.classList.toggle('is-active', hasUnsaved);
             ui.panelApplyBtn.classList.toggle('is-idle', !hasUnsaved);
             ui.panelApplyBtn.textContent = 'Сохранить';
-            hasVisibleAction = hasVisibleAction || hasUnsaved;
+            hasVisibleAction = true;
         }
         if (ui.panelActions) {
             ui.panelActions.hidden = !hasVisibleAction;
