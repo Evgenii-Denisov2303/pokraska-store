@@ -266,11 +266,20 @@
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
-                white-space: normal;
                 text-align: center;
-                text-wrap: balance;
-                overflow-wrap: anywhere;
                 line-height: 1.2;
+            }
+
+            .p-inline-toolbar__btn {
+                white-space: nowrap;
+                text-wrap: nowrap;
+                overflow-wrap: normal;
+            }
+
+            .p-inline-panel__btn {
+                white-space: nowrap;
+                text-wrap: nowrap;
+                overflow-wrap: normal;
             }
 
             .p-inline-panel__btn {
@@ -309,6 +318,13 @@
                 background: rgba(255, 255, 255, 0.12);
                 color: #e2e8f0;
                 border: 1px solid rgba(148, 163, 184, 0.24);
+            }
+
+            .p-inline-toolbar__btn--soft.is-active {
+                background: rgba(96, 165, 250, 0.24);
+                color: #eff6ff;
+                border-color: rgba(147, 197, 253, 0.5);
+                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.16);
             }
 
             .p-inline-toolbar__btn:disabled,
@@ -2021,6 +2037,7 @@
         if (ui.toolbarRevertBtn) {
             ui.toolbarRevertBtn.hidden = !canShowToolbarRevert;
             ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
+            ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
         }
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = pendingPanel
