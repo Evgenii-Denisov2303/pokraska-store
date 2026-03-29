@@ -9,6 +9,30 @@
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
+    const INLINE_ICON_OPTIONS = [
+        { value: '', label: 'Без иконки', preview: '—' },
+        { value: 'fas fa-phone', label: 'Телефон' },
+        { value: 'fab fa-telegram-plane', label: 'Telegram' },
+        { value: 'fas fa-envelope', label: 'Почта' },
+        { value: 'fas fa-comment-dots', label: 'Сообщение' },
+        { value: 'fas fa-location-dot', label: 'Адрес' },
+        { value: 'fas fa-clock', label: 'Часы' },
+        { value: 'fas fa-arrow-right', label: 'Стрелка' },
+        { value: 'fas fa-link', label: 'Ссылка' },
+        { value: 'fas fa-check', label: 'Галочка' },
+        { value: 'fas fa-circle-check', label: 'Подтверждение' },
+        { value: 'fas fa-camera', label: 'Фото' },
+        { value: 'fas fa-image', label: 'Картинка' },
+        { value: 'fas fa-hammer', label: 'Монтаж' },
+        { value: 'fas fa-wrench', label: 'Инструмент' },
+        { value: 'fas fa-shield-alt', label: 'Защита' },
+        { value: 'fas fa-lock', label: 'Замок' },
+        { value: 'fas fa-palette', label: 'Палитра' },
+        { value: 'fas fa-paint-roller', label: 'Покраска' },
+        { value: 'fas fa-bolt', label: 'Автоматика' },
+        { value: 'fas fa-house', label: 'Дом' },
+        { value: 'fas fa-truck', label: 'Доставка' }
+    ];
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
@@ -255,6 +279,16 @@
                 border: 1px solid rgba(148, 163, 184, 0.24);
             }
 
+            .p-inline-panel__btn--danger {
+                background: #fff1f2;
+                color: #be123c;
+                border-color: rgba(244, 63, 94, 0.18);
+            }
+
+            .p-inline-panel__btn--danger:hover:not(:disabled) {
+                background: #ffe4e6;
+            }
+
             .p-inline-panel__btn:hover:not(:disabled) {
                 background: #e0e7ff;
                 transform: translateY(-1px);
@@ -276,6 +310,101 @@
             .p-inline-panel__btn:disabled {
                 opacity: 0.55;
                 cursor: not-allowed;
+            }
+
+            .p-inline-panel__icon-preview {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px;
+                padding: 12px 14px;
+                border-radius: 16px;
+                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                color: #334155;
+                font-size: 14px;
+                line-height: 1.35;
+            }
+
+            .p-inline-panel__icon-preview-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 38px;
+                height: 38px;
+                border-radius: 12px;
+                background: #e0e7ff;
+                color: #1d4ed8;
+                font-size: 18px;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-panel__icon-preview-text {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                min-width: 0;
+            }
+
+            .p-inline-panel__icon-preview-title {
+                font-weight: 700;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__icon-picker {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+                gap: 8px;
+                margin-top: 10px;
+            }
+
+            .p-inline-panel__icon-option {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                min-height: 84px;
+                padding: 10px 8px;
+                border-radius: 16px;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: #fff;
+                color: #334155;
+                cursor: pointer;
+                text-align: center;
+                font: inherit;
+                transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+            }
+
+            .p-inline-panel__icon-option:hover {
+                border-color: rgba(37, 99, 235, 0.35);
+                background: #f8fbff;
+                transform: translateY(-1px);
+            }
+
+            .p-inline-panel__icon-option.is-active {
+                border-color: rgba(37, 99, 235, 0.5);
+                background: #eef4ff;
+                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+            }
+
+            .p-inline-panel__icon-option-symbol {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+                background: rgba(37, 99, 235, 0.08);
+                font-size: 18px;
+            }
+
+            .p-inline-panel__icon-option-label {
+                font-size: 12px;
+                line-height: 1.25;
+                color: inherit;
+                overflow-wrap: anywhere;
             }
 
             .p-inline-toolbar__notice {
@@ -1375,6 +1504,7 @@
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить правки</button>
+                <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
                 <button class="p-inline-panel__btn" type="button" data-inline-panel-action="cancel">Закрыть</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
             </div>
@@ -1436,6 +1566,7 @@
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
         ui.panelRevertBtn = panel.querySelector('[data-inline-panel-action="revert"]');
+        ui.panelRemoveBtn = panel.querySelector('[data-inline-panel-action="remove"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
         ui.overview = overview;
         ui.overviewSearch = overview.querySelector('.p-inline-overview__search');
@@ -2232,14 +2363,102 @@
         control.name = field.key || 'value';
         wrapper.appendChild(control);
 
+        if (isIconField(field)) {
+            wrapper.appendChild(createIconPreview(control));
+            wrapper.appendChild(createIconPicker(control));
+        }
+
         if (field.hint) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
             hint.textContent = field.hint;
             wrapper.appendChild(hint);
+        } else if (isIconField(field)) {
+            const hint = document.createElement('p');
+            hint.className = 'p-inline-panel__hint';
+            hint.textContent = 'Можно выбрать иконку из набора ниже или оставить свой класс вручную.';
+            wrapper.appendChild(hint);
         }
 
         return wrapper;
+    }
+
+    function isIconField(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        return key === 'icon' || /иконк/.test(label);
+    }
+
+    function createIconPreview(control) {
+        const preview = document.createElement('div');
+        preview.className = 'p-inline-panel__icon-preview';
+
+        const badge = document.createElement('span');
+        badge.className = 'p-inline-panel__icon-preview-badge';
+        preview.appendChild(badge);
+
+        const text = document.createElement('div');
+        text.className = 'p-inline-panel__icon-preview-text';
+        text.innerHTML = `
+            <span class="p-inline-panel__icon-preview-title">Текущая иконка</span>
+            <span class="p-inline-panel__icon-preview-value"></span>
+        `;
+        preview.appendChild(text);
+
+        const valueNode = text.querySelector('.p-inline-panel__icon-preview-value');
+
+        const render = () => {
+            const nextValue = String(control.value || '').trim();
+            badge.innerHTML = '';
+            if (nextValue) {
+                const icon = document.createElement('i');
+                icon.className = nextValue;
+                icon.setAttribute('aria-hidden', 'true');
+                badge.appendChild(icon);
+                valueNode.textContent = nextValue;
+            } else {
+                badge.textContent = '—';
+                valueNode.textContent = 'Без иконки';
+            }
+        };
+
+        control.addEventListener('input', render);
+        render();
+        return preview;
+    }
+
+    function createIconPicker(control) {
+        const picker = document.createElement('div');
+        picker.className = 'p-inline-panel__icon-picker';
+
+        const updateActiveState = () => {
+            const currentValue = String(control.value || '').trim();
+            picker.querySelectorAll('.p-inline-panel__icon-option').forEach((button) => {
+                button.classList.toggle('is-active', button.dataset.iconValue === currentValue);
+            });
+        };
+
+        INLINE_ICON_OPTIONS.forEach((option) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'p-inline-panel__icon-option';
+            button.dataset.iconValue = option.value;
+            button.innerHTML = `
+                <span class="p-inline-panel__icon-option-symbol">${option.preview || `<i class="${option.value}" aria-hidden="true"></i>`}</span>
+                <span class="p-inline-panel__icon-option-label">${option.label}</span>
+            `;
+            button.addEventListener('click', () => {
+                control.value = option.value;
+                control.dispatchEvent(new Event('input', { bubbles: true }));
+                control.dispatchEvent(new Event('change', { bubbles: true }));
+                updateActiveState();
+            });
+            picker.appendChild(button);
+        });
+
+        control.addEventListener('input', updateActiveState);
+        updateActiveState();
+        return picker;
     }
 
     function getBindingEditorFields(binding) {
@@ -2459,8 +2678,7 @@
             { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
             { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
             { action: 'duplicate', label: nouns.duplicate, disabled: false },
-            { action: 'add', label: nouns.add, disabled: false },
-            { action: 'remove', label: nouns.remove, disabled: collectionState.total <= 1 }
+            { action: 'add', label: nouns.add, disabled: false }
         ];
 
         actionSet.forEach((item) => {
@@ -2956,6 +3174,14 @@
             ui.panelRevertBtn.hidden = !canRevertBinding(binding);
             ui.panelRevertBtn.disabled = !(bindingIsDirty(binding) || hasPendingPanelChanges());
         }
+        if (ui.panelRemoveBtn) {
+            const collectionState = getBindingCollectionState(binding);
+            const nouns = getCollectionItemNouns(binding);
+            const canRemove = Boolean(collectionState && collectionState.total > 1);
+            ui.panelRemoveBtn.hidden = !canRemove;
+            ui.panelRemoveBtn.disabled = !canRemove;
+            ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Удалить';
+        }
     }
 
     function getImageBindingsNavigation(binding) {
@@ -3067,11 +3293,16 @@
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
             const toastLabels = getCollectionToastLabels(binding);
+            const nouns = getCollectionItemNouns(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
             const collectionState = getBindingCollectionState(binding, fileState);
             if (!collectionState || collectionState.total <= 1) {
                 showToast(toastLabels.removeLast);
+                return;
+            }
+
+            if (!window.confirm(`${nouns.remove} с этой страницы?`)) {
                 return;
             }
 
@@ -3094,7 +3325,7 @@
                 closePanel({ skipConfirm: true });
             }
 
-            showToast(toastLabels.removed);
+            showToast(`${toastLabels.removed}. Нажмите «Сохранить», чтобы закрепить.`);
         } catch (error) {
             const binding = state.bindingMap.get(state.activeBindingId);
             showToast(error.message || getCollectionToastLabels(binding).removeError);
@@ -3524,6 +3755,9 @@
         ui.panel.querySelector('[data-inline-panel-action="cancel"]').addEventListener('click', closePanel);
         ui.panelRevertBtn?.addEventListener('click', () => {
             revertActiveBindingToSaved();
+        });
+        ui.panelRemoveBtn?.addEventListener('click', () => {
+            removeActiveBindingFromCollection();
         });
         ui.panelApplyBtn.addEventListener('click', () => {
             applyActiveBinding();
