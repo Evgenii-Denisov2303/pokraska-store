@@ -484,8 +484,9 @@
                 position: fixed;
                 top: 24px;
                 right: 24px;
+                bottom: 108px;
                 width: min(420px, calc(100vw - 32px));
-                max-height: calc(100vh - 48px);
+                max-height: none;
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
@@ -734,8 +735,9 @@
                 position: fixed;
                 top: 24px;
                 right: 24px;
+                bottom: 108px;
                 width: min(400px, calc(100vw - 32px));
-                max-height: calc(100vh - 48px);
+                max-height: none;
                 overflow: auto;
                 overscroll-behavior: contain;
                 scrollbar-gutter: stable;
@@ -1188,18 +1190,18 @@
                     top: auto;
                     left: 12px;
                     right: 12px;
-                    bottom: 88px;
+                    bottom: 104px;
                     width: auto;
-                    max-height: calc(100vh - 120px);
+                    max-height: none;
                 }
 
                 .p-inline-overview {
                     top: auto;
                     left: 12px;
                     right: 12px;
-                    bottom: 88px;
+                    bottom: 104px;
                     width: auto;
-                    max-height: calc(100vh - 120px);
+                    max-height: none;
                 }
             }
 
@@ -1220,8 +1222,8 @@
                 .p-inline-overview {
                     left: 8px;
                     right: 8px;
-                    bottom: 80px;
-                    max-height: calc(100vh - 96px);
+                    bottom: 96px;
+                    max-height: none;
                     border-radius: 20px;
                     padding: 16px 16px 12px;
                 }
@@ -1568,7 +1570,7 @@
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Сохранить</button>
+                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
             </div>
         `;
 
@@ -2084,7 +2086,7 @@
             ui.toolbarRevertBtn.disabled = !canUseToolbarRevert;
             ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
         }
-        ui.saveBtn.hidden = panelOpen || Boolean(activeBinding);
+        ui.saveBtn.hidden = false;
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
         ui.saveBtn.classList.toggle('is-idle', !dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = dirtyCount
@@ -2777,10 +2779,10 @@
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
         if (ui.panelActions) {
-            ui.panelActions.hidden = false;
+            ui.panelActions.hidden = true;
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.hidden = false;
+            ui.panelApplyBtn.hidden = true;
         }
         if (ui.panelBackBtn) {
             ui.panelBackBtn.hidden = !state.panelReturnToOverview;
@@ -3264,12 +3266,9 @@
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.hidden = false;
-            ui.panelApplyBtn.disabled = !hasUnsaved;
-            ui.panelApplyBtn.classList.toggle('is-active', hasUnsaved);
-            ui.panelApplyBtn.classList.toggle('is-idle', !hasUnsaved);
-            ui.panelApplyBtn.textContent = 'Сохранить';
-            hasVisibleAction = true;
+            ui.panelApplyBtn.hidden = true;
+            ui.panelApplyBtn.disabled = true;
+            ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
         }
         if (ui.panelActions) {
             ui.panelActions.hidden = !hasVisibleAction;
