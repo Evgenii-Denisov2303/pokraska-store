@@ -154,20 +154,20 @@
             }
 
             .p-inline-toolbar {
-                width: fit-content;
-                max-width: min(640px, calc(100vw - 32px));
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(246, 250, 255, 0.97));
-                color: #334155;
-                border: 1px solid rgba(148, 163, 184, 0.18);
+                width: min(420px, calc(100vw - 32px));
+                max-width: none;
+                background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.92));
+                color: #e2e8f0;
+                border: 1px solid rgba(96, 165, 250, 0.18);
                 border-radius: 22px;
                 padding: 14px 16px;
-                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+                box-shadow: 0 20px 42px rgba(15, 23, 42, 0.22);
                 backdrop-filter: blur(18px);
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: fit-content;
-                max-width: min(640px, calc(100vw - 32px));
+                width: min(420px, calc(100vw - 32px));
+                max-width: none;
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -225,8 +225,8 @@
                 padding: 0 10px;
                 min-height: 24px;
                 border-radius: 999px;
-                background: rgba(37, 99, 235, 0.08);
-                color: #1d4ed8;
+                background: rgba(96, 165, 250, 0.14);
+                color: #bfdbfe;
             }
             .p-inline-panel__kicker {
                 width: fit-content;
@@ -245,7 +245,7 @@
                 text-wrap: balance;
             }
 
-            .p-inline-toolbar__title { font-size: 17px; color: #0f172a; }
+            .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
             .p-inline-panel__title { font-size: 24px; font-weight: 800; color: #0f172a; }
 
             .p-inline-toolbar__meta,
@@ -257,7 +257,7 @@
                 text-wrap: pretty;
             }
 
-            .p-inline-toolbar__meta { color: #64748b; }
+            .p-inline-toolbar__meta { color: rgba(226, 232, 240, 0.84); }
             .p-inline-panel__meta { color: #64748b; }
 
             .p-inline-toolbar__actions,
@@ -316,6 +316,9 @@
                 white-space: nowrap;
                 text-wrap: nowrap;
                 overflow-wrap: normal;
+                background: rgba(255, 255, 255, 0.08);
+                color: #e2e8f0;
+                border-color: rgba(148, 163, 184, 0.22);
             }
 
             .p-inline-panel__btn {
@@ -351,9 +354,9 @@
             }
 
             .p-inline-toolbar__btn--primary.is-idle {
-                background: #f1f5f9;
-                color: #64748b;
-                border: 1px solid rgba(148, 163, 184, 0.18);
+                background: rgba(255, 255, 255, 0.08);
+                color: rgba(226, 232, 240, 0.74);
+                border: 1px solid rgba(148, 163, 184, 0.22);
                 box-shadow: none;
             }
 
@@ -371,6 +374,11 @@
             .p-inline-panel__btn:disabled {
                 opacity: 0.55;
                 cursor: not-allowed;
+            }
+
+            .p-inline-toolbar__btn:hover:not(:disabled) {
+                background: rgba(255, 255, 255, 0.14);
+                transform: translateY(-1px);
             }
 
             .p-inline-panel__icon-preview {
@@ -472,11 +480,11 @@
                 margin-top: 12px;
                 padding: 12px 14px;
                 border-radius: 14px;
-                background: #f8fafc;
+                background: rgba(15, 23, 42, 0.26);
                 border: 1px solid rgba(148, 163, 184, 0.16);
                 font-size: 14px;
                 line-height: 1.5;
-                color: #475569;
+                color: #e2e8f0;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__notice {
