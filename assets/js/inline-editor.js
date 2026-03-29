@@ -314,6 +314,17 @@
                 color: #fff;
             }
 
+            .p-inline-toolbar__btn--primary.is-idle,
+            .p-inline-panel__btn--primary.is-idle {
+                background: linear-gradient(135deg, #94a3b8, #64748b);
+                color: #f8fafc;
+                box-shadow: none;
+            }
+
+            .p-inline-panel__btn--primary.is-active {
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+            }
+
             .p-inline-toolbar__btn--soft {
                 background: rgba(255, 255, 255, 0.12);
                 color: #e2e8f0;
@@ -2040,6 +2051,7 @@
             ui.toolbarRevertBtn.classList.toggle('is-active', canUseToolbarRevert);
         }
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
+        ui.saveBtn.classList.toggle('is-idle', !dirtyFilesCount && !pendingPanel);
         ui.saveBtn.textContent = pendingPanel
             ? 'Сохранить всё'
             : (dirtyCount
@@ -3195,9 +3207,10 @@
 
     function updatePanelMeta(binding) {
         if (!ui.panelMeta || !binding) return;
-        ui.panelMeta.textContent = hasPendingPanelChanges()
-            ? `${binding.sectionLabel} · Есть неприменённые правки · Ctrl+Enter — применить`
-            : `${binding.sectionLabel} · Ctrl+Enter — применить`;
+        const hasPending = hasPendingPanelChanges();
+        ui.panelMeta.textContent = hasPending
+            ? `${binding.sectionLabel} · Изменения в блоке ещё не применены · Ctrl+Enter — применить`
+            : `${binding.sectionLabel} · Изменений в блоке пока нет`;
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3205,6 +3218,11 @@
             ui.panelRemoveBtn.hidden = !canRemove;
             ui.panelRemoveBtn.disabled = !canRemove;
             ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Удалить';
+        }
+        if (ui.panelApplyBtn) {
+            ui.panelApplyBtn.disabled = !hasPending;
+            ui.panelApplyBtn.classList.toggle('is-active', hasPending);
+            ui.panelApplyBtn.classList.toggle('is-idle', !hasPending);
         }
     }
 
