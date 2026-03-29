@@ -14,7 +14,7 @@
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-primary-hover`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-button-copy`;
         document.head.appendChild(script);
     }
 

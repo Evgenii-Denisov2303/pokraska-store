@@ -1484,7 +1484,7 @@
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Отменить</button>
+                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Сбросить блок</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
@@ -1502,15 +1502,15 @@
                     <p class="p-inline-panel__meta"></p>
                 </div>
                 <div class="p-inline-panel__head-actions">
-                    <button class="p-inline-panel__back" type="button" data-inline-panel-action="back" hidden>Назад</button>
+                    <button class="p-inline-panel__back" type="button" data-inline-panel-action="back" hidden>К обзору</button>
                     <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
             </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
-                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Отменить правки</button>
+                <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Сбросить блок</button>
                 <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Удалить</button>
-                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить правки</button>
+                <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply">Применить</button>
             </div>
         `;
 
@@ -1963,7 +1963,7 @@
                                     <span class="p-inline-overview__item-state">Правка</span>
                                     ${isNewUnsavedCollectionBinding(binding)
                                         ? `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-remove="${binding.id}">Удалить</button>`
-                                        : `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Отменить</button>`}
+                                        : `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Сбросить</button>`}
                                 </span>
                             ` : ''}
                         </div>
