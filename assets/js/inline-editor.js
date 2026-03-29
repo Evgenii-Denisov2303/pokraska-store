@@ -300,6 +300,11 @@
                 color: #fff;
             }
 
+            .p-inline-panel__btn--primary:hover:not(:disabled) {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: #fff;
+            }
+
             .p-inline-toolbar__btn--soft {
                 background: rgba(255, 255, 255, 0.12);
                 color: #e2e8f0;
