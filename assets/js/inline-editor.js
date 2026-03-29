@@ -1276,19 +1276,19 @@
             .p-inline-panel__actions {
                 position: static;
                 z-index: 2;
-                margin: 20px -20px -16px;
+                margin-top: 24px;
                 display: grid;
-                gap: 12px;
-                padding: 14px 20px 18px;
-                border-top: 1px solid rgba(148, 163, 184, 0.18);
-                background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.998));
-                backdrop-filter: blur(12px);
-                min-height: 72px;
+                gap: 14px;
+                padding: 18px;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                border-radius: 20px;
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 1));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
             }
 
             .p-inline-panel__actions-head {
                 display: grid;
-                gap: 4px;
+                gap: 6px;
             }
 
             .p-inline-panel__actions-title {
@@ -1299,15 +1299,24 @@
 
             .p-inline-panel__actions-meta {
                 font-size: 14px;
-                line-height: 1.45;
+                line-height: 1.5;
                 color: #475569;
             }
 
             .p-inline-panel__actions-row {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                gap: 8px;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .p-inline-panel__actions-row .p-inline-panel__btn {
+                width: 100%;
+                min-width: 0;
+                min-height: 46px;
+                padding: 12px 14px;
+                white-space: normal;
+                text-wrap: balance;
             }
 
             .p-inline-overview__empty {
@@ -1437,8 +1446,13 @@
                 }
 
                 .p-inline-panel__actions {
-                    margin: 16px -16px -12px;
-                    padding: 12px 16px;
+                    margin-top: 18px;
+                    padding: 16px;
+                    border-radius: 18px;
+                }
+
+                .p-inline-panel__actions-row {
+                    grid-template-columns: 1fr;
                 }
 
                 .p-inline-overview__search-row {
