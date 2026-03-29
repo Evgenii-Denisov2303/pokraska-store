@@ -10,6 +10,7 @@
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
     const OVERVIEW_ENABLED = false;
+    const HOVER_LABEL_ENABLED = false;
     const INLINE_ICON_OPTIONS = [
         { value: '', label: 'Без иконки', preview: '—' },
         { value: 'fas fa-phone', label: 'Телефон' },
@@ -232,12 +233,12 @@
             }
 
             .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
-            .p-inline-panel__title { font-size: 22px; color: #0f172a; }
+            .p-inline-panel__title { font-size: 24px; font-weight: 800; color: #0f172a; }
 
             .p-inline-toolbar__meta,
             .p-inline-panel__meta {
                 margin: 6px 0 0;
-                font-size: 14px;
+                font-size: 15px;
                 line-height: 1.5;
                 overflow-wrap: anywhere;
                 text-wrap: pretty;
@@ -292,6 +293,7 @@
                 background: rgba(255, 255, 255, 0.08);
                 color: #f8fafc;
                 font-weight: 700;
+                font-size: 15px;
                 text-align: center;
                 line-height: 1.2;
             }
@@ -490,18 +492,18 @@
                 top: 24px;
                 right: 24px;
                 bottom: var(--p-inline-dock-offset);
-                width: min(420px, calc(100vw - 32px));
+                width: min(456px, calc(100vw - 32px));
                 max-height: none;
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
                 overscroll-behavior: contain;
                 scrollbar-gutter: stable;
-                background: #ffffff;
-                border-radius: 24px;
+                background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+                border-radius: 26px;
                 border: 1px solid rgba(148, 163, 184, 0.24);
-                box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
-                padding: 18px 18px 14px;
+                box-shadow: 0 30px 70px rgba(15, 23, 42, 0.16);
+                padding: 20px 20px 16px;
                 z-index: 5001;
             }
 
@@ -509,13 +511,13 @@
                 display: flex;
                 align-items: flex-start;
                 justify-content: space-between;
-                gap: 10px;
+                gap: 12px;
                 position: sticky;
-                top: -18px;
+                top: -20px;
                 z-index: 2;
-                margin: -18px -18px 16px;
-                padding: 18px 18px 14px;
-                border-radius: 24px 24px 18px 18px;
+                margin: -20px -20px 18px;
+                padding: 20px 20px 16px;
+                border-radius: 26px 26px 18px 18px;
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(255, 255, 255, 0.96));
                 border-bottom: 1px solid rgba(148, 163, 184, 0.16);
                 backdrop-filter: blur(12px);
@@ -555,41 +557,55 @@
 
             .p-inline-panel__group {
                 display: grid;
-                gap: 8px;
-                margin-bottom: 14px;
+                gap: 10px;
+                margin-bottom: 0;
+                padding: 14px;
+                border-radius: 18px;
+                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.16);
             }
 
             .p-inline-panel__form {
+                display: grid;
+                gap: 14px;
                 flex: 1 1 auto;
                 min-height: 0;
                 overflow-y: auto;
                 overscroll-behavior: contain;
-                padding-right: 4px;
-                padding-bottom: 6px;
+                padding-right: 6px;
+                padding-bottom: 8px;
             }
 
             .p-inline-panel__label {
-                font-size: 14px;
-                font-weight: 700;
-                color: #334155;
+                font-size: 15px;
+                font-weight: 800;
+                color: #1f2937;
             }
 
             .p-inline-panel__control,
             .p-inline-panel__textarea {
                 width: 100%;
-                border: 1px solid rgba(148, 163, 184, 0.35);
-                border-radius: 14px;
-                background: #f8fafc;
+                border: 1px solid rgba(148, 163, 184, 0.28);
+                border-radius: 16px;
+                background: #ffffff;
                 color: #0f172a;
                 font: inherit;
-                font-size: 15px;
-                line-height: 1.45;
-                padding: 13px 15px;
+                font-size: 16px;
+                line-height: 1.55;
+                padding: 14px 16px;
+                box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
             }
 
             .p-inline-panel__textarea {
-                min-height: 124px;
+                min-height: 148px;
                 resize: vertical;
+            }
+
+            .p-inline-panel__control:focus,
+            .p-inline-panel__textarea:focus {
+                outline: none;
+                border-color: rgba(59, 130, 246, 0.62);
+                box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
             }
 
             .p-inline-panel__textarea--autosize {
@@ -598,26 +614,27 @@
             }
 
             .p-inline-panel__hint {
-                margin: -2px 0 0;
-                font-size: 13px;
-                line-height: 1.45;
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.5;
                 color: #64748b;
             }
 
             .p-inline-panel__collection {
                 display: grid;
-                gap: 10px;
-                margin-bottom: 14px;
-                padding: 13px;
+                gap: 12px;
+                margin-bottom: 0;
+                padding: 16px;
                 border-radius: 18px;
-                background: #f8fafc;
-                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: #ffffff;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
             }
 
             .p-inline-panel__collection-meta {
                 margin: 0;
-                font-size: 14px;
-                line-height: 1.45;
+                font-size: 15px;
+                line-height: 1.5;
                 color: #475569;
             }
 
@@ -629,11 +646,12 @@
 
             .p-inline-panel__preview {
                 display: grid;
-                gap: 10px;
-                padding: 13px;
+                gap: 12px;
+                padding: 16px;
                 border-radius: 18px;
-                background: #f8fafc;
-                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: #ffffff;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
             }
 
             .p-inline-panel__preview-frame {
@@ -642,10 +660,10 @@
 
             .p-inline-panel__preview img {
                 width: 100%;
-                max-height: 240px;
+                max-height: 260px;
                 object-fit: contain;
                 border-radius: 14px;
-                background: #fff;
+                background: #f8fafc;
             }
 
             .p-inline-panel__preview-nav {
@@ -697,9 +715,9 @@
             .p-inline-panel__upload-zone {
                 display: grid;
                 gap: 8px;
-                padding: 14px;
+                padding: 16px;
                 border: 1px dashed rgba(59, 130, 246, 0.34);
-                border-radius: 14px;
+                border-radius: 16px;
                 background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(248, 250, 252, 0.98));
                 transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
             }
@@ -711,14 +729,14 @@
             }
 
             .p-inline-panel__upload-title {
-                font-size: 14px;
+                font-size: 15px;
                 font-weight: 800;
                 color: #1e3a8a;
             }
 
             .p-inline-panel__upload-meta {
-                font-size: 13px;
-                line-height: 1.45;
+                font-size: 14px;
+                line-height: 1.5;
                 color: #64748b;
             }
 
@@ -731,7 +749,7 @@
                 border-radius: 999px;
                 background: rgba(37, 99, 235, 0.1);
                 color: #1d4ed8;
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 800;
                 overflow-wrap: anywhere;
             }
@@ -1094,8 +1112,8 @@
             .p-inline-panel__actions {
                 position: static;
                 z-index: 2;
-                margin: 18px -18px -14px;
-                padding: 14px 18px 16px;
+                margin: 20px -20px -16px;
+                padding: 14px 20px 18px;
                 border-top: 1px solid rgba(148, 163, 184, 0.14);
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
                 backdrop-filter: blur(12px);
@@ -1127,21 +1145,7 @@
             }
 
             .p-inline-hover {
-                position: fixed;
-                z-index: 5003;
-                max-width: min(320px, calc(100vw - 24px));
-                padding: 8px 12px;
-                border-radius: 999px;
-                background: rgba(15, 23, 42, 0.94);
-                color: #fff;
-                font-size: 13px;
-                font-weight: 700;
-                line-height: 1.3;
-                white-space: normal;
-                overflow-wrap: anywhere;
-                pointer-events: none;
-                box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
-                transform: translateY(-8px);
+                display: none !important;
             }
 
             .p-inline-hover[hidden] {
@@ -2861,12 +2865,12 @@
 
             const uploadTitle = document.createElement('div');
             uploadTitle.className = 'p-inline-panel__upload-title';
-            uploadTitle.textContent = 'Выбрать или перетащить фото';
+            uploadTitle.textContent = 'Заменить фото';
             uploadZone.appendChild(uploadTitle);
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Файл можно выбрать, перетащить сюда или вставить из буфера.';
+            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера.';
             uploadZone.appendChild(uploadMeta);
 
             const uploadFile = document.createElement('div');
@@ -2926,8 +2930,8 @@
             const imageHint = document.createElement('p');
             imageHint.className = 'p-inline-panel__hint';
             imageHint.textContent = imageNavigation && imageNavigation.total > 1
-                ? 'После замены можно поправить alt или подпись ниже. Клавиши ← и → листают соседние фото.'
-                : 'После замены можно сразу поправить alt или подпись ниже.';
+                ? 'Ниже можно поправить подпись и alt. Стрелки ← и → листают соседние фото.'
+                : 'Ниже можно поправить подпись и alt.';
             ui.panelForm.appendChild(imageHint);
 
         }
@@ -3277,10 +3281,10 @@
         const hasPending = hasPendingPanelChanges();
         const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
-            ? `${binding.sectionLabel} · Изменения в блоке ещё не сохранены · Ctrl+Enter — сохранить`
+            ? `${binding.sectionLabel} · Изменения в этом блоке ещё не сохранены`
             : (hasUnsaved
-                ? `${binding.sectionLabel} · На странице есть несохранённые изменения · Ctrl+Enter — сохранить`
-                : `${binding.sectionLabel} · Изменений в блоке пока нет`);
+                ? `${binding.sectionLabel} · На странице есть несохранённые изменения`
+                : `${binding.sectionLabel} · Можно спокойно редактировать этот блок`);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
@@ -3674,7 +3678,7 @@
     }
 
     function showHoverLabel(target) {
-        if (!ui.hover || !state.enabled || !target) return;
+        if (!HOVER_LABEL_ENABLED || !ui.hover || !state.enabled || !target) return;
         const rect = target.getBoundingClientRect();
         const binding = state.bindingMap.get(target.dataset.inlineEditId || '');
         const kind = getBindingKindLabel(binding).replace(/ на странице$/i, '');
@@ -3694,11 +3698,12 @@
     }
 
     function hideHoverLabel() {
-        if (!ui.hover) return;
+        if (!HOVER_LABEL_ENABLED || !ui.hover) return;
         ui.hover.hidden = true;
     }
 
     function handlePointerMove(event) {
+        if (!HOVER_LABEL_ENABLED) return;
         if (!state.enabled) {
             hideHoverLabel();
             return;
@@ -3967,12 +3972,16 @@
         });
 
         document.addEventListener('click', handleDocumentClick, true);
-        document.addEventListener('pointermove', handlePointerMove, true);
+        if (HOVER_LABEL_ENABLED) {
+            document.addEventListener('pointermove', handlePointerMove, true);
+            window.addEventListener('scroll', hideHoverLabel, true);
+        }
         document.addEventListener('keydown', handleKeydown);
         document.addEventListener('paste', handlePaste, true);
-        window.addEventListener('scroll', hideHoverLabel, true);
         window.addEventListener('resize', () => {
-            hideHoverLabel();
+            if (HOVER_LABEL_ENABLED) {
+                hideHoverLabel();
+            }
             updateDockOffset();
         });
         window.addEventListener('beforeunload', handleBeforeUnload);
