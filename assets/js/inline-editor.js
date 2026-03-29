@@ -1753,7 +1753,7 @@
         panel.innerHTML = `
             <div class="p-inline-panel__head">
                 <div>
-                    <span class="p-inline-panel__kicker">Редактор</span>
+                    <span class="p-inline-panel__kicker">Блок</span>
                     <h2 class="p-inline-panel__title">Правка блока</h2>
                     <p class="p-inline-panel__meta"></p>
                 </div>
@@ -1764,8 +1764,8 @@
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
                 <div class="p-inline-panel__actions-head">
-                    <strong class="p-inline-panel__actions-title">Действия с блоком</strong>
-                    <span class="p-inline-panel__actions-meta">Здесь можно вернуть изменения или убрать этот элемент.</span>
+                    <strong class="p-inline-panel__actions-title">С этим блоком</strong>
+                    <span class="p-inline-panel__actions-meta">Можно вернуть изменения или убрать элемент.</span>
                 </div>
                 <div class="p-inline-panel__actions-row">
                     <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть как было</button>
@@ -2324,7 +2324,7 @@
         const hasIssue = !state.apiAvailable || (state.authEnabled && !state.authenticated);
         const activeBinding = state.bindingMap.get(state.activeBindingId) || null;
         const activeSummary = activeBinding
-            ? `${getBindingKindLabel(activeBinding)} · ${truncateInlineLabel(activeBinding.label, 62)}`
+            ? `${getBindingKindLabel(activeBinding)}`
             : '';
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
@@ -2960,12 +2960,12 @@
             const extraFields = editorFields.filter((field) => !isImageDescriptionField(field));
             return [
                 descriptionFields.length ? {
-                    title: 'Подпись к фото',
-                    meta: 'Короткий текст и описание для этого изображения.',
+                    title: 'Подпись и описание',
+                    meta: 'Короткий текст для этого изображения.',
                     fields: descriptionFields
                 } : null,
                 extraFields.length ? {
-                    title: 'Дополнительно',
+                    title: 'Редко нужно',
                     meta: 'Редкие параметры фото. Чаще всего здесь ничего менять не нужно.',
                     fields: extraFields
                 } : null
@@ -3000,8 +3000,8 @@
                     fields: iconFields
                 } : null,
                 extraFields.length ? {
-                    title: 'Дополнительно',
-                    meta: 'Редкие параметры этого блока.',
+                    title: 'Редко нужно',
+                    meta: 'Параметры, которые обычно менять не приходится.',
                     fields: extraFields
                 } : null
             ].filter(Boolean);
@@ -3054,7 +3054,7 @@
         const preview = document.createElement('div');
         preview.className = 'p-inline-panel__action-preview';
         preview.innerHTML = `
-            <div class="p-inline-panel__action-preview-badge">Как это будет выглядеть</div>
+            <div class="p-inline-panel__action-preview-badge">Так увидит клиент</div>
             <div class="p-inline-panel__action-preview-button">
                 <i aria-hidden="true" hidden></i>
                 <span></span>
@@ -3318,18 +3318,18 @@
         const collectionTitle = document.createElement('h3');
         collectionTitle.className = 'p-inline-panel__collection-title';
         collectionTitle.textContent = binding.type === 'image'
-            ? 'Порядок и набор фото'
-            : 'Порядок и состав блока';
+            ? 'Порядок фото'
+            : 'Порядок блока';
         collectionBox.appendChild(collectionTitle);
 
         const collectionMeta = document.createElement('p');
         collectionMeta.className = 'p-inline-panel__collection-meta';
         collectionMeta.textContent = binding.type === 'image'
             ? (collectionState.index === 0
-                ? `Сейчас это главное фото. Всего в наборе: ${collectionState.total}.`
+                ? `Сейчас это главное фото. Всего: ${collectionState.total}.`
                 : `Фото ${collectionState.index + 1} из ${collectionState.total}.`)
             : (collectionState.index === 0
-                ? `Сейчас это первый ${nouns.singular}. Всего в блоке: ${collectionState.total}.`
+                ? `Сейчас это первый ${nouns.singular}. Всего: ${collectionState.total}.`
                 : `${nouns.singular.charAt(0).toUpperCase() + nouns.singular.slice(1)} ${collectionState.index + 1} из ${collectionState.total}.`);
         collectionBox.appendChild(collectionMeta);
 
@@ -3861,7 +3861,7 @@
             ? `${binding.sectionLabel} · Изменения в этом блоке пока не сохранены`
             : (hasUnsaved
                 ? `${binding.sectionLabel} · На странице есть другие несохранённые изменения`
-                : `${binding.sectionLabel} · Этот блок можно спокойно править`);
+                : `${binding.sectionLabel} · Блок готов к правке`);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
