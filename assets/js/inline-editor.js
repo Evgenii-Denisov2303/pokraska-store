@@ -1476,15 +1476,15 @@
                 <div class="p-inline-toolbar__top">
                     <div>
                         <span class="p-inline-toolbar__eyebrow">Правка</span>
-                        <h2 class="p-inline-toolbar__title">Нажмите на блок</h2>
-                        <p class="p-inline-toolbar__meta">Текст, фото, кнопка или секция.</p>
+                        <h2 class="p-inline-toolbar__title">Выберите блок</h2>
+                        <p class="p-inline-toolbar__meta">Текст, фото, ссылки и блоки.</p>
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="admin" hidden>Вход</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save">Сохранить</button>
-                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Сбросить блок</button>
+                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--soft" type="button" data-inline-action="revert" hidden>Отменить блок</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
@@ -1497,8 +1497,8 @@
         panel.innerHTML = `
             <div class="p-inline-panel__head">
                 <div>
-                    <span class="p-inline-panel__kicker">На странице</span>
-                    <h2 class="p-inline-panel__title">Изменить блок</h2>
+                    <span class="p-inline-panel__kicker">Редактор</span>
+                    <h2 class="p-inline-panel__title">Правка блока</h2>
                     <p class="p-inline-panel__meta"></p>
                 </div>
                 <div class="p-inline-panel__head-actions">
@@ -1520,9 +1520,9 @@
             <div class="p-inline-overview__sticky">
                 <div class="p-inline-overview__head">
                     <div>
-                        <span class="p-inline-panel__kicker">Секции</span>
+                        <span class="p-inline-panel__kicker">Поиск</span>
                         <h2 class="p-inline-overview__title">Обзор страницы</h2>
-                        <p class="p-inline-overview__meta">Найдите нужный блок и откройте его. Ctrl+K — быстрый поиск.</p>
+                        <p class="p-inline-overview__meta">Найдите нужный блок и откройте его.</p>
                     </div>
                     <button class="p-inline-overview__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
@@ -1958,10 +1958,10 @@
                             </button>
                             ${bindingIsDirty(binding) ? `
                                 <span class="p-inline-overview__item-actions">
-                                    <span class="p-inline-overview__item-state">Правка</span>
+                                    <span class="p-inline-overview__item-state">Изменён</span>
                                     ${isNewUnsavedCollectionBinding(binding)
                                         ? `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-remove="${binding.id}">Удалить</button>`
-                                        : `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Сбросить</button>`}
+                                        : `<button class="p-inline-overview__item-revert" type="button" data-inline-overview-revert="${binding.id}">Вернуть</button>`}
                                 </span>
                             ` : ''}
                         </div>
@@ -2059,8 +2059,8 @@
         }
 
         ui.toolbarTitle.textContent = dirtyCount
-            ? `Правки: ${dirtyCount}`
-            : 'Нажмите на блок';
+            ? `Изменения: ${dirtyCount}`
+            : 'Выберите блок';
         ui.toolbarMeta.textContent = activeSummary
             ? (dirtyCount
                 ? `Сейчас: ${activeSummary}. Сохраните изменения, когда закончите.`
