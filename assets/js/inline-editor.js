@@ -140,6 +140,13 @@
                 display: none;
             }
 
+            .p-inline-toolbar__btn[hidden],
+            .p-inline-panel__btn[hidden],
+            .p-inline-panel__back[hidden],
+            .p-inline-overview__search-clear[hidden] {
+                display: none !important;
+            }
+
             .p-inline-toolbar {
                 width: fit-content;
                 max-width: min(640px, calc(100vw - 32px));
