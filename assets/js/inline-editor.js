@@ -578,6 +578,13 @@
                 border: 1px solid rgba(148, 163, 184, 0.14);
             }
 
+            .p-inline-panel__group--primary {
+                gap: 12px;
+                padding: 16px;
+                border-color: rgba(96, 165, 250, 0.18);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 20px rgba(37, 99, 235, 0.04);
+            }
+
             .p-inline-panel__section-title {
                 margin: 0;
                 font-size: 15px;
@@ -623,9 +630,25 @@
                 box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
             }
 
+            .p-inline-panel__control::placeholder,
+            .p-inline-panel__textarea::placeholder {
+                color: #94a3b8;
+            }
+
+            .p-inline-panel__control--primary,
+            .p-inline-panel__textarea--primary {
+                font-size: 17px;
+                line-height: 1.6;
+                color: #0f172a;
+            }
+
             .p-inline-panel__textarea {
                 min-height: 148px;
                 resize: vertical;
+            }
+
+            .p-inline-panel__textarea--primary {
+                min-height: 184px;
             }
 
             .p-inline-panel__control:focus,
@@ -645,6 +668,24 @@
                 font-size: 14px;
                 line-height: 1.5;
                 color: #64748b;
+            }
+
+            .p-inline-panel__examples {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .p-inline-panel__example-chip {
+                display: inline-flex;
+                align-items: center;
+                min-height: 28px;
+                padding: 0 10px;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.05);
+                color: #475569;
+                font-size: 12px;
+                font-weight: 700;
             }
 
             .p-inline-panel__collection {
@@ -825,6 +866,23 @@
                 font-size: 14px;
                 line-height: 1.5;
                 color: #64748b;
+            }
+
+            .p-inline-panel__upload-actions {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                margin-top: 4px;
+            }
+
+            .p-inline-panel__upload-pick {
+                min-height: 40px;
+                padding-inline: 16px;
+            }
+
+            .p-inline-panel__upload-input {
+                display: none;
             }
 
             .p-inline-panel__upload-file {
@@ -1221,9 +1279,9 @@
             }
 
             .p-inline-panel__actions-meta {
-                font-size: 13px;
+                font-size: 14px;
                 line-height: 1.45;
-                color: #64748b;
+                color: #475569;
             }
 
             .p-inline-panel__actions-row {
@@ -1689,7 +1747,7 @@
             <div class="p-inline-panel__actions">
                 <div class="p-inline-panel__actions-head">
                     <strong class="p-inline-panel__actions-title">Действия с блоком</strong>
-                    <span class="p-inline-panel__actions-meta">Здесь можно вернуть изменения или убрать этот элемент со страницы.</span>
+                    <span class="p-inline-panel__actions-meta">Здесь можно вернуть изменения или убрать этот элемент.</span>
                 </div>
                 <div class="p-inline-panel__actions-row">
                     <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть как было</button>
@@ -1773,9 +1831,30 @@
         if (binding.editorKindLabel) return binding.editorKindLabel;
         if (binding.type === 'image') return 'Фото';
         if (binding.type === 'list') return 'Список';
-        if (binding.type === 'object') return 'Кнопка и ссылка';
+        if (binding.type === 'object') {
+            const fields = getBindingEditorFields(binding);
+            if (fields.some(isLinkLikeField)) return 'Кнопка';
+            if (binding.collectionPath) return 'Карточка';
+            return 'Блок';
+        }
         if (binding.type === 'html') return 'Текстовый блок';
+        if (/заголов/i.test(binding.label || '')) return 'Заголовок';
         return 'Текст';
+    }
+
+    function getBindingWorkHint(binding) {
+        if (!binding) return 'Нажмите на текст, фото или кнопку на странице.';
+        if (binding.type === 'image') return 'Замените фото или поправьте подпись справа.';
+        if (binding.type === 'object') {
+            const fields = getBindingEditorFields(binding);
+            if (fields.some(isLinkLikeField)) {
+                return 'Меняйте текст, адрес перехода и значок справа.';
+            }
+            return 'Меняйте текст и параметры этого блока справа.';
+        }
+        if (binding.type === 'list') return 'Меняйте пункты этого списка справа.';
+        if (/заголов/i.test(binding.label || '')) return 'Меняйте заголовок справа.';
+        return 'Меняйте текст этого блока справа.';
     }
 
     function truncateInlineLabel(value, maxLength = 68) {
@@ -2270,15 +2349,13 @@
             return;
         }
 
-        ui.toolbarTitle.textContent = dirtyCount
-            ? `Изменения: ${dirtyCount}`
-            : 'Выберите блок';
-        ui.toolbarMeta.textContent = activeSummary
-            ? (dirtyCount
-                ? `Сейчас открыт блок: ${activeSummary}. Сохраните изменения, когда закончите.`
-                : `Сейчас открыт блок: ${activeSummary}.`)
+        ui.toolbarTitle.textContent = activeBinding
+            ? truncateInlineLabel(activeBinding.label, 56)
+            : (dirtyCount ? `Изменения: ${dirtyCount}` : 'Выберите блок');
+        ui.toolbarMeta.textContent = activeBinding
+            ? `${activeSummary}. ${getBindingWorkHint(activeBinding)}${dirtyCount ? ' Потом нажмите «Сохранить».' : ''}`
             : (dirtyCount
-                ? 'Сохраните изменения, когда закончите.'
+                ? 'На странице есть изменения. Сохраните их, когда закончите.'
                 : 'Нажмите на текст, фото или кнопку на странице.');
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
@@ -2547,9 +2624,66 @@
         }
     }
 
-    function createFieldGroup(field, value) {
+    function getFieldPlaceholder(field, binding) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+
+        if (isLinkLikeField(field)) {
+            if (key.includes('phone')) return 'Например: tel:+79376154629';
+            if (key.includes('email')) return 'Например: mailto:mail@example.ru';
+            if (key.includes('telegram')) return 'Например: https://t.me/username';
+            if (key.includes('whatsapp')) return 'Например: https://wa.me/79376154629';
+            return 'Например: /pages/services.html или #contacts';
+        }
+
+        if (binding?.type === 'image' && isImageDescriptionField(field)) {
+            if (key === 'alt') return 'Коротко опишите, что видно на фото';
+            return 'Например: Откатные ворота';
+        }
+
+        if ((binding?.type === 'text' || binding?.type === 'html' || binding?.type === 'list') && /заголов|title/.test(`${key} ${label}`)) {
+            return 'Например: Ворота и заборы под ключ';
+        }
+
+        if (binding?.type === 'object' && isPrimaryTextField(field)) {
+            return 'Напишите текст так, как его увидит клиент';
+        }
+
+        if ((binding?.type === 'text' || binding?.type === 'html') && isPrimaryTextField(field)) {
+            return 'Напишите текст так, как его увидит клиент';
+        }
+
+        return '';
+    }
+
+    function createFieldExamples(field) {
+        if (!isLinkLikeField(field)) return null;
+
+        const examples = [
+            '/pages/services.html',
+            '#contacts',
+            'tel:+79376154629',
+            'https://t.me/...'
+        ];
+
+        const container = document.createElement('div');
+        container.className = 'p-inline-panel__examples';
+        examples.forEach((example) => {
+            const chip = document.createElement('span');
+            chip.className = 'p-inline-panel__example-chip';
+            chip.textContent = example;
+            container.appendChild(chip);
+        });
+        return container;
+    }
+
+    function createFieldGroup(field, value, binding = null) {
         const wrapper = document.createElement('div');
         wrapper.className = 'p-inline-panel__group';
+        const isPrimary = isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field);
+        if (isPrimary) {
+            wrapper.classList.add('p-inline-panel__group--primary');
+        }
 
         const label = document.createElement('label');
         label.className = 'p-inline-panel__label';
@@ -2572,12 +2706,28 @@
             control.value = value ?? '';
         }
 
+        if (isPrimary) {
+            control.classList.add(control.tagName === 'TEXTAREA'
+                ? 'p-inline-panel__textarea--primary'
+                : 'p-inline-panel__control--primary');
+        }
+
+        const placeholder = getFieldPlaceholder(field, binding);
+        if (placeholder) {
+            control.placeholder = placeholder;
+        }
+
         control.name = field.key || 'value';
         wrapper.appendChild(control);
 
         if (isIconField(field)) {
             wrapper.appendChild(createIconPreview(control));
             wrapper.appendChild(createIconPicker(control));
+        }
+
+        const examples = createFieldExamples(field);
+        if (examples) {
+            wrapper.appendChild(examples);
         }
 
         if (field.hint) {
@@ -2588,7 +2738,7 @@
         } else if (isLinkLikeField(field)) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
-            hint.textContent = 'Примеры: /pages/services.html, #contacts, tel:+79376154629, https://t.me/...';
+            hint.textContent = 'Можно вести на страницу, блок, телефон или мессенджер.';
             wrapper.appendChild(hint);
         } else if (isIconField(field)) {
             const hint = document.createElement('p');
@@ -2745,13 +2895,13 @@
             const extraFields = editorFields.filter((field) => !isImageDescriptionField(field));
             return [
                 descriptionFields.length ? {
-                    title: 'Что видно на фото',
-                    meta: 'Подпись и описание для этого изображения.',
+                    title: 'Подпись к фото',
+                    meta: 'Короткий текст и описание для этого изображения.',
                     fields: descriptionFields
                 } : null,
                 extraFields.length ? {
                     title: 'Дополнительно',
-                    meta: 'Редкие параметры этого изображения.',
+                    meta: 'Редкие параметры фото. Чаще всего здесь ничего менять не нужно.',
                     fields: extraFields
                 } : null
             ].filter(Boolean);
@@ -2764,11 +2914,14 @@
             const extraFields = editorFields.filter((field) => (
                 !isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field)
             ));
+            const isActionLike = linkFields.length > 0;
 
             return [
                 primaryFields.length ? {
-                    title: 'Что увидит клиент',
-                    meta: 'Главный текст этой кнопки или ссылки.',
+                    title: isActionLike ? 'Текст на кнопке' : 'Главный текст',
+                    meta: isActionLike
+                        ? 'Именно это посетитель увидит на кнопке или ссылке.'
+                        : 'Главный текст этого блока на странице.',
                     fields: primaryFields
                 } : null,
                 linkFields.length ? {
@@ -2797,9 +2950,12 @@
             }];
         }
 
+        const title = /заголов/i.test(binding.label || '')
+            ? 'Заголовок'
+            : 'Текст на странице';
         return [{
-            title: 'Текст',
-            meta: 'То, что будет видно посетителю на странице.',
+            title,
+            meta: 'То, что увидит посетитель на странице.',
             fields: editorFields
         }];
     }
@@ -2831,7 +2987,7 @@
         const preview = document.createElement('div');
         preview.className = 'p-inline-panel__action-preview';
         preview.innerHTML = `
-            <div class="p-inline-panel__action-preview-badge">Как увидит клиент</div>
+            <div class="p-inline-panel__action-preview-badge">Как это будет выглядеть</div>
             <div class="p-inline-panel__action-preview-button">
                 <i aria-hidden="true" hidden></i>
                 <span></span>
@@ -2854,8 +3010,8 @@
                 iconNode.className = '';
             }
             linkNode.textContent = data.href
-                ? `Ссылка: ${data.href}`
-                : 'Ссылка пока не указана';
+                ? `Откроется: ${data.href}`
+                : 'Переход пока не указан';
         };
 
         preview.renderPreview = render;
@@ -3200,7 +3356,7 @@
 
             const uploadTitle = document.createElement('div');
             uploadTitle.className = 'p-inline-panel__upload-title';
-            uploadTitle.textContent = 'Заменить фото';
+            uploadTitle.textContent = 'Новое фото';
             uploadZone.appendChild(uploadTitle);
 
             const uploadMeta = document.createElement('div');
@@ -3214,7 +3370,7 @@
             uploadZone.appendChild(uploadFile);
 
             const fileInput = document.createElement('input');
-            fileInput.className = 'p-inline-panel__control';
+            fileInput.className = 'p-inline-panel__upload-input';
             fileInput.type = 'file';
             fileInput.accept = 'image/*';
             fileInput.name = '__imageUpload';
@@ -3223,6 +3379,17 @@
                 const nextFile = fileInput.files?.[0];
                 updateImagePreviewFromFile(nextFile, image, uploadFile);
             });
+
+            const uploadActions = document.createElement('div');
+            uploadActions.className = 'p-inline-panel__upload-actions';
+
+            const uploadButton = document.createElement('button');
+            uploadButton.type = 'button';
+            uploadButton.className = 'p-inline-panel__btn p-inline-panel__upload-pick';
+            uploadButton.textContent = 'Выбрать фото';
+            uploadButton.addEventListener('click', () => fileInput.click());
+            uploadActions.appendChild(uploadButton);
+            uploadZone.appendChild(uploadActions);
 
             const preventTransferDefaults = (event) => {
                 event.preventDefault();
@@ -3265,8 +3432,8 @@
             const imageHint = document.createElement('p');
             imageHint.className = 'p-inline-panel__hint';
             imageHint.textContent = imageNavigation && imageNavigation.total > 1
-                ? 'Ниже можно поправить подпись и alt. Стрелки ← и → листают соседние фото.'
-                : 'Ниже можно поправить подпись и alt.';
+                ? 'Стрелки ← и → листают соседние фото. Ниже можно поправить подпись и описание.'
+                : 'Ниже можно поправить подпись и описание.';
             ui.panelForm.appendChild(imageHint);
 
         }
@@ -3281,7 +3448,7 @@
                 const fieldValue = field.key === '__value'
                     ? value
                     : getByPath(value, field.key);
-                section.appendChild(createFieldGroup(field, fieldValue));
+                section.appendChild(createFieldGroup(field, fieldValue, binding));
             });
             ui.panelForm.appendChild(section);
         });
@@ -3624,10 +3791,10 @@
         const hasPending = hasPendingPanelChanges();
         const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
-            ? `${binding.sectionLabel} · Изменения в этом блоке ещё не сохранены`
+            ? `${binding.sectionLabel} · Изменения в этом блоке пока не сохранены`
             : (hasUnsaved
-                ? `${binding.sectionLabel} · На странице есть несохранённые изменения`
-                : `${binding.sectionLabel} · Можно спокойно редактировать этот блок`);
+                ? `${binding.sectionLabel} · На странице есть другие несохранённые изменения`
+                : `${binding.sectionLabel} · Этот блок можно спокойно править`);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
