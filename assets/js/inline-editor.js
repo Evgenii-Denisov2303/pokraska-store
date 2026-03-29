@@ -50,6 +50,10 @@
         const style = document.createElement('style');
         style.id = STYLE_ID;
         style.textContent = `
+            :root {
+                --p-inline-dock-offset: 124px;
+            }
+
             body.${MODE_CLASS} [data-inline-edit-id] {
                 cursor: pointer;
                 outline: 2px solid transparent;
@@ -484,7 +488,7 @@
                 position: fixed;
                 top: 24px;
                 right: 24px;
-                bottom: 108px;
+                bottom: var(--p-inline-dock-offset);
                 width: min(420px, calc(100vw - 32px));
                 max-height: none;
                 display: flex;
@@ -735,7 +739,7 @@
                 position: fixed;
                 top: 24px;
                 right: 24px;
-                bottom: 108px;
+                bottom: var(--p-inline-dock-offset);
                 width: min(400px, calc(100vw - 32px));
                 max-height: none;
                 overflow: auto;
@@ -1190,7 +1194,7 @@
                     top: auto;
                     left: 12px;
                     right: 12px;
-                    bottom: 104px;
+                    bottom: var(--p-inline-dock-offset);
                     width: auto;
                     max-height: none;
                 }
@@ -1199,7 +1203,7 @@
                     top: auto;
                     left: 12px;
                     right: 12px;
-                    bottom: 104px;
+                    bottom: var(--p-inline-dock-offset);
                     width: auto;
                     max-height: none;
                 }
@@ -1222,7 +1226,7 @@
                 .p-inline-overview {
                     left: 8px;
                     right: 8px;
-                    bottom: 96px;
+                    bottom: var(--p-inline-dock-offset);
                     max-height: none;
                     border-radius: 20px;
                     padding: 16px 16px 12px;
@@ -2063,6 +2067,26 @@
         return `/admin/?${params.toString()}`;
     }
 
+    function updateDockOffset() {
+        const fallback = 124;
+        if (!ui.root || !document?.documentElement) {
+            return;
+        }
+
+        const activeDock = state.enabled && ui.toolbar && !ui.toolbar.hidden
+            ? ui.toolbar
+            : ui.launcher;
+
+        if (!activeDock || activeDock.hidden) {
+            document.documentElement.style.setProperty('--p-inline-dock-offset', `${fallback}px`);
+            return;
+        }
+
+        const rect = activeDock.getBoundingClientRect();
+        const offset = Math.max(fallback, Math.ceil(rect.height + 40));
+        document.documentElement.style.setProperty('--p-inline-dock-offset', `${offset}px`);
+    }
+
     function renderToolbar() {
         if (!ui.launcher) return;
 
@@ -2137,6 +2161,7 @@
         }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
+        updateDockOffset();
         renderOverviewPanel();
     }
 
@@ -3944,7 +3969,10 @@
         document.addEventListener('keydown', handleKeydown);
         document.addEventListener('paste', handlePaste, true);
         window.addEventListener('scroll', hideHoverLabel, true);
-        window.addEventListener('resize', hideHoverLabel);
+        window.addEventListener('resize', () => {
+            hideHoverLabel();
+            updateDockOffset();
+        });
         window.addEventListener('beforeunload', handleBeforeUnload);
         refreshEnvironment();
 
