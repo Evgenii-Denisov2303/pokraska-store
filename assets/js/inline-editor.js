@@ -685,6 +685,7 @@
             }
 
             .p-inline-panel__example-chip {
+                border: 0;
                 display: inline-flex;
                 align-items: center;
                 min-height: 28px;
@@ -692,8 +693,17 @@
                 border-radius: 999px;
                 background: rgba(15, 23, 42, 0.05);
                 color: #475569;
+                font: inherit;
                 font-size: 12px;
                 font-weight: 700;
+                cursor: pointer;
+                transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+            }
+
+            .p-inline-panel__example-chip:hover {
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                transform: translateY(-1px);
             }
 
             .p-inline-panel__collection {
@@ -1856,7 +1866,7 @@
         if (binding.type === 'object') {
             const fields = getBindingEditorFields(binding);
             if (fields.some(isLinkLikeField)) {
-                return 'Меняйте текст, адрес перехода и значок справа.';
+                return 'Меняйте текст, переход и значок справа.';
             }
             return 'Меняйте текст и параметры этого блока справа.';
         }
@@ -2664,22 +2674,56 @@
         return '';
     }
 
-    function createFieldExamples(field) {
+    function getLinkExamples(field) {
+        const key = String(field?.key || '').toLowerCase();
+        if (key.includes('phone')) {
+            return [
+                { label: 'Телефон', value: 'tel:+79376154629' }
+            ];
+        }
+        if (key.includes('email')) {
+            return [
+                { label: 'Почта', value: 'mailto:mail@example.ru' }
+            ];
+        }
+        if (key.includes('telegram')) {
+            return [
+                { label: 'Telegram', value: 'https://t.me/' }
+            ];
+        }
+        if (key.includes('whatsapp')) {
+            return [
+                { label: 'WhatsApp', value: 'https://wa.me/7' }
+            ];
+        }
+        return [
+            { label: 'Страница', value: '/pages/services.html' },
+            { label: 'Блок', value: '#contacts' },
+            { label: 'Телефон', value: 'tel:+79376154629' },
+            { label: 'Telegram', value: 'https://t.me/' }
+        ];
+    }
+
+    function createFieldExamples(field, control) {
         if (!isLinkLikeField(field)) return null;
 
-        const examples = [
-            '/pages/services.html',
-            '#contacts',
-            'tel:+79376154629',
-            'https://t.me/...'
-        ];
+        const examples = getLinkExamples(field);
 
         const container = document.createElement('div');
         container.className = 'p-inline-panel__examples';
         examples.forEach((example) => {
-            const chip = document.createElement('span');
+            const chip = document.createElement('button');
+            chip.type = 'button';
             chip.className = 'p-inline-panel__example-chip';
-            chip.textContent = example;
+            chip.textContent = example.label;
+            chip.title = example.value;
+            chip.addEventListener('click', () => {
+                control.value = example.value;
+                control.dispatchEvent(new Event('input', { bubbles: true }));
+                control.focus();
+                const cursorPosition = control.value.length;
+                control.setSelectionRange?.(cursorPosition, cursorPosition);
+            });
             container.appendChild(chip);
         });
         return container;
@@ -2695,7 +2739,7 @@
 
         const label = document.createElement('label');
         label.className = 'p-inline-panel__label';
-        label.textContent = getFieldDisplayLabel(field);
+        label.textContent = getFieldDisplayLabel(field, binding);
         wrapper.appendChild(label);
 
         let control;
@@ -2733,7 +2777,7 @@
             wrapper.appendChild(createIconPicker(control));
         }
 
-        const examples = createFieldExamples(field);
+        const examples = createFieldExamples(field, control);
         if (examples) {
             wrapper.appendChild(examples);
         }
@@ -2758,16 +2802,29 @@
         return wrapper;
     }
 
-    function getFieldDisplayLabel(field) {
+    function getFieldDisplayLabel(field, binding = null) {
         const key = String(field?.key || '').toLowerCase();
         const label = String(field?.label || '').trim();
         if (isLinkLikeField(field)) {
             if (key.includes('phone')) return 'Номер для кнопки';
             if (key.includes('email')) return 'Почта для кнопки';
-            return 'Куда вести';
+            return 'Куда вести после нажатия';
         }
         if (isIconField(field)) {
             return 'Значок рядом с текстом';
+        }
+        if (binding?.type === 'object' && isPrimaryTextField(field)) {
+            return 'Текст кнопки';
+        }
+        if ((binding?.type === 'text' || binding?.type === 'html') && /заголов/i.test(binding.label || '')) {
+            return 'Новый заголовок';
+        }
+        if (binding?.type === 'text' || binding?.type === 'html') {
+            return 'Новый текст';
+        }
+        if (binding?.type === 'image' && isImageDescriptionField(field)) {
+            if (key === 'alt') return 'Короткое описание';
+            if (key === 'caption') return 'Подпись под фото';
         }
         return label || field.key;
     }
@@ -2934,7 +2991,7 @@
                 } : null,
                 linkFields.length ? {
                     title: 'Куда вести',
-                    meta: 'Укажите, что должно открываться после нажатия.',
+                    meta: 'Укажите адрес перехода или выберите готовый вариант ниже.',
                     fields: linkFields
                 } : null,
                 iconFields.length ? {
@@ -2960,10 +3017,12 @@
 
         const title = /заголов/i.test(binding.label || '')
             ? 'Заголовок'
-            : 'Текст на странице';
+            : 'Текст';
         return [{
             title,
-            meta: 'То, что увидит посетитель на странице.',
+            meta: /заголов/i.test(binding.label || '')
+                ? 'Крупный текст, который первым видит посетитель.'
+                : 'То, что увидит посетитель на странице.',
             fields: editorFields
         }];
     }
@@ -3369,7 +3428,7 @@
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера.';
+            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера. Потом нажмите «Сохранить» сверху.';
             uploadZone.appendChild(uploadMeta);
 
             const uploadFile = document.createElement('div');
