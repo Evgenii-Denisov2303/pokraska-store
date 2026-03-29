@@ -222,7 +222,14 @@
             }
 
             .p-inline-toolbar__eyebrow { color: #93c5fd; }
-            .p-inline-panel__kicker { color: #64748b; }
+            .p-inline-panel__kicker {
+                width: fit-content;
+                padding: 0 10px;
+                min-height: 24px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.08);
+                color: #1d4ed8;
+            }
 
             .p-inline-toolbar__title,
             .p-inline-panel__title {
@@ -518,8 +525,9 @@
                 margin: -20px -20px 18px;
                 padding: 20px 20px 16px;
                 border-radius: 26px 26px 18px 18px;
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(255, 255, 255, 0.96));
-                border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(246, 250, 255, 0.98));
+                border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+                box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
                 backdrop-filter: blur(12px);
             }
 
@@ -555,25 +563,30 @@
                 flex: 0 0 auto;
             }
 
+            .p-inline-panel__section {
+                display: grid;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 20px;
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.96));
+                border: 1px solid rgba(148, 163, 184, 0.16);
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__section-head {
+                display: grid;
+                gap: 4px;
+                padding: 0;
+            }
+
             .p-inline-panel__group {
                 display: grid;
                 gap: 10px;
                 margin-bottom: 0;
                 padding: 14px;
                 border-radius: 18px;
-                background: #f8fafc;
-                border: 1px solid rgba(148, 163, 184, 0.16);
-            }
-
-            .p-inline-panel__section {
-                display: grid;
-                gap: 10px;
-            }
-
-            .p-inline-panel__section-head {
-                display: grid;
-                gap: 4px;
-                padding: 0 2px;
+                background: #ffffff;
+                border: 1px solid rgba(148, 163, 184, 0.14);
             }
 
             .p-inline-panel__section-title {
@@ -592,13 +605,13 @@
 
             .p-inline-panel__form {
                 display: grid;
-                gap: 14px;
+                gap: 16px;
                 flex: 1 1 auto;
                 min-height: 0;
                 overflow-y: auto;
                 overscroll-behavior: contain;
                 padding-right: 6px;
-                padding-bottom: 8px;
+                padding-bottom: 10px;
             }
 
             .p-inline-panel__label {
@@ -1201,8 +1214,8 @@
                 display: grid;
                 gap: 12px;
                 padding: 14px 20px 18px;
-                border-top: 1px solid rgba(148, 163, 184, 0.14);
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.995));
+                border-top: 1px solid rgba(148, 163, 184, 0.18);
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.998));
                 backdrop-filter: blur(12px);
                 min-height: 72px;
             }
