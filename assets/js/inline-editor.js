@@ -1608,6 +1608,7 @@
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
+        ui.panelActions = panel.querySelector('.p-inline-panel__actions');
         ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
         ui.panelRemoveBtn = panel.querySelector('[data-inline-panel-action="remove"]');
         ui.panelApplyBtn = panel.querySelector('[data-inline-panel-action="apply"]');
@@ -3228,6 +3229,7 @@
             : (hasUnsaved
                 ? `${binding.sectionLabel} · На странице есть несохранённые изменения · Ctrl+Enter — сохранить`
                 : `${binding.sectionLabel} · Изменений в блоке пока нет`);
+        let hasVisibleAction = false;
         if (ui.panelRemoveBtn) {
             const collectionState = getBindingCollectionState(binding);
             const nouns = getCollectionItemNouns(binding);
@@ -3235,12 +3237,18 @@
             ui.panelRemoveBtn.hidden = !canRemove;
             ui.panelRemoveBtn.disabled = !canRemove;
             ui.panelRemoveBtn.textContent = canRemove ? nouns.remove : 'Удалить';
+            hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
+            ui.panelApplyBtn.hidden = !hasUnsaved;
             ui.panelApplyBtn.disabled = !hasUnsaved;
             ui.panelApplyBtn.classList.toggle('is-active', hasUnsaved);
             ui.panelApplyBtn.classList.toggle('is-idle', !hasUnsaved);
-            ui.panelApplyBtn.textContent = hasUnsaved ? 'Сохранить' : 'Готово';
+            ui.panelApplyBtn.textContent = 'Сохранить';
+            hasVisibleAction = hasVisibleAction || hasUnsaved;
+        }
+        if (ui.panelActions) {
+            ui.panelActions.hidden = !hasVisibleAction;
         }
     }
 
