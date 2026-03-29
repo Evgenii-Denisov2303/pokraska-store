@@ -141,7 +141,7 @@
             }
 
             .p-inline-toolbar {
-                width: min(500px, calc(100vw - 32px));
+                width: min(640px, calc(100vw - 32px));
                 background: rgba(15, 23, 42, 0.96);
                 color: #e2e8f0;
                 border-radius: 20px;
@@ -151,8 +151,8 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact {
-                width: auto;
-                max-width: min(520px, calc(100vw - 32px));
+                width: min(640px, calc(100vw - 32px));
+                max-width: none;
                 padding: 12px 14px;
                 border-radius: 22px;
             }
@@ -179,10 +179,10 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
-                margin-top: 0;
+                margin-top: 12px;
                 margin-left: 0;
-                justify-content: flex-end;
-                flex-wrap: wrap;
+                justify-content: flex-start;
+                flex-wrap: nowrap;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__btn {
@@ -238,14 +238,18 @@
                 display: flex;
                 flex-wrap: nowrap;
                 align-items: center;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 gap: 8px;
                 margin-top: 14px;
             }
 
             .p-inline-toolbar__actions {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content;
                 overflow-x: auto;
                 scrollbar-width: none;
+                padding-bottom: 2px;
             }
 
             .p-inline-toolbar__actions::-webkit-scrollbar {

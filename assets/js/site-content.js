@@ -14,7 +14,7 @@
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';
-        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-toolbar-live-state`;
+        script.src = `${base || ''}/assets/js/inline-editor.js?v=20260329-inline-toolbar-row-fix`;
         document.head.appendChild(script);
     }
 
