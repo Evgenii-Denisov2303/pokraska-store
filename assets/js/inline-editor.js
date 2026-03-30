@@ -497,9 +497,20 @@
 
             .p-inline-panel__icon-picker {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
-                gap: 8px;
+                gap: 10px;
                 margin-top: 0;
+            }
+
+            .p-inline-panel__icon-picker-open {
+                min-height: 44px;
+                justify-content: center;
+            }
+
+            .p-inline-panel__icon-picker-note {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #64748b;
             }
 
             .p-inline-panel__icon-library {
@@ -625,6 +636,137 @@
                 color: #64748b;
                 font-size: 13px;
                 line-height: 1.5;
+            }
+
+            .p-inline-icon-modal[hidden] {
+                display: none !important;
+            }
+
+            .p-inline-icon-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 5004;
+                display: grid;
+                place-items: center;
+                padding: 20px;
+            }
+
+            .p-inline-icon-modal__backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.56);
+                backdrop-filter: blur(10px);
+            }
+
+            .p-inline-icon-modal__dialog {
+                position: relative;
+                z-index: 1;
+                width: min(920px, calc(100vw - 24px));
+                max-height: min(86vh, 880px);
+                display: grid;
+                gap: 16px;
+                overflow: hidden;
+                border-radius: 28px;
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(247, 250, 255, 0.98));
+                box-shadow: 0 34px 80px rgba(15, 23, 42, 0.24);
+                padding: 22px 22px 20px;
+            }
+
+            .p-inline-icon-modal__head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 14px;
+            }
+
+            .p-inline-icon-modal__head-copy {
+                display: grid;
+                gap: 4px;
+                min-width: 0;
+            }
+
+            .p-inline-icon-modal__title {
+                margin: 0;
+                font-size: 24px;
+                line-height: 1.1;
+                color: #0f172a;
+                text-wrap: balance;
+            }
+
+            .p-inline-icon-modal__meta {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.6;
+                color: #64748b;
+                text-wrap: pretty;
+            }
+
+            .p-inline-icon-modal__close {
+                width: 42px;
+                height: 42px;
+                border: 0;
+                border-radius: 999px;
+                background: #eef2ff;
+                color: #1e3a8a;
+                font-size: 20px;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-icon-modal__topbar {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 14px;
+                align-items: center;
+            }
+
+            .p-inline-icon-modal__selected {
+                margin: 0;
+            }
+
+            .p-inline-icon-modal__search {
+                width: 100%;
+                min-height: 46px;
+                padding: 0 16px;
+                border-radius: 16px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                background: #fff;
+                color: #0f172a;
+                font: inherit;
+            }
+
+            .p-inline-icon-modal__search:focus {
+                outline: none;
+                border-color: rgba(37, 99, 235, 0.46);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-icon-modal__meta-row {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                color: #64748b;
+            }
+
+            .p-inline-icon-modal__scroll {
+                max-height: min(58vh, 560px);
+                overflow: auto;
+                padding-right: 6px;
+            }
+
+            @media (max-width: 900px) {
+                .p-inline-icon-modal__dialog {
+                    width: min(100vw - 16px, 760px);
+                    max-height: calc(100vh - 16px);
+                    padding: 18px 18px 16px;
+                }
+
+                .p-inline-icon-modal__topbar {
+                    grid-template-columns: 1fr;
+                }
             }
 
             .p-inline-panel__icon-option {
@@ -1896,6 +2038,7 @@
         bindingMap: new Map(),
         files: new Map(),
         activeBindingId: '',
+        activeIconPicker: null,
         toastTimer: 0
     };
 
@@ -2052,11 +2195,46 @@
         hover.className = 'p-inline-hover';
         hover.hidden = true;
 
+        const iconModal = document.createElement('div');
+        iconModal.className = 'p-inline-icon-modal';
+        iconModal.hidden = true;
+        iconModal.innerHTML = `
+            <div class="p-inline-icon-modal__backdrop" data-inline-icon-modal-close></div>
+            <div class="p-inline-icon-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="p-inline-icon-modal-title">
+                <div class="p-inline-icon-modal__head">
+                    <div class="p-inline-icon-modal__head-copy">
+                        <span class="p-inline-panel__kicker">Иконки</span>
+                        <h2 class="p-inline-icon-modal__title" id="p-inline-icon-modal-title">Выбор иконки</h2>
+                        <p class="p-inline-icon-modal__meta">Выберите значок для кнопки или ссылки. Можно искать по словам: телефон, покраска, доставка, ворота.</p>
+                    </div>
+                    <button class="p-inline-icon-modal__close" type="button" aria-label="Закрыть">&times;</button>
+                </div>
+                <div class="p-inline-icon-modal__topbar">
+                    <div class="p-inline-panel__icon-preview p-inline-icon-modal__selected">
+                        <span class="p-inline-panel__icon-preview-badge" data-inline-icon-modal-badge>—</span>
+                        <div class="p-inline-panel__icon-preview-text">
+                            <span class="p-inline-panel__icon-preview-title">Выбрано сейчас</span>
+                            <span class="p-inline-panel__icon-preview-value" data-inline-icon-modal-value>Без значка</span>
+                        </div>
+                    </div>
+                    <button class="p-inline-panel__btn" type="button" data-inline-icon-clear>Без иконки</button>
+                </div>
+                <input class="p-inline-icon-modal__search" type="search" placeholder="Найти иконку: телефон, ворота, доставка...">
+                <div class="p-inline-icon-modal__meta-row">
+                    <span data-inline-icon-modal-count>Загрузка библиотеки…</span>
+                </div>
+                <div class="p-inline-icon-modal__scroll">
+                    <div class="p-inline-panel__icon-groups" data-inline-icon-modal-groups></div>
+                </div>
+            </div>
+        `;
+
         document.body.appendChild(root);
         document.body.appendChild(panel);
         document.body.appendChild(overview);
         document.body.appendChild(toast);
         document.body.appendChild(hover);
+        document.body.appendChild(iconModal);
 
         ui.root = root;
         ui.launcher = root.querySelector('.p-inline-launcher');
@@ -2086,6 +2264,13 @@
         ui.overviewBody = overview.querySelector('.p-inline-overview__body');
         ui.toast = toast;
         ui.hover = hover;
+        ui.iconModal = iconModal;
+        ui.iconModalSearch = iconModal.querySelector('.p-inline-icon-modal__search');
+        ui.iconModalGroups = iconModal.querySelector('[data-inline-icon-modal-groups]');
+        ui.iconModalCount = iconModal.querySelector('[data-inline-icon-modal-count]');
+        ui.iconModalBadge = iconModal.querySelector('[data-inline-icon-modal-badge]');
+        ui.iconModalValue = iconModal.querySelector('[data-inline-icon-modal-value]');
+        ui.iconModalClear = iconModal.querySelector('[data-inline-icon-clear]');
     }
 
     function getBindingKindLabel(binding) {
@@ -2667,6 +2852,7 @@
         if (!options.skipConfirm && !confirmDiscardPanelChanges()) {
             return false;
         }
+        closeIconModal();
         ui.panel.hidden = true;
         state.activeBindingId = '';
         state.panelReturnToOverview = false;
@@ -2698,6 +2884,7 @@
         state.overviewOpen = false;
         state.overviewQuery = '';
         state.enabled = false;
+        closeIconModal();
         if (!closePanel()) {
             state.enabled = true;
             return;
@@ -3040,7 +3227,7 @@
         } else if (isIconField(field)) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
-            hint.textContent = 'Выберите готовый значок ниже или оставьте блок без значка.';
+            hint.textContent = 'Откройте библиотеку иконок в отдельном окне или оставьте блок без значка.';
             wrapper.appendChild(hint);
         }
 
@@ -3122,7 +3309,74 @@
         return button;
     }
 
-    function renderIconOptionGroups(container, options, control, updateActiveState) {
+    function closeIconModal() {
+        if (!ui.iconModal || ui.iconModal.hidden) return;
+        ui.iconModal.hidden = true;
+        state.activeIconPicker = null;
+        if (ui.iconModalSearch) {
+            ui.iconModalSearch.value = '';
+        }
+    }
+
+    function renderIconModalSelection(control) {
+        if (!ui.iconModalBadge || !ui.iconModalValue) return;
+        const nextValue = String(control?.value || '').trim();
+        ui.iconModalBadge.innerHTML = '';
+        if (nextValue) {
+            const icon = document.createElement('i');
+            icon.className = nextValue;
+            icon.setAttribute('aria-hidden', 'true');
+            ui.iconModalBadge.appendChild(icon);
+            ui.iconModalValue.textContent = getInlineIconOptionLabel(nextValue);
+        } else {
+            ui.iconModalBadge.textContent = '—';
+            ui.iconModalValue.textContent = 'Без значка';
+        }
+    }
+
+    function applyIconChoice(control, updateActiveState, nextValue, options = {}) {
+        control.value = nextValue;
+        control.dispatchEvent(new Event('input', { bubbles: true }));
+        control.dispatchEvent(new Event('change', { bubbles: true }));
+        updateActiveState();
+        renderIconModalSelection(control);
+        if (options.closeModal !== false) {
+            closeIconModal();
+        }
+    }
+
+    function renderIconModalOptions() {
+        const context = state.activeIconPicker;
+        if (!context || !ui.iconModalGroups || !ui.iconModalCount) return;
+
+        const filteredOptions = filterInlineIconOptions(ui.iconModalSearch?.value);
+        const selectableOptions = filteredOptions.filter((option) => option.value);
+        ui.iconModalCount.textContent = ui.iconModalSearch?.value?.trim()
+            ? `Найдено: ${selectableOptions.length} вариантов`
+            : `Всего доступно: ${INLINE_ICON_OPTIONS.filter((option) => option.value).length} иконок`;
+
+        renderIconOptionGroups(
+            ui.iconModalGroups,
+            selectableOptions,
+            context.control,
+            context.updateActiveState,
+            (value) => applyIconChoice(context.control, context.updateActiveState, value, { closeModal: true })
+        );
+        renderIconModalSelection(context.control);
+    }
+
+    function openIconModal(control, updateActiveState) {
+        if (!ui.iconModal) return;
+        state.activeIconPicker = { control, updateActiveState };
+        ui.iconModal.hidden = false;
+        renderIconModalOptions();
+        window.setTimeout(() => {
+            ui.iconModalSearch?.focus();
+            ui.iconModalSearch?.select();
+        }, 0);
+    }
+
+    function renderIconOptionGroups(container, options, control, updateActiveState, onSelect = null) {
         container.innerHTML = '';
 
         if (!options.length) {
@@ -3162,7 +3416,11 @@
             const grid = document.createElement('div');
             grid.className = 'p-inline-panel__icon-group-grid';
             groupOptions.forEach((option) => {
-                grid.appendChild(createIconOptionButton(option, control, updateActiveState));
+                const button = createIconOptionButton(option, control, updateActiveState);
+                if (typeof onSelect === 'function') {
+                    button.addEventListener('click', () => onSelect(option.value));
+                }
+                grid.appendChild(button);
             });
             group.appendChild(grid);
             container.appendChild(group);
@@ -3210,44 +3468,7 @@
 
     function createIconPicker(control) {
         const wrapper = document.createElement('div');
-        wrapper.className = 'p-inline-panel__icon-library';
-
-        const quickTitle = document.createElement('div');
-        quickTitle.className = 'p-inline-panel__icon-library-title';
-        quickTitle.textContent = 'Часто используют';
-        wrapper.appendChild(quickTitle);
-
-        const picker = document.createElement('div');
-        picker.className = 'p-inline-panel__icon-picker';
-
-        const library = document.createElement('details');
-        library.className = 'p-inline-panel__icon-library-details';
-
-        const summary = document.createElement('summary');
-        summary.className = 'p-inline-panel__icon-library-summary';
-        summary.innerHTML = `
-            <span>Вся библиотека иконок</span>
-            <span class="p-inline-panel__icon-library-count">${INLINE_ICON_OPTIONS.length - 1} вариантов</span>
-        `;
-        library.appendChild(summary);
-
-        const libraryBody = document.createElement('div');
-        libraryBody.className = 'p-inline-panel__icon-library-body';
-
-        const search = document.createElement('input');
-        search.type = 'search';
-        search.className = 'p-inline-panel__icon-search';
-        search.placeholder = 'Найти иконку: телефон, ворота, доставка...';
-        libraryBody.appendChild(search);
-
-        const meta = document.createElement('div');
-        meta.className = 'p-inline-panel__icon-library-meta';
-        libraryBody.appendChild(meta);
-
-        const libraryGroups = document.createElement('div');
-        libraryGroups.className = 'p-inline-panel__icon-groups';
-        libraryBody.appendChild(libraryGroups);
-        library.appendChild(libraryBody);
+        wrapper.className = 'p-inline-panel__icon-picker';
 
         const updateActiveState = () => {
             const currentValue = String(control.value || '').trim();
@@ -3256,35 +3477,20 @@
             });
         };
 
-        INLINE_ICON_OPTIONS
-            .filter((option) => option.featured)
-            .forEach((option) => {
-                picker.appendChild(createIconOptionButton(option, control, updateActiveState));
-            });
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'p-inline-panel__btn p-inline-panel__icon-picker-open';
+        button.textContent = 'Выбрать иконку';
+        button.addEventListener('click', () => openIconModal(control, updateActiveState));
+        wrapper.appendChild(button);
 
-        const renderLibrary = () => {
-            const filteredOptions = filterInlineIconOptions(search.value);
-            const selectableOptions = filteredOptions.filter((option) => option.value || !search.value.trim());
-            meta.textContent = search.value.trim()
-                ? `Найдено: ${filteredOptions.length} ${filteredOptions.length === 1 ? 'иконка' : 'иконок'}.`
-                : 'Откройте нужную группу или начните поиск по смыслу.';
-            renderIconOptionGroups(libraryGroups, selectableOptions, control, updateActiveState);
-            updateActiveState();
-        };
+        const note = document.createElement('p');
+        note.className = 'p-inline-panel__icon-picker-note';
+        note.textContent = 'Откроется отдельное окно со всеми доступными иконками и поиском по словам.';
+        wrapper.appendChild(note);
 
         control.addEventListener('input', updateActiveState);
-        search.addEventListener('input', renderLibrary);
-        library.addEventListener('toggle', () => {
-            if (library.open) {
-                window.setTimeout(() => search.focus(), 0);
-            }
-        });
-
-        renderLibrary();
         updateActiveState();
-
-        wrapper.appendChild(picker);
-        wrapper.appendChild(library);
         return wrapper;
     }
 
@@ -4672,7 +4878,7 @@
 
     function handleDocumentClick(event) {
         if (!state.enabled) return;
-        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target)) return;
+        if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target) || ui.iconModal?.contains(event.target)) return;
 
         const target = event.target.closest('[data-inline-edit-id]');
         if (!target) {
@@ -4784,6 +4990,12 @@
         }
 
         if (event.key !== 'Escape') return;
+
+        if (ui.iconModal && !ui.iconModal.hidden) {
+            event.preventDefault();
+            closeIconModal();
+            return;
+        }
 
         if (!ui.panel.hidden) {
             if (state.panelReturnToOverview) {
@@ -4926,6 +5138,18 @@
                 updatePanelMeta(binding);
                 renderToolbar();
             }
+        });
+        ui.iconModal?.addEventListener('click', (event) => {
+            if (event.target?.matches?.('[data-inline-icon-modal-close]')) {
+                closeIconModal();
+            }
+        });
+        ui.iconModal?.querySelector('.p-inline-icon-modal__close')?.addEventListener('click', closeIconModal);
+        ui.iconModalSearch?.addEventListener('input', renderIconModalOptions);
+        ui.iconModalClear?.addEventListener('click', () => {
+            const context = state.activeIconPicker;
+            if (!context) return;
+            applyIconChoice(context.control, context.updateActiveState, '', { closeModal: true });
         });
         ui.overview.querySelector('.p-inline-overview__close').addEventListener('click', () => {
             toggleOverview(false);
