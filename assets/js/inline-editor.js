@@ -143,7 +143,7 @@
             .p-inline-toolbar[hidden],
             .p-inline-panel[hidden],
             .p-inline-toast[hidden] {
-                display: none;
+                display: none !important;
             }
 
             .p-inline-toolbar__btn[hidden],
