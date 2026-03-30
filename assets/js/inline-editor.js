@@ -127,6 +127,26 @@
         { value: 'pages/gallery.html', label: 'Работы' },
         { value: 'pages/contacts.html', label: 'Контакты' }
     ];
+    const INLINE_BUTTON_STYLE_LIBRARY = {
+        primary: {
+            value: 'primary',
+            label: 'Главная',
+            meta: 'Яркая кнопка для главного действия.',
+            previewClass: 'primary'
+        },
+        secondary: {
+            value: 'secondary',
+            label: 'Спокойная',
+            meta: 'Более мягкий вариант рядом с главной кнопкой.',
+            previewClass: 'secondary'
+        },
+        outline: {
+            value: 'outline',
+            label: 'Контурная',
+            meta: 'Кнопка с обводкой, без плотной заливки.',
+            previewClass: 'outline'
+        }
+    };
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
@@ -1151,6 +1171,94 @@
                 font-weight: 600;
             }
 
+            .p-inline-panel__style-picker {
+                display: grid;
+                gap: 10px;
+            }
+
+            .p-inline-panel__style-options {
+                display: grid;
+                gap: 10px;
+            }
+
+            .p-inline-panel__style-option {
+                display: grid;
+                gap: 8px;
+                width: 100%;
+                padding: 14px;
+                border-radius: 18px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                background: #ffffff;
+                text-align: left;
+                cursor: pointer;
+                transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+            }
+
+            .p-inline-panel__style-option:hover {
+                border-color: rgba(59, 130, 246, 0.38);
+                box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+                transform: translateY(-1px);
+            }
+
+            .p-inline-panel__style-option.is-active {
+                border-color: rgba(37, 99, 235, 0.56);
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.94), rgba(255, 255, 255, 1));
+                box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-panel__style-option-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            .p-inline-panel__style-option-title {
+                font-size: 15px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__style-option-meta {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
+            .p-inline-panel__style-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 34px;
+                padding: 0 14px;
+                border-radius: 999px;
+                font-size: 13px;
+                font-weight: 800;
+                white-space: nowrap;
+            }
+
+            .p-inline-panel__style-badge--primary,
+            .p-inline-panel__action-preview-button--primary {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                color: #ffffff;
+                box-shadow: 0 14px 28px rgba(37, 99, 235, 0.16);
+            }
+
+            .p-inline-panel__style-badge--secondary,
+            .p-inline-panel__action-preview-button--secondary {
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.96), rgba(219, 234, 254, 0.96));
+                color: #1d4ed8;
+                box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.32);
+            }
+
+            .p-inline-panel__style-badge--outline,
+            .p-inline-panel__action-preview-button--outline {
+                background: #ffffff;
+                color: #1d4ed8;
+                box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.34);
+            }
+
             .p-inline-panel__collection {
                 display: grid;
                 gap: 12px;
@@ -1225,12 +1333,9 @@
                 max-width: 100%;
                 padding: 0 18px;
                 border-radius: 999px;
-                background: linear-gradient(135deg, #2563eb, #1d4ed8);
-                color: #ffffff;
                 font-size: 15px;
                 font-weight: 800;
                 line-height: 1.2;
-                box-shadow: 0 14px 28px rgba(37, 99, 235, 0.16);
             }
 
             .p-inline-panel__action-preview-button i {
@@ -3203,6 +3308,31 @@
         return '';
     }
 
+    function isStyleField(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        return key === 'style'
+            || key === 'variant'
+            || /стиль/.test(label)
+            || /primary\/secondary|primary\/outline|primary\/secondary\/outline/.test(label);
+    }
+
+    function getStyleOptionsForField(field, currentValue = '') {
+        const source = `${field?.label || ''} ${field?.hint || ''}`.toLowerCase();
+        const allowedValues = ['primary', 'secondary', 'outline'].filter((value) => source.includes(value));
+        const values = allowedValues.length ? allowedValues : ['primary', 'secondary', 'outline'];
+        if (currentValue && !values.includes(String(currentValue).trim())) {
+            values.push(String(currentValue).trim());
+        }
+        return values
+            .map((value) => INLINE_BUTTON_STYLE_LIBRARY[value] || {
+                value,
+                label: value,
+                meta: 'Текущий вариант оформления кнопки.',
+                previewClass: 'outline'
+            });
+    }
+
     function isInlineNestedPage() {
         return /\/pages\/[^/]+$/i.test(String(window.location.pathname || '').replace(/\\/g, '/'));
     }
@@ -3663,6 +3793,46 @@
         return wrapper;
     }
 
+    function createStylePicker(field, control) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'p-inline-panel__style-picker';
+
+        const optionsWrap = document.createElement('div');
+        optionsWrap.className = 'p-inline-panel__style-options';
+        wrapper.appendChild(optionsWrap);
+
+        const options = getStyleOptionsForField(field, control.value);
+        const updateActiveState = () => {
+            optionsWrap.querySelectorAll('.p-inline-panel__style-option').forEach((button) => {
+                button.classList.toggle('is-active', button.dataset.styleValue === control.value);
+            });
+        };
+
+        options.forEach((option) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'p-inline-panel__style-option';
+            button.dataset.styleValue = option.value;
+            button.innerHTML = `
+                <div class="p-inline-panel__style-option-top">
+                    <span class="p-inline-panel__style-option-title">${option.label}</span>
+                    <span class="p-inline-panel__style-badge p-inline-panel__style-badge--${option.previewClass || 'outline'}">Пример</span>
+                </div>
+                <p class="p-inline-panel__style-option-meta">${option.meta || 'Выберите, как будет выглядеть кнопка.'}</p>
+            `;
+            button.addEventListener('click', () => {
+                control.value = option.value;
+                control.dispatchEvent(new Event('input', { bubbles: true }));
+                control.dispatchEvent(new Event('change', { bubbles: true }));
+                updateActiveState();
+            });
+            optionsWrap.appendChild(button);
+        });
+
+        updateActiveState();
+        return wrapper;
+    }
+
     function getLinkExamples(field) {
         const key = String(field?.key || '').toLowerCase();
         if (key.includes('phone')) {
@@ -3702,7 +3872,7 @@
     function createFieldGroup(field, value, binding = null) {
         const wrapper = document.createElement('div');
         wrapper.className = 'p-inline-panel__group';
-        const isPrimary = isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field);
+        const isPrimary = isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field) && !isStyleField(field);
         if (isPrimary) {
             wrapper.classList.add('p-inline-panel__group--primary');
         }
@@ -3724,7 +3894,7 @@
         } else {
             control = document.createElement('input');
             control.className = 'p-inline-panel__control';
-            control.type = isLinkLikeField(field)
+            control.type = (isLinkLikeField(field) || isStyleField(field))
                 ? 'hidden'
                 : (field.type === 'number' ? 'number' : 'text');
             control.value = value ?? '';
@@ -3748,6 +3918,10 @@
             wrapper.appendChild(createInlineLinkBuilder(field, control));
         }
 
+        if (isStyleField(field)) {
+            wrapper.appendChild(createStylePicker(field, control));
+        }
+
         if (isIconField(field)) {
             wrapper.appendChild(createIconPreview(control));
             wrapper.appendChild(createIconPicker(control));
@@ -3762,6 +3936,11 @@
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
             hint.textContent = field.hint;
+            wrapper.appendChild(hint);
+        } else if (isStyleField(field)) {
+            const hint = document.createElement('p');
+            hint.className = 'p-inline-panel__hint';
+            hint.textContent = 'Можно спокойно попробовать разные варианты: на странице сразу видно, какой стиль подходит лучше.';
             wrapper.appendChild(hint);
         } else if (isLinkLikeField(field)) {
             const hint = document.createElement('p');
@@ -3781,6 +3960,9 @@
     function getFieldDisplayLabel(field, binding = null) {
         const key = String(field?.key || '').toLowerCase();
         const label = String(field?.label || '').trim();
+        if (isStyleField(field)) {
+            return 'Вид кнопки';
+        }
         if (isLinkLikeField(field)) {
             if (key.includes('phone')) return 'Номер для кнопки';
             if (key.includes('email')) return 'Почта для кнопки';
@@ -4106,8 +4288,9 @@
             const primaryFields = editorFields.filter(isPrimaryTextField);
             const linkFields = editorFields.filter(isLinkLikeField);
             const iconFields = editorFields.filter(isIconField);
+            const styleFields = editorFields.filter(isStyleField);
             const extraFields = editorFields.filter((field) => (
-                !isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field)
+                !isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field) && !isStyleField(field)
             ));
             const isActionLike = linkFields.length > 0;
 
@@ -4128,6 +4311,11 @@
                     title: 'Значок',
                     meta: 'Маленький значок рядом с текстом.',
                     fields: iconFields
+                } : null,
+                styleFields.length ? {
+                    title: 'Вид кнопки',
+                    meta: 'Выберите, должна ли кнопка быть яркой, спокойной или контурной.',
+                    fields: styleFields
                 } : null,
                 extraFields.length ? {
                     title: 'Редко нужно',
@@ -4176,7 +4364,8 @@
         return {
             text: String(rawText || 'Кнопка').trim() || 'Кнопка',
             href: String(rawHref || '').trim(),
-            icon: String(rawIcon || '').trim()
+            icon: String(rawIcon || '').trim(),
+            style: String(objectValue.style || objectValue.variant || 'primary').trim() || 'primary'
         };
     }
 
@@ -4194,6 +4383,7 @@
 
         const iconNode = preview.querySelector('i');
         const textNode = preview.querySelector('span');
+        const buttonNode = preview.querySelector('.p-inline-panel__action-preview-button');
         const linkNode = preview.querySelector('.p-inline-panel__action-preview-link');
 
         const render = (nextValue = value) => {
@@ -4206,6 +4396,13 @@
                 iconNode.hidden = true;
                 iconNode.className = '';
             }
+            buttonNode.classList.remove(
+                'p-inline-panel__action-preview-button--primary',
+                'p-inline-panel__action-preview-button--secondary',
+                'p-inline-panel__action-preview-button--outline'
+            );
+            const previewStyle = INLINE_BUTTON_STYLE_LIBRARY[data.style]?.previewClass || 'primary';
+            buttonNode.classList.add(`p-inline-panel__action-preview-button--${previewStyle}`);
             const description = describeInlineHref(data.href);
             linkNode.textContent = description.text;
         };
