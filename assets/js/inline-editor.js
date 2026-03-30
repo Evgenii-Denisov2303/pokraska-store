@@ -3619,7 +3619,9 @@
             appendCollectionControls(binding, collectionState);
         }
 
-        const firstControl = ui.panelForm.querySelector('input, textarea');
+        const firstControl = ui.panelForm.querySelector(
+            'textarea, select, input:not([type="file"]):not([type="hidden"])'
+        );
         if (firstControl) {
             window.setTimeout(() => {
                 firstControl.focus();
