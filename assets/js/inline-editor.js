@@ -170,23 +170,38 @@
                 width: fit-content;
                 min-width: min(360px, calc(100vw - 32px));
                 max-width: min(420px, calc(100vw - 32px));
-                padding: 12px 14px;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 10px 12px;
+                padding: 10px 12px;
                 border-radius: 22px;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__top {
                 align-items: center;
-                gap: 14px;
-                flex-wrap: wrap;
+                gap: 8px;
+                flex-wrap: nowrap;
+                min-width: 0;
+            }
+
+            .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__top > div {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                min-width: 0;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__eyebrow {
-                margin-bottom: 2px;
+                margin: 0;
+                flex: 0 0 auto;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__title {
-                font-size: 16px;
-                white-space: normal;
+                font-size: 15px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__meta {
@@ -194,15 +209,16 @@
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
-                margin-top: 12px;
-                margin-left: 0;
-                justify-content: flex-start;
+                margin-top: 0;
+                margin-left: auto;
+                justify-content: flex-end;
                 flex-wrap: nowrap;
             }
 
             .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__btn {
-                padding: 11px 14px;
-                font-size: 14px;
+                min-height: 38px;
+                padding: 9px 12px;
+                font-size: 13px;
             }
 
             .p-inline-toolbar__top {
@@ -248,7 +264,7 @@
             }
 
             .p-inline-toolbar__title { font-size: 17px; color: #f8fafc; }
-            .p-inline-panel__title { font-size: 24px; font-weight: 800; color: #0f172a; }
+            .p-inline-panel__title { font-size: 21px; font-weight: 800; color: #0f172a; }
 
             .p-inline-toolbar__meta,
             .p-inline-panel__meta {
@@ -260,7 +276,14 @@
             }
 
             .p-inline-toolbar__meta { color: rgba(226, 232, 240, 0.84); }
-            .p-inline-panel__meta { color: #64748b; }
+            .p-inline-panel__meta {
+                color: #64748b;
+                font-size: 13px;
+                line-height: 1.35;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 
             .p-inline-toolbar__actions,
             .p-inline-panel__actions {
@@ -516,17 +539,23 @@
                 display: flex;
                 align-items: flex-start;
                 justify-content: space-between;
-                gap: 12px;
+                gap: 10px;
                 position: sticky;
                 top: -20px;
                 z-index: 2;
-                margin: -20px -20px 18px;
-                padding: 20px 20px 16px;
+                margin: -20px -20px 14px;
+                padding: 16px 20px 12px;
                 border-radius: 26px 26px 18px 18px;
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(246, 250, 255, 0.98));
                 border-bottom: 1px solid rgba(148, 163, 184, 0.18);
                 box-shadow: 0 14px 28px rgba(15, 23, 42, 0.05);
                 backdrop-filter: blur(12px);
+            }
+
+            .p-inline-panel__head > div:first-child {
+                display: grid;
+                gap: 3px;
+                min-width: 0;
             }
 
             .p-inline-panel__head-actions {
@@ -1276,19 +1305,22 @@
             .p-inline-panel__actions {
                 position: static;
                 z-index: 2;
-                margin-top: 24px;
+                margin-top: 18px;
                 display: grid;
-                gap: 14px;
-                padding: 18px;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
+                gap: 10px 12px;
+                padding: 12px 14px;
                 border: 1px solid rgba(148, 163, 184, 0.18);
-                border-radius: 20px;
+                border-radius: 18px;
                 background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 1));
                 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
             }
 
             .p-inline-panel__actions-head {
                 display: grid;
-                gap: 6px;
+                gap: 3px;
+                min-width: 0;
             }
 
             .p-inline-panel__actions-title {
@@ -1298,25 +1330,30 @@
             }
 
             .p-inline-panel__actions-meta {
-                font-size: 14px;
-                line-height: 1.5;
+                font-size: 13px;
+                line-height: 1.35;
                 color: #475569;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .p-inline-panel__actions-row {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                display: flex;
+                flex-wrap: nowrap;
                 align-items: stretch;
-                gap: 10px;
+                justify-content: flex-end;
+                gap: 8px;
             }
 
             .p-inline-panel__actions-row .p-inline-panel__btn {
-                width: 100%;
-                min-width: 0;
-                min-height: 46px;
-                padding: 12px 14px;
+                width: auto;
+                min-width: 136px;
+                min-height: 40px;
+                padding: 10px 12px;
                 white-space: normal;
                 text-wrap: balance;
+                font-size: 13px;
             }
 
             .p-inline-overview__empty {
@@ -1372,16 +1409,24 @@
                 .p-inline-toolbar.p-inline-toolbar--compact {
                     width: 100%;
                     border-radius: 20px;
-                    padding: 14px;
+                    grid-template-columns: 1fr;
+                    padding: 12px 14px;
                 }
 
                 .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__eyebrow {
                     display: block;
                 }
 
+                .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__top > div {
+                    display: grid;
+                    gap: 2px;
+                }
+
                 .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__title {
                     font-size: 17px;
                     white-space: normal;
+                    overflow: visible;
+                    text-overflow: clip;
                 }
 
                 .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__meta {
@@ -1389,7 +1434,7 @@
                 }
 
                 .p-inline-toolbar.p-inline-toolbar--compact .p-inline-toolbar__actions {
-                    margin-top: 14px;
+                    margin-top: 6px;
                     margin-left: 0;
                     flex-wrap: nowrap;
                     justify-content: flex-start;
@@ -1446,13 +1491,20 @@
                 }
 
                 .p-inline-panel__actions {
-                    margin-top: 18px;
-                    padding: 16px;
-                    border-radius: 18px;
+                    grid-template-columns: 1fr;
+                    margin-top: 16px;
+                    padding: 14px;
+                    border-radius: 16px;
                 }
 
                 .p-inline-panel__actions-row {
-                    grid-template-columns: 1fr;
+                    flex-wrap: wrap;
+                    justify-content: stretch;
+                }
+
+                .p-inline-panel__actions-row .p-inline-panel__btn {
+                    flex: 1 1 100%;
+                    min-width: 0;
                 }
 
                 .p-inline-overview__search-row {
@@ -1781,7 +1833,7 @@
             <div class="p-inline-panel__actions">
                 <div class="p-inline-panel__actions-head">
                     <strong class="p-inline-panel__actions-title">С этим блоком</strong>
-                    <span class="p-inline-panel__actions-meta">Можно вернуть изменения или убрать элемент.</span>
+                    <span class="p-inline-panel__actions-meta">Вернуть изменения или убрать.</span>
                 </div>
                 <div class="p-inline-panel__actions-row">
                     <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть как было</button>
@@ -3874,10 +3926,10 @@
         const hasPending = hasPendingPanelChanges();
         const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
-            ? `${binding.sectionLabel} · Изменения в этом блоке пока не сохранены`
+            ? `${binding.sectionLabel} · Есть несохранённые правки`
             : (hasUnsaved
-                ? `${binding.sectionLabel} · На странице есть другие несохранённые изменения`
-                : `${binding.sectionLabel} · Блок готов к правке`);
+                ? `${binding.sectionLabel} · На странице есть другие правки`
+                : `${binding.sectionLabel} · Готово к правке`);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
