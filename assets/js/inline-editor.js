@@ -12,29 +12,73 @@
     const OVERVIEW_ENABLED = false;
     const HOVER_LABEL_ENABLED = false;
     const INLINE_ICON_OPTIONS = [
-        { value: '', label: 'Без иконки', preview: '—' },
-        { value: 'fas fa-phone', label: 'Телефон' },
-        { value: 'fab fa-telegram-plane', label: 'Telegram' },
-        { value: 'fas fa-envelope', label: 'Почта' },
-        { value: 'fas fa-comment-dots', label: 'Сообщение' },
-        { value: 'fas fa-location-dot', label: 'Адрес' },
-        { value: 'fas fa-clock', label: 'Часы' },
-        { value: 'fas fa-arrow-right', label: 'Стрелка' },
-        { value: 'fas fa-link', label: 'Ссылка' },
-        { value: 'fas fa-check', label: 'Галочка' },
-        { value: 'fas fa-circle-check', label: 'Подтверждение' },
-        { value: 'fas fa-camera', label: 'Фото' },
-        { value: 'fas fa-image', label: 'Картинка' },
-        { value: 'fas fa-hammer', label: 'Монтаж' },
-        { value: 'fas fa-wrench', label: 'Инструмент' },
-        { value: 'fas fa-shield-alt', label: 'Защита' },
-        { value: 'fas fa-lock', label: 'Замок' },
-        { value: 'fas fa-palette', label: 'Палитра' },
-        { value: 'fas fa-paint-roller', label: 'Покраска' },
-        { value: 'fas fa-bolt', label: 'Автоматика' },
-        { value: 'fas fa-house', label: 'Дом' },
-        { value: 'fas fa-truck', label: 'Доставка' }
+        { value: '', label: 'Без иконки', preview: '—', group: 'common', keywords: ['пусто', 'убрать', 'без'], featured: true },
+        { value: 'fas fa-phone', label: 'Телефон', group: 'contact', keywords: ['звонок', 'трубка', 'call'], featured: true },
+        { value: 'fas fa-phone-alt', label: 'Звонок', group: 'contact', keywords: ['контакт', 'связь'], featured: false },
+        { value: 'fas fa-mobile-alt', label: 'Мобильный', group: 'contact', keywords: ['смартфон', 'номер'], featured: false },
+        { value: 'fab fa-telegram-plane', label: 'Telegram', group: 'contact', keywords: ['телеграм', 'мессенджер'], featured: true },
+        { value: 'fab fa-whatsapp', label: 'WhatsApp', group: 'contact', keywords: ['ватсап', 'мессенджер'], featured: false },
+        { value: 'fas fa-envelope', label: 'Почта', group: 'contact', keywords: ['email', 'письмо'], featured: true },
+        { value: 'fas fa-comment-dots', label: 'Сообщение', group: 'contact', keywords: ['чат', 'ответ'], featured: true },
+        { value: 'fas fa-comments', label: 'Диалог', group: 'contact', keywords: ['чат', 'обсуждение'], featured: false },
+        { value: 'fas fa-map-marker-alt', label: 'Адрес', group: 'contact', keywords: ['карта', 'точка', 'локация'], featured: true },
+        { value: 'fas fa-map-signs', label: 'Маршрут', group: 'contact', keywords: ['навигация', 'проезд'], featured: false },
+        { value: 'fas fa-clock', label: 'Часы', group: 'contact', keywords: ['время', 'режим'], featured: true },
+        { value: 'fas fa-calendar-alt', label: 'Дата', group: 'contact', keywords: ['календарь', 'срок'], featured: false },
+        { value: 'fas fa-arrow-right', label: 'Стрелка', group: 'action', keywords: ['вперед', 'далее'], featured: true },
+        { value: 'fas fa-long-arrow-alt-right', label: 'Длинная стрелка', group: 'action', keywords: ['направление', 'переход'], featured: false },
+        { value: 'fas fa-external-link-alt', label: 'Внешняя ссылка', group: 'action', keywords: ['открыть', 'переход'], featured: false },
+        { value: 'fas fa-link', label: 'Ссылка', group: 'action', keywords: ['url', 'переход'], featured: true },
+        { value: 'fas fa-th-large', label: 'Плитки', group: 'action', keywords: ['каталог', 'карточки'], featured: false },
+        { value: 'fas fa-th-list', label: 'Список', group: 'action', keywords: ['пункты', 'список'], featured: false },
+        { value: 'fas fa-layer-group', label: 'Слои', group: 'action', keywords: ['группы', 'разделы'], featured: false },
+        { value: 'fas fa-check', label: 'Галочка', group: 'status', keywords: ['ок', 'готово'], featured: true },
+        { value: 'fas fa-check-circle', label: 'Подтверждение', group: 'status', keywords: ['успех', 'принято'], featured: true },
+        { value: 'fas fa-shield-alt', label: 'Защита', group: 'status', keywords: ['гарантия', 'надежно'], featured: true },
+        { value: 'fas fa-lock', label: 'Замок', group: 'status', keywords: ['закрыто', 'безопасность'], featured: false },
+        { value: 'fas fa-unlock-alt', label: 'Открытый замок', group: 'status', keywords: ['доступ', 'открыто'], featured: false },
+        { value: 'fas fa-star', label: 'Звезда', group: 'status', keywords: ['важно', 'лучшее'], featured: false },
+        { value: 'fas fa-medal', label: 'Медаль', group: 'status', keywords: ['награда', 'качество'], featured: false },
+        { value: 'fas fa-thumbs-up', label: 'Одобрение', group: 'status', keywords: ['нравится', 'рекомендация'], featured: false },
+        { value: 'fas fa-info-circle', label: 'Информация', group: 'status', keywords: ['подсказка', 'важно'], featured: false },
+        { value: 'fas fa-question-circle', label: 'Вопрос', group: 'status', keywords: ['faq', 'справка'], featured: false },
+        { value: 'fas fa-exclamation-circle', label: 'Внимание', group: 'status', keywords: ['предупреждение', 'акцент'], featured: false },
+        { value: 'fas fa-hammer', label: 'Монтаж', group: 'work', keywords: ['установка', 'работа'], featured: true },
+        { value: 'fas fa-tools', label: 'Инструменты', group: 'work', keywords: ['сервис', 'ремонт'], featured: false },
+        { value: 'fas fa-wrench', label: 'Инструмент', group: 'work', keywords: ['настройка', 'ремонт'], featured: false },
+        { value: 'fas fa-cog', label: 'Шестеренка', group: 'work', keywords: ['настройка', 'параметры'], featured: false },
+        { value: 'fas fa-cogs', label: 'Механизм', group: 'work', keywords: ['оборудование', 'автоматика'], featured: true },
+        { value: 'fas fa-bolt', label: 'Автоматика', group: 'work', keywords: ['электрика', 'привод'], featured: true },
+        { value: 'fas fa-palette', label: 'Палитра', group: 'work', keywords: ['цвет', 'дизайн'], featured: true },
+        { value: 'fas fa-paint-roller', label: 'Покраска', group: 'work', keywords: ['порошковая', 'покрытие'], featured: true },
+        { value: 'fas fa-spray-can', label: 'Напыление', group: 'work', keywords: ['распыление', 'краска'], featured: false },
+        { value: 'fas fa-ruler-combined', label: 'Размеры', group: 'work', keywords: ['замер', 'габариты'], featured: false },
+        { value: 'fas fa-home', label: 'Дом', group: 'place', keywords: ['участок', 'коттедж'], featured: true },
+        { value: 'fas fa-store', label: 'Магазин', group: 'place', keywords: ['витрина', 'объект'], featured: false },
+        { value: 'fas fa-building', label: 'Здание', group: 'place', keywords: ['офис', 'объект'], featured: false },
+        { value: 'fas fa-city', label: 'Город', group: 'place', keywords: ['коммерция', 'район'], featured: false },
+        { value: 'fas fa-industry', label: 'Производство', group: 'place', keywords: ['цех', 'завод'], featured: false },
+        { value: 'fas fa-warehouse', label: 'Склад', group: 'place', keywords: ['ангар', 'объект'], featured: false },
+        { value: 'fas fa-truck', label: 'Доставка', group: 'place', keywords: ['логистика', 'выезд'], featured: true },
+        { value: 'fas fa-archway', label: 'Ворота', group: 'place', keywords: ['въезд', 'арка'], featured: false },
+        { value: 'fas fa-door-open', label: 'Дверь', group: 'place', keywords: ['калитка', 'вход'], featured: false },
+        { value: 'fas fa-camera', label: 'Фото', group: 'media', keywords: ['снимок', 'галерея'], featured: false },
+        { value: 'fas fa-image', label: 'Картинка', group: 'media', keywords: ['изображение', 'баннер'], featured: false },
+        { value: 'fas fa-images', label: 'Галерея', group: 'media', keywords: ['фото', 'примеры'], featured: false },
+        { value: 'fas fa-tag', label: 'Цена', group: 'media', keywords: ['стоимость', 'ярлык'], featured: false },
+        { value: 'fas fa-calculator', label: 'Расчет', group: 'media', keywords: ['калькулятор', 'стоимость'], featured: false },
+        { value: 'fas fa-ruble-sign', label: 'Рубль', group: 'media', keywords: ['деньги', 'оплата'], featured: false }
     ];
+    const INLINE_ICON_GROUP_LABELS = {
+        common: 'Часто используют',
+        contact: 'Связь и контакты',
+        action: 'Переходы и действия',
+        status: 'Статус и доверие',
+        work: 'Работы и услуги',
+        place: 'Объекты и локации',
+        media: 'Медиа и акценты'
+    };
+    const INLINE_ICON_GROUP_ORDER = ['contact', 'action', 'status', 'work', 'place', 'media'];
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
@@ -453,9 +497,134 @@
 
             .p-inline-panel__icon-picker {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
                 gap: 8px;
+                margin-top: 0;
+            }
+
+            .p-inline-panel__icon-library {
+                display: grid;
+                gap: 10px;
                 margin-top: 10px;
+            }
+
+            .p-inline-panel__icon-library-title {
+                font-size: 13px;
+                font-weight: 800;
+                color: #475569;
+            }
+
+            .p-inline-panel__icon-library-details {
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                border-radius: 18px;
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.96));
+                overflow: hidden;
+            }
+
+            .p-inline-panel__icon-library-summary {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                padding: 14px 16px;
+                cursor: pointer;
+                list-style: none;
+                user-select: none;
+                color: #0f172a;
+                font-size: 14px;
+                font-weight: 800;
+            }
+
+            .p-inline-panel__icon-library-summary::-webkit-details-marker {
+                display: none;
+            }
+
+            .p-inline-panel__icon-library-summary::after {
+                content: '▾';
+                color: #64748b;
+                font-size: 14px;
+                transition: transform 0.18s ease;
+            }
+
+            .p-inline-panel__icon-library-details[open] .p-inline-panel__icon-library-summary::after {
+                transform: rotate(180deg);
+            }
+
+            .p-inline-panel__icon-library-count {
+                display: inline-flex;
+                align-items: center;
+                padding: 6px 10px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.08);
+                color: #1d4ed8;
+                font-size: 12px;
+                font-weight: 800;
+                white-space: nowrap;
+            }
+
+            .p-inline-panel__icon-library-body {
+                display: grid;
+                gap: 12px;
+                padding: 0 16px 16px;
+            }
+
+            .p-inline-panel__icon-search {
+                width: 100%;
+                min-height: 42px;
+                padding: 0 14px;
+                border-radius: 14px;
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                background: #fff;
+                color: #0f172a;
+                font: inherit;
+            }
+
+            .p-inline-panel__icon-search:focus {
+                outline: none;
+                border-color: rgba(37, 99, 235, 0.46);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-panel__icon-library-meta {
+                font-size: 12px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
+            .p-inline-panel__icon-groups {
+                display: grid;
+                gap: 14px;
+                max-height: 380px;
+                overflow: auto;
+                padding-right: 4px;
+            }
+
+            .p-inline-panel__icon-group {
+                display: grid;
+                gap: 8px;
+            }
+
+            .p-inline-panel__icon-group-title {
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.02em;
+                color: #475569;
+            }
+
+            .p-inline-panel__icon-group-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+                gap: 8px;
+            }
+
+            .p-inline-panel__icon-empty {
+                padding: 14px;
+                border-radius: 14px;
+                border: 1px dashed rgba(148, 163, 184, 0.28);
+                background: rgba(255, 255, 255, 0.8);
+                color: #64748b;
+                font-size: 13px;
+                line-height: 1.5;
             }
 
             .p-inline-panel__icon-option {
@@ -464,7 +633,7 @@
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
-                min-height: 84px;
+                min-height: 78px;
                 padding: 10px 8px;
                 border-radius: 16px;
                 border: 1px solid rgba(148, 163, 184, 0.2);
@@ -2911,6 +3080,95 @@
         return key === 'icon' || /иконк/.test(label);
     }
 
+    function getInlineIconOptionLabel(iconValue) {
+        return INLINE_ICON_OPTIONS.find((option) => option.value === iconValue)?.label || iconValue;
+    }
+
+    function getInlineIconSearchText(option) {
+        return [
+            option.label,
+            option.value,
+            INLINE_ICON_GROUP_LABELS[option.group] || '',
+            ...(Array.isArray(option.keywords) ? option.keywords : [])
+        ]
+            .join(' ')
+            .toLowerCase();
+    }
+
+    function filterInlineIconOptions(queryValue) {
+        const queryText = String(queryValue || '').trim().toLowerCase();
+        if (!queryText) {
+            return INLINE_ICON_OPTIONS;
+        }
+
+        return INLINE_ICON_OPTIONS.filter((option) => getInlineIconSearchText(option).includes(queryText));
+    }
+
+    function createIconOptionButton(option, control, updateActiveState) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'p-inline-panel__icon-option';
+        button.dataset.iconValue = option.value;
+        button.innerHTML = `
+            <span class="p-inline-panel__icon-option-symbol">${option.preview || `<i class="${option.value}" aria-hidden="true"></i>`}</span>
+            <span class="p-inline-panel__icon-option-label">${option.label}</span>
+        `;
+        button.addEventListener('click', () => {
+            control.value = option.value;
+            control.dispatchEvent(new Event('input', { bubbles: true }));
+            control.dispatchEvent(new Event('change', { bubbles: true }));
+            updateActiveState();
+        });
+        return button;
+    }
+
+    function renderIconOptionGroups(container, options, control, updateActiveState) {
+        container.innerHTML = '';
+
+        if (!options.length) {
+            const empty = document.createElement('div');
+            empty.className = 'p-inline-panel__icon-empty';
+            empty.textContent = 'По этому запросу ничего не найдено. Попробуйте другое слово, например: телефон, ворота, покраска.';
+            container.appendChild(empty);
+            return;
+        }
+
+        const groups = new Map();
+        options.forEach((option) => {
+            const groupKey = option.group || 'common';
+            if (!groups.has(groupKey)) {
+                groups.set(groupKey, []);
+            }
+            groups.get(groupKey).push(option);
+        });
+
+        const orderedGroupKeys = Array.from(new Set([
+            ...INLINE_ICON_GROUP_ORDER,
+            ...groups.keys()
+        ]));
+
+        orderedGroupKeys.forEach((groupKey) => {
+            const groupOptions = groups.get(groupKey);
+            if (!groupOptions?.length) return;
+
+            const group = document.createElement('div');
+            group.className = 'p-inline-panel__icon-group';
+
+            const title = document.createElement('div');
+            title.className = 'p-inline-panel__icon-group-title';
+            title.textContent = INLINE_ICON_GROUP_LABELS[groupKey] || 'Другие';
+            group.appendChild(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'p-inline-panel__icon-group-grid';
+            groupOptions.forEach((option) => {
+                grid.appendChild(createIconOptionButton(option, control, updateActiveState));
+            });
+            group.appendChild(grid);
+            container.appendChild(group);
+        });
+    }
+
     function createIconPreview(control) {
         const preview = document.createElement('div');
         preview.className = 'p-inline-panel__icon-preview';
@@ -2931,7 +3189,7 @@
 
         const render = () => {
             const nextValue = String(control.value || '').trim();
-            const optionLabel = INLINE_ICON_OPTIONS.find((option) => option.value === nextValue)?.label || nextValue;
+            const optionLabel = getInlineIconOptionLabel(nextValue);
             badge.innerHTML = '';
             if (nextValue) {
                 const icon = document.createElement('i');
@@ -2951,37 +3209,83 @@
     }
 
     function createIconPicker(control) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'p-inline-panel__icon-library';
+
+        const quickTitle = document.createElement('div');
+        quickTitle.className = 'p-inline-panel__icon-library-title';
+        quickTitle.textContent = 'Часто используют';
+        wrapper.appendChild(quickTitle);
+
         const picker = document.createElement('div');
         picker.className = 'p-inline-panel__icon-picker';
 
+        const library = document.createElement('details');
+        library.className = 'p-inline-panel__icon-library-details';
+
+        const summary = document.createElement('summary');
+        summary.className = 'p-inline-panel__icon-library-summary';
+        summary.innerHTML = `
+            <span>Вся библиотека иконок</span>
+            <span class="p-inline-panel__icon-library-count">${INLINE_ICON_OPTIONS.length - 1} вариантов</span>
+        `;
+        library.appendChild(summary);
+
+        const libraryBody = document.createElement('div');
+        libraryBody.className = 'p-inline-panel__icon-library-body';
+
+        const search = document.createElement('input');
+        search.type = 'search';
+        search.className = 'p-inline-panel__icon-search';
+        search.placeholder = 'Найти иконку: телефон, ворота, доставка...';
+        libraryBody.appendChild(search);
+
+        const meta = document.createElement('div');
+        meta.className = 'p-inline-panel__icon-library-meta';
+        libraryBody.appendChild(meta);
+
+        const libraryGroups = document.createElement('div');
+        libraryGroups.className = 'p-inline-panel__icon-groups';
+        libraryBody.appendChild(libraryGroups);
+        library.appendChild(libraryBody);
+
         const updateActiveState = () => {
             const currentValue = String(control.value || '').trim();
-            picker.querySelectorAll('.p-inline-panel__icon-option').forEach((button) => {
+            wrapper.querySelectorAll('.p-inline-panel__icon-option').forEach((button) => {
                 button.classList.toggle('is-active', button.dataset.iconValue === currentValue);
             });
         };
 
-        INLINE_ICON_OPTIONS.forEach((option) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'p-inline-panel__icon-option';
-            button.dataset.iconValue = option.value;
-            button.innerHTML = `
-                <span class="p-inline-panel__icon-option-symbol">${option.preview || `<i class="${option.value}" aria-hidden="true"></i>`}</span>
-                <span class="p-inline-panel__icon-option-label">${option.label}</span>
-            `;
-            button.addEventListener('click', () => {
-                control.value = option.value;
-                control.dispatchEvent(new Event('input', { bubbles: true }));
-                control.dispatchEvent(new Event('change', { bubbles: true }));
-                updateActiveState();
+        INLINE_ICON_OPTIONS
+            .filter((option) => option.featured)
+            .forEach((option) => {
+                picker.appendChild(createIconOptionButton(option, control, updateActiveState));
             });
-            picker.appendChild(button);
-        });
+
+        const renderLibrary = () => {
+            const filteredOptions = filterInlineIconOptions(search.value);
+            const selectableOptions = filteredOptions.filter((option) => option.value || !search.value.trim());
+            meta.textContent = search.value.trim()
+                ? `Найдено: ${filteredOptions.length} ${filteredOptions.length === 1 ? 'иконка' : 'иконок'}.`
+                : 'Откройте нужную группу или начните поиск по смыслу.';
+            renderIconOptionGroups(libraryGroups, selectableOptions, control, updateActiveState);
+            updateActiveState();
+        };
 
         control.addEventListener('input', updateActiveState);
+        search.addEventListener('input', renderLibrary);
+        library.addEventListener('toggle', () => {
+            if (library.open) {
+                window.setTimeout(() => search.focus(), 0);
+            }
+        });
+
+        renderLibrary();
         updateActiveState();
-        return picker;
+
+        wrapper.appendChild(picker);
+        wrapper.appendChild(library);
+        return wrapper;
     }
 
     function isLinkLikeField(field) {
