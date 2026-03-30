@@ -102,6 +102,31 @@
         media: 'Медиа и акценты'
     };
     const INLINE_ICON_GROUP_ORDER = ['contact', 'action', 'status', 'work', 'place', 'media'];
+    const INLINE_LINK_TYPE_OPTIONS = [
+        { value: 'page', label: 'Страница сайта' },
+        { value: 'section', label: 'Блок на этой странице' },
+        { value: 'phone', label: 'Телефон' },
+        { value: 'telegram', label: 'Telegram' },
+        { value: 'whatsapp', label: 'WhatsApp' },
+        { value: 'email', label: 'Почта' },
+        { value: 'external', label: 'Внешний сайт' },
+        { value: 'custom', label: 'Свой адрес' }
+    ];
+    const INLINE_SITE_PAGE_TARGETS = [
+        { value: 'index.html', label: 'Главная' },
+        { value: 'index.html#request-form', label: 'Главная → Форма заявки' },
+        { value: 'pages/services.html', label: 'Каталог' },
+        { value: 'pages/services.html#catalog-panel-sliding', label: 'Каталог → Откатные ворота' },
+        { value: 'pages/services.html#catalog-panel-swing', label: 'Каталог → Распашные ворота' },
+        { value: 'pages/services.html#catalog-panel-wicket', label: 'Каталог → Калитки' },
+        { value: 'pages/services.html#catalog-panel-fence-profnastil', label: 'Каталог → Заборы из профнастила' },
+        { value: 'pages/powder-coating.html', label: 'Порошковая покраска' },
+        { value: 'pages/sandblasting.html', label: 'Пескоструйная обработка' },
+        { value: 'pages/prices.html', label: 'Цены' },
+        { value: 'pages/payment-documents.html', label: 'Оплата и документы' },
+        { value: 'pages/gallery.html', label: 'Работы' },
+        { value: 'pages/contacts.html', label: 'Контакты' }
+    ];
     const query = new URLSearchParams(window.location.search);
     const autoEnable = query.get('edit') === '1';
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
@@ -1075,6 +1100,55 @@
                 background: rgba(37, 99, 235, 0.1);
                 color: #1d4ed8;
                 transform: translateY(-1px);
+            }
+
+            .p-inline-panel__link-builder {
+                display: grid;
+                gap: 10px;
+            }
+
+            .p-inline-panel__link-builder-head {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .p-inline-panel__link-builder-label {
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #64748b;
+            }
+
+            .p-inline-panel__link-builder-badge {
+                display: inline-flex;
+                align-items: center;
+                min-height: 28px;
+                padding: 0 12px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.08);
+                color: #1d4ed8;
+                font-size: 12px;
+                font-weight: 800;
+            }
+
+            .p-inline-panel__link-summary {
+                margin: 0;
+                padding: 12px 14px;
+                border-radius: 16px;
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.95), rgba(248, 250, 252, 0.98));
+                border: 1px solid rgba(147, 197, 253, 0.32);
+                color: #1e3a8a;
+                font-size: 14px;
+                line-height: 1.5;
+                font-weight: 700;
+            }
+
+            .p-inline-panel__link-summary.is-empty {
+                color: #64748b;
+                font-weight: 600;
             }
 
             .p-inline-panel__collection {
@@ -3129,6 +3203,466 @@
         return '';
     }
 
+    function isInlineNestedPage() {
+        return /\/pages\/[^/]+$/i.test(String(window.location.pathname || '').replace(/\\/g, '/'));
+    }
+
+    function normalizeSiteTargetValue(value) {
+        return String(value || '').trim().replace(/^\/+/, '');
+    }
+
+    function toRelativeSiteHref(siteTarget) {
+        const normalized = normalizeSiteTargetValue(siteTarget);
+        if (!normalized) return '';
+        const [pathPart, hashPart] = normalized.split('#');
+        const hash = hashPart ? `#${hashPart}` : '';
+
+        if (!pathPart || pathPart === 'index.html') {
+            if (isInlineNestedPage()) {
+                return `../index.html${hash}`;
+            }
+            return hash || 'index.html';
+        }
+
+        if (isInlineNestedPage() && pathPart.startsWith('pages/')) {
+            return `${pathPart.slice(6)}${hash}`;
+        }
+
+        return `${pathPart}${hash}`;
+    }
+
+    function resolveSameOriginHref(rawHref) {
+        const value = String(rawHref || '').trim();
+        if (!value) return null;
+        try {
+            const nextUrl = new URL(value, window.location.href);
+            if (nextUrl.origin !== window.location.origin) return null;
+            return `${nextUrl.pathname.replace(/^\/+/, '')}${nextUrl.hash || ''}`;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function prettifyInlineSectionId(id) {
+        const value = String(id || '').replace(/^#/, '').trim();
+        if (!value) return 'Блок страницы';
+        const normalized = value
+            .replace(/[-_]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+        return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+    }
+
+    function getCurrentPageSectionTargets() {
+        const used = new Set();
+        return Array.from(document.querySelectorAll('[id]'))
+            .map((element) => {
+                const id = String(element.id || '').trim();
+                if (!id || id.startsWith('p-inline-')) return null;
+                if (used.has(id)) return null;
+                if (['script', 'style', 'link', 'meta'].includes(element.tagName.toLowerCase())) return null;
+
+                let label = '';
+                const ariaLabelledBy = element.getAttribute('aria-labelledby');
+                if (ariaLabelledBy) {
+                    const source = document.getElementById(ariaLabelledBy);
+                    if (source?.textContent) {
+                        label = source.textContent.trim();
+                    }
+                }
+
+                if (!label && /^h[1-6]$/i.test(element.tagName)) {
+                    label = element.textContent.trim();
+                }
+
+                if (!label) {
+                    const heading = element.querySelector?.('h1, h2, h3, h4, h5, h6');
+                    if (heading?.textContent) {
+                        label = heading.textContent.trim();
+                    }
+                }
+
+                if (!label) {
+                    label = prettifyInlineSectionId(id);
+                }
+
+                used.add(id);
+                return {
+                    value: `#${id}`,
+                    label
+                };
+            })
+            .filter(Boolean)
+            .slice(0, 40);
+    }
+
+    function getInlineLockedLinkType(field) {
+        const key = String(field?.key || '').toLowerCase();
+        if (key.includes('phone')) return 'phone';
+        if (key.includes('email')) return 'email';
+        if (key.includes('telegram')) return 'telegram';
+        if (key.includes('whatsapp')) return 'whatsapp';
+        return '';
+    }
+
+    function normalizePhoneForHref(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        let digits = raw.replace(/[^\d+]/g, '');
+        if (digits.startsWith('8') && digits.length === 11) {
+            digits = `+7${digits.slice(1)}`;
+        }
+        if (!digits.startsWith('+') && /^\d+$/.test(digits)) {
+            digits = `+${digits}`;
+        }
+        return digits;
+    }
+
+    function formatPhoneForDisplay(value) {
+        const phone = normalizePhoneForHref(value);
+        if (!phone) return '';
+        const digits = phone.replace(/[^\d]/g, '');
+        if (digits.length === 11 && digits.startsWith('7')) {
+            return `+7 ${digits.slice(1, 4)} ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`;
+        }
+        return phone;
+    }
+
+    function normalizeTelegramValue(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        const cleaned = raw
+            .replace(/^https?:\/\/t\.me\//i, '')
+            .replace(/^@+/, '')
+            .trim();
+        return cleaned;
+    }
+
+    function normalizeWhatsAppValue(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        if (/^https?:\/\/wa\.me\//i.test(raw)) {
+            return raw.replace(/^https?:\/\/wa\.me\//i, '').replace(/[^\d]/g, '');
+        }
+        return raw.replace(/[^\d]/g, '');
+    }
+
+    function parseInlineLinkState(field, rawHref) {
+        const lockedType = getInlineLockedLinkType(field);
+        const value = String(rawHref || '').trim();
+        const sectionTargets = getCurrentPageSectionTargets();
+        const matchedPage = resolveSameOriginHref(value)
+            ? INLINE_SITE_PAGE_TARGETS.find((option) => option.value === resolveSameOriginHref(value))
+            : null;
+        const matchedSection = resolveSameOriginHref(value)
+            ? sectionTargets.find((option) => {
+                const resolvedOption = resolveSameOriginHref(option.value);
+                return resolvedOption && resolvedOption === resolveSameOriginHref(value);
+            })
+            : null;
+
+        if (lockedType === 'phone') {
+            return { type: 'phone', text: value.replace(/^tel:/i, ''), page: '', section: '' };
+        }
+        if (lockedType === 'email') {
+            return { type: 'email', text: value.replace(/^mailto:/i, ''), page: '', section: '' };
+        }
+        if (lockedType === 'telegram') {
+            return { type: 'telegram', text: normalizeTelegramValue(value), page: '', section: '' };
+        }
+        if (lockedType === 'whatsapp') {
+            return { type: 'whatsapp', text: normalizeWhatsAppValue(value), page: '', section: '' };
+        }
+
+        if (!value) {
+            return {
+                type: 'page',
+                page: INLINE_SITE_PAGE_TARGETS[0]?.value || 'index.html',
+                section: sectionTargets[0]?.value || '',
+                text: ''
+            };
+        }
+
+        if (/^tel:/i.test(value)) {
+            return { type: 'phone', text: value.replace(/^tel:/i, ''), page: '', section: '' };
+        }
+        if (/^mailto:/i.test(value)) {
+            return { type: 'email', text: value.replace(/^mailto:/i, ''), page: '', section: '' };
+        }
+        if (/t\.me\//i.test(value)) {
+            return { type: 'telegram', text: normalizeTelegramValue(value), page: '', section: '' };
+        }
+        if (/wa\.me\//i.test(value) || /whatsapp/i.test(value)) {
+            return { type: 'whatsapp', text: normalizeWhatsAppValue(value), page: '', section: '' };
+        }
+        if (matchedSection) {
+            return { type: 'section', section: matchedSection.value, page: '', text: '' };
+        }
+        if (matchedPage) {
+            return { type: 'page', page: matchedPage.value, section: '', text: '' };
+        }
+        if (/^https?:\/\//i.test(value)) {
+            return { type: 'external', text: value, page: '', section: '' };
+        }
+        if (value.startsWith('#')) {
+            return { type: 'section', section: value, page: '', text: '' };
+        }
+        return { type: 'custom', text: value, page: '', section: '' };
+    }
+
+    function composeInlineLinkHref(linkState) {
+        if (!linkState) return '';
+        switch (linkState.type) {
+            case 'page':
+                return toRelativeSiteHref(linkState.page);
+            case 'section':
+                return String(linkState.section || '').trim();
+            case 'phone': {
+                const phone = normalizePhoneForHref(linkState.text);
+                return phone ? `tel:${phone}` : '';
+            }
+            case 'email': {
+                const email = String(linkState.text || '').trim();
+                return email ? `mailto:${email}` : '';
+            }
+            case 'telegram': {
+                const username = normalizeTelegramValue(linkState.text);
+                return username ? `https://t.me/${username}` : '';
+            }
+            case 'whatsapp': {
+                const phone = normalizeWhatsAppValue(linkState.text);
+                return phone ? `https://wa.me/${phone}` : '';
+            }
+            case 'external':
+            case 'custom':
+            default:
+                return String(linkState.text || '').trim();
+        }
+    }
+
+    function describeInlineHref(rawHref) {
+        const value = String(rawHref || '').trim();
+        if (!value) {
+            return { text: 'Переход пока не указан', empty: true };
+        }
+
+        if (/^tel:/i.test(value)) {
+            return { text: `Позвонит: ${formatPhoneForDisplay(value.replace(/^tel:/i, '')) || value.replace(/^tel:/i, '')}`, empty: false };
+        }
+        if (/^mailto:/i.test(value)) {
+            return { text: `Откроет почту: ${value.replace(/^mailto:/i, '')}`, empty: false };
+        }
+        if (/t\.me\//i.test(value)) {
+            return { text: `Откроет Telegram: @${normalizeTelegramValue(value)}`, empty: false };
+        }
+        if (/wa\.me\//i.test(value) || /whatsapp/i.test(value)) {
+            const phone = normalizeWhatsAppValue(value);
+            return { text: `Откроет WhatsApp: ${formatPhoneForDisplay(phone) || phone}`, empty: false };
+        }
+
+        const resolved = resolveSameOriginHref(value);
+        if (resolved) {
+            const matchedPage = INLINE_SITE_PAGE_TARGETS.find((option) => option.value === resolved);
+            if (matchedPage) {
+                return { text: `Откроется страница: ${matchedPage.label}`, empty: false };
+            }
+            if (resolved.includes('#')) {
+                const sectionId = resolved.split('#')[1] || '';
+                return { text: `Прокрутит к блоку: ${prettifyInlineSectionId(sectionId)}`, empty: false };
+            }
+            return { text: `Откроется адрес: /${resolved}`, empty: false };
+        }
+
+        if (/^https?:\/\//i.test(value)) {
+            try {
+                const nextUrl = new URL(value);
+                return { text: `Откроется внешний сайт: ${nextUrl.hostname}`, empty: false };
+            } catch (error) {
+                return { text: `Откроется внешний адрес: ${value}`, empty: false };
+            }
+        }
+
+        return { text: `Откроется: ${value}`, empty: false };
+    }
+
+    function createInlineLinkBuilder(field, control) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'p-inline-panel__link-builder';
+
+        const lockedType = getInlineLockedLinkType(field);
+        const state = parseInlineLinkState(field, control.value);
+
+        const head = document.createElement('div');
+        head.className = 'p-inline-panel__link-builder-head';
+        wrapper.appendChild(head);
+
+        if (lockedType) {
+            const badge = document.createElement('div');
+            badge.className = 'p-inline-panel__link-builder-badge';
+            badge.textContent = INLINE_LINK_TYPE_OPTIONS.find((option) => option.value === lockedType)?.label || 'Ссылка';
+            head.appendChild(badge);
+        } else {
+            const typeLabel = document.createElement('div');
+            typeLabel.className = 'p-inline-panel__link-builder-label';
+            typeLabel.textContent = 'Тип перехода';
+            head.appendChild(typeLabel);
+        }
+
+        let typeControl = null;
+        if (!lockedType) {
+            typeControl = document.createElement('select');
+            typeControl.className = 'p-inline-panel__control';
+            INLINE_LINK_TYPE_OPTIONS.forEach((option) => {
+                const optionNode = document.createElement('option');
+                optionNode.value = option.value;
+                optionNode.textContent = option.label;
+                typeControl.appendChild(optionNode);
+            });
+            typeControl.value = state.type;
+            wrapper.appendChild(typeControl);
+        }
+
+        const destination = document.createElement('div');
+        destination.className = 'p-inline-panel__link-builder';
+        wrapper.appendChild(destination);
+
+        const summary = document.createElement('p');
+        summary.className = 'p-inline-panel__link-summary';
+        wrapper.appendChild(summary);
+
+        const syncControl = () => {
+            control.value = composeInlineLinkHref(state);
+            control.dispatchEvent(new Event('input', { bubbles: true }));
+            control.dispatchEvent(new Event('change', { bubbles: true }));
+            const description = describeInlineHref(control.value);
+            summary.textContent = description.text;
+            summary.classList.toggle('is-empty', Boolean(description.empty));
+        };
+
+        const buildField = (placeholder, value, onInput) => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'p-inline-panel__control';
+            input.placeholder = placeholder;
+            input.value = value || '';
+            input.addEventListener('input', () => {
+                onInput(input.value);
+                syncControl();
+            });
+            return input;
+        };
+
+        const buildSelect = (options, currentValue, onChange, includeEmptyLabel = 'Выберите вариант') => {
+            const select = document.createElement('select');
+            select.className = 'p-inline-panel__control';
+
+            const availableOptions = [...options];
+            if (currentValue && !availableOptions.some((option) => option.value === currentValue)) {
+                availableOptions.unshift({
+                    value: currentValue,
+                    label: `Текущий адрес: ${currentValue}`
+                });
+            }
+
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = includeEmptyLabel;
+            select.appendChild(emptyOption);
+
+            availableOptions.forEach((option) => {
+                const optionNode = document.createElement('option');
+                optionNode.value = option.value;
+                optionNode.textContent = option.label;
+                select.appendChild(optionNode);
+            });
+
+            select.value = currentValue || '';
+            select.addEventListener('change', () => {
+                onChange(select.value);
+                syncControl();
+            });
+            return select;
+        };
+
+        const renderDestination = () => {
+            destination.innerHTML = '';
+            const activeType = lockedType || state.type;
+
+            switch (activeType) {
+                case 'page':
+                    destination.appendChild(buildSelect(
+                        INLINE_SITE_PAGE_TARGETS,
+                        state.page,
+                        (nextValue) => { state.page = nextValue; }
+                    ));
+                    break;
+                case 'section':
+                    destination.appendChild(buildSelect(
+                        getCurrentPageSectionTargets(),
+                        state.section,
+                        (nextValue) => { state.section = nextValue; },
+                        'Выберите блок на этой странице'
+                    ));
+                    break;
+                case 'phone':
+                    destination.appendChild(buildField(
+                        '+7 937 615-46-29',
+                        formatPhoneForDisplay(state.text) || state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+                case 'email':
+                    destination.appendChild(buildField(
+                        'mail@example.ru',
+                        state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+                case 'telegram':
+                    destination.appendChild(buildField(
+                        'username или ссылка',
+                        state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+                case 'whatsapp':
+                    destination.appendChild(buildField(
+                        '+7 937 615-46-29',
+                        formatPhoneForDisplay(state.text) || state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+                case 'external':
+                    destination.appendChild(buildField(
+                        'https://example.ru',
+                        state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+                case 'custom':
+                default:
+                    destination.appendChild(buildField(
+                        '/pages/services.html или #request-form',
+                        state.text,
+                        (nextValue) => { state.text = nextValue; }
+                    ));
+                    break;
+            }
+        };
+
+        if (typeControl) {
+            typeControl.addEventListener('change', () => {
+                state.type = typeControl.value || 'custom';
+                renderDestination();
+                syncControl();
+            });
+        }
+
+        renderDestination();
+        syncControl();
+        return wrapper;
+    }
+
     function getLinkExamples(field) {
         const key = String(field?.key || '').toLowerCase();
         if (key.includes('phone')) {
@@ -3160,28 +3694,9 @@
     }
 
     function createFieldExamples(field, control) {
-        if (!isLinkLikeField(field)) return null;
-
-        const examples = getLinkExamples(field);
-
-        const container = document.createElement('div');
-        container.className = 'p-inline-panel__examples';
-        examples.forEach((example) => {
-            const chip = document.createElement('button');
-            chip.type = 'button';
-            chip.className = 'p-inline-panel__example-chip';
-            chip.textContent = example.label;
-            chip.title = example.value;
-            chip.addEventListener('click', () => {
-                control.value = example.value;
-                control.dispatchEvent(new Event('input', { bubbles: true }));
-                control.focus();
-                const cursorPosition = control.value.length;
-                control.setSelectionRange?.(cursorPosition, cursorPosition);
-            });
-            container.appendChild(chip);
-        });
-        return container;
+        void field;
+        void control;
+        return null;
     }
 
     function createFieldGroup(field, value, binding = null) {
@@ -3209,7 +3724,9 @@
         } else {
             control = document.createElement('input');
             control.className = 'p-inline-panel__control';
-            control.type = field.type === 'number' ? 'number' : 'text';
+            control.type = isLinkLikeField(field)
+                ? 'hidden'
+                : (field.type === 'number' ? 'number' : 'text');
             control.value = value ?? '';
         }
 
@@ -3226,6 +3743,10 @@
 
         control.name = field.key || 'value';
         wrapper.appendChild(control);
+
+        if (isLinkLikeField(field)) {
+            wrapper.appendChild(createInlineLinkBuilder(field, control));
+        }
 
         if (isIconField(field)) {
             wrapper.appendChild(createIconPreview(control));
@@ -3245,7 +3766,7 @@
         } else if (isLinkLikeField(field)) {
             const hint = document.createElement('p');
             hint.className = 'p-inline-panel__hint';
-            hint.textContent = 'Можно вести на страницу, блок, телефон или мессенджер.';
+            hint.textContent = 'Сначала выберите тип перехода, потом укажите страницу, блок или контакт.';
             wrapper.appendChild(hint);
         } else if (isIconField(field)) {
             const hint = document.createElement('p');
@@ -3685,9 +4206,8 @@
                 iconNode.hidden = true;
                 iconNode.className = '';
             }
-            linkNode.textContent = data.href
-                ? `Откроется: ${data.href}`
-                : 'Переход пока не указан';
+            const description = describeInlineHref(data.href);
+            linkNode.textContent = description.text;
         };
 
         preview.renderPreview = render;
