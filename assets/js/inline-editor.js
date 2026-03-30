@@ -3243,6 +3243,24 @@
         return Boolean(binding?.path) && !isNewUnsavedCollectionBinding(binding);
     }
 
+    function hasSavedDifferenceForBinding(binding, fileState = state.files.get(binding?.fileName)) {
+        if (!binding || !fileState) return false;
+
+        const collectionState = getBindingCollectionState(binding, fileState);
+        if (collectionState) {
+            const currentItems = getByPath(fileState.data, collectionState.collectionPath);
+            const originalItems = getByPath(fileState.originalData, collectionState.collectionPath);
+            return !isSameData(currentItems, originalItems);
+        }
+
+        const currentValue = resolveBindingValue(fileState, binding);
+        const originalValue = getOriginalBindingValue(binding, fileState);
+        const comparableOriginal = originalValue === undefined
+            ? resolveBindingDefault(binding)
+            : cloneData(originalValue);
+        return !isSameData(currentValue, comparableOriginal);
+    }
+
     function markBindingsDirtyForCollection(fileName, collectionPath) {
         const pattern = new RegExp(`^${escapeRegExp(collectionPath)}\\.\\d+$`);
         state.bindings.forEach((binding) => {
@@ -3925,6 +3943,7 @@
     function updatePanelMeta(binding) {
         if (!ui.panelMeta || !binding) return;
         const hasPending = hasPendingPanelChanges();
+        const hasSavedDifference = hasSavedDifferenceForBinding(binding);
         const hasUnsaved = hasPending || hasDirtyFiles();
         ui.panelMeta.textContent = hasPending
             ? `${binding.sectionLabel} · Есть несохранённые правки`
@@ -3935,9 +3954,9 @@
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
             ui.panelRevertBtn.hidden = !canRevert;
-            ui.panelRevertBtn.disabled = !hasPending;
-            ui.panelRevertBtn.classList.toggle('is-active', hasPending);
-            ui.panelRevertBtn.classList.toggle('is-idle', !hasPending);
+            ui.panelRevertBtn.disabled = !(hasPending || hasSavedDifference);
+            ui.panelRevertBtn.classList.toggle('is-active', hasPending || hasSavedDifference);
+            ui.panelRevertBtn.classList.toggle('is-idle', !hasPending && !hasSavedDifference);
             hasVisibleAction = hasVisibleAction || canRevert;
         }
         if (ui.panelRemoveBtn) {
@@ -4195,6 +4214,41 @@
             if (!binding || !canRevertBinding(binding)) return;
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+
+            if (collectionState) {
+                const originalItems = getByPath(fileState.originalData, collectionState.collectionPath);
+                const restoredItems = originalItems === undefined ? [] : cloneData(originalItems);
+                setByPath(fileState.data, collectionState.collectionPath, restoredItems);
+                refreshCollectionBindings(binding, fileState);
+
+                const collectionPattern = new RegExp(`^${escapeRegExp(collectionState.collectionPath)}\\.\\d+$`);
+                state.bindings.forEach((item) => {
+                    if (item.fileName === binding.fileName && collectionPattern.test(item.path)) {
+                        item.elements.forEach((element) => element.classList.remove(DIRTY_CLASS));
+                    }
+                });
+
+                fileState.dirty = !isSameData(fileState.data, fileState.originalData);
+                if (!fileState.dirty) {
+                    state.lastSavedAt = 0;
+                }
+                persistDraftFiles();
+
+                const restoredIndex = Math.min(collectionState.index, Math.max(0, restoredItems.length - 1));
+                const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${restoredIndex}`) || binding;
+                state.activeBindingId = nextBinding.id;
+                clearActiveMarks();
+                nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+                if (!ui.panel.hidden) {
+                    fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+                }
+                renderToolbar();
+                renderOverviewPanel();
+                showToast(`Возвращено: ${truncateInlineLabel(binding.label, 44)}`);
+                return;
+            }
+
             const originalValue = getByPath(fileState.originalData, binding.path);
             const nextValue = originalValue === undefined
                 ? resolveBindingDefault(binding)
