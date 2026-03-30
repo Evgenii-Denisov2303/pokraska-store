@@ -522,7 +522,7 @@
             <span class="eyebrow">POKRASKA.STORE</span>
             <h1>Визуальное редактирование сайта</h1>
             <p class="lead">
-                Главный сценарий теперь простой: открыть нужную страницу, включить режим правки и менять текст или фото прямо на сайте.
+                Сначала открой нужную страницу как посетитель. На ней справа снизу появится кнопка <strong>Редактировать на странице</strong>, и только после нажатия включится режим правки.
             </p>
             <div class="status-bar">
                 <span class="badge" id="sessionBadge">Проверяем доступ…</span>
@@ -534,7 +534,7 @@
                 <a class="hero-link" href="/pages/services.html">Открыть каталог</a>
                 <a class="hero-link" href="/pages/gallery.html">Открыть галерею</a>
                 <a class="hero-link" href="/pages/contacts.html">Открыть контакты</a>
-                <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить правку</a>
+                <a class="hero-link" id="recentHeroLink" href="/" hidden>Открыть последнюю страницу</a>
             </div>
         </section>
 
@@ -542,7 +542,7 @@
             <article class="card" id="launcherCard" hidden>
                 <span class="section-kicker">Страницы</span>
                 <h2>Быстрый запуск</h2>
-                <p>Обычно открой страницу как посетитель, а когда будешь готов, нажми на ней <strong>Редактировать на странице</strong>. Если нужно быстрее, рядом есть прямой вход в правку.</p>
+                <p>Обычно открой страницу как посетитель, а когда будешь готов, нажми на ней <strong>Редактировать на странице</strong>. Это самый понятный сценарий для обычной правки.</p>
 
                 <div class="launch-grid" id="launchGrid">
                     <article class="launch-card launch-card--featured">
@@ -551,18 +551,16 @@
                             <span>Первый экран, направления, заявка и контакты</span>
                         </div>
                         <div class="launch-card__actions">
-                            <a class="button button--primary" href="/">Открыть страницу</a>
-                            <a class="button launch-card__quick" href="/?edit=1">Сразу править</a>
-                        </div>
-                    </article>
-                    <article class="launch-card">
+                    <a class="button button--primary" href="/">Открыть страницу</a>
+                </div>
+            </article>
+            <article class="launch-card">
                         <div>
                             <strong>Каталог</strong>
                             <span>Карточки, галереи, FAQ и блоки автоматики</span>
                         </div>
                         <div class="launch-card__actions">
                             <a class="button button--primary" href="/pages/services.html">Открыть страницу</a>
-                            <a class="button launch-card__quick" href="/pages/services.html?edit=1">Сразу править</a>
                         </div>
                     </article>
                     <article class="launch-card">
@@ -572,7 +570,6 @@
                         </div>
                         <div class="launch-card__actions">
                             <a class="button button--primary" href="/pages/gallery.html">Открыть страницу</a>
-                            <a class="button launch-card__quick" href="/pages/gallery.html?edit=1">Сразу править</a>
                         </div>
                     </article>
                     <article class="launch-card">
@@ -582,7 +579,6 @@
                         </div>
                         <div class="launch-card__actions">
                             <a class="button button--primary" href="/pages/contacts.html">Открыть страницу</a>
-                            <a class="button launch-card__quick" href="/pages/contacts.html?edit=1">Сразу править</a>
                         </div>
                     </article>
                 </div>
@@ -629,19 +625,18 @@
                 <p>Эта страница теперь нужна только для входа и запуска. Всё основное редактирование идёт уже на самом сайте.</p>
 
                 <ul class="mini-list">
-                    <li><strong>Текст и фото:</strong> открой страницу, нажми <strong>Редактировать на странице</strong> и кликни по нужному блоку.</li>
+                    <li><strong>Текст и фото:</strong> открой страницу, нажми <strong>Редактировать на странице</strong> и только потом кликай по нужному блоку.</li>
                     <li><strong>Длинные страницы:</strong> кнопка <strong>Обзор</strong> помогает быстро найти нужное место.</li>
-                    <li><strong>Быстрый вход:</strong> если нужно сразу попасть в редактор, используй быстрые правки ниже.</li>
                     <li><strong>Сохранение:</strong> правки уходят в те же JSON-файлы и сразу синхронны с сайтом.</li>
                 </ul>
 
                 <h3 class="subsection-title">Частые действия</h3>
                 <div class="mini-actions">
-                    <a class="mini-action" href="/?edit=1&focus=text">Главная: текст</a>
-                    <a class="mini-action" href="/?edit=1&focus=image">Главная: фото</a>
-                    <a class="mini-action" href="/?edit=1&focus=collection">Сайт: меню и подвал</a>
-                    <a class="mini-action" href="/pages/services.html?edit=1&focus=collection">Каталог: блоки</a>
-                    <a class="mini-action" href="/pages/contacts.html?edit=1&focus=contacts">Контакты: телефоны</a>
+                    <a class="mini-action" href="/">Главная: текст</a>
+                    <a class="mini-action" href="/">Главная: фото</a>
+                    <a class="mini-action" href="/">Сайт: меню и подвал</a>
+                    <a class="mini-action" href="/pages/services.html">Каталог: блоки</a>
+                    <a class="mini-action" href="/pages/contacts.html">Контакты: телефоны</a>
                 </div>
 
                 <div class="tips">
@@ -719,13 +714,13 @@
             function buildRecentHref(item) {
                 try {
                     const url = new URL(item.href, window.location.origin);
-                    if (item.fileName && item.path) {
-                        url.searchParams.set('resumeFile', item.fileName);
-                        url.searchParams.set('resumePath', item.path);
-                    }
+                    url.searchParams.delete('edit');
+                    url.searchParams.delete('focus');
+                    url.searchParams.delete('resumeFile');
+                    url.searchParams.delete('resumePath');
                     return `${url.pathname}${url.search}`;
                 } catch (error) {
-                    return item.href || '/?edit=1';
+                    return item.href || '/';
                 }
             }
 
@@ -743,9 +738,9 @@
                 recentHeroLink.hidden = !first;
                 if (first) {
                     recentHeroLink.href = buildRecentHref(first);
-                    recentHeroLink.textContent = 'Продолжить правку';
+                    recentHeroLink.textContent = 'Открыть последнюю страницу';
                     recentHeroLink.title = first.title;
-                    recentHeroLink.setAttribute('aria-label', `Продолжить: ${first.title}`);
+                    recentHeroLink.setAttribute('aria-label', `Открыть: ${first.title}`);
                 } else {
                     recentHeroLink.removeAttribute('title');
                     recentHeroLink.removeAttribute('aria-label');
@@ -759,7 +754,7 @@
                 recentGrid.innerHTML = pages.slice(0, 4).map((item) => {
                     const blockHint = item.bindingLabel
                         ? `Последний блок: ${item.bindingLabel}`
-                        : (item.sectionLabel || 'Откроется страница в режиме правки');
+                        : (item.sectionLabel || 'Откроется страница сайта');
                     const when = formatRecentDate(item.updatedAt);
                     const hasDraft = item.fileName && readDraftFiles()[item.fileName];
                     return `
