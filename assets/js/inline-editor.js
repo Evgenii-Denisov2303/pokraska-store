@@ -111,7 +111,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: flex-end;
-                gap: 12px;
+                gap: 8px;
                 pointer-events: none;
             }
 
@@ -155,8 +155,8 @@
 
             .p-inline-toolbar {
                 width: fit-content;
-                min-width: min(360px, calc(100vw - 32px));
-                max-width: min(420px, calc(100vw - 32px));
+                min-width: min(456px, calc(100vw - 32px));
+                max-width: min(456px, calc(100vw - 32px));
                 background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.92));
                 color: #e2e8f0;
                 border: 1px solid rgba(96, 165, 250, 0.18);
@@ -168,8 +168,8 @@
 
             .p-inline-toolbar.p-inline-toolbar--compact {
                 width: fit-content;
-                min-width: min(360px, calc(100vw - 32px));
-                max-width: min(420px, calc(100vw - 32px));
+                min-width: min(456px, calc(100vw - 32px));
+                max-width: min(456px, calc(100vw - 32px));
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) auto;
                 align-items: center;
@@ -2362,7 +2362,7 @@
     }
 
     function updateDockOffset() {
-        const fallback = 124;
+        const fallback = state.enabled ? 84 : 104;
         if (!ui.root || !document?.documentElement) {
             return;
         }
@@ -2377,7 +2377,8 @@
         }
 
         const rect = activeDock.getBoundingClientRect();
-        const offset = Math.max(fallback, Math.ceil(rect.height + 40));
+        const gap = state.enabled ? 12 : 20;
+        const offset = Math.max(fallback, Math.ceil(rect.height + gap));
         document.documentElement.style.setProperty('--p-inline-dock-offset', `${offset}px`);
     }
 
