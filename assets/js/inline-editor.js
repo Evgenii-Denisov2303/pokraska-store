@@ -119,6 +119,13 @@
                 pointer-events: auto;
             }
 
+            body.${MODE_CLASS} .gallery-page .gallery-item .image-overlay,
+            body.${MODE_CLASS} .gallery-page .gallery-item .image-overlay *,
+            body.${MODE_CLASS} .gallery-page .gallery-item .zoom-btn,
+            body.${MODE_CLASS} .gallery-page .gallery-item .zoom-btn * {
+                pointer-events: none !important;
+            }
+
             .p-inline-launcher,
             .p-inline-toolbar__btn,
             .p-inline-panel__btn {
