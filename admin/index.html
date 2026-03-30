@@ -198,39 +198,59 @@
             color: var(--muted);
         }
 
-        .launch-link {
+        .launch-card {
             display: grid;
-            gap: 5px;
+            gap: 14px;
             padding: 17px 18px;
             border-radius: 20px;
-            text-decoration: none;
             color: var(--text);
             background: var(--panel-soft);
             border: 1px solid var(--line);
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
-        .launch-link:hover {
+        .launch-card:hover {
             transform: translateY(-2px);
             border-color: rgba(37, 99, 235, 0.32);
             box-shadow: 0 16px 30px rgba(37, 99, 235, 0.12);
         }
 
-        .launch-link strong {
+        .launch-card strong {
             font-size: 17px;
             text-wrap: balance;
         }
 
-        .launch-link span {
+        .launch-card span {
             color: var(--muted);
             font-size: 14px;
             text-wrap: pretty;
         }
 
-        .primary-link {
-            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-            color: #fff;
-            border-color: transparent;
+        .launch-card--featured {
+            background: linear-gradient(180deg, #f3f8ff 0%, #ffffff 100%);
+            border-color: rgba(37, 99, 235, 0.18);
+        }
+
+        .launch-card--featured strong {
+            color: var(--blue-dark);
+        }
+
+        .launch-card__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .launch-card__actions .button {
+            min-height: 42px;
+            padding: 0 14px;
+            font-size: 14px;
+        }
+
+        .launch-card__quick {
+            background: #fff;
+            color: var(--blue-dark);
+            border-color: rgba(37, 99, 235, 0.18);
         }
 
         .primary-link span {
@@ -510,10 +530,10 @@
                 <span class="badge" id="draftBadge" hidden>Есть черновики</span>
             </div>
             <div class="hero-actions">
-                <a class="hero-link hero-link--primary" href="/?edit=1">Править главную</a>
-                <a class="hero-link" href="/pages/services.html?edit=1">Править каталог</a>
-                <a class="hero-link" href="/pages/gallery.html?edit=1">Править галерею</a>
-                <a class="hero-link" href="/pages/contacts.html?edit=1">Править контакты</a>
+                <a class="hero-link hero-link--primary" href="/">Открыть главную</a>
+                <a class="hero-link" href="/pages/services.html">Открыть каталог</a>
+                <a class="hero-link" href="/pages/gallery.html">Открыть галерею</a>
+                <a class="hero-link" href="/pages/contacts.html">Открыть контакты</a>
                 <a class="hero-link" id="recentHeroLink" href="/" hidden>Продолжить правку</a>
             </div>
         </section>
@@ -522,25 +542,49 @@
             <article class="card" id="launcherCard" hidden>
                 <span class="section-kicker">Страницы</span>
                 <h2>Быстрый запуск</h2>
-                <p>Открой нужную страницу сразу в режиме правки и меняй всё прямо на месте.</p>
+                <p>Обычно открой страницу как посетитель, а когда будешь готов, нажми на ней <strong>Редактировать на странице</strong>. Если нужно быстрее, рядом есть прямой вход в правку.</p>
 
                 <div class="launch-grid" id="launchGrid">
-                    <a class="launch-link primary-link" href="/?edit=1">
-                        <strong>Главная страница</strong>
-                        <span>Первый экран, направления, заявка и контакты</span>
-                    </a>
-                    <a class="launch-link" href="/pages/services.html?edit=1">
-                        <strong>Каталог</strong>
-                        <span>Карточки, галереи, FAQ и блоки автоматики</span>
-                    </a>
-                    <a class="launch-link" href="/pages/gallery.html?edit=1">
-                        <strong>Галерея</strong>
-                        <span>Шапка, фильтры, карточки работ и фотографии</span>
-                    </a>
-                    <a class="launch-link" href="/pages/contacts.html?edit=1">
-                        <strong>Контакты</strong>
-                        <span>Телефоны, режим работы, менеджер и схема проезда</span>
-                    </a>
+                    <article class="launch-card launch-card--featured">
+                        <div>
+                            <strong>Главная страница</strong>
+                            <span>Первый экран, направления, заявка и контакты</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/">Открыть страницу</a>
+                            <a class="button launch-card__quick" href="/?edit=1">Сразу править</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Каталог</strong>
+                            <span>Карточки, галереи, FAQ и блоки автоматики</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/services.html">Открыть страницу</a>
+                            <a class="button launch-card__quick" href="/pages/services.html?edit=1">Сразу править</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Галерея</strong>
+                            <span>Шапка, фильтры, карточки работ и фотографии</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/gallery.html">Открыть страницу</a>
+                            <a class="button launch-card__quick" href="/pages/gallery.html?edit=1">Сразу править</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Контакты</strong>
+                            <span>Телефоны, режим работы, менеджер и схема проезда</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/contacts.html">Открыть страницу</a>
+                            <a class="button launch-card__quick" href="/pages/contacts.html?edit=1">Сразу править</a>
+                        </div>
+                    </article>
                 </div>
 
                 <div id="recentWrap" hidden>
@@ -585,8 +629,9 @@
                 <p>Эта страница теперь нужна только для входа и запуска. Всё основное редактирование идёт уже на самом сайте.</p>
 
                 <ul class="mini-list">
-                    <li><strong>Текст и фото:</strong> открой страницу, нажми <code>?edit=1</code> и кликни по нужному блоку.</li>
+                    <li><strong>Текст и фото:</strong> открой страницу, нажми <strong>Редактировать на странице</strong> и кликни по нужному блоку.</li>
                     <li><strong>Длинные страницы:</strong> кнопка <strong>Обзор</strong> помогает быстро найти нужное место.</li>
+                    <li><strong>Быстрый вход:</strong> если нужно сразу попасть в редактор, используй быстрые правки ниже.</li>
                     <li><strong>Сохранение:</strong> правки уходят в те же JSON-файлы и сразу синхронны с сайтом.</li>
                 </ul>
 
@@ -698,7 +743,7 @@
                 recentHeroLink.hidden = !first;
                 if (first) {
                     recentHeroLink.href = buildRecentHref(first);
-                    recentHeroLink.textContent = 'Продолжить';
+                    recentHeroLink.textContent = 'Продолжить правку';
                     recentHeroLink.title = first.title;
                     recentHeroLink.setAttribute('aria-label', `Продолжить: ${first.title}`);
                 } else {
