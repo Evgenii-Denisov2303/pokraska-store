@@ -1290,6 +1290,121 @@
                 gap: 8px;
             }
 
+            .p-inline-panel__collection-list {
+                display: grid;
+                gap: 10px;
+            }
+
+            .p-inline-panel__collection-item {
+                display: grid;
+                grid-template-columns: 78px minmax(0, 1fr);
+                gap: 12px;
+                padding: 12px;
+                border-radius: 16px;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+                cursor: pointer;
+                transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+            }
+
+            .p-inline-panel__collection-item:hover {
+                border-color: rgba(59, 130, 246, 0.36);
+                box-shadow: 0 12px 26px rgba(37, 99, 235, 0.08);
+                transform: translateY(-1px);
+            }
+
+            .p-inline-panel__collection-item.is-active {
+                border-color: rgba(37, 99, 235, 0.56);
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.94), rgba(255, 255, 255, 1));
+                box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-panel__collection-item-media {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 72px;
+                border-radius: 14px;
+                background: #f8fafc;
+                overflow: hidden;
+                box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.16);
+            }
+
+            .p-inline-panel__collection-item-media img {
+                width: 100%;
+                height: 72px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .p-inline-panel__collection-item-placeholder {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 14px;
+                font-weight: 800;
+            }
+
+            .p-inline-panel__collection-item-copy {
+                display: grid;
+                gap: 8px;
+                min-width: 0;
+            }
+
+            .p-inline-panel__collection-item-top {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .p-inline-panel__collection-item-title {
+                min-width: 0;
+                font-size: 14px;
+                font-weight: 800;
+                color: #0f172a;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .p-inline-panel__collection-item-badge {
+                display: inline-flex;
+                align-items: center;
+                min-height: 24px;
+                padding: 0 8px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 11px;
+                font-weight: 800;
+                white-space: nowrap;
+            }
+
+            .p-inline-panel__collection-item-badge--muted {
+                background: rgba(148, 163, 184, 0.14);
+                color: #475569;
+            }
+
+            .p-inline-panel__collection-item-meta {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #64748b;
+                overflow-wrap: anywhere;
+            }
+
+            .p-inline-panel__collection-item-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
             .p-inline-panel__preview {
                 display: grid;
                 gap: 12px;
@@ -4654,6 +4769,111 @@
         };
     }
 
+    function getCollectionItemPreviewData(binding, item, index, total) {
+        if (binding?.type === 'image') {
+            const title = String(item?.caption || item?.title || item?.alt || `Фото ${index + 1}`).trim();
+            const src = String(item?.previewSrc || item?.zoomSrc || item?.src || '').trim();
+            return {
+                title,
+                meta: index === 0 ? 'Главное фото в галерее' : `Фото ${index + 1} из ${total}`,
+                imageSrc: src,
+                imageAlt: String(item?.alt || title || `Фото ${index + 1}`).trim() || `Фото ${index + 1}`
+            };
+        }
+
+        if (typeof item === 'string') {
+            const clean = item.trim();
+            return {
+                title: clean || `Элемент ${index + 1}`,
+                meta: `${index + 1} из ${total}`
+            };
+        }
+
+        if (Array.isArray(item)) {
+            return {
+                title: item[0] ? String(item[0]).trim() : `Элемент ${index + 1}`,
+                meta: `${item.length} пунктов внутри`
+            };
+        }
+
+        const title = String(
+            item?.title
+            || item?.label
+            || item?.name
+            || item?.text
+            || item?.question
+            || item?.heading
+            || item?.caption
+            || item?.alt
+            || `Элемент ${index + 1}`
+        ).trim();
+        const meta = String(
+            item?.subtitle
+            || item?.description
+            || item?.answer
+            || item?.href
+            || `${index + 1} из ${total}`
+        ).trim();
+        return {
+            title: title || `Элемент ${index + 1}`,
+            meta: meta || `${index + 1} из ${total}`
+        };
+    }
+
+    async function openCollectionBindingAtIndex(binding, index) {
+        const collectionState = getBindingCollectionState(binding);
+        if (!collectionState) return;
+        const targetBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${index}`);
+        if (!targetBinding) return;
+        await openBinding(targetBinding.id, { fromOverview: state.panelReturnToOverview });
+    }
+
+    async function moveBindingToCollectionIndex(bindingTarget, nextIndex) {
+        try {
+            const binding = typeof bindingTarget === 'string'
+                ? state.bindingMap.get(bindingTarget)
+                : bindingTarget;
+            if (!binding) return false;
+            const toastLabels = getCollectionToastLabels(binding);
+
+            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+            const collectionState = getBindingCollectionState(binding, fileState);
+            if (!collectionState || collectionState.total < 2) {
+                showToast(toastLabels.onlyOne);
+                return false;
+            }
+
+            const targetIndex = Math.max(0, Math.min(collectionState.total - 1, Number(nextIndex)));
+            if (targetIndex === collectionState.index) {
+                return false;
+            }
+
+            const [movedItem] = collectionState.items.splice(collectionState.index, 1);
+            collectionState.items.splice(targetIndex, 0, movedItem);
+
+            fileState.dirty = true;
+            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
+            refreshCollectionBindings(binding, fileState);
+            persistDraftFiles();
+            renderToolbar();
+
+            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${targetIndex}`) || binding;
+            state.activeBindingId = nextBinding.id;
+            clearActiveMarks();
+            nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+            fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
+
+            showToast(targetIndex === 0 ? toastLabels.movedFirst : toastLabels.moved);
+            return true;
+        } catch (error) {
+            const activeBinding = typeof bindingTarget === 'string'
+                ? state.bindingMap.get(bindingTarget)
+                : bindingTarget;
+            showToast(error.message || getCollectionToastLabels(activeBinding).moveError);
+            return false;
+        }
+    }
+
     function appendCollectionControls(binding, collectionState) {
         const nouns = getCollectionItemNouns(binding);
         const collectionBox = document.createElement('div');
@@ -4699,6 +4919,111 @@
         });
 
         collectionBox.appendChild(collectionActions);
+
+        const collectionList = document.createElement('div');
+        collectionList.className = 'p-inline-panel__collection-list';
+
+        collectionState.items.forEach((item, index) => {
+            const preview = getCollectionItemPreviewData(binding, item, index, collectionState.total);
+            const card = document.createElement('div');
+            card.className = 'p-inline-panel__collection-item';
+            card.tabIndex = 0;
+            if (index === collectionState.index) {
+                card.classList.add('is-active');
+            }
+
+            const media = document.createElement('div');
+            media.className = 'p-inline-panel__collection-item-media';
+            if (preview.imageSrc) {
+                const image = document.createElement('img');
+                image.src = preview.imageSrc;
+                image.alt = preview.imageAlt || preview.title;
+                media.appendChild(image);
+            } else {
+                const placeholder = document.createElement('span');
+                placeholder.className = 'p-inline-panel__collection-item-placeholder';
+                placeholder.textContent = String(index + 1);
+                media.appendChild(placeholder);
+            }
+            card.appendChild(media);
+
+            const copy = document.createElement('div');
+            copy.className = 'p-inline-panel__collection-item-copy';
+
+            const top = document.createElement('div');
+            top.className = 'p-inline-panel__collection-item-top';
+
+            const title = document.createElement('div');
+            title.className = 'p-inline-panel__collection-item-title';
+            title.textContent = preview.title;
+            top.appendChild(title);
+
+            if (index === collectionState.index) {
+                const currentBadge = document.createElement('span');
+                currentBadge.className = 'p-inline-panel__collection-item-badge';
+                currentBadge.textContent = 'Сейчас';
+                top.appendChild(currentBadge);
+            }
+
+            if (index === 0) {
+                const firstBadge = document.createElement('span');
+                firstBadge.className = 'p-inline-panel__collection-item-badge p-inline-panel__collection-item-badge--muted';
+                firstBadge.textContent = binding.type === 'image' ? 'Главное' : 'Первый';
+                top.appendChild(firstBadge);
+            }
+
+            copy.appendChild(top);
+
+            const meta = document.createElement('p');
+            meta.className = 'p-inline-panel__collection-item-meta';
+            meta.textContent = preview.meta;
+            copy.appendChild(meta);
+
+            const itemActions = document.createElement('div');
+            itemActions.className = 'p-inline-panel__collection-item-actions';
+
+            const openButton = document.createElement('button');
+            openButton.type = 'button';
+            openButton.className = 'p-inline-panel__example-chip';
+            openButton.textContent = index === collectionState.index ? 'Открыто' : 'Открыть';
+            openButton.disabled = index === collectionState.index;
+            openButton.addEventListener('click', async (event) => {
+                event.stopPropagation();
+                if (index === collectionState.index) return;
+                await openCollectionBindingAtIndex(binding, index);
+            });
+            itemActions.appendChild(openButton);
+
+            if (index !== 0) {
+                const firstButton = document.createElement('button');
+                firstButton.type = 'button';
+                firstButton.className = 'p-inline-panel__example-chip';
+                firstButton.textContent = binding.type === 'image' ? 'Сделать главным' : 'В начало';
+                firstButton.addEventListener('click', async (event) => {
+                    event.stopPropagation();
+                    await moveBindingToCollectionIndex(index === collectionState.index ? binding : findBinding(binding.fileName, `${collectionState.collectionPath}.${index}`), 0);
+                });
+                itemActions.appendChild(firstButton);
+            }
+
+            copy.appendChild(itemActions);
+            card.appendChild(copy);
+
+            card.addEventListener('click', async () => {
+                if (index === collectionState.index) return;
+                await openCollectionBindingAtIndex(binding, index);
+            });
+            card.addEventListener('keydown', async (event) => {
+                if (event.key !== 'Enter' && event.key !== ' ') return;
+                event.preventDefault();
+                if (index === collectionState.index) return;
+                await openCollectionBindingAtIndex(binding, index);
+            });
+
+            collectionList.appendChild(card);
+        });
+
+        collectionBox.appendChild(collectionList);
         ui.panelForm.appendChild(collectionBox);
     }
 
@@ -5394,51 +5719,25 @@
     }
 
     async function moveActiveBindingInCollection(direction) {
-        try {
-            const binding = state.bindingMap.get(state.activeBindingId);
-            if (!binding) return;
-            const toastLabels = getCollectionToastLabels(binding);
-
-            const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
-            const collectionState = getBindingCollectionState(binding, fileState);
-            if (!collectionState || collectionState.total < 2) {
-                showToast(toastLabels.onlyOne);
-                return;
-            }
-
-            let nextIndex = collectionState.index;
-            if (direction === 'first') {
-                nextIndex = 0;
-            } else if (direction === 'prev') {
-                nextIndex = Math.max(0, collectionState.index - 1);
-            } else if (direction === 'next') {
-                nextIndex = Math.min(collectionState.total - 1, collectionState.index + 1);
-            }
-
-            if (nextIndex === collectionState.index) {
-                return;
-            }
-
-            const [movedItem] = collectionState.items.splice(collectionState.index, 1);
-            collectionState.items.splice(nextIndex, 0, movedItem);
-
-            fileState.dirty = true;
-            markBindingsDirtyForCollection(binding.fileName, collectionState.collectionPath);
-            refreshCollectionBindings(binding, fileState);
-            persistDraftFiles();
-            renderToolbar();
-
-            const nextBinding = findBinding(binding.fileName, `${collectionState.collectionPath}.${nextIndex}`) || binding;
-            state.activeBindingId = nextBinding.id;
-            clearActiveMarks();
-            nextBinding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
-            fillPanel(nextBinding, resolveBindingValue(fileState, nextBinding));
-
-            showToast(nextIndex === 0 ? toastLabels.movedFirst : toastLabels.moved);
-        } catch (error) {
-            const activeBinding = state.bindingMap.get(state.activeBindingId);
-            showToast(error.message || getCollectionToastLabels(activeBinding).moveError);
+        const binding = state.bindingMap.get(state.activeBindingId);
+        if (!binding) return;
+        const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
+        const collectionState = getBindingCollectionState(binding, fileState);
+        if (!collectionState || collectionState.total < 2) {
+            showToast(getCollectionToastLabels(binding).onlyOne);
+            return;
         }
+
+        let nextIndex = collectionState.index;
+        if (direction === 'first') {
+            nextIndex = 0;
+        } else if (direction === 'prev') {
+            nextIndex = Math.max(0, collectionState.index - 1);
+        } else if (direction === 'next') {
+            nextIndex = Math.min(collectionState.total - 1, collectionState.index + 1);
+        }
+
+        await moveBindingToCollectionIndex(binding, nextIndex);
     }
 
     async function applyActiveBinding(options = {}) {
