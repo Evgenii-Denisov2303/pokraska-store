@@ -3316,7 +3316,21 @@
         if (binding.type === 'object') {
             const fields = getBindingEditorFields(binding);
             if (fields.some(isLinkLikeField)) {
-                return 'Меняйте текст, переход и значок справа.';
+                const hasIcon = fields.some(isIconField);
+                const hasStyle = fields.some(isStyleField);
+                const hasPhoneLabel = fields.some((field) => String(field?.key || '').toLowerCase() === 'note');
+                const hasPhoneValue = fields.some((field) => String(field?.key || '').toLowerCase() === 'label');
+
+                if (hasPhoneLabel && hasPhoneValue && !hasIcon && !hasStyle) {
+                    return 'Меняйте номер, ссылку и подпись справа.';
+                }
+                if (hasIcon && hasStyle) {
+                    return 'Меняйте текст, переход, значок и вид кнопки справа.';
+                }
+                if (hasIcon) {
+                    return 'Меняйте текст, переход и значок справа.';
+                }
+                return 'Меняйте текст и переход справа.';
             }
             return 'Меняйте текст и параметры этого блока справа.';
         }
@@ -3851,7 +3865,7 @@
             } else if (panelState?.tone === 'is-pending') {
                 ui.toolbarMeta.textContent = `${activeSummary}. Этот блок уже обновлён на странице, но ещё не сохранён окончательно.`;
             } else {
-                ui.toolbarMeta.textContent = `${activeSummary}. ${getBindingWorkHint(activeBinding)}${dirtyCount ? ' Потом нажмите «Сохранить».' : ''}`;
+                ui.toolbarMeta.textContent = `${activeSummary}. Вы только выбрали блок — изменений ещё нет. ${getBindingWorkHint(activeBinding)}${dirtyCount ? ' Потом нажмите «Сохранить».' : ''}`;
             }
         } else {
             ui.toolbarMeta.textContent = dirtyCount
