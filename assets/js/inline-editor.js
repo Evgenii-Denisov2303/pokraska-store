@@ -1893,6 +1893,10 @@
                 flex: 0 0 auto;
             }
 
+            .p-inline-panel__object-preview-icon[hidden] {
+                display: none !important;
+            }
+
             .p-inline-panel__object-preview-copy {
                 display: grid;
                 gap: 6px;
@@ -1910,6 +1914,12 @@
                 color: #1d4ed8;
                 font-size: 12px;
                 font-weight: 800;
+            }
+
+            .p-inline-panel__object-preview-badge[hidden],
+            .p-inline-panel__object-preview-text[hidden],
+            .p-inline-panel__action-preview-button[hidden] {
+                display: none !important;
             }
 
             .p-inline-panel__object-preview-title {
