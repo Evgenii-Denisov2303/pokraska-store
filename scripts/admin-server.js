@@ -44,8 +44,9 @@ const LOGIN_WINDOW_MS = Number(process.env.LOGIN_WINDOW_MS || 1000 * 60 * 15);
 const LOGIN_MAX_ATTEMPTS = Number(process.env.LOGIN_MAX_ATTEMPTS || 10);
 const ADMIN_ALLOWED_IPS = parseList(process.env.ADMIN_ALLOWED_IPS);
 const CONTENT_CORS_ORIGINS = parseList(process.env.CONTENT_CORS_ORIGINS);
+const SESSIONS_FILE = path.join(ADMIN_DATA_DIR, 'sessions.json');
 
-const sessions = new Map();
+let sessions = new Map();
 const loginAttempts = new Map();
 
 const MIME_TYPES = {
@@ -140,7 +141,12 @@ function getSecurityHeaders(pathname) {
         || pathname.startsWith('/admin/')
         || pathname.startsWith('/api/');
 
+    const csp = isAdmin
+        ? "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        : "default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data: https://fonts.gstatic.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'";
+
     return {
+        'Content-Security-Policy': csp,
         'X-Content-Type-Options': 'nosniff',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
@@ -191,6 +197,27 @@ function cleanExpiredLoginAttempts() {
     }
 }
 
+async function loadSessions() {
+    try {
+        const data = await fs.readFile(SESSIONS_FILE, 'utf-8');
+        const entries = JSON.parse(data);
+        sessions = new Map(entries.filter(([, s]) => s.expiresAt > Date.now()));
+    } catch {
+        sessions = new Map();
+    }
+}
+
+async function saveSessions() {
+    try {
+        await fs.mkdir(ADMIN_DATA_DIR, { recursive: true });
+        const now = Date.now();
+        const entries = [...sessions.entries()].filter(([, s]) => s.expiresAt > now);
+        await fs.writeFile(SESSIONS_FILE, JSON.stringify(entries), 'utf-8');
+    } catch {
+        // не критично
+    }
+}
+
 function getSession(request) {
     cleanExpiredSessions();
     const token = parseCookies(request)[SESSION_COOKIE];
@@ -211,7 +238,13 @@ function createSession(username) {
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = Date.now() + SESSION_TTL_MS;
     sessions.set(token, { username, expiresAt });
+    saveSessions().catch(() => {});
     return { token, expiresAt };
+}
+
+function deleteSession(token) {
+    sessions.delete(token);
+    saveSessions().catch(() => {});
 }
 
 function createSessionCookie(request, token, maxAgeSeconds) {
@@ -555,7 +588,7 @@ async function handleAuthApi(request, response, pathname) {
 
         const session = getSession(request);
         if (session?.token) {
-            sessions.delete(session.token);
+            deleteSession(session.token);
         }
 
         sendJson(request, response, 200, {
@@ -726,7 +759,7 @@ async function handleContentApi(request, response, pathname) {
                 ...getSecurityHeaders(pathname)
             }, content);
         } catch (error) {
-            sendJson(request, response, 404, { error: `Файл ${fileName} не найден` });
+            sendJson(request, response, 404, { ok: false, error: `Файл ${fileName} не найден` });
         }
         return true;
     }
@@ -773,6 +806,7 @@ async function handleContentApi(request, response, pathname) {
             });
         } catch (error) {
             sendJson(request, response, 400, {
+                ok: false,
                 error: 'Не удалось сохранить JSON',
                 details: error.message
             });
@@ -780,7 +814,7 @@ async function handleContentApi(request, response, pathname) {
         return true;
     }
 
-    sendJson(request, response, 405, { error: 'Метод не поддерживается' });
+    sendJson(request, response, 405, { ok: false, error: 'Метод не поддерживается' });
     return true;
 }
 
@@ -811,7 +845,8 @@ async function handlePublicContent(request, response, pathname) {
             ...getSecurityHeaders(pathname)
         }), content);
     } catch (error) {
-        sendJson(request, response, 404, { error: `Файл ${fileName} не найден` });
+        const corsHeaders = maybeApplyContentCors(request, response, {});
+        sendJson(request, response, 404, { ok: false, error: `Файл ${fileName} не найден` }, corsHeaders);
     }
     return true;
 }
@@ -819,30 +854,62 @@ async function handlePublicContent(request, response, pathname) {
 async function handleStaticFile(request, response, pathname) {
     const filePath = getStaticFilePath(pathname);
     if (!filePath) {
-        sendJson(request, response, 403, { error: 'Недопустимый путь' });
+        sendJson(request, response, 403, { ok: false, error: 'Недопустимый путь' });
         return;
     }
 
     try {
         const stats = await fs.stat(filePath);
         if (stats.isDirectory()) {
-            sendJson(request, response, 403, { error: 'Ожидался файл, а не директория' });
+            sendJson(request, response, 403, { ok: false, error: 'Ожидался файл, а не директория' });
             return;
         }
 
         const ext = path.extname(filePath).toLowerCase();
-        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-        const data = await fs.readFile(filePath);
         const isHtml = ext === '.html';
         const isAdmin = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
 
+        // WebP-переговоры: отдаём .webp вместо .jpg/.png если браузер поддерживает
+        if (!isHtml && ['.jpg', '.jpeg', '.png'].includes(ext)) {
+            const acceptHeader = String(request.headers.accept || '');
+            if (acceptHeader.includes('image/webp')) {
+                const webpPath = filePath.slice(0, filePath.length - ext.length) + '.webp';
+                try {
+                    const webpData = await fs.readFile(webpPath);
+                    writeResponse(response, 200, {
+                        'Content-Type': 'image/webp',
+                        'Cache-Control': 'public, max-age=31536000, immutable',
+                        'Vary': 'Accept',
+                        ...getSecurityHeaders(pathname)
+                    }, webpData);
+                    return;
+                } catch {
+                    // .webp не найден — продолжаем с оригиналом
+                }
+            }
+        }
+
+        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+        const data = await fs.readFile(filePath);
+
+        let cacheControl;
+        if (isHtml || isAdmin) {
+            cacheControl = 'no-cache';
+        } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
+            cacheControl = 'public, max-age=31536000, immutable';
+        } else if (ext === '.css' || ext === '.js') {
+            cacheControl = 'public, max-age=86400';
+        } else {
+            cacheControl = 'public, max-age=3600';
+        }
+
         writeResponse(response, 200, {
             'Content-Type': contentType,
-            'Cache-Control': isHtml || isAdmin ? 'no-cache' : 'public, max-age=3600',
+            'Cache-Control': cacheControl,
             ...getSecurityHeaders(pathname)
         }, data);
     } catch (error) {
-        sendJson(request, response, 404, { error: 'Файл не найден' });
+        sendJson(request, response, 404, { ok: false, error: 'Файл не найден' });
     }
 }
 
@@ -910,11 +977,13 @@ const server = http.createServer(async (request, response) => {
     }
 });
 
-server.listen(PORT, HOST, () => {
-    const displayHost = HOST === '0.0.0.0' ? 'localhost' : HOST;
-    console.log(`POKRASKA.STORE admin server is running on http://${displayHost}:${PORT}`);
-    console.log(`Open the visual editing launcher at http://${displayHost}:${PORT}/admin/`);
-    console.log(`Auth mode: ${AUTH_ENABLED ? 'enabled' : 'disabled'}`);
-    console.log(`Trust proxy: ${TRUST_PROXY ? 'enabled' : 'disabled'}`);
-    console.log(`Force HTTPS: ${FORCE_HTTPS ? 'enabled' : 'disabled'}`);
+loadSessions().catch(() => {}).then(() => {
+    server.listen(PORT, HOST, () => {
+        const displayHost = HOST === '0.0.0.0' ? 'localhost' : HOST;
+        console.log(`POKRASKA.STORE admin server is running on http://${displayHost}:${PORT}`);
+        console.log(`Open the visual editing launcher at http://${displayHost}:${PORT}/admin/`);
+        console.log(`Auth mode: ${AUTH_ENABLED ? 'enabled' : 'disabled'}`);
+        console.log(`Trust proxy: ${TRUST_PROXY ? 'enabled' : 'disabled'}`);
+        console.log(`Force HTTPS: ${FORCE_HTTPS ? 'enabled' : 'disabled'}`);
+    });
 });

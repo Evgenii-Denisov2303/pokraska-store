@@ -1,6 +1,13 @@
 pokraska.store, www.pokraska.store {
     encode zstd gzip
 
+    header {
+        # HSTS: браузер запоминает HTTPS на 1 год
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Убираем заголовок Server из ответов Caddy
+        -Server
+    }
+
     reverse_proxy pokraska-store:4173 {
         header_up X-Forwarded-Proto {scheme}
         header_up X-Forwarded-For {remote_host}

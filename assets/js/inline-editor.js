@@ -1465,6 +1465,104 @@
                 overflow-wrap: anywhere;
             }
 
+            .p-inline-panel__object-preview {
+                display: grid;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 18px;
+                background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+                border: 1px solid rgba(96, 165, 250, 0.18);
+                box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__object-preview-card {
+                display: grid;
+                gap: 12px;
+                padding: 16px;
+                border-radius: 18px;
+                background: #ffffff;
+                border: 1px solid rgba(148, 163, 184, 0.16);
+                transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            }
+
+            .p-inline-panel__object-preview-card--primary {
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.96), rgba(255, 255, 255, 1));
+                border-color: rgba(96, 165, 250, 0.26);
+                box-shadow: 0 14px 28px rgba(37, 99, 235, 0.08);
+            }
+
+            .p-inline-panel__object-preview-card--secondary {
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 1));
+                border-color: rgba(148, 163, 184, 0.18);
+            }
+
+            .p-inline-panel__object-preview-card--outline {
+                background: #ffffff;
+                border-color: rgba(37, 99, 235, 0.24);
+                box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+            }
+
+            .p-inline-panel__object-preview-top {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .p-inline-panel__object-preview-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 46px;
+                height: 46px;
+                border-radius: 14px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 18px;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-panel__object-preview-copy {
+                display: grid;
+                gap: 6px;
+                min-width: 0;
+            }
+
+            .p-inline-panel__object-preview-badge {
+                display: inline-flex;
+                align-items: center;
+                width: fit-content;
+                min-height: 24px;
+                padding: 0 9px;
+                border-radius: 999px;
+                background: rgba(37, 99, 235, 0.1);
+                color: #1d4ed8;
+                font-size: 12px;
+                font-weight: 800;
+            }
+
+            .p-inline-panel__object-preview-title {
+                margin: 0;
+                font-size: 17px;
+                line-height: 1.35;
+                font-weight: 800;
+                color: #0f172a;
+                text-wrap: balance;
+            }
+
+            .p-inline-panel__object-preview-text {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.6;
+                color: #475569;
+                text-wrap: pretty;
+            }
+
+            .p-inline-panel__quick-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
             .p-inline-panel__preview-frame {
                 position: relative;
             }
@@ -3948,6 +4046,30 @@
         return wrapper;
     }
 
+    function getDefaultInlineIconForBinding(binding, value = {}) {
+        const text = String(
+            binding?.label
+            || value?.title
+            || value?.label
+            || value?.name
+            || value?.text
+            || ''
+        ).toLowerCase();
+
+        if (/телефон|звон|контакт/.test(text)) return 'fas fa-phone';
+        if (/почт|mail/.test(text)) return 'fas fa-envelope';
+        if (/telegram|телеграм/.test(text)) return 'fab fa-telegram-plane';
+        if (/whatsapp|ватсап/.test(text)) return 'fab fa-whatsapp';
+        if (/ворот/.test(text)) return 'fas fa-archway';
+        if (/калит/.test(text)) return 'fas fa-door-open';
+        if (/забор|секц|панел/.test(text)) return 'fas fa-border-all';
+        if (/договор|документ/.test(text)) return 'fas fa-file-contract';
+        if (/расчет|стоим|цен/.test(text)) return 'fas fa-calculator';
+        if (/покраск/.test(text)) return 'fas fa-paint-roller';
+        if (/достав|выезд/.test(text)) return 'fas fa-truck';
+        return 'fas fa-check-circle';
+    }
+
     function getLinkExamples(field) {
         const key = String(field?.key || '').toLowerCase();
         if (key.includes('phone')) {
@@ -4527,8 +4649,132 @@
         return preview;
     }
 
+    function getObjectPreviewValues(binding, value) {
+        const objectValue = value && typeof value === 'object' ? value : {};
+        const title = String(
+            objectValue.title
+            || objectValue.label
+            || objectValue.name
+            || binding.label
+            || 'Карточка'
+        ).trim() || 'Карточка';
+        const text = String(
+            objectValue.description
+            || objectValue.subtitle
+            || objectValue.text
+            || objectValue.answer
+            || ''
+        ).trim();
+        const badge = String(objectValue.badge || objectValue.meta || '').trim();
+        const icon = String(objectValue.icon || '').trim();
+        const style = String(objectValue.style || objectValue.variant || 'secondary').trim() || 'secondary';
+        const action = {
+            label: String(objectValue.actionLabel || objectValue.cta?.label || '').trim(),
+            href: String(objectValue.href || objectValue.url || objectValue.link || objectValue.cta?.href || '').trim(),
+            icon: String(objectValue.cta?.icon || '').trim()
+        };
+        return { title, text, badge, icon, style, action };
+    }
+
+    function createObjectCardPreview(binding, value) {
+        const preview = document.createElement('div');
+        preview.className = 'p-inline-panel__object-preview';
+        preview.dataset.inlineObjectPreview = 'card';
+        preview.innerHTML = `
+            <div class="p-inline-panel__action-preview-badge">Так увидит клиент</div>
+            <div class="p-inline-panel__object-preview-card">
+                <div class="p-inline-panel__object-preview-top">
+                    <div class="p-inline-panel__object-preview-icon" hidden><i aria-hidden="true"></i></div>
+                    <div class="p-inline-panel__object-preview-copy">
+                        <span class="p-inline-panel__object-preview-badge" hidden></span>
+                        <h4 class="p-inline-panel__object-preview-title"></h4>
+                        <p class="p-inline-panel__object-preview-text" hidden></p>
+                    </div>
+                </div>
+                <div class="p-inline-panel__action-preview-button" hidden>
+                    <i aria-hidden="true" hidden></i>
+                    <span></span>
+                </div>
+            </div>
+        `;
+
+        const cardNode = preview.querySelector('.p-inline-panel__object-preview-card');
+        const iconWrap = preview.querySelector('.p-inline-panel__object-preview-icon');
+        const iconNode = iconWrap.querySelector('i');
+        const badgeNode = preview.querySelector('.p-inline-panel__object-preview-badge');
+        const titleNode = preview.querySelector('.p-inline-panel__object-preview-title');
+        const textNode = preview.querySelector('.p-inline-panel__object-preview-text');
+        const actionNode = preview.querySelector('.p-inline-panel__action-preview-button');
+        const actionIcon = actionNode.querySelector('i');
+        const actionText = actionNode.querySelector('span');
+
+        const render = (nextValue = value) => {
+            const data = getObjectPreviewValues(binding, nextValue);
+            const previewStyle = INLINE_BUTTON_STYLE_LIBRARY[data.style]?.previewClass || 'secondary';
+            cardNode.classList.remove(
+                'p-inline-panel__object-preview-card--primary',
+                'p-inline-panel__object-preview-card--secondary',
+                'p-inline-panel__object-preview-card--outline'
+            );
+            cardNode.classList.add(`p-inline-panel__object-preview-card--${previewStyle}`);
+
+            titleNode.textContent = data.title;
+
+            if (data.badge) {
+                badgeNode.hidden = false;
+                badgeNode.textContent = data.badge;
+            } else {
+                badgeNode.hidden = true;
+                badgeNode.textContent = '';
+            }
+
+            if (data.text) {
+                textNode.hidden = false;
+                textNode.textContent = data.text;
+            } else {
+                textNode.hidden = true;
+                textNode.textContent = '';
+            }
+
+            if (data.icon) {
+                iconWrap.hidden = false;
+                iconNode.className = data.icon;
+            } else {
+                iconWrap.hidden = true;
+                iconNode.className = '';
+            }
+
+            if (data.action.label) {
+                actionNode.hidden = false;
+                actionNode.classList.remove(
+                    'p-inline-panel__action-preview-button--primary',
+                    'p-inline-panel__action-preview-button--secondary',
+                    'p-inline-panel__action-preview-button--outline'
+                );
+                actionNode.classList.add(`p-inline-panel__action-preview-button--${previewStyle}`);
+                actionText.textContent = data.action.label;
+                if (data.action.icon) {
+                    actionIcon.hidden = false;
+                    actionIcon.className = data.action.icon;
+                } else {
+                    actionIcon.hidden = true;
+                    actionIcon.className = '';
+                }
+            } else {
+                actionNode.hidden = true;
+                actionText.textContent = '';
+                actionIcon.hidden = true;
+                actionIcon.className = '';
+            }
+        };
+
+        preview.renderPreview = render;
+        render(value);
+        return preview;
+    }
+
     function updatePanelActionPreview() {
-        const preview = ui.panelForm?.querySelector('.p-inline-panel__action-preview');
+        const preview = ui.panelForm?.querySelector('.p-inline-panel__action-preview, [data-inline-object-preview="card"]');
         const binding = state.bindingMap.get(state.activeBindingId);
         if (!preview || !binding || binding.type !== 'object' || typeof preview.renderPreview !== 'function') {
             return;
@@ -4545,6 +4791,85 @@
             setByPath(nextValue, field.key, control.value ?? '');
         });
         preview.renderPreview(nextValue);
+    }
+
+    function appendObjectQuickActions(binding, value) {
+        const editorFields = getBindingEditorFields(binding);
+        const styleField = editorFields.find(isStyleField);
+        const iconField = editorFields.find(isIconField);
+        if (!styleField && !iconField) return;
+
+        const section = createPanelSection(
+            'Быстрые варианты',
+            'Можно быстро попробовать вид карточки, не меняя поля по одному.'
+        );
+
+        const actions = document.createElement('div');
+        actions.className = 'p-inline-panel__quick-actions';
+
+        if (styleField) {
+            const styleControl = ui.panelForm.querySelector(`[name="${styleField.key}"]`);
+            const styleOptions = getStyleOptionsForField(styleField, styleControl?.value || value?.style || value?.variant || '');
+            const accentOption = styleOptions.find((option) => option.value === 'primary');
+            const calmOption = styleOptions.find((option) => option.value === 'secondary') || styleOptions.find((option) => option.value === 'outline');
+
+            if (accentOption && styleControl) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'p-inline-panel__example-chip';
+                button.textContent = 'Акцентная';
+                button.addEventListener('click', () => {
+                    styleControl.value = accentOption.value;
+                    styleControl.dispatchEvent(new Event('input', { bubbles: true }));
+                    styleControl.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                actions.appendChild(button);
+            }
+
+            if (calmOption && styleControl) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'p-inline-panel__example-chip';
+                button.textContent = calmOption.value === 'outline' ? 'Контурная' : 'Спокойная';
+                button.addEventListener('click', () => {
+                    styleControl.value = calmOption.value;
+                    styleControl.dispatchEvent(new Event('input', { bubbles: true }));
+                    styleControl.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                actions.appendChild(button);
+            }
+        }
+
+        if (iconField) {
+            const iconControl = ui.panelForm.querySelector(`[name="${iconField.key}"]`);
+            if (iconControl) {
+                const withIcon = document.createElement('button');
+                withIcon.type = 'button';
+                withIcon.className = 'p-inline-panel__example-chip';
+                withIcon.textContent = 'С иконкой';
+                withIcon.addEventListener('click', () => {
+                    iconControl.value = iconControl.value || getDefaultInlineIconForBinding(binding, value);
+                    iconControl.dispatchEvent(new Event('input', { bubbles: true }));
+                    iconControl.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                actions.appendChild(withIcon);
+
+                const withoutIcon = document.createElement('button');
+                withoutIcon.type = 'button';
+                withoutIcon.className = 'p-inline-panel__example-chip';
+                withoutIcon.textContent = 'Без иконки';
+                withoutIcon.addEventListener('click', () => {
+                    iconControl.value = '';
+                    iconControl.dispatchEvent(new Event('input', { bubbles: true }));
+                    iconControl.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                actions.appendChild(withoutIcon);
+            }
+        }
+
+        if (!actions.children.length) return;
+        section.appendChild(actions);
+        ui.panelForm.appendChild(section);
     }
 
     function getBindingEditorFields(binding) {
@@ -5175,7 +5500,13 @@
         }
 
         if (binding.type === 'object') {
-            ui.panelForm.appendChild(createActionPreview(binding, value));
+            const editorFields = getBindingEditorFields(binding);
+            const linkFields = editorFields.filter(isLinkLikeField);
+            const cardFields = editorFields.filter((field) => isPrimaryTextField(field) || isIconField(field) || isStyleField(field));
+            const preview = (cardFields.length >= 2 || !linkFields.length)
+                ? createObjectCardPreview(binding, value)
+                : createActionPreview(binding, value);
+            ui.panelForm.appendChild(preview);
         }
 
         fieldSections.forEach((sectionConfig) => {
@@ -5188,6 +5519,10 @@
             });
             ui.panelForm.appendChild(section);
         });
+
+        if (binding.type === 'object') {
+            appendObjectQuickActions(binding, value);
+        }
 
         const collectionState = getBindingCollectionState(binding);
         if (collectionState && (binding.type === 'image' || binding.type === 'object' || binding.type === 'text')) {
