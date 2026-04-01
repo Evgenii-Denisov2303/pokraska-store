@@ -2052,6 +2052,10 @@
                 overflow-wrap: anywhere;
             }
 
+            .p-inline-panel__upload-file[hidden] {
+                display: none !important;
+            }
+
             .p-inline-overview {
                 position: fixed;
                 top: 24px;
