@@ -12,6 +12,13 @@
             .replace(/'/g, '&#39;');
     }
 
+    function extractDirectoryFromSrc(src, fallback = 'assets/images/catalog') {
+        const cleanSrc = String(src || '').split('?')[0];
+        const withoutDots = cleanSrc.replace(/^(\.\.\/)+/, '').replace(/^\/+/, '');
+        const lastSlashIndex = withoutDots.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? withoutDots.slice(0, lastSlashIndex) : fallback;
+    }
+
     function renderAction(action, className) {
         const targetAttrs = action.href?.startsWith('http')
             ? ' target="_blank" rel="noopener noreferrer"'
@@ -117,6 +124,27 @@
         const container = featureElement?.querySelector('.direction-feature__actions');
         if (!container) return;
         syncCollection(container, 'a', items, applyDirectionAction);
+    }
+
+    function applyPartnerCard(node, item) {
+        if (!node || !item) return;
+        const image = node.querySelector('img');
+        if (!image) return;
+        image.src = item.src || '';
+        image.alt = item.alt || '';
+        if (item.title) {
+            image.title = item.title;
+        } else {
+            image.removeAttribute('title');
+        }
+        if (item.width) image.width = Number(item.width) || image.width;
+        if (item.height) image.height = Number(item.height) || image.height;
+    }
+
+    function syncPartnersGrid(items) {
+        const container = document.querySelector('.partners-grid');
+        if (!container) return;
+        syncCollection(container, '.partner-card', items, applyPartnerCard);
     }
 
     function applyHeroFeature(node, feature) {
@@ -507,6 +535,18 @@
                 </div>
             `).join('');
         }
+    }
+
+    function applyPartners(partners) {
+        const section = document.querySelector('.partners-section');
+        if (!section || !partners) return;
+
+        const title = section.querySelector('.section-title');
+        const subtitle = section.querySelector('.section-subtitle');
+
+        if (title) title.textContent = partners.title || '';
+        if (subtitle) subtitle.textContent = partners.subtitle || '';
+        syncPartnersGrid(partners.items || []);
     }
 
     function applyRequest(request) {
@@ -1180,6 +1220,61 @@
             if (cardText) bindings.push({ path: `trust.cards.${index}.text`, type: 'textarea', label: `Карточка доверия ${index + 1}: описание`, element: cardText });
         });
 
+        const partnersTitle = document.querySelector('.partners-section .section-title');
+        const partnersSubtitle = document.querySelector('.partners-section .section-subtitle');
+        if (partnersTitle) {
+            bindings.push({ path: 'partners.title', type: 'text', label: 'Заголовок блока брендов', element: partnersTitle });
+        }
+        if (partnersSubtitle) {
+            bindings.push({ path: 'partners.subtitle', type: 'textarea', label: 'Подзаголовок блока брендов', element: partnersSubtitle });
+        }
+
+        const buildPartnerBinding = (targetItem, index) => {
+            const image = targetItem?.querySelector('img');
+            if (!image) return null;
+            return {
+                path: `partners.items.${index}`,
+                type: 'image',
+                label: `Логотип бренда ${index + 1}`,
+                hint: 'Можно заменить логотип и описание для поисковиков.',
+                editorKindLabel: 'Логотип на странице',
+                element: targetItem,
+                collectionPath: 'partners.items',
+                collectionItemFactory(nextIndex) {
+                    const nextItem = document.querySelectorAll('.partners-grid .partner-card')[nextIndex];
+                    if (!nextItem) return null;
+                    return buildPartnerBinding(nextItem, nextIndex);
+                },
+                collectionCreateValue() {
+                    return {
+                        src: image.getAttribute('src') || '',
+                        alt: 'Новый бренд',
+                        title: 'Новый бренд',
+                        width: Number(image.getAttribute('width')) || null,
+                        height: Number(image.getAttribute('height')) || null
+                    };
+                },
+                directory: extractDirectoryFromSrc(image.getAttribute('src') || ''),
+                fields: [
+                    { key: 'alt', label: 'Alt', type: 'text' },
+                    { key: 'title', label: 'Название бренда', type: 'text' }
+                ],
+                collectionRender(items) {
+                    syncPartnersGrid(Array.isArray(items) ? items : []);
+                },
+                render(value) {
+                    applyPartnerCard(targetItem, value || {});
+                }
+            };
+        };
+
+        document.querySelectorAll('.partners-grid .partner-card').forEach((cardElement, index) => {
+            const binding = buildPartnerBinding(cardElement, index);
+            if (binding) {
+                bindings.push(binding);
+            }
+        });
+
         const requestTitle = document.querySelector('#request-title');
         const requestLead = document.querySelector('.request-lead');
         const requestEyebrow = document.querySelector('.request-eyebrow');
@@ -1399,6 +1494,7 @@
             applyDirections(home.directions || {});
             applyProcess(home.process || {});
             applyTrust(home.trust || {});
+            applyPartners(home.partners || {});
             applyRequest(home.request || {});
             registerInlineBindings();
         } catch (error) {

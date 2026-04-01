@@ -328,6 +328,33 @@
       }
     ]
   },
+  "partners": {
+    "title": "Бренды, с которыми работаем",
+    "subtitle": "Используем проверенную автоматику и комплектующие от ведущих производителей",
+    "items": [
+      {
+        "src": "/assets/images/catalog/came-logo.jpg",
+        "alt": "CAME",
+        "title": "CAME",
+        "width": 800,
+        "height": 500
+      },
+      {
+        "src": "/assets/images/catalog/alutech-logo.png",
+        "alt": "ALUTECH",
+        "title": "ALUTECH",
+        "width": 890,
+        "height": 399
+      },
+      {
+        "src": "/assets/images/catalog/doorhan-logo.png",
+        "alt": "DoorHan",
+        "title": "DoorHan",
+        "width": 1242,
+        "height": 414
+      }
+    ]
+  },
   "request": {
     "eyebrow": "Получить расчет",
     "titleHtml": "Рассчитайте стоимость<br>ворот, забора или покраски",

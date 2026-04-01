@@ -1,6 +1,6 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260401-inline-cache-bust-19';
+    const INLINE_EDITOR_VERSION = '20260401-inline-cache-bust-20';
     let inlineEditorAvailabilityPromise = null;
 
     function getInlineEditorBase() {
@@ -85,6 +85,13 @@
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
+    }
+
+    function extractDirectoryFromSrc(src, fallback = 'assets/images') {
+        const cleanSrc = String(src || '').split('?')[0];
+        const withoutDots = cleanSrc.replace(/^(\.\.\/)+/, '').replace(/^\/+/, '');
+        const lastSlashIndex = withoutDots.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? withoutDots.slice(0, lastSlashIndex) : fallback;
     }
 
     function normalizePath(input) {
@@ -211,7 +218,10 @@
         });
 
         document.querySelectorAll('.logo-image').forEach((image) => {
-            image.alt = site.brand?.logoAlt || image.alt;
+            if (site.brand?.logo?.src) {
+                image.src = site.brand.logo.src;
+            }
+            image.alt = site.brand?.logo?.alt || site.brand?.logoAlt || image.alt;
         });
 
         const headerPhoneBlocks = document.querySelectorAll('.header-contact-stack .contact-phone');
@@ -323,6 +333,30 @@
                 label: 'Слоган рядом с логотипом',
                 hint: 'Короткая строка рядом с логотипом в шапке.',
                 element: taglineNodes
+            });
+        }
+
+        const logoImages = Array.from(document.querySelectorAll('.logo-image'));
+        if (logoImages.length) {
+            bindings.push({
+                path: 'brand.logo',
+                type: 'image',
+                label: 'Логотип сайта',
+                hint: 'Меняет логотип в шапке и подвале по всему сайту.',
+                editorKindLabel: 'Логотип на странице',
+                element: logoImages,
+                directory: extractDirectoryFromSrc(logoImages[0]?.getAttribute('src') || '', 'assets/images'),
+                fields: [
+                    { key: 'alt', label: 'Alt', type: 'text' }
+                ],
+                render(value, binding) {
+                    binding.elements.forEach((element) => {
+                        if (value?.src) {
+                            element.src = value.src;
+                        }
+                        element.alt = value?.alt || site.brand?.logoAlt || element.alt;
+                    });
+                }
             });
         }
 
