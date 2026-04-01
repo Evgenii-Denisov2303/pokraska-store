@@ -1468,6 +1468,12 @@
                 transform: translateY(-1px);
             }
 
+            .p-inline-panel__example-chip.is-active {
+                background: rgba(37, 99, 235, 0.14);
+                color: #1d4ed8;
+                box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.22);
+            }
+
             .p-inline-panel__examples {
                 display: grid;
                 gap: 8px;
@@ -4661,6 +4667,8 @@
             optionsWrap.appendChild(button);
         });
 
+        control.addEventListener('input', updateActiveState);
+        control.addEventListener('change', updateActiveState);
         updateActiveState();
         return wrapper;
     }
@@ -5641,12 +5649,23 @@
         if (!styleField && !iconField) return;
 
         const section = createPanelSection(
-            'Быстрые варианты',
-            'Можно быстро попробовать вид карточки, не меняя поля по одному.'
+            'Быстрые действия',
+            'Нажмите на вариант ниже: он сразу изменит вид кнопки или значок.'
         );
 
         const actions = document.createElement('div');
         actions.className = 'p-inline-panel__quick-actions';
+
+        const quickButtons = [];
+        const registerQuickButton = (button, isActive) => {
+            if (!(button instanceof HTMLElement) || typeof isActive !== 'function') return;
+            quickButtons.push({ button, isActive });
+        };
+        const updateQuickActionsState = () => {
+            quickButtons.forEach(({ button, isActive }) => {
+                button.classList.toggle('is-active', Boolean(isActive()));
+            });
+        };
 
         if (styleField) {
             const styleControl = ui.panelForm.querySelector(`[name="${styleField.key}"]`);
@@ -5663,7 +5682,10 @@
                     styleControl.value = accentOption.value;
                     styleControl.dispatchEvent(new Event('input', { bubbles: true }));
                     styleControl.dispatchEvent(new Event('change', { bubbles: true }));
+                    updateQuickActionsState();
+                    showToast('Кнопка стала акцентной');
                 });
+                registerQuickButton(button, () => styleControl.value === accentOption.value);
                 actions.appendChild(button);
             }
 
@@ -5676,9 +5698,15 @@
                     styleControl.value = calmOption.value;
                     styleControl.dispatchEvent(new Event('input', { bubbles: true }));
                     styleControl.dispatchEvent(new Event('change', { bubbles: true }));
+                    updateQuickActionsState();
+                    showToast(calmOption.value === 'outline' ? 'Кнопка стала контурной' : 'Кнопка стала спокойной');
                 });
+                registerQuickButton(button, () => styleControl.value === calmOption.value);
                 actions.appendChild(button);
             }
+
+            styleControl?.addEventListener('input', updateQuickActionsState);
+            styleControl?.addEventListener('change', updateQuickActionsState);
         }
 
         if (iconField) {
@@ -5692,7 +5720,10 @@
                     iconControl.value = iconControl.value || getDefaultInlineIconForBinding(binding, value);
                     iconControl.dispatchEvent(new Event('input', { bubbles: true }));
                     iconControl.dispatchEvent(new Event('change', { bubbles: true }));
+                    updateQuickActionsState();
+                    showToast('Значок добавлен');
                 });
+                registerQuickButton(withIcon, () => Boolean(String(iconControl.value || '').trim()));
                 actions.appendChild(withIcon);
 
                 const withoutIcon = document.createElement('button');
@@ -5703,14 +5734,21 @@
                     iconControl.value = '';
                     iconControl.dispatchEvent(new Event('input', { bubbles: true }));
                     iconControl.dispatchEvent(new Event('change', { bubbles: true }));
+                    updateQuickActionsState();
+                    showToast('Значок убран');
                 });
+                registerQuickButton(withoutIcon, () => !String(iconControl.value || '').trim());
                 actions.appendChild(withoutIcon);
+
+                iconControl.addEventListener('input', updateQuickActionsState);
+                iconControl.addEventListener('change', updateQuickActionsState);
             }
         }
 
         if (!actions.children.length) return;
         section.appendChild(actions);
         ui.panelForm.appendChild(section);
+        updateQuickActionsState();
     }
 
     function getBindingEditorFields(binding) {
