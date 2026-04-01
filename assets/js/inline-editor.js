@@ -581,6 +581,10 @@
                 line-height: 1.35;
             }
 
+            .p-inline-panel__icon-preview[hidden] {
+                display: none !important;
+            }
+
             .p-inline-panel__icon-preview-badge {
                 display: inline-flex;
                 align-items: center;
@@ -1161,6 +1165,10 @@
                 border: 1px solid rgba(148, 163, 184, 0.18);
                 background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.98));
                 box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__status[hidden] {
+                display: none !important;
             }
 
             .p-inline-panel__status-copy {
@@ -3000,7 +3008,7 @@
                     <button class="p-inline-icon-modal__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
                 <div class="p-inline-icon-modal__topbar">
-                    <div class="p-inline-panel__icon-preview p-inline-icon-modal__selected">
+                    <div class="p-inline-panel__icon-preview p-inline-icon-modal__selected" hidden>
                         <span class="p-inline-panel__icon-preview-badge" data-inline-icon-modal-badge>—</span>
                         <div class="p-inline-panel__icon-preview-text">
                             <span class="p-inline-panel__icon-preview-title">Выбрано сейчас</span>
@@ -3097,6 +3105,7 @@
         ui.iconModalSearch = iconModal.querySelector('.p-inline-icon-modal__search');
         ui.iconModalGroups = iconModal.querySelector('[data-inline-icon-modal-groups]');
         ui.iconModalCount = iconModal.querySelector('[data-inline-icon-modal-count]');
+        ui.iconModalSelected = iconModal.querySelector('.p-inline-icon-modal__selected');
         ui.iconModalBadge = iconModal.querySelector('[data-inline-icon-modal-badge]');
         ui.iconModalValue = iconModal.querySelector('[data-inline-icon-modal-value]');
         ui.iconModalClear = iconModal.querySelector('[data-inline-icon-clear]');
@@ -4737,38 +4746,6 @@
         return wrapper;
     }
 
-    function getButtonTextExamples(binding) {
-        const bindingLabel = String(binding?.label || '').toLowerCase();
-        const presets = [
-            /цен|стоим/.test(bindingLabel) ? 'Узнать цену' : 'Получить расчет',
-            'Оставить заявку',
-            'Связаться',
-            'Подробнее'
-        ];
-
-        return Array.from(new Set(presets)).map((value) => ({
-            label: value,
-            value
-        }));
-    }
-
-    function createFieldExamples(field, control, binding = null) {
-        if (!binding || binding.type !== 'object' || !isPrimaryTextField(field)) {
-            return null;
-        }
-
-        const hasActionControls = getBindingEditorFields(binding).some((item) => isLinkLikeField(item) || isStyleField(item));
-        if (!hasActionControls || control.type === 'hidden') {
-            return null;
-        }
-
-        return createExampleChipGroup(
-            'Быстрый текст',
-            getButtonTextExamples(binding),
-            (example) => setControlValueAndDispatch(control, example.value)
-        );
-    }
-
     function createFieldGroup(field, value, binding = null) {
         const wrapper = document.createElement('div');
         wrapper.className = 'p-inline-panel__group';
@@ -4842,13 +4819,10 @@
         }
 
         if (isIconField(field)) {
-            wrapper.appendChild(createIconPreview(control));
+            if (!isActionLikeObjectBinding(binding)) {
+                wrapper.appendChild(createIconPreview(control));
+            }
             wrapper.appendChild(createIconPicker(control));
-        }
-
-        const examples = createFieldExamples(field, control, binding);
-        if (examples) {
-            wrapper.appendChild(examples);
         }
 
         if (field.hint) {
@@ -4966,6 +4940,9 @@
     function renderIconModalSelection(control) {
         if (!ui.iconModalBadge || !ui.iconModalValue) return;
         const nextValue = String(control?.value || '').trim();
+        if (ui.iconModalSelected) {
+            ui.iconModalSelected.hidden = !nextValue;
+        }
         ui.iconModalBadge.innerHTML = '';
         if (nextValue) {
             const icon = document.createElement('i');
@@ -5075,6 +5052,7 @@
     function createIconPreview(control) {
         const preview = document.createElement('div');
         preview.className = 'p-inline-panel__icon-preview';
+        preview.hidden = true;
 
         const badge = document.createElement('span');
         badge.className = 'p-inline-panel__icon-preview-badge';
@@ -5093,16 +5071,17 @@
         const render = () => {
             const nextValue = String(control.value || '').trim();
             const optionLabel = getInlineIconOptionLabel(nextValue);
+            const hasIcon = Boolean(nextValue);
+            preview.hidden = !hasIcon;
             badge.innerHTML = '';
-            if (nextValue) {
+            if (hasIcon) {
                 const icon = document.createElement('i');
                 icon.className = nextValue;
                 icon.setAttribute('aria-hidden', 'true');
                 badge.appendChild(icon);
-                valueNode.textContent = optionLabel;
+                valueNode.textContent = optionLabel || 'Выбрана иконка';
             } else {
-                badge.textContent = '—';
-                valueNode.textContent = 'Без значка';
+                valueNode.textContent = '';
             }
         };
 
@@ -5153,6 +5132,27 @@
         return key === '__value'
             || ['label', 'text', 'title', 'name', 'actionlabel', 'buttontext'].includes(key)
             || /текст|заголов|название|кнопк|подпись/.test(label);
+    }
+
+    function isActionLikeObjectBinding(binding, editorFields = null) {
+        if (!binding || binding.type !== 'object') return false;
+
+        const fields = Array.isArray(editorFields) && editorFields.length
+            ? editorFields
+            : getBindingEditorFields(binding);
+        const linkFields = fields.filter(isLinkLikeField);
+        if (!linkFields.length) return false;
+
+        const textFields = fields.filter(isPrimaryTextField);
+        const hasExtendedCopy = fields.some((field) => {
+            if (!field || isIconField(field) || isLinkLikeField(field) || isStyleField(field)) return false;
+            const key = String(field.key || '').toLowerCase();
+            const label = String(field.label || '').toLowerCase();
+            return ['description', 'subtitle', 'answer', 'note', 'meta', 'badge'].includes(key)
+                || /опис|подзаголов|ответ|примеч|бейдж|мета/.test(label);
+        });
+
+        return textFields.length <= 2 && !hasExtendedCopy;
     }
 
     function isImageDescriptionField(field) {
@@ -6609,12 +6609,10 @@
 
         if (binding.type === 'object') {
             const editorFields = getBindingEditorFields(binding);
-            const linkFields = editorFields.filter(isLinkLikeField);
-            const cardFields = editorFields.filter((field) => isPrimaryTextField(field) || isIconField(field) || isStyleField(field));
-            const preview = (cardFields.length >= 2 || !linkFields.length)
-                ? createObjectCardPreview(binding, value)
-                : createActionPreview(binding, value);
-            ui.panelForm.appendChild(preview);
+            if (!isActionLikeObjectBinding(binding, editorFields)) {
+                const preview = createObjectCardPreview(binding, value);
+                ui.panelForm.appendChild(preview);
+            }
         }
 
         appendFocusedFieldSections(binding, value, fieldSections, options.focusField || '');
@@ -6624,7 +6622,10 @@
         }
 
         const collectionState = getBindingCollectionState(binding);
-        if (collectionState && (binding.type === 'image' || binding.type === 'object' || binding.type === 'text')) {
+        const shouldShowCollectionControls = collectionState
+            && (binding.type === 'image' || binding.type === 'object' || binding.type === 'text')
+            && !(binding.type === 'object' && isActionLikeObjectBinding(binding, editorFields));
+        if (shouldShowCollectionControls) {
             appendCollectionControls(binding, collectionState);
         }
 
@@ -7025,16 +7026,16 @@
         };
     }
 
-    function updatePanelStatus(binding) {
-        if (!ui.panelStatus || !ui.panelStatusBadge || !ui.panelStatusTitle || !ui.panelStatusMeta || !binding) return;
-
+    function getCompactPanelStatusLabel(binding) {
         const status = getPanelStatusState(binding);
-        ui.panelStatus.hidden = false;
-        ui.panelStatus.classList.remove('is-ready', 'is-draft', 'is-pending', 'is-other');
-        ui.panelStatus.classList.add(status.tone);
-        ui.panelStatusBadge.textContent = status.badge;
-        ui.panelStatusTitle.textContent = status.title;
-        ui.panelStatusMeta.textContent = status.meta;
+        if (!status || status.tone === 'is-ready') return '';
+        return status.badge || '';
+    }
+
+    function updatePanelStatus(binding) {
+        void binding;
+        if (!ui.panelStatus) return;
+        ui.panelStatus.hidden = true;
     }
 
     function updatePanelMeta(binding) {
@@ -7045,12 +7046,18 @@
         const focusField = state.panelFocusField
             ? getBindingEditorFields(binding).find((field) => field.key === state.panelFocusField)
             : null;
-        const focusPrefix = focusField
-            ? `Точечная правка: ${focusField.label || focusField.key} · `
-            : '';
-        ui.panelMeta.textContent = hasPending || hasSavedDifference
-            ? `${focusPrefix}Раздел: ${sectionLabel} · Есть правки`
-            : `${focusPrefix}Раздел: ${sectionLabel}`;
+        const metaParts = [];
+        if (focusField) {
+            metaParts.push(`Точечная правка: ${focusField.label || focusField.key}`);
+        }
+        metaParts.push(`Раздел: ${sectionLabel}`);
+
+        const compactStatus = getCompactPanelStatusLabel(binding);
+        if (compactStatus) {
+            metaParts.push(compactStatus);
+        }
+
+        ui.panelMeta.textContent = metaParts.join(' · ');
         updatePanelStatus(binding);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
