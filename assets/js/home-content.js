@@ -227,6 +227,46 @@
         syncCollection(container, 'a', items, applyProcessAction);
     }
 
+    function renderReviewRating(rating) {
+        const safeRating = Math.max(1, Math.min(5, Number(rating) || 5));
+        return Array.from({ length: safeRating }, () => '<i class="fas fa-star"></i>').join('');
+    }
+
+    function applyReviewCard(node, item) {
+        if (!node || !item) return;
+        const rating = node.querySelector('.review-rating');
+        const text = node.querySelector('p');
+        const name = node.querySelector('.review-name');
+        const meta = node.querySelector('.review-meta');
+        const value = Math.max(1, Math.min(5, Number(item.rating) || 5));
+
+        if (rating) {
+            rating.setAttribute('aria-label', `Оценка ${value} из 5`);
+            rating.innerHTML = renderReviewRating(value);
+        }
+        if (text) text.textContent = item.text || '';
+        if (name) name.textContent = item.name || '';
+        if (meta) meta.textContent = item.meta || '';
+    }
+
+    function syncReviewCards(items) {
+        const container = document.querySelector('.reviews-grid');
+        if (!container) return;
+        syncCollection(container, '.review-card', items, applyReviewCard);
+    }
+
+    function applyReviewAction(node, action) {
+        if (!node || !action) return;
+        const className = action.style === 'secondary' ? 'btn btn-outline' : 'btn btn-primary';
+        renderActionNode(node, action, className);
+    }
+
+    function syncReviewActions(items) {
+        const container = document.querySelector('.reviews-section .btn-group');
+        if (!container) return;
+        syncCollection(container, 'a', items, applyReviewAction);
+    }
+
     function applyTrustHighlight(node, item) {
         if (!node || !item) return;
         const value = node.querySelector('strong');
@@ -501,6 +541,19 @@
                 return renderAction(action, className);
             }).join('');
         }
+    }
+
+    function applyReviews(reviews) {
+        const section = document.querySelector('.reviews-section');
+        if (!section || !reviews) return;
+
+        const title = section.querySelector('.section-title');
+        const subtitle = section.querySelector('.section-subtitle');
+
+        if (title) title.textContent = reviews.title || '';
+        if (subtitle) subtitle.textContent = reviews.subtitle || '';
+        syncReviewCards(reviews.items || []);
+        syncReviewActions(reviews.actions || []);
     }
 
     function applyTrust(trust) {
@@ -1135,6 +1188,93 @@
             bindings.push(buildProcessActionBinding(actionElement, index));
         });
 
+        const reviewsTitle = document.querySelector('.reviews-section .section-title');
+        const reviewsSubtitle = document.querySelector('.reviews-section .section-subtitle');
+        if (reviewsTitle) bindings.push({ path: 'reviews.title', type: 'text', label: 'Заголовок блока отзывов', element: reviewsTitle });
+        if (reviewsSubtitle) bindings.push({ path: 'reviews.subtitle', type: 'textarea', label: 'Подзаголовок блока отзывов', element: reviewsSubtitle });
+
+        const buildReviewCardBinding = (targetItem, index) => ({
+            path: `reviews.items.${index}`,
+            type: 'object',
+            editorKindLabel: 'Отзыв на странице',
+            label: `Отзыв ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'reviews.items',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.reviews-grid .review-card')[nextIndex];
+                if (!nextItem) return null;
+                return buildReviewCardBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    rating: 5,
+                    text: 'Новый отзыв',
+                    name: 'Новый клиент',
+                    meta: 'Услуга'
+                };
+            },
+            fields: [
+                { key: 'rating', label: 'Оценка', type: 'text' },
+                { key: 'text', label: 'Текст отзыва', type: 'textarea' },
+                { key: 'name', label: 'Имя или компания', type: 'text' },
+                { key: 'meta', label: 'Подпись', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncReviewCards(items);
+            },
+            render(value) {
+                applyReviewCard(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.reviews-grid .review-card').forEach((cardElement, index) => {
+            const textElement = cardElement.querySelector('p');
+            const nameElement = cardElement.querySelector('.review-name');
+            const metaElement = cardElement.querySelector('.review-meta');
+            bindings.push(buildReviewCardBinding(cardElement, index));
+            if (textElement) bindings.push({ path: `reviews.items.${index}.text`, type: 'textarea', label: `Отзыв ${index + 1}: текст`, element: textElement });
+            if (nameElement) bindings.push({ path: `reviews.items.${index}.name`, type: 'text', label: `Отзыв ${index + 1}: имя`, element: nameElement });
+            if (metaElement) bindings.push({ path: `reviews.items.${index}.meta`, type: 'text', label: `Отзыв ${index + 1}: подпись`, element: metaElement });
+        });
+
+        const buildReviewActionBinding = (targetItem, index) => ({
+            path: `reviews.actions.${index}`,
+            type: 'object',
+            editorKindLabel: 'Кнопка на странице',
+            label: `Кнопка блока отзывов ${index + 1}`,
+            element: targetItem,
+            collectionPath: 'reviews.actions',
+            collectionItemFactory(nextIndex) {
+                const nextItem = document.querySelectorAll('.reviews-section .btn-group a')[nextIndex];
+                if (!nextItem) return null;
+                return buildReviewActionBinding(nextItem, nextIndex);
+            },
+            collectionCreateValue() {
+                return {
+                    label: 'Новая кнопка',
+                    href: '#',
+                    icon: 'fas fa-link',
+                    style: 'primary'
+                };
+            },
+            fields: [
+                { key: 'label', label: 'Текст кнопки', type: 'text' },
+                { key: 'href', label: 'Ссылка', type: 'text' },
+                { key: 'icon', label: 'Иконка', type: 'text' },
+                { key: 'style', label: 'Стиль (primary/secondary)', type: 'text' }
+            ],
+            collectionRender(items) {
+                syncReviewActions(items);
+            },
+            render(value) {
+                applyReviewAction(targetItem, value || {});
+            }
+        });
+
+        document.querySelectorAll('.reviews-section .btn-group a').forEach((actionElement, index) => {
+            bindings.push(buildReviewActionBinding(actionElement, index));
+        });
+
         const trustEyebrow = document.querySelector('.trust-eyebrow');
         const trustTitle = document.querySelector('.trust-section .section-title');
         const trustSubtitle = document.querySelector('.trust-section .section-subtitle');
@@ -1493,6 +1633,7 @@
             applyHero(home.hero || {});
             applyDirections(home.directions || {});
             applyProcess(home.process || {});
+            applyReviews(home.reviews || {});
             applyTrust(home.trust || {});
             applyPartners(home.partners || {});
             applyRequest(home.request || {});
