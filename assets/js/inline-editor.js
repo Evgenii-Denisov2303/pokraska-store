@@ -1511,6 +1511,35 @@
                 color: #64748b;
             }
 
+            .p-inline-panel__preset-groups {
+                display: grid;
+                gap: 12px;
+            }
+
+            .p-inline-panel__preset-group {
+                display: grid;
+                gap: 8px;
+                padding: 12px;
+                border-radius: 18px;
+                border: 1px solid rgba(191, 219, 254, 0.72);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+            }
+
+            .p-inline-panel__preset-group-title {
+                margin: 0;
+                font-size: 13px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__preset-group-meta {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
             .p-inline-panel__link-builder {
                 display: grid;
                 gap: 10px;
@@ -4778,6 +4807,44 @@
         return 'fas fa-check-circle';
     }
 
+    function getSuggestedInlineActionIcon(binding, value = {}) {
+        const href = String(
+            value?.href
+            || value?.url
+            || value?.link
+            || value?.phone
+            || value?.email
+            || ''
+        ).trim().toLowerCase();
+
+        if (href.startsWith('tel:')) return 'fas fa-phone';
+        if (href.includes('t.me')) return 'fab fa-telegram-plane';
+        if (href.includes('wa.me') || href.includes('whatsapp')) return 'fab fa-whatsapp';
+        if (href.startsWith('mailto:')) return 'fas fa-envelope';
+        if (href.includes('#') || href.includes('services') || href.includes('catalog')) return 'fas fa-arrow-right';
+
+        return getDefaultInlineIconForBinding(binding, value);
+    }
+
+    function getDefaultInlineBadgeText(binding, value = {}) {
+        const currentBadge = String(value?.badge || value?.meta || '').trim();
+        if (currentBadge) return currentBadge;
+
+        const text = String(
+            binding?.label
+            || value?.title
+            || value?.label
+            || value?.name
+            || ''
+        ).toLowerCase();
+
+        if (/цен|расчет|стоим/.test(text)) return 'Расчёт';
+        if (/договор|документ|оплат/.test(text)) return 'Официально';
+        if (/монтаж|установ|под ключ/.test(text)) return 'Под ключ';
+        if (/контакт|связ/.test(text)) return 'Связь';
+        return 'Важно';
+    }
+
     function getLinkExamples(field) {
         const key = String(field?.key || '').toLowerCase();
         if (key.includes('phone')) {
@@ -5228,6 +5295,42 @@
         return key === '__value'
             || ['label', 'text', 'title', 'name', 'actionlabel', 'buttontext'].includes(key)
             || /текст|заголов|название|кнопк|подпись/.test(label);
+    }
+
+    function isBadgeField(field) {
+        if (!field || isIconField(field) || isLinkLikeField(field) || isStyleField(field)) return false;
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        return ['badge', 'meta', 'tag', 'eyebrow', 'kicker'].includes(key)
+            || /бейдж|плашк|мета|ярлык|подпись сверху|лейбл/.test(label);
+    }
+
+    function normalizeInlineTextSpaces(value) {
+        return String(value || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function stripInlineTextEnding(value) {
+        return normalizeInlineTextSpaces(value).replace(/[.!?…:;]+$/u, '').trim();
+    }
+
+    function toInlineSoftSentenceCase(value) {
+        const normalized = normalizeInlineTextSpaces(value);
+        if (!normalized) return '';
+
+        const hasLetters = /[A-Za-zА-Яа-яЁё]/.test(normalized);
+        if (!hasLetters) return normalized;
+
+        if (normalized === normalized.toUpperCase()) {
+            return normalized.charAt(0).toUpperCase() + normalized.slice(1).toLowerCase();
+        }
+
+        return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+    }
+
+    function isInlineUppercaseText(value) {
+        const normalized = normalizeInlineTextSpaces(value);
+        if (!normalized || !/[A-Za-zА-Яа-яЁё]/.test(normalized)) return false;
+        return normalized === normalized.toUpperCase();
     }
 
     function isActionLikeObjectBinding(binding, editorFields = null) {
@@ -5950,6 +6053,549 @@
         section.appendChild(actions);
         ui.panelForm.appendChild(section);
         updateQuickActionsState();
+    }
+
+    function applyInlinePresetChanges(changes) {
+        if (!Array.isArray(changes)) return;
+        changes.forEach((change) => {
+            if (!change?.control) return;
+            setControlValueAndDispatch(change.control, change.value);
+        });
+    }
+
+    function appendPresetGroupsSection(binding, sectionTitle, sectionMeta, groups) {
+        if (!Array.isArray(groups) || !groups.length) return;
+
+        const section = createPanelSection(sectionTitle, sectionMeta);
+        const groupsWrap = document.createElement('div');
+        groupsWrap.className = 'p-inline-panel__preset-groups';
+
+        const trackedButtons = [];
+        const watchedControls = new Set();
+        const registerQuickButton = (button, isActive) => {
+            if (!(button instanceof HTMLElement) || typeof isActive !== 'function') return;
+            trackedButtons.push({ button, isActive });
+        };
+        const updateQuickButtonsState = () => {
+            trackedButtons.forEach(({ button, isActive }) => {
+                button.classList.toggle('is-active', Boolean(isActive()));
+            });
+        };
+        const watchControl = (control) => {
+            if (!(control instanceof HTMLElement) || watchedControls.has(control)) return;
+            watchedControls.add(control);
+            control.addEventListener('input', updateQuickButtonsState);
+            control.addEventListener('change', updateQuickButtonsState);
+        };
+
+        groups.forEach((group) => {
+            if (!group || !Array.isArray(group.items) || !group.items.length) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'p-inline-panel__preset-group';
+
+            const title = document.createElement('h4');
+            title.className = 'p-inline-panel__preset-group-title';
+            title.textContent = group.title;
+            wrapper.appendChild(title);
+
+            if (group.meta) {
+                const meta = document.createElement('p');
+                meta.className = 'p-inline-panel__preset-group-meta';
+                meta.textContent = group.meta;
+                wrapper.appendChild(meta);
+            }
+
+            const row = document.createElement('div');
+            row.className = 'p-inline-panel__quick-actions';
+
+            group.items.forEach((item) => {
+                if (!item || typeof item.apply !== 'function') return;
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'p-inline-panel__example-chip';
+                button.textContent = item.label;
+                if (item.meta) {
+                    button.title = item.meta;
+                    button.setAttribute('aria-label', `${item.label}. ${item.meta}`);
+                }
+                if (Array.isArray(item.watch)) {
+                    item.watch.forEach(watchControl);
+                }
+                button.addEventListener('click', () => {
+                    const toastMessage = item.apply();
+                    updateQuickButtonsState();
+                    flashActiveBindingPreview(binding);
+                    if (toastMessage) {
+                        showToast(toastMessage);
+                    }
+                });
+                registerQuickButton(button, item.isActive);
+                row.appendChild(button);
+            });
+
+            if (!row.children.length) return;
+            wrapper.appendChild(row);
+            groupsWrap.appendChild(wrapper);
+        });
+
+        if (!groupsWrap.children.length) return;
+
+        section.appendChild(groupsWrap);
+        ui.panelForm.appendChild(section);
+        updateQuickButtonsState();
+    }
+
+    function appendButtonVisualPresets(binding, value, editorFields) {
+        const styleField = editorFields.find(isStyleField);
+        const iconField = editorFields.find(isIconField);
+        if (!styleField && !iconField) return false;
+
+        const styleControl = styleField ? ui.panelForm.querySelector(`[name="${styleField.key}"]`) : null;
+        const iconControl = iconField ? ui.panelForm.querySelector(`[name="${iconField.key}"]`) : null;
+        const currentValue = collectPanelPreviewValue(binding);
+        const styleOptions = styleField
+            ? getStyleOptionsForField(styleField, styleControl?.value || currentValue?.style || currentValue?.variant || '')
+            : [];
+        const primaryOption = styleOptions.find((option) => option.value === 'primary');
+        const secondaryOption = styleOptions.find((option) => option.value === 'secondary');
+        const outlineOption = styleOptions.find((option) => option.value === 'outline');
+        const calmOption = secondaryOption || outlineOption || primaryOption;
+        const linkControl = editorFields
+            .filter(isLinkLikeField)
+            .map((field) => ui.panelForm.querySelector(`[name="${field.key}"]`))
+            .find(Boolean) || null;
+
+        const groups = [];
+
+        if (styleControl && styleOptions.length) {
+            groups.push({
+                title: 'Вид кнопки',
+                meta: 'Попробуйте готовые варианты оформления, не меняя настройки по одной.',
+                items: styleOptions
+                    .filter((option) => ['primary', 'secondary', 'outline'].includes(option.value))
+                    .map((option) => ({
+                        label: option.value === 'primary'
+                            ? 'Акцентная'
+                            : (option.value === 'outline' ? 'Контурная' : 'Спокойная'),
+                        meta: option.meta,
+                        watch: [styleControl],
+                        isActive: () => styleControl.value === option.value,
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: styleControl, value: option.value }]);
+                            return option.value === 'primary'
+                                ? 'Кнопка стала акцентной'
+                                : (option.value === 'outline' ? 'Кнопка стала контурной' : 'Кнопка стала спокойной');
+                        }
+                    }))
+            });
+        }
+
+        if (iconControl) {
+            groups.push({
+                title: 'Значок',
+                meta: 'Можно быстро добавить или сменить значок, не открывая большую библиотеку.',
+                items: [
+                    {
+                        label: 'С иконкой',
+                        meta: 'Подставит подходящий значок автоматически.',
+                        watch: [iconControl],
+                        isActive: () => Boolean(String(iconControl.value || '').trim()),
+                        apply: () => {
+                            const nextValue = collectPanelPreviewValue(binding);
+                            applyInlinePresetChanges([{
+                                control: iconControl,
+                                value: iconControl.value || getSuggestedInlineActionIcon(binding, nextValue)
+                            }]);
+                            return 'Значок добавлен';
+                        }
+                    },
+                    {
+                        label: 'Без иконки',
+                        meta: 'Оставит только текст кнопки.',
+                        watch: [iconControl],
+                        isActive: () => !String(iconControl.value || '').trim(),
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: iconControl, value: '' }]);
+                            return 'Значок убран';
+                        }
+                    },
+                    {
+                        label: 'Стрелка',
+                        meta: 'Для переходов и навигации по сайту.',
+                        watch: [iconControl],
+                        isActive: () => iconControl.value === 'fas fa-arrow-right',
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: iconControl, value: 'fas fa-arrow-right' }]);
+                            return 'Поставили стрелку';
+                        }
+                    },
+                    {
+                        label: 'Телефон',
+                        meta: 'Подходит для кнопок связи и звонка.',
+                        watch: [iconControl],
+                        isActive: () => iconControl.value === 'fas fa-phone',
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: iconControl, value: 'fas fa-phone' }]);
+                            return 'Поставили иконку телефона';
+                        }
+                    },
+                    {
+                        label: 'Сообщение',
+                        meta: 'Подходит для Telegram, Max и форм связи.',
+                        watch: [iconControl],
+                        isActive: () => iconControl.value === 'fas fa-comment-dots',
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: iconControl, value: 'fas fa-comment-dots' }]);
+                            return 'Поставили иконку сообщения';
+                        }
+                    }
+                ]
+            });
+        }
+
+        if ((styleControl && primaryOption) || iconControl) {
+            groups.push({
+                title: 'Готовые варианты',
+                meta: 'Эти варианты меняют кнопку сразу по нескольким параметрам, чтобы можно было быстро поиграться с настроением.',
+                items: [
+                    {
+                        label: 'Яркая продажа',
+                        meta: 'Главная кнопка для расчёта или заявки.',
+                        watch: [styleControl, iconControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === (primaryOption?.value || styleControl.value))
+                            && (!iconControl || Boolean(String(iconControl.value || '').trim())),
+                        apply: () => {
+                            const nextValue = collectPanelPreviewValue(binding);
+                            applyInlinePresetChanges([
+                                styleControl && primaryOption ? { control: styleControl, value: primaryOption.value } : null,
+                                iconControl ? { control: iconControl, value: getSuggestedInlineActionIcon(binding, nextValue) || 'fas fa-calculator' } : null
+                            ].filter(Boolean));
+                            return 'Применили яркий вариант кнопки';
+                        }
+                    },
+                    {
+                        label: 'Спокойная ссылка',
+                        meta: 'Мягкий вариант без лишнего акцента.',
+                        watch: [styleControl, iconControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === (calmOption?.value || styleControl.value))
+                            && (!iconControl || !String(iconControl.value || '').trim()),
+                        apply: () => {
+                            applyInlinePresetChanges([
+                                styleControl && calmOption ? { control: styleControl, value: calmOption.value } : null,
+                                iconControl ? { control: iconControl, value: '' } : null
+                            ].filter(Boolean));
+                            return 'Применили спокойный вариант';
+                        }
+                    },
+                    {
+                        label: 'Контактная',
+                        meta: 'Хорошо работает для звонка и связи в мессенджерах.',
+                        watch: [styleControl, iconControl, linkControl].filter(Boolean),
+                        isActive: () => {
+                            const suggested = getSuggestedInlineActionIcon(binding, collectPanelPreviewValue(binding));
+                            return (!styleControl || styleControl.value === (primaryOption?.value || styleControl.value))
+                                && (!iconControl || iconControl.value === suggested);
+                        },
+                        apply: () => {
+                            const nextValue = collectPanelPreviewValue(binding);
+                            applyInlinePresetChanges([
+                                styleControl && primaryOption ? { control: styleControl, value: primaryOption.value } : null,
+                                iconControl ? { control: iconControl, value: getSuggestedInlineActionIcon(binding, nextValue) } : null
+                            ].filter(Boolean));
+                            return 'Кнопка стала контактной';
+                        }
+                    },
+                    {
+                        label: 'Навигация',
+                        meta: 'Подходит для переходов по разделам и каталогу.',
+                        watch: [styleControl, iconControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === ((outlineOption || calmOption || primaryOption)?.value || styleControl.value))
+                            && (!iconControl || iconControl.value === 'fas fa-arrow-right'),
+                        apply: () => {
+                            applyInlinePresetChanges([
+                                styleControl && (outlineOption || calmOption || primaryOption)
+                                    ? { control: styleControl, value: (outlineOption || calmOption || primaryOption).value }
+                                    : null,
+                                iconControl ? { control: iconControl, value: 'fas fa-arrow-right' } : null
+                            ].filter(Boolean));
+                            return 'Кнопка стала навигационной';
+                        }
+                    }
+                ]
+            });
+        }
+
+        appendPresetGroupsSection(
+            binding,
+            'Визуальные пресеты кнопки',
+            'Здесь можно быстро попробовать настроение кнопки: вид, значок и готовые сочетания. Все изменения сразу видны на самой странице.',
+            groups
+        );
+        return groups.length > 0;
+    }
+
+    function appendCardVisualPresets(binding, value, editorFields) {
+        const styleField = editorFields.find(isStyleField);
+        const iconField = editorFields.find(isIconField);
+        const badgeField = editorFields.find(isBadgeField);
+        if (!styleField && !iconField && !badgeField) return false;
+
+        const styleControl = styleField ? ui.panelForm.querySelector(`[name="${styleField.key}"]`) : null;
+        const iconControl = iconField ? ui.panelForm.querySelector(`[name="${iconField.key}"]`) : null;
+        const badgeControl = badgeField ? ui.panelForm.querySelector(`[name="${badgeField.key}"]`) : null;
+        const currentValue = collectPanelPreviewValue(binding);
+        const styleOptions = styleField
+            ? getStyleOptionsForField(styleField, styleControl?.value || currentValue?.style || currentValue?.variant || '')
+            : [];
+        const primaryOption = styleOptions.find((option) => option.value === 'primary');
+        const secondaryOption = styleOptions.find((option) => option.value === 'secondary');
+        const outlineOption = styleOptions.find((option) => option.value === 'outline');
+        const quietOption = secondaryOption || outlineOption || primaryOption;
+
+        const groups = [];
+
+        if (styleControl && styleOptions.length) {
+            groups.push({
+                title: 'Вид карточки',
+                meta: 'Быстро меняет настроение карточки: ярче, спокойнее или строже.',
+                items: styleOptions
+                    .filter((option) => ['primary', 'secondary', 'outline'].includes(option.value))
+                    .map((option) => ({
+                        label: option.value === 'primary'
+                            ? 'Выделенная'
+                            : (option.value === 'outline' ? 'Строгая' : 'Спокойная'),
+                        meta: option.meta,
+                        watch: [styleControl],
+                        isActive: () => styleControl.value === option.value,
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: styleControl, value: option.value }]);
+                            return option.value === 'primary'
+                                ? 'Карточка стала выделенной'
+                                : (option.value === 'outline' ? 'Карточка стала строже' : 'Карточка стала спокойнее');
+                        }
+                    }))
+            });
+        }
+
+        if (iconControl || badgeControl) {
+            groups.push({
+                title: 'Детали карточки',
+                meta: 'Можно быстро добавить или убрать иконку и плашку над заголовком.',
+                items: [
+                    iconControl ? {
+                        label: 'С иконкой',
+                        meta: 'Подставит подходящий значок для карточки.',
+                        watch: [iconControl],
+                        isActive: () => Boolean(String(iconControl.value || '').trim()),
+                        apply: () => {
+                            applyInlinePresetChanges([{
+                                control: iconControl,
+                                value: iconControl.value || getDefaultInlineIconForBinding(binding, collectPanelPreviewValue(binding))
+                            }]);
+                            return 'Иконка карточки добавлена';
+                        }
+                    } : null,
+                    iconControl ? {
+                        label: 'Без иконки',
+                        meta: 'Оставит акцент только на тексте карточки.',
+                        watch: [iconControl],
+                        isActive: () => !String(iconControl.value || '').trim(),
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: iconControl, value: '' }]);
+                            return 'Иконка карточки убрана';
+                        }
+                    } : null,
+                    badgeControl ? {
+                        label: 'С плашкой',
+                        meta: 'Добавит короткий акцент над заголовком карточки.',
+                        watch: [badgeControl],
+                        isActive: () => Boolean(String(badgeControl.value || '').trim()),
+                        apply: () => {
+                            applyInlinePresetChanges([{
+                                control: badgeControl,
+                                value: String(badgeControl.value || '').trim() || getDefaultInlineBadgeText(binding, collectPanelPreviewValue(binding))
+                            }]);
+                            return 'Плашка карточки добавлена';
+                        }
+                    } : null,
+                    badgeControl ? {
+                        label: 'Без плашки',
+                        meta: 'Оставит карточку без верхнего ярлыка.',
+                        watch: [badgeControl],
+                        isActive: () => !String(badgeControl.value || '').trim(),
+                        apply: () => {
+                            applyInlinePresetChanges([{ control: badgeControl, value: '' }]);
+                            return 'Плашка карточки убрана';
+                        }
+                    } : null
+                ].filter(Boolean)
+            });
+        }
+
+        if ([styleControl, iconControl, badgeControl].filter(Boolean).length >= 2) {
+            groups.push({
+                title: 'Готовые варианты',
+                meta: 'Ниже — безопасные наборы, чтобы быстро попробовать характер карточки целиком.',
+                items: [
+                    {
+                        label: 'Информативная',
+                        meta: 'Спокойный вид, иконка и плашка для более заметной подачи.',
+                        watch: [styleControl, iconControl, badgeControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === (quietOption?.value || styleControl.value))
+                            && (!iconControl || Boolean(String(iconControl.value || '').trim()))
+                            && (!badgeControl || Boolean(String(badgeControl.value || '').trim())),
+                        apply: () => {
+                            const nextValue = collectPanelPreviewValue(binding);
+                            applyInlinePresetChanges([
+                                styleControl && quietOption ? { control: styleControl, value: quietOption.value } : null,
+                                iconControl ? { control: iconControl, value: getDefaultInlineIconForBinding(binding, nextValue) } : null,
+                                badgeControl ? { control: badgeControl, value: getDefaultInlineBadgeText(binding, nextValue) } : null
+                            ].filter(Boolean));
+                            return 'Карточка стала информативнее';
+                        }
+                    },
+                    {
+                        label: 'Минималистичная',
+                        meta: 'Тише визуально: без иконки и без плашки.',
+                        watch: [styleControl, iconControl, badgeControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === ((outlineOption || quietOption || primaryOption)?.value || styleControl.value))
+                            && (!iconControl || !String(iconControl.value || '').trim())
+                            && (!badgeControl || !String(badgeControl.value || '').trim()),
+                        apply: () => {
+                            applyInlinePresetChanges([
+                                styleControl && (outlineOption || quietOption || primaryOption)
+                                    ? { control: styleControl, value: (outlineOption || quietOption || primaryOption).value }
+                                    : null,
+                                iconControl ? { control: iconControl, value: '' } : null,
+                                badgeControl ? { control: badgeControl, value: '' } : null
+                            ].filter(Boolean));
+                            return 'Карточка стала минималистичной';
+                        }
+                    },
+                    {
+                        label: 'Выделенная',
+                        meta: 'Больше акцента: яркий вид и визуальные детали.',
+                        watch: [styleControl, iconControl, badgeControl].filter(Boolean),
+                        isActive: () => (!styleControl || styleControl.value === (primaryOption?.value || styleControl.value))
+                            && (!iconControl || Boolean(String(iconControl.value || '').trim())),
+                        apply: () => {
+                            const nextValue = collectPanelPreviewValue(binding);
+                            applyInlinePresetChanges([
+                                styleControl && primaryOption ? { control: styleControl, value: primaryOption.value } : null,
+                                iconControl ? { control: iconControl, value: getDefaultInlineIconForBinding(binding, nextValue) } : null,
+                                badgeControl ? { control: badgeControl, value: String(badgeControl.value || '').trim() || getDefaultInlineBadgeText(binding, nextValue) } : null
+                            ].filter(Boolean));
+                            return 'Карточка стала более акцентной';
+                        }
+                    }
+                ]
+            });
+        }
+
+        appendPresetGroupsSection(
+            binding,
+            'Визуальные пресеты карточки',
+            'Здесь можно быстро поиграться с характером карточки: сделать её тише, строже или заметнее без ручной настройки каждого поля.',
+            groups
+        );
+        return groups.length > 0;
+    }
+
+    function appendTextVisualPresets(binding, value, editorFields) {
+        const textField = editorFields.find(isPrimaryTextField);
+        const textControl = textField ? ui.panelForm.querySelector(`[name="${textField.key}"]`) : null;
+        if (!textControl) return false;
+
+        const textValue = String(textControl.value || value || '').trim();
+        if (!textValue || textValue.length > 180) return false;
+
+        const groups = [{
+            title: 'Подача текста',
+            meta: 'Эти варианты меняют сам текст, поэтому можно быстро поиграться с тоном и оставить понравившийся.',
+            items: [
+                {
+                    label: 'Спокойнее',
+                    meta: 'Убирает лишний эмоциональный акцент.',
+                    watch: [textControl],
+                    apply: () => {
+                        setControlValueAndDispatch(textControl, toInlineSoftSentenceCase(stripInlineTextEnding(textControl.value)));
+                        return 'Текст стал спокойнее';
+                    }
+                },
+                {
+                    label: 'Строже',
+                    meta: 'Оставляет текст без точки и лишних знаков в конце.',
+                    watch: [textControl],
+                    apply: () => {
+                        setControlValueAndDispatch(textControl, stripInlineTextEnding(textControl.value));
+                        return 'Текст стал строже';
+                    }
+                },
+                {
+                    label: 'Выразительнее',
+                    meta: 'Добавляет более заметный акцент.',
+                    watch: [textControl],
+                    isActive: () => /!$/.test(normalizeInlineTextSpaces(textControl.value)),
+                    apply: () => {
+                        const nextValue = stripInlineTextEnding(textControl.value);
+                        setControlValueAndDispatch(textControl, nextValue ? `${toInlineSoftSentenceCase(nextValue)}!` : '');
+                        return 'Текст стал выразительнее';
+                    }
+                },
+                {
+                    label: 'ЗАГЛАВНЫМИ',
+                    meta: 'Подходит для коротких акцентных подписей и кнопок.',
+                    watch: [textControl],
+                    isActive: () => isInlineUppercaseText(textControl.value),
+                    apply: () => {
+                        setControlValueAndDispatch(textControl, normalizeInlineTextSpaces(textControl.value).toUpperCase());
+                        return 'Текст перевели в верхний регистр';
+                    }
+                },
+                {
+                    label: 'Обычный вид',
+                    meta: 'Возвращает спокойный человеческий вид.',
+                    watch: [textControl],
+                    isActive: () => !isInlineUppercaseText(textControl.value) && !/[!]$/.test(normalizeInlineTextSpaces(textControl.value)),
+                    apply: () => {
+                        setControlValueAndDispatch(textControl, toInlineSoftSentenceCase(textControl.value));
+                        return 'Текст вернули к обычному виду';
+                    }
+                }
+            ]
+        }];
+
+        appendPresetGroupsSection(
+            binding,
+            'Визуальные варианты текста',
+            'Здесь можно быстро менять подачу короткого текста без ручной правки каждого символа.',
+            groups
+        );
+        return true;
+    }
+
+    function appendBindingVisualPresets(binding, value) {
+        if (!binding) return;
+
+        const editorFields = getBindingEditorFields(binding);
+
+        if (binding.type === 'object') {
+            if (isActionLikeObjectBinding(binding, editorFields)) {
+                appendButtonVisualPresets(binding, value, editorFields);
+                return;
+            }
+
+            const hasCardVisualControls = editorFields.some((field) => isStyleField(field) || isIconField(field) || isBadgeField(field));
+            if (hasCardVisualControls) {
+                appendCardVisualPresets(binding, value, editorFields);
+                return;
+            }
+        }
+
+        if (binding.type === 'text' || binding.type === 'html') {
+            appendTextVisualPresets(binding, value, editorFields);
+        }
     }
 
     function getBindingEditorFields(binding) {
@@ -6877,9 +7523,7 @@
 
         appendFocusedFieldSections(binding, value, fieldSections, options.focusField || '');
 
-        if (binding.type === 'object') {
-            appendObjectQuickActions(binding, value);
-        }
+        appendBindingVisualPresets(binding, value);
 
         const collectionState = getBindingCollectionState(binding);
         const shouldShowCollectionControls = collectionState
