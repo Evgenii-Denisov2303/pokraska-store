@@ -4433,9 +4433,9 @@
 
         if (!value) {
             return {
-                type: 'page',
-                page: INLINE_SITE_PAGE_TARGETS[0]?.value || 'index.html',
-                section: sectionTargets[0]?.value || '',
+                type: lockedType || 'custom',
+                page: '',
+                section: '',
                 text: ''
             };
         }
@@ -7823,6 +7823,42 @@
         return nextValue;
     }
 
+    function normalizeComparableTextValue(value) {
+        return String(value ?? '').replace(/\r\n?/g, '\n');
+    }
+
+    function normalizeComparableLinkValue(value) {
+        const raw = String(value ?? '').trim();
+        if (!raw) return '';
+
+        if (/^tel:/i.test(raw)) {
+            const phone = normalizePhoneForHref(raw.replace(/^tel:/i, ''));
+            return phone ? `tel:${phone}` : '';
+        }
+
+        if (/^mailto:/i.test(raw)) {
+            const email = String(raw.replace(/^mailto:/i, '') || '').trim().toLowerCase();
+            return email ? `mailto:${email}` : '';
+        }
+
+        if (/t\.me\//i.test(raw)) {
+            const username = normalizeTelegramValue(raw);
+            return username ? `https://t.me/${username}` : '';
+        }
+
+        if (/wa\.me\//i.test(raw) || /whatsapp/i.test(raw)) {
+            const phone = normalizeWhatsAppValue(raw);
+            return phone ? `https://wa.me/${phone}` : '';
+        }
+
+        const sameOriginValue = resolveSameOriginHref(raw);
+        if (sameOriginValue) {
+            return sameOriginValue;
+        }
+
+        return raw;
+    }
+
     function getComparablePanelFieldValue(field, control) {
         if (!control) return undefined;
 
@@ -7838,7 +7874,11 @@
                 .filter(Boolean);
         }
 
-        return String(value ?? '');
+        if (isLinkLikeField(field)) {
+            return normalizeComparableLinkValue(value);
+        }
+
+        return normalizeComparableTextValue(value);
     }
 
     function getComparableStoredFieldValue(field, currentValue) {
@@ -7856,7 +7896,11 @@
             return Array.isArray(storedValue) ? storedValue : [];
         }
 
-        return String(storedValue ?? '');
+        if (isLinkLikeField(field)) {
+            return normalizeComparableLinkValue(storedValue);
+        }
+
+        return normalizeComparableTextValue(storedValue);
     }
 
     function hasPendingPanelChanges() {
