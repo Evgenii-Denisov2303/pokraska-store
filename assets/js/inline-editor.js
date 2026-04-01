@@ -1724,12 +1724,19 @@
 
             .p-inline-panel__collection-item-title {
                 min-width: 0;
+                max-width: 100%;
                 font-size: 14px;
                 font-weight: 800;
+                line-height: 1.35;
                 color: #0f172a;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                white-space: nowrap;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                word-break: break-word;
             }
 
             .p-inline-panel__collection-item-badge {
