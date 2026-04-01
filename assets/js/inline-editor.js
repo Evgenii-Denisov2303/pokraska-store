@@ -1927,6 +1927,12 @@
                 box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
             }
 
+            .p-inline-panel__object-preview-card--contact {
+                background: linear-gradient(135deg, #3498db, #2980b9);
+                border-color: rgba(41, 128, 185, 0.48);
+                box-shadow: 0 14px 28px rgba(41, 128, 185, 0.18);
+            }
+
             .p-inline-panel__object-preview-top {
                 display: flex;
                 align-items: flex-start;
@@ -1990,6 +1996,24 @@
                 line-height: 1.6;
                 color: #475569;
                 text-wrap: pretty;
+            }
+
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__object-preview-title,
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__object-preview-text,
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__action-preview-button,
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__action-preview-button span,
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__action-preview-button i {
+                color: #ffffff;
+            }
+
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__object-preview-badge {
+                background: rgba(255, 255, 255, 0.18);
+                color: #ffffff;
+            }
+
+            .p-inline-panel__object-preview-card--contact .p-inline-panel__object-preview-icon {
+                background: rgba(255, 255, 255, 0.16);
+                color: #ffffff;
             }
 
             .p-inline-panel__quick-actions {
@@ -5357,6 +5381,25 @@
         return textFields.length <= 2 && !hasExtendedCopy;
     }
 
+    function isContactLikeObjectBinding(binding, editorFields = null) {
+        if (!binding || binding.type !== 'object') return false;
+
+        const fields = Array.isArray(editorFields) && editorFields.length
+            ? editorFields
+            : getBindingEditorFields(binding);
+        const path = String(binding.path || '').toLowerCase();
+        const label = String(binding.label || '').toLowerCase();
+
+        const hasLabelField = fields.some((field) => String(field?.key || '').toLowerCase() === 'label');
+        const hasHrefField = fields.some(isLinkLikeField);
+        const hasIconField = fields.some(isIconField);
+
+        return (
+            /contact|phone|email|address|telegram|max|whatsapp|ответствен|mail|tel/.test(path)
+            || /контакт|телефон|почт|адрес|telegram|max|whatsapp|ответствен/.test(label)
+        ) && hasLabelField && hasIconField && (hasHrefField || /contact\.items\./.test(path));
+    }
+
     function isImageDescriptionField(field) {
         const key = String(field?.key || '').toLowerCase();
         const label = String(field?.label || '').toLowerCase();
@@ -5806,13 +5849,17 @@
 
         const render = (nextValue = value) => {
             const data = getObjectPreviewValues(binding, nextValue);
+            const isContactPreview = isContactLikeObjectBinding(binding);
             const previewStyle = INLINE_BUTTON_STYLE_LIBRARY[data.style]?.previewClass || 'secondary';
             cardNode.classList.remove(
                 'p-inline-panel__object-preview-card--primary',
                 'p-inline-panel__object-preview-card--secondary',
-                'p-inline-panel__object-preview-card--outline'
+                'p-inline-panel__object-preview-card--outline',
+                'p-inline-panel__object-preview-card--contact'
             );
-            cardNode.classList.add(`p-inline-panel__object-preview-card--${previewStyle}`);
+            cardNode.classList.add(isContactPreview
+                ? 'p-inline-panel__object-preview-card--contact'
+                : `p-inline-panel__object-preview-card--${previewStyle}`);
 
             titleNode.textContent = data.title;
 
@@ -5840,7 +5887,7 @@
                 iconNode.className = '';
             }
 
-            if (data.action.label) {
+            if (data.action.label && !isContactPreview) {
                 actionNode.hidden = false;
                 actionNode.classList.remove(
                     'p-inline-panel__action-preview-button--primary',

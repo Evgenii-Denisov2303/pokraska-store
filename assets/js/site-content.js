@@ -1,6 +1,6 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260401-inline-cache-bust-20';
+    const INLINE_EDITOR_VERSION = '20260401-inline-cache-bust-21';
     let inlineEditorAvailabilityPromise = null;
 
     function getInlineEditorBase() {

@@ -97,6 +97,17 @@
     text-align: center;
 }
 
+.contact-block,
+.contact-block p,
+.contact-block span,
+.contact-block .contact-response-note,
+.contact-block .contact-item,
+.contact-block .contact-item a,
+.contact-block .contact-item span,
+.contact-block .contact-item i {
+    color: #ffffff;
+}
+
 .contact-block h3 {
     font-size: 1.5rem;
     margin-bottom: 20px;
