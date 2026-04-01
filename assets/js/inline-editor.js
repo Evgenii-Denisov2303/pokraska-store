@@ -4684,6 +4684,7 @@
                 control.dispatchEvent(new Event('input', { bubbles: true }));
                 control.dispatchEvent(new Event('change', { bubbles: true }));
                 updateActiveState();
+                flashActiveBindingPreview();
             });
             optionsWrap.appendChild(button);
         });
@@ -5753,6 +5754,11 @@
         renderBinding(binding);
     }
 
+    function flashActiveBindingPreview(binding = state.bindingMap.get(state.activeBindingId)) {
+        if (!binding) return;
+        pulseBindingElements(binding, binding.elements);
+    }
+
     function appendObjectQuickActions(binding, value) {
         const editorFields = getBindingEditorFields(binding);
         const styleField = editorFields.find(isStyleField);
@@ -5794,6 +5800,7 @@
                     styleControl.dispatchEvent(new Event('input', { bubbles: true }));
                     styleControl.dispatchEvent(new Event('change', { bubbles: true }));
                     updateQuickActionsState();
+                    flashActiveBindingPreview(binding);
                     showToast('Кнопка стала акцентной');
                 });
                 registerQuickButton(button, () => styleControl.value === accentOption.value);
@@ -5810,6 +5817,7 @@
                     styleControl.dispatchEvent(new Event('input', { bubbles: true }));
                     styleControl.dispatchEvent(new Event('change', { bubbles: true }));
                     updateQuickActionsState();
+                    flashActiveBindingPreview(binding);
                     showToast(calmOption.value === 'outline' ? 'Кнопка стала контурной' : 'Кнопка стала спокойной');
                 });
                 registerQuickButton(button, () => styleControl.value === calmOption.value);
@@ -5832,6 +5840,7 @@
                     iconControl.dispatchEvent(new Event('input', { bubbles: true }));
                     iconControl.dispatchEvent(new Event('change', { bubbles: true }));
                     updateQuickActionsState();
+                    flashActiveBindingPreview(binding);
                     showToast('Значок добавлен');
                 });
                 registerQuickButton(withIcon, () => Boolean(String(iconControl.value || '').trim()));
@@ -5846,6 +5855,7 @@
                     iconControl.dispatchEvent(new Event('input', { bubbles: true }));
                     iconControl.dispatchEvent(new Event('change', { bubbles: true }));
                     updateQuickActionsState();
+                    flashActiveBindingPreview(binding);
                     showToast('Значок убран');
                 });
                 registerQuickButton(withoutIcon, () => !String(iconControl.value || '').trim());
