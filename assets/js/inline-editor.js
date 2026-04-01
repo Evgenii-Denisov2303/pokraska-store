@@ -9,7 +9,7 @@
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
-    const OVERVIEW_ENABLED = false;
+    const OVERVIEW_ENABLED = true;
     const HOVER_LABEL_ENABLED = false;
     const INLINE_ICON_OPTIONS = [
         { value: '', label: 'Без иконки', preview: '—', group: 'common', keywords: ['пусто', 'убрать', 'без'], featured: true },
@@ -5743,8 +5743,13 @@
         }
         if (fileBadge) {
             const sizeKb = Math.max(1, Math.round((file.size || 0) / 1024));
-            fileBadge.textContent = `${file.name} · ${sizeKb} KB`;
+            const sizeMb = (file.size || 0) / (1024 * 1024);
+            const sizeWarning = sizeMb > 2 ? ` ⚠ Файл крупный (${sizeMb.toFixed(1)} МБ) — загрузка может занять время` : '';
+            fileBadge.textContent = `${file.name} · ${sizeKb} KB${sizeWarning}`;
             fileBadge.hidden = false;
+        }
+        if ((file.size || 0) > 5 * 1024 * 1024) {
+            showToast(`Файл ${(file.size / 1024 / 1024).toFixed(1)} МБ — это много. Лучше уменьшить фото перед загрузкой.`);
         }
     }
 

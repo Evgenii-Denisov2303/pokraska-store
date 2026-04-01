@@ -551,16 +551,18 @@
                             <span>Первый экран, направления, заявка и контакты</span>
                         </div>
                         <div class="launch-card__actions">
-                    <a class="button button--primary" href="/">Открыть страницу</a>
-                </div>
-            </article>
-            <article class="launch-card">
+                            <a class="button button--primary" href="/?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/">Просто открыть</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
                         <div>
                             <strong>Каталог</strong>
                             <span>Карточки, галереи, FAQ и блоки автоматики</span>
                         </div>
                         <div class="launch-card__actions">
-                            <a class="button button--primary" href="/pages/services.html">Открыть страницу</a>
+                            <a class="button button--primary" href="/pages/services.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/services.html">Просто открыть</a>
                         </div>
                     </article>
                     <article class="launch-card">
@@ -569,7 +571,8 @@
                             <span>Шапка, фильтры, карточки работ и фотографии</span>
                         </div>
                         <div class="launch-card__actions">
-                            <a class="button button--primary" href="/pages/gallery.html">Открыть страницу</a>
+                            <a class="button button--primary" href="/pages/gallery.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/gallery.html">Просто открыть</a>
                         </div>
                     </article>
                     <article class="launch-card">
@@ -578,7 +581,48 @@
                             <span>Телефоны, режим работы, менеджер и схема проезда</span>
                         </div>
                         <div class="launch-card__actions">
-                            <a class="button button--primary" href="/pages/contacts.html">Открыть страницу</a>
+                            <a class="button button--primary" href="/pages/contacts.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/contacts.html">Просто открыть</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Цены</strong>
+                            <span>Таблицы цен, заголовки и описания прайса</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/prices.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/prices.html">Просто открыть</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Порошковая покраска</strong>
+                            <span>Описание услуги, преимущества, фото и кнопки</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/powder-coating.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/powder-coating.html">Просто открыть</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Пескоструйная обработка</strong>
+                            <span>Описание услуги, преимущества, фото и кнопки</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/sandblasting.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/sandblasting.html">Просто открыть</a>
+                        </div>
+                    </article>
+                    <article class="launch-card">
+                        <div>
+                            <strong>Оплата и документы</strong>
+                            <span>Способы оплаты, закрывающие документы, реквизиты</span>
+                        </div>
+                        <div class="launch-card__actions">
+                            <a class="button button--primary" href="/pages/payment-documents.html?edit=1">Открыть и редактировать</a>
+                            <a class="button launch-card__quick" href="/pages/payment-documents.html">Просто открыть</a>
                         </div>
                     </article>
                 </div>
@@ -625,18 +669,18 @@
                 <p>Эта страница теперь нужна только для входа и запуска. Всё основное редактирование идёт уже на самом сайте.</p>
 
                 <ul class="mini-list">
-                    <li><strong>Текст и фото:</strong> открой страницу, нажми <strong>Редактировать на странице</strong> и только потом кликай по нужному блоку.</li>
-                    <li><strong>Длинные страницы:</strong> кнопка <strong>Обзор</strong> помогает быстро найти нужное место.</li>
-                    <li><strong>Сохранение:</strong> правки уходят в те же JSON-файлы и сразу синхронны с сайтом.</li>
+                    <li><strong>Текст и фото:</strong> нажми <strong>Открыть и редактировать</strong> — режим включится сразу, без лишних шагов.</li>
+                    <li><strong>Поиск по блокам:</strong> в режиме правки нажми <strong>Ctrl+K</strong> или кнопку <strong>Обзор</strong> — откроется список всех редактируемых блоков страницы с поиском.</li>
+                    <li><strong>Сохранение:</strong> правки уходят в JSON-файлы и сразу видны на сайте. Нажми <strong>Сохранить</strong> или <strong>Ctrl+S</strong>.</li>
                 </ul>
 
                 <h3 class="subsection-title">Частые действия</h3>
                 <div class="mini-actions">
-                    <a class="mini-action" href="/">Главная: текст</a>
-                    <a class="mini-action" href="/">Главная: фото</a>
-                    <a class="mini-action" href="/">Сайт: меню и подвал</a>
-                    <a class="mini-action" href="/pages/services.html">Каталог: блоки</a>
-                    <a class="mini-action" href="/pages/contacts.html">Контакты: телефоны</a>
+                    <a class="mini-action" href="/?edit=1&focus=text">Главная: текст</a>
+                    <a class="mini-action" href="/?edit=1&focus=image">Главная: фото</a>
+                    <a class="mini-action" href="/?edit=1">Сайт: меню и подвал</a>
+                    <a class="mini-action" href="/pages/services.html?edit=1">Каталог: блоки</a>
+                    <a class="mini-action" href="/pages/contacts.html?edit=1&focus=contacts">Контакты: телефоны</a>
                 </div>
 
                 <div class="tips">
