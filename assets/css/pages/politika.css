@@ -114,15 +114,20 @@
     color: white;
 }
 
-.contact-info {
+.privacy-page .contact-block .contact-info {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
     margin-top: 20px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
-.contact-response-note {
+.privacy-page .contact-block .contact-response-note {
     margin-top: 20px;
     font-size: 0.9rem;
     opacity: 0.9;
@@ -142,24 +147,26 @@
     color: #95a5a6;
 }
 
-.contact-item {
+.privacy-page .contact-block .contact-item {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
     font-size: 1.1rem;
 }
 
-.contact-item i {
+.privacy-page .contact-block .contact-item i {
     font-size: 1.3rem;
 }
 
-.contact-item a {
+.privacy-page .contact-block .contact-item a {
     color: white;
     text-decoration: none;
     font-weight: 500;
 }
 
-.contact-item a:hover {
+.privacy-page .contact-block .contact-item a:hover {
     text-decoration: underline;
 }
 
@@ -191,7 +198,7 @@
         font-size: 1.8rem;
     }
 
-    .contact-info {
+    .privacy-page .contact-block .contact-info {
         flex-direction: column;
         gap: 15px;
     }
