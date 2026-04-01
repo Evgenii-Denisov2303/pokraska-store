@@ -38,14 +38,6 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Автоматика для распашных ворот -->
-  <url>
-    <loc>https://pokraska.store/pages/automation-swing.html</loc>
-    <lastmod>2026-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
   <!-- Автоматика для откатных ворот -->
   <url>
     <loc>https://pokraska.store/pages/automation-alutech-rto500.html</loc>
