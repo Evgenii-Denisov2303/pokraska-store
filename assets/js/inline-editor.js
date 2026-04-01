@@ -3842,11 +3842,22 @@
         ui.toolbarTitle.textContent = activeBinding
             ? truncateInlineLabel(activeBinding.label, 56)
             : (dirtyCount ? `Изменения: ${dirtyCount}` : 'Выберите блок');
-        ui.toolbarMeta.textContent = activeBinding
-            ? `${activeSummary}. ${getBindingWorkHint(activeBinding)}${dirtyCount ? ' Потом нажмите «Сохранить».' : ''}`
-            : (dirtyCount
+        if (activeBinding) {
+            const panelState = getPanelStatusState(activeBinding);
+            if (panelState?.tone === 'is-other') {
+                ui.toolbarMeta.textContent = `${activeSummary}. Этот блок уже без новых правок, но на странице остались другие изменения. Потом нажмите «Сохранить».`;
+            } else if (panelState?.tone === 'is-draft') {
+                ui.toolbarMeta.textContent = `${activeSummary}. Предпросмотр уже виден на странице. Если нравится результат, нажмите «Сохранить».`;
+            } else if (panelState?.tone === 'is-pending') {
+                ui.toolbarMeta.textContent = `${activeSummary}. Этот блок уже обновлён на странице, но ещё не сохранён окончательно.`;
+            } else {
+                ui.toolbarMeta.textContent = `${activeSummary}. ${getBindingWorkHint(activeBinding)}${dirtyCount ? ' Потом нажмите «Сохранить».' : ''}`;
+            }
+        } else {
+            ui.toolbarMeta.textContent = dirtyCount
                 ? 'На странице есть изменения. Сохраните их, когда закончите.'
-                : 'Нажмите на текст, фото или кнопку на странице.');
+                : 'Нажмите на текст, фото или кнопку на странице.';
+        }
         ui.toolbarNotice.hidden = true;
         ui.toolbarNotice.textContent = '';
         updateDockOffset();
@@ -5312,14 +5323,33 @@
 
     function getSecondaryAccordionConfig(binding, secondarySections, fallbackTitle, fallbackMeta) {
         const sections = Array.isArray(secondarySections) ? secondarySections : [];
-        const hasButtonVisualSettings = binding?.type === 'object' && sections.some((section) =>
-            (section?.fields || []).some((field) => isIconField(field) || isStyleField(field))
+        const hasIconSettings = binding?.type === 'object' && sections.some((section) =>
+            (section?.fields || []).some((field) => isIconField(field))
+        );
+        const hasStyleSettings = binding?.type === 'object' && sections.some((section) =>
+            (section?.fields || []).some((field) => isStyleField(field))
         );
 
-        if (hasButtonVisualSettings) {
+        if (hasIconSettings && hasStyleSettings) {
             return {
                 title: 'Значок и вид кнопки',
                 meta: 'Здесь можно выбрать значок и поменять оформление кнопки.',
+                open: true
+            };
+        }
+
+        if (hasIconSettings) {
+            return {
+                title: 'Значок',
+                meta: 'Здесь можно выбрать или убрать значок у этого блока.',
+                open: true
+            };
+        }
+
+        if (hasStyleSettings) {
+            return {
+                title: 'Вид кнопки',
+                meta: 'Здесь можно поменять оформление кнопки.',
                 open: true
             };
         }
