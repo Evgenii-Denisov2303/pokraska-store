@@ -1255,6 +1255,7 @@
                 display: grid;
                 gap: 12px;
                 min-width: 0;
+                max-width: 100%;
                 padding: 16px;
                 border-radius: 20px;
                 background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.96));
@@ -1272,6 +1273,7 @@
                 display: grid;
                 gap: 10px;
                 min-width: 0;
+                max-width: 100%;
                 margin-bottom: 0;
                 padding: 14px;
                 border-radius: 18px;
@@ -1358,6 +1360,7 @@
                 display: grid;
                 gap: 12px;
                 min-width: 0;
+                max-width: 100%;
                 padding: 0 14px 14px;
             }
 
@@ -1374,6 +1377,14 @@
                 padding-bottom: 10px;
             }
 
+            .p-inline-panel__form > *,
+            .p-inline-panel__section > *,
+            .p-inline-panel__group > *,
+            .p-inline-panel__accordion-body > * {
+                min-width: 0;
+                max-width: 100%;
+            }
+
             .p-inline-panel__label {
                 font-size: 15px;
                 font-weight: 800;
@@ -1383,6 +1394,7 @@
             .p-inline-panel__control,
             .p-inline-panel__textarea {
                 width: 100%;
+                max-width: 100%;
                 border: 1px solid rgba(148, 163, 184, 0.28);
                 border-radius: 16px;
                 background: #ffffff;
@@ -6655,6 +6667,20 @@
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
+        ui.panelForm.scrollTop = 0;
+        ui.panelForm.scrollLeft = 0;
+        if (ui.panel) {
+            ui.panel.scrollTop = 0;
+            ui.panel.scrollLeft = 0;
+        }
+        window.requestAnimationFrame(() => {
+            if (ui.panelForm) {
+                ui.panelForm.scrollLeft = 0;
+            }
+            if (ui.panel) {
+                ui.panel.scrollLeft = 0;
+            }
+        });
         if (ui.panelActions) {
             ui.panelActions.hidden = false;
         }
