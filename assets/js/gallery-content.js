@@ -288,6 +288,10 @@
 
         galleryItems.forEach((itemElement, index) => {
             const imageElement = itemElement.querySelector('.gallery-image img');
+            const overlayTitle = itemElement.querySelector('.overlay-title');
+            const overlayTag = itemElement.querySelector('.overlay-tag');
+            const workCategory = itemElement.querySelector('.work-category');
+            const workTitle = itemElement.querySelector('.work-title');
             const defaultItem = extractedItems[index];
             if (!defaultItem) return;
 
@@ -339,6 +343,27 @@
             };
 
             bindings.push(buildGalleryItemBinding(itemElement, index));
+
+            const categoryElements = [overlayTitle, workCategory].filter(Boolean);
+            const titleElements = [overlayTag, workTitle].filter(Boolean);
+
+            if (categoryElements.length) {
+                bindings.push({
+                    path: `items.${index}.categoryLabel`,
+                    type: 'text',
+                    label: `Карточка галереи ${index + 1}: категория`,
+                    element: categoryElements
+                });
+            }
+
+            if (titleElements.length) {
+                bindings.push({
+                    path: `items.${index}.title`,
+                    type: 'text',
+                    label: `Карточка галереи ${index + 1}: название`,
+                    element: titleElements
+                });
+            }
 
             if (imageElement) {
                 bindings.push({

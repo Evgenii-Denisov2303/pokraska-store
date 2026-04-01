@@ -3,9 +3,12 @@
 
     const STYLE_ID = 'pokraska-inline-editor-style';
     const ACTIVE_CLASS = 'p-inline-active';
+    const ACTIVE_TARGET_CLASS = 'p-inline-active-target';
     const DIRTY_CLASS = 'p-inline-dirty';
+    const HOVER_TARGET_CLASS = 'p-inline-hover-target';
     const REVEAL_CLASS = 'p-inline-reveal';
     const MODE_CLASS = 'p-inline-mode';
+    const SUPPRESS_HOVER_CLASS = 'p-inline-suppress-hover';
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
@@ -152,7 +155,16 @@
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
     const requestedResumeFile = (query.get('resumeFile') || '').trim();
     const requestedResumePath = (query.get('resumePath') || '').trim();
-    const wantsInlineEditor = query.get('edit') === '1'
+    const inlineBootstrapSession = window.POKRASKA_INLINE_SESSION && typeof window.POKRASKA_INLINE_SESSION === 'object'
+        ? {
+            authEnabled: Boolean(window.POKRASKA_INLINE_SESSION.authEnabled),
+            authenticated: Boolean(window.POKRASKA_INLINE_SESSION.authenticated),
+            username: window.POKRASKA_INLINE_SESSION.username || ''
+        }
+        : null;
+    let inlineSessionCache = inlineBootstrapSession;
+    const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
+        || query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
         || window.location.port === '4173';
 
@@ -178,7 +190,9 @@
             }
 
             body.${MODE_CLASS} [data-inline-edit-id]:hover,
-            body.${MODE_CLASS} [data-inline-edit-id].${ACTIVE_CLASS} {
+            body.${MODE_CLASS} [data-inline-edit-id].${ACTIVE_CLASS},
+            body.${MODE_CLASS} .${HOVER_TARGET_CLASS},
+            body.${MODE_CLASS} .${ACTIVE_TARGET_CLASS} {
                 outline-color: rgba(37, 99, 235, 0.75);
                 background-color: rgba(37, 99, 235, 0.05);
                 box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18) inset, 0 0 0 8px rgba(37, 99, 235, 0.12);
@@ -190,13 +204,42 @@
                 box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.26) inset, 0 0 0 10px rgba(37, 99, 235, 0.15);
             }
 
+            body.${MODE_CLASS} .${ACTIVE_TARGET_CLASS} {
+                cursor: pointer;
+                outline: 2px solid rgba(37, 99, 235, 0.9);
+                outline-offset: 4px;
+                border-radius: 14px;
+                background-color: rgba(37, 99, 235, 0.08);
+                box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.26) inset, 0 0 0 10px rgba(37, 99, 235, 0.15);
+                scroll-margin-top: 80px;
+                transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            }
+
+            body.${MODE_CLASS} .${HOVER_TARGET_CLASS} {
+                cursor: pointer;
+                outline: 2px solid rgba(37, 99, 235, 0.75);
+                outline-offset: 4px;
+                border-radius: 14px;
+                background-color: rgba(37, 99, 235, 0.05);
+                box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18) inset, 0 0 0 8px rgba(37, 99, 235, 0.12);
+                scroll-margin-top: 80px;
+                transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            }
+
+            body.${MODE_CLASS} [data-inline-edit-id].${SUPPRESS_HOVER_CLASS}:hover {
+                outline-color: transparent;
+                background-color: transparent;
+                box-shadow: none;
+            }
+
             body.${MODE_CLASS} [data-inline-edit-id].${DIRTY_CLASS} {
                 outline-color: rgba(5, 150, 105, 0.82);
                 background-color: rgba(5, 150, 105, 0.07);
                 box-shadow: 0 0 0 1px rgba(5, 150, 105, 0.22) inset, 0 0 0 10px rgba(5, 150, 105, 0.15);
             }
 
-            body.${MODE_CLASS} [data-inline-edit-id].${REVEAL_CLASS} {
+            body.${MODE_CLASS} [data-inline-edit-id].${REVEAL_CLASS},
+            body.${MODE_CLASS} .${ACTIVE_TARGET_CLASS}.${REVEAL_CLASS} {
                 animation: p-inline-reveal-pulse 0.9s ease;
             }
 
@@ -825,10 +868,142 @@
                 padding-right: 6px;
             }
 
+            .p-inline-auth-modal[hidden] {
+                display: none !important;
+            }
+
+            .p-inline-auth-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 5005;
+                display: grid;
+                place-items: center;
+                padding: 20px;
+            }
+
+            .p-inline-auth-modal__backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.56);
+                backdrop-filter: blur(10px);
+            }
+
+            .p-inline-auth-modal__dialog {
+                position: relative;
+                z-index: 1;
+                width: min(460px, calc(100vw - 24px));
+                display: grid;
+                gap: 16px;
+                border-radius: 28px;
+                border: 1px solid rgba(148, 163, 184, 0.22);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(247, 250, 255, 0.98));
+                box-shadow: 0 34px 80px rgba(15, 23, 42, 0.24);
+                padding: 22px 22px 20px;
+            }
+
+            .p-inline-auth-modal__head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 14px;
+            }
+
+            .p-inline-auth-modal__head-copy {
+                display: grid;
+                gap: 4px;
+                min-width: 0;
+            }
+
+            .p-inline-auth-modal__title {
+                margin: 0;
+                font-size: 24px;
+                line-height: 1.1;
+                color: #0f172a;
+                text-wrap: balance;
+            }
+
+            .p-inline-auth-modal__meta {
+                margin: 0;
+                font-size: 14px;
+                line-height: 1.6;
+                color: #64748b;
+                text-wrap: pretty;
+            }
+
+            .p-inline-auth-modal__close {
+                width: 42px;
+                height: 42px;
+                border: 0;
+                border-radius: 999px;
+                background: #eef2ff;
+                color: #1e3a8a;
+                font-size: 20px;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+
+            .p-inline-auth-modal__form {
+                display: grid;
+                gap: 14px;
+            }
+
+            .p-inline-auth-modal__field {
+                display: grid;
+                gap: 8px;
+            }
+
+            .p-inline-auth-modal__label {
+                font-size: 13px;
+                font-weight: 800;
+                color: #334155;
+            }
+
+            .p-inline-auth-modal__input {
+                width: 100%;
+                min-height: 46px;
+                padding: 0 16px;
+                border-radius: 16px;
+                border: 1px solid rgba(148, 163, 184, 0.24);
+                background: #fff;
+                color: #0f172a;
+                font: inherit;
+                font-size: 15px;
+            }
+
+            .p-inline-auth-modal__input:focus {
+                outline: none;
+                border-color: rgba(37, 99, 235, 0.46);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            }
+
+            .p-inline-auth-modal__error {
+                margin: 0;
+                padding: 12px 14px;
+                border-radius: 16px;
+                background: rgba(254, 242, 242, 0.98);
+                border: 1px solid rgba(248, 113, 113, 0.22);
+                color: #b91c1c;
+                font-size: 14px;
+                line-height: 1.5;
+                font-weight: 700;
+            }
+
+            .p-inline-auth-modal__actions {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
             @media (max-width: 900px) {
                 .p-inline-icon-modal__dialog {
                     width: min(100vw - 16px, 760px);
                     max-height: calc(100vh - 16px);
+                    padding: 18px 18px 16px;
+                }
+
+                .p-inline-auth-modal__dialog {
+                    width: min(100vw - 16px, 460px);
                     padding: 18px 18px 16px;
                 }
 
@@ -976,6 +1151,91 @@
                 flex: 0 0 auto;
             }
 
+            .p-inline-panel__status {
+                display: grid;
+                grid-template-columns: auto minmax(0, 1fr);
+                gap: 12px;
+                margin-bottom: 14px;
+                padding: 14px 16px;
+                border-radius: 20px;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.98));
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            }
+
+            .p-inline-panel__status-copy {
+                display: grid;
+                gap: 4px;
+                min-width: 0;
+            }
+
+            .p-inline-panel__status-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 28px;
+                padding: 0 12px;
+                border-radius: 999px;
+                background: rgba(148, 163, 184, 0.14);
+                color: #475569;
+                font-size: 12px;
+                font-weight: 800;
+                white-space: nowrap;
+            }
+
+            .p-inline-panel__status-title {
+                font-size: 14px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__status-meta {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #475569;
+            }
+
+            .p-inline-panel__status.is-ready {
+                border-color: rgba(16, 185, 129, 0.2);
+                background: linear-gradient(180deg, rgba(236, 253, 245, 0.96), rgba(255, 255, 255, 0.98));
+            }
+
+            .p-inline-panel__status.is-ready .p-inline-panel__status-badge {
+                background: rgba(16, 185, 129, 0.12);
+                color: #047857;
+            }
+
+            .p-inline-panel__status.is-draft {
+                border-color: rgba(59, 130, 246, 0.24);
+                background: linear-gradient(180deg, rgba(239, 246, 255, 0.96), rgba(255, 255, 255, 0.98));
+            }
+
+            .p-inline-panel__status.is-draft .p-inline-panel__status-badge {
+                background: rgba(37, 99, 235, 0.12);
+                color: #1d4ed8;
+            }
+
+            .p-inline-panel__status.is-pending {
+                border-color: rgba(245, 158, 11, 0.24);
+                background: linear-gradient(180deg, rgba(255, 251, 235, 0.96), rgba(255, 255, 255, 0.98));
+            }
+
+            .p-inline-panel__status.is-pending .p-inline-panel__status-badge {
+                background: rgba(245, 158, 11, 0.14);
+                color: #b45309;
+            }
+
+            .p-inline-panel__status.is-other {
+                border-color: rgba(148, 163, 184, 0.2);
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.98));
+            }
+
+            .p-inline-panel__status.is-other .p-inline-panel__status-badge {
+                background: rgba(148, 163, 184, 0.14);
+                color: #475569;
+            }
+
             .p-inline-panel__section {
                 display: grid;
                 gap: 12px;
@@ -1021,6 +1281,66 @@
                 font-size: 14px;
                 line-height: 1.5;
                 color: #64748b;
+            }
+
+            .p-inline-panel__accordion {
+                display: grid;
+                gap: 0;
+                border: 1px solid rgba(148, 163, 184, 0.18);
+                border-radius: 20px;
+                background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.98));
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+                overflow: hidden;
+            }
+
+            .p-inline-panel__accordion-summary {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 16px;
+                list-style: none;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .p-inline-panel__accordion-summary::-webkit-details-marker {
+                display: none;
+            }
+
+            .p-inline-panel__accordion-summary::after {
+                content: '▾';
+                color: #64748b;
+                font-size: 14px;
+                transition: transform 0.18s ease;
+            }
+
+            .p-inline-panel__accordion[open] .p-inline-panel__accordion-summary::after {
+                transform: rotate(180deg);
+            }
+
+            .p-inline-panel__accordion-copy {
+                display: grid;
+                gap: 4px;
+                min-width: 0;
+            }
+
+            .p-inline-panel__accordion-title {
+                font-size: 15px;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .p-inline-panel__accordion-meta {
+                font-size: 14px;
+                line-height: 1.5;
+                color: #64748b;
+            }
+
+            .p-inline-panel__accordion-body {
+                display: grid;
+                gap: 12px;
+                padding: 0 14px 14px;
             }
 
             .p-inline-panel__form {
@@ -1138,6 +1458,19 @@
                 background: rgba(37, 99, 235, 0.1);
                 color: #1d4ed8;
                 transform: translateY(-1px);
+            }
+
+            .p-inline-panel__examples {
+                display: grid;
+                gap: 8px;
+            }
+
+            .p-inline-panel__examples-title {
+                font-size: 12px;
+                font-weight: 800;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #64748b;
             }
 
             .p-inline-panel__link-builder {
@@ -2457,9 +2790,9 @@
     const state = {
         enabled: false,
         apiAvailable: false,
-        authEnabled: false,
-        authenticated: false,
-        username: '',
+        authEnabled: Boolean(inlineSessionCache?.authEnabled),
+        authenticated: Boolean(inlineSessionCache?.authenticated),
+        username: inlineSessionCache?.username || '',
         lastSavedAt: 0,
         restoredDrafts: 0,
         panelReturnToOverview: false,
@@ -2471,11 +2804,28 @@
         bindingMap: new Map(),
         files: new Map(),
         activeBindingId: '',
+        activeHighlightElements: [],
+        activeSuppressedElements: [],
         activeIconPicker: null,
+        hoverHighlightElements: [],
+        hoverSuppressedElement: null,
+        panelFocusField: '',
         toastTimer: 0
     };
 
     const ui = {};
+
+    function setInlineSessionCache(session) {
+        inlineSessionCache = session && typeof session === 'object'
+            ? {
+                authEnabled: Boolean(session.authEnabled),
+                authenticated: Boolean(session.authenticated),
+                username: session.username || ''
+            }
+            : null;
+
+        window.POKRASKA_INLINE_SESSION = inlineSessionCache;
+    }
 
     async function checkApiAvailability() {
         try {
@@ -2497,11 +2847,13 @@
             const response = await fetch('/api/auth/session', { cache: 'no-store' });
             if (!response.ok) throw new Error('Не удалось проверить вход');
             const payload = await response.json();
-            return {
+            const session = {
                 authEnabled: Boolean(payload.authEnabled),
                 authenticated: Boolean(payload.authenticated),
                 username: payload.username || ''
             };
+            setInlineSessionCache(session);
+            return session;
         } catch (error) {
             return { authEnabled: false, authenticated: false, username: '' };
         }
@@ -2561,6 +2913,7 @@
                 </div>
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save" hidden>Сохранить</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="session" hidden>Войти</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
@@ -2581,12 +2934,15 @@
                     <button class="p-inline-panel__close" type="button" aria-label="Закрыть">&times;</button>
                 </div>
             </div>
+            <div class="p-inline-panel__status" hidden>
+                <span class="p-inline-panel__status-badge"></span>
+                <div class="p-inline-panel__status-copy">
+                    <strong class="p-inline-panel__status-title"></strong>
+                    <p class="p-inline-panel__status-meta"></p>
+                </div>
+            </div>
             <form class="p-inline-panel__form"></form>
             <div class="p-inline-panel__actions">
-                <div class="p-inline-panel__actions-head">
-                    <strong class="p-inline-panel__actions-title">С этим блоком</strong>
-                    <span class="p-inline-panel__actions-meta">Вернуть изменения или убрать.</span>
-                </div>
                 <div class="p-inline-panel__actions-row">
                     <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
                     <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>↩ Отменить правку</button>
@@ -2663,26 +3019,65 @@
             </div>
         `;
 
+        const authModal = document.createElement('div');
+        authModal.className = 'p-inline-auth-modal';
+        authModal.hidden = true;
+        authModal.innerHTML = `
+            <div class="p-inline-auth-modal__backdrop" data-inline-auth-close></div>
+            <div class="p-inline-auth-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="p-inline-auth-title">
+                <div class="p-inline-auth-modal__head">
+                    <div class="p-inline-auth-modal__head-copy">
+                        <span class="p-inline-panel__kicker">Вход</span>
+                        <h2 class="p-inline-auth-modal__title" id="p-inline-auth-title">Войти для правки</h2>
+                        <p class="p-inline-auth-modal__meta">Введите логин и пароль администратора. После входа правка откроется прямо на этой странице.</p>
+                    </div>
+                    <button class="p-inline-auth-modal__close" type="button" aria-label="Закрыть">&times;</button>
+                </div>
+                <form class="p-inline-auth-modal__form">
+                    <label class="p-inline-auth-modal__field">
+                        <span class="p-inline-auth-modal__label">Логин</span>
+                        <input class="p-inline-auth-modal__input" name="username" type="text" autocomplete="username" required>
+                    </label>
+                    <label class="p-inline-auth-modal__field">
+                        <span class="p-inline-auth-modal__label">Пароль</span>
+                        <input class="p-inline-auth-modal__input" name="password" type="password" autocomplete="current-password" required>
+                    </label>
+                    <p class="p-inline-auth-modal__error" hidden></p>
+                    <div class="p-inline-auth-modal__actions">
+                        <button class="p-inline-panel__btn" type="button" data-inline-auth-close>Отмена</button>
+                        <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="submit" data-inline-auth-submit>Войти и редактировать</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
         document.body.appendChild(root);
         document.body.appendChild(panel);
         document.body.appendChild(overview);
         document.body.appendChild(toast);
         document.body.appendChild(hover);
         document.body.appendChild(iconModal);
+        document.body.appendChild(authModal);
 
         ui.root = root;
         ui.launcher = root.querySelector('.p-inline-launcher');
+        ui.launcherLabel = root.querySelector('.p-inline-launcher span');
         ui.toolbar = root.querySelector('.p-inline-toolbar');
         ui.toolbarTitle = root.querySelector('.p-inline-toolbar__title');
         ui.toolbarMeta = root.querySelector('.p-inline-toolbar__meta');
         ui.toolbarNotice = root.querySelector('.p-inline-toolbar__notice');
         ui.toolbarRevertBtn = root.querySelector('[data-inline-action="revert"]');
         ui.saveBtn = root.querySelector('[data-inline-action="save"]');
+        ui.sessionBtn = root.querySelector('[data-inline-action="session"]');
         ui.adminBtn = root.querySelector('[data-inline-action="admin"]');
         ui.panel = panel;
         ui.panelKicker = panel.querySelector('.p-inline-panel__kicker');
         ui.panelTitle = panel.querySelector('.p-inline-panel__title');
         ui.panelMeta = panel.querySelector('.p-inline-panel__meta');
+        ui.panelStatus = panel.querySelector('.p-inline-panel__status');
+        ui.panelStatusBadge = panel.querySelector('.p-inline-panel__status-badge');
+        ui.panelStatusTitle = panel.querySelector('.p-inline-panel__status-title');
+        ui.panelStatusMeta = panel.querySelector('.p-inline-panel__status-meta');
         ui.panelForm = panel.querySelector('.p-inline-panel__form');
         ui.panelActions = panel.querySelector('.p-inline-panel__actions');
         ui.panelBackBtn = panel.querySelector('[data-inline-panel-action="back"]');
@@ -2705,6 +3100,138 @@
         ui.iconModalBadge = iconModal.querySelector('[data-inline-icon-modal-badge]');
         ui.iconModalValue = iconModal.querySelector('[data-inline-icon-modal-value]');
         ui.iconModalClear = iconModal.querySelector('[data-inline-icon-clear]');
+        ui.authModal = authModal;
+        ui.authForm = authModal.querySelector('.p-inline-auth-modal__form');
+        ui.authUsername = authModal.querySelector('[name="username"]');
+        ui.authPassword = authModal.querySelector('[name="password"]');
+        ui.authError = authModal.querySelector('.p-inline-auth-modal__error');
+        ui.authSubmitBtn = authModal.querySelector('[data-inline-auth-submit]');
+    }
+
+    function clearAuthError() {
+        if (!ui.authError) return;
+        ui.authError.hidden = true;
+        ui.authError.textContent = '';
+    }
+
+    function showAuthError(message) {
+        if (!ui.authError) return;
+        ui.authError.hidden = !message;
+        ui.authError.textContent = message || '';
+    }
+
+    function closeAuthModal() {
+        if (!ui.authModal || ui.authModal.hidden) return;
+        ui.authModal.hidden = true;
+        clearAuthError();
+        if (ui.authSubmitBtn) {
+            ui.authSubmitBtn.disabled = false;
+            ui.authSubmitBtn.textContent = 'Войти и редактировать';
+        }
+    }
+
+    function openAuthModal(message = '') {
+        if (!ui.authModal) return;
+
+        const wasHidden = ui.authModal.hidden;
+        ui.authModal.hidden = false;
+
+        if (wasHidden) {
+            ui.authForm?.reset();
+        }
+
+        if (ui.authSubmitBtn) {
+            ui.authSubmitBtn.disabled = false;
+            ui.authSubmitBtn.textContent = 'Войти и редактировать';
+        }
+
+        if (message) {
+            showAuthError(message);
+        } else {
+            clearAuthError();
+        }
+
+        window.setTimeout(() => {
+            ui.authUsername?.focus();
+            ui.authUsername?.select?.();
+        }, 0);
+    }
+
+    async function submitAuthForm(event) {
+        event.preventDefault();
+        if (!ui.authForm || !ui.authSubmitBtn) return;
+
+        const shouldStartEditMode = !state.enabled;
+
+        clearAuthError();
+
+        const formData = new FormData(ui.authForm);
+        const payload = {
+            username: String(formData.get('username') || '').trim(),
+            password: String(formData.get('password') || '')
+        };
+
+        ui.authSubmitBtn.disabled = true;
+        ui.authSubmitBtn.textContent = 'Входим...';
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || !result.ok) {
+                throw new Error(result.error || 'Не удалось войти');
+            }
+
+            setInlineSessionCache({
+                authEnabled: Boolean(result.authEnabled),
+                authenticated: Boolean(result.authenticated),
+                username: result.username || payload.username
+            });
+            closeAuthModal();
+            if (shouldStartEditMode) {
+                await enterEditMode({ skipAuthCheck: true });
+            } else {
+                await refreshEnvironment();
+                showToast('Вход выполнен');
+            }
+        } catch (error) {
+            showAuthError(error.message || 'Не удалось войти');
+            ui.authSubmitBtn.disabled = false;
+            ui.authSubmitBtn.textContent = 'Войти и редактировать';
+        }
+    }
+
+    async function logoutInline() {
+        const hasUnsavedWork = hasDirtyFiles() || hasPendingPanelChanges();
+        if (hasUnsavedWork && !window.confirm('Есть несохранённые правки. Выйти из режима правки и завершить сеанс?')) {
+            return;
+        }
+
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (error) {
+            // ignore logout transport errors and still clear local session state
+        }
+
+        setInlineSessionCache({
+            authEnabled: state.authEnabled,
+            authenticated: false,
+            username: ''
+        });
+
+        state.enabled = false;
+        state.overviewOpen = false;
+        state.overviewQuery = '';
+        closeAuthModal();
+        closeIconModal();
+        closePanel({ skipConfirm: true });
+        document.body.classList.remove(MODE_CLASS);
+        await refreshEnvironment();
+        showToast('Сеанс правки завершён');
     }
 
     function getBindingKindLabel(binding) {
@@ -3177,6 +3704,19 @@
         document.documentElement.style.setProperty('--p-inline-dock-offset', `${offset}px`);
     }
 
+    function updateLauncherState() {
+        if (!ui.launcher || !ui.launcherLabel) return;
+
+        if (state.authEnabled && !state.authenticated) {
+            ui.launcherLabel.textContent = 'Войти для правки';
+            ui.launcher.title = 'Войдите, чтобы редактировать страницу прямо на сайте';
+            return;
+        }
+
+        ui.launcherLabel.textContent = 'Редактировать на странице';
+        ui.launcher.title = 'Включить редактирование прямо на странице';
+    }
+
     function renderToolbar() {
         if (!ui.launcher) return;
 
@@ -3190,6 +3730,7 @@
         const activeSummary = activeBinding
             ? `${getBindingKindLabel(activeBinding)}`
             : '';
+        updateLauncherState();
         ui.launcher.hidden = state.enabled;
         ui.toolbar.hidden = !state.enabled;
         ui.toolbar.classList.toggle('p-inline-toolbar--compact', !hasIssue);
@@ -3197,6 +3738,11 @@
             ui.toolbarRevertBtn.hidden = true;
             ui.toolbarRevertBtn.disabled = true;
             ui.toolbarRevertBtn.classList.remove('is-active');
+        }
+        if (ui.sessionBtn) {
+            ui.sessionBtn.hidden = !state.enabled || !state.authEnabled;
+            ui.sessionBtn.disabled = false;
+            ui.sessionBtn.textContent = state.authenticated ? 'Выйти' : 'Войти';
         }
         ui.saveBtn.hidden = false;
         ui.saveBtn.disabled = !canSave || (!dirtyFilesCount && !pendingPanel);
@@ -3209,6 +3755,7 @@
         }
 
         if (!state.enabled) {
+            updateDockOffset();
             renderOverviewPanel();
             return;
         }
@@ -3224,9 +3771,10 @@
 
         if (state.authEnabled && !state.authenticated) {
             ui.toolbarTitle.textContent = 'Нужен вход';
-            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте /admin/, выполните вход и вернитесь на страницу.`;
+            ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · войдите прямо на этой странице и продолжайте правку.`;
             ui.toolbarNotice.hidden = false;
-            ui.toolbarNotice.textContent = 'Вход выполняется через панель запуска /admin/.';
+            ui.toolbarNotice.textContent = 'Нажмите «Войти», введите логин и пароль, и режим правки снова станет доступен.';
+            updateDockOffset();
             renderOverviewPanel();
             return;
         }
@@ -3248,6 +3796,7 @@
     async function refreshEnvironment() {
         state.apiAvailable = await checkApiAvailability();
         const session = await checkAuthSession();
+        setInlineSessionCache(session);
         state.authEnabled = session.authEnabled;
         state.authenticated = session.authenticated;
         state.username = session.username || '';
@@ -3289,10 +3838,10 @@
         closeIconModal();
         ui.panel.hidden = true;
         state.activeBindingId = '';
+        state.panelFocusField = '';
         state.panelReturnToOverview = false;
-        state.bindings.forEach((binding) => {
-            binding.elements.forEach((element) => element.classList.remove(ACTIVE_CLASS));
-        });
+        clearActiveMarks();
+        clearHoverMarks();
         renderToolbar();
         return true;
     }
@@ -3301,6 +3850,15 @@
         state.bindings.forEach((binding) => {
             binding.elements.forEach((element) => element.classList.remove(ACTIVE_CLASS));
         });
+        state.activeSuppressedElements.forEach((element) => {
+            element?.classList?.remove(SUPPRESS_HOVER_CLASS);
+        });
+        state.activeSuppressedElements = [];
+        state.activeHighlightElements.forEach((element) => {
+            element?.classList?.remove(ACTIVE_TARGET_CLASS);
+            element?.classList?.remove(REVEAL_CLASS);
+        });
+        state.activeHighlightElements = [];
     }
 
     function markBindingDirty(binding) {
@@ -3318,6 +3876,8 @@
         state.overviewOpen = false;
         state.overviewQuery = '';
         state.enabled = false;
+        clearHoverMarks();
+        closeAuthModal();
         closeIconModal();
         if (!closePanel()) {
             state.enabled = true;
@@ -3330,8 +3890,14 @@
         }
     }
 
-    async function enterEditMode() {
+    async function enterEditMode(options = {}) {
         await refreshEnvironment();
+
+        if (!options.skipAuthCheck && state.authEnabled && !state.authenticated) {
+            openAuthModal();
+            return;
+        }
+
         state.enabled = true;
         document.body.classList.add(MODE_CLASS);
         rememberEditingContext();
@@ -3340,8 +3906,6 @@
 
         if (!state.apiAvailable) {
             showToast('Сейчас открыт обычный сервер. Для сохранения нужен сервер сохранения.');
-        } else if (state.authEnabled && !state.authenticated) {
-            showToast('Сначала откройте панель входа и авторизуйтесь.');
         } else {
             const openedFromFocus = await openRequestedFocusBinding();
             const openedFromResume = !openedFromFocus && await openRequestedResumeBinding();
@@ -3884,6 +4448,26 @@
             wrapper.appendChild(typeControl);
         }
 
+        const quickExampleGroup = createExampleChipGroup(
+            'Быстрые переходы',
+            getLinkExamples(field),
+            (example) => {
+                const nextState = parseInlineLinkState(field, example.value);
+                state.type = lockedType || nextState.type || 'custom';
+                state.page = nextState.page || '';
+                state.section = nextState.section || '';
+                state.text = nextState.text || '';
+                if (typeControl) {
+                    typeControl.value = state.type;
+                }
+                renderDestination();
+                syncControl();
+            }
+        );
+        if (quickExampleGroup) {
+            wrapper.appendChild(quickExampleGroup);
+        }
+
         const destination = document.createElement('div');
         destination.className = 'p-inline-panel__link-builder';
         wrapper.appendChild(destination);
@@ -4119,10 +4703,70 @@
         ];
     }
 
-    function createFieldExamples(field, control) {
-        void field;
-        void control;
-        return null;
+    function setControlValueAndDispatch(control, nextValue) {
+        if (!control) return;
+        control.value = nextValue;
+        control.dispatchEvent(new Event('input', { bubbles: true }));
+        control.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function createExampleChipGroup(title, items, onSelect) {
+        if (!Array.isArray(items) || !items.length || typeof onSelect !== 'function') return null;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'p-inline-panel__examples';
+
+        const heading = document.createElement('div');
+        heading.className = 'p-inline-panel__examples-title';
+        heading.textContent = title;
+        wrapper.appendChild(heading);
+
+        const row = document.createElement('div');
+        row.className = 'p-inline-panel__quick-actions';
+
+        items.forEach((item) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'p-inline-panel__example-chip';
+            button.textContent = item.label;
+            button.addEventListener('click', () => onSelect(item));
+            row.appendChild(button);
+        });
+
+        wrapper.appendChild(row);
+        return wrapper;
+    }
+
+    function getButtonTextExamples(binding) {
+        const bindingLabel = String(binding?.label || '').toLowerCase();
+        const presets = [
+            /цен|стоим/.test(bindingLabel) ? 'Узнать цену' : 'Получить расчет',
+            'Оставить заявку',
+            'Связаться',
+            'Подробнее'
+        ];
+
+        return Array.from(new Set(presets)).map((value) => ({
+            label: value,
+            value
+        }));
+    }
+
+    function createFieldExamples(field, control, binding = null) {
+        if (!binding || binding.type !== 'object' || !isPrimaryTextField(field)) {
+            return null;
+        }
+
+        const hasActionControls = getBindingEditorFields(binding).some((item) => isLinkLikeField(item) || isStyleField(item));
+        if (!hasActionControls || control.type === 'hidden') {
+            return null;
+        }
+
+        return createExampleChipGroup(
+            'Быстрый текст',
+            getButtonTextExamples(binding),
+            (example) => setControlValueAndDispatch(control, example.value)
+        );
     }
 
     function createFieldGroup(field, value, binding = null) {
@@ -4202,7 +4846,7 @@
             wrapper.appendChild(createIconPicker(control));
         }
 
-        const examples = createFieldExamples(field, control);
+        const examples = createFieldExamples(field, control, binding);
         if (examples) {
             wrapper.appendChild(examples);
         }
@@ -4541,20 +5185,165 @@
         return section;
     }
 
+    function createPanelAccordion(title, meta = '') {
+        const details = document.createElement('details');
+        details.className = 'p-inline-panel__accordion';
+
+        const summary = document.createElement('summary');
+        summary.className = 'p-inline-panel__accordion-summary';
+
+        const copy = document.createElement('div');
+        copy.className = 'p-inline-panel__accordion-copy';
+
+        const heading = document.createElement('span');
+        heading.className = 'p-inline-panel__accordion-title';
+        heading.textContent = title;
+        copy.appendChild(heading);
+
+        if (meta) {
+            const hint = document.createElement('span');
+            hint.className = 'p-inline-panel__accordion-meta';
+            hint.textContent = meta;
+            copy.appendChild(hint);
+        }
+
+        summary.appendChild(copy);
+        details.appendChild(summary);
+
+        const body = document.createElement('div');
+        body.className = 'p-inline-panel__accordion-body';
+        details.appendChild(body);
+
+        return { element: details, body };
+    }
+
+    function appendFieldSectionContent(mountNode, sectionConfig, value, binding) {
+        const section = createPanelSection(sectionConfig.title, sectionConfig.meta);
+        sectionConfig.fields.forEach((field) => {
+            const fieldValue = field.key === '__value'
+                ? value
+                : getByPath(value, field.key);
+            section.appendChild(createFieldGroup(field, fieldValue, binding));
+        });
+        mountNode.appendChild(section);
+    }
+
+    function getAdditionalSectionsSummary(binding) {
+        if (binding.type === 'image') {
+            return 'Описание для поисковиков и редкие параметры фото.';
+        }
+        if (binding.type === 'object') {
+            return 'Иконка, вид кнопки и другие второстепенные настройки.';
+        }
+        return 'Редкие и технические параметры этого блока.';
+    }
+
+    function appendFieldSections(binding, value, sectionConfigs) {
+        if (!Array.isArray(sectionConfigs) || !sectionConfigs.length) return;
+
+        const primarySections = sectionConfigs.filter((section) => section.importance !== 'secondary');
+        const secondarySections = sectionConfigs.filter((section) => section.importance === 'secondary');
+
+        if (!primarySections.length && secondarySections.length) {
+            primarySections.push(secondarySections.shift());
+        }
+
+        primarySections.forEach((section) => appendFieldSectionContent(ui.panelForm, section, value, binding));
+
+        if (!secondarySections.length) {
+            return;
+        }
+
+        const accordion = createPanelAccordion('Дополнительно', getAdditionalSectionsSummary(binding));
+        secondarySections.forEach((section) => appendFieldSectionContent(accordion.body, section, value, binding));
+        ui.panelForm.appendChild(accordion.element);
+    }
+
+    function appendFocusedFieldSections(binding, value, sectionConfigs, focusFieldKey = '') {
+        if (!Array.isArray(sectionConfigs) || !sectionConfigs.length || !focusFieldKey) {
+            appendFieldSections(binding, value, sectionConfigs);
+            return;
+        }
+
+        const primarySections = [];
+        const secondarySections = [];
+
+        sectionConfigs.forEach((sectionConfig) => {
+            const fields = Array.isArray(sectionConfig.fields) ? sectionConfig.fields : [];
+            const focusField = fields.find((field) => field.key === focusFieldKey);
+            if (!focusField) {
+                secondarySections.push(sectionConfig);
+                return;
+            }
+
+            const compactActionGroup = fields.length <= 3
+                && (fields.some(isLinkLikeField) || fields.some(isIconField));
+            const primaryFields = compactActionGroup
+                ? fields
+                : [focusField];
+            const secondaryFields = fields.filter((field) => !primaryFields.includes(field));
+
+            primarySections.push({
+                title: 'Быстрая правка',
+                meta: compactActionGroup
+                    ? 'Открыта нужная часть блока. Соседние поля для этого действия тоже показаны сразу.'
+                    : `Открыта точечная правка поля «${focusField.label || focusField.key}».`,
+                fields: primaryFields,
+                importance: 'primary'
+            });
+
+            if (secondaryFields.length) {
+                secondarySections.push({
+                    ...sectionConfig,
+                    fields: secondaryFields,
+                    importance: 'secondary'
+                });
+            }
+        });
+
+        if (!primarySections.length) {
+            appendFieldSections(binding, value, sectionConfigs);
+            return;
+        }
+
+        primarySections.forEach((section) => appendFieldSectionContent(ui.panelForm, section, value, binding));
+
+        if (!secondarySections.length) {
+            return;
+        }
+
+        const accordion = createPanelAccordion(
+            'Остальное в блоке',
+            'Раскройте, если нужно отредактировать соседние поля этого же блока.'
+        );
+        secondarySections.forEach((section) => appendFieldSectionContent(accordion.body, section, value, binding));
+        ui.panelForm.appendChild(accordion.element);
+    }
+
     function getFieldGroupsForBinding(binding, editorFields) {
         if (binding.type === 'image') {
             const descriptionFields = editorFields.filter(isImageDescriptionField);
+            const primaryFields = descriptionFields.filter((field) => String(field?.key || '').toLowerCase() !== 'alt');
+            const searchFields = descriptionFields.filter((field) => String(field?.key || '').toLowerCase() === 'alt');
             const extraFields = editorFields.filter((field) => !isImageDescriptionField(field));
             return [
-                descriptionFields.length ? {
-                    title: 'Подпись и описание',
-                    meta: 'Подпись видна посетителям. Описание — только поисковикам и незрячим пользователям.',
-                    fields: descriptionFields
+                primaryFields.length ? {
+                    title: 'Главное',
+                    meta: 'Подпись и заголовок, которые увидит посетитель рядом с фото.',
+                    fields: primaryFields,
+                    importance: 'primary'
+                } : null,
+                searchFields.length ? {
+                    title: 'Для поисковиков',
+                    meta: 'Помогает поиску и доступности. Обычный посетитель это не видит.',
+                    fields: searchFields,
+                    importance: 'secondary'
                 } : null,
                 extraFields.length ? {
-                    title: 'Редко нужно',
-                    meta: 'Редкие параметры фото. Чаще всего здесь ничего менять не нужно.',
-                    fields: extraFields
+                    title: 'Редкие настройки',
+                    meta: 'Нестандартные параметры фото. Обычно их трогать не нужно.',
+                    fields: extraFields,
+                    importance: 'secondary'
                 } : null
             ].filter(Boolean);
         }
@@ -4571,52 +5360,59 @@
 
             return [
                 primaryFields.length ? {
-                    title: isActionLike ? 'Текст на кнопке' : 'Главный текст',
+                    title: isActionLike ? 'Главное на кнопке' : 'Главный текст',
                     meta: isActionLike
                         ? 'Именно это посетитель увидит на кнопке или ссылке.'
                         : 'Главный текст этого блока на странице.',
-                    fields: primaryFields
+                    fields: primaryFields,
+                    importance: 'primary'
                 } : null,
                 linkFields.length ? {
                     title: 'Куда вести',
                     meta: 'Укажите адрес перехода или выберите готовый вариант ниже.',
-                    fields: linkFields
+                    fields: linkFields,
+                    importance: 'primary'
                 } : null,
                 iconFields.length ? {
                     title: 'Значок',
                     meta: 'Маленький значок рядом с текстом.',
-                    fields: iconFields
+                    fields: iconFields,
+                    importance: 'secondary'
                 } : null,
                 styleFields.length ? {
                     title: 'Вид кнопки',
                     meta: 'Выберите, должна ли кнопка быть яркой, спокойной или контурной.',
-                    fields: styleFields
+                    fields: styleFields,
+                    importance: 'secondary'
                 } : null,
                 extraFields.length ? {
-                    title: 'Редко нужно',
+                    title: 'Редкие настройки',
                     meta: 'Параметры, которые обычно менять не приходится.',
-                    fields: extraFields
+                    fields: extraFields,
+                    importance: 'secondary'
                 } : null
             ].filter(Boolean);
         }
 
         if (binding.type === 'list') {
             return [{
-                title: 'Список',
+                title: 'Главное',
                 meta: 'Каждая строка станет отдельным пунктом.',
-                fields: editorFields
+                fields: editorFields,
+                importance: 'primary'
             }];
         }
 
         const title = /заголов/i.test(binding.label || '')
-            ? 'Заголовок'
-            : 'Текст';
+            ? 'Главное'
+            : 'Главное';
         return [{
             title,
             meta: /заголов/i.test(binding.label || '')
                 ? 'Крупный текст, который первым видит посетитель.'
                 : 'То, что увидит посетитель на странице.',
-            fields: editorFields
+            fields: editorFields,
+            importance: 'primary'
         }];
     }
 
@@ -4932,6 +5728,282 @@
             type: binding.type === 'html' ? 'html' : 'textarea',
             hint: binding.hint || ''
         }];
+    }
+
+    function normalizeInlineComparableText(value) {
+        return String(value ?? '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+    }
+
+    function getBindingFieldValueForMatching(field, value) {
+        const rawValue = field?.key === '__value'
+            ? value
+            : getByPath(value, field?.key);
+
+        if (rawValue == null) return '';
+        if (Array.isArray(rawValue)) {
+            return normalizeInlineComparableText(rawValue.join(' '));
+        }
+        if (typeof rawValue === 'object') {
+            if (isIconField(field)) {
+                return normalizeInlineComparableText(rawValue.icon || '');
+            }
+            if (isLinkLikeField(field)) {
+                return normalizeInlineComparableText(
+                    rawValue.href
+                    || rawValue.url
+                    || rawValue.phone
+                    || rawValue.email
+                    || rawValue.telegram
+                    || rawValue.whatsapp
+                    || rawValue.label
+                    || ''
+                );
+            }
+            return normalizeInlineComparableText(
+                Object.values(rawValue)
+                    .filter((item) => typeof item === 'string' || typeof item === 'number')
+                    .join(' ')
+            );
+        }
+        return normalizeInlineComparableText(rawValue);
+    }
+
+    function resolveInlineMiniBlockTarget(bindingRoot, rawTarget) {
+        let current = rawTarget instanceof Element ? rawTarget : rawTarget?.parentElement;
+        if (!(bindingRoot instanceof HTMLElement) || !(current instanceof Element)) {
+            return bindingRoot;
+        }
+
+        while (current && current !== bindingRoot) {
+            if (current.matches('i, svg, use, path')) {
+                current = current.parentElement;
+                continue;
+            }
+
+            if (current.matches('a, button, img, li, dt, dd, p, blockquote, h1, h2, h3, h4, h5, h6, figcaption, label, summary')) {
+                return current;
+            }
+
+            const tagName = String(current.tagName || '').toLowerCase();
+            const classText = normalizeInlineComparableText(
+                typeof current.className === 'string' ? current.className : current.getAttribute('class') || ''
+            );
+            const textContent = normalizeInlineComparableText(current.textContent || '');
+
+            if (
+                ((tagName === 'strong' || tagName === 'span' || tagName === 'small' || tagName === 'em' || tagName === 'b') && textContent.length >= 2)
+                || /title|subtitle|description|text|label|badge|meta|price|value|note|caption|question|answer|lead|intro|cta|action|btn|fact|point/.test(classText)
+            ) {
+                return current;
+            }
+
+            if (tagName === 'div' && current.childElementCount <= 3 && textContent && textContent.length <= 180) {
+                return current;
+            }
+
+            current = current.parentElement;
+        }
+
+        return bindingRoot;
+    }
+
+    function inferFocusedFieldKey(binding, value, targetElement) {
+        if (!binding || !targetElement) return '';
+
+        const fields = getBindingEditorFields(binding);
+        if (!fields.length) return '';
+        if (fields.length === 1) return fields[0].key;
+
+        const tagName = String(targetElement.tagName || '').toLowerCase();
+        const classText = normalizeInlineComparableText(
+            typeof targetElement.className === 'string'
+                ? targetElement.className
+                : targetElement.getAttribute?.('class') || ''
+        );
+        const targetText = normalizeInlineComparableText(targetElement.textContent || '');
+        const linkTarget = targetElement.closest?.('a, button');
+        const targetHref = normalizeInlineComparableText(
+            resolveSameOriginHref(linkTarget?.getAttribute?.('href') || linkTarget?.href || '')
+            || linkTarget?.getAttribute?.('href')
+            || ''
+        );
+        const iconNode = targetElement.matches?.('i')
+            ? targetElement
+            : targetElement.querySelector?.('i');
+        const iconClass = normalizeInlineComparableText(iconNode?.className || '');
+        const isHeading = /^h[1-6]$/.test(tagName);
+        const isParagraphLike = ['p', 'div', 'span', 'blockquote', 'figcaption'].includes(tagName);
+        const isListItem = tagName === 'li' || Boolean(targetElement.closest?.('li'));
+
+        let bestField = null;
+        let bestScore = 0;
+
+        fields.forEach((field) => {
+            const fieldValue = getBindingFieldValueForMatching(field, value);
+            const fieldKeywords = normalizeInlineComparableText(`${field.key || ''} ${field.label || ''}`);
+            let score = 0;
+
+            if (isIconField(field)) {
+                if (iconClass) score += 70;
+                if (fieldValue && iconClass && (fieldValue.includes(iconClass) || iconClass.includes(fieldValue))) score += 70;
+            }
+
+            if (field.type === 'list') {
+                if (isListItem) score += 90;
+                if (fieldValue && targetText && (fieldValue.includes(targetText) || targetText.includes(fieldValue))) score += 50;
+            }
+
+            if (isLinkLikeField(field)) {
+                if (linkTarget) score += 30;
+                if (targetHref) {
+                    if (fieldValue && (fieldValue === targetHref || fieldValue.includes(targetHref) || targetHref.includes(fieldValue))) {
+                        score += 95;
+                    } else {
+                        score += 15;
+                    }
+                }
+            }
+
+            if (isPrimaryTextField(field)) {
+                if (isHeading && /title|name|label|heading|question|заголов|название/.test(fieldKeywords)) score += 60;
+                if (linkTarget && /label|text|title|name|button|кноп/.test(fieldKeywords)) score += 50;
+                if (targetText && fieldValue) {
+                    if (targetText === fieldValue) score += 100;
+                    else if (targetText.length > 3 && (fieldValue.includes(targetText) || targetText.includes(fieldValue))) score += 75;
+                }
+            }
+
+            if (!isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field) && targetText && fieldValue) {
+                if (targetText === fieldValue) score += 85;
+                else if (targetText.length > 3 && (fieldValue.includes(targetText) || targetText.includes(fieldValue))) score += 60;
+            }
+
+            if (isParagraphLike && /description|text|lead|subtitle|intro|note|answer|опис|текст|подзаголов/.test(fieldKeywords)) {
+                score += 45;
+            }
+
+            if (/badge|meta|price|value|count|number|бейдж|цена|стоим/.test(fieldKeywords)
+                && (/badge|meta|price|value|count|number/.test(classText) || ['strong', 'span', 'div'].includes(tagName))) {
+                score += 45;
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestField = field;
+            }
+        });
+
+        if (bestField && bestScore >= 50) {
+            return bestField.key;
+        }
+
+        if (isListItem) {
+            return fields.find((field) => field.type === 'list')?.key || '';
+        }
+
+        if (iconClass) {
+            return fields.find((field) => isIconField(field))?.key || '';
+        }
+
+        if (linkTarget) {
+            return fields.find((field) => isPrimaryTextField(field))?.key
+                || fields.find((field) => isLinkLikeField(field))?.key
+                || '';
+        }
+
+        if (isHeading) {
+            return fields.find((field) => /title|name|label|question|заголов|название/.test(normalizeInlineComparableText(`${field.key} ${field.label}`)))?.key
+                || fields.find((field) => isPrimaryTextField(field))?.key
+                || '';
+        }
+
+        if (isParagraphLike) {
+            return fields.find((field) => /description|text|lead|subtitle|intro|note|answer|опис|текст|подзаголов/.test(normalizeInlineComparableText(`${field.key} ${field.label}`)))?.key
+                || fields.find((field) => isPrimaryTextField(field))?.key
+                || '';
+        }
+
+        return fields.find((field) => isPrimaryTextField(field))?.key || '';
+    }
+
+    function resolveInlineInteractionContext(eventTarget) {
+        const sourceElement = eventTarget instanceof Element ? eventTarget : eventTarget?.parentElement;
+        if (!(sourceElement instanceof Element)) return null;
+
+        const bindingTarget = sourceElement.closest?.('[data-inline-edit-id]');
+        if (!(bindingTarget instanceof HTMLElement)) return null;
+
+        const binding = state.bindingMap.get(bindingTarget.dataset.inlineEditId || '');
+        if (!binding) return null;
+
+        const focusElement = resolveInlineMiniBlockTarget(bindingTarget, sourceElement);
+        return {
+            binding,
+            bindingTarget,
+            focusElement,
+            sourceElement
+        };
+    }
+
+    function clearHoverMarks() {
+        state.hoverHighlightElements.forEach((element) => {
+            element?.classList?.remove(HOVER_TARGET_CLASS);
+        });
+        state.hoverHighlightElements = [];
+
+        if (state.hoverSuppressedElement) {
+            if (!state.activeSuppressedElements.includes(state.hoverSuppressedElement)) {
+                state.hoverSuppressedElement.classList.remove(SUPPRESS_HOVER_CLASS);
+            }
+            state.hoverSuppressedElement = null;
+        }
+
+        hideHoverLabel();
+    }
+
+    function applyHoverMarks(context) {
+        clearHoverMarks();
+        if (!context?.focusElement || !context?.bindingTarget || context.focusElement === context.bindingTarget) {
+            return;
+        }
+
+        context.focusElement.classList.add(HOVER_TARGET_CLASS);
+        context.bindingTarget.classList.add(SUPPRESS_HOVER_CLASS);
+        state.hoverHighlightElements = [context.focusElement];
+        state.hoverSuppressedElement = context.bindingTarget;
+    }
+
+    function setActiveMarks(binding, elements = []) {
+        clearActiveMarks();
+        const bindingElements = Array.isArray(binding?.elements) ? binding.elements : [];
+        const nextElements = (Array.isArray(elements) ? elements : [elements])
+            .filter((element) => element instanceof HTMLElement && element.isConnected);
+
+        if (!nextElements.length) {
+            bindingElements.forEach((element) => element.classList.add(ACTIVE_CLASS));
+            return bindingElements;
+        }
+
+        const customElements = [];
+        nextElements.forEach((element) => {
+            if (bindingElements.includes(element)) {
+                element.classList.add(ACTIVE_CLASS);
+                return;
+            }
+
+            element.classList.add(ACTIVE_TARGET_CLASS);
+            customElements.push(element);
+        });
+
+        state.activeHighlightElements = customElements;
+        if (customElements.length) {
+            bindingElements.forEach((element) => element.classList.add(SUPPRESS_HOVER_CLASS));
+            state.activeSuppressedElements = [...bindingElements];
+        }
+        return nextElements;
     }
 
     function findBinding(fileName, path) {
@@ -5390,7 +6462,8 @@
         ui.panelForm.appendChild(collectionBox);
     }
 
-    function fillPanel(binding, value) {
+    function fillPanel(binding, value, options = {}) {
+        state.panelFocusField = options.focusField || '';
         ui.panelKicker.textContent = getBindingKindLabel(binding);
         ui.panelTitle.textContent = binding.label;
         ui.panelForm.innerHTML = '';
@@ -5544,16 +6617,7 @@
             ui.panelForm.appendChild(preview);
         }
 
-        fieldSections.forEach((sectionConfig) => {
-            const section = createPanelSection(sectionConfig.title, sectionConfig.meta);
-            sectionConfig.fields.forEach((field) => {
-                const fieldValue = field.key === '__value'
-                    ? value
-                    : getByPath(value, field.key);
-                section.appendChild(createFieldGroup(field, fieldValue, binding));
-            });
-            ui.panelForm.appendChild(section);
-        });
+        appendFocusedFieldSections(binding, value, fieldSections, options.focusField || '');
 
         if (binding.type === 'object') {
             appendObjectQuickActions(binding, value);
@@ -5565,9 +6629,10 @@
         }
 
         if (binding.type !== 'image') {
-            const firstControl = ui.panelForm.querySelector(
-                'textarea, select, input:not([type="file"]):not([type="hidden"])'
-            );
+            const firstControl = (options.focusField
+                ? ui.panelForm.querySelector(`[name="${options.focusField}"]`)
+                : null)
+                || ui.panelForm.querySelector('textarea, select, input:not([type="file"]):not([type="hidden"])');
             if (firstControl) {
                 window.setTimeout(() => {
                     firstControl.focus();
@@ -5597,8 +6662,8 @@
         });
     }
 
-    function pulseBindingElements(binding) {
-        binding?.elements?.forEach((element) => {
+    function pulseBindingElements(binding, elements = binding?.elements || []) {
+        (Array.isArray(elements) ? elements : [elements]).forEach((element) => {
             if (!element?.classList) return;
             element.classList.remove(REVEAL_CLASS);
             void element.offsetWidth;
@@ -5657,6 +6722,16 @@
             const value = storedValue === undefined
                 ? resolveBindingDefault(binding)
                 : cloneData(storedValue);
+            const focusTarget = options.targetElement instanceof HTMLElement
+                ? options.targetElement
+                : null;
+            const shouldInferFocusField = Boolean(focusTarget && !binding.elements.includes(focusTarget));
+            const focusField = options.focusField || (shouldInferFocusField
+                ? inferFocusedFieldKey(binding, value, focusTarget)
+                : '');
+            const activeElements = focusTarget && focusTarget.isConnected
+                ? [focusTarget]
+                : binding.elements;
 
             const shouldReturnToOverview = OVERVIEW_ENABLED && (typeof options.fromOverview === 'boolean'
                 ? options.fromOverview
@@ -5665,12 +6740,12 @@
             state.panelReturnToOverview = shouldReturnToOverview;
             state.overviewOpen = false;
             state.activeBindingId = binding.id;
-            clearActiveMarks();
-            binding.elements.forEach((element) => element.classList.add(ACTIVE_CLASS));
-            revealBindingElement(binding.elements[0]);
-            pulseBindingElements(binding);
+            clearHoverMarks();
+            const highlightedElements = setActiveMarks(binding, activeElements);
+            revealBindingElement(highlightedElements[0] || binding.elements[0]);
+            pulseBindingElements(binding, highlightedElements);
 
-            fillPanel(binding, value);
+            fillPanel(binding, value, { focusField });
             ui.panel.hidden = false;
             rememberEditingContext(binding);
             renderToolbar();
@@ -5910,16 +6985,73 @@
         return window.confirm('Есть неприменённые изменения в открытой панели. Закрыть их без применения?');
     }
 
+    function getPanelStatusState(binding) {
+        const hasPending = hasPendingPanelChanges();
+        const hasSavedDifference = hasSavedDifferenceForBinding(binding);
+        const hasUnsaved = hasPending || hasDirtyFiles();
+
+        if (hasPending) {
+            return {
+                tone: 'is-draft',
+                badge: 'Черновик',
+                title: 'Изменения пока только в панели',
+                meta: 'Страница ещё не обновлена. Нажмите «Сохранить» в тёмной панели, чтобы применить правку и записать её.'
+            };
+        }
+
+        if (hasSavedDifference) {
+            return {
+                tone: 'is-pending',
+                badge: 'Не сохранено',
+                title: 'Этот блок уже обновлён на странице',
+                meta: 'Новая версия уже в предпросмотре, но на сайте ещё не закреплена. Нажмите «Сохранить» в тёмной панели.'
+            };
+        }
+
+        if (hasUnsaved) {
+            return {
+                tone: 'is-other',
+                badge: 'Есть правки',
+                title: 'В этом блоке сейчас без новых черновиков',
+                meta: 'Но на странице есть другие несохранённые изменения. Когда закончите, нажмите «Сохранить» в тёмной панели.'
+            };
+        }
+
+        return {
+            tone: 'is-ready',
+            badge: 'Готово',
+            title: 'Можно спокойно редактировать этот блок',
+            meta: 'Изменения сначала попадут в черновик. Потом нажмите «Сохранить» в тёмной панели.'
+        };
+    }
+
+    function updatePanelStatus(binding) {
+        if (!ui.panelStatus || !ui.panelStatusBadge || !ui.panelStatusTitle || !ui.panelStatusMeta || !binding) return;
+
+        const status = getPanelStatusState(binding);
+        ui.panelStatus.hidden = false;
+        ui.panelStatus.classList.remove('is-ready', 'is-draft', 'is-pending', 'is-other');
+        ui.panelStatus.classList.add(status.tone);
+        ui.panelStatusBadge.textContent = status.badge;
+        ui.panelStatusTitle.textContent = status.title;
+        ui.panelStatusMeta.textContent = status.meta;
+    }
+
     function updatePanelMeta(binding) {
         if (!ui.panelMeta || !binding) return;
         const hasPending = hasPendingPanelChanges();
         const hasSavedDifference = hasSavedDifferenceForBinding(binding);
-        const hasUnsaved = hasPending || hasDirtyFiles();
-        ui.panelMeta.textContent = hasPending
-            ? `${binding.sectionLabel} · Есть несохранённые правки`
-            : (hasUnsaved
-                ? `${binding.sectionLabel} · На странице есть другие правки`
-                : `${binding.sectionLabel} · Готово к правке`);
+        const sectionLabel = binding.sectionLabel || binding.fileName;
+        const focusField = state.panelFocusField
+            ? getBindingEditorFields(binding).find((field) => field.key === state.panelFocusField)
+            : null;
+        const focusPrefix = focusField
+            ? `Точечная правка: ${focusField.label || focusField.key} · `
+            : '';
+        ui.panelMeta.textContent = hasPending || hasSavedDifference
+            ? `${focusPrefix}Раздел: ${sectionLabel} · Есть правки`
+            : `${focusPrefix}Раздел: ${sectionLabel}`;
+        updatePanelStatus(binding);
         let hasVisibleAction = false;
         if (ui.panelRevertBtn) {
             const canRevert = canRevertBinding(binding);
@@ -5946,12 +7078,10 @@
                 ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
             } else {
                 const hasSomethingToSave = hasPending || hasDirtyFiles();
-                ui.panelApplyBtn.hidden = false;
+                ui.panelApplyBtn.hidden = true;
                 ui.panelApplyBtn.disabled = !hasSomethingToSave;
-                ui.panelApplyBtn.textContent = hasPending ? 'Сохранить' : 'Сохранить';
-                ui.panelApplyBtn.classList.toggle('is-active', hasSomethingToSave);
-                ui.panelApplyBtn.classList.toggle('is-idle', !hasSomethingToSave);
-                hasVisibleAction = true;
+                ui.panelApplyBtn.textContent = 'Сохранить';
+                ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
             }
         }
         if (ui.panelActions) {
@@ -6316,27 +7446,28 @@
         if (!state.enabled) return;
         if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target) || ui.iconModal?.contains(event.target)) return;
 
-        const target = event.target.closest('[data-inline-edit-id]');
-        if (!target) {
+        const context = resolveInlineInteractionContext(event.target);
+        if (!context) {
             if (state.overviewOpen) {
                 toggleOverview(false);
             }
             return;
         }
 
-        const bindingId = target.dataset.inlineEditId;
-        if (!bindingId) return;
-
         event.preventDefault();
         event.stopPropagation();
-        openBinding(bindingId);
+        openBinding(context.binding.id, { targetElement: context.focusElement });
     }
 
-    function showHoverLabel(target) {
+    function showHoverLabel(target, binding = null) {
         if (!HOVER_LABEL_ENABLED || !ui.hover || !state.enabled || !target) return;
         const rect = target.getBoundingClientRect();
-        const binding = state.bindingMap.get(target.dataset.inlineEditId || '');
-        const kind = getBindingKindLabel(binding).replace(/ на странице$/i, '');
+        const activeBinding = binding || state.bindingMap.get(
+            target.dataset.inlineEditId
+            || target.closest?.('[data-inline-edit-id]')?.dataset.inlineEditId
+            || ''
+        );
+        const kind = getBindingKindLabel(activeBinding).replace(/ на странице$/i, '');
         const label = target.dataset.inlineEditLabel || 'Редактировать';
         ui.hover.textContent = `${kind} · ${label}`;
         ui.hover.hidden = false;
@@ -6358,27 +7489,33 @@
     }
 
     function handlePointerMove(event) {
-        if (!HOVER_LABEL_ENABLED) return;
         if (!state.enabled) {
-            hideHoverLabel();
+            clearHoverMarks();
             return;
         }
 
         if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target)) {
-            hideHoverLabel();
+            clearHoverMarks();
             return;
         }
 
-        const target = event.target.closest?.('[data-inline-edit-id]');
-        if (!target) {
-            hideHoverLabel();
+        const context = resolveInlineInteractionContext(event.target);
+        if (!context) {
+            clearHoverMarks();
             return;
         }
 
-        showHoverLabel(target);
+        applyHoverMarks(context);
+        showHoverLabel(context.focusElement || context.bindingTarget, context.binding);
     }
 
     function handleKeydown(event) {
+        if (event.key === 'Escape' && ui.authModal && !ui.authModal.hidden) {
+            event.preventDefault();
+            closeAuthModal();
+            return;
+        }
+
         if (!state.enabled) return;
         const target = event.target;
         const isTypingTarget = target instanceof HTMLInputElement
@@ -6529,6 +7666,14 @@
             saveDirtyFiles();
         });
 
+        ui.sessionBtn?.addEventListener('click', async () => {
+            if (state.authEnabled && state.authenticated) {
+                await logoutInline();
+                return;
+            }
+            openAuthModal();
+        });
+
         ui.adminBtn?.addEventListener('click', () => {
             window.open(getLauncherHref(), '_blank', 'noopener');
         });
@@ -6587,6 +7732,13 @@
             if (!context) return;
             applyIconChoice(context.control, context.updateActiveState, '', { closeModal: true });
         });
+        ui.authModal?.addEventListener('click', (event) => {
+            if (event.target?.matches?.('[data-inline-auth-close]')) {
+                closeAuthModal();
+            }
+        });
+        ui.authModal?.querySelector('.p-inline-auth-modal__close')?.addEventListener('click', closeAuthModal);
+        ui.authForm?.addEventListener('submit', submitAuthForm);
         ui.overview.querySelector('.p-inline-overview__close').addEventListener('click', () => {
             toggleOverview(false);
         });

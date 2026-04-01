@@ -197,9 +197,11 @@
         });
 
         document.querySelectorAll('.contacts-facts .contacts-fact').forEach((factElement, index) => {
+            const label = factElement.querySelector('.contacts-fact__label');
             const title = factElement.querySelector('strong');
             const text = factElement.querySelector('p');
             bindings.push(buildHeroFactBinding(factElement, index));
+            if (label) bindings.push({ path: `hero.facts.${index}.label`, type: 'text', label: `Факт контактов ${index + 1}: метка`, element: label });
             if (title) bindings.push({ path: `hero.facts.${index}.title`, type: 'text', label: `Факт контактов ${index + 1}: заголовок`, element: title });
             if (text) bindings.push({ path: `hero.facts.${index}.text`, type: 'textarea', label: `Факт контактов ${index + 1}: описание`, element: text });
         });
@@ -244,8 +246,10 @@
 
         document.querySelectorAll('.contacts-overview-list .contact-item').forEach((itemElement, index) => {
             const title = itemElement.querySelector('.contact-details h3');
+            const note = itemElement.querySelector('.contact-note span');
             bindings.push(buildOverviewItemBinding(itemElement, index));
             if (title) bindings.push({ path: `overview.items.${index}.title`, type: 'text', label: `Карточка контакта ${index + 1}: заголовок`, element: title });
+            if (note) bindings.push({ path: `overview.items.${index}.note`, type: 'textarea', label: `Карточка контакта ${index + 1}: примечание`, element: note });
         });
 
         const managerKicker = document.querySelector('.contact-manager-card .contacts-card-kicker');
@@ -292,7 +296,11 @@
         });
 
         document.querySelectorAll('.hours-list li').forEach((itemElement, index) => {
+            const day = itemElement.querySelector('.day');
+            const time = itemElement.querySelector('.time');
             bindings.push(buildHoursItemBinding(itemElement, index));
+            if (day) bindings.push({ path: `overview.hours.items.${index}.day`, type: 'text', label: `Режим работы ${index + 1}: день`, element: day });
+            if (time) bindings.push({ path: `overview.hours.items.${index}.time`, type: 'text', label: `Режим работы ${index + 1}: время`, element: time });
         });
 
         const buildConnectActionBinding = (targetItem, index) => ({
@@ -368,7 +376,9 @@
         });
 
         document.querySelectorAll('.contact-trust .contact-trust__item').forEach((itemElement, index) => {
+            const text = itemElement.querySelector('span');
             bindings.push(buildTrustItemBinding(itemElement, index));
+            if (text) bindings.push({ path: `connect.trustItems.${index}.text`, type: 'textarea', label: `Пункт доверия ${index + 1}: текст`, element: text });
         });
 
         const locationKicker = document.querySelector('.contacts-location-copy .contacts-card-kicker');
@@ -442,7 +452,11 @@
         });
 
         document.querySelectorAll('.location-points li').forEach((pointElement, index) => {
+            const title = pointElement.querySelector('strong');
+            const text = pointElement.querySelector('span');
             bindings.push(buildLocationPointBinding(pointElement, index));
+            if (title) bindings.push({ path: `location.points.${index}.title`, type: 'text', label: `Точка маршрута ${index + 1}: заголовок`, element: title });
+            if (text) bindings.push({ path: `location.points.${index}.text`, type: 'textarea', label: `Точка маршрута ${index + 1}: описание`, element: text });
         });
 
         const buildLocationActionBinding = (targetItem, index) => ({

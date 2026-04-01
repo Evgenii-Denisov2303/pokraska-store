@@ -1,22 +1,67 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const INLINE_EDITOR_VERSION = '20260329-inline-panel-audit-pass';
+    const INLINE_EDITOR_VERSION = '20260401-site-first-inline';
+    let inlineEditorAvailabilityPromise = null;
 
-    function shouldLoadInlineEditor() {
-        return query.get('edit') === '1'
-            || ['localhost', '127.0.0.1'].includes(window.location.hostname)
-            || window.location.port === '4173';
+    function getInlineEditorBase() {
+        return (window.PokraskaContent?.baseUrl || '').replace(/\/+$/, '');
     }
 
-    function ensureInlineEditor() {
-        if (!shouldLoadInlineEditor()) return;
+    async function readInlineEditorSession() {
+        if (inlineEditorAvailabilityPromise) {
+            return inlineEditorAvailabilityPromise;
+        }
+
+        inlineEditorAvailabilityPromise = (async () => {
+            const base = getInlineEditorBase();
+
+            try {
+                const response = await fetch(`${base || ''}/api/auth/session`, {
+                    cache: 'no-store',
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    return null;
+                }
+
+                const payload = await response.json();
+                return {
+                    authEnabled: Boolean(payload.authEnabled),
+                    authenticated: Boolean(payload.authenticated),
+                    username: payload.username || ''
+                };
+            } catch (error) {
+                return null;
+            }
+        })();
+
+        return inlineEditorAvailabilityPromise;
+    }
+
+    async function shouldLoadInlineEditor() {
+        const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+            || window.location.port === '4173';
+        const session = await readInlineEditorSession();
+
+        if (session) {
+            window.POKRASKA_INLINE_SESSION = session;
+            return true;
+        }
+
+        return localHost;
+    }
+
+    async function ensureInlineEditor() {
+        if (!await shouldLoadInlineEditor()) return;
         if (document.querySelector('script[data-pokraska-inline-editor]')) return;
 
-        const base = (window.PokraskaContent?.baseUrl || '').replace(/\/+$/, '');
+        const base = getInlineEditorBase();
         const freshToken = (query.get('fresh') || query.get('v') || '').trim();
         const version = freshToken
             ? `${INLINE_EDITOR_VERSION}-${freshToken}`
             : INLINE_EDITOR_VERSION;
+        window.POKRASKA_INLINE_EDITOR_ENABLED = true;
         const script = document.createElement('script');
         script.defer = true;
         script.dataset.pokraskaInlineEditor = '1';

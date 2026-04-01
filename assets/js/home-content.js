@@ -801,7 +801,25 @@
             });
 
             feature?.querySelectorAll('.direction-feature__facts .direction-fact').forEach((factElement, index) => {
+                const valueElement = factElement.querySelector('strong');
+                const textElement = factElement.querySelector('span');
                 bindings.push(buildDirectionFactBinding(factElement, index));
+                if (valueElement) {
+                    bindings.push({
+                        path: `directions.${key}.facts.${index}.value`,
+                        type: 'text',
+                        label: `${key === 'gates' ? 'Факт ворот' : 'Факт покраски'} ${index + 1}: значение`,
+                        element: valueElement
+                    });
+                }
+                if (textElement) {
+                    bindings.push({
+                        path: `directions.${key}.facts.${index}.text`,
+                        type: 'text',
+                        label: `${key === 'gates' ? 'Факт ворот' : 'Факт покраски'} ${index + 1}: описание`,
+                        element: textElement
+                    });
+                }
             });
 
             const buildDirectionItemBinding = (targetItem, index) => ({
@@ -840,6 +858,38 @@
 
             feature?.querySelectorAll('.direction-feature__items .direction-item').forEach((itemElement, index) => {
                 bindings.push(buildDirectionItemBinding(itemElement, index));
+
+                const titleElement = itemElement.querySelector('strong');
+                const textElement = itemElement.querySelector('span:not(.direction-item__arrow)');
+                const arrowElement = itemElement.querySelector('.direction-item__arrow');
+                const itemLabel = `${key === 'gates' ? 'Пункт ворот' : 'Пункт покраски'} ${index + 1}`;
+
+                if (titleElement) {
+                    bindings.push({
+                        path: `directions.${key}.items.${index}.title`,
+                        type: 'text',
+                        label: `${itemLabel}: заголовок`,
+                        element: titleElement
+                    });
+                }
+
+                if (textElement) {
+                    bindings.push({
+                        path: `directions.${key}.items.${index}.text`,
+                        type: 'textarea',
+                        label: `${itemLabel}: описание`,
+                        element: textElement
+                    });
+                }
+
+                if (arrowElement) {
+                    bindings.push({
+                        path: `directions.${key}.items.${index}.arrowLabel`,
+                        type: 'text',
+                        label: `${itemLabel}: подпись ссылки`,
+                        element: arrowElement
+                    });
+                }
             });
 
             const buildDirectionActionBinding = (targetItem, index) => ({
@@ -952,7 +1002,15 @@
         });
 
         document.querySelectorAll('.process-facts .process-fact').forEach((factElement, index) => {
+            const valueElement = factElement.querySelector('strong');
+            const textElement = factElement.querySelector('span');
             bindings.push(buildProcessFactBinding(factElement, index));
+            if (valueElement) {
+                bindings.push({ path: `process.facts.${index}.value`, type: 'text', label: `Факт процесса ${index + 1}: значение`, element: valueElement });
+            }
+            if (textElement) {
+                bindings.push({ path: `process.facts.${index}.text`, type: 'text', label: `Факт процесса ${index + 1}: описание`, element: textElement });
+            }
         });
 
         const buildTimelineStepBinding = (targetItem, index) => ({
@@ -990,7 +1048,13 @@
         });
 
         document.querySelectorAll('.process-timeline .process-step').forEach((stepElement, index) => {
+            const stepNumber = stepElement.querySelector('.process-step__number');
+            const stepTitle = stepElement.querySelector('h3');
+            const stepText = stepElement.querySelector('p');
             bindings.push(buildTimelineStepBinding(stepElement, index));
+            if (stepNumber) bindings.push({ path: `process.steps.${index}.number`, type: 'text', label: `Шаг процесса ${index + 1}: номер`, element: stepNumber });
+            if (stepTitle) bindings.push({ path: `process.steps.${index}.title`, type: 'text', label: `Шаг процесса ${index + 1}: заголовок`, element: stepTitle });
+            if (stepText) bindings.push({ path: `process.steps.${index}.text`, type: 'textarea', label: `Шаг процесса ${index + 1}: описание`, element: stepText });
         });
 
         const buildProcessActionBinding = (targetItem, index) => ({
@@ -1069,7 +1133,11 @@
         });
 
         document.querySelectorAll('.trust-highlights .trust-highlight').forEach((itemElement, index) => {
+            const valueElement = itemElement.querySelector('strong');
+            const textElement = itemElement.querySelector('span');
             bindings.push(buildTrustHighlightBinding(itemElement, index));
+            if (valueElement) bindings.push({ path: `trust.highlights.${index}.value`, type: 'text', label: `Показатель доверия ${index + 1}: значение`, element: valueElement });
+            if (textElement) bindings.push({ path: `trust.highlights.${index}.text`, type: 'text', label: `Показатель доверия ${index + 1}: описание`, element: textElement });
         });
 
         const buildTrustCardBinding = (targetItem, index) => ({
@@ -1105,7 +1173,11 @@
         });
 
         document.querySelectorAll('.trust-grid .trust-card').forEach((cardElement, index) => {
+            const cardTitle = cardElement.querySelector('h3');
+            const cardText = cardElement.querySelector('p');
             bindings.push(buildTrustCardBinding(cardElement, index));
+            if (cardTitle) bindings.push({ path: `trust.cards.${index}.title`, type: 'text', label: `Карточка доверия ${index + 1}: заголовок`, element: cardTitle });
+            if (cardText) bindings.push({ path: `trust.cards.${index}.text`, type: 'textarea', label: `Карточка доверия ${index + 1}: описание`, element: cardText });
         });
 
         const requestTitle = document.querySelector('#request-title');
@@ -1223,7 +1295,11 @@
         });
 
         document.querySelectorAll('.request-facts .request-fact').forEach((factElement, index) => {
+            const valueElement = factElement.querySelector('strong');
+            const textElement = factElement.querySelector('span');
             bindings.push(buildRequestFactBinding(factElement, index));
+            if (valueElement) bindings.push({ path: `request.facts.${index}.value`, type: 'text', label: `Факт в блоке заявки ${index + 1}: значение`, element: valueElement });
+            if (textElement) bindings.push({ path: `request.facts.${index}.text`, type: 'text', label: `Факт в блоке заявки ${index + 1}: описание`, element: textElement });
         });
 
         const buildRequestContactLineBinding = (targetItem, index) => ({
@@ -1261,7 +1337,11 @@
         });
 
         document.querySelectorAll('.contact-info p:not(.contact-info__intro)').forEach((lineElement, index) => {
+            const linkElement = lineElement.querySelector('a');
+            const noteElement = lineElement.querySelector('.contact-note');
             bindings.push(buildRequestContactLineBinding(lineElement, index));
+            if (linkElement) bindings.push({ path: `request.contactLines.${index}.label`, type: 'text', label: `Контакт в блоке заявки ${index + 1}: текст`, element: linkElement });
+            if (noteElement) bindings.push({ path: `request.contactLines.${index}.note`, type: 'text', label: `Контакт в блоке заявки ${index + 1}: подпись`, element: noteElement });
         });
 
         const buildRequestQuickActionBinding = (targetItem, index) => ({

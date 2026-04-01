@@ -291,9 +291,11 @@
             });
 
             workflowSection.querySelectorAll('.payment-docs-steps .payment-docs-step').forEach((step, index) => {
+                const stepNumber = step.querySelector('.payment-docs-step__number');
                 const stepTitle = step.querySelector('h3');
                 const stepText = step.querySelector('p');
                 bindings.push(buildWorkflowBinding(step, index));
+                if (stepNumber) bindings.push({ path: `workflow.steps.${index}.number`, type: 'text', label: `Этап оплаты ${index + 1}: номер`, element: stepNumber });
                 if (stepTitle) bindings.push({ path: `workflow.steps.${index}.title`, type: 'text', label: `Этап оплаты ${index + 1}: заголовок`, element: stepTitle });
                 if (stepText) bindings.push({ path: `workflow.steps.${index}.text`, type: 'textarea', label: `Этап оплаты ${index + 1}: описание`, element: stepText });
             });

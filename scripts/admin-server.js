@@ -114,6 +114,30 @@ function getRequestProtocol(request) {
     return request.socket.encrypted ? 'https' : 'http';
 }
 
+function getRequestHostname(request) {
+    const hostHeader = String(request.headers.host || '').trim();
+    if (!hostHeader) return '';
+
+    try {
+        return new URL(`http://${hostHeader}`).hostname;
+    } catch {
+        return hostHeader
+            .replace(/^\[/, '')
+            .replace(/\]$/, '')
+            .split(':')[0]
+            .trim();
+    }
+}
+
+function isLocalDevelopmentHost(hostname) {
+    return ['127.0.0.1', 'localhost', '::1'].includes(String(hostname || '').toLowerCase());
+}
+
+function isLocalDevelopmentRequest(request) {
+    return isLocalDevelopmentHost(getRequestHostname(request))
+        || isLocalDevelopmentHost(HOST);
+}
+
 function isSecureRequest(request) {
     if (COOKIE_SECURE === 'always') return true;
     if (COOKIE_SECURE === 'never') return false;
@@ -871,6 +895,7 @@ async function handleStaticFile(request, response, pathname) {
         const ext = path.extname(filePath).toLowerCase();
         const isHtml = ext === '.html';
         const isAdmin = pathname === '/admin' || pathname === '/admin/' || pathname.startsWith('/admin/');
+        const isLocalDev = isLocalDevelopmentRequest(request);
 
         // WebP-переговоры: отдаём .webp вместо .jpg/.png если браузер поддерживает
         if (!isHtml && ['.jpg', '.jpeg', '.png'].includes(ext)) {
@@ -881,7 +906,7 @@ async function handleStaticFile(request, response, pathname) {
                     const webpData = await fs.readFile(webpPath);
                     writeResponse(response, 200, {
                         'Content-Type': 'image/webp',
-                        'Cache-Control': 'public, max-age=31536000, immutable',
+                        'Cache-Control': isLocalDev ? 'no-store' : 'public, max-age=31536000, immutable',
                         'Vary': 'Accept',
                         ...getSecurityHeaders(pathname)
                     }, webpData);
@@ -896,7 +921,9 @@ async function handleStaticFile(request, response, pathname) {
         const data = await fs.readFile(filePath);
 
         let cacheControl;
-        if (isHtml || isAdmin) {
+        if (isLocalDev) {
+            cacheControl = 'no-store';
+        } else if (isHtml || isAdmin) {
             cacheControl = 'no-cache';
         } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'].includes(ext)) {
             cacheControl = 'public, max-age=31536000, immutable';
@@ -984,7 +1011,8 @@ loadSessions().catch(() => {}).then(() => {
     server.listen(PORT, HOST, () => {
         const displayHost = HOST === '0.0.0.0' ? 'localhost' : HOST;
         console.log(`POKRASKA.STORE admin server is running on http://${displayHost}:${PORT}`);
-        console.log(`Open the visual editing launcher at http://${displayHost}:${PORT}/admin/`);
+        console.log(`Open the site directly at http://${displayHost}:${PORT}/ and use the on-page editor button.`);
+        console.log(`Optional fallback launcher: http://${displayHost}:${PORT}/admin/`);
         console.log(`Auth mode: ${AUTH_ENABLED ? 'enabled' : 'disabled'}`);
         console.log(`Trust proxy: ${TRUST_PROXY ? 'enabled' : 'disabled'}`);
         console.log(`Force HTTPS: ${FORCE_HTTPS ? 'enabled' : 'disabled'}`);
