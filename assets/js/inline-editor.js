@@ -5511,6 +5511,19 @@
                 !isPrimaryTextField(field) && !isLinkLikeField(field) && !isIconField(field) && !isStyleField(field)
             ));
             const isActionLike = linkFields.length > 0;
+            const visualFields = [...iconFields, ...styleFields];
+            const visualSection = visualFields.length ? {
+                title: iconFields.length && styleFields.length
+                    ? 'Значок и вид кнопки'
+                    : (iconFields.length ? 'Значок' : 'Вид кнопки'),
+                meta: iconFields.length && styleFields.length
+                    ? 'Здесь можно выбрать значок и поменять оформление кнопки.'
+                    : (iconFields.length
+                        ? 'Здесь можно выбрать или убрать значок у этого блока.'
+                        : 'Здесь можно поменять оформление кнопки.'),
+                fields: visualFields,
+                importance: isActionLike ? 'primary' : 'secondary'
+            } : null;
 
             return [
                 primaryFields.length ? {
@@ -5521,23 +5534,12 @@
                     fields: primaryFields,
                     importance: 'primary'
                 } : null,
+                visualSection,
                 linkFields.length ? {
                     title: 'Куда вести',
                     meta: 'Укажите адрес перехода или выберите готовый вариант ниже.',
                     fields: linkFields,
                     importance: 'primary'
-                } : null,
-                iconFields.length ? {
-                    title: 'Значок',
-                    meta: 'Маленький значок рядом с текстом.',
-                    fields: iconFields,
-                    importance: 'secondary'
-                } : null,
-                styleFields.length ? {
-                    title: 'Вид кнопки',
-                    meta: 'Выберите, должна ли кнопка быть яркой, спокойной или контурной.',
-                    fields: styleFields,
-                    importance: 'secondary'
                 } : null,
                 extraFields.length ? {
                     title: 'Редкие настройки',
