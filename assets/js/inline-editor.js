@@ -5025,7 +5025,7 @@
             return 'Куда вести после нажатия';
         }
         if (isIconField(field)) {
-            return 'Значок рядом с текстом';
+            return label || 'Значок рядом с текстом';
         }
         if (binding?.type === 'object' && isPrimaryTextField(field)) {
             return 'Текст кнопки';
@@ -5046,7 +5046,10 @@
     function isIconField(field) {
         const key = String(field?.key || '').toLowerCase();
         const label = String(field?.label || '').toLowerCase();
-        return key === 'icon' || /иконк/.test(label);
+        return key === 'icon'
+            || key.endsWith('.icon')
+            || /(?:^|[._-])icon$/.test(key)
+            || /иконк/.test(label);
     }
 
     function getInlineIconOptionLabel(iconValue) {
@@ -6598,8 +6601,63 @@
         }
     }
 
+    function prettifyInlineNestedFieldLabel(key) {
+        const source = String(key || '').trim();
+        if (!source) return 'блока';
+        return source
+            .replace(/([a-zа-яё])([A-ZА-ЯЁ])/g, '$1 $2')
+            .replace(/[_-]+/g, ' ')
+            .trim()
+            .toLowerCase();
+    }
+
+    function inferAdditionalObjectIconFields(binding, baseFields = []) {
+        if (!binding || binding.type !== 'object') return Array.isArray(baseFields) ? [...baseFields] : [];
+
+        const fields = Array.isArray(baseFields) ? [...baseFields] : [];
+        const fileState = state.files.get(binding.fileName);
+        if (!fileState) return fields;
+
+        const currentValue = resolveBindingValue(fileState, binding);
+        if (!currentValue || typeof currentValue !== 'object' || Array.isArray(currentValue)) {
+            return fields;
+        }
+
+        const existingKeys = new Set(fields.map((field) => String(field?.key || '').trim()).filter(Boolean));
+        const addField = (key, label) => {
+            const normalizedKey = String(key || '').trim();
+            if (!normalizedKey || existingKeys.has(normalizedKey)) return;
+            fields.push({
+                key: normalizedKey,
+                label,
+                type: 'text'
+            });
+            existingKeys.add(normalizedKey);
+        };
+
+        if (typeof currentValue.icon === 'string') {
+            addField('icon', 'Иконка');
+        }
+
+        Object.entries(currentValue).forEach(([nestedKey, nestedValue]) => {
+            if (nestedKey === 'icon') return;
+            if (!nestedValue || typeof nestedValue !== 'object' || Array.isArray(nestedValue)) return;
+            if (typeof nestedValue.icon !== 'string') return;
+
+            const nestedLabel = prettifyInlineNestedFieldLabel(nestedKey);
+            const label = /cta|action/i.test(nestedKey)
+                ? 'Иконка кнопки'
+                : `Иконка ${nestedLabel}`;
+            addField(`${nestedKey}.icon`, label);
+        });
+
+        return fields;
+    }
+
     function getBindingEditorFields(binding) {
-        if (binding.fields.length) return binding.fields;
+        if (binding.fields.length) {
+            return inferAdditionalObjectIconFields(binding, binding.fields);
+        }
 
         if (binding.type === 'image') {
             return [];
