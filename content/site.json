@@ -1,3 +1,115 @@
 {
-  "_test": true
+  "brand": {
+    "name": "POKRASKA.STORE",
+    "tagline": "╨Т╨╛╤А╨╛╤В╨░, ╨╖╨░╨▒╨╛╤А╤Л ╨╕ ╨┐╨╛╨║╤А╨░╤Б╨║╨░ ╨▓ ╨Ъ╨░╨╖╨░╨╜╨╕",
+    "logoAlt": "POKRASKA.STORE тАФ ╨▓╨╛╤А╨╛╤В╨░, ╨╖╨░╨▒╨╛╤А╤Л ╨╕ ╨┐╨╛╤А╨╛╤И╨║╨╛╨▓╨░╤П ╨┐╨╛╨║╤А╨░╤Б╨║╨░ ╨▓ ╨Ъ╨░╨╖╨░╨╜╨╕",
+    "footerCaption": "POKRASKA.STORE тАФ ╨Т╨╛╤А╨╛╤В╨░, ╨╖╨░╨▒╨╛╤А╤Л ╨╕ ╨┐╨╛╤А╨╛╤И╨║╨╛╨▓╨░╤П ╨┐╨╛╨║╤А╨░╤Б╨║╨░ ╨▓ ╨Ъ╨░╨╖╨░╨╜╨╕",
+    "copyrightStartYear": 2014,
+    "domain": "pokraska.store"
+  },
+  "contact": {
+    "primaryPhone": {
+      "label": "+7 (937) 615-46-29",
+      "href": "tel:+79376154629",
+      "note": "╨Я╨╜-╨Я╤В 8:00-18:00, ╨б╨▒ 9:00-14:00"
+    },
+    "secondaryPhone": {
+      "label": "+7 (962) 554-22-60",
+      "href": "tel:+79625542260",
+      "note": ""
+    },
+    "address": "╨Ъ╨░╨╖╨░╨╜╤М, ╨б╤В╨░╤А╨╛╨╡ ╨Я╨╛╨▒╨╡╨┤╨╕╨╗╨╛╨▓╨╛, ╤Г╨╗. ╨б╨░╨┤╨╛╨▓╨░╤П, 72",
+    "email": "vorota404@mail.ru",
+    "hours": "╨Я╨╜-╨Я╤В: 8:00-18:00, ╨б╨▒: 9:00-14:00",
+    "telegram": {
+      "label": "Telegram",
+      "href": "https://t.me/+79625542260"
+    },
+    "max": {
+      "label": "Max",
+      "href": "https://max.ru"
+    }
+  },
+  "navigation": [
+    {
+      "label": "╨У╨╗╨░╨▓╨╜╨░╤П",
+      "href": "/index.html",
+      "icon": "fas fa-home"
+    },
+    {
+      "label": "╨Ъ╨░╤В╨░╨╗╨╛╨│",
+      "href": "/pages/services.html",
+      "icon": "fas fa-store"
+    },
+    {
+      "label": "╨Я╨╛╤А╨╛╤И╨║╨╛╨▓╨░╤П ╨┐╨╛╨║╤А╨░╤Б╨║╨░",
+      "href": "/pages/powder-coating.html",
+      "icon": "fas fa-paint-roller"
+    },
+    {
+      "label": "╨Я╨╡╤Б╨║╨╛╤Б╤В╤А╤Г╨╣╨╜╨░╤П ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨░",
+      "href": "/pages/sandblasting.html",
+      "icon": "fas fa-wind"
+    },
+    {
+      "label": "╨ж╨╡╨╜╤Л",
+      "href": "/pages/prices.html",
+      "icon": "fas fa-tag"
+    },
+    {
+      "label": "╨Ю╨┐╨╗╨░╤В╨░",
+      "href": "/pages/payment-documents.html",
+      "icon": "fas fa-receipt"
+    },
+    {
+      "label": "╨У╨░╨╗╨╡╤А╨╡╤П",
+      "href": "/pages/gallery.html",
+      "icon": "fas fa-images"
+    },
+    {
+      "label": "╨Ъ╨╛╨╜╤В╨░╨║╤В╤Л",
+      "href": "/pages/contacts.html",
+      "icon": "fas fa-map-marker-alt"
+    }
+  ],
+  "footer": {
+    "companyTitle": "╨Ю╨Ю╨Ю ┬л╨Ъ╨╛╨╝╤Д╨╛╤А╤В ╨Я╨╗╤О╤Б┬╗",
+    "companyParagraphs": [
+      "╨Я╤А╨╛╨╕╨╖╨▓╨╛╨┤╤Б╤В╨▓╨╛ ╨╝╨╡╤В╨░╨╗╨╗╨╛╨║╨╛╨╜╤Б╤В╤А╤Г╨║╤Ж╨╕╨╣, ╨╕╨╖╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜╨╕╨╡ ╨▓╨╛╤А╨╛╤В, ╨║╨░╤А╨║╨░╤Б╨╛╨▓ ╨╕ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╨║╨╕.",
+      "╨С╨╛╨╗╨╡╨╡ 10 ╨╗╨╡╤В ╨╛╨┐╤Л╤В╨░ ╨▓ ╨╕╨╖╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜╨╕╨╕ ╨╕ ╨╝╨╛╨╜╤В╨░╨╢╨╡ ╨║╨╛╨╜╤Б╤В╤А╤Г╨║╤Ж╨╕╨╣ ╨┤╨╗╤П ╤З╨░╤Б╤В╨╜╤Л╤Е ╨╕ ╨║╨╛╨╝╨╝╨╡╤А╤З╨╡╤Б╨║╨╕╤Е ╨╛╨▒╤К╨╡╨║╤В╨╛╨▓."
+    ],
+    "usefulTitle": "╨Я╨╛╨╗╨╡╨╖╨╜╨╛╨╡",
+    "usefulLinks": [
+      {
+        "label": "╨Я╨╛╤А╨╛╤И╨║╨╛╨▓╨░╤П ╨┐╨╛╨║╤А╨░╤Б╨║╨░",
+        "href": "/pages/powder-coating.html"
+      },
+      {
+        "label": "╨Я╨╡╤Б╨║╨╛╤Б╤В╤А╤Г╨╣╨╜╨░╤П ╨╛╨▒╤А╨░╨▒╨╛╤В╨║╨░",
+        "href": "/pages/sandblasting.html"
+      },
+      {
+        "label": "╨ж╨╡╨╜╤Л ╨╕ ╤А╨░╤Б╤З╨╡╤В",
+        "href": "/pages/prices.html"
+      },
+      {
+        "label": "╨Ю╨┐╨╗╨░╤В╨░ ╨╕ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л",
+        "href": "/pages/payment-documents.html"
+      },
+      {
+        "label": "╨У╨░╨╗╨╡╤А╨╡╤П",
+        "href": "/pages/gallery.html"
+      },
+      {
+        "label": "╨Ю╤Б╤В╨░╨▓╨╕╤В╤М ╨╖╨░╤П╨▓╨║╤Г",
+        "href": "/#request-form"
+      },
+      {
+        "label": "╨б╤Е╨╡╨╝╨░ ╨┐╤А╨╛╨╡╨╖╨┤╨░",
+        "href": "/pages/contacts.html"
+      }
+    ],
+    "policyLabel": "╨Я╨╛╨╗╨╕╤В╨╕╨║╨░ ╨║╨╛╨╜╤Д╨╕╨┤╨╡╨╜╤Ж╨╕╨░╨╗╤М╨╜╨╛╤Б╤В╨╕",
+    "policyHref": "/politika.html"
+  }
 }
