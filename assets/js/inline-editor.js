@@ -2588,7 +2588,6 @@
                     <span class="p-inline-panel__actions-meta">Вернуть изменения или убрать.</span>
                 </div>
                 <div class="p-inline-panel__actions-row">
-                    <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
                     <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>↩ Отменить правку</button>
                     <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Убрать</button>
                 </div>
@@ -5939,20 +5938,9 @@
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
-            const canApply = canSaveInline();
-            if (!canApply) {
-                ui.panelApplyBtn.hidden = true;
-                ui.panelApplyBtn.disabled = true;
-                ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
-            } else {
-                const hasSomethingToSave = hasPending || hasDirtyFiles();
-                ui.panelApplyBtn.hidden = false;
-                ui.panelApplyBtn.disabled = !hasSomethingToSave;
-                ui.panelApplyBtn.textContent = hasPending ? '💾 Применить и сохранить' : '💾 Сохранить';
-                ui.panelApplyBtn.classList.toggle('is-active', hasSomethingToSave);
-                ui.panelApplyBtn.classList.toggle('is-idle', !hasSomethingToSave);
-                hasVisibleAction = true;
-            }
+            ui.panelApplyBtn.hidden = true;
+            ui.panelApplyBtn.disabled = true;
+            ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
         }
         if (ui.panelActions) {
             ui.panelActions.hidden = !hasVisibleAction;
