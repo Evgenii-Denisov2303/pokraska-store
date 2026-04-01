@@ -6585,7 +6585,6 @@
 
         if (binding.type === 'object') {
             if (isActionLikeObjectBinding(binding, editorFields)) {
-                appendButtonVisualPresets(binding, value, editorFields);
                 return;
             }
 
