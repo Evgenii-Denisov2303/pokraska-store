@@ -2560,6 +2560,7 @@
                     </div>
                 </div>
                 <div class="p-inline-toolbar__actions">
+                    <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save" hidden>Сохранить</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
                 <div class="p-inline-toolbar__notice" hidden></div>
