@@ -5200,9 +5200,10 @@
         return section;
     }
 
-    function createPanelAccordion(title, meta = '') {
+    function createPanelAccordion(title, meta = '', options = {}) {
         const details = document.createElement('details');
         details.className = 'p-inline-panel__accordion';
+        details.open = Boolean(options.open);
 
         const summary = document.createElement('summary');
         summary.className = 'p-inline-panel__accordion-summary';
@@ -5253,6 +5254,27 @@
         return 'Редкие и технические параметры этого блока.';
     }
 
+    function getSecondaryAccordionConfig(binding, secondarySections, fallbackTitle, fallbackMeta) {
+        const sections = Array.isArray(secondarySections) ? secondarySections : [];
+        const hasButtonVisualSettings = binding?.type === 'object' && sections.some((section) =>
+            (section?.fields || []).some((field) => isIconField(field) || isStyleField(field))
+        );
+
+        if (hasButtonVisualSettings) {
+            return {
+                title: 'Значок и вид кнопки',
+                meta: 'Здесь можно выбрать значок и поменять оформление кнопки.',
+                open: true
+            };
+        }
+
+        return {
+            title: fallbackTitle,
+            meta: fallbackMeta,
+            open: false
+        };
+    }
+
     function appendFieldSections(binding, value, sectionConfigs) {
         if (!Array.isArray(sectionConfigs) || !sectionConfigs.length) return;
 
@@ -5269,7 +5291,17 @@
             return;
         }
 
-        const accordion = createPanelAccordion('Дополнительно', getAdditionalSectionsSummary(binding));
+        const accordionConfig = getSecondaryAccordionConfig(
+            binding,
+            secondarySections,
+            'Дополнительно',
+            getAdditionalSectionsSummary(binding)
+        );
+        const accordion = createPanelAccordion(
+            accordionConfig.title,
+            accordionConfig.meta,
+            { open: accordionConfig.open }
+        );
         secondarySections.forEach((section) => appendFieldSectionContent(accordion.body, section, value, binding));
         ui.panelForm.appendChild(accordion.element);
     }
@@ -5327,9 +5359,16 @@
             return;
         }
 
-        const accordion = createPanelAccordion(
+        const accordionConfig = getSecondaryAccordionConfig(
+            binding,
+            secondarySections,
             'Остальное в блоке',
             'Раскройте, если нужно отредактировать соседние поля этого же блока.'
+        );
+        const accordion = createPanelAccordion(
+            accordionConfig.title,
+            accordionConfig.meta,
+            { open: accordionConfig.open }
         );
         secondarySections.forEach((section) => appendFieldSectionContent(accordion.body, section, value, binding));
         ui.panelForm.appendChild(accordion.element);
