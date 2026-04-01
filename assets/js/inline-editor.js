@@ -3861,6 +3861,7 @@
         if (!options.skipConfirm && !confirmDiscardPanelChanges()) {
             return false;
         }
+        restoreActiveBindingPreview();
         closeIconModal();
         ui.panel.hidden = true;
         state.activeBindingId = '';
@@ -4010,6 +4011,22 @@
 
         if (typeof binding.render === 'function') {
             binding.render(nextValue, binding);
+            return;
+        }
+
+        if (binding.type === 'list') {
+            defaultListRender(nextValue, binding);
+            return;
+        }
+
+        defaultTextRender(nextValue, binding);
+    }
+
+    function renderBindingPreviewValue(binding, nextValue) {
+        if (!binding) return;
+
+        if (typeof binding.render === 'function') {
+            binding.render(cloneData(nextValue), binding);
             return;
         }
 
@@ -5685,6 +5702,57 @@
         preview.renderPreview(nextValue);
     }
 
+    function collectPanelPreviewValue(binding) {
+        const currentFile = state.files.get(binding.fileName);
+        const currentValue = resolveBindingValue(currentFile, binding);
+        const nextValue = binding.fields.length || binding.type === 'image'
+            ? (cloneData(currentValue) && typeof currentValue === 'object' ? cloneData(currentValue) : {})
+            : currentValue;
+        const fields = getBindingEditorFields(binding);
+
+        for (const field of fields) {
+            const control = ui.panelForm.querySelector(`[name="${field.key}"]`);
+            if (!control) continue;
+
+            let value = control.value;
+            if (field.type === 'number') {
+                value = value === '' ? null : Number(value);
+            } else if (field.type === 'list') {
+                value = value
+                    .split(/\r?\n/)
+                    .map((item) => item.trim())
+                    .filter(Boolean);
+            }
+
+            if (field.key === '__value') {
+                return value;
+            }
+
+            setByPath(nextValue, field.key, value);
+        }
+
+        return nextValue;
+    }
+
+    function updateLiveBindingPreview(binding = state.bindingMap.get(state.activeBindingId)) {
+        if (!binding) return;
+        const fileState = state.files.get(binding.fileName);
+        if (!fileState) return;
+
+        if (!ui.panel?.hidden && state.activeBindingId === binding.id && hasPendingPanelChanges()) {
+            renderBindingPreviewValue(binding, collectPanelPreviewValue(binding));
+            return;
+        }
+
+        renderBinding(binding);
+    }
+
+    function restoreActiveBindingPreview() {
+        const binding = state.bindingMap.get(state.activeBindingId);
+        if (!binding) return;
+        renderBinding(binding);
+    }
+
     function appendObjectQuickActions(binding, value) {
         const editorFields = getBindingEditorFields(binding);
         const styleField = editorFields.find(isStyleField);
@@ -6804,6 +6872,7 @@
                 if (!confirmDiscardPanelChanges()) {
                     return;
                 }
+                restoreActiveBindingPreview();
             }
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
@@ -7083,8 +7152,8 @@
             return {
                 tone: 'is-draft',
                 badge: 'Черновик',
-                title: 'Изменения пока только в панели',
-                meta: 'Страница ещё не обновлена. Нажмите «Сохранить» в тёмной панели, чтобы применить правку и записать её.'
+                title: 'Предпросмотр уже виден на странице',
+                meta: 'Изменения пока не сохранены. Если нравится результат, нажмите «Сохранить» в тёмной панели.'
             };
         }
 
@@ -7802,6 +7871,7 @@
         ui.panelForm.addEventListener('input', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
+                updateLiveBindingPreview(binding);
                 updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
@@ -7810,6 +7880,7 @@
         ui.panelForm.addEventListener('change', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
+                updateLiveBindingPreview(binding);
                 updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
