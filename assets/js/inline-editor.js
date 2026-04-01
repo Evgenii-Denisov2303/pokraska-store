@@ -1094,6 +1094,24 @@
                 color: #64748b;
             }
 
+            .p-inline-panel__char-counter {
+                display: block;
+                margin-top: 4px;
+                font-size: 12px;
+                color: #94a3b8;
+                text-align: right;
+                transition: color 0.2s ease;
+            }
+
+            .p-inline-panel__char-counter--warn {
+                color: #d97706;
+            }
+
+            .p-inline-panel__char-counter--over {
+                color: #dc2626;
+                font-weight: 700;
+            }
+
             .p-inline-panel__examples {
                 display: flex;
                 flex-wrap: wrap;
@@ -2570,7 +2588,8 @@
                     <span class="p-inline-panel__actions-meta">Вернуть изменения или убрать.</span>
                 </div>
                 <div class="p-inline-panel__actions-row">
-                    <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>Вернуть как было</button>
+                    <button class="p-inline-panel__btn p-inline-panel__btn--primary" type="button" data-inline-panel-action="apply" hidden>Сохранить</button>
+                    <button class="p-inline-panel__btn" type="button" data-inline-panel-action="revert" hidden>↩ Отменить правку</button>
                     <button class="p-inline-panel__btn p-inline-panel__btn--danger" type="button" data-inline-panel-action="remove" hidden>Убрать</button>
                 </div>
             </div>
@@ -3502,7 +3521,7 @@
         }
 
         if (binding?.type === 'image' && isImageDescriptionField(field)) {
-            if (key === 'alt') return 'Коротко опишите, что видно на фото';
+            if (key === 'alt') return 'Кратко: что изображено (для поисковиков)';
             return 'Например: Откатные ворота';
         }
 
@@ -4151,6 +4170,25 @@
         control.name = field.key || 'value';
         wrapper.appendChild(control);
 
+        // Character counter for visible single-line text inputs
+        if (
+            control.tagName === 'INPUT' &&
+            control.type === 'text' &&
+            !isLinkLikeField(field) && !isIconField(field) && !isStyleField(field)
+        ) {
+            const counter = document.createElement('span');
+            counter.className = 'p-inline-panel__char-counter';
+            const updateCounter = () => {
+                const len = control.value.length;
+                counter.textContent = `${len} симв.`;
+                counter.classList.toggle('p-inline-panel__char-counter--warn', len > 80 && len <= 120);
+                counter.classList.toggle('p-inline-panel__char-counter--over', len > 120);
+            };
+            control.addEventListener('input', updateCounter);
+            updateCounter();
+            wrapper.appendChild(counter);
+        }
+
         if (isLinkLikeField(field)) {
             wrapper.appendChild(createInlineLinkBuilder(field, control));
         }
@@ -4218,7 +4256,7 @@
             return 'Новый текст';
         }
         if (binding?.type === 'image' && isImageDescriptionField(field)) {
-            if (key === 'alt') return 'Короткое описание';
+            if (key === 'alt') return 'Описание для поисковиков';
             if (key === 'caption') return 'Подпись под фото';
         }
         return label || field.key;
@@ -4510,7 +4548,7 @@
             return [
                 descriptionFields.length ? {
                     title: 'Подпись и описание',
-                    meta: 'Короткий текст для этого изображения.',
+                    meta: 'Подпись видна посетителям. Описание — только поисковикам и незрячим пользователям.',
                     fields: descriptionFields
                 } : null,
                 extraFields.length ? {
@@ -5359,9 +5397,6 @@
         if (ui.panelActions) {
             ui.panelActions.hidden = false;
         }
-        if (ui.panelRevertBtn) {
-            ui.panelRevertBtn.hidden = false;
-        }
         if (ui.panelApplyBtn) {
             ui.panelApplyBtn.hidden = true;
         }
@@ -5422,7 +5457,7 @@
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Выберите файл, перетащите его сюда или вставьте из буфера. Потом нажмите «Сохранить».';
+            uploadMeta.textContent = 'Выберите файл, перетащите сюда или вставьте (Ctrl+V). Лучше брать JPG или PNG не менее 800×600 пкс и до 2 МБ.';
             uploadZone.appendChild(uploadMeta);
 
             const uploadFile = document.createElement('div');
@@ -5493,8 +5528,8 @@
             const imageHint = document.createElement('p');
             imageHint.className = 'p-inline-panel__hint';
             imageHint.textContent = imageNavigation && imageNavigation.total > 1
-                ? 'Стрелки ← и → листают соседние фото. Ниже можно поправить подпись и описание.'
-                : 'Ниже можно поправить подпись и описание.';
+                ? `Фото ${imageNavigation.index + 1} из ${imageNavigation.total} — стрелки ← → листают соседние. Ниже подпись и описание для поисковиков.`
+                : 'Ниже можно добавить подпись (видна посетителям) и описание для поисковиков.';
             ui.panelForm.appendChild(imageHint);
 
         }
@@ -5740,18 +5775,27 @@
 
     function updateImagePreviewFromFile(file, previewImage, fileBadge) {
         if (!file) return;
+        const objectUrl = URL.createObjectURL(file);
         if (previewImage) {
-            previewImage.src = URL.createObjectURL(file);
+            previewImage.src = objectUrl;
+            previewImage.onload = () => {
+                const w = previewImage.naturalWidth;
+                const h = previewImage.naturalHeight;
+                if (w < 800 || h < 600) {
+                    showToast(`Фото маловато (${w}×${h} пкс) — может выглядеть размыто. Лучше от 800×600.`);
+                }
+                URL.revokeObjectURL(objectUrl);
+            };
         }
         if (fileBadge) {
             const sizeKb = Math.max(1, Math.round((file.size || 0) / 1024));
             const sizeMb = (file.size || 0) / (1024 * 1024);
-            const sizeWarning = sizeMb > 2 ? ` ⚠ Файл крупный (${sizeMb.toFixed(1)} МБ) — загрузка может занять время` : '';
-            fileBadge.textContent = `${file.name} · ${sizeKb} KB${sizeWarning}`;
+            const sizeWarning = sizeMb > 2 ? ` ⚠ Файл крупный (${sizeMb.toFixed(1)} МБ)` : '';
+            fileBadge.textContent = `${file.name} · ${sizeKb} КБ${sizeWarning}`;
             fileBadge.hidden = false;
         }
-        if ((file.size || 0) > 5 * 1024 * 1024) {
-            showToast(`Файл ${(file.size / 1024 / 1024).toFixed(1)} МБ — это много. Лучше уменьшить фото перед загрузкой.`);
+        if ((file.size || 0) > 3 * 1024 * 1024) {
+            showToast(`Файл ${(file.size / 1024 / 1024).toFixed(1)} МБ — рекомендуем уменьшить до 2 МБ перед загрузкой.`);
         }
     }
 
@@ -5895,9 +5939,20 @@
             hasVisibleAction = hasVisibleAction || canRemove;
         }
         if (ui.panelApplyBtn) {
-            ui.panelApplyBtn.hidden = true;
-            ui.panelApplyBtn.disabled = true;
-            ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
+            const canApply = canSaveInline();
+            if (!canApply) {
+                ui.panelApplyBtn.hidden = true;
+                ui.panelApplyBtn.disabled = true;
+                ui.panelApplyBtn.classList.remove('is-active', 'is-idle');
+            } else {
+                const hasSomethingToSave = hasPending || hasDirtyFiles();
+                ui.panelApplyBtn.hidden = false;
+                ui.panelApplyBtn.disabled = !hasSomethingToSave;
+                ui.panelApplyBtn.textContent = hasPending ? '💾 Применить и сохранить' : '💾 Сохранить';
+                ui.panelApplyBtn.classList.toggle('is-active', hasSomethingToSave);
+                ui.panelApplyBtn.classList.toggle('is-idle', !hasSomethingToSave);
+                hasVisibleAction = true;
+            }
         }
         if (ui.panelActions) {
             ui.panelActions.hidden = !hasVisibleAction;
