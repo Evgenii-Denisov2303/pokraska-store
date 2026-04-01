@@ -1100,6 +1100,13 @@
                 z-index: 5001;
             }
 
+            .p-inline-panel,
+            .p-inline-panel *,
+            .p-inline-overview,
+            .p-inline-overview * {
+                box-sizing: border-box;
+            }
+
             .p-inline-panel__head {
                 display: flex;
                 align-items: flex-start;
@@ -1247,6 +1254,7 @@
             .p-inline-panel__section {
                 display: grid;
                 gap: 12px;
+                min-width: 0;
                 padding: 16px;
                 border-radius: 20px;
                 background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.96));
@@ -1263,6 +1271,7 @@
             .p-inline-panel__group {
                 display: grid;
                 gap: 10px;
+                min-width: 0;
                 margin-bottom: 0;
                 padding: 14px;
                 border-radius: 18px;
@@ -1348,6 +1357,7 @@
             .p-inline-panel__accordion-body {
                 display: grid;
                 gap: 12px;
+                min-width: 0;
                 padding: 0 14px 14px;
             }
 
@@ -1356,6 +1366,8 @@
                 gap: 16px;
                 flex: 1 1 auto;
                 min-height: 0;
+                min-width: 0;
+                overflow-x: hidden;
                 overflow-y: auto;
                 overscroll-behavior: contain;
                 padding-right: 6px;
