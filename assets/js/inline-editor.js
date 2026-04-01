@@ -5529,16 +5529,18 @@
             appendCollectionControls(binding, collectionState);
         }
 
-        const firstControl = ui.panelForm.querySelector(
-            'textarea, select, input:not([type="file"]):not([type="hidden"])'
-        );
-        if (firstControl) {
-            window.setTimeout(() => {
-                firstControl.focus();
-                if (firstControl instanceof HTMLInputElement || firstControl instanceof HTMLTextAreaElement) {
-                    firstControl.setSelectionRange?.(firstControl.value.length, firstControl.value.length);
-                }
-            }, 0);
+        if (binding.type !== 'image') {
+            const firstControl = ui.panelForm.querySelector(
+                'textarea, select, input:not([type="file"]):not([type="hidden"])'
+            );
+            if (firstControl) {
+                window.setTimeout(() => {
+                    firstControl.focus();
+                    if (firstControl instanceof HTMLInputElement || firstControl instanceof HTMLTextAreaElement) {
+                        firstControl.setSelectionRange?.(firstControl.value.length, firstControl.value.length);
+                    }
+                }, 0);
+            }
         }
 
         updatePanelMeta(binding);
