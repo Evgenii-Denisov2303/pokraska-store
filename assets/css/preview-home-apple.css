@@ -454,6 +454,42 @@ button {
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 38%);
 }
 
+.hero-stage__orbits {
+    position: absolute;
+    inset: 20px 24px auto auto;
+    z-index: 2;
+    display: grid;
+    gap: 10px;
+    justify-items: end;
+}
+
+.hero-stage__orbit {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.78rem;
+    font-weight: 800;
+    box-shadow: 0 12px 22px rgba(9, 22, 36, 0.16);
+}
+
+.hero-stage__orbit--one {
+    transform: translateX(-14px) rotate(-7deg);
+}
+
+.hero-stage__orbit--two {
+    transform: translateX(8px) rotate(5deg);
+}
+
+.hero-stage__orbit--three {
+    transform: translateX(-26px) rotate(-4deg);
+}
+
 .hero-stage__badge {
     position: absolute;
     z-index: 2;
@@ -732,7 +768,9 @@ button {
 
 .panel-scene {
     display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
     gap: 18px;
+    align-items: start;
 }
 
 .panel-scene__eyebrow,
@@ -753,10 +791,12 @@ button {
 .panel-scene__card--dark {
     background: linear-gradient(180deg, #10263d 0%, #163a59 100%);
     color: #ffffff;
+    transform: translateY(18px);
 }
 
 .panel-scene__card--light {
     background: linear-gradient(180deg, #f7fbff 0%, #eaf2fb 100%);
+    min-height: 760px;
 }
 
 .panel-scene__image {
@@ -787,6 +827,50 @@ button {
 .panel-scene__card--light .panel-scene__overlay {
     background:
         linear-gradient(90deg, rgba(247, 251, 255, 0.97) 0%, rgba(247, 251, 255, 0.72) 44%, rgba(247, 251, 255, 0.14) 100%);
+}
+
+.panel-scene__stamp {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 320px;
+}
+
+.panel-scene__stamp span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.panel-scene__stamp--dark {
+    top: 26px;
+    right: 26px;
+    justify-content: flex-end;
+}
+
+.panel-scene__stamp--dark span {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.panel-scene__stamp--light {
+    top: 26px;
+    left: 26px;
+}
+
+.panel-scene__stamp--light span {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(16, 38, 61, 0.08);
+    color: rgba(16, 38, 61, 0.7);
 }
 
 .panel-scene__content {
@@ -871,16 +955,22 @@ button {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.82fr);
     gap: 18px;
+    align-items: start;
 }
 
 .trust-scene__left,
 .trust-scene__right {
+    position: relative;
     padding: 34px;
     border: 1px solid var(--apple-line);
     border-radius: var(--apple-radius-xl);
     background: rgba(255, 255, 255, 0.74);
     backdrop-filter: blur(14px);
     box-shadow: var(--apple-shadow-soft);
+}
+
+.trust-scene__right {
+    transform: translateY(48px);
 }
 
 .trust-scene h3 {
@@ -902,6 +992,31 @@ button {
     display: grid;
     gap: 10px;
     margin-top: 22px;
+}
+
+.trust-scene__float {
+    position: absolute;
+    right: 26px;
+    bottom: 26px;
+    max-width: 220px;
+    padding: 14px 16px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(24, 77, 122, 0.96), rgba(16, 58, 91, 0.96));
+    color: #ffffff;
+    box-shadow: 0 18px 30px rgba(20, 54, 86, 0.18);
+    transform: rotate(-5deg);
+}
+
+.trust-scene__float strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.94rem;
+}
+
+.trust-scene__float span {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.84rem;
+    line-height: 1.5;
 }
 
 .trust-scene__fact {
@@ -953,8 +1068,14 @@ button {
 @media (max-width: 1220px) {
     .hero-scene__content,
     .scale-scene,
+    .panel-scene,
     .trust-scene {
         grid-template-columns: 1fr;
+    }
+
+    .panel-scene__card--dark,
+    .trust-scene__right {
+        transform: none;
     }
 
     .panel-scene__facts {
@@ -1042,5 +1163,35 @@ button {
         right: 16px;
         bottom: 16px;
         max-width: none;
+    }
+
+    .hero-stage__orbits {
+        top: 16px;
+        right: 16px;
+    }
+
+    .hero-stage__orbit--one,
+    .hero-stage__orbit--two,
+    .hero-stage__orbit--three {
+        transform: none;
+    }
+
+    .panel-scene__stamp {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        padding: 22px 22px 0;
+        max-width: none;
+        justify-content: flex-start;
+    }
+
+    .trust-scene__float {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        margin-top: 20px;
+        max-width: none;
+        transform: none;
     }
 }
