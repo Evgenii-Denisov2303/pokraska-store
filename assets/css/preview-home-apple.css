@@ -646,7 +646,7 @@ button {
     overflow: hidden;
     border-radius: 0;
     border: 0;
-    background: linear-gradient(180deg, #ffffff 0%, #fcfdff 8%, #f4f8fd 18%, #e5eef8 30%, #d6e3f0 46%, #d6e2ee 100%);
+    background: linear-gradient(180deg, #fbfdff 0%, #f6faff 5%, #eaf2fb 12%, #dce8f5 20%, #d0e0ef 38%, #d6e2ee 100%);
     box-shadow: 0 38px 74px rgba(16, 38, 61, 0.24);
     margin: 0;
 }
@@ -679,8 +679,8 @@ button {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(253, 254, 255, 0.98) 4%, rgba(250, 252, 255, 0.92) 10%, rgba(246, 249, 254, 0.76) 18%, rgba(242, 247, 253, 0.52) 26%, rgba(241, 246, 252, 0.26) 34%, rgba(241, 246, 252, 0.08) 42%, rgba(241, 246, 252, 0) 50%),
-        linear-gradient(180deg, rgba(16, 38, 61, 0.01) 0%, rgba(16, 38, 61, 0.15) 100%),
+        linear-gradient(180deg, rgba(251, 253, 255, 0.99) 0%, rgba(250, 252, 255, 0.92) 3%, rgba(247, 250, 255, 0.72) 7%, rgba(244, 248, 254, 0.38) 13%, rgba(244, 248, 254, 0.12) 20%, rgba(244, 248, 254, 0) 28%),
+        linear-gradient(180deg, rgba(16, 38, 61, 0.02) 0%, rgba(16, 38, 61, 0.16) 100%),
         linear-gradient(90deg, rgba(10, 24, 39, 0.36) 0%, rgba(10, 24, 39, 0.16) 18%, rgba(10, 24, 39, 0.04) 34%, rgba(255, 255, 255, 0) 58%);
     z-index: 2;
 }
