@@ -100,13 +100,7 @@ button {
 }
 
 .story-rail {
-    position: fixed;
-    top: 120px;
-    left: 18px;
-    z-index: 8;
-    display: grid;
-    gap: 10px;
-    align-content: start;
+    display: none;
 }
 
 .story-rail__label {
