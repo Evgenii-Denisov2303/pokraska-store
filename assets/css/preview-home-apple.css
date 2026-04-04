@@ -450,6 +450,11 @@ button {
     box-shadow: 0 14px 24px rgba(18, 46, 74, 0.08);
 }
 
+.hero-copy__features span i {
+    color: var(--apple-accent-deep);
+    font-size: 0.92rem;
+}
+
 .hero-copy__facts {
     display: grid;
     grid-template-columns: minmax(0, 1.18fr) repeat(2, minmax(0, 0.91fr));
