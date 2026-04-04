@@ -646,9 +646,9 @@ button {
     overflow: hidden;
     border-radius: 0;
     border: 0;
-    background: linear-gradient(180deg, #fbfdff 0%, #f6faff 5%, #eaf2fb 12%, #dce8f5 20%, #d0e0ef 38%, #d6e2ee 100%);
+    background: linear-gradient(180deg, #fcfdff 0%, #f7fbff 8%, #eaf2fb 18%, #dce8f5 30%, #d0e0ef 44%, #d6e2ee 100%);
     box-shadow: 0 38px 74px rgba(16, 38, 61, 0.24);
-    margin: 0;
+    margin: -1px 0 0;
 }
 
 .hero-stage::before {
@@ -679,7 +679,7 @@ button {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(180deg, rgba(251, 253, 255, 0.99) 0%, rgba(250, 252, 255, 0.92) 3%, rgba(247, 250, 255, 0.72) 7%, rgba(244, 248, 254, 0.38) 13%, rgba(244, 248, 254, 0.12) 20%, rgba(244, 248, 254, 0) 28%),
+        radial-gradient(130% 42% at 50% 0%, rgba(255, 255, 255, 0.98) 0%, rgba(251, 253, 255, 0.9) 18%, rgba(247, 250, 255, 0.62) 38%, rgba(244, 248, 254, 0.24) 58%, rgba(244, 248, 254, 0.04) 70%, rgba(244, 248, 254, 0) 82%),
         linear-gradient(180deg, rgba(16, 38, 61, 0.02) 0%, rgba(16, 38, 61, 0.16) 100%),
         linear-gradient(90deg, rgba(10, 24, 39, 0.36) 0%, rgba(10, 24, 39, 0.16) 18%, rgba(10, 24, 39, 0.04) 34%, rgba(255, 255, 255, 0) 58%);
     z-index: 2;
