@@ -166,7 +166,7 @@ button {
 .hero-scene {
     position: relative;
     overflow: hidden;
-    min-height: 1180px;
+    min-height: 0;
     border: 1px solid var(--apple-line);
     border-radius: 48px;
     background:
@@ -260,20 +260,20 @@ button {
     position: relative;
     z-index: 3;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.4fr);
-    gap: 36px;
-    padding: 138px 44px 52px;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.38fr);
+    gap: 26px;
+    padding: 118px 36px 28px;
     align-items: start;
 }
 
 .hero-copy {
-    max-width: 820px;
-    padding: 40px 42px 42px;
+    max-width: 760px;
+    padding: 34px 36px 36px;
     border: 1px solid rgba(255, 255, 255, 0.38);
     border-radius: 34px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.62));
     backdrop-filter: blur(18px);
-    box-shadow: 0 24px 48px rgba(18, 46, 74, 0.12);
+    box-shadow: 0 20px 38px rgba(18, 46, 74, 0.1);
 }
 
 .hero-copy__eyebrow,
@@ -373,11 +373,19 @@ button {
     margin-top: 30px;
 }
 
+.hero-summary {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    gap: 16px;
+    padding: 20px 36px 36px;
+}
+
 .hero-copy__features {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 24px;
+    margin-top: 0;
 }
 
 .hero-copy__features span {
@@ -399,7 +407,7 @@ button {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    margin-top: 22px;
+    margin-top: 0;
 }
 
 .hero-copy__fact {
@@ -430,7 +438,7 @@ button {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 26px;
+    margin-top: 0;
 }
 
 .hero-copy__route {
@@ -488,9 +496,9 @@ button {
 
 .hero-aside {
     display: flex;
-    align-self: center;
+    align-self: start;
     justify-content: flex-end;
-    margin-bottom: 152px;
+    margin-bottom: 0;
 }
 
 .hero-aside__card,
@@ -520,12 +528,12 @@ button {
 
 .hero-kinetic {
     display: grid;
-    gap: 18px;
-    max-width: 360px;
+    gap: 14px;
+    max-width: 320px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.66));
     border-color: rgba(255, 255, 255, 0.34);
     color: var(--apple-text);
-    box-shadow: 0 24px 44px rgba(18, 46, 74, 0.16);
+    box-shadow: 0 20px 34px rgba(18, 46, 74, 0.14);
 }
 
 .hero-kinetic__meter {
@@ -584,7 +592,7 @@ button {
 
 .hero-kinetic__facts {
     display: grid;
-    gap: 10px;
+    gap: 8px;
 }
 
 .hero-kinetic__fact {
@@ -608,13 +616,14 @@ button {
 }
 
 .hero-stage {
-    position: absolute;
-    inset: auto 22px 22px 22px;
-    height: 56%;
+    position: relative;
+    inset: auto;
+    height: 520px;
     overflow: hidden;
     border-radius: 34px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 30px 56px rgba(16, 38, 61, 0.22);
+    margin: 0 36px;
 }
 
 .hero-stage img {
