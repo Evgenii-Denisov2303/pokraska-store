@@ -153,24 +153,24 @@ button {
 }
 
 .hero-scene__topbar {
-    position: absolute;
-    inset: 22px 28px auto;
-    z-index: 5;
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    border-radius: 28px;
+    background: rgba(243, 247, 251, 0.62);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 20px 34px rgba(16, 38, 61, 0.1);
 }
 
 .hero-brand {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: rgba(243, 247, 251, 0.62);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 16px 28px rgba(16, 38, 61, 0.1);
 }
 
 .hero-brand__logo {
@@ -216,9 +216,9 @@ button {
     min-height: 56px;
     padding: 12px 16px;
     border-radius: 20px;
-    background: rgba(243, 247, 251, 0.56);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 18px 32px rgba(16, 38, 61, 0.1);
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 24px rgba(16, 38, 61, 0.08);
 }
 
 .hero-header-link {
@@ -263,7 +263,7 @@ button {
 
 .hero-copy {
     position: absolute;
-    top: 112px;
+    top: 42px;
     left: 42px;
     z-index: 3;
     display: grid;
@@ -1812,7 +1812,10 @@ button {
     }
 
     .hero-scene__topbar {
-        inset: 16px 16px auto;
+        padding: 16px;
+        gap: 14px;
+        align-items: stretch;
+        flex-direction: column;
     }
 
     .hero-meta,
@@ -1832,7 +1835,7 @@ button {
     }
 
     .hero-copy {
-        top: 112px;
+        top: 22px;
         left: 16px;
         width: min(420px, calc(100% - 32px));
         padding: 0;
