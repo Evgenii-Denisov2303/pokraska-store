@@ -539,7 +539,7 @@ button {
     overflow: hidden;
     border-radius: 34px;
     border: 0;
-    background: linear-gradient(180deg, #edf4fb 0%, #e2edf8 12%, #d5e5f4 22%, #c8ddf1 34%, #c4d8ec 46%, #d6e2ee 100%);
+    background: linear-gradient(180deg, #f1f6fb 0%, #eaf2f9 12%, #e0ebf6 24%, #d4e3f1 40%, #c8dded 58%, #d6e2ee 100%);
     box-shadow: 0 38px 74px rgba(16, 38, 61, 0.24);
     margin: 0;
 }
@@ -563,21 +563,8 @@ button {
     object-position: center 32%;
     transform: scale(1.005);
     animation: stageDrift 16s ease-in-out infinite;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.12) 5%, rgba(0, 0, 0, 0.38) 12%, rgba(0, 0, 0, 0.74) 22%, rgba(0, 0, 0, 1) 34%, rgba(0, 0, 0, 1) 100%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.12) 5%, rgba(0, 0, 0, 0.38) 12%, rgba(0, 0, 0, 0.74) 22%, rgba(0, 0, 0, 1) 34%, rgba(0, 0, 0, 1) 100%);
-}
-
-.hero-stage__top-fade {
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 1;
-    height: 220px;
-    pointer-events: none;
-    background: linear-gradient(180deg, rgba(246, 249, 252, 0.64) 0%, rgba(246, 249, 252, 0.34) 30%, rgba(246, 249, 252, 0.1) 66%, rgba(246, 249, 252, 0) 100%);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 38%, rgba(0, 0, 0, 0.28) 76%, rgba(0, 0, 0, 0) 100%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 38%, rgba(0, 0, 0, 0.28) 76%, rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.08) 6%, rgba(0, 0, 0, 0.22) 12%, rgba(0, 0, 0, 0.52) 20%, rgba(0, 0, 0, 0.82) 30%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.08) 6%, rgba(0, 0, 0, 0.22) 12%, rgba(0, 0, 0, 0.52) 20%, rgba(0, 0, 0, 0.82) 30%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 1) 100%);
 }
 
 .hero-stage::after {
