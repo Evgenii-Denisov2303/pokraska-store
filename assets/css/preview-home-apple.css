@@ -156,22 +156,25 @@ button {
 .hero-scene__topbar {
     position: relative;
     z-index: 2;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 6px 10px;
-    margin-bottom: 8px;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-    box-shadow: none;
+    gap: 18px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    border-radius: 32px;
+    background: rgba(245, 248, 252, 0.6);
+    backdrop-filter: blur(14px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.46),
+        0 20px 32px rgba(16, 38, 61, 0.06);
 }
 
 .hero-brand {
     display: flex;
     align-items: center;
     gap: 14px;
+    min-width: 0;
 }
 
 .hero-brand__logo {
@@ -185,28 +188,37 @@ button {
 
 .hero-brand__text {
     display: grid;
-    gap: 4px;
+    gap: 2px;
+    min-width: 0;
 }
 
 .hero-brand__eyebrow {
     color: rgba(16, 38, 61, 0.62);
-    font-size: 0.74rem;
+    font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
 .hero-brand__name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.1rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 0.95;
 }
 
 .hero-header-stack {
     display: grid;
-    justify-items: end;
-    gap: 10px;
+    grid-template-columns: repeat(2, auto);
+    justify-content: end;
+    gap: 12px 18px;
+    align-items: start;
+    padding: 12px 16px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.52),
+        0 14px 24px rgba(16, 38, 61, 0.07);
 }
 
 .hero-header-link,
@@ -214,16 +226,21 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    min-height: 56px;
-    padding: 12px 16px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.84);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 12px 24px rgba(16, 38, 61, 0.08);
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
 }
 
 .hero-header-link {
     color: inherit;
+}
+
+.hero-header-link--secondary {
+    padding-left: 18px;
+    border-left: 1px solid rgba(16, 38, 61, 0.1);
 }
 
 .hero-header-link i,
@@ -241,21 +258,24 @@ button {
 
 .hero-header-main {
     color: var(--apple-accent-deep);
-    font-size: 0.96rem;
+    font-size: 0.92rem;
     line-height: 1.1;
     font-weight: 800;
 }
 
 .hero-header-sub {
     color: rgba(16, 38, 61, 0.62);
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     line-height: 1.35;
     font-weight: 700;
 }
 
 .hero-header-address {
-    justify-self: end;
-    max-width: 360px;
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    max-width: none;
+    padding-top: 12px;
+    border-top: 1px solid rgba(16, 38, 61, 0.08);
     color: rgba(16, 38, 61, 0.78);
     font-size: 0.82rem;
     line-height: 1.45;
@@ -1816,7 +1836,7 @@ button {
         padding: 16px;
         gap: 14px;
         align-items: stretch;
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .hero-meta,
@@ -1827,11 +1847,21 @@ button {
     }
 
     .hero-header-stack {
+        grid-template-columns: 1fr;
         justify-items: stretch;
-        width: min(100%, 360px);
+        width: 100%;
+        gap: 12px;
+    }
+
+    .hero-header-link--secondary,
+    .hero-header-address {
+        grid-column: auto;
+        padding-left: 0;
+        border-left: 0;
     }
 
     .hero-header-address {
+        padding-top: 12px;
         max-width: none;
     }
 
