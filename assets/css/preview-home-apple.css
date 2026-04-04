@@ -172,7 +172,9 @@ button {
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08)),
         linear-gradient(145deg, #dfeaf4 0%, #c7d9ea 44%, #91afc8 100%);
-    box-shadow: var(--apple-shadow);
+    box-shadow:
+        0 44px 92px rgba(16, 38, 61, 0.16),
+        0 18px 34px rgba(16, 38, 61, 0.08);
 }
 
 .hero-scene::before {
@@ -183,6 +185,18 @@ button {
     background:
         radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.52), transparent 28%),
         linear-gradient(180deg, rgba(16, 38, 61, 0) 0%, rgba(16, 38, 61, 0.14) 100%);
+    pointer-events: none;
+}
+
+.hero-scene::after {
+    content: '';
+    position: absolute;
+    inset: auto 5% -58px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(16, 38, 61, 0.22), rgba(16, 38, 61, 0) 70%);
+    filter: blur(26px);
+    opacity: 0.52;
     pointer-events: none;
 }
 
@@ -278,7 +292,7 @@ button {
     backdrop-filter: blur(22px);
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.54),
-        0 26px 44px rgba(18, 46, 74, 0.12);
+        0 34px 58px rgba(18, 46, 74, 0.14);
 }
 
 .hero-copy__eyebrow,
@@ -388,7 +402,15 @@ button {
     z-index: 3;
     display: grid;
     gap: 16px;
-    padding: 20px 36px 36px;
+    margin: -14px 40px 0;
+    padding: 24px 22px 30px;
+    border-radius: 30px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    backdrop-filter: blur(16px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        0 24px 44px rgba(18, 46, 74, 0.1);
 }
 
 .hero-copy__features {
@@ -410,7 +432,7 @@ button {
     color: rgba(16, 38, 61, 0.78);
     font-size: 0.88rem;
     font-weight: 800;
-    box-shadow: 0 10px 18px rgba(18, 46, 74, 0.08);
+    box-shadow: 0 14px 24px rgba(18, 46, 74, 0.08);
 }
 
 .hero-copy__facts {
@@ -428,7 +450,7 @@ button {
     border-radius: 22px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.66);
-    box-shadow: 0 14px 24px rgba(18, 46, 74, 0.08);
+    box-shadow: 0 18px 30px rgba(18, 46, 74, 0.09);
 }
 
 .hero-copy__fact strong {
@@ -462,7 +484,7 @@ button {
     color: rgba(16, 38, 61, 0.78);
     font-size: 0.88rem;
     font-weight: 800;
-    box-shadow: 0 10px 18px rgba(18, 46, 74, 0.08);
+    box-shadow: 0 14px 24px rgba(18, 46, 74, 0.08);
     transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
 }
 
@@ -546,7 +568,7 @@ button {
     color: var(--apple-text);
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        0 22px 36px rgba(18, 46, 74, 0.14);
+        0 30px 52px rgba(18, 46, 74, 0.15);
 }
 
 .hero-kinetic__meter {
@@ -635,8 +657,20 @@ button {
     overflow: hidden;
     border-radius: 34px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 30px 56px rgba(16, 38, 61, 0.22);
+    box-shadow: 0 44px 82px rgba(16, 38, 61, 0.26);
     margin: 0 40px;
+}
+
+.hero-stage::before {
+    content: '';
+    position: absolute;
+    inset: auto 12% -38px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(16, 38, 61, 0.28), rgba(16, 38, 61, 0) 72%);
+    filter: blur(26px);
+    opacity: 0.44;
+    pointer-events: none;
 }
 
 .hero-stage img {
@@ -734,8 +768,21 @@ button {
 }
 
 .statement-scene {
+    position: relative;
     padding: 42px 0 0;
     margin-top: 30px;
+}
+
+.statement-scene::before {
+    content: '';
+    position: absolute;
+    inset: -20px 8% auto;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(39, 134, 208, 0.12), rgba(39, 134, 208, 0) 72%);
+    filter: blur(22px);
+    opacity: 0.62;
+    pointer-events: none;
 }
 
 .marquee-scene {
@@ -1100,7 +1147,9 @@ button {
         radial-gradient(circle at top left, rgba(39, 134, 208, 0.08), transparent 28%),
         radial-gradient(circle at bottom right, rgba(24, 77, 122, 0.05), transparent 24%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(245, 249, 253, 0.96));
-    box-shadow: var(--apple-shadow-soft);
+    box-shadow:
+        0 32px 64px rgba(16, 38, 61, 0.1),
+        0 12px 24px rgba(16, 38, 61, 0.05);
 }
 
 .statement-scene__intro {
@@ -1202,11 +1251,24 @@ button {
 }
 
 .panel-scene {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(340px, 1fr);
     gap: 20px;
     align-items: start;
-    margin-top: 90px;
+    margin-top: 96px;
+}
+
+.panel-scene::before {
+    content: '';
+    position: absolute;
+    inset: -28px 10% auto;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(24, 77, 122, 0.1), rgba(24, 77, 122, 0) 72%);
+    filter: blur(28px);
+    opacity: 0.56;
+    pointer-events: none;
 }
 
 .route-scene {
@@ -1385,18 +1447,21 @@ button {
     min-height: 700px;
     border: 1px solid var(--apple-line);
     border-radius: var(--apple-radius-xl);
-    box-shadow: var(--apple-shadow-soft);
+    box-shadow:
+        0 34px 64px rgba(16, 38, 61, 0.12),
+        0 14px 26px rgba(16, 38, 61, 0.06);
 }
 
 .panel-scene__card--dark {
     background: linear-gradient(180deg, #10263d 0%, #163a59 100%);
     color: #ffffff;
-    transform: translateY(18px);
+    transform: translateY(26px);
 }
 
 .panel-scene__card--light {
     background: linear-gradient(180deg, #f7fbff 0%, #eaf2fb 100%);
     min-height: 760px;
+    transform: translateY(-8px);
 }
 
 .panel-scene__image {
@@ -1420,13 +1485,13 @@ button {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.02) 100%),
-        linear-gradient(135deg, rgba(10, 24, 39, 0.08) 0%, rgba(10, 24, 39, 0.72) 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%),
+        linear-gradient(135deg, rgba(10, 24, 39, 0.04) 0%, rgba(10, 24, 39, 0.82) 100%);
 }
 
 .panel-scene__card--light .panel-scene__overlay {
     background:
-        linear-gradient(90deg, rgba(247, 251, 255, 0.98) 0%, rgba(247, 251, 255, 0.84) 48%, rgba(247, 251, 255, 0.24) 100%);
+        linear-gradient(90deg, rgba(247, 251, 255, 0.98) 0%, rgba(247, 251, 255, 0.88) 44%, rgba(247, 251, 255, 0.28) 100%);
 }
 
 .panel-scene__stamp {
@@ -1523,16 +1588,19 @@ button {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(10px);
-    transition: transform 0.22s ease, background 0.22s ease;
+    box-shadow: 0 18px 28px rgba(8, 17, 27, 0.12);
+    transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
 
 .panel-scene__card--light .panel-scene__fact {
     background: rgba(255, 255, 255, 0.74);
     border-color: rgba(16, 38, 61, 0.08);
+    box-shadow: 0 16px 26px rgba(18, 46, 74, 0.08);
 }
 
 .panel-scene__fact:hover {
     transform: translateY(-4px);
+    box-shadow: 0 22px 34px rgba(18, 46, 74, 0.12);
 }
 
 .panel-scene__fact strong {
@@ -1635,7 +1703,9 @@ button {
     border-radius: var(--apple-radius-xl);
     background: rgba(255, 255, 255, 0.74);
     backdrop-filter: blur(14px);
-    box-shadow: var(--apple-shadow-soft);
+    box-shadow:
+        0 30px 56px rgba(16, 38, 61, 0.1),
+        0 12px 24px rgba(16, 38, 61, 0.05);
 }
 
 .trust-scene__right {
@@ -1839,6 +1909,11 @@ button {
         margin: 0 22px 22px;
     }
 
+    .hero-summary {
+        margin: -10px 22px 0;
+        padding: 18px 16px 22px;
+    }
+
     .marquee-track__line span {
         font-size: 0.88rem;
     }
@@ -1922,6 +1997,11 @@ button {
         padding: 22px 22px 0;
         max-width: none;
         justify-content: flex-start;
+    }
+
+    .panel-scene__card--dark,
+    .panel-scene__card--light {
+        transform: none;
     }
 
     .trust-scene__float {
