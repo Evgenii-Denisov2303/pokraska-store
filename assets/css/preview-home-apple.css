@@ -153,6 +153,12 @@ button {
     pointer-events: none;
 }
 
+.hero-header {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
 .hero-scene__topbar {
     position: relative;
     z-index: 2;
@@ -161,7 +167,7 @@ button {
     align-items: center;
     gap: 34px;
     padding: 10px 6px 0;
-    margin-bottom: 12px;
+    margin-bottom: 0;
     border: 0;
     border-radius: 0;
     background: none;
@@ -284,8 +290,8 @@ button {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px 18px;
-    margin: 2px 0 20px;
-    padding: 0 6px;
+    margin: 0;
+    padding: 0 6px 0 82px;
 }
 
 .hero-nav__link {
@@ -1915,10 +1921,15 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .hero-header {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
     .hero-scene__nav {
         gap: 10px;
-        margin-bottom: 14px;
         padding: 0 4px;
+        margin: 0;
     }
 
     .hero-meta,
