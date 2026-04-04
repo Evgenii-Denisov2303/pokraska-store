@@ -29,7 +29,9 @@
 
     const routeItems = Array.from(document.querySelectorAll('.hero-copy__route'));
     const kineticSteps = Array.from(document.querySelectorAll('.hero-kinetic__step'));
-    const groupedItems = [routeItems, kineticSteps].filter((group) => group.length > 1);
+    const scalePhases = Array.from(document.querySelectorAll('.scale-growth__phase'));
+    const scaleTabs = Array.from(document.querySelectorAll('.scale-growth__tab'));
+    const groupedItems = [routeItems, kineticSteps, scaleTabs].filter((group) => group.length > 1);
 
     if (!groupedItems.length) return;
 
@@ -41,7 +43,18 @@
                 item.classList.toggle('is-active', itemIndex === index);
             });
         });
+
+        scalePhases.forEach((phase, phaseIndex) => {
+            phase.classList.toggle('is-active', phaseIndex === index);
+        });
     };
+
+    scaleTabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            activeIndex = index;
+            setActiveIndex(activeIndex);
+        });
+    });
 
     setInterval(() => {
         activeIndex = (activeIndex + 1) % Math.max(...groupedItems.map((group) => group.length));

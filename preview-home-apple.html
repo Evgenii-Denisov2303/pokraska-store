@@ -123,22 +123,45 @@
             </div>
 
             <div class="scale-growth" aria-hidden="true">
-                <div class="scale-growth__lane">
-                    <div class="scale-growth__node scale-growth__node--house">
-                        <span class="scale-growth__glow"></span>
-                        <span class="scale-growth__shape"></span>
-                        <small>Дом</small>
+                <div class="scale-growth__viewport">
+                    <div class="scale-growth__rings">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
-                    <div class="scale-growth__node scale-growth__node--street">
-                        <span class="scale-growth__glow"></span>
-                        <span class="scale-growth__shape"></span>
-                        <small>Фасад</small>
-                    </div>
-                    <div class="scale-growth__node scale-growth__node--tower">
-                        <span class="scale-growth__glow"></span>
-                        <span class="scale-growth__shape"></span>
-                        <small>Башня</small>
-                    </div>
+
+                    <article class="scale-growth__phase scale-growth__phase--house is-active">
+                        <div class="scale-growth__mass scale-growth__mass--house"></div>
+                        <div class="scale-growth__info">
+                            <small>Шаг 1</small>
+                            <strong>Частный дом и участок</strong>
+                            <span>Тёплый жилой масштаб, спокойный фасад, ворота как часть общей сцены дома.</span>
+                        </div>
+                    </article>
+
+                    <article class="scale-growth__phase scale-growth__phase--street">
+                        <div class="scale-growth__mass scale-growth__mass--street"></div>
+                        <div class="scale-growth__info">
+                            <small>Шаг 2</small>
+                            <strong>Улица, фасад, посёлок</strong>
+                            <span>Из одного двора история вырастает в общий ритм улицы и более крупный масштаб фасада.</span>
+                        </div>
+                    </article>
+
+                    <article class="scale-growth__phase scale-growth__phase--tower">
+                        <div class="scale-growth__mass scale-growth__mass--tower"></div>
+                        <div class="scale-growth__info">
+                            <small>Шаг 3</small>
+                            <strong>Большой объект и коммерческий уровень</strong>
+                            <span>Подача показывает, что вы умеете работать уже не только с частным заказом, а с большим визуальным весом.</span>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="scale-growth__tabs">
+                    <button class="scale-growth__tab is-active" type="button" data-scale-tab="0">Дом</button>
+                    <button class="scale-growth__tab" type="button" data-scale-tab="1">Фасад</button>
+                    <button class="scale-growth__tab" type="button" data-scale-tab="2">Башня</button>
                 </div>
 
                 <div class="scale-growth__caption">
