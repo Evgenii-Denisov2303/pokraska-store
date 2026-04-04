@@ -74,8 +74,10 @@ button {
 }
 
 .apple-shell {
-    width: min(1440px, calc(100% - 40px));
-    margin: 26px auto 96px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 26px 18px 112px;
 }
 
 .apple-note {
@@ -1247,8 +1249,7 @@ button {
 
 @media (max-width: 920px) {
     .apple-shell {
-        width: min(1440px, calc(100% - 24px));
-        margin-top: 14px;
+        padding: 14px 12px 84px;
     }
 
     .hero-scene,
