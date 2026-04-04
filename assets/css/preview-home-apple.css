@@ -202,29 +202,43 @@ button {
     line-height: 0.95;
 }
 
-.hero-meta {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+.hero-contact {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, auto));
+    gap: 10px 12px;
+    justify-content: end;
+    align-items: start;
+    padding: 14px 16px;
+    border-radius: 26px;
+    background: rgba(243, 247, 251, 0.56);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 32px rgba(16, 38, 61, 0.12);
 }
 
-.hero-meta__pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    color: var(--apple-accent-deep);
-    font-size: 0.84rem;
+.hero-contact__item {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.hero-contact__item--wide {
+    grid-column: 1 / -1;
+}
+
+.hero-contact__item small {
+    color: rgba(16, 38, 61, 0.56);
+    font-size: 0.66rem;
     font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
-.hero-meta__pill--soft {
-    background: rgba(255, 255, 255, 0.52);
-    color: rgba(16, 38, 61, 0.72);
+.hero-contact__item strong {
+    color: var(--apple-accent-deep);
+    font-size: 0.93rem;
+    line-height: 1.35;
+    font-weight: 800;
+    text-wrap: balance;
 }
 
 .hero-copy {
@@ -263,6 +277,7 @@ button {
     background: rgba(8, 20, 32, 0.34);
     color: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(10px);
+    max-width: min(540px, 100%);
 }
 
 .hero-copy__title-main {
@@ -1810,6 +1825,12 @@ button {
     .hero-copy__features,
     .hero-copy__routes {
         justify-content: flex-start;
+    }
+
+    .hero-contact {
+        grid-template-columns: 1fr;
+        justify-content: stretch;
+        width: min(100%, 360px);
     }
 
     .hero-copy {
