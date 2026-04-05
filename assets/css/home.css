@@ -160,7 +160,7 @@ button {
     position: relative;
     z-index: 4;
     display: grid;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 0;
     padding-inline: 4px;
 }
@@ -227,7 +227,7 @@ button {
 
 .hero-brand__text {
     display: grid;
-    gap: 5px;
+    gap: 6px;
     min-width: 0;
     position: relative;
     padding-bottom: 8px;
@@ -245,18 +245,18 @@ button {
 }
 
 .hero-brand__eyebrow {
-    color: rgba(16, 38, 61, 0.6);
-    font-size: 0.76rem;
-    font-weight: 700;
+    color: rgba(16, 38, 61, 0.54);
+    font-size: 0.74rem;
+    font-weight: 720;
     letter-spacing: 0.18em;
     text-transform: uppercase;
 }
 
 .hero-brand__name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.08rem;
+    font-size: 2rem;
     font-weight: 700;
-    line-height: 0.9;
+    line-height: 0.92;
     letter-spacing: -0.015em;
 }
 
@@ -283,8 +283,8 @@ button {
     grid-template-columns: 1fr;
     justify-content: start;
     justify-self: end;
-    width: min(100%, 336px);
-    max-width: 336px;
+    width: min(100%, 328px);
+    max-width: 328px;
     gap: 10px;
     align-items: stretch;
     align-content: start;
@@ -320,7 +320,7 @@ button {
 .hero-header-link--secondary {
     padding-left: 0;
     border-left: 0;
-    opacity: 0.62;
+    opacity: 0.54;
 }
 
 .hero-header-link--secondary .hero-header-sub {
@@ -333,11 +333,11 @@ button {
 }
 
 .hero-header-link--primary .hero-header-sub {
-    color: rgba(16, 38, 61, 0.52);
+    color: rgba(16, 38, 61, 0.48);
 }
 
 .hero-header-link--secondary .hero-header-main {
-    font-size: 0.94rem;
+    font-size: 0.92rem;
 }
 
 .hero-header-link i,
@@ -373,8 +373,8 @@ button {
     max-width: none;
     padding-top: 6px;
     border-top: 0;
-    color: rgba(16, 38, 61, 0.44);
-    font-size: 0.8rem;
+    color: rgba(16, 38, 61, 0.4);
+    font-size: 0.79rem;
     line-height: 1.38;
     font-weight: 600;
     text-align: left;
@@ -384,9 +384,9 @@ button {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px 26px;
+    gap: 12px 28px;
     margin: 2px 0 -2px;
-    padding: 8px 0 0;
+    padding: 10px 0 0;
     border-top: 0;
 }
 
@@ -399,9 +399,9 @@ button {
     border: 0;
     border-radius: 999px;
     background: transparent;
-    color: rgba(16, 38, 61, 0.68);
+    color: rgba(16, 38, 61, 0.64);
     font-size: 0.95rem;
-    font-weight: 760;
+    font-weight: 740;
     line-height: 1.08;
     transition:
         color 180ms ease,
@@ -450,13 +450,13 @@ button {
 
 .hero-copy {
     position: absolute;
-    top: 252px;
-    left: 70px;
+    top: 286px;
+    left: 78px;
     z-index: 3;
     display: grid;
     align-content: start;
-    gap: 28px;
-    width: min(486px, calc(100% - 140px));
+    gap: 32px;
+    width: min(510px, calc(100% - 156px));
     padding: 0;
     border: 0;
     border-radius: 0;
@@ -482,10 +482,10 @@ button {
 .hero-copy__eyebrow {
     padding: 0;
     background: none;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.76);
     backdrop-filter: none;
     max-width: min(540px, 100%);
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     gap: 10px;
     text-shadow: 0 8px 18px rgba(8, 20, 32, 0.38);
 }
@@ -505,8 +505,8 @@ button {
 .hero-copy h1 {
     margin: 0;
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.96rem, 5.05vw, 4.82rem);
-    line-height: 0.88;
+    font-size: clamp(2.82rem, 4.9vw, 4.62rem);
+    line-height: 0.9;
     letter-spacing: -0.034em;
     font-weight: 700;
     max-width: 7.2ch;
@@ -521,27 +521,27 @@ button {
 
 .hero-copy__title-sub {
     color: rgba(255, 255, 255, 0.88);
-    font-size: clamp(1.2rem, 1.82vw, 1.8rem);
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-    margin-top: 18px;
-    max-width: 17.2ch;
+    font-size: clamp(1.16rem, 1.72vw, 1.64rem);
+    line-height: 1.28;
+    letter-spacing: 0.012em;
+    margin-top: 20px;
+    max-width: 18.2ch;
     text-wrap: balance;
     text-shadow: 0 14px 30px rgba(8, 20, 32, 0.44);
 }
 
 .hero-copy__subtext {
     display: grid;
-    gap: 6px;
+    gap: 8px;
     margin: 0;
 }
 
 .hero-copy__lead {
-    max-width: 33ch;
+    max-width: 35ch;
     margin: 0;
-    color: rgba(255, 255, 255, 0.84);
-    font-size: 1.02rem;
-    line-height: 1.54;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 1.06rem;
+    line-height: 1.62;
     text-shadow: 0 12px 24px rgba(8, 20, 32, 0.42);
 }
 
@@ -572,23 +572,24 @@ button {
 .hero-copy__features {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 12px;
-    max-width: 320px;
+    gap: 14px;
+    max-width: 360px;
     margin-top: 0;
 }
 
 .hero-copy__features span {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     min-height: 0;
     padding: 0;
     border-radius: 0;
     background: none;
     border: 0;
     color: rgba(255, 255, 255, 0.9);
-    font-size: 0.98rem;
-    font-weight: 700;
+    font-size: 1.12rem;
+    font-weight: 720;
+    line-height: 1.32;
     box-shadow: none;
     text-shadow: 0 10px 20px rgba(8, 20, 32, 0.34);
     backdrop-filter: none;
@@ -596,7 +597,7 @@ button {
 
 .hero-copy__features span i {
     color: rgba(147, 206, 255, 0.9);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
 }
 
 .hero-copy__facts {
@@ -676,11 +677,11 @@ button {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    min-height: 42px;
-    padding: 9px 13px;
-    border-radius: 16px;
+    min-height: 44px;
+    padding: 10px 15px;
+    border-radius: 17px;
     border: 0;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 800;
     cursor: pointer;
     transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
@@ -698,7 +699,7 @@ button {
 
 .apple-button--ghost {
     border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
 }
 
