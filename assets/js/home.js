@@ -1,5 +1,5 @@
 (function() {
-    const REVEAL_FALLBACK_DELAY_MS = 300;
+    const REVEAL_FALLBACK_DELAY_MS = 600;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
@@ -17,7 +17,9 @@
         if (forceReveal || !('IntersectionObserver' in window)) {
             scenes.forEach(revealScene);
         } else {
-            const hiddenScenes = new Set();
+            const hiddenScenes = new Set(
+                scenes.filter((scene) => !scene.classList.contains('is-visible'))
+            );
             let revealFallbackTimerId = null;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
@@ -35,9 +37,7 @@
                 rootMargin: '0px 0px -10% 0px'
             });
 
-            scenes.forEach((scene) => {
-                if (scene.classList.contains('is-visible')) return;
-                hiddenScenes.add(scene);
+            hiddenScenes.forEach((scene) => {
                 observer.observe(scene);
             });
 
