@@ -4,18 +4,24 @@
     const focusSection = searchParams.get('section');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
     if (scenes.length) {
+        const revealScene = (scene) => {
+            scene.classList.add('is-visible');
+        };
+
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
             scene.style.setProperty('--scene-delay', `${delay}ms`);
         });
 
         if (forceReveal || !('IntersectionObserver' in window)) {
-            scenes.forEach((scene) => scene.classList.add('is-visible'));
+            scenes.forEach(revealScene);
         } else {
+            const hiddenScenes = new Set();
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    entry.target.classList.add('is-visible');
+                    revealScene(entry.target);
+                    hiddenScenes.delete(entry.target);
                     observer.unobserve(entry.target);
                 });
             }, {
@@ -25,8 +31,27 @@
 
             scenes.forEach((scene) => {
                 if (scene.classList.contains('is-visible')) return;
+                hiddenScenes.add(scene);
                 observer.observe(scene);
             });
+
+            const revealRemainingScenes = () => {
+                hiddenScenes.forEach((scene) => {
+                    revealScene(scene);
+                    observer.unobserve(scene);
+                });
+                hiddenScenes.clear();
+            };
+
+            const scheduleRevealFallback = () => {
+                window.setTimeout(revealRemainingScenes, 300);
+            };
+
+            if (document.readyState === 'complete') {
+                scheduleRevealFallback();
+            } else {
+                window.addEventListener('load', scheduleRevealFallback, { once: true });
+            }
         }
     }
 
