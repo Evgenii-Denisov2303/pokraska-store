@@ -1,4 +1,5 @@
 (function() {
+    const REVEAL_FALLBACK_DELAY_MS = 300;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
@@ -44,7 +45,7 @@
             };
 
             const scheduleRevealFallback = () => {
-                window.setTimeout(revealRemainingScenes, 300);
+                window.setTimeout(revealRemainingScenes, REVEAL_FALLBACK_DELAY_MS);
             };
 
             if (document.readyState === 'complete') {
