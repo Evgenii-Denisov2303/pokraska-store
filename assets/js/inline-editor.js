@@ -3891,7 +3891,7 @@
             ui.toolbarTitle.textContent = 'Нужен сервер сохранения';
             ui.toolbarMeta.textContent = `${getCurrentPageLabel()} · откройте страницу через сервер сохранения, чтобы правки можно было сохранить.`;
             ui.toolbarNotice.hidden = false;
-            ui.toolbarNotice.textContent = 'Подсказка: запустите `node scripts/admin-server.js` и откройте адрес, который покажет сервер.';
+            ui.toolbarNotice.textContent = 'Подсказка: запустите `npm start` и откройте адрес, который покажет сервер.';
             renderOverviewPanel();
             return;
         }

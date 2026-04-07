@@ -10,7 +10,7 @@
 В корне проекта:
 
 ```powershell
-node scripts/admin-server.js
+npm start
 ```
 
 Открыть:
@@ -36,7 +36,7 @@ $env:ADMIN_USERNAME = "admin"
 $env:ADMIN_PASSWORD = "StrongPasswordHere"
 $env:TRUST_PROXY = "true"
 $env:FORCE_HTTPS = "true"
-node scripts/admin-server.js
+npm start
 ```
 
 Что уже поддерживает сервер:
@@ -57,10 +57,10 @@ node scripts/admin-server.js
 
 Готовые файлы:
 
-- [Dockerfile](c:/Users/Evgeny/VSCode/pokraska-store/Dockerfile)
-- [docker-compose.example.yml](c:/Users/Evgeny/VSCode/pokraska-store/deploy/docker-compose.example.yml)
-- [Caddyfile.example](c:/Users/Evgeny/VSCode/pokraska-store/deploy/Caddyfile.example)
-- [.env.example](c:/Users/Evgeny/VSCode/pokraska-store/deploy/.env.example)
+- [Dockerfile](../Dockerfile)
+- [docker-compose.example.yml](../deploy/docker-compose.example.yml)
+- [Caddyfile.example](../deploy/Caddyfile.example)
+- [.env.example](../deploy/.env.example)
 
 ### Шаги на сервере
 
@@ -120,8 +120,8 @@ ADMIN_ALLOWED_IPS=1.2.3.4,5.6.7.8
 
 Я уже подготовил задел под отдельный content-origin:
 
-- [runtime-config.js](c:/Users/Evgeny/VSCode/pokraska-store/assets/js/runtime-config.js)
-- [content-api.js](c:/Users/Evgeny/VSCode/pokraska-store/assets/js/content-api.js)
+- [runtime-config.js](../assets/js/runtime-config.js)
+- [content-api.js](../assets/js/content-api.js)
 
 То есть при желании можно оставить публичный сайт на одной площадке, а JSON и админку вынести на другую.
 
