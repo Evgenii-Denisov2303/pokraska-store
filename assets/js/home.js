@@ -18,12 +18,17 @@
             scenes.forEach(revealScene);
         } else {
             const hiddenScenes = new Set();
+            let revealFallbackTimerId = null;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
                     revealScene(entry.target);
                     hiddenScenes.delete(entry.target);
                     observer.unobserve(entry.target);
+                    if (!hiddenScenes.size && revealFallbackTimerId) {
+                        window.clearTimeout(revealFallbackTimerId);
+                        revealFallbackTimerId = null;
+                    }
                 });
             }, {
                 threshold: 0.2,
@@ -37,6 +42,10 @@
             });
 
             const revealRemainingScenes = () => {
+                if (revealFallbackTimerId) {
+                    window.clearTimeout(revealFallbackTimerId);
+                    revealFallbackTimerId = null;
+                }
                 hiddenScenes.forEach((scene) => {
                     revealScene(scene);
                     observer.unobserve(scene);
@@ -45,7 +54,7 @@
             };
 
             const scheduleRevealFallback = () => {
-                window.setTimeout(revealRemainingScenes, REVEAL_FALLBACK_DELAY_MS);
+                revealFallbackTimerId = window.setTimeout(revealRemainingScenes, REVEAL_FALLBACK_DELAY_MS);
             };
 
             if (document.readyState === 'complete') {
