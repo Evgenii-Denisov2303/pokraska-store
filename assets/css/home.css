@@ -812,7 +812,14 @@ button {
     pointer-events: none;
 }
 
-.hero-stage img {
+.hero-stage__picture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+}
+
+.hero-stage__picture img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -4774,19 +4781,20 @@ button {
 
 @media (max-width: 640px) {
     .hero-scene {
-        margin-top: -18px;
+        margin-top: -118px;
+        padding-top: 118px;
         margin-left: -12px;
         margin-right: -12px;
         border-radius: 0;
         background:
             linear-gradient(
                 180deg,
-                rgba(248, 252, 255, 1) 0%,
-                rgba(248, 252, 255, 0.99) 16%,
-                rgba(246, 250, 254, 0.9) 30%,
-                rgba(243, 248, 252, 0.62) 46%,
-                rgba(241, 246, 251, 0.2) 62%,
-                rgba(241, 246, 251, 0) 76%
+                #deecf8 0%,
+                #e3eff8 24%,
+                #e9f3fa 46%,
+                #eef6fb 68%,
+                rgba(238, 246, 251, 0.72) 86%,
+                rgba(241, 247, 252, 0) 100%
             );
         box-shadow:
             0 30px 58px -34px rgba(16, 38, 61, 0.28),
@@ -4794,25 +4802,7 @@ button {
     }
 
     .hero-scene::before {
-        display: block;
-        content: '';
-        position: absolute;
-        inset: 0 0 auto;
-        z-index: 2;
-        height: 188px;
-        pointer-events: none;
-        background:
-            linear-gradient(
-                180deg,
-                rgba(248, 252, 255, 1) 0%,
-                rgba(248, 252, 255, 0.985) 12%,
-                rgba(247, 251, 255, 0.93) 24%,
-                rgba(245, 249, 253, 0.78) 38%,
-                rgba(243, 248, 252, 0.52) 52%,
-                rgba(242, 247, 252, 0.24) 66%,
-                rgba(242, 247, 252, 0.08) 78%,
-                rgba(242, 247, 252, 0) 90%
-            );
+        display: none;
     }
 
     .hero-scene__nav {
@@ -4821,46 +4811,30 @@ button {
 
     .hero-stage {
         position: relative;
-        min-height: 328px;
+        min-height: 404px;
         aspect-ratio: auto;
-        margin: -34px 0 10px;
+        margin: -126px 0 10px;
         border-radius: 0;
+        background: linear-gradient(180deg, #deecf8 0%, #e5f1f9 42%, rgba(229, 241, 249, 0.36) 76%, rgba(229, 241, 249, 0) 100%);
     }
 
     .hero-stage::before {
-        display: block;
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-        background:
-            linear-gradient(
-                180deg,
-                rgba(250, 253, 255, 0.54) 0%,
-                rgba(250, 253, 255, 0.36) 16%,
-                rgba(250, 253, 255, 0.18) 30%,
-                rgba(250, 253, 255, 0.06) 46%,
-                rgba(250, 253, 255, 0) 62%
-            );
+        display: none;
     }
 
     .hero-stage::after {
         background:
-            radial-gradient(46% 52% at 18% 40%, rgba(10, 24, 39, 0.24) 0%, rgba(10, 24, 39, 0.1) 42%, rgba(10, 24, 39, 0) 100%),
-            linear-gradient(180deg, rgba(16, 38, 61, 0.02) 0%, rgba(16, 38, 61, 0.16) 100%);
+            radial-gradient(46% 52% at 18% 56%, rgba(10, 24, 39, 0.1) 0%, rgba(10, 24, 39, 0.04) 44%, rgba(10, 24, 39, 0) 100%),
+            linear-gradient(180deg, rgba(16, 38, 61, 0.01) 0%, rgba(16, 38, 61, 0.14) 100%);
         -webkit-mask-image: none;
         mask-image: none;
     }
 
-    .hero-stage img {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
+    .hero-stage__picture img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center 34%;
+        object-position: center top;
         animation: none;
         -webkit-mask-image: none;
         mask-image: none;
@@ -5226,7 +5200,7 @@ button {
     }
 
     .hero-copy {
-        top: 28px;
+        top: 118px;
         left: 18px;
         width: auto;
         max-width: calc(100% - 36px);
