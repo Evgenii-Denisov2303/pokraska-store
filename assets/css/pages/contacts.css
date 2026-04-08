@@ -393,7 +393,8 @@
 
 .contact-form-card .yandex-form-embed {
     width: 100%;
-    min-height: 560px;
+    min-height: 680px;
+    height: 680px;
     flex: 1 1 auto;
     border: none;
     display: block;
@@ -682,7 +683,8 @@
     }
 
     .contact-form-card .yandex-form-embed {
-        min-height: 520px;
+        min-height: 680px;
+        height: 680px;
     }
 
     .map-container iframe {
