@@ -4714,6 +4714,11 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .statement-scene__lead {
+        display: grid;
+        justify-items: center;
+    }
+
     .home-tail__brands {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
@@ -5032,12 +5037,15 @@ button {
     .statement-scene h2 {
         font-size: clamp(2.42rem, 10.4vw, 3.32rem);
         line-height: 0.96;
-        text-align: center;
+        width: fit-content;
+        max-width: 8.2ch;
+        margin-inline: auto;
+        text-align: left;
         letter-spacing: -0.03em;
     }
 
     .statement-scene h2 span {
-        text-wrap: initial;
+        text-wrap: balance;
     }
 
     .statement-scene h2 span:nth-child(2),
@@ -5047,9 +5055,11 @@ button {
 
     .statement-scene h2 span:nth-child(2) {
         margin-top: 6px;
+        margin-left: clamp(18px, 7vw, 34px);
     }
 
     .statement-scene h2 span:nth-child(3) {
         margin-top: 4px;
+        margin-left: clamp(54px, 18vw, 88px);
     }
 }
