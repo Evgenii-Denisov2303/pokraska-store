@@ -3904,6 +3904,7 @@ button {
     .hero-header {
         gap: 12px;
         margin-bottom: 14px;
+        overflow: visible;
     }
 
     .hero-brand__text {
@@ -3927,30 +3928,34 @@ button {
     }
 
     .hero-scene__nav {
+        position: absolute;
+        top: calc(100% - 2px);
+        left: 0;
+        right: 0;
+        z-index: 12;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
-        padding: 0;
+        width: 100%;
+        padding: 14px;
         margin: 0;
-        border-top: 0;
-        max-height: 0;
+        border: 1px solid rgba(16, 38, 61, 0.1);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: 0 22px 42px rgba(18, 46, 74, 0.14);
+        backdrop-filter: blur(18px);
         opacity: 0;
-        overflow: hidden;
         pointer-events: none;
-        transform: translateY(-6px);
-        transition: max-height 220ms ease, opacity 180ms ease, transform 180ms ease, padding 180ms ease;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
     }
 
     .hero-header.is-menu-open .hero-scene__nav {
-        max-height: 520px;
         opacity: 1;
         pointer-events: auto;
+        visibility: visible;
         transform: translateY(0);
-        padding: 8px 0 0;
-        border-radius: 0;
-        background: rgba(255, 255, 255, 0.58);
-        box-shadow: none;
-        backdrop-filter: blur(12px);
     }
 
     .hero-header.is-menu-open .hero-menu-toggle {
@@ -3965,13 +3970,13 @@ button {
         min-height: 42px;
         padding: 10px 12px;
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.72);
+        background: rgba(255, 255, 255, 0.92);
         color: rgba(16, 38, 61, 0.72);
         font-size: 0.88rem;
         font-weight: 760;
         line-height: 1.25;
         white-space: normal;
-        box-shadow: 0 8px 18px rgba(18, 46, 74, 0.07);
+        box-shadow: 0 10px 18px rgba(18, 46, 74, 0.06);
     }
 
     .hero-nav__link::after {
@@ -4714,6 +4719,38 @@ button {
         grid-template-columns: 1fr;
     }
 
+    .hero-stage {
+        position: relative;
+        min-height: 284px;
+        aspect-ratio: 16 / 10;
+        margin: 12px 0 8px;
+        border-radius: 28px;
+    }
+
+    .hero-stage::before {
+        display: none;
+    }
+
+    .hero-stage::after {
+        background:
+            radial-gradient(46% 52% at 18% 32%, rgba(10, 24, 39, 0.42) 0%, rgba(10, 24, 39, 0.18) 42%, rgba(10, 24, 39, 0) 100%),
+            linear-gradient(180deg, rgba(16, 38, 61, 0.02) 0%, rgba(16, 38, 61, 0.14) 100%);
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .hero-stage img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        animation: none;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
     .statement-scene__lead {
         display: grid;
         justify-items: center;
@@ -4992,10 +5029,10 @@ button {
     }
 
     .hero-copy {
-        top: 112px;
-        left: 18px;
+        top: 20px;
+        left: 16px;
         width: auto;
-        max-width: calc(100% - 36px);
+        max-width: calc(100% - 32px);
         gap: 0;
     }
 
@@ -5010,20 +5047,15 @@ button {
 
     .hero-copy__eyebrow {
         gap: 9px;
-        font-size: 0.74rem;
-        letter-spacing: 0.14em;
-        color: rgba(255, 255, 255, 0.84);
+        font-size: 0.72rem;
+        letter-spacing: 0.13em;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 8px 18px rgba(8, 20, 32, 0.28);
     }
 
     .hero-copy__eyebrow::before {
         width: 18px;
-        background: rgba(255, 255, 255, 0.5);
-    }
-
-    .hero-stage {
-        aspect-ratio: auto;
-        min-height: 360px;
-        margin: 16px 0 12px;
+        background: rgba(255, 255, 255, 0.56);
     }
 
     .statement-scene {
@@ -5035,17 +5067,17 @@ button {
     }
 
     .statement-scene h2 {
-        font-size: clamp(2.42rem, 10.4vw, 3.32rem);
+        font-size: clamp(2.24rem, 9.4vw, 3.02rem);
         line-height: 0.96;
         width: fit-content;
-        max-width: 8.2ch;
+        max-width: none;
         margin-inline: auto;
         text-align: left;
         letter-spacing: -0.03em;
     }
 
     .statement-scene h2 span {
-        text-wrap: balance;
+        text-wrap: nowrap;
     }
 
     .statement-scene h2 span:nth-child(2),
@@ -5055,11 +5087,11 @@ button {
 
     .statement-scene h2 span:nth-child(2) {
         margin-top: 6px;
-        margin-left: clamp(18px, 7vw, 34px);
+        margin-left: clamp(18px, 7vw, 32px);
     }
 
     .statement-scene h2 span:nth-child(3) {
         margin-top: 4px;
-        margin-left: clamp(54px, 18vw, 88px);
+        margin-left: clamp(44px, 14vw, 68px);
     }
 }
