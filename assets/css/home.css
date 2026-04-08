@@ -2592,10 +2592,10 @@ button {
 
 .home-tail__intro h3,
 .home-tail__request-copy h3 {
-    margin: 18px 0 16px;
+    margin: 16px 0 14px;
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(2.55rem, 4.2vw, 4.4rem);
-    line-height: 0.94;
+    line-height: 0.92;
     letter-spacing: -0.03em;
     font-weight: 700;
 }
@@ -2616,6 +2616,11 @@ button {
 
 .home-tail__request-copy p {
     color: var(--apple-muted);
+    max-width: 34ch;
+}
+
+.home-tail__request-copy h3 {
+    max-width: 10ch;
 }
 
 .home-tail__request-copy {
@@ -2790,30 +2795,32 @@ button {
 .home-tail__advantages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px 16px;
-    margin-top: 26px;
+    gap: 12px 14px;
+    margin-top: 24px;
     width: 100%;
 }
 
 .home-tail__advantages span {
     display: inline-flex;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     min-height: 100%;
-    padding: 15px 17px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.7);
+    padding: 14px 16px;
+    border-radius: 19px;
+    background: rgba(255, 255, 255, 0.76);
     border: 1px solid rgba(16, 38, 61, 0.06);
-    box-shadow: 0 12px 22px rgba(16, 38, 61, 0.035);
+    box-shadow: 0 10px 20px rgba(16, 38, 61, 0.03);
     color: rgba(16, 38, 61, 0.84);
-    font-size: 0.95rem;
-    line-height: 1.42;
+    font-size: 0.94rem;
+    line-height: 1.34;
     font-weight: 700;
 }
 
 .home-tail__advantages i {
     color: var(--apple-accent);
-    margin-top: 2px;
+    margin-top: 0;
+    font-size: 1rem;
+    flex: 0 0 auto;
 }
 
 .home-tail__request-side {
@@ -2824,56 +2831,99 @@ button {
 
 .home-tail__contact {
     display: grid;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     max-width: none;
-    padding: 20px 22px;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(247, 251, 255, 0.68));
+    padding: 22px 22px 20px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(247, 251, 255, 0.72));
     border: 1px solid rgba(16, 38, 61, 0.06);
-    box-shadow: 0 14px 28px rgba(16, 38, 61, 0.04);
+    box-shadow: 0 16px 28px rgba(16, 38, 61, 0.04);
     backdrop-filter: blur(10px);
     color: var(--apple-text);
 }
 
 .home-tail__contact-eyebrow {
-    color: rgba(16, 38, 61, 0.5);
-    font-size: 0.8rem;
+    color: rgba(16, 38, 61, 0.46);
+    font-size: 0.74rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
 }
 
 .home-tail__contact p {
     color: var(--apple-muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    max-width: 36ch;
+    font-size: 0.96rem;
+    line-height: 1.62;
 }
 
 .home-tail__contact-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    width: fit-content;
+    gap: 12px;
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(16, 38, 61, 0.06);
+    box-shadow: 0 8px 16px rgba(16, 38, 61, 0.024);
     color: var(--apple-accent-deep);
-    font-size: 1.04rem;
+    font-size: 1.08rem;
     font-weight: 800;
 }
 
 .home-tail__contact-link i {
-    color: var(--apple-accent);
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(39, 134, 208, 0.98), rgba(24, 77, 122, 0.98));
+    color: #ffffff;
+    font-size: 0.92rem;
+    box-shadow: 0 8px 16px rgba(24, 77, 122, 0.16);
+}
+
+.home-tail__contact-link span {
+    line-height: 1.24;
 }
 
 .home-tail__contact-actions,
 .home-tail__request-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 2px;
+}
+
+.home-tail__contact-actions .panel-scene__action {
+    min-height: 48px;
+    justify-content: flex-start;
     gap: 10px;
-    padding-top: 4px;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.94rem;
+    letter-spacing: 0.02em;
+    border-color: rgba(16, 38, 61, 0.08);
+    background: rgba(255, 255, 255, 0.82);
+    color: rgba(16, 38, 61, 0.9);
+    box-shadow: 0 10px 18px rgba(16, 38, 61, 0.028);
+}
+
+.home-tail__contact-actions .panel-scene__action i {
+    font-size: 1.18rem;
+    width: 22px;
+    text-align: center;
+    color: var(--apple-accent-deep);
+}
+
+.home-tail__contact-actions .panel-scene__action:hover {
+    transform: translateY(-1px);
 }
 
 .home-tail__request-copy .home-tail__contact {
-    margin-top: 20px;
+    margin-top: 22px;
 }
 
 .home-tail__form-card {
@@ -4259,6 +4309,11 @@ button {
         max-width: none;
     }
 
+    .home-tail__request-copy p,
+    .home-tail__contact p {
+        max-width: none;
+    }
+
     .home-tail__contact,
     .home-tail__form-card {
         padding: 18px 18px 20px;
@@ -4804,6 +4859,10 @@ button {
         padding: 26px 22px 20px;
     }
 
+    .home-tail__request-copy h3 {
+        max-width: 11ch;
+    }
+
     .home-tail__request-copy > .route-scene__eyebrow,
     .home-tail__request-copy > h3,
     .home-tail__request-copy > p {
@@ -4812,6 +4871,49 @@ button {
 }
 
 @media (max-width: 640px) {
+    .home-tail__request-copy h3 {
+        max-width: none;
+    }
+
+    .home-tail__advantages span {
+        padding: 13px 14px;
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+
+    .home-tail__contact {
+        gap: 10px;
+        padding: 18px 16px 16px;
+        border-radius: 22px;
+    }
+
+    .home-tail__contact-link {
+        padding: 12px 12px;
+        font-size: 1rem;
+    }
+
+    .home-tail__contact-link i {
+        width: 30px;
+        height: 30px;
+        font-size: 0.84rem;
+    }
+
+    .home-tail__contact-actions {
+        gap: 10px;
+    }
+
+    .home-tail__contact-actions .panel-scene__action {
+        min-height: 44px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        font-size: 0.86rem;
+    }
+
+    .home-tail__contact-actions .panel-scene__action i {
+        width: 18px;
+        font-size: 1.02rem;
+    }
+
     .hero-scene__topbar {
         padding: 8px 12px 0;
         gap: 8px;
