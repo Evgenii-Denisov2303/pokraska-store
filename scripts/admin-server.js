@@ -168,10 +168,9 @@ function getSecurityHeaders(pathname) {
         || pathname.startsWith('/admin/')
         || pathname.startsWith('/api/');
 
-    const publicFrameSrc = "frame-src 'self' https://forms.yandex.ru https://yandex.ru";
     const csp = isAdmin
-        ? "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
-        : `default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; manifest-src 'self'; ${publicFrameSrc}; frame-ancestors 'self'; base-uri 'self'; form-action 'self'`;
+        ? "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        : "default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'";
 
     return {
         'Content-Security-Policy': csp,

@@ -1,67 +1,32 @@
 (function() {
-    const REVEAL_FALLBACK_DELAY_MS = 600;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
     if (scenes.length) {
-        const revealScene = (scene) => {
-            scene.classList.add('is-visible');
-        };
-
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
             scene.style.setProperty('--scene-delay', `${delay}ms`);
         });
 
         if (forceReveal || !('IntersectionObserver' in window)) {
-            scenes.forEach(revealScene);
+            scenes.forEach((scene) => scene.classList.add('is-visible'));
         } else {
-            const hiddenScenes = new Set(
-                scenes.filter((scene) => !scene.classList.contains('is-visible'))
-            );
-            let revealFallbackTimerId = null;
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    revealScene(entry.target);
-                    hiddenScenes.delete(entry.target);
+                    entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target);
-                    if (!hiddenScenes.size && revealFallbackTimerId) {
-                        window.clearTimeout(revealFallbackTimerId);
-                        revealFallbackTimerId = null;
-                    }
                 });
             }, {
                 threshold: 0.2,
                 rootMargin: '0px 0px -10% 0px'
             });
 
-            hiddenScenes.forEach((scene) => {
+            scenes.forEach((scene) => {
+                if (scene.classList.contains('is-visible')) return;
                 observer.observe(scene);
             });
-
-            const revealRemainingScenes = () => {
-                if (revealFallbackTimerId) {
-                    window.clearTimeout(revealFallbackTimerId);
-                    revealFallbackTimerId = null;
-                }
-                hiddenScenes.forEach((scene) => {
-                    revealScene(scene);
-                    observer.unobserve(scene);
-                });
-                hiddenScenes.clear();
-            };
-
-            const scheduleRevealFallback = () => {
-                revealFallbackTimerId = window.setTimeout(revealRemainingScenes, REVEAL_FALLBACK_DELAY_MS);
-            };
-
-            if (document.readyState === 'complete') {
-                scheduleRevealFallback();
-            } else {
-                window.addEventListener('load', scheduleRevealFallback, { once: true });
-            }
         }
     }
 
