@@ -121,6 +121,7 @@ button {
 .hero-scene {
     position: relative;
     overflow: hidden;
+    isolation: isolate;
     min-height: 0;
     margin-top: -7px;
     margin-left: -20px;
@@ -157,12 +158,13 @@ button {
 }
 
 .hero-header {
-    position: relative;
+    position: absolute;
+    inset: 22px 28px auto;
     z-index: 4;
     display: grid;
     gap: 12px;
     margin-bottom: 0;
-    padding-inline: 4px;
+    padding-inline: 0;
 }
 
 .hero-header::after {
@@ -533,7 +535,7 @@ button {
 
 .hero-copy {
     position: absolute;
-    top: clamp(152px, 12.4vw, 198px);
+    top: clamp(148px, 11.5vw, 186px);
     left: clamp(28px, 5vw, 78px);
     z-index: 3;
     display: grid;
@@ -819,14 +821,14 @@ button {
     position: relative;
     inset: auto;
     aspect-ratio: 15 / 8;
-    min-height: 720px;
+    min-height: 734px;
     height: auto;
     overflow: hidden;
     border-radius: 0;
     border: 0;
     background: linear-gradient(180deg, #f8f6f1 0%, #f1efe8 42%, #ece9e1 100%);
     box-shadow: 0 34px 78px -34px rgba(16, 38, 61, 0.24);
-    margin: -7px 0 0;
+    margin: -344px 0 0;
 }
 
 .hero-stage::before {
@@ -843,7 +845,7 @@ button {
 
 .hero-stage__picture {
     position: absolute;
-    inset: 0;
+    inset: -72px 0 0;
     z-index: 0;
     display: block;
 }
@@ -852,11 +854,11 @@ button {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 92%;
+    object-position: center 52%;
     transform: scale(1);
     animation: stageDrift 16s ease-in-out infinite;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.24) 26px, rgba(0, 0, 0, 0.56) 62px, rgba(0, 0, 0, 0.86) 112px, rgba(0, 0, 0, 0.98) 152px, rgba(0, 0, 0, 1) 182px, rgba(0, 0, 0, 1) calc(100% - 8px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.24) 26px, rgba(0, 0, 0, 0.56) 62px, rgba(0, 0, 0, 0.86) 112px, rgba(0, 0, 0, 0.98) 152px, rgba(0, 0, 0, 1) 182px, rgba(0, 0, 0, 1) calc(100% - 8px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
 }
 
 .hero-stage::after {
@@ -864,12 +866,13 @@ button {
     position: absolute;
     inset: 0;
     background:
+        linear-gradient(180deg, rgba(176, 201, 233, 0.44) 0%, rgba(176, 201, 233, 0.22) 11%, rgba(176, 201, 233, 0.06) 24%, rgba(176, 201, 233, 0) 36%),
         radial-gradient(34% 34% at 7% 7%, rgba(255, 231, 190, 0.16) 0%, rgba(255, 231, 190, 0.06) 30%, rgba(255, 231, 190, 0) 64%),
         radial-gradient(40% 48% at 18% 34%, rgba(18, 20, 24, 0.065) 0%, rgba(18, 20, 24, 0.024) 40%, rgba(18, 20, 24, 0.006) 58%, rgba(18, 20, 24, 0) 78%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.012) 0%, rgba(34, 31, 26, 0.008) 24%, rgba(34, 31, 26, 0.02) 100%);
     z-index: 2;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.24) 26px, rgba(0, 0, 0, 0.56) 62px, rgba(0, 0, 0, 0.86) 112px, rgba(0, 0, 0, 0.98) 152px, rgba(0, 0, 0, 1) 182px, rgba(0, 0, 0, 1) calc(100% - 8px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.24) 26px, rgba(0, 0, 0, 0.56) 62px, rgba(0, 0, 0, 0.86) 112px, rgba(0, 0, 0, 0.98) 152px, rgba(0, 0, 0, 1) 182px, rgba(0, 0, 0, 1) calc(100% - 8px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
 }
 
 .hero-stage__badge,
@@ -4091,8 +4094,9 @@ button {
     }
 
     .hero-header {
+        inset: 16px 12px auto;
         gap: 12px;
-        margin-bottom: 14px;
+        margin-bottom: 0;
         overflow: visible;
     }
 
@@ -4208,7 +4212,7 @@ button {
     }
 
     .hero-copy {
-        top: 164px;
+        top: 176px;
         left: 22px;
         width: min(430px, calc(100% - 36px));
         padding: 0;
@@ -4265,6 +4269,10 @@ button {
 
     .hero-stage__picture img {
         object-position: center 18%;
+    }
+
+    .hero-stage__picture {
+        inset: 0;
     }
 
     .panel-scene__media,
@@ -4601,6 +4609,7 @@ button {
     }
 
     .hero-header {
+        inset: 12px 14px auto;
         gap: 10px;
         padding-inline: 0;
     }
@@ -4670,11 +4679,11 @@ button {
     .hero-stage {
         min-height: 540px;
         aspect-ratio: 4 / 3;
-        margin: 12px 0 18px;
+        margin: 0 0 18px;
     }
 
     .hero-copy {
-        top: 112px;
+        top: 124px;
         left: 20px;
         width: min(500px, calc(100% - 40px));
         gap: 18px;
@@ -4985,8 +4994,9 @@ button {
     }
 
     .hero-header {
+        inset: 8px 12px auto;
         gap: 6px;
-        margin-bottom: 6px;
+        margin-bottom: 0;
     }
 
     .hero-brand__link {
@@ -5061,8 +5071,8 @@ button {
     }
 
     .hero-scene {
-        margin-top: -110px;
-        padding-top: 112px;
+        margin-top: -12px;
+        padding-top: 0;
         margin-left: -12px;
         margin-right: -12px;
         border-radius: 0;
@@ -5093,7 +5103,7 @@ button {
         position: relative;
         min-height: 348px;
         aspect-ratio: auto;
-        margin: -104px 0 10px;
+        margin: 0 0 10px;
         border-radius: 0;
         background: linear-gradient(180deg, #f8f6f1 0%, #f2eee8 42%, rgba(242, 238, 232, 0.38) 76%, rgba(242, 238, 232, 0) 100%);
     }
@@ -5118,6 +5128,10 @@ button {
         animation: none;
         -webkit-mask-image: none;
         mask-image: none;
+    }
+
+    .hero-stage__picture {
+        inset: 0;
     }
 
     .statement-scene__lead {
@@ -5489,7 +5503,7 @@ button {
     }
 
     .hero-copy {
-        top: 94px;
+        top: 104px;
         left: 18px;
         width: auto;
         max-width: calc(100% - 36px);
