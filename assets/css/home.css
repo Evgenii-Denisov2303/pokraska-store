@@ -2075,7 +2075,7 @@ button {
 
 .panel-scene__copy-block {
     display: grid;
-    gap: 20px;
+    gap: 18px;
     max-width: none;
     padding: 0 0 0 2px;
     border: 0;
@@ -2179,10 +2179,10 @@ button {
 
 .panel-scene p {
     margin: 0;
-    max-width: 42ch;
-    color: rgba(49, 71, 95, 0.9);
-    font-size: 1.28rem;
-    line-height: 1.72;
+    max-width: 40ch;
+    color: rgba(35, 56, 79, 0.96);
+    font-size: 1.22rem;
+    line-height: 1.66;
 }
 
 .panel-scene__content > .panel-scene__eyebrow {
@@ -2236,7 +2236,7 @@ button {
 }
 
 .panel-scene__fact {
-    padding: 10px 18px 10px 16px;
+    padding: 12px 18px 12px 16px;
     border-radius: 0;
     background: none;
     border: 0;
@@ -2265,19 +2265,19 @@ button {
 .panel-scene__fact strong {
     display: block;
     margin-bottom: 6px;
-    font-size: 1.22rem;
+    font-size: 1.26rem;
     line-height: 1.12;
     color: rgba(22, 45, 72, 0.96);
 }
 
 .panel-scene__fact span {
-    color: rgba(70, 90, 111, 0.86);
-    font-size: 1rem;
-    line-height: 1.52;
+    color: rgba(57, 77, 99, 0.92);
+    font-size: 1.02rem;
+    line-height: 1.5;
 }
 
 .panel-scene__card--light .panel-scene__fact span {
-    color: rgba(79, 99, 120, 0.82);
+    color: rgba(58, 79, 101, 0.9);
 }
 
 .panel-scene__items {
@@ -2290,8 +2290,8 @@ button {
 
 .panel-scene__item {
     display: grid;
-    gap: 11px;
-    padding: 18px 18px 18px 0;
+    gap: 10px;
+    padding: 20px 18px 18px 0;
     border-radius: 0;
     text-decoration: none;
     transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
@@ -2334,15 +2334,15 @@ button {
 
 .panel-scene__item strong {
     color: inherit;
-    font-size: 1.24rem;
-    line-height: 1.28;
+    font-size: 1.28rem;
+    line-height: 1.24;
     color: rgba(22, 45, 72, 0.96);
 }
 
 .panel-scene__item span {
-    font-size: 1.04rem;
-    line-height: 1.58;
-    color: rgba(71, 92, 114, 0.86);
+    font-size: 1.06rem;
+    line-height: 1.56;
+    color: rgba(58, 78, 99, 0.92);
 }
 
 .panel-scene__card--dark .panel-scene__item span {
@@ -2364,24 +2364,27 @@ button {
 }
 
 .panel-scene__card--light .panel-scene__item span {
-    color: rgba(79, 99, 120, 0.82);
+    color: rgba(58, 79, 101, 0.9);
 }
 
 .panel-scene__card--light .panel-scene__trust {
     max-width: 40ch;
-    border-left-color: rgba(25, 101, 166, 0.34);
+    border-left-color: rgba(25, 101, 166, 0.42);
 }
 
 .panel-scene__trust {
     grid-column: 1 / -1;
     margin-top: 0;
     max-width: 46ch;
-    padding: 16px 0 0 16px;
-    border-left: 2px solid rgba(39, 134, 208, 0.32);
-    font-size: 1.16rem;
-    line-height: 1.64;
+    padding: 18px 18px 18px 18px;
+    border-left: 3px solid rgba(39, 134, 208, 0.42);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.54);
+    box-shadow: 0 10px 20px rgba(16, 38, 61, 0.028);
+    font-size: 1.14rem;
+    line-height: 1.6;
     align-self: end;
-    color: rgba(49, 70, 92, 0.9);
+    color: rgba(35, 56, 79, 0.94);
 }
 
 .panel-scene__trust strong {
@@ -2402,13 +2405,13 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 8px 12px;
-    border-radius: 13px;
-    font-size: 0.84rem;
+    gap: 10px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 15px;
+    font-size: 0.94rem;
     font-weight: 800;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     text-decoration: none;
     transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
 }
@@ -2420,7 +2423,7 @@ button {
 .panel-scene__action--primary {
     background: linear-gradient(180deg, #205f96 0%, #194d79 100%);
     color: #ffffff;
-    box-shadow: 0 12px 22px rgba(20, 54, 86, 0.14);
+    box-shadow: 0 14px 24px rgba(20, 54, 86, 0.16);
 }
 
 .panel-scene__action--ghost {
@@ -2430,9 +2433,9 @@ button {
 }
 
 .panel-scene__action--ghost-light {
-    border-color: rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.46);
-    color: rgba(16, 38, 61, 0.84);
+    border-color: rgba(16, 38, 61, 0.1);
+    background: rgba(255, 255, 255, 0.68);
+    color: rgba(16, 38, 61, 0.9);
 }
 
 .reviews-scene {
@@ -3527,8 +3530,8 @@ button {
 
     .panel-scene p {
         max-width: 34ch;
-        font-size: 1.12rem;
-        line-height: 1.64;
+        font-size: 1.14rem;
+        line-height: 1.6;
     }
 
     .panel-scene__facts {
@@ -3548,8 +3551,8 @@ button {
     }
 
     .panel-scene__fact span {
-        font-size: 0.92rem;
-        line-height: 1.42;
+        font-size: 0.96rem;
+        line-height: 1.44;
     }
 
     .panel-scene__items {
@@ -3701,8 +3704,8 @@ button {
 
     .panel-scene p {
         max-width: 31ch;
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: 1.04rem;
+        line-height: 1.52;
     }
 
     .panel-scene__facts {
@@ -5374,9 +5377,9 @@ button {
         border: 1px solid rgba(24, 77, 122, 0.1);
         border-left: 0;
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.62);
+        background: rgba(255, 255, 255, 0.7);
         font-size: 0.95rem;
-        line-height: 1.54;
+        line-height: 1.5;
     }
 
     .panel-scene__actions {
@@ -5388,8 +5391,8 @@ button {
     .panel-scene__action {
         width: 100%;
         justify-content: center;
-        min-height: 48px;
-        font-size: 0.88rem;
+        min-height: 50px;
+        font-size: 0.92rem;
     }
 
     .hero-brand__link {
