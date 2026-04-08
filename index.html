@@ -72,6 +72,10 @@
                         </div>
                     </a>
                 </div>
+                <button class="hero-menu-toggle" type="button" aria-expanded="false" aria-controls="hero-mobile-nav" aria-label="Открыть меню">
+                    <i class="fas fa-bars" aria-hidden="true"></i>
+                    <span>Меню</span>
+                </button>
                 <div class="hero-header-stack" aria-label="Контакты компании">
                     <a class="hero-header-link hero-header-link--primary" href="tel:+79376154629">
                         <i class="fas fa-phone" aria-hidden="true"></i>
@@ -94,7 +98,7 @@
                 </div>
             </div>
 
-            <nav class="hero-scene__nav" aria-label="Основная навигация">
+            <nav class="hero-scene__nav" id="hero-mobile-nav" aria-label="Основная навигация">
                 <a class="hero-nav__link hero-nav__link--active" href="#top" aria-current="page">Главная</a>
                 <a class="hero-nav__link" href="pages/services.html">Каталог</a>
                 <a class="hero-nav__link" href="pages/powder-coating.html">Порошковая покраска</a>
@@ -331,7 +335,7 @@
 
             <div class="route-scene__facts">
                 <div class="route-scene__fact">
-                    <strong>1 выезд на объект</strong>
+                    <strong>Выезд на объект</strong>
                     <span>делаем замер и оцениваем условия монтажа</span>
                 </div>
                 <div class="route-scene__fact">
@@ -375,16 +379,6 @@
                 </article>
             </div>
 
-            <div class="text-center btn-group route-scene__actions">
-                <a href="pages/services.html" class="panel-scene__action panel-scene__action--primary">
-                    <i class="fas fa-th-large" aria-hidden="true"></i>
-                    Каталог и услуги
-                </a>
-                <a href="pages/contacts.html" class="panel-scene__action panel-scene__action--ghost panel-scene__action--ghost-light">
-                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                    Как добраться
-                </a>
-            </div>
         </section>
 
         <section class="scene reviews-scene scene-reveal" aria-label="Отзывы клиентов">
@@ -463,9 +457,6 @@
                             <span><i class="fas fa-check-circle" aria-hidden="true"></i> Раздвижные решётки</span>
                             <span><i class="fas fa-check-circle" aria-hidden="true"></i> Пескоструй и порошковая покраска</span>
                         </div>
-                    </div>
-
-                    <div class="home-tail__request-side">
                         <div class="home-tail__contact">
                             <span class="home-tail__contact-eyebrow">Быстрый контакт</span>
                             <p>Если удобнее, свяжитесь с нами напрямую по телефону или в мессенджере.</p>
@@ -488,7 +479,9 @@
                                 </a>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="home-tail__request-side">
                         <div class="home-tail__form-card">
                             <span class="home-tail__form-eyebrow">Быстрый расчёт</span>
                             <h4>Оставить заявку</h4>

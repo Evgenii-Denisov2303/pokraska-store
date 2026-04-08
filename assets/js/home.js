@@ -1,8 +1,60 @@
 (function() {
+    const HERO_MENU_BREAKPOINT = 1080;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
+    const heroHeader = document.querySelector('.hero-header');
+    const heroMenuToggle = document.querySelector('.hero-menu-toggle');
+    const heroNav = document.querySelector('.hero-scene__nav');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
+
+    if (heroHeader && heroMenuToggle && heroNav) {
+        const closeHeroMenu = () => {
+            heroHeader.classList.remove('is-menu-open');
+            heroMenuToggle.setAttribute('aria-expanded', 'false');
+        };
+
+        const openHeroMenu = () => {
+            heroHeader.classList.add('is-menu-open');
+            heroMenuToggle.setAttribute('aria-expanded', 'true');
+        };
+
+        heroMenuToggle.addEventListener('click', () => {
+            if (heroHeader.classList.contains('is-menu-open')) {
+                closeHeroMenu();
+                return;
+            }
+
+            openHeroMenu();
+        });
+
+        heroNav.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= HERO_MENU_BREAKPOINT) {
+                    closeHeroMenu();
+                }
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (window.innerWidth > HERO_MENU_BREAKPOINT) return;
+            if (!heroHeader.classList.contains('is-menu-open')) return;
+            if (heroHeader.contains(event.target)) return;
+            closeHeroMenu();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            closeHeroMenu();
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > HERO_MENU_BREAKPOINT) {
+                closeHeroMenu();
+            }
+        });
+    }
+
     if (scenes.length) {
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
