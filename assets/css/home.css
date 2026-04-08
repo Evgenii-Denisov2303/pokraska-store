@@ -3274,10 +3274,10 @@ button {
 
 @keyframes stageDrift {
     0%, 100% {
-        transform: scale(1.03) translateX(0);
+        transform: scale(1.005) translateX(0);
     }
     50% {
-        transform: scale(1.06) translateX(-1.2%);
+        transform: scale(1.018) translateX(0);
     }
 }
 
@@ -4780,9 +4780,91 @@ button {
 }
 
 @media (max-width: 640px) {
+    .hero-scene__topbar {
+        padding: 10px 14px 0;
+        gap: 10px;
+    }
+
+    .hero-header {
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .hero-brand__link {
+        gap: 7px;
+    }
+
+    .hero-brand__logo {
+        height: 48px;
+        max-width: 164px;
+    }
+
+    .hero-brand__eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.11em;
+    }
+
+    .hero-brand__name {
+        font-size: 1.48rem;
+    }
+
+    .hero-header-stack {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px 8px;
+        align-items: stretch;
+    }
+
+    .hero-header-link,
+    .hero-header-address {
+        gap: 7px;
+    }
+
+    .hero-header-link--primary {
+        grid-column: 1 / -1;
+    }
+
+    .hero-header-link--secondary,
+    .hero-header-address {
+        min-height: 38px;
+        padding: 8px 10px;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.26);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 10px 18px rgba(16, 38, 61, 0.04);
+        color: rgba(16, 38, 61, 0.64);
+    }
+
+    .hero-header-link--secondary {
+        opacity: 0.78;
+    }
+
+    .hero-header-link--secondary .hero-header-main {
+        font-size: 0.79rem;
+        line-height: 1.08;
+    }
+
+    .hero-header-main {
+        font-size: 0.84rem;
+        line-height: 1.05;
+    }
+
+    .hero-header-sub,
+    .hero-header-address {
+        font-size: 0.78rem;
+        line-height: 1.18;
+    }
+
+    .hero-header-address span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .hero-scene {
-        margin-top: -118px;
-        padding-top: 118px;
+        margin-top: -110px;
+        padding-top: 112px;
         margin-left: -12px;
         margin-right: -12px;
         border-radius: 0;
@@ -4811,9 +4893,9 @@ button {
 
     .hero-stage {
         position: relative;
-        min-height: 404px;
+        min-height: 348px;
         aspect-ratio: auto;
-        margin: -126px 0 10px;
+        margin: -112px 0 10px;
         border-radius: 0;
         background: linear-gradient(180deg, #deecf8 0%, #e5f1f9 42%, rgba(229, 241, 249, 0.36) 76%, rgba(229, 241, 249, 0) 100%);
     }
@@ -5200,7 +5282,7 @@ button {
     }
 
     .hero-copy {
-        top: 118px;
+        top: 102px;
         left: 18px;
         width: auto;
         max-width: calc(100% - 36px);
@@ -5218,15 +5300,22 @@ button {
 
     .hero-copy__eyebrow {
         gap: 9px;
+        min-height: 34px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(10, 24, 39, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(10px);
         font-size: 0.72rem;
-        letter-spacing: 0.13em;
-        color: rgba(255, 255, 255, 0.9);
-        text-shadow: 0 10px 20px rgba(8, 20, 32, 0.2);
+        letter-spacing: 0.11em;
+        color: rgba(255, 255, 255, 0.96);
+        text-shadow: 0 10px 20px rgba(8, 20, 32, 0.34);
+        box-shadow: 0 14px 24px rgba(8, 20, 32, 0.08);
     }
 
     .hero-copy__eyebrow::before {
-        width: 18px;
-        background: rgba(255, 255, 255, 0.56);
+        width: 14px;
+        background: rgba(255, 255, 255, 0.78);
     }
 
     .statement-scene {
