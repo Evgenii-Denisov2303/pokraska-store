@@ -1010,7 +1010,7 @@ const server = http.createServer(async (request, response) => {
 loadSessions().catch(() => {}).then(() => {
     server.listen(PORT, HOST, () => {
         const displayHost = HOST === '0.0.0.0' ? 'localhost' : HOST;
-        console.log(`POKRASKA.STORE admin server is running on http://${displayHost}:${PORT}`);
+        console.log(`KOMFORTPLUS116.RU admin server is running on http://${displayHost}:${PORT}`);
         console.log(`Open the site directly at http://${displayHost}:${PORT}/ and use the on-page editor button.`);
         console.log(`Optional fallback launcher: http://${displayHost}:${PORT}/admin/`);
         console.log(`Auth mode: ${AUTH_ENABLED ? 'enabled' : 'disabled'}`);

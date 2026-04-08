@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pokraska.store/sitemap.xml
+Sitemap: https://komfortplus116.ru/sitemap.xml
 
 # Боты Яндекса
 User-agent: Yandex
