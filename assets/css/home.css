@@ -828,7 +828,7 @@ button {
     border: 0;
     background: linear-gradient(180deg, #f8f6f1 0%, #f1efe8 42%, #ece9e1 100%);
     box-shadow: 0 34px 78px -34px rgba(16, 38, 61, 0.24);
-    margin: -344px 0 0;
+    margin: -48px 0 0;
 }
 
 .hero-stage::before {
