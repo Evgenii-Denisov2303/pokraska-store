@@ -4439,8 +4439,9 @@ button {
 
 @media (max-width: 1100px) and (pointer: coarse) {
     .apple-shell {
-        max-width: 760px;
-        margin: 0 auto;
+        max-width: none;
+        width: 100%;
+        margin: 0;
         padding: 14px 12px 78px;
     }
 
@@ -4710,7 +4711,7 @@ button {
     .route-scene,
     .reviews-scene,
     .home-tail-scene {
-        width: min(100%, 760px);
+        width: 100%;
         margin-top: 56px;
     }
 
