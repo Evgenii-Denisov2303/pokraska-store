@@ -3905,15 +3905,24 @@ button {
     .statement-scene h2 {
         font-size: clamp(3.4rem, 6vw, 5.4rem);
         width: fit-content;
-        text-align: center;
+        max-width: none;
+        margin-inline: auto;
+        line-height: 0.92;
+        text-align: left;
+    }
+
+    .statement-scene h2 span {
+        text-wrap: nowrap;
     }
 
     .statement-scene h2 span:nth-child(2) {
-        margin-left: 0;
+        margin-top: 4px;
+        margin-left: clamp(48px, 7vw, 104px);
     }
 
     .statement-scene h2 span:nth-child(3) {
-        margin-left: 0;
+        margin-top: 0;
+        margin-left: clamp(128px, 14vw, 214px);
     }
 
 }
@@ -4314,8 +4323,11 @@ button {
 
     .statement-scene h2 {
         font-size: clamp(2.5rem, 10vw, 4rem);
+        width: fit-content;
         max-width: none;
-        text-align: center;
+        margin-inline: auto;
+        line-height: 0.94;
+        text-align: left;
     }
 
     .statement-scene__inner {
@@ -4323,12 +4335,17 @@ button {
         padding: 48px 22px 42px;
     }
 
+    .statement-scene h2 span {
+        text-wrap: nowrap;
+    }
+
     .statement-scene h2 span:nth-child(2) {
-        margin-left: 0;
+        margin-top: 4px;
+        margin-left: clamp(30px, 6vw, 62px);
     }
 
     .statement-scene h2 span:nth-child(3) {
-        margin-left: 0;
+        margin-left: clamp(86px, 14vw, 144px);
         margin-top: 2px;
     }
 
@@ -4939,6 +4956,8 @@ button {
     .statement-scene__lead {
         display: grid;
         justify-items: center;
+        width: min(100%, 326px);
+        margin-inline: auto;
     }
 
     .route-scene {
@@ -5341,13 +5360,13 @@ button {
     }
 
     .statement-scene h2 {
-        font-size: clamp(2.24rem, 9.4vw, 3.02rem);
-        line-height: 0.96;
+        font-size: clamp(1.72rem, 7vw, 2.34rem);
+        line-height: 0.94;
         width: fit-content;
         max-width: none;
         margin-inline: auto;
         text-align: left;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.024em;
     }
 
     .statement-scene h2 span {
@@ -5360,12 +5379,12 @@ button {
     }
 
     .statement-scene h2 span:nth-child(2) {
-        margin-top: 6px;
-        margin-left: clamp(18px, 7vw, 32px);
+        margin-top: 5px;
+        margin-left: clamp(18px, 7vw, 30px);
     }
 
     .statement-scene h2 span:nth-child(3) {
-        margin-top: 4px;
-        margin-left: clamp(44px, 14vw, 68px);
+        margin-top: 3px;
+        margin-left: clamp(44px, 15vw, 70px);
     }
 }
