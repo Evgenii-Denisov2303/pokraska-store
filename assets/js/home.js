@@ -6,17 +6,26 @@
     const heroHeader = document.querySelector('.hero-header');
     const heroMenuToggle = document.querySelector('.hero-menu-toggle');
     const heroNav = document.querySelector('.hero-scene__nav');
+    const heroMenuIcon = heroMenuToggle ? heroMenuToggle.querySelector('i') : null;
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
 
     if (heroHeader && heroMenuToggle && heroNav) {
         const closeHeroMenu = () => {
             heroHeader.classList.remove('is-menu-open');
             heroMenuToggle.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('menu-open');
+            if (heroMenuIcon) {
+                heroMenuIcon.className = 'fas fa-bars';
+            }
         };
 
         const openHeroMenu = () => {
             heroHeader.classList.add('is-menu-open');
             heroMenuToggle.setAttribute('aria-expanded', 'true');
+            document.body.classList.add('menu-open');
+            if (heroMenuIcon) {
+                heroMenuIcon.className = 'fas fa-times';
+            }
         };
 
         heroMenuToggle.addEventListener('click', () => {
