@@ -40,16 +40,17 @@
     }
 
     async function shouldLoadInlineEditor() {
-        const localHost = ['localhost', '127.0.0.1'].includes(window.location.hostname)
-            || window.location.port === '4173';
+        const requestedEditor = query.get('edit') === '1';
         const session = await readInlineEditorSession();
 
         if (session) {
             window.POKRASKA_INLINE_SESSION = session;
-            return true;
+            if (session.authenticated) {
+                return true;
+            }
         }
 
-        return localHost;
+        return requestedEditor;
     }
 
     async function ensureInlineEditor() {
@@ -141,7 +142,10 @@
 
     function applyTextItem(element, value) {
         if (!element) return;
-        element.textContent = value || '';
+        const nextValue = value || '';
+        if (element.textContent !== nextValue) {
+            element.textContent = nextValue;
+        }
     }
 
     function syncTextCollection(container, itemSelector, items) {
@@ -153,13 +157,44 @@
 
     function renderPhoneLink(anchor, phone) {
         if (!anchor || !phone) return;
-        anchor.setAttribute('href', phone.href || '#');
+        const nextHref = phone.href || '#';
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
         const number = anchor.querySelector('.phone-number');
         const note = anchor.querySelector('.phone-label');
 
-        if (number) number.textContent = phone.label || '';
+        if (number && number.textContent !== (phone.label || '')) {
+            number.textContent = phone.label || '';
+        }
         if (note) {
-            note.textContent = phone.note || '';
+            const nextNote = phone.note || '';
+            if (note.textContent !== nextNote) {
+                note.textContent = nextNote;
+            }
+            note.hidden = !phone.note;
+        }
+    }
+
+    function renderHeroPhoneLink(anchor, phone) {
+        if (!anchor || !phone) return;
+        const nextHref = phone.href || '#';
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
+
+        const number = anchor.querySelector('.hero-header-main');
+        const note = anchor.querySelector('.hero-header-sub');
+
+        if (number && number.textContent !== (phone.label || '')) {
+            number.textContent = phone.label || '';
+        }
+
+        if (note) {
+            const nextNote = phone.note || '';
+            if (note.textContent !== nextNote) {
+                note.textContent = nextNote;
+            }
             note.hidden = !phone.note;
         }
     }
@@ -167,17 +202,32 @@
     function updateAnchorWithIcon(anchor, item) {
         if (!anchor || !item) return;
         const icon = anchor.querySelector('i');
-        anchor.setAttribute('href', item.href || '#');
+        const nextHref = item.href || '#';
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
 
         if (icon) {
+            const currentLabel = anchor.textContent.replace(/\s+/g, ' ').trim();
+            const nextLabel = item.label || '';
+            const iconClass = item.icon || icon.className;
+            const needsRebuild = currentLabel !== nextLabel || icon.className !== iconClass;
+
+            if (!needsRebuild) {
+                return;
+            }
+
             if (item.icon) {
                 icon.className = item.icon;
             }
             anchor.textContent = '';
             anchor.appendChild(icon);
-            anchor.append(` ${item.label || ''}`);
+            anchor.append(` ${nextLabel}`);
         } else {
-            anchor.textContent = item.label || '';
+            const nextLabel = item.label || '';
+            if (anchor.textContent !== nextLabel) {
+                anchor.textContent = nextLabel;
+            }
         }
     }
 
@@ -210,18 +260,29 @@
 
     function applyHeader(site) {
         document.querySelectorAll('.logo-link').forEach((link) => {
-            link.setAttribute('href', site.navigation?.[0]?.href || '/index.html');
+            const nextHref = site.navigation?.[0]?.href || '/index.html';
+            if (link.getAttribute('href') !== nextHref) {
+                link.setAttribute('href', nextHref);
+            }
         });
 
         document.querySelectorAll('.logo-tagline').forEach((node) => {
-            node.textContent = site.brand?.tagline || '';
+            const nextTagline = site.brand?.tagline || '';
+            if (node.textContent !== nextTagline) {
+                node.textContent = nextTagline;
+            }
         });
 
         document.querySelectorAll('.logo-image').forEach((image) => {
             if (site.brand?.logo?.src) {
-                image.src = site.brand.logo.src;
+                if (image.getAttribute('src') !== site.brand.logo.src) {
+                    image.src = site.brand.logo.src;
+                }
             }
-            image.alt = site.brand?.logo?.alt || site.brand?.logoAlt || image.alt;
+            const nextAlt = site.brand?.logo?.alt || site.brand?.logoAlt || image.alt;
+            if (image.alt !== nextAlt) {
+                image.alt = nextAlt;
+            }
         });
 
         const headerPhoneBlocks = document.querySelectorAll('.header-contact-stack .contact-phone');
@@ -229,30 +290,29 @@
         const secondaryPhone = site.contact?.secondaryPhone;
 
         if (headerPhoneBlocks[0] && primaryPhone) {
-            headerPhoneBlocks[0].setAttribute('href', primaryPhone.href || '#');
-            const number = headerPhoneBlocks[0].querySelector('.phone-number');
-            const note = headerPhoneBlocks[0].querySelector('.phone-label');
-            if (number) number.textContent = primaryPhone.label || '';
-            if (note) note.textContent = primaryPhone.note || '';
+            renderPhoneLink(headerPhoneBlocks[0], primaryPhone);
         }
 
         if (headerPhoneBlocks[1] && secondaryPhone) {
-            headerPhoneBlocks[1].setAttribute('href', secondaryPhone.href || '#');
-            const number = headerPhoneBlocks[1].querySelector('.phone-number');
-            const note = headerPhoneBlocks[1].querySelector('.phone-label');
-            if (number) number.textContent = secondaryPhone.label || '';
-            if (note) note.textContent = secondaryPhone.note || '';
+            renderPhoneLink(headerPhoneBlocks[1], secondaryPhone);
         }
 
         const addressNode = document.querySelector('.header-contact-stack .contact-address span');
         if (addressNode) {
-            addressNode.textContent = site.contact?.address || '';
+            const nextAddress = site.contact?.address || '';
+            if (addressNode.textContent !== nextAddress) {
+                addressNode.textContent = nextAddress;
+            }
         }
 
         const currentPath = normalizePath(window.location.pathname);
         document.querySelectorAll('.nav-list').forEach((navList) => {
             syncNavigationList(navList, site.navigation || [], currentPath);
         });
+
+        // Десктопная hero-шапка теперь является статичным шаблоном и не должна
+        // пересобираться после загрузки. Иначе появляются заметные рывки:
+        // перезагрузка логотипа, переустановка телефонов и вставка иконок в меню.
     }
 
     function applyFooter(site) {

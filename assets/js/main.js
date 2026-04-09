@@ -16,15 +16,31 @@ document.addEventListener('DOMContentLoaded', function() {
     function setHeaderHeight() {
         if (!headerTop && !header) return;
         const isMobile = isCompactViewport();
-        const heightTarget = isMobile ? (header || headerTop) : (headerTop || header);
+        const desktopHeroHeader = header ? header.querySelector('.desktop-hero-header') : null;
+        const desktopHeaderTarget = desktopHeroHeader && header?.classList.contains('header--desktop-hero')
+            ? desktopHeroHeader
+            : (headerTop || header);
+        const heightTarget = isMobile ? (header || headerTop) : desktopHeaderTarget;
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
         if (headerTop) {
-            document.documentElement.style.setProperty('--header-top-height', `${headerTop.offsetHeight}px`);
+            document.documentElement.style.setProperty('--header-top-height', `${heightTarget.offsetHeight}px`);
         }
     }
 
     setHeaderHeight();
     window.addEventListener('resize', setHeaderHeight);
+
+    if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(setHeaderHeight);
+            });
+        }).catch(() => {});
+    }
+
+    window.addEventListener('load', () => {
+        requestAnimationFrame(setHeaderHeight);
+    }, { once: true });
 
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
@@ -168,6 +184,223 @@ document.addEventListener('DOMContentLoaded', function() {
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
     }
+
+    // 3.1. Умный премиальный футер для внутренних страниц
+    function renderPremiumFooter() {
+        const footer = document.querySelector('footer.footer');
+        if (!footer || footer.classList.contains('footer--premium')) return;
+
+        const pathname = (window.location.pathname || '').toLowerCase();
+        const fileName = pathname.split('/').pop() || 'index.html';
+        if (fileName === 'index.html') return;
+
+        const isInnerPage = pathname.includes('/pages/');
+        const homeHref = isInnerPage ? '../index.html' : 'index.html';
+        const policyHref = isInnerPage ? '../politika.html' : 'politika.html';
+        const assetsPrefix = isInnerPage ? '../assets/' : 'assets/';
+        const pageHref = (page) => (isInnerPage ? page : `pages/${page}`);
+
+        function getFooterContext() {
+            const defaultContext = {
+                label: 'Полезное',
+                items: [
+                    { href: pageHref('services.html'), label: 'Каталог ворот и заборов' },
+                    { href: pageHref('powder-coating.html'), label: 'Порошковая покраска' },
+                    { href: pageHref('sandblasting.html'), label: 'Пескоструйная обработка' },
+                    { href: pageHref('prices.html'), label: 'Цены и расчёт' },
+                    { href: pageHref('contacts.html'), label: 'Контакты' }
+                ]
+            };
+
+            if (fileName === 'services.html') {
+                return {
+                    label: 'Каталог и услуги',
+                    items: [
+                        { href: '#catalog-panel-sliding', label: 'Откатные ворота' },
+                        { href: '#catalog-panel-swing', label: 'Распашные ворота' },
+                        { href: '#catalog-panel-fence-profnastil', label: 'Заборы' },
+                        { href: '#catalog-panel-automation-sliding', label: 'Автоматика' },
+                        { href: homeHref + '#request-form', label: 'Оставить заявку' }
+                    ]
+                };
+            }
+
+            if (fileName === 'powder-coating.html') {
+                return {
+                    label: 'Разделы покраски',
+                    items: [
+                        { href: '#wheels', label: 'Штампованные диски' },
+                        { href: '#metal', label: 'Металлоконструкции' },
+                        { href: '#equipment', label: 'Крупногабаритные изделия' },
+                        { href: '#interior', label: 'Интерьер и декор' },
+                        { href: homeHref + '#request-form', label: 'Получить расчёт' }
+                    ]
+                };
+            }
+
+            if (fileName === 'sandblasting.html') {
+                return {
+                    label: 'Разделы пескоструя',
+                    items: [
+                        { href: '#metal', label: 'Металлоконструкции' },
+                        { href: '#rust', label: 'Удаление ржавчины' },
+                        { href: '#prep', label: 'Подготовка под покраску' },
+                        { href: '#decor', label: 'Матирование стекла' },
+                        { href: homeHref + '#request-form', label: 'Оставить заявку' }
+                    ]
+                };
+            }
+
+            if (fileName === 'prices.html') {
+                return {
+                    label: 'Расчёт и стоимость',
+                    items: [
+                        { href: '#prices-faq-title', label: 'Частые вопросы о цене' },
+                        { href: homeHref + '#request-form', label: 'Получить расчёт' },
+                        { href: pageHref('services.html'), label: 'Каталог ворот и заборов' },
+                        { href: pageHref('payment-documents.html'), label: 'Оплата и документы' },
+                        { href: pageHref('contacts.html'), label: 'Консультация' }
+                    ]
+                };
+            }
+
+            if (fileName === 'gallery.html') {
+                return {
+                    label: 'Что посмотреть',
+                    items: [
+                        { href: pageHref('services.html'), label: 'Каталог ворот и заборов' },
+                        { href: pageHref('powder-coating.html'), label: 'Порошковая покраска' },
+                        { href: pageHref('sandblasting.html'), label: 'Пескоструйная обработка' },
+                        { href: pageHref('prices.html'), label: 'Цены и расчёт' },
+                        { href: homeHref + '#request-form', label: 'Оставить заявку' }
+                    ]
+                };
+            }
+
+            if (fileName === 'contacts.html') {
+                return {
+                    label: 'Быстрые действия',
+                    items: [
+                        { href: 'tel:+79376154629', label: 'Позвонить менеджеру' },
+                        { href: 'https://t.me/+79625542260', label: 'Написать в Telegram', external: true },
+                        { href: '#contact-location-title', label: 'Как нас найти' },
+                        { href: '#contact-form', label: 'Оставить заявку' },
+                        { href: pageHref('services.html'), label: 'Каталог ворот и заборов' }
+                    ]
+                };
+            }
+
+            if (fileName === 'payment-documents.html') {
+                return {
+                    label: 'Документы и оплата',
+                    items: [
+                        { href: '#payment-benefits-title', label: 'Как оформляем заказ' },
+                        { href: '#payment-flow-title', label: 'Этапы и закрывающие документы' },
+                        { href: policyHref, label: 'Политика конфиденциальности' },
+                        { href: pageHref('prices.html'), label: 'Цены и расчёт' },
+                        { href: pageHref('contacts.html'), label: 'Контакты' }
+                    ]
+                };
+            }
+
+            if (fileName === 'politika.html') {
+                return {
+                    label: 'Полезное',
+                    items: [
+                        { href: pageHref('payment-documents.html'), label: 'Оплата и документы' },
+                        { href: pageHref('contacts.html'), label: 'Контакты' },
+                        { href: pageHref('services.html'), label: 'Каталог ворот и заборов' },
+                        { href: homeHref + '#request-form', label: 'Оставить заявку' },
+                        { href: homeHref, label: 'На главную' }
+                    ]
+                };
+            }
+
+            if (fileName.startsWith('automation-')) {
+                return {
+                    label: 'Автоматика',
+                    items: [
+                        { href: pageHref('automation-swing.html'), label: 'Приводы и комплекты' },
+                        { href: pageHref('automation-sliding-components.html'), label: 'Комплектующие' },
+                        { href: pageHref('services.html'), label: 'Каталог ворот и заборов' },
+                        { href: pageHref('prices.html'), label: 'Цены и расчёт' },
+                        { href: homeHref + '#request-form', label: 'Получить расчёт' }
+                    ]
+                };
+            }
+
+            return defaultContext;
+        }
+
+        const context = getFooterContext();
+        const contextItems = context.items.map((item) => {
+            const target = item.external ? ' target="_blank" rel="noopener noreferrer"' : '';
+            return `<li><a href="${item.href}"${target}>${item.label}</a></li>`;
+        }).join('');
+
+        const currentYear = new Date().getFullYear();
+        footer.classList.add('footer--premium');
+        footer.innerHTML = `
+            <div class="container">
+                <div class="footer-premium__layout">
+                    <div class="footer-premium__primary">
+                        <a class="footer-premium__brand" href="#top" aria-label="Наверх">
+                            <span class="footer-premium__mark logo-main logo-main--image" aria-hidden="true">
+                                <img class="footer-premium__logo logo-image" src="${assetsPrefix}images/logo.png" alt="">
+                                <span class="logo-wave footer-premium__wave" aria-hidden="true"></span>
+                            </span>
+                        </a>
+
+                        <div class="footer-premium__socials" aria-label="Быстрые контакты">
+                            <a class="footer-premium__social" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            </a>
+                            <a class="footer-premium__social" href="https://max.ru" target="_blank" rel="noopener noreferrer" aria-label="Max">
+                                <i class="fas fa-comment-dots" aria-hidden="true"></i>
+                            </a>
+                            <a class="footer-premium__social" href="${pageHref('contacts.html')}" aria-label="Контакты и адрес">
+                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-premium__column footer-premium__column--company">
+                        <span class="footer-premium__label">Компания</span>
+                        <p class="footer-premium__company">ООО «Комфорт Плюс»</p>
+                        <p class="footer-premium__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
+                        <p class="footer-premium__legal-text">Более 10 лет опыта в изготовлении и монтаже конструкций для частных и коммерческих объектов.</p>
+                    </div>
+
+                    <div class="footer-premium__column footer-premium__column--context">
+                        <span class="footer-premium__label">${context.label}</span>
+                        <ul class="footer-premium__list">
+                            ${contextItems}
+                        </ul>
+                    </div>
+
+                    <div class="footer-premium__column footer-premium__column--contacts">
+                        <span class="footer-premium__label">Контакты</span>
+                        <ul class="footer-premium__list footer-premium__list--contacts">
+                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Казань, Старое Победилово, ул. Садовая, 72</span></li>
+                            <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79625542260">+7 (962) 554-22-60</a></li>
+                            <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79376154629">+7 (937) 615-46-29</a></li>
+                            <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></li>
+                            <li><i class="fas fa-clock" aria-hidden="true"></i><span>Пн-Пт: 8:00-18:00, Сб: 9:00-14:00</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-premium__bottom">
+                    <p>&copy; 2014-${currentYear} KOMFORTPLUS116.RU — Ворота, заборы и порошковая покраска в Казани</p>
+                    <p><a href="${policyHref}">Политика конфиденциальности</a> | Домен: pokraska.store</p>
+                </div>
+            </div>
+        `;
+    }
+
+    renderPremiumFooter();
+
+    // 3.2. Десктопная шапка внутренних страниц теперь статична и не подменяется после загрузки.
 
     // 4. Более живой, но спокойный автослайд направлений на главной
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

@@ -1,7 +1,7 @@
 /* Automation product detail pages */
 .automation-product-page {
     padding: 56px 0 72px;
-    background: #f3f6fb;
+    background: linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
 }
 
 .automation-product-stack {
@@ -14,14 +14,14 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 18px;
-    color: #2d8bd6;
+    color: #b67a32;
     text-decoration: none;
     font-weight: 600;
 }
 
 .automation-product-card {
     background: #ffffff;
-    border: 1px solid #e7eef6;
+    border: 1px solid #e9dfd1;
     border-radius: 20px;
     padding: 24px;
     box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
@@ -43,7 +43,7 @@
     grid-row: 1;
     border-radius: 14px;
     overflow: hidden;
-    border: 1px solid #dce8f4;
+    border: 1px solid #e6d9c9;
     background: #ffffff;
 }
 
@@ -52,7 +52,7 @@
     height: 440px;
     object-fit: contain;
     display: block;
-    background: #f7f9fc;
+    background: linear-gradient(180deg, #fdfaf5, #f6efe4);
 }
 
 .automation-product-thumbs {
@@ -67,10 +67,10 @@
     z-index: 2;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(45, 139, 214, 0.2);
+    border: 1px solid rgba(182, 122, 50, 0.2);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.92);
-    color: #2d8bd6;
+    color: #b67a32;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
     cursor: pointer;
     display: inline-flex;
@@ -99,7 +99,7 @@
 }
 
 .automation-product-thumb {
-    border: 1px solid #dce8f4;
+    border: 1px solid #e6d9c9;
     border-radius: 10px;
     overflow: hidden;
     background: #ffffff;
@@ -117,12 +117,12 @@
 }
 
 .automation-product-thumb.is-active {
-    border-color: #2d8bd6;
-    box-shadow: 0 0 0 2px rgba(45, 139, 214, 0.18);
+    border-color: #b67a32;
+    box-shadow: 0 0 0 2px rgba(182, 122, 50, 0.18);
 }
 
 .automation-product-meta {
-    color: #94a3b8;
+    color: #8f7b66;
     font-size: 0.95rem;
     margin-bottom: 10px;
 }
@@ -150,8 +150,8 @@
 }
 
 .automation-product-specs li {
-    background: #f8fafc;
-    border: 1px solid #e6edf5;
+    background: #fbf8f3;
+    border: 1px solid #e5ddd1;
     border-radius: 10px;
     padding: 10px 12px;
     color: #2c3e50;
@@ -196,7 +196,7 @@
 
 .automation-accessories__item {
     background: #ffffff;
-    border: 1px solid #e6edf5;
+    border: 1px solid #e5ddd1;
     border-radius: 12px;
     padding: 12px;
     display: grid;
@@ -207,7 +207,7 @@
     border-radius: 10px;
     overflow: hidden;
     background: #ffffff;
-    border: 1px solid #edf2f7;
+    border: 1px solid #eee6da;
 }
 
 .automation-accessories__media a {
@@ -298,9 +298,9 @@
 .automation-product-page {
     padding: 72px 0 92px;
     background:
-        radial-gradient(circle at top left, rgba(22, 93, 171, 0.12), transparent 22%),
+        radial-gradient(circle at top left, rgba(154, 108, 31, 0.12), transparent 22%),
         radial-gradient(circle at top right, rgba(194, 128, 56, 0.08), transparent 18%),
-        linear-gradient(180deg, #f4f7fb 0%, #edf2f7 52%, #f8fafc 100%);
+        linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
 }
 
 .automation-product-back {
@@ -329,7 +329,7 @@
 }
 
 .automation-product-main img {
-    background: linear-gradient(180deg, #fbfdff 0%, #f4f8fc 100%);
+    background: linear-gradient(180deg, #fdfaf5 0%, #f6efe4 100%);
 }
 
 .automation-product-thumb {
@@ -338,7 +338,7 @@
 }
 
 .automation-product-thumb.is-active {
-    box-shadow: 0 0 0 2px rgba(29, 111, 178, 0.16), 0 14px 24px rgba(29, 111, 178, 0.08);
+    box-shadow: 0 0 0 2px rgba(154, 108, 31, 0.16), 0 14px 24px rgba(154, 108, 31, 0.08);
 }
 
 .automation-product-meta {
@@ -347,8 +347,8 @@
     width: fit-content;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(29, 111, 178, 0.08);
-    border: 1px solid rgba(29, 111, 178, 0.1);
+    background: rgba(154, 108, 31, 0.08);
+    border: 1px solid rgba(154, 108, 31, 0.1);
     color: #5d7390;
     font-size: 0.82rem;
     font-weight: 800;
@@ -416,3 +416,18 @@
         border-radius: 18px;
     }
 }
+
+/* Unified warm palette overrides */
+.automation-product-page {
+    background: linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
+}
+
+.automation-product-main img {
+    background: linear-gradient(180deg, #fdfaf5, #f6efe4);
+}
+
+.automation-product-meta {
+    color: #8f7b66;
+}
+
+

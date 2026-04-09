@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "KOMFORTPLUS116.RU",
-    "tagline": "Ворота, заборы и покраска в Казани",
+    "tagline": "Ворота, заборы, покраска",
     "logo": {
       "src": "/assets/images/logo.png",
       "alt": "KOMFORTPLUS116.RU — ворота, заборы и порошковая покраска в Казани"
@@ -22,7 +22,7 @@
       "href": "tel:+79625542260",
       "note": ""
     },
-    "address": "Казань, Старое Победилово, ул. Садовая, 72",
+    "address": "Старое Победилово, ул. Садовая, 72",
     "email": "vorota404@mail.ru",
     "hours": "Пн-Пт: 8:00-18:00, Сб: 9:00-14:00",
     "telegram": {
@@ -66,7 +66,7 @@
       "icon": "fas fa-receipt"
     },
     {
-      "label": "Галерея",
+      "label": "Наши работы",
       "href": "/pages/gallery.html",
       "icon": "fas fa-images"
     },
@@ -101,7 +101,7 @@
         "href": "/pages/payment-documents.html"
       },
       {
-        "label": "Галерея",
+        "label": "Наши работы",
         "href": "/pages/gallery.html"
       },
       {

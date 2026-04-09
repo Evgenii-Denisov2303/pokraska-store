@@ -1,7 +1,7 @@
 /* ========== GALLERY STYLES ========== */
 .gallery-page {
     padding: 80px 0 100px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #f8f4ee 0%, #ece4d8 100%);
     min-height: 100vh;
 }
 
@@ -15,7 +15,7 @@
     font-size: 2.8rem;
     margin-bottom: 15px;
     font-weight: 800;
-    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    background: linear-gradient(135deg, #2c3e50 0%,  #c8a15a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -56,15 +56,15 @@
 }
 
 .filter-btn:hover {
-    border-color: #3498db;
-    color: #3498db;
+    border-color:  #c8a15a;
+    color:  #c8a15a;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+    box-shadow: 0 6px 20px rgba(154, 108, 31, 0.12);
 }
 
 .filter-btn.active {
-    background: #3498db;
-    border-color: #3498db;
+    background:  #c8a15a;
+    border-color:  #c8a15a;
     color: white;
 }
 
@@ -83,7 +83,7 @@
 .gallery-empty {
     grid-column: 1 / -1;
     background: #ffffff;
-    border: 1px solid #e7edf5;
+    border: 1px solid #e7ddd1;
     border-radius: 18px;
     padding: 28px;
     text-align: center;
@@ -136,8 +136,8 @@
 }
 
 .gallery-item.highlight {
-    border: 3px solid #3498db;
-    box-shadow: 0 15px 35px rgba(52, 152, 219, 0.2);
+    border: 3px solid  #c8a15a;
+    box-shadow: 0 15px 35px rgba(154, 108, 31, 0.16);
 }
 
 .gallery-image {
@@ -227,7 +227,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #f8fafc;
+    background: #fbf8f3;
     padding: 6px 15px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -255,7 +255,7 @@
 }
 
 .detail {
-    background: #f8fafc;
+    background: #fbf8f3;
     padding: 5px 12px;
     border-radius: 15px;
     font-size: 0.8rem;
@@ -266,8 +266,8 @@
 }
 
 .detail.badge {
-    background: #e8f4fd;
-    color: #3498db;
+    background: #f6ede0;
+    color:  #c8a15a;
     font-weight: 600;
 }
 
@@ -327,7 +327,7 @@
 .color-info {
     padding: 15px;
     text-align: center;
-    background: #f8fafc;
+    background: #fbf8f3;
 }
 
 .color-info h4 {
@@ -347,7 +347,7 @@
 
 /* Счетчик */
 .work-counter {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+    background: linear-gradient(135deg,  #c8a15a,  #9a6c1f);
     color: white;
     padding: 50px;
     border-radius: 20px;
@@ -493,9 +493,9 @@
 .gallery-page {
     padding: 92px 0 110px;
     background:
-        radial-gradient(circle at top left, rgba(22, 93, 171, 0.14), transparent 24%),
+        radial-gradient(circle at top left, rgba(154, 108, 31, 0.14), transparent 24%),
         radial-gradient(circle at top right, rgba(194, 128, 56, 0.08), transparent 18%),
-        linear-gradient(180deg, #f4f7fb 0%, #edf2f7 46%, #f8fafc 100%);
+        linear-gradient(180deg, #f7f4ee 0%, #eee6da 46%, #fbf8f3 100%);
 }
 
 .gallery-header {
@@ -508,9 +508,11 @@
     font-size: clamp(3rem, 5vw, 4.6rem);
     line-height: 0.95;
     letter-spacing: -0.035em;
-    color: #1f3044;
+    color: #2b231c;
     background: none;
+    -webkit-background-clip: initial;
     -webkit-text-fill-color: currentColor;
+    background-clip: initial;
 }
 
 .gallery-header .subtitle {
@@ -535,14 +537,14 @@
 }
 
 .filter-btn:hover {
-    border-color: rgba(29, 111, 178, 0.16);
-    box-shadow: 0 16px 28px rgba(29, 111, 178, 0.09);
+    border-color: rgba(154, 108, 31, 0.16);
+    box-shadow: 0 16px 28px rgba(154, 108, 31, 0.09);
 }
 
 .filter-btn.active {
-    background: linear-gradient(135deg, #1d6fb2, #2c5f91);
+    background: linear-gradient(135deg,  #9a6c1f, #8e5c1a);
     border-color: transparent;
-    box-shadow: 0 18px 30px rgba(29, 111, 178, 0.18);
+    box-shadow: 0 18px 30px rgba(154, 108, 31, 0.18);
 }
 
 .gallery-grid {
@@ -575,7 +577,7 @@
 
 .work-category,
 .detail {
-    background: rgba(241, 247, 253, 0.95);
+    background: rgba(248, 243, 235, 0.95);
     border: 1px solid rgba(20, 56, 89, 0.08);
     color: #587086;
 }
@@ -610,14 +612,14 @@
 }
 
 .color-info {
-    background: rgba(247, 250, 253, 0.96);
+    background: rgba(250, 246, 239, 0.96);
 }
 
 .work-counter {
     border-radius: 30px;
     background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 28%),
-        linear-gradient(135deg, #16293f 0%, #21486e 56%, #2b659b 100%);
+        linear-gradient(135deg, #2b231c 0%, #4a3a2b 56%, #7a5b3d 100%);
     box-shadow: 0 24px 42px rgba(15, 23, 42, 0.16);
 }
 
@@ -640,3 +642,16 @@
         font-size: clamp(2.5rem, 11vw, 3.5rem);
     }
 }
+
+/* Unified warm palette overrides */
+.gallery-header h1 {
+    background: none;
+    color: #2b231c;
+    -webkit-text-fill-color: currentColor;
+}
+
+.filter-btn:hover {
+    box-shadow: 0 6px 20px rgba(154, 108, 31, 0.12);
+}
+
+
