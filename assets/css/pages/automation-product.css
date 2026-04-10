@@ -430,4 +430,130 @@
     color: #8f7b66;
 }
 
+/* Editorial desktop redesign */
+@media (min-width: 1101px) {
+    .automation-product-page {
+        padding: 126px 0 122px;
+    }
+
+    .automation-product-page > .container,
+    .catalog-page > .container {
+        width: min(1500px, calc(100vw - 76px));
+        max-width: none;
+    }
+
+    .catalog-hero {
+        margin-bottom: 24px;
+        padding: 40px 44px 36px;
+        border-radius: 36px;
+        background:
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 28%),
+            linear-gradient(135deg, #272a30 0%, #373739 52%, #53483d 100%);
+        color: #ffffff;
+        box-shadow: 0 28px 54px rgba(20, 28, 39, 0.18);
+    }
+
+    .catalog-hero h1 {
+        margin: 18px 0 16px;
+        font-family: var(--font-display);
+        font-size: clamp(3.1rem, 4.4vw, 4.8rem);
+        line-height: 0.92;
+        letter-spacing: -0.03em;
+        color: #ffffff;
+    }
+
+    .catalog-hero p {
+        max-width: 54ch;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1.06rem;
+        line-height: 1.82;
+    }
+
+    .catalog-breadcrumbs {
+        color: rgba(255, 255, 255, 0.58);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        font-weight: 760;
+    }
+
+    .automation-product-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 46px;
+        padding: 11px 18px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(34, 52, 70, 0.08);
+        box-shadow: 0 14px 22px rgba(20, 28, 39, 0.05);
+    }
+
+    .automation-product-card {
+        grid-template-columns: minmax(480px, 1.02fr) minmax(360px, 0.98fr);
+        align-items: stretch;
+        gap: 34px;
+        padding: 36px;
+        border-radius: 36px;
+    }
+
+    .automation-product-gallery {
+        gap: 16px;
+    }
+
+    .automation-product-main {
+        border-radius: 26px;
+    }
+
+    .automation-product-main img {
+        min-height: 500px;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .automation-product-thumb {
+        border-radius: 16px;
+    }
+
+    .automation-product-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .automation-product-title {
+        margin: 20px 0 14px;
+        font-size: clamp(3rem, 3.8vw, 4.2rem);
+    }
+
+    .automation-product-description {
+        max-width: 46ch;
+        font-size: 1.05rem;
+        line-height: 1.82;
+    }
+
+    .automation-product-specs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .automation-product-specs li {
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        padding: 14px 16px;
+        border-radius: 18px;
+    }
+
+    .automation-product-cta {
+        margin-top: 22px;
+    }
+
+    .automation-product-cta .btn {
+        min-height: 50px;
+        border-radius: 999px;
+        padding-inline: 22px;
+    }
+}
+
 
