@@ -640,3 +640,63 @@
         justify-content: flex-end;
     }
 }
+
+/* ========== DESKTOP FINAL PASS ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    .payment-docs-page {
+        background:
+            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
+            radial-gradient(circle at 90% 6%, rgba(41, 73, 101, 0.06), transparent 18%),
+            linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
+    }
+
+    .payment-docs-page > .container {
+        width: min(1520px, calc(100vw - 72px));
+    }
+
+    .payment-docs-panel,
+    .payment-docs-section,
+    .payment-docs-card,
+    .payment-docs-step {
+        border-color: var(--theme-border);
+        box-shadow: var(--theme-shadow);
+    }
+
+    .payment-docs-hero__content,
+    .payment-docs-cta {
+        background: var(--site-desktop-band);
+    }
+
+    .payment-docs-panel,
+    .payment-docs-card,
+    .payment-docs-step,
+    .payment-docs-section {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 240, 232, 0.96));
+    }
+
+    .payment-docs-panel__icon,
+    .payment-docs-card__icon {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 243, 247, 0.96));
+        color: var(--theme-accent);
+        box-shadow: var(--theme-shadow-soft);
+    }
+
+    .payment-docs-step__number {
+        background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
+    }
+
+    .payment-docs-panel h2,
+    .payment-docs-section__heading h2,
+    .payment-docs-card h3,
+    .payment-docs-step h3 {
+        color: var(--theme-text);
+    }
+
+    .payment-docs-panel p,
+    .payment-docs-panel__list,
+    .payment-docs-card p,
+    .payment-docs-step p,
+    .payment-docs-section__heading p {
+        color: var(--theme-text-muted);
+    }
+}

@@ -86,6 +86,7 @@ html {
     --theme-surface: #fffdfc;
     --theme-surface-soft: #f4ede4;
     --theme-surface-muted: #ece2d5;
+    --theme-surface-strong: #f2e7d8;
     --theme-text: #223344;
     --theme-text-strong: #1f2f3d;
     --theme-text-muted: #6d7c8c;
@@ -97,6 +98,11 @@ html {
     --theme-band-from: #272a30;
     --theme-band-mid: #373739;
     --theme-band-to: #53483d;
+    --theme-border: rgba(34, 52, 70, 0.08);
+    --theme-border-strong: rgba(34, 52, 70, 0.14);
+    --theme-shadow-soft: 0 18px 32px rgba(20, 28, 39, 0.05);
+    --theme-shadow: 0 24px 46px rgba(20, 28, 39, 0.07);
+    --theme-shadow-strong: 0 28px 56px rgba(20, 28, 39, 0.12);
     --premium-ink: #1b1f24;
     --premium-ink-soft: #2f3640;
     --premium-muted: #6b7280;

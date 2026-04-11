@@ -556,4 +556,60 @@
     }
 }
 
+/* ========== DESKTOP FINAL PASS ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    .automation-product-page {
+        background:
+            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
+            radial-gradient(circle at 90% 6%, rgba(41, 73, 101, 0.06), transparent 18%),
+            linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
+    }
+
+    .automation-product-page > .container,
+    .catalog-page > .container {
+        width: min(1540px, calc(100vw - 72px));
+    }
+
+    .catalog-hero {
+        background: var(--site-desktop-band);
+    }
+
+    .automation-product-back,
+    .automation-product-card,
+    .automation-accessories__item,
+    .automation-product-specs li {
+        border-color: var(--theme-border);
+    }
+
+    .automation-product-card,
+    .automation-accessories__item {
+        box-shadow: var(--theme-shadow);
+    }
+
+    .automation-product-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 240, 232, 0.96));
+    }
+
+    .automation-product-main,
+    .automation-product-thumb {
+        border-color: var(--theme-border);
+        box-shadow: var(--theme-shadow-soft);
+    }
+
+    .automation-product-thumb.is-active {
+        box-shadow: 0 0 0 2px rgba(41, 73, 101, 0.16), 0 16px 28px rgba(31, 57, 79, 0.1);
+    }
+
+    .automation-product-meta {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 239, 231, 0.94));
+        border-color: var(--theme-border);
+        color: var(--theme-warm);
+    }
+
+    .automation-product-specs li {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 239, 231, 0.95));
+        color: var(--theme-text);
+    }
+}
+
 
