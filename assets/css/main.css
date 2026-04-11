@@ -6451,6 +6451,7 @@ body#top .contacts-subtitle {
         position: relative;
         isolation: isolate;
         overflow: clip;
+        padding-top: 162px !important;
     }
 
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)::before {
