@@ -6451,7 +6451,7 @@ body#top .contacts-subtitle {
         position: relative;
         isolation: isolate;
         overflow: clip;
-        padding-top: 162px !important;
+        padding-top: 198px !important;
     }
 
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)::before {
@@ -6471,6 +6471,7 @@ body#top .contacts-subtitle {
     body#top .privacy-container {
         position: relative;
         z-index: 1;
+        padding-top: 18px;
     }
 
     body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"]) {
