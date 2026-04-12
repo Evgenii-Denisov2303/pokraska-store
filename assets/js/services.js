@@ -314,11 +314,28 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        const applyMainVisual = (src) => {
+            if (!src) {
+                return;
+            }
+
+            mainLink.style.backgroundImage = `url("${src}")`;
+        };
+
+        getThumbs().forEach((thumb) => {
+            const thumbSrc = thumb.dataset.gallerySrc;
+            if (thumbSrc) {
+                thumb.style.backgroundImage = `url("${thumbSrc}")`;
+            }
+        });
+
         let activeIndex = getThumbs().findIndex((thumb) => thumb.classList.contains('is-active'));
         if (activeIndex < 0) {
             activeIndex = 0;
             getThumbs()[0]?.classList.add('is-active');
         }
+
+        applyMainVisual(mainImage.currentSrc || mainImage.getAttribute('src') || getThumbs()[activeIndex]?.dataset.gallerySrc || '');
 
         if (getThumbs().length === 1) {
             if (prevBtn) {
@@ -354,6 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mainLink.title = title;
             mainImage.src = src;
             mainImage.alt = alt;
+            applyMainVisual(src);
 
             const thumbImage = thumb.querySelector('img');
             const width = thumbImage?.getAttribute('width');

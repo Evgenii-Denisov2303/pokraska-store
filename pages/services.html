@@ -207,15 +207,15 @@
             <div class="catalog-layout" data-catalog-layout data-active-group="gates">
                 <aside class="catalog-sidebar" aria-label="Категории каталога">
                     <div class="catalog-sidebar__hero">
-                        <span class="catalog-page__eyebrow">Каталог решений</span>
+                        <span class="catalog-page__eyebrow">Каталог</span>
                         <div class="catalog-sidebar__hero-main">
-                            <h2>Ворота, заборы, гаражные системы и автоматика под задачу объекта</h2>
-                            <p>Выберите группу и тип изделия. Ниже сразу откроется витрина и следующий шаг для расчёта.</p>
+                            <h2>Ворота, заборы и автоматика</h2>
+                            <p>Выберите раздел и тип изделия — ниже сразу откроется нужная витрина.</p>
                         </div>
                     </div>
 
                     <div class="catalog-sidebar__section">
-                        <span class="catalog-sidebar__label">Группа каталога</span>
+                        <span class="catalog-sidebar__label">Раздел</span>
                         <div class="catalog-group-tabs" role="tablist" aria-label="Группы каталога">
                             <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates">
                                 <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-archway"></i></span>
@@ -237,14 +237,9 @@
                     </div>
 
                     <div class="catalog-sidebar__section catalog-sidebar__section--detail">
-                        <span class="catalog-sidebar__label">Тип изделия</span>
+                        <span class="catalog-sidebar__label">Тип</span>
                         <div class="catalog-group-panels">
                             <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
-                                <div class="catalog-group-panel__intro">
-                                    <span class="catalog-group-panel__eyebrow">Изделия и каркасы</span>
-                                    <h3>Ворота</h3>
-                                    <p>Откатные, распашные, калитки и каркасы под обшивку, автоматику и монтаж.</p>
-                                </div>
                                 <div class="catalog-group-panel__links">
                                     <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
@@ -255,11 +250,6 @@
                             </div>
 
                             <div class="catalog-group-panel" data-catalog-group-panel="fences" hidden>
-                                <div class="catalog-group-panel__intro">
-                                    <span class="catalog-group-panel__eyebrow">Ограждения участка</span>
-                                    <h3>Заборы</h3>
-                                    <p>Профнастил, сайдинг, штакетник и жалюзи для фасада, приватности и ритма участка.</p>
-                                </div>
                                 <div class="catalog-group-panel__links">
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из металлосайдинга</button>
@@ -269,11 +259,6 @@
                             </div>
 
                             <div class="catalog-group-panel" data-catalog-group-panel="garage" hidden>
-                                <div class="catalog-group-panel__intro">
-                                    <span class="catalog-group-panel__eyebrow">Защита и доступ</span>
-                                    <h3>Гараж и защита</h3>
-                                    <p>Секционные, рольворота, рольставни и защитные системы для дома и коммерческих объектов.</p>
-                                </div>
                                 <div class="catalog-group-panel__links">
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
@@ -283,11 +268,6 @@
                             </div>
 
                             <div class="catalog-group-panel" data-catalog-group-panel="automation" hidden>
-                                <div class="catalog-group-panel__intro">
-                                    <span class="catalog-group-panel__eyebrow">Приводы и комплектующие</span>
-                                    <h3>Автоматика</h3>
-                                    <p>Приводы, комплекты и аксессуары под вес створки, размеры ворот и режим работы.</p>
-                                </div>
                                 <div class="catalog-group-panel__links">
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
                                     <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
@@ -305,9 +285,14 @@
                             <h2>Откатные ворота</h2>
                         </div>
                         <div class="catalog-panel__grid catalog-panel__grid--feature">
-                            <div class="catalog-panel__text">
-                                <p>Откатные ворота под индивидуальный проём для частных, коммерческих и промышленных объектов. Полотно движется вдоль линии ограждения, не занимает место перед въездом и при необходимости комплектуется автоматикой.</p>
-                                <p>Каркас, направляющая балка, роликовые опоры, улавливатели и заполнение подбираются под задачу объекта. Основание выполняется на силовой раме из швеллера для стабильной работы и долгого ресурса.</p>
+                            <div class="catalog-panel__text catalog-panel__text--feature-lead">
+                                <span class="catalog-panel__eyebrow">Под частный и коммерческий въезд</span>
+                                <p>Откатные ворота изготавливаются под конкретный проём, двигаются вдоль линии ограждения и не занимают место перед въездом. Решение удобно для дома, склада и коммерческого объекта.</p>
+                                <ul class="catalog-panel__feature-list">
+                                    <li>Металлический каркас под размеры объекта</li>
+                                    <li>Фурнитура, направляющая и улавливатели под нагрузку</li>
+                                    <li>Заполнение и автоматика подбираются по задаче</li>
+                                </ul>
                                 <div class="catalog-panel__badges">
                                     <span>Под размер проема</span>
                                     <span>Автоматика по согласованию</span>
