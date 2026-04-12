@@ -9,6 +9,27 @@
     unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 
+/* ========== FINAL HEADER ACTIVE NAV CLARITY ========== */
+.header.header--desktop-hero .desktop-hero-header .hero-nav__link--active,
+.header.header--desktop-hero .desktop-hero-header .hero-nav__link--active:visited,
+.header-top--compact .nav-list a.active {
+    border-color: rgba(16, 38, 61, 0.96) !important;
+    background: linear-gradient(180deg, rgba(21, 52, 80, 0.98), rgba(15, 39, 63, 0.98)) !important;
+    color: rgba(255, 255, 255, 0.99) !important;
+    text-shadow: none !important;
+    box-shadow:
+        0 14px 26px rgba(16, 38, 61, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+.header.header--desktop-hero .desktop-hero-header .hero-nav__link--active:hover,
+.header.header--desktop-hero .desktop-hero-header .hero-nav__link--active:focus-visible,
+.header-top--compact .nav-list a.active:hover,
+.header-top--compact .nav-list a.active:focus-visible {
+    color: rgba(255, 255, 255, 0.99) !important;
+    transform: none !important;
+}
+
 body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)::before {
     content: none !important;
 }

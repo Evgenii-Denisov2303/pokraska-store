@@ -116,6 +116,148 @@ document.addEventListener('DOMContentLoaded', function() {
     const catalogGroupPanels = document.querySelectorAll('[data-catalog-group-panel]');
     const catalogLayout = document.querySelector('[data-catalog-layout]');
 
+    const flattenCatalogChrome = () => {
+        if (!catalogLayout) {
+            return;
+        }
+
+        Object.assign(catalogLayout.style, {
+            background: 'transparent',
+            border: '0',
+            boxShadow: 'none',
+            outline: '0',
+            padding: '0',
+            gap: '16px'
+        });
+
+        const sidebar = catalogLayout.querySelector('.catalog-sidebar');
+        const content = catalogLayout.querySelector('.catalog-content');
+        let groupTabsRoot = sidebar?.querySelector('.catalog-group-tabs') || catalogLayout.querySelector(':scope > .catalog-group-tabs');
+        let groupPanelsRoot = sidebar?.querySelector('.catalog-group-panels') || catalogLayout.querySelector(':scope > .catalog-group-panels');
+
+        if (sidebar && groupTabsRoot && groupPanelsRoot && !catalogLayout.dataset.catalogNavDetached) {
+            if (content) {
+                catalogLayout.insertBefore(groupTabsRoot, content);
+                catalogLayout.insertBefore(groupPanelsRoot, content);
+            } else {
+                catalogLayout.appendChild(groupTabsRoot);
+                catalogLayout.appendChild(groupPanelsRoot);
+            }
+
+            sidebar.remove();
+            catalogLayout.dataset.catalogNavDetached = 'true';
+        }
+
+        if (groupTabsRoot) {
+            Object.assign(groupTabsRoot.style, {
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+                margin: '0',
+                padding: '0',
+                maxWidth: '980px',
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none'
+            });
+        }
+
+        if (groupPanelsRoot) {
+            Object.assign(groupPanelsRoot.style, {
+                display: 'contents',
+                margin: '0',
+                padding: '0',
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none'
+            });
+        }
+
+        if (sidebar) {
+            Object.assign(sidebar.style, {
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none',
+                padding: '0',
+                backdropFilter: 'none'
+            });
+        }
+
+        if (content) {
+            Object.assign(content.style, {
+                gap: '18px'
+            });
+        }
+
+        catalogLayout.querySelectorAll('.catalog-sidebar__section, .catalog-sidebar__section--detail, .catalog-group-panels, .catalog-group-panel, .catalog-group-panel__links').forEach((element) => {
+            Object.assign(element.style, {
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none',
+                padding: '0',
+                borderRadius: '0',
+                backdropFilter: 'none'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-group-tab').forEach((tab) => {
+            Object.assign(tab.style, {
+                flex: '1 1 176px',
+                minHeight: '52px',
+                background: 'rgba(255, 255, 255, 0.72)',
+                boxShadow: 'none',
+                backdropFilter: 'none'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-group-panel__links, .catalog-group-panel.is-active').forEach((element) => {
+            Object.assign(element.style, {
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none',
+                padding: '0'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-link').forEach((link) => {
+            Object.assign(link.style, {
+                minHeight: '38px',
+                background: 'rgba(255, 255, 255, 0.68)',
+                boxShadow: 'none'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-panel').forEach((panel) => {
+            Object.assign(panel.style, {
+                background: 'transparent',
+                border: '0',
+                boxShadow: 'none',
+                padding: '0',
+                borderRadius: '0',
+                overflow: 'visible'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-panel__header').forEach((headerElement) => {
+            headerElement.style.display = 'none';
+        });
+
+        catalogLayout.querySelectorAll('.catalog-panel__grid--feature .catalog-panel__text').forEach((textBlock) => {
+            Object.assign(textBlock.style, {
+                borderLeft: '0',
+                padding: '0',
+                background: 'transparent',
+                boxShadow: 'none'
+            });
+        });
+
+        catalogLayout.querySelectorAll('.catalog-group-panel__intro, .catalog-sidebar__label, .catalog-breadcrumbs').forEach((element) => {
+            element.style.display = 'none';
+        });
+    };
+
+    flattenCatalogChrome();
+
     if (catalogTabs.length && catalogPanels.length) {
         const lastActiveTabByGroup = new Map();
 
@@ -193,6 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const isActive = groupPanel.dataset.catalogGroupPanel === groupId;
                 groupPanel.classList.toggle('is-active', isActive);
                 groupPanel.hidden = !isActive;
+                groupPanel.style.display = isActive ? 'contents' : 'none';
             });
         };
 
@@ -314,28 +457,45 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const applyMainVisual = (src) => {
+        const preloadImage = (src) => {
             if (!src) {
-                return;
+                return Promise.resolve(null);
             }
 
-            mainLink.style.backgroundImage = `url("${src}")`;
+            return new Promise((resolve) => {
+                const image = new Image();
+                image.decoding = 'async';
+                image.src = src;
+
+                const finish = () => resolve(image);
+
+                if (typeof image.decode === 'function') {
+                    image.decode().then(finish).catch(finish);
+                    return;
+                }
+
+                image.onload = finish;
+                image.onerror = finish;
+            });
         };
 
-        getThumbs().forEach((thumb) => {
-            const thumbSrc = thumb.dataset.gallerySrc;
-            if (thumbSrc) {
-                thumb.style.backgroundImage = `url("${thumbSrc}")`;
+        const sameImageSource = (candidate, current) => {
+            if (!candidate || !current) {
+                return false;
             }
-        });
+
+            try {
+                return new URL(candidate, window.location.href).href === new URL(current, window.location.href).href;
+            } catch (error) {
+                return candidate === current;
+            }
+        };
 
         let activeIndex = getThumbs().findIndex((thumb) => thumb.classList.contains('is-active'));
         if (activeIndex < 0) {
             activeIndex = 0;
             getThumbs()[0]?.classList.add('is-active');
         }
-
-        applyMainVisual(mainImage.currentSrc || mainImage.getAttribute('src') || getThumbs()[activeIndex]?.dataset.gallerySrc || '');
 
         if (getThumbs().length === 1) {
             if (prevBtn) {
@@ -351,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        const syncGallery = (index) => {
+        const syncGallery = async (index) => {
             const thumbs = getThumbs();
             const thumb = thumbs[index];
             if (!thumb) {
@@ -366,20 +526,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            const width = Number(thumb.dataset.galleryWidth || thumb.querySelector('img')?.getAttribute('width') || mainImage.width || 0);
+            const height = Number(thumb.dataset.galleryHeight || thumb.querySelector('img')?.getAttribute('height') || mainImage.height || 0);
+
+            activeIndex = index;
+
+            if (!sameImageSource(src, mainImage.currentSrc || mainImage.getAttribute('src'))) {
+                await preloadImage(src);
+            }
+
             activeIndex = index;
             mainLink.href = src;
             mainLink.title = title;
             mainImage.src = src;
             mainImage.alt = alt;
-            applyMainVisual(src);
-
-            const thumbImage = thumb.querySelector('img');
-            const width = thumbImage?.getAttribute('width');
-            const height = thumbImage?.getAttribute('height');
 
             if (width && height) {
-                mainImage.width = Number(width);
-                mainImage.height = Number(height);
+                mainImage.width = width;
+                mainImage.height = height;
             }
 
             thumbs.forEach((item, itemIndex) => {
@@ -400,14 +564,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const thumbs = getThumbs();
-            syncGallery(thumbs.indexOf(thumb));
+            void syncGallery(thumbs.indexOf(thumb));
         });
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
                 const thumbs = getThumbs();
                 const nextIndex = (activeIndex - 1 + thumbs.length) % thumbs.length;
-                syncGallery(nextIndex);
+                void syncGallery(nextIndex);
             });
         }
 
@@ -415,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
             nextBtn.addEventListener('click', () => {
                 const thumbs = getThumbs();
                 const nextIndex = (activeIndex + 1) % thumbs.length;
-                syncGallery(nextIndex);
+                void syncGallery(nextIndex);
             });
         }
 
