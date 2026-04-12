@@ -3,6 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let visibleCount = pageSize;
     let activeFilter = 'all';
     const hideTimeouts = new WeakMap();
+    const categoryNotes = {
+        sliding: 'Надёжная откатная система для въезда, участка и фасада.',
+        swing: 'Распашные створки под частный дом, двор и въездную группу.',
+        wicket: 'Калитка в едином стиле с воротами и забором.',
+        fence: 'Решение под фасад, улицу и границу участка.',
+        automation: 'Автоматика и комплектующие для уверенной работы ворот.',
+        install: 'Монтаж, каркас и точная геометрия на объекте.',
+        sandblast: 'Подготовка металла перед грунтом и покраской.',
+        powder: 'Цвет, фактура и стойкое покрытие для металла.'
+    };
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
     const closeBtn = document.querySelector('.modal-close');
@@ -60,6 +70,21 @@ document.addEventListener('DOMContentLoaded', function() {
         showMoreBtn.style.display = totalItems > visibleCount ? 'inline-flex' : 'none';
     }
 
+    function syncGalleryCardMeta(item) {
+        if (!item) return;
+        const workInfo = item.querySelector('.work-info');
+        if (!workInfo) return;
+
+        let note = workInfo.querySelector('.work-note');
+        if (!note) {
+            note = document.createElement('p');
+            note.className = 'work-note';
+            workInfo.appendChild(note);
+        }
+
+        note.textContent = categoryNotes[item.getAttribute('data-category')] || 'Реальный объект из практики компании.';
+    }
+
     function applyFilter(filterValue, resetCount) {
         const buttons = getFilterButtons();
         const galleryItems = getGalleryItems();
@@ -85,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         filteredItems.forEach((item, index) => {
+            syncGalleryCardMeta(item);
             if (index < visibleCount) {
                 showItem(item, index);
             } else {
@@ -191,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('pokraska:gallery-updated', function() {
+        getGalleryItems().forEach(syncGalleryCardMeta);
         const buttons = getFilterButtons();
         const availableValues = new Set(buttons.map((button) => button.getAttribute('data-filter')));
         if (!availableValues.has(activeFilter)) {
@@ -200,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     if (getFilterButtons().length && getGalleryItems().length) {
+        getGalleryItems().forEach(syncGalleryCardMeta);
         applyFilter(filterFromUrl || 'all', true);
     }
 

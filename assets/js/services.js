@@ -155,6 +155,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         };
 
+        let panelPulseTimeout = null;
+
+        const pulseCatalogPanel = (panelElement) => {
+            if (!panelElement) {
+                return;
+            }
+
+            panelElement.classList.remove('catalog-panel--pulse');
+            void panelElement.offsetWidth;
+            panelElement.classList.add('catalog-panel--pulse');
+
+            if (panelPulseTimeout) {
+                clearTimeout(panelPulseTimeout);
+            }
+
+            panelPulseTimeout = setTimeout(() => {
+                panelElement.classList.remove('catalog-panel--pulse');
+            }, 900);
+        };
+
         const activateCatalogGroup = (groupId) => {
             if (!catalogGroupTabs.length || !catalogGroupPanels.length) {
                 return;
@@ -208,6 +228,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (targetTab) {
                     activateCatalogTab(targetTab.dataset.catalogTab);
+                    requestAnimationFrame(() => {
+                        const targetPanel = document.getElementById(targetTab.dataset.catalogTab);
+                        if (targetPanel) {
+                            scrollCatalogTarget(targetPanel, true);
+                            pulseCatalogPanel(targetPanel);
+                        }
+                    });
                 } else {
                     activateCatalogGroup(groupId);
                 }
@@ -220,6 +247,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const panelId = tab.dataset.catalogTab;
                 if (panelId) {
                     history.replaceState(null, '', `#${panelId}`);
+                    requestAnimationFrame(() => {
+                        const targetPanel = document.getElementById(panelId);
+                        if (targetPanel) {
+                            scrollCatalogTarget(targetPanel, true);
+                            pulseCatalogPanel(targetPanel);
+                        }
+                    });
                 }
             });
         });

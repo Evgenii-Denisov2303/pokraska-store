@@ -1012,3 +1012,331 @@ table tr:last-child td {
     }
 }
 
+/* ========== PRICES PAGE PRODUCTION REBUILD ========== */
+.price-eyebrow,
+.price-card-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    color: rgba(34, 52, 70, 0.56);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.price-eyebrow::before,
+.price-card-kicker::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(41, 73, 101, 0.92), rgba(41, 73, 101, 0.18));
+}
+
+.price-header {
+    display: grid;
+    justify-items: start;
+    text-align: left;
+    gap: 0;
+    max-width: 1120px;
+    margin: 0 0 42px;
+}
+
+.price-header .subtitle {
+    max-width: 64ch;
+    margin: 0;
+}
+
+.price-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.price-summary__item {
+    display: grid;
+    gap: 10px;
+    padding: 20px 22px 18px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 241, 233, 0.94));
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow-soft);
+}
+
+.price-summary__label {
+    color: rgba(34, 52, 70, 0.5);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.price-summary__item strong {
+    color: var(--theme-text-strong);
+    font-size: 1.06rem;
+    line-height: 1.38;
+}
+
+.price-summary__item p {
+    margin: 0;
+    color: var(--theme-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.58;
+}
+
+.pricing-lead-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.price-factors,
+.calculator-section,
+.guarantee-section,
+.price-cta,
+.prices-page .section[aria-labelledby="prices-faq-title"] {
+    border-radius: 30px;
+}
+
+.price-factors {
+    margin-bottom: 0;
+    padding: 30px;
+}
+
+.price-factors h2,
+.calculator-section h2,
+.guarantee-title,
+.price-cta h3 {
+    margin-top: 0;
+}
+
+.factors-grid {
+    gap: 16px;
+}
+
+.factor-card {
+    padding: 22px;
+    border-radius: 22px;
+}
+
+.calculator-section {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    min-height: 100%;
+    margin-bottom: 0;
+    padding: 30px;
+    text-align: left;
+}
+
+.calculator-section h2 {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.calculator-section p {
+    max-width: none;
+    margin: 0;
+}
+
+.calculator-section .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.calculator-contact {
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.pricing-assurance-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.74fr);
+    gap: 24px;
+    align-items: stretch;
+    margin-top: 24px;
+}
+
+.guarantee-section,
+.price-cta {
+    margin: 0;
+    padding: 30px;
+}
+
+.guarantee-section {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    text-align: left;
+}
+
+.guarantee-text {
+    margin: 0;
+    max-width: 52ch;
+}
+
+.price-cta {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    text-align: left;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 241, 235, 0.95));
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow-soft);
+}
+
+.price-cta h3 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 2.8vw, 2.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: var(--theme-text-strong);
+}
+
+.price-cta p {
+    margin: 0;
+    color: var(--theme-text-muted);
+    line-height: 1.72;
+}
+
+.price-cta__actions {
+    display: grid;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.price-cta__actions .btn,
+.price-cta__actions .btn + .btn {
+    width: 100%;
+    margin-left: 0;
+}
+
+.prices-page .section[aria-labelledby="prices-faq-title"] {
+    margin-top: 24px;
+}
+
+@media (max-width: 1100px) {
+    .price-summary,
+    .pricing-lead-grid,
+    .pricing-assurance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .price-header {
+        max-width: none;
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .desktop-hero-header {
+        display: none;
+    }
+
+    .header.header--desktop-hero .container {
+        width: min(calc(100vw - 28px), 100%);
+    }
+
+    .header-top--compact {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .header-top--compact .header-contact-stack {
+        grid-column: 1 / -1;
+        display: grid;
+        gap: 8px;
+    }
+
+    .header-top--compact .contact-phone,
+    .header-top--compact .contact-address {
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.82);
+    }
+
+    .header-top--compact .nav {
+        grid-column: 1 / -1;
+    }
+
+    .header-top--compact .nav-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .price-header {
+        text-align: left;
+    }
+
+    .price-header h1 {
+        line-height: 1;
+    }
+
+    .price-summary {
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .price-summary__item,
+    .price-factors,
+    .calculator-section,
+    .guarantee-section,
+    .price-cta,
+    .prices-page .section[aria-labelledby="prices-faq-title"] {
+        padding: 22px;
+        border-radius: 24px;
+    }
+
+    .factors-grid {
+        gap: 12px;
+    }
+
+    .factor-card {
+        padding: 18px;
+    }
+
+    .calculator-section h2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 540px) {
+    .header-top--compact .nav-list {
+        grid-template-columns: 1fr;
+    }
+
+    .price-summary__item {
+        gap: 8px;
+    }
+}
+
+@media (min-width: 1101px) {
+    .price-summary,
+    .pricing-lead-grid,
+    .pricing-assurance-grid,
+    .prices-page .section[aria-labelledby="prices-faq-title"] {
+        grid-column: 1 / -1 !important;
+    }
+
+    .pricing-lead-grid > .price-factors,
+    .pricing-lead-grid > .calculator-section,
+    .pricing-assurance-grid > .guarantee-section,
+    .pricing-assurance-grid > .price-cta {
+        grid-column: auto !important;
+        margin-bottom: 0 !important;
+        position: static !important;
+        top: auto !important;
+    }
+}
+

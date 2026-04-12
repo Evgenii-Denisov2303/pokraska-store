@@ -206,79 +206,93 @@
             <h1 class="visually-hidden">Каталог ворот, заборов и автоматики в Казани</h1>
             <div class="catalog-layout" data-catalog-layout data-active-group="gates">
                 <aside class="catalog-sidebar" aria-label="Категории каталога">
-                    <div class="catalog-group-tabs" role="tablist" aria-label="Группы каталога">
-                        <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates">
-                            <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-archway"></i></span>
-                            <span class="catalog-group-tab__title">Ворота</span>
-                        </button>
-                        <button class="catalog-group-tab" type="button" data-catalog-group="fences">
-                            <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-layer-group"></i></span>
-                            <span class="catalog-group-tab__title">Заборы</span>
-                        </button>
-                        <button class="catalog-group-tab" type="button" data-catalog-group="garage">
-                            <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></span>
-                            <span class="catalog-group-tab__title">Гараж и защита</span>
-                        </button>
-                        <button class="catalog-group-tab" type="button" data-catalog-group="automation">
-                            <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-cogs"></i></span>
-                            <span class="catalog-group-tab__title">Автоматика</span>
-                        </button>
+                    <div class="catalog-sidebar__hero">
+                        <span class="catalog-page__eyebrow">Каталог решений</span>
+                        <div class="catalog-sidebar__hero-main">
+                            <h2>Ворота, заборы, гаражные системы и автоматика под задачу объекта</h2>
+                            <p>Выберите группу и тип изделия. Ниже сразу откроется витрина и следующий шаг для расчёта.</p>
+                        </div>
                     </div>
 
-                    <div class="catalog-group-panels">
-                        <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
-                            <div class="catalog-group-panel__intro">
-                                <span class="catalog-group-panel__eyebrow">Изделия и каркасы</span>
-                                <h3>Ворота</h3>
-                                <p>Откатные, распашные, калитки и каркасы под дальнейшую обшивку, автоматику и монтаж.</p>
-                            </div>
-                            <div class="catalog-group-panel__links">
-                                <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing">Распашные ворота</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing-frame">Каркас распашных ворот</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-wicket">Калитки</button>
-                            </div>
+                    <div class="catalog-sidebar__section">
+                        <span class="catalog-sidebar__label">Группа каталога</span>
+                        <div class="catalog-group-tabs" role="tablist" aria-label="Группы каталога">
+                            <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates">
+                                <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-archway"></i></span>
+                                <span class="catalog-group-tab__title">Ворота</span>
+                            </button>
+                            <button class="catalog-group-tab" type="button" data-catalog-group="fences">
+                                <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-layer-group"></i></span>
+                                <span class="catalog-group-tab__title">Заборы</span>
+                            </button>
+                            <button class="catalog-group-tab" type="button" data-catalog-group="garage">
+                                <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></span>
+                                <span class="catalog-group-tab__title">Гараж и защита</span>
+                            </button>
+                            <button class="catalog-group-tab" type="button" data-catalog-group="automation">
+                                <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-cogs"></i></span>
+                                <span class="catalog-group-tab__title">Автоматика</span>
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="catalog-group-panel" data-catalog-group-panel="fences" hidden>
-                            <div class="catalog-group-panel__intro">
-                                <span class="catalog-group-panel__eyebrow">Ограждения участка</span>
-                                <h3>Заборы</h3>
-                                <p>Практичные и декоративные решения для фасадной линии, приватности участка и единого внешнего вида.</p>
+                    <div class="catalog-sidebar__section catalog-sidebar__section--detail">
+                        <span class="catalog-sidebar__label">Тип изделия</span>
+                        <div class="catalog-group-panels">
+                            <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
+                                <div class="catalog-group-panel__intro">
+                                    <span class="catalog-group-panel__eyebrow">Изделия и каркасы</span>
+                                    <h3>Ворота</h3>
+                                    <p>Откатные, распашные, калитки и каркасы под обшивку, автоматику и монтаж.</p>
+                                </div>
+                                <div class="catalog-group-panel__links">
+                                    <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing">Распашные ворота</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing-frame">Каркас распашных ворот</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-wicket">Калитки</button>
+                                </div>
                             </div>
-                            <div class="catalog-group-panel__links">
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из металлосайдинга</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-picket">Заборы из металлоштакетника</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-louver">Заборы из жалюзи</button>
-                            </div>
-                        </div>
 
-                        <div class="catalog-group-panel" data-catalog-group-panel="garage" hidden>
-                            <div class="catalog-group-panel__intro">
-                                <span class="catalog-group-panel__eyebrow">Защита и доступ</span>
-                                <h3>Гараж и защита</h3>
-                                <p>Гаражные системы, рольворота, рольставни и защитные конструкции для частных и коммерческих объектов.</p>
+                            <div class="catalog-group-panel" data-catalog-group-panel="fences" hidden>
+                                <div class="catalog-group-panel__intro">
+                                    <span class="catalog-group-panel__eyebrow">Ограждения участка</span>
+                                    <h3>Заборы</h3>
+                                    <p>Профнастил, сайдинг, штакетник и жалюзи для фасада, приватности и ритма участка.</p>
+                                </div>
+                                <div class="catalog-group-panel__links">
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из металлосайдинга</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-picket">Заборы из металлоштакетника</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-louver">Заборы из жалюзи</button>
+                                </div>
                             </div>
-                            <div class="catalog-group-panel__links">
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-shutters">Рольставни</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-grilles">Металлические раздвижные решетки</button>
-                            </div>
-                        </div>
 
-                        <div class="catalog-group-panel" data-catalog-group-panel="automation" hidden>
-                            <div class="catalog-group-panel__intro">
-                                <span class="catalog-group-panel__eyebrow">Приводы и комплектующие</span>
-                                <h3>Автоматика</h3>
-                                <p>Подбор приводов, комплектов и сопутствующих элементов под вес створки, размеры ворот и режим работы.</p>
+                            <div class="catalog-group-panel" data-catalog-group-panel="garage" hidden>
+                                <div class="catalog-group-panel__intro">
+                                    <span class="catalog-group-panel__eyebrow">Защита и доступ</span>
+                                    <h3>Гараж и защита</h3>
+                                    <p>Секционные, рольворота, рольставни и защитные системы для дома и коммерческих объектов.</p>
+                                </div>
+                                <div class="catalog-group-panel__links">
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-shutters">Рольставни</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-grilles">Металлические раздвижные решетки</button>
+                                </div>
                             </div>
-                            <div class="catalog-group-panel__links">
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
-                                <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-components">Аксессуары и комплектующие</button>
+
+                            <div class="catalog-group-panel" data-catalog-group-panel="automation" hidden>
+                                <div class="catalog-group-panel__intro">
+                                    <span class="catalog-group-panel__eyebrow">Приводы и комплектующие</span>
+                                    <h3>Автоматика</h3>
+                                    <p>Приводы, комплекты и аксессуары под вес створки, размеры ворот и режим работы.</p>
+                                </div>
+                                <div class="catalog-group-panel__links">
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
+                                    <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-components">Аксессуары и комплектующие</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -292,8 +306,8 @@
                         </div>
                         <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
-                                <p>Откатные ворота изготавливаются по индивидуальным размерам проёма и предназначены для установки на частных, коммерческих и промышленных объектах. Конструкция состоит из металлического каркаса, направляющей балки, роликовых опор, улавливателей и комплектующих. Открывание осуществляется в сторону вдоль линии ограждения. Возможна установка автоматики.</p>
-                                <p>В качестве основания выполняется бетонирование силовой рамы из швеллера под роликовые опоры, что обеспечивает устойчивость, правильную работу ворот и длительный срок службы конструкции. Заполнение полотна подбирается по пожеланиям заказчика.</p>
+                                <p>Откатные ворота под индивидуальный проём для частных, коммерческих и промышленных объектов. Полотно движется вдоль линии ограждения, не занимает место перед въездом и при необходимости комплектуется автоматикой.</p>
+                                <p>Каркас, направляющая балка, роликовые опоры, улавливатели и заполнение подбираются под задачу объекта. Основание выполняется на силовой раме из швеллера для стабильной работы и долгого ресурса.</p>
                                 <div class="catalog-panel__badges">
                                     <span>Под размер проема</span>
                                     <span>Автоматика по согласованию</span>
