@@ -211,7 +211,7 @@
 .prices-page {
     padding: 84px 0 96px;
     background:
-    radial-gradient(circle at top left, rgba(45, 116, 173, 0.08), transparent 24%),
+    radial-gradient(circle at top left, rgba(36, 166, 191, 0.08), transparent 24%),
     radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
     linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
 }

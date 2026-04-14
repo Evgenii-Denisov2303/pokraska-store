@@ -8,6 +8,14 @@
 - Client-side renderers and page bindings live in `assets/js/*.js`.
 - Inline editing is implemented in `assets/js/inline-editor.js`.
 
+## Quick Start
+- If the user is new to the project or unsure which specialist to use, start with the `pokraska-main` agent.
+- Use the `pokraska-store` agent for copy, CTA, offer, navigation, contact, and content-data work.
+- Use the `pokraska-frontend` agent for HTML, CSS, JS, layout, responsive behavior, and inline-editor surface fixes.
+- Use the `pokraska-seo` agent for page metadata, JSON-LD, `robots.txt`, `sitemap.xml`, and `site.webmanifest`.
+- For mixed tasks, start from the primary source of truth and synchronize the other affected layers in the same pass.
+- Prefer inline editing on the site itself for simple content tweaks that are already exposed there; treat `/admin/` as auxiliary support tooling.
+
 ## Source Of Truth
 - Prefer editing `content/*.json` when a page already reads its copy or business data from JSON.
 - Edit HTML only when the target text or metadata is hardcoded there.
@@ -15,12 +23,14 @@
 - Keep URLs, anchors, phone numbers, email addresses, company details, and visible metadata consistent across the site.
 
 ## Task Routing
+- Use the `pokraska-main` agent as the default entry point for beginner or cross-domain tasks.
 - Use the `pokraska-store` agent for copy, CTA, offer, navigation, and content-data edits.
 - Use the `pokraska-seo` agent for `title`, `meta description`, canonical, Open Graph, Twitter cards, JSON-LD, `robots.txt`, `sitemap.xml`, and `site.webmanifest`.
 - Use the `pokraska-frontend` agent for HTML, CSS, JS, layout, responsive behavior, interaction polish, and page-level visual fixes.
 - If a task affects both visible business data and metadata, update both layers in one pass.
 
 ## Validation
+- Do not rely on screenshots, image inspection, or browser-based visual checking in this workspace; prefer file inspection, targeted search, and text-based validation.
 - Use targeted validation after edits; this repo does not have a formal automated test suite.
 - For local content verification, use `node scripts/admin-server.js`.
 - For deployment details, see `docs/admin-deploy.md`.

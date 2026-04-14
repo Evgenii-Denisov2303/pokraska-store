@@ -187,7 +187,7 @@
 .back-btn:hover {
     background: linear-gradient(135deg, var(--theme-accent-strong) 0%, #183d5d 100%);
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(30, 82, 126, 0.18);
+    box-shadow: 0 10px 22px rgba(23, 121, 149, 0.18);
 }
 
 @media (max-width: 768px) {
@@ -245,7 +245,7 @@ table tr:hover {
 .privacy-page {
     padding: 82px 0 96px;
     background:
-        radial-gradient(circle at top left, rgba(45, 116, 173, 0.08), transparent 24%),
+        radial-gradient(circle at top left, rgba(36, 166, 191, 0.08), transparent 24%),
         radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
     color: #314354;

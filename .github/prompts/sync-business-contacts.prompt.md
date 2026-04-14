@@ -2,7 +2,7 @@
 name: "Синхронизировать контакты по сайту"
 description: "Use when: changing pokraska.store phone numbers, email, address, company info, or other business contacts across the whole site."
 argument-hint: "Укажи новые контакты или реквизиты, которые нужно проставить"
-agent: "agent"
+agent: "pokraska-main"
 tools: [read, edit, search]
 ---
 Синхронизируй контактные данные и сведения о компании по всему pokraska.store.
@@ -11,6 +11,7 @@ tools: [read, edit, search]
 - Обнови все зеркальные места: видимые контактные блоки, `tel:` и `mailto:` ссылки, JSON-LD, hardcoded business details и другие найденные дубли.
 - Не меняй URL-структуру, брендинг или текстовые офферы без прямого указания.
 - Если найдешь расхождения между основными данными и hardcoded-копиями, приведи их к одному состоянию в рамках задачи.
+- Не используй screenshots или визуальные проверки; валидация должна быть текстовой и файловой.
 
 В ответе:
 - Назови основной source-of-truth файл.

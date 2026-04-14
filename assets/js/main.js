@@ -445,10 +445,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <img class="footer-premium__logo logo-image" src="${assetsPrefix}images/logo.png" alt="">
                                 <span class="logo-wave footer-premium__wave" aria-hidden="true"></span>
                             </span>
+                            <span class="footer-premium__brand-copy">
+                                <span class="footer-premium__label">Компания</span>
+                                <span class="footer-premium__company">ООО «Комфорт Плюс»</span>
+                            </span>
                         </a>
-
-                        <span class="footer-premium__label">Компания</span>
-                        <p class="footer-premium__company">ООО «Комфорт Плюс»</p>
                         <p class="footer-premium__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
                         <p class="footer-premium__legal-text">Более 10 лет опыта в изготовлении и монтаже конструкций для частных и коммерческих объектов.</p>
                     </div>
