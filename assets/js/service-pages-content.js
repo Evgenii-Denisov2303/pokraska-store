@@ -153,10 +153,46 @@
         link.innerHTML = `<i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.label || '')}`;
     }
 
+    function applyOverviewCard(card, item) {
+        if (!card || !item) return;
+        const label = card.querySelector('.service-overview-card__label');
+        const text = card.querySelector('p');
+        if (label) label.textContent = item.label || '';
+        if (text) text.textContent = item.text || '';
+    }
+
+    function syncOverviewCards(overview, items) {
+        const grid = overview?.querySelector('.service-overview__cards');
+        if (!grid) return;
+        syncCollection(grid, '.service-overview-card', items, applyOverviewCard);
+    }
+
     function syncQuickNavItems(items) {
         const nav = document.getElementById('service-nav');
         if (!nav) return;
         syncCollection(nav, '.service-nav-link', Array.isArray(items) ? items : [], applyQuickNavItem);
+    }
+
+    function applyOverview(pageContent) {
+        const overview = document.querySelector('.service-overview');
+        if (!overview || !pageContent.overview) return;
+
+        const eyebrow = overview.querySelector('.service-overview__eyebrow');
+        const title = overview.querySelector('.service-overview__title');
+        const text = overview.querySelector('.service-overview__text');
+        const bridgeLabel = overview.querySelector('.service-overview__bridge-label');
+        const bridgeText = overview.querySelector('.service-overview__bridge-text');
+        const bridgeAction = overview.querySelector('.service-overview__bridge-link');
+
+        if (eyebrow) eyebrow.textContent = pageContent.overview.eyebrow || '';
+        if (title) title.textContent = pageContent.overview.title || '';
+        if (text) text.textContent = pageContent.overview.text || '';
+        syncOverviewCards(overview, pageContent.overview.cards || []);
+        if (bridgeLabel) bridgeLabel.textContent = pageContent.overview.bridge?.label || '';
+        if (bridgeText) bridgeText.textContent = pageContent.overview.bridge?.text || '';
+        if (bridgeAction && pageContent.overview.bridge?.action) {
+            renderButtonNode(bridgeAction, pageContent.overview.bridge.action, 'service-overview__bridge-link');
+        }
     }
 
     function renderCtaPhoneLine(container, phones) {
@@ -347,6 +383,7 @@
         const bindings = [];
         const headerTitle = document.querySelector('.services-header h1');
         const headerSubtitle = document.querySelector('.services-header .subtitle');
+        const overview = document.querySelector('.service-overview');
         const finalCta = document.querySelector('.services-cta');
         const faqSection = document.querySelector('#services-faq-title')?.closest('section');
         const fileSectionLabel = pageKey === 'powderCoating' ? 'Порошковая покраска' : 'Пескоструйная обработка';
@@ -400,6 +437,44 @@
         document.querySelectorAll('#service-nav .service-nav-link').forEach((link, index) => {
             bindings.push(buildQuickNavBinding(link, index));
         });
+
+        if (overview && pageContent.overview) {
+            const overviewEyebrow = overview.querySelector('.service-overview__eyebrow');
+            const overviewTitle = overview.querySelector('.service-overview__title');
+            const overviewText = overview.querySelector('.service-overview__text');
+            const overviewBridgeLabel = overview.querySelector('.service-overview__bridge-label');
+            const overviewBridgeText = overview.querySelector('.service-overview__bridge-text');
+            const overviewBridgeAction = overview.querySelector('.service-overview__bridge-link');
+
+            if (overviewEyebrow) bindings.push({ path: `${pageKey}.overview.eyebrow`, type: 'text', label: 'Обзор услуги: надзаголовок', element: overviewEyebrow });
+            if (overviewTitle) bindings.push({ path: `${pageKey}.overview.title`, type: 'text', label: 'Обзор услуги: заголовок', element: overviewTitle });
+            if (overviewText) bindings.push({ path: `${pageKey}.overview.text`, type: 'textarea', label: 'Обзор услуги: описание', element: overviewText });
+            if (overviewBridgeLabel) bindings.push({ path: `${pageKey}.overview.bridge.label`, type: 'text', label: 'Обзор услуги: метка связки', element: overviewBridgeLabel });
+            if (overviewBridgeText) bindings.push({ path: `${pageKey}.overview.bridge.text`, type: 'textarea', label: 'Обзор услуги: текст связки', element: overviewBridgeText });
+            if (overviewBridgeAction) {
+                bindings.push({
+                    path: `${pageKey}.overview.bridge.action`,
+                    type: 'object',
+                    label: 'Обзор услуги: кнопка связки',
+                    element: overviewBridgeAction,
+                    fields: [
+                        { key: 'label', label: 'Текст кнопки', type: 'text' },
+                        { key: 'href', label: 'Ссылка', type: 'text' },
+                        { key: 'icon', label: 'Иконка', type: 'text' }
+                    ],
+                    render(value, binding) {
+                        binding.elements.forEach((element) => renderButtonNode(element, value || {}, 'service-overview__bridge-link'));
+                    }
+                });
+            }
+
+            overview.querySelectorAll('.service-overview-card').forEach((card, index) => {
+                const label = card.querySelector('.service-overview-card__label');
+                const text = card.querySelector('p');
+                if (label) bindings.push({ path: `${pageKey}.overview.cards.${index}.label`, type: 'text', label: `Обзор услуги: карточка ${index + 1} — заголовок`, element: label });
+                if (text) bindings.push({ path: `${pageKey}.overview.cards.${index}.text`, type: 'textarea', label: `Обзор услуги: карточка ${index + 1} — текст`, element: text });
+            });
+        }
 
         if (pageKey === 'sandblasting' && pageContent.beforeAfter) {
             const beforeAfterTitle = document.querySelector('.before-after-section .section-title');
@@ -817,6 +892,7 @@
             if (!pageContent) return;
 
             applyHeader(pageContent);
+            applyOverview(pageContent);
             applyQuickNav(pageContent);
             applyBeforeAfter(pageContent);
             applyServiceSections(pageContent, content.sharedCta || {});
