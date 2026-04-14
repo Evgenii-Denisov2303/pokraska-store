@@ -1,7 +1,7 @@
 /* Automation product detail pages */
 .automation-product-page {
     padding: 56px 0 72px;
-    background: linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
+    background: linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
 }
 
 .automation-product-stack {
@@ -14,17 +14,17 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 18px;
-    color: #b67a32;
+    color: var(--theme-accent);
     text-decoration: none;
     font-weight: 600;
 }
 
 .automation-product-card {
-    background: #ffffff;
-    border: 1px solid #e9dfd1;
-    border-radius: 20px;
+    background: var(--theme-surface-gradient);
+    border: 1px solid var(--theme-border);
+    border-radius: var(--theme-radius-lg);
     padding: 24px;
-    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+    box-shadow: var(--theme-shadow);
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     gap: 24px;
@@ -41,9 +41,9 @@
     display: block;
     grid-column: 1 / -1;
     grid-row: 1;
-    border-radius: 14px;
+    border-radius: var(--theme-radius-sm);
     overflow: hidden;
-    border: 1px solid #e6d9c9;
+    border: 1px solid var(--theme-border);
     background: #ffffff;
 }
 
@@ -52,7 +52,7 @@
     height: 440px;
     object-fit: contain;
     display: block;
-    background: linear-gradient(180deg, #fdfaf5, #f6efe4);
+    background: var(--theme-surface-gradient-soft);
 }
 
 .automation-product-thumbs {
@@ -67,10 +67,10 @@
     z-index: 2;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(182, 122, 50, 0.2);
+    border: 1px solid rgba(45, 116, 173, 0.18);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.92);
-    color: #b67a32;
+    color: var(--theme-accent);
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
     cursor: pointer;
     display: inline-flex;
@@ -99,7 +99,7 @@
 }
 
 .automation-product-thumb {
-    border: 1px solid #e6d9c9;
+    border: 1px solid var(--theme-border);
     border-radius: 10px;
     overflow: hidden;
     background: #ffffff;
@@ -117,12 +117,12 @@
 }
 
 .automation-product-thumb.is-active {
-    border-color: #b67a32;
-    box-shadow: 0 0 0 2px rgba(182, 122, 50, 0.18);
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 0 2px rgba(45, 116, 173, 0.16);
 }
 
 .automation-product-meta {
-    color: #8f7b66;
+    color: var(--theme-text-muted);
     font-size: 0.95rem;
     margin-bottom: 10px;
 }
@@ -150,11 +150,11 @@
 }
 
 .automation-product-specs li {
-    background: #fbf8f3;
-    border: 1px solid #e5ddd1;
+    background: var(--theme-surface-gradient-soft);
+    border: 1px solid var(--theme-border);
     border-radius: 10px;
     padding: 10px 12px;
-    color: #2c3e50;
+    color: var(--theme-text);
     font-weight: 600;
 }
 
@@ -195,8 +195,8 @@
 }
 
 .automation-accessories__item {
-    background: #ffffff;
-    border: 1px solid #e5ddd1;
+    background: var(--theme-surface-gradient);
+    border: 1px solid var(--theme-border);
     border-radius: 12px;
     padding: 12px;
     display: grid;
@@ -207,7 +207,7 @@
     border-radius: 10px;
     overflow: hidden;
     background: #ffffff;
-    border: 1px solid #eee6da;
+    border: 1px solid var(--theme-border);
 }
 
 .automation-accessories__media a {
@@ -298,9 +298,9 @@
 .automation-product-page {
     padding: 72px 0 92px;
     background:
-        radial-gradient(circle at top left, rgba(154, 108, 31, 0.12), transparent 22%),
-        radial-gradient(circle at top right, rgba(194, 128, 56, 0.08), transparent 18%),
-        linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
+    radial-gradient(circle at top left, rgba(45, 116, 173, 0.08), transparent 22%),
+    radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
+    linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
 }
 
 .automation-product-back {
@@ -316,8 +316,8 @@
     border: 1px solid rgba(20, 56, 89, 0.08);
     background:
         radial-gradient(circle at top right, rgba(255,255,255,0.5), transparent 24%),
-        rgba(255, 255, 255, 0.9);
-    box-shadow: 0 26px 46px rgba(15, 23, 42, 0.08);
+        rgba(255, 255, 255, 0.92);
+    box-shadow: var(--theme-shadow);
     padding: 30px;
     gap: 28px;
 }
@@ -329,7 +329,7 @@
 }
 
 .automation-product-main img {
-    background: linear-gradient(180deg, #fdfaf5 0%, #f6efe4 100%);
+    background: var(--theme-surface-gradient-soft);
 }
 
 .automation-product-thumb {
@@ -338,7 +338,7 @@
 }
 
 .automation-product-thumb.is-active {
-    box-shadow: 0 0 0 2px rgba(154, 108, 31, 0.16), 0 14px 24px rgba(154, 108, 31, 0.08);
+    box-shadow: 0 0 0 2px rgba(45, 116, 173, 0.16), 0 14px 24px rgba(30, 82, 126, 0.08);
 }
 
 .automation-product-meta {
@@ -347,9 +347,9 @@
     width: fit-content;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(154, 108, 31, 0.08);
-    border: 1px solid rgba(154, 108, 31, 0.1);
-    color: #5d7390;
+    background: rgba(45, 116, 173, 0.08);
+    border: 1px solid rgba(45, 116, 173, 0.1);
+    color: var(--theme-text-muted);
     font-size: 0.82rem;
     font-weight: 800;
     letter-spacing: 0.12em;
@@ -362,7 +362,7 @@
     font-size: clamp(2.4rem, 4vw, 3.5rem);
     line-height: 0.96;
     letter-spacing: -0.03em;
-    color: #1f3044;
+    color: var(--theme-text-strong);
 }
 
 .automation-product-description {
@@ -419,21 +419,21 @@
 
 /* Unified warm palette overrides */
 .automation-product-page {
-    background: linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
+    background: linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
 }
 
 .automation-product-main img {
-    background: linear-gradient(180deg, #fdfaf5, #f6efe4);
+    background: var(--theme-surface-gradient-soft);
 }
 
 .automation-product-meta {
-    color: #8f7b66;
+    color: var(--theme-text-muted);
 }
 
 /* Editorial desktop redesign */
 @media (min-width: 1101px) {
     .automation-product-page {
-        padding: 126px 0 122px;
+        padding: 118px 0 112px;
     }
 
     .automation-product-page > .container,
@@ -444,29 +444,29 @@
 
     .catalog-hero {
         margin-bottom: 24px;
-        padding: 40px 44px 36px;
-        border-radius: 36px;
+        padding: 34px 38px 30px;
+        border-radius: 30px;
         background:
             radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 28%),
-            linear-gradient(135deg, #272a30 0%, #373739 52%, #53483d 100%);
+            var(--theme-band);
         color: #ffffff;
-        box-shadow: 0 28px 54px rgba(20, 28, 39, 0.18);
+        box-shadow: 0 24px 46px rgba(20, 28, 39, 0.16);
     }
 
     .catalog-hero h1 {
         margin: 18px 0 16px;
         font-family: var(--font-display);
-        font-size: clamp(3.1rem, 4.4vw, 4.8rem);
+        font-size: clamp(2.8rem, 4vw, 4.2rem);
         line-height: 0.92;
         letter-spacing: -0.03em;
         color: #ffffff;
     }
 
     .catalog-hero p {
-        max-width: 54ch;
+        max-width: 48ch;
         color: rgba(255, 255, 255, 0.82);
         font-size: 1.06rem;
-        line-height: 1.82;
+        line-height: 1.74;
     }
 
     .catalog-breadcrumbs {
@@ -492,9 +492,9 @@
     .automation-product-card {
         grid-template-columns: minmax(480px, 1.02fr) minmax(360px, 0.98fr);
         align-items: stretch;
-        gap: 34px;
-        padding: 36px;
-        border-radius: 36px;
+        gap: 28px;
+        padding: 30px;
+        border-radius: 30px;
     }
 
     .automation-product-gallery {
@@ -502,12 +502,12 @@
     }
 
     .automation-product-main {
-        border-radius: 26px;
+        border-radius: 22px;
     }
 
     .automation-product-main img {
-        min-height: 500px;
-        height: 500px;
+        min-height: 440px;
+        height: 440px;
         object-fit: cover;
     }
 
@@ -523,13 +523,13 @@
 
     .automation-product-title {
         margin: 20px 0 14px;
-        font-size: clamp(3rem, 3.8vw, 4.2rem);
+        font-size: clamp(2.6rem, 3.4vw, 3.6rem);
     }
 
     .automation-product-description {
         max-width: 46ch;
         font-size: 1.05rem;
-        line-height: 1.82;
+        line-height: 1.72;
     }
 
     .automation-product-specs {
@@ -538,7 +538,7 @@
     }
 
     .automation-product-specs li {
-        min-height: 78px;
+        min-height: 68px;
         display: flex;
         align-items: center;
         padding: 14px 16px;
@@ -546,13 +546,13 @@
     }
 
     .automation-product-cta {
-        margin-top: 22px;
+        margin-top: 18px;
     }
 
     .automation-product-cta .btn {
-        min-height: 50px;
+        min-height: 46px;
         border-radius: 999px;
-        padding-inline: 22px;
+        padding-inline: 20px;
     }
 }
 
@@ -609,6 +609,52 @@
     .automation-product-specs li {
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 239, 231, 0.95));
         color: var(--theme-text);
+    }
+}
+
+/* ========== AUTOMATION READING & STABILITY PASS ========== */
+.automation-product-main,
+.automation-product-thumb,
+.automation-guide__figure {
+    isolation: isolate;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.automation-product-description {
+    color: #4d6479;
+    font-size: clamp(1.06rem, 1.02rem + 0.12vw, 1.11rem);
+    line-height: 1.78;
+}
+
+.automation-product-specs li {
+    font-size: 0.99rem;
+    line-height: 1.56;
+}
+
+.automation-product-section__title,
+.automation-accessories__title {
+    color: #1d3145;
+}
+
+.automation-accessories__text {
+    color: #50677b;
+    font-size: 0.99rem;
+    line-height: 1.66;
+}
+
+@media (max-width: 640px) {
+    .automation-product-description {
+        font-size: 1.01rem;
+        line-height: 1.7;
+    }
+
+    .automation-product-specs li {
+        font-size: 0.95rem;
+    }
+
+    .automation-accessories__text {
+        font-size: 0.95rem;
     }
 }
 

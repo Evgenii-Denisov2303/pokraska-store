@@ -27,9 +27,10 @@
     <link rel="preload" href="assets/fonts/manrope/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/home.css?v=1">
-    <script type="application/ld+json">
+    <link rel="stylesheet" href="assets/css/home.css?v=20260414-came-brand-1">
+    <script id="home-structured-data" type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -37,7 +38,7 @@
         "name": "KOMFORTPLUS116.RU",
         "image": "https://pokraska.store/assets/images/hero/home-hero-main.jpg",
         "url": "https://pokraska.store/",
-        "telephone": ["+7 962 554-22-60", "+7 937 615-46-29"],
+        "telephone": ["+7 937 615-46-29", "+7 962 554-22-60"],
         "email": "vorota404@mail.ru",
         "address": {
             "@type": "PostalAddress",
@@ -52,8 +53,6 @@
         "priceRange": "₽₽",
         "areaServed": "Казань",
         "sameAs": [
-            "https://vk.com/pokraska_kazan",
-            "https://www.instagram.com/pokraska_kazan/",
             "https://t.me/+79625542260",
             "https://max.ru"
         ]
@@ -446,13 +445,13 @@
                 </div>
 
                 <div class="home-tail__brands">
-                    <div class="home-tail__brand">
+                    <div class="home-tail__brand" data-brand="came">
                         <img src="assets/images/catalog/came-logo.jpg" alt="CAME" loading="lazy" decoding="async">
                     </div>
-                    <div class="home-tail__brand">
+                    <div class="home-tail__brand" data-brand="alutech">
                         <img src="assets/images/catalog/alutech-logo.png" alt="ALUTECH" loading="lazy" decoding="async">
                     </div>
-                    <div class="home-tail__brand">
+                    <div class="home-tail__brand" data-brand="doorhan">
                         <img src="assets/images/catalog/doorhan-logo.png" alt="DoorHan" loading="lazy" decoding="async">
                     </div>
                 </div>
@@ -516,28 +515,13 @@
 
         <footer id="page-footer" class="scene preview-footer scene-reveal" aria-label="Футер сайта">
             <div class="preview-footer__layout">
-                <div class="preview-footer__primary">
+                <div class="preview-footer__column preview-footer__column--company">
                     <a class="preview-footer__brand" href="#top" aria-label="Наверх">
                         <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
                             <img class="preview-footer__logo logo-image" src="assets/images/logo.png" alt="">
                             <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                         </span>
                     </a>
-
-                    <div class="preview-footer__socials" aria-label="Быстрые контакты">
-                        <a class="preview-footer__social" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                        </a>
-                        <a class="preview-footer__social" href="https://max.ru" target="_blank" rel="noopener noreferrer" aria-label="Max">
-                            <i class="fas fa-comment-dots" aria-hidden="true"></i>
-                        </a>
-                        <a class="preview-footer__social" href="pages/contacts.html" aria-label="Контакты и адрес">
-                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="preview-footer__column preview-footer__column--company">
                     <span class="preview-footer__label">Компания</span>
                     <p class="preview-footer__company">ООО «Комфорт Плюс»</p>
                     <p class="preview-footer__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
@@ -577,6 +561,8 @@
             </div>
         </footer>
     </main>
-    <script src="assets/js/home.js?v=1" defer></script>
+    <script src="assets/js/content-api.js" defer></script>
+    <script src="assets/js/home-content.js?v=20260414-came-brand-1" defer></script>
+    <script src="assets/js/home.js?v=20260413-footer-3col-1" defer></script>
 </body>
 </html>

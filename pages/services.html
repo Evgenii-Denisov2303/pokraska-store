@@ -87,16 +87,17 @@
 
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/form.css">
+    <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260414-footer-layout-2">
+    <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260412-catalog-flat-3">
+    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260414-came-brand-1">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
     <header class="header header--desktop-hero">
         <div class="container">
-            
+
             <div class="desktop-hero-header hero-header">
                 <div class="hero-scene__topbar">
                     <div class="hero-brand">
@@ -226,6 +227,11 @@
                     </div>
 
                     <div class="catalog-group-panels">
+                        <div class="catalog-group-panels__meta" aria-live="polite">
+                            <span class="catalog-group-panels__eyebrow">Подкатегории</span>
+                            <span class="catalog-group-panels__current" data-catalog-group-current>Ворота</span>
+                        </div>
+
                         <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
                             <div class="catalog-group-panel__links">
                                 <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
@@ -1241,7 +1247,7 @@
                             <div class="catalog-breadcrumbs">Главная / Каталог / Гараж и защита / Секционные гаражные ворота</div>
                             <h2>Секционные гаражные ворота</h2>
                         </div>
-                        <div class="catalog-panel__grid">
+                        <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text">
                                 <p>Надёжные подъёмные ворота для частного гаража с тёплым полотном из сэндвич-панелей, плотным прилеганием по контуру и возможностью автоматизации потолочным приводом. Подходят для ежедневной эксплуатации, помогают сохранить тепло в помещении и не занимают место перед гаражом при открывании.</p>
                                 <div class="catalog-panel__badges">
@@ -1985,13 +1991,13 @@
             <div class="catalog-partners">
                 <h3><i class="fas fa-handshake"></i> Бренды, с которыми работаем</h3>
                 <div class="partners-grid">
-                    <div class="partner-card partner-card--logo">
+                    <div class="partner-card partner-card--logo" data-brand="came">
                         <img src="../assets/images/catalog/came-logo.jpg" width="800" height="500" alt="CAME" loading="lazy" decoding="async">
                     </div>
-                    <div class="partner-card partner-card--logo">
+                    <div class="partner-card partner-card--logo" data-brand="alutech">
                         <img src="../assets/images/catalog/alutech-logo.png" width="890" height="399" alt="ALUTECH" loading="lazy" decoding="async">
                     </div>
-                    <div class="partner-card partner-card--logo">
+                    <div class="partner-card partner-card--logo" data-brand="doorhan">
                         <img src="../assets/images/catalog/doorhan-logo.png" width="1242" height="414" alt="DoorHan" loading="lazy" decoding="async">
                     </div>
                 </div>
@@ -2093,9 +2099,9 @@
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/runtime-config.js" defer></script>
     <script src="../assets/js/content-api.js" defer></script>
-    <script src="../assets/js/site-content.js?v=20260401-inline-cache-bust-21" defer></script>
-    <script src="../assets/js/main.js" defer></script>
-    <script src="../assets/js/services.js?v=20260412-catalog-flat-7" defer></script>
+    <script src="../assets/js/site-content.js?v=20260414-footer-layout-2" defer></script>
+    <script src="../assets/js/main.js?v=20260413-footer-3col-1" defer></script>
+    <script src="../assets/js/services.js?v=20260414-catalog-reading-1" defer></script>
 </body>
 </html>
 

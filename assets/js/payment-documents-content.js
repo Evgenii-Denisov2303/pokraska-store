@@ -116,7 +116,7 @@
         syncCollection(container, 'li', items, applySideCardItem);
     }
 
-    function registerInlineBindings(content) {
+    function registerInlineBindings() {
         if (!window.PokraskaQueueInlineBindings) return;
 
         const bindings = [];
@@ -423,7 +423,7 @@
                 }
             }
 
-            registerInlineBindings(content);
+            registerInlineBindings();
         } catch (error) {
             console.warn('Failed to apply payment documents content', error);
         }

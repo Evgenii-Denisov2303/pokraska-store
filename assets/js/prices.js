@@ -10,10 +10,4 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.transform = 'translateY(0)';
         }, index * 100);
     });
-
-    document.querySelectorAll('.price-amount').forEach(priceElement => {
-        const text = priceElement.textContent;
-        const formatted = text.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
-        priceElement.textContent = formatted;
-    });
 });

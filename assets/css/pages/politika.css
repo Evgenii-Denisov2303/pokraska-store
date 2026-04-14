@@ -1,36 +1,36 @@
 /* ========== PRIVACY PAGE ========== */
 .privacy-page {
     padding: 60px 0;
-    background: #f8f4ee;
+    background: linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
     min-height: 100vh;
     line-height: 1.7;
-    color: #333;
+    color: var(--theme-text);
 }
 
 .privacy-container {
     max-width: 900px;
     margin: 0 auto;
     padding: 40px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: var(--theme-surface-gradient);
+    border-radius: var(--theme-radius-xl);
+    box-shadow: var(--theme-shadow);
 }
 
 .privacy-header {
     text-align: center;
     margin-bottom: 40px;
     padding-bottom: 30px;
-    border-bottom: 2px solid  #c8a15a;
+    border-bottom: 1px solid var(--theme-border-strong);
 }
 
 .privacy-header h1 {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     font-size: 2.2rem;
     margin-bottom: 15px;
 }
 
 .privacy-header .date {
-    color: #7f8c8d;
+    color: var(--theme-text-muted);
     font-size: 1rem;
     margin-bottom: 10px;
 }
@@ -45,18 +45,18 @@
 }
 
 .privacy-page .section h2 {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     font-size: 1.5rem;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--theme-border);
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 .privacy-page .section h2 i {
-    color:  #c8a15a;
+    color: var(--theme-accent);
 }
 
 .privacy-page .section p {
@@ -76,23 +76,25 @@
 }
 
 .highlight {
-    background: #f8f4ee;
+    background: var(--theme-surface-gradient-soft);
     padding: 20px;
-    border-radius: 10px;
-    border-left: 4px solid  #c8a15a;
+    border-radius: var(--theme-radius-md);
+    border-left: 4px solid var(--theme-accent);
     margin: 20px 0;
 }
 
 .highlight-title {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     margin-top: 0;
 }
 
 .contact-block {
-    background: linear-gradient(135deg,  #c8a15a,  #9a6c1f);
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
+        var(--theme-band);
     color: white;
     padding: 30px;
-    border-radius: 15px;
+    border-radius: var(--theme-radius-xl);
     margin-top: 40px;
     text-align: center;
 }
@@ -139,7 +141,7 @@
 }
 
 .footer-link-primary {
-    color:  #c8a15a;
+    color: var(--theme-accent);
     font-weight: 500;
 }
 
@@ -174,18 +176,18 @@
     display: inline-block;
     margin-top: 40px;
     padding: 12px 30px;
-    background:  #c8a15a;
+    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
     color: white;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--theme-radius-sm);
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    background:  #9a6c1f;
+    background: linear-gradient(135deg, var(--theme-accent-strong) 0%, #183d5d 100%);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(154, 108, 31, 0.24);
+    box-shadow: 0 10px 22px rgba(30, 82, 126, 0.18);
 }
 
 @media (max-width: 768px) {
@@ -243,25 +245,25 @@ table tr:hover {
 .privacy-page {
     padding: 82px 0 96px;
     background:
-        radial-gradient(circle at top left, rgba(154, 108, 31, 0.12), transparent 24%),
-        radial-gradient(circle at top right, rgba(194, 128, 56, 0.08), transparent 18%),
-        linear-gradient(180deg, #f7f4ee 0%, #eee6da 52%, #fbf8f3 100%);
+        radial-gradient(circle at top left, rgba(45, 116, 173, 0.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
+        linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
     color: #314354;
 }
 
 .privacy-container {
     max-width: 980px;
     padding: 48px 46px;
-    border-radius: 32px;
-    border: 1px solid rgba(20, 56, 89, 0.08);
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 26px 46px rgba(15, 23, 42, 0.08);
+    border-radius: var(--theme-radius-xl);
+    border: 1px solid var(--theme-border);
+    background: var(--theme-surface-gradient);
+    box-shadow: var(--theme-shadow);
 }
 
 .privacy-header {
     margin-bottom: 48px;
     padding-bottom: 34px;
-    border-bottom: 1px solid rgba(154, 108, 31, 0.14);
+    border-bottom: 1px solid var(--theme-border);
 }
 
 .privacy-header h1 {
@@ -269,22 +271,22 @@ table tr:hover {
     font-size: clamp(2.6rem, 4.6vw, 4rem);
     line-height: 0.95;
     letter-spacing: -0.03em;
-    color: #1f3044;
+    color: var(--theme-text-strong);
 }
 
 .privacy-header .date,
 .privacy-page .section p,
 .privacy-page .section li {
-    color: #5f7388;
+    color: var(--theme-text-muted);
 }
 
 .privacy-page .section {
     margin-bottom: 24px;
     padding: 28px 28px 24px;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(246,250,253,0.94));
-    border: 1px solid rgba(20, 56, 89, 0.08);
-    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.04);
+    border-radius: var(--theme-radius-lg);
+    background: var(--theme-surface-gradient);
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .privacy-page .section h2 {
@@ -301,19 +303,19 @@ table tr:hover {
 }
 
 .highlight {
-    border-radius: 20px;
-    background: linear-gradient(180deg, rgba(249,244,236,0.98), rgba(252,249,244,0.98));
-    border: 1px solid rgba(154, 108, 31, 0.12);
+    border-radius: var(--theme-radius-md);
+    background: var(--theme-surface-gradient-soft);
+    border: 1px solid var(--theme-border);
     border-left: 0;
 }
 
 .contact-block {
     margin-top: 48px;
-    border-radius: 28px;
+    border-radius: var(--theme-radius-xl);
     background:
         radial-gradient(circle at top right, rgba(255,255,255,0.18), transparent 28%),
-        linear-gradient(135deg, #4a3a2b 0%, #7a5b3d 100%);
-    box-shadow: 0 22px 38px rgba(154, 108, 31, 0.18);
+        var(--theme-band);
+    box-shadow: 0 24px 46px rgba(16, 38, 61, 0.16);
 }
 
 .back-btn {
@@ -329,7 +331,7 @@ table {
 }
 
 table th {
-    background: rgba(249, 244, 236, 0.98);
+    background: rgba(234, 243, 251, 0.98);
 }
 
 @media (max-width: 768px) {
@@ -354,15 +356,15 @@ table th {
 
 /* Unified warm palette overrides */
 .privacy-page .section {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 245, 238, 0.94));
-    border-color: rgba(154, 108, 31, 0.12);
+    background: var(--theme-surface-gradient);
+    border-color: var(--theme-border);
 }
 
 .contact-block {
     background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
-        linear-gradient(135deg, #4a3a2b 0%, #7a5b3d 100%);
-    box-shadow: 0 22px 38px rgba(154, 108, 31, 0.18);
+        var(--theme-band);
+    box-shadow: 0 24px 46px rgba(16, 38, 61, 0.16);
 }
 
 /* ========== DESKTOP FINAL PASS ========== */

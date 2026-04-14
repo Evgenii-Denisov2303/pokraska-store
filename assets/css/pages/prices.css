@@ -1,7 +1,7 @@
 /* ========== PRICES PAGE STYLES ========== */
 .prices-page {
     padding: 80px 0;
-    background: linear-gradient(135deg, #f8f4ee 0%, #ece4d8 100%);
+    background: linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
     min-height: 100vh;
 }
 
@@ -11,144 +11,35 @@
 }
 
 .price-header h1 {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     font-size: 2.8rem;
     margin-bottom: 15px;
     font-weight: 800;
-    background: linear-gradient(135deg, #2c3e50 0%,  #c8a15a 100%);
+    background: linear-gradient(135deg, var(--theme-text-strong) 0%, var(--theme-accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .price-header .subtitle {
-    color: #7f8c8d;
+    color: var(--theme-text-muted);
     font-size: 1.2rem;
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.6;
 }
 
-/* Таблица цен */
-.pricing-table {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    margin-bottom: 50px;
-}
-
-.pricing-table-header {
-    background: linear-gradient(135deg,  #c8a15a,  #9a6c1f);
-    color: white;
-    padding: 30px;
-    text-align: center;
-}
-
-.pricing-table-header h2 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-}
-
-.pricing-table-header .note {
-    font-size: 0.95rem;
-    opacity: 0.9;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-}
-
-table thead {
-    background: #f8f4ee;
-}
-
-table th {
-    padding: 20px 25px;
-    text-align: left;
-    color: #2c3e50;
-    font-weight: 700;
-    font-size: 1.1rem;
-    border-bottom: 2px solid #e0e6ed;
-}
-
-table td {
-    padding: 20px 25px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #5a6c7d;
-}
-
-table tbody tr {
-    transition: background-color 0.3s ease;
-}
-
-table tr:hover {
-    background: #fbf8f3;
-}
-
-table tr:last-child td {
-    border-bottom: none;
-}
-
-.price-col-service {
-    width: 30%;
-}
-
-.price-col-description {
-    width: 45%;
-}
-
-.price-col-cost {
-    width: 25%;
-}
-
-.service-name {
-    font-weight: 600;
-    color: #2c3e50;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.service-name i {
-    color:  #c8a15a;
-    font-size: 1.2em;
-}
-
-.service-description {
-    font-size: 0.95rem;
-    color: #7f8c8d;
-    line-height: 1.5;
-}
-
-.price-amount {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #27ae60;
-    text-align: right;
-}
-
-.price-note {
-    font-size: 0.85rem;
-    color: #95a5a6;
-    text-align: right;
-    margin-top: 5px;
-}
-
 /* Факторы цены */
 .price-factors {
-    background: white;
-    border-radius: 20px;
+    background: var(--theme-surface-gradient);
+    border-radius: var(--theme-radius-xl);
     padding: 40px;
     margin-bottom: 50px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: var(--theme-shadow);
 }
 
 .price-factors h2 {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     text-align: center;
     margin-bottom: 40px;
     font-size: 1.8rem;
@@ -161,41 +52,41 @@ table tr:last-child td {
 }
 
 .factor-card {
-    background: #fbf8f3;
+    background: var(--theme-surface-gradient-soft);
     padding: 25px;
-    border-radius: 15px;
-    border-left: 4px solid  #c8a15a;
+    border-radius: var(--theme-radius-md);
+    border-left: 4px solid var(--theme-accent);
     transition: all 0.3s ease;
 }
 
 .factor-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(154, 108, 31, 0.12);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .factor-card i {
     font-size: 2rem;
-    color:  #c8a15a;
+    color: var(--theme-accent);
     margin-bottom: 15px;
 }
 
 .factor-card h3 {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     font-size: 1.2rem;
     margin-bottom: 10px;
 }
 
 .factor-card p {
-    color: #7f8c8d;
+    color: var(--theme-text-muted);
     font-size: 0.95rem;
     line-height: 1.5;
 }
 
 /* Калькулятор (упрощенный) */
 .calculator-section {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: var(--theme-band);
     color: white;
-    border-radius: 20px;
+    border-radius: var(--theme-radius-xl);
     padding: 50px;
     margin-bottom: 50px;
     text-align: center;
@@ -218,7 +109,7 @@ table tr:last-child td {
 
 .calculator-section .btn {
     background: white;
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     padding: 15px 40px;
     font-size: 1.1rem;
 }
@@ -235,11 +126,11 @@ table tr:last-child td {
 
 /* Гарантии */
 .guarantee-section {
-    background: white;
-    border-radius: 20px;
+    background: var(--theme-surface-gradient);
+    border-radius: var(--theme-radius-xl);
     padding: 40px;
     margin-bottom: 50px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: var(--theme-shadow);
     text-align: center;
 }
 
@@ -247,8 +138,8 @@ table tr:last-child td {
     display: inline-flex;
     align-items: center;
     gap: 15px;
-    background: linear-gradient(135deg, #d4edda, #c3e6cb);
-    color: #155724;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+    color: var(--theme-accent-strong);
     padding: 20px 40px;
     border-radius: 50px;
     font-weight: 700;
@@ -261,12 +152,12 @@ table tr:last-child td {
 }
 
 .guarantee-title {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     margin-bottom: 15px;
 }
 
 .guarantee-text {
-    color: #7f8c8d;
+    color: var(--theme-text-muted);
     max-width: 700px;
     margin: 0 auto;
 }
@@ -281,16 +172,6 @@ table tr:last-child td {
     margin-left: 20px;
 }
 
-@media (max-width: 1024px) {
-    .pricing-table {
-        overflow-x: auto;
-    }
-
-    .pricing-table table {
-        min-width: 720px;
-    }
-}
-
 @media (max-width: 768px) {
     .prices-page {
         padding: 60px 0;
@@ -298,10 +179,6 @@ table tr:last-child td {
 
     .price-header h1 {
         font-size: 2.2rem;
-    }
-
-    table th, table td {
-        padding: 15px;
     }
 
     .calculator-section, .price-factors, .guarantee-section {
@@ -328,36 +205,25 @@ table tr:last-child td {
         font-size: 1.8rem;
     }
 
-    table {
-        display: block;
-        overflow-x: auto;
-    }
-
-    .service-name {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
 }
 
 /* ========== 2026 VISUAL POLISH ========== */
 .prices-page {
-    padding: 92px 0 108px;
+    padding: 84px 0 96px;
     background:
-        radial-gradient(circle at top left, rgba(154, 108, 31, 0.12), transparent 24%),
-        radial-gradient(circle at top right, rgba(194, 128, 56, 0.08), transparent 18%),
-        linear-gradient(180deg, #f7f4ee 0%, #eee6da 48%, #fbf8f3 100%);
+    radial-gradient(circle at top left, rgba(45, 116, 173, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
+    linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
 }
 
 .price-header {
     max-width: 820px;
-    margin: 0 auto 52px;
+    margin: 0 auto 42px;
 }
 
 .price-header h1 {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 5vw, 4.4rem);
+    font-size: clamp(2.75rem, 4.6vw, 4.05rem);
     line-height: 0.95;
     letter-spacing: -0.035em;
     color: #1f3044;
@@ -367,29 +233,17 @@ table tr:last-child td {
 
 .price-header .subtitle {
     color: #607285;
-    font-size: 1.08rem;
-    line-height: 1.8;
+    font-size: 1.02rem;
+    line-height: 1.72;
 }
 
-.pricing-table,
 .price-factors,
 .guarantee-section {
-    border-radius: 28px;
+    border-radius: 26px;
     border: 1px solid rgba(20, 56, 89, 0.08);
-    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.08);
+    box-shadow: var(--theme-shadow);
 }
 
-.pricing-table {
-    background: rgba(255, 255, 255, 0.9);
-}
-
-.pricing-table-header {
-    background:
-        radial-gradient(circle at top right, rgba(255,255,255,0.14), transparent 26%),
-        linear-gradient(135deg, #2b231c 0%, #4a3a2b 56%, #7a5b3d 100%);
-}
-
-.pricing-table-header h2,
 .price-factors h2,
 .guarantee-title {
     font-family: var(--font-display);
@@ -398,46 +252,45 @@ table tr:last-child td {
 
 .price-factors,
 .guarantee-section {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--theme-surface-gradient);
 }
 
 .factor-card {
-    padding: 26px 24px;
-    border-radius: 22px;
+    padding: 22px 20px;
+    border-radius: 20px;
     border: 1px solid rgba(20, 56, 89, 0.08);
     border-left: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(250,245,238,0.94));
+    background: var(--theme-surface-gradient-soft);
     box-shadow: 0 16px 28px rgba(15, 23, 42, 0.05);
 }
 
 .factor-card:hover {
-    box-shadow: 0 20px 32px rgba(154, 108, 31, 0.1);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .factor-card p,
-.service-description,
 .guarantee-text {
     color: #65788d;
 }
 
 .calculator-section {
-    border-radius: 30px;
+    border-radius: 28px;
     background:
         radial-gradient(circle at top right, rgba(255,255,255,0.16), transparent 28%),
-        linear-gradient(135deg, #2b231c 0%, #4a3a2b 56%, #7a5b3d 100%);
+        var(--theme-band);
     box-shadow: 0 24px 42px rgba(15, 23, 42, 0.16);
 }
 
 .calculator-section h2 {
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-size: clamp(2rem, 3.3vw, 2.8rem);
     line-height: 0.98;
     letter-spacing: -0.02em;
 }
 
 .guarantee-badge {
     border-radius: 999px;
-    background: linear-gradient(135deg, rgba(249, 244, 236, 0.98), rgba(242, 230, 208, 0.94));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
@@ -465,7 +318,6 @@ table tr:last-child td {
         font-size: clamp(2.5rem, 11vw, 3.5rem);
     }
 
-    .pricing-table,
     .price-factors,
     .guarantee-section,
     .calculator-section {
@@ -475,12 +327,12 @@ table tr:last-child td {
 
 /* Unified warm palette overrides */
 .price-header h1 {
-    background: linear-gradient(135deg, #2b231c 0%, #9a6c1f 100%);
+    background: linear-gradient(135deg, var(--theme-text-strong) 0%, var(--theme-accent) 100%);
 }
 
 .guarantee-badge {
-    background: linear-gradient(135deg, rgba(249, 244, 236, 0.98), rgba(242, 230, 208, 0.94));
-    color: #8e5c1a;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+    color: var(--theme-accent-strong);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
@@ -501,7 +353,7 @@ table tr:last-child td {
 
     .price-header h1 {
         background: none;
-        color: #2b231c;
+        color: var(--theme-text-strong);
         -webkit-background-clip: initial;
         background-clip: initial;
         -webkit-text-fill-color: currentColor;
@@ -512,7 +364,7 @@ table tr:last-child td {
 
     .price-header h1 i {
         margin-right: 12px;
-        color: #9a6c1f;
+        color: var(--theme-accent);
         font-size: 0.72em;
         vertical-align: 0.06em;
     }
@@ -525,7 +377,6 @@ table tr:last-child td {
         line-height: 1.75;
     }
 
-    .pricing-table,
     .price-factors,
     .guarantee-section,
     .calculator-section {
@@ -562,13 +413,13 @@ table tr:last-child td {
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #9a6c1f 0%, #c8a15a 100%);
+        background: linear-gradient(90deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
     }
 
     .factor-card i {
         margin-bottom: 12px;
         font-size: 1.7rem;
-        color: #9a6c1f;
+        color: var(--theme-accent);
         opacity: 1;
     }
 
@@ -823,7 +674,7 @@ table tr:last-child td {
 
     .price-header h1 {
         margin-bottom: 20px;
-        font-size: clamp(3.3rem, 4.7vw, 4.9rem);
+        font-size: clamp(3rem, 4.2vw, 4.3rem);
         line-height: 0.92;
     }
 
@@ -835,13 +686,13 @@ table tr:last-child td {
     .price-factors {
         grid-column: 1 / 2;
         margin-bottom: 0;
-        padding: 34px;
-        border-radius: 34px;
+        padding: 30px;
+        border-radius: 30px;
     }
 
     .price-factors h2 {
         margin-bottom: 28px;
-        font-size: clamp(2.15rem, 2.9vw, 3rem);
+        font-size: clamp(2rem, 2.6vw, 2.6rem);
         text-align: left;
     }
 
@@ -851,9 +702,9 @@ table tr:last-child td {
     }
 
     .factor-card {
-        min-height: 210px;
-        padding: 28px 24px 24px;
-        border-radius: 24px;
+        min-height: 184px;
+        padding: 22px 20px 20px;
+        border-radius: 20px;
     }
 
     .calculator-section {
@@ -861,14 +712,14 @@ table tr:last-child td {
         position: sticky;
         top: 168px;
         margin-bottom: 0;
-        padding: 40px 34px 36px;
-        border-radius: 34px;
+        padding: 32px 28px 28px;
+        border-radius: 30px;
         text-align: left;
-        box-shadow: 0 28px 56px rgba(20, 28, 39, 0.18);
+        box-shadow: 0 24px 44px rgba(20, 28, 39, 0.16);
     }
 
     .calculator-section h2 {
-        font-size: clamp(2.1rem, 3vw, 2.85rem);
+        font-size: clamp(2rem, 2.8vw, 2.55rem);
         line-height: 0.96;
     }
 
@@ -884,27 +735,27 @@ table tr:last-child td {
     .guarantee-section {
         grid-column: 1 / 2;
         margin-bottom: 0;
-        padding: 34px;
+        padding: 30px;
         text-align: left;
-        border-radius: 34px;
+        border-radius: 30px;
     }
 
     .guarantee-title {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
     .price-cta {
         grid-column: 2 / 3;
         display: grid;
-        gap: 16px;
+        gap: 14px;
         align-content: start;
         margin: 0;
-        padding: 30px;
-        border-radius: 34px;
+        padding: 26px 26px 28px;
+        border-radius: 30px;
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 241, 235, 0.96));
         border: 1px solid rgba(34, 52, 70, 0.08);
-        box-shadow: 0 22px 42px rgba(20, 28, 39, 0.06);
+        box-shadow: var(--theme-shadow-soft);
     }
 
     .price-cta .btn,
@@ -915,13 +766,13 @@ table tr:last-child td {
     }
 
     .prices-page .section[aria-labelledby="prices-faq-title"] {
-        margin-top: 8px;
-        padding: 38px;
-        border-radius: 34px;
+        margin-top: 6px;
+        padding: 32px;
+        border-radius: 30px;
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 242, 236, 0.96));
         border: 1px solid rgba(34, 52, 70, 0.08);
-        box-shadow: 0 24px 44px rgba(20, 28, 39, 0.06);
+        box-shadow: var(--theme-shadow-soft);
     }
 
     .prices-page .section-title {
@@ -1099,7 +950,7 @@ table tr:last-child td {
 .guarantee-section,
 .price-cta,
 .prices-page .section[aria-labelledby="prices-faq-title"] {
-    border-radius: 30px;
+    border-radius: var(--theme-radius-xl);
 }
 
 .price-factors {
@@ -1120,7 +971,7 @@ table tr:last-child td {
 
 .factor-card {
     padding: 22px;
-    border-radius: 22px;
+    border-radius: var(--theme-radius-md);
 }
 
 .calculator-section {
@@ -1188,7 +1039,7 @@ table tr:last-child td {
     align-content: start;
     gap: 14px;
     text-align: left;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 241, 235, 0.95));
+    background: var(--theme-surface-gradient-soft);
     border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow-soft);
 }

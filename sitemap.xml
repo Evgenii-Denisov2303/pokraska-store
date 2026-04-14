@@ -54,6 +54,12 @@
 
   <!-- Автоматика для распашных ворот: карточки -->
   <url>
+    <loc>https://pokraska.store/pages/automation-swing.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.74</priority>
+  </url>
+  <url>
     <loc>https://pokraska.store/pages/automation-ati3000a.html</loc>
     <lastmod>2026-03-20</lastmod>
     <changefreq>monthly</changefreq>

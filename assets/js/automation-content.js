@@ -12,6 +12,35 @@
             .replace(/'/g, '&#39;');
     }
 
+    function setTextIfChanged(element, value) {
+        if (!element) return;
+        const nextValue = String(value ?? '');
+        if (element.textContent !== nextValue) {
+            element.textContent = nextValue;
+        }
+    }
+
+    function setAttributeIfChanged(element, attributeName, value) {
+        if (!element) return;
+        const nextValue = String(value ?? '');
+        const currentValue = element.getAttribute(attributeName) || '';
+        if (currentValue !== nextValue) {
+            if (nextValue) {
+                element.setAttribute(attributeName, nextValue);
+            } else {
+                element.removeAttribute(attributeName);
+            }
+        }
+    }
+
+    function setHtmlIfChanged(element, html) {
+        if (!element) return;
+        const nextHtml = String(html ?? '').trim();
+        if (element.innerHTML.trim() !== nextHtml) {
+            element.innerHTML = nextHtml;
+        }
+    }
+
     function renderButton(action, className) {
         return `
             <a href="${escapeHtml(action.href || '#')}" class="${escapeHtml(className)}">
@@ -51,13 +80,39 @@
         };
     }
 
+    function sameImageSource(candidate, current) {
+        if (!candidate || !current) return false;
+
+        try {
+            return new URL(candidate, window.location.href).href === new URL(current, window.location.href).href;
+        } catch (error) {
+            return candidate === current;
+        }
+    }
+
+    function applyImageSourceIfNeeded(image, src) {
+        if (!image) return;
+
+        const nextSrc = src || '';
+        const currentSrc = image.currentSrc || image.getAttribute('src') || '';
+
+        if (!nextSrc) {
+            image.removeAttribute('src');
+            return;
+        }
+
+        if (!sameImageSource(nextSrc, currentSrc)) {
+            image.src = nextSrc;
+        }
+    }
+
     function applyLinkedImageValue(image, link, value) {
         if (!image || !value) return;
         if (link) {
             link.href = value.src || '';
             link.title = value.title || value.alt || '';
         }
-        image.src = value.src || '';
+        applyImageSourceIfNeeded(image, value.src || '');
         image.alt = value.alt || '';
         if (value.width) image.setAttribute('width', Number(value.width));
         if (value.height) image.setAttribute('height', Number(value.height));
@@ -81,7 +136,7 @@
         button.dataset.thumbSrc = item.src || '';
         button.dataset.thumbAlt = item.alt || '';
         if (image) {
-            image.src = item.src || '';
+            applyImageSourceIfNeeded(image, item.src || '');
             image.alt = item.alt || '';
             if (item.width) image.setAttribute('width', Number(item.width));
             if (item.height) image.setAttribute('height', Number(item.height));
@@ -157,7 +212,10 @@
 
     function applyTextListItem(node, item) {
         if (!node) return;
-        node.textContent = item || '';
+        const nextValue = item || '';
+        if (node.textContent !== nextValue) {
+            node.textContent = nextValue;
+        }
     }
 
     function syncTextList(container, itemSelector, items) {
@@ -174,17 +232,17 @@
             const breadcrumbs = hero.querySelector('.catalog-breadcrumbs');
             const title = hero.querySelector('h1');
             const text = hero.querySelector('p');
-            if (breadcrumbs) breadcrumbs.textContent = content.hero?.breadcrumbs || '';
-            if (title) title.textContent = content.hero?.title || '';
-            if (text) text.textContent = content.hero?.subtitle || '';
+            setTextIfChanged(breadcrumbs, content.hero?.breadcrumbs || '');
+            setTextIfChanged(title, content.hero?.title || '');
+            setTextIfChanged(text, content.hero?.subtitle || '');
         }
 
         const listingHeader = document.querySelector('#catalog-panel-automation-swing .catalog-panel__header');
         if (listingHeader) {
             const breadcrumbs = listingHeader.querySelector('.catalog-breadcrumbs');
             const title = listingHeader.querySelector('h2');
-            if (breadcrumbs) breadcrumbs.textContent = content.listingHeader?.breadcrumbs || '';
-            if (title) title.textContent = content.listingHeader?.title || '';
+            setTextIfChanged(breadcrumbs, content.listingHeader?.breadcrumbs || '');
+            setTextIfChanged(title, content.listingHeader?.title || '');
         }
 
         const wrapper = document.querySelector('.automation-products');
@@ -211,15 +269,15 @@
             const specs = card.querySelector('.automation-product-specs');
             const action = card.querySelector('.automation-product-cta .btn');
 
-            if (meta) meta.textContent = product.meta || '';
-            if (title) title.textContent = product.title || '';
-            if (description) description.textContent = product.description || '';
+            setTextIfChanged(meta, product.meta || '');
+            setTextIfChanged(title, product.title || '');
+            setTextIfChanged(description, product.description || '');
             if (specs) {
                 syncTextList(specs, 'li', product.specs || []);
             }
             if (action) {
-                action.innerHTML = `<i class="fas fa-external-link-alt" aria-hidden="true"></i> ${escapeHtml(product.cta?.label || '')}`;
-                action.setAttribute('href', product.cta?.href || '#');
+                setHtmlIfChanged(action, `<i class="fas fa-external-link-alt" aria-hidden="true"></i> ${escapeHtml(product.cta?.label || '')}`);
+                setAttributeIfChanged(action, 'href', product.cta?.href || '#');
             }
 
             const gallery = card.querySelector('.automation-product-gallery');
@@ -237,12 +295,12 @@
             const subheading = guide.querySelector('h4');
             const text = guide.querySelector('.automation-guide__text');
 
-            if (title) title.textContent = content.guide?.title || '';
-            if (intro) intro.textContent = content.guide?.intro || '';
+            setTextIfChanged(title, content.guide?.title || '');
+            setTextIfChanged(intro, content.guide?.intro || '');
             if (list) {
                 syncTextList(list, 'li', content.guide?.list || []);
             }
-            if (subheading) subheading.textContent = content.guide?.subheading || '';
+            setTextIfChanged(subheading, content.guide?.subheading || '');
             if (text) {
                 syncTextList(text, 'p', content.guide?.paragraphs || []);
             }
@@ -265,14 +323,14 @@
             const text = cta.querySelector('p');
             const contacts = cta.querySelector('.catalog-contact-list');
 
-            if (title) title.textContent = content.cta?.title || '';
-            if (text) text.textContent = content.cta?.text || '';
+            setTextIfChanged(title, content.cta?.title || '');
+            setTextIfChanged(text, content.cta?.text || '');
             if (contacts) {
-                contacts.innerHTML = (content.cta?.contacts || []).map((item) => `
+                setHtmlIfChanged(contacts, (content.cta?.contacts || []).map((item) => `
                     <a href="${escapeHtml(item.href || '#')}">
                         <i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.label || '')}
                     </a>
-                `).join('');
+                `).join(''));
             }
         }
     }
@@ -286,12 +344,12 @@
         const cta = document.querySelector('.automation-product-cta');
 
         if (backLink) {
-            backLink.setAttribute('href', content.backHref || '#');
-            backLink.innerHTML = `<i class="fas fa-arrow-left" aria-hidden="true"></i> ${escapeHtml(content.backLabel || '')}`;
+            setAttributeIfChanged(backLink, 'href', content.backHref || '#');
+            setHtmlIfChanged(backLink, `<i class="fas fa-arrow-left" aria-hidden="true"></i> ${escapeHtml(content.backLabel || '')}`);
         }
-        if (meta) meta.textContent = content.meta || '';
-        if (title) title.textContent = content.title || '';
-        if (description) description.textContent = content.description || '';
+        setTextIfChanged(meta, content.meta || '');
+        setTextIfChanged(title, content.title || '');
+        setTextIfChanged(description, content.description || '');
         const gallery = document.querySelector('.automation-product-gallery');
         if (gallery && Array.isArray(content.gallery) && content.gallery.length) {
             syncAutomationGallery(gallery, content.gallery);
@@ -302,17 +360,17 @@
             if (!section) return;
             const sectionTitle = section.querySelector('.automation-product-section__title');
             const list = section.querySelector('.automation-product-specs');
-            if (sectionTitle) sectionTitle.textContent = sectionContent.title || '';
+            setTextIfChanged(sectionTitle, sectionContent.title || '');
             if (list) {
                 syncTextList(list, 'li', sectionContent.items || []);
             }
         });
 
         if (cta) {
-            cta.innerHTML = [
+            setHtmlIfChanged(cta, [
                 renderButton(sharedActions.primary || {}, 'btn btn-primary'),
                 renderButton(sharedActions.secondary || {}, 'btn btn-secondary')
-            ].join('');
+            ].join(''));
         }
     }
 
@@ -325,12 +383,12 @@
         const cta = document.querySelector('.automation-product-cta');
 
         if (backLink) {
-            backLink.setAttribute('href', content.backHref || '#');
-            backLink.innerHTML = `<i class="fas fa-arrow-left" aria-hidden="true"></i> ${escapeHtml(content.backLabel || '')}`;
+            setAttributeIfChanged(backLink, 'href', content.backHref || '#');
+            setHtmlIfChanged(backLink, `<i class="fas fa-arrow-left" aria-hidden="true"></i> ${escapeHtml(content.backLabel || '')}`);
         }
-        if (meta) meta.textContent = content.meta || '';
-        if (title) title.textContent = content.title || '';
-        if (description) description.textContent = content.description || '';
+        setTextIfChanged(meta, content.meta || '');
+        setTextIfChanged(title, content.title || '');
+        setTextIfChanged(description, content.description || '');
         if (specs) {
             syncTextList(specs, 'li', content.specs || []);
         }

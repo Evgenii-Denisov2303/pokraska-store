@@ -14,10 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
     `.trim();
 
     const hasNav = navLinks.length && sections.length;
+    const shouldHydrateCatalogContacts = Boolean(
+        hasNav || document.querySelector('[data-catalog-layout], [data-catalog-gallery], [data-catalog-panel]')
+    );
 
-    document.querySelectorAll('.catalog-contact-list').forEach((contactList) => {
-        contactList.innerHTML = catalogContactListMarkup;
-    });
+    if (shouldHydrateCatalogContacts) {
+        document.querySelectorAll('.catalog-contact-list').forEach((contactList) => {
+            if (contactList.innerHTML.trim() !== catalogContactListMarkup) {
+                contactList.innerHTML = catalogContactListMarkup;
+            }
+        });
+    }
 
     function updateActiveLink() {
         if (!hasNav) {
@@ -115,151 +122,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const catalogGroupTabs = document.querySelectorAll('[data-catalog-group]');
     const catalogGroupPanels = document.querySelectorAll('[data-catalog-group-panel]');
     const catalogLayout = document.querySelector('[data-catalog-layout]');
-
-    const flattenCatalogChrome = () => {
-        if (!catalogLayout) {
-            return;
-        }
-
-        Object.assign(catalogLayout.style, {
-            background: 'transparent',
-            border: '0',
-            boxShadow: 'none',
-            outline: '0',
-            padding: '0',
-            gap: '16px'
-        });
-
-        const sidebar = catalogLayout.querySelector('.catalog-sidebar');
-        const content = catalogLayout.querySelector('.catalog-content');
-        let groupTabsRoot = sidebar?.querySelector('.catalog-group-tabs') || catalogLayout.querySelector(':scope > .catalog-group-tabs');
-        let groupPanelsRoot = sidebar?.querySelector('.catalog-group-panels') || catalogLayout.querySelector(':scope > .catalog-group-panels');
-
-        if (sidebar && groupTabsRoot && groupPanelsRoot && !catalogLayout.dataset.catalogNavDetached) {
-            if (content) {
-                catalogLayout.insertBefore(groupTabsRoot, content);
-                catalogLayout.insertBefore(groupPanelsRoot, content);
-            } else {
-                catalogLayout.appendChild(groupTabsRoot);
-                catalogLayout.appendChild(groupPanelsRoot);
-            }
-
-            sidebar.remove();
-            catalogLayout.dataset.catalogNavDetached = 'true';
-        }
-
-        if (groupTabsRoot) {
-            Object.assign(groupTabsRoot.style, {
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '12px',
-                margin: '0',
-                padding: '0',
-                maxWidth: '980px',
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none'
-            });
-        }
-
-        if (groupPanelsRoot) {
-            Object.assign(groupPanelsRoot.style, {
-                display: 'contents',
-                margin: '0',
-                padding: '0',
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none'
-            });
-        }
-
-        if (sidebar) {
-            Object.assign(sidebar.style, {
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none',
-                padding: '0',
-                backdropFilter: 'none'
-            });
-        }
-
-        if (content) {
-            Object.assign(content.style, {
-                gap: '18px'
-            });
-        }
-
-        catalogLayout.querySelectorAll('.catalog-sidebar__section, .catalog-sidebar__section--detail, .catalog-group-panels, .catalog-group-panel, .catalog-group-panel__links').forEach((element) => {
-            Object.assign(element.style, {
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none',
-                padding: '0',
-                borderRadius: '0',
-                backdropFilter: 'none'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-group-tab').forEach((tab) => {
-            Object.assign(tab.style, {
-                flex: '1 1 176px',
-                minHeight: '52px',
-                background: 'rgba(255, 255, 255, 0.72)',
-                boxShadow: 'none',
-                backdropFilter: 'none'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-group-panel__links, .catalog-group-panel.is-active').forEach((element) => {
-            Object.assign(element.style, {
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none',
-                padding: '0'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-link').forEach((link) => {
-            Object.assign(link.style, {
-                minHeight: '38px',
-                background: 'rgba(255, 255, 255, 0.68)',
-                boxShadow: 'none'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-panel').forEach((panel) => {
-            Object.assign(panel.style, {
-                background: 'transparent',
-                border: '0',
-                boxShadow: 'none',
-                padding: '0',
-                borderRadius: '0',
-                overflow: 'visible'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-panel__header').forEach((headerElement) => {
-            headerElement.style.display = 'none';
-        });
-
-        catalogLayout.querySelectorAll('.catalog-panel__grid--feature .catalog-panel__text').forEach((textBlock) => {
-            Object.assign(textBlock.style, {
-                borderLeft: '0',
-                padding: '0',
-                background: 'transparent',
-                boxShadow: 'none'
-            });
-        });
-
-        catalogLayout.querySelectorAll('.catalog-group-panel__intro, .catalog-sidebar__label, .catalog-breadcrumbs').forEach((element) => {
-            element.style.display = 'none';
-        });
-    };
-
-    flattenCatalogChrome();
+    const catalogGroupCurrent = document.querySelector('[data-catalog-group-current]');
 
     if (catalogTabs.length && catalogPanels.length) {
         const lastActiveTabByGroup = new Map();
+
+        const getCatalogGroupTab = (groupId) => Array.from(catalogGroupTabs).find((tab) => tab.dataset.catalogGroup === groupId);
+        const getCatalogGroupPanel = (groupId) => Array.from(catalogGroupPanels).find((panel) => panel.dataset.catalogGroupPanel === groupId);
+
+        const getCatalogGroupTitle = (groupId) => {
+            const groupTab = getCatalogGroupTab(groupId);
+            if (!groupTab) {
+                return '';
+            }
+
+            const titleElement = groupTab.querySelector('.catalog-group-tab__title');
+            return (titleElement ? titleElement.textContent : groupTab.textContent).trim();
+        };
 
         const getCatalogHashState = (hashValue = window.location.hash) => {
             const hashId = hashValue ? hashValue.replace('#', '') : '';
@@ -297,6 +176,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         };
 
+        const catalogTargetNeedsScroll = (targetElement) => {
+            if (!targetElement) {
+                return false;
+            }
+
+            const headerHeight = header ? header.offsetHeight : 140;
+            const rect = targetElement.getBoundingClientRect();
+            const topBoundary = headerHeight + 24;
+            const bottomBoundary = window.innerHeight - 120;
+
+            return rect.top < topBoundary || rect.top > bottomBoundary;
+        };
+
         let panelPulseTimeout = null;
 
         const pulseCatalogPanel = (panelElement) => {
@@ -326,16 +218,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 catalogLayout.dataset.activeGroup = groupId;
             }
 
+            if (catalogGroupCurrent) {
+                catalogGroupCurrent.textContent = getCatalogGroupTitle(groupId);
+            }
+
             catalogGroupTabs.forEach((groupTab) => {
                 const isActive = groupTab.dataset.catalogGroup === groupId;
                 groupTab.classList.toggle('is-active', isActive);
+                groupTab.setAttribute('aria-expanded', String(isActive));
+                groupTab.setAttribute('aria-selected', String(isActive));
             });
 
             catalogGroupPanels.forEach((groupPanel) => {
                 const isActive = groupPanel.dataset.catalogGroupPanel === groupId;
                 groupPanel.classList.toggle('is-active', isActive);
                 groupPanel.hidden = !isActive;
-                groupPanel.style.display = isActive ? 'contents' : 'none';
+                groupPanel.setAttribute('aria-hidden', String(!isActive));
+                groupPanel.style.removeProperty('display');
             });
         };
 
@@ -343,12 +242,14 @@ document.addEventListener('DOMContentLoaded', function() {
             catalogTabs.forEach((tab) => {
                 const isActive = tab.dataset.catalogTab === panelId;
                 tab.classList.toggle('is-active', isActive);
+                tab.setAttribute('aria-pressed', String(isActive));
             });
 
             catalogPanels.forEach((panel) => {
                 const isActive = panel.id === panelId;
                 panel.classList.toggle('is-active', isActive);
                 panel.hidden = !isActive;
+                panel.setAttribute('aria-hidden', String(!isActive));
             });
 
             const activeTab = Array.from(catalogTabs).find((tab) => tab.dataset.catalogTab === panelId);
@@ -362,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         catalogGroupTabs.forEach((groupTab) => {
             groupTab.addEventListener('click', () => {
                 const groupId = groupTab.dataset.catalogGroup;
-                const groupPanel = Array.from(catalogGroupPanels).find((panel) => panel.dataset.catalogGroupPanel === groupId);
+                const groupPanel = getCatalogGroupPanel(groupId);
                 const groupTabsList = groupPanel ? Array.from(groupPanel.querySelectorAll('[data-catalog-tab]')) : [];
                 const rememberedPanelId = lastActiveTabByGroup.get(groupId);
                 const targetTab =
@@ -371,11 +272,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (targetTab) {
                     activateCatalogTab(targetTab.dataset.catalogTab);
+                    history.replaceState(null, '', `#${targetTab.dataset.catalogTab}`);
                     requestAnimationFrame(() => {
                         const targetPanel = document.getElementById(targetTab.dataset.catalogTab);
-                        if (targetPanel) {
+                        if (targetPanel && catalogTargetNeedsScroll(targetPanel)) {
                             scrollCatalogTarget(targetPanel, true);
-                            pulseCatalogPanel(targetPanel);
                         }
                     });
                 } else {
@@ -393,12 +294,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     requestAnimationFrame(() => {
                         const targetPanel = document.getElementById(panelId);
                         if (targetPanel) {
-                            scrollCatalogTarget(targetPanel, true);
+                            if (catalogTargetNeedsScroll(targetPanel)) {
+                                scrollCatalogTarget(targetPanel, true);
+                            }
                             pulseCatalogPanel(targetPanel);
                         }
                     });
                 }
             });
+        });
+
+        catalogGroupTabs.forEach((groupTab) => {
+            const groupId = groupTab.dataset.catalogGroup;
+            const groupPanel = getCatalogGroupPanel(groupId);
+
+            if (!groupTab.id) {
+                groupTab.id = `catalog-group-tab-${groupId}`;
+            }
+
+            groupTab.setAttribute('role', 'tab');
+            groupTab.setAttribute('aria-haspopup', 'true');
+
+            if (groupPanel) {
+                if (!groupPanel.id) {
+                    groupPanel.id = `catalog-group-panel-${groupId}`;
+                }
+
+                groupTab.setAttribute('aria-controls', groupPanel.id);
+                groupPanel.setAttribute('role', 'tabpanel');
+                groupPanel.setAttribute('aria-labelledby', groupTab.id);
+            }
         });
 
         const hashState = getCatalogHashState();
@@ -438,7 +363,9 @@ document.addEventListener('DOMContentLoaded', function() {
             activateCatalogTab(currentHashState.panelId);
 
             setTimeout(() => {
-                scrollCatalogTarget(currentHashState.targetElement, true);
+                if (catalogTargetNeedsScroll(currentHashState.targetElement)) {
+                    scrollCatalogTarget(currentHashState.targetElement, true);
+                }
             }, 60);
         });
     }

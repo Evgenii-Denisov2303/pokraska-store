@@ -315,24 +315,103 @@
         // перезагрузка логотипа, переустановка телефонов и вставка иконок в меню.
     }
 
-    function applyFooter(site) {
-        const footerCompany = document.querySelector('.footer-column--company');
-        if (footerCompany) {
-            const title = footerCompany.querySelector('h4');
-            const paragraphs = footerCompany;
+    function ensureLegacyFooterBrandMeta() {
+        const footerLogo = document.querySelector('.footer-column--logo .footer-logo');
+        if (!footerLogo) {
+            return null;
+        }
 
-            if (title) {
-                title.textContent = site.footer?.companyTitle || '';
+        let brandMeta = footerLogo.querySelector('.footer-brand-meta');
+        if (!brandMeta) {
+            brandMeta = document.createElement('div');
+            brandMeta.className = 'footer-brand-meta';
+            brandMeta.innerHTML = `
+                <div class="footer-brand-meta__heading">
+                    <div class="footer-brand-meta__eyebrow">Компания</div>
+                    <h4 class="footer-brand-meta__company"></h4>
+                </div>
+                <div class="footer-brand-meta__description">
+                    <p class="footer-brand-meta__text"></p>
+                    <p class="footer-brand-meta__text"></p>
+                </div>
+            `;
+            footerLogo.appendChild(brandMeta);
+            return brandMeta;
+        }
+
+        let heading = brandMeta.querySelector('.footer-brand-meta__heading');
+        let description = brandMeta.querySelector('.footer-brand-meta__description');
+
+        if (!heading) {
+            const eyebrow = brandMeta.querySelector('.footer-brand-meta__eyebrow') || document.createElement('div');
+            eyebrow.className = 'footer-brand-meta__eyebrow';
+            if (!eyebrow.textContent) {
+                eyebrow.textContent = 'Компания';
             }
 
-            if (paragraphs) {
-                syncTextCollection(paragraphs, ':scope > p', site.footer?.companyParagraphs || []);
+            const company = brandMeta.querySelector('.footer-brand-meta__company') || document.createElement('h4');
+            company.className = 'footer-brand-meta__company';
+
+            heading = document.createElement('div');
+            heading.className = 'footer-brand-meta__heading';
+            heading.append(eyebrow, company);
+        }
+
+        if (!description) {
+            description = document.createElement('div');
+            description.className = 'footer-brand-meta__description';
+        }
+
+        while (description.querySelectorAll('.footer-brand-meta__text').length < 2) {
+            const paragraph = document.createElement('p');
+            paragraph.className = 'footer-brand-meta__text';
+            description.appendChild(paragraph);
+        }
+
+        if (brandMeta.firstElementChild !== heading || brandMeta.lastElementChild !== description) {
+            brandMeta.replaceChildren(heading, description);
+        }
+
+        return brandMeta;
+    }
+
+    function applyFooter(site) {
+        const premiumFooterCompany = document.querySelector('.footer-premium__column--company');
+        const legacyFooterCompany = document.querySelector('.footer-column--company');
+        const legacyFooterBrandMeta = ensureLegacyFooterBrandMeta();
+        const footerCompanyTitle = premiumFooterCompany?.querySelector('.footer-premium__company')
+            || legacyFooterCompany?.querySelector('h4')
+            || legacyFooterBrandMeta?.querySelector('.footer-brand-meta__company');
+
+        if (footerCompanyTitle) {
+            footerCompanyTitle.textContent = site.footer?.companyTitle || '';
+        }
+
+        if (premiumFooterCompany) {
+            syncTextCollection(premiumFooterCompany, '.footer-premium__legal-text', site.footer?.companyParagraphs || []);
+        } else if (legacyFooterCompany) {
+            syncTextCollection(legacyFooterCompany, ':scope > p', site.footer?.companyParagraphs || []);
+        } else if (legacyFooterBrandMeta) {
+            const legacyFooterBrandDescription = legacyFooterBrandMeta.querySelector('.footer-brand-meta__description');
+            if (legacyFooterBrandDescription) {
+                syncTextCollection(legacyFooterBrandDescription, '.footer-brand-meta__text', site.footer?.companyParagraphs || []);
             }
         }
 
-        const contactList = document.querySelector('.footer .contact-list');
-        if (contactList) {
-            contactList.innerHTML = `
+        const premiumContactList = document.querySelector('.footer-premium__list--contacts');
+        const legacyContactList = document.querySelector('.footer .contact-list');
+        if (premiumContactList) {
+            premiumContactList.innerHTML = `
+                <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>${escapeHtml(site.contact?.address || '')}</span></li>
+                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
+                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.secondaryPhone?.href || '#')}">${escapeHtml(site.contact?.secondaryPhone?.label || '')}</a></li>
+                <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:${escapeHtml(site.contact?.email || '')}">${escapeHtml(site.contact?.email || '')}</a></li>
+                <li><i class="fas fa-clock" aria-hidden="true"></i><span>${escapeHtml(site.contact?.hours || '')}</span></li>
+                <li><i class="fab fa-telegram-plane" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.telegram?.label || 'Telegram')}</a></li>
+                <li><i class="fas fa-comment-dots" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.max?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.max?.label || 'Max')}</a></li>
+            `;
+        } else if (legacyContactList) {
+            legacyContactList.innerHTML = `
                 <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> ${escapeHtml(site.contact?.address || '')}</li>
                 <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
                 <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.secondaryPhone?.href || '#')}">${escapeHtml(site.contact?.secondaryPhone?.label || '')}</a></li>
@@ -362,21 +441,20 @@
             }
         }
 
-        const footerBottom = document.querySelector('.footer-bottom');
+        const footerBottom = document.querySelector('.footer-premium__bottom') || document.querySelector('.footer-bottom');
         if (footerBottom) {
             const paragraphs = footerBottom.querySelectorAll('p');
+            const currentYear = new Date().getFullYear();
+            const startYear = Number(site.brand?.copyrightStartYear) || currentYear;
+            const yearRange = startYear >= currentYear ? `${currentYear}` : `${startYear}-${currentYear}`;
+
             if (paragraphs[0]) {
-                paragraphs[0].innerHTML = `&copy; ${escapeHtml(site.brand?.copyrightStartYear || 2014)}-<span id="currentYear"></span> ${escapeHtml(site.brand?.footerCaption || '')}`;
+                paragraphs[0].innerHTML = `&copy; ${escapeHtml(yearRange)} ${escapeHtml(site.brand?.footerCaption || '')}`;
             }
 
             if (paragraphs[1]) {
                 paragraphs[1].innerHTML = `<a href="${escapeHtml(site.footer?.policyHref || '/politika.html')}">${escapeHtml(site.footer?.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand?.domain || '')}`;
             }
-        }
-
-        const yearElement = document.getElementById('currentYear');
-        if (yearElement) {
-            yearElement.textContent = new Date().getFullYear();
         }
     }
 
@@ -513,7 +591,9 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerCompanyTitle = document.querySelector('.footer-column--company h4');
+        const footerCompanyTitle = document.querySelector('.footer-premium__company')
+            || document.querySelector('.footer-column--company h4')
+            || document.querySelector('.footer-brand-meta__company');
         if (footerCompanyTitle) {
             bindings.push({
                 path: 'footer.companyTitle',
@@ -523,9 +603,17 @@
             });
         }
 
-        const footerCompany = document.querySelector('.footer-column--company');
+        const footerCompany = document.querySelector('.footer-premium__column--company')
+            || document.querySelector('.footer-column--company')
+            || document.querySelector('.footer-brand-meta__description');
         if (footerCompany) {
             const paragraphContainer = footerCompany;
+            const paragraphSelector = footerCompany.classList.contains('footer-premium__column--company')
+                ? '.footer-premium__legal-text'
+                : footerCompany.classList.contains('footer-brand-meta__description')
+                    ? '.footer-brand-meta__text'
+                : ':scope > p';
+
             bindings.push({
                 path: 'footer.companyParagraphs',
                 type: 'list',
@@ -534,12 +622,12 @@
                 element: footerCompany,
                 render(value, binding) {
                     binding.elements.forEach((element) => {
-                        syncTextCollection(element, ':scope > p', Array.isArray(value) ? value : []);
+                        syncTextCollection(element, paragraphSelector, Array.isArray(value) ? value : []);
                     });
                 }
             });
             if (paragraphContainer) {
-                paragraphContainer.querySelectorAll(':scope > p').forEach((paragraph, index) => {
+                Array.from(paragraphContainer.querySelectorAll(paragraphSelector)).forEach((paragraph, index) => {
                     bindings.push({
                         path: `footer.companyParagraphs.${index}`,
                         type: 'text',
@@ -550,7 +638,7 @@
                         label: `Описание компании в подвале — абзац ${index + 1}`,
                         element: paragraph,
                         collectionItemFactory(nextIndex) {
-                            const nextParagraph = paragraphContainer.querySelectorAll(':scope > p')[nextIndex];
+                            const nextParagraph = paragraphContainer.querySelectorAll(paragraphSelector)[nextIndex];
                             if (!nextParagraph) return null;
                             return {
                                 ...this,
@@ -563,7 +651,7 @@
                             return 'Новый абзац';
                         },
                         collectionRender(items) {
-                            syncTextCollection(paragraphContainer, ':scope > p', Array.isArray(items) ? items : []);
+                            syncTextCollection(paragraphContainer, paragraphSelector, Array.isArray(items) ? items : []);
                         },
                         render(value, binding) {
                             binding.elements.forEach((element) => applyTextItem(element, value || ''));
@@ -631,7 +719,7 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerEmail = document.querySelector('.footer .contact-list a[href^="mailto:"]');
+        const footerEmail = document.querySelector('.footer-premium__list--contacts a[href^="mailto:"]') || document.querySelector('.footer .contact-list a[href^="mailto:"]');
         if (footerEmail) {
             bindings.push({
                 path: 'contact.email',
@@ -647,7 +735,7 @@
             });
         }
 
-        const footerHoursItem = Array.from(document.querySelectorAll('.footer .contact-list li')).find((item) => item.querySelector('.fa-clock'));
+        const footerHoursItem = Array.from(document.querySelectorAll('.footer-premium__list--contacts li, .footer .contact-list li')).find((item) => item.querySelector('.fa-clock'));
         if (footerHoursItem) {
             bindings.push({
                 path: 'contact.hours',
@@ -656,13 +744,18 @@
                 element: footerHoursItem,
                 render(value, binding) {
                     binding.elements.forEach((element) => {
+                        if (element.closest('.footer-premium__list--contacts')) {
+                            element.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i><span>${escapeHtml(value || '')}</span>`;
+                            return;
+                        }
+
                         element.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i> ${escapeHtml(value || '')}`;
                     });
                 }
             });
         }
 
-        const footerTelegram = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent));
+        const footerTelegram = Array.from(document.querySelectorAll('.footer-premium__list--contacts a, .footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent));
         if (footerTelegram) {
             bindings.push({
                 path: 'contact.telegram',
@@ -676,13 +769,18 @@
                 render(value, binding) {
                     binding.elements.forEach((element) => {
                         element.setAttribute('href', value?.href || '#');
+                        if (element.closest('.footer-premium__list--contacts')) {
+                            element.textContent = value?.label || 'Telegram';
+                            return;
+                        }
+
                         element.innerHTML = `<i class="fab fa-telegram-plane" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Telegram')}`;
                     });
                 }
             });
         }
 
-        const footerMax = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent));
+        const footerMax = Array.from(document.querySelectorAll('.footer-premium__list--contacts a, .footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent));
         if (footerMax) {
             bindings.push({
                 path: 'contact.max',
@@ -696,13 +794,18 @@
                 render(value, binding) {
                     binding.elements.forEach((element) => {
                         element.setAttribute('href', value?.href || '#');
+                        if (element.closest('.footer-premium__list--contacts')) {
+                            element.textContent = value?.label || 'Max';
+                            return;
+                        }
+
                         element.innerHTML = `<i class="fas fa-comment-dots" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Max')}`;
                     });
                 }
             });
         }
 
-        const footerPolicy = document.querySelector('.footer-bottom p:last-child a');
+        const footerPolicy = document.querySelector('.footer-premium__bottom p:last-child a') || document.querySelector('.footer-bottom p:last-child a');
         if (footerPolicy) {
             bindings.push({
                 path: 'footer.policyLabel',

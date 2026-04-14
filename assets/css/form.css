@@ -2,11 +2,11 @@
 
 /* Общие стили формы */
 .request-form {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 251, 255, 0.96));
-    padding: 36px;
-    border-radius: 22px;
-    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.10);
-    border: 1px solid #dbe8f3;
+    background: var(--theme-surface-gradient);
+    padding: 30px;
+    border-radius: var(--theme-radius-xl);
+    box-shadow: var(--theme-shadow);
+    border: 1px solid var(--theme-border);
     position: relative;
     overflow: hidden;
     align-self: start;
@@ -24,14 +24,14 @@
     margin: 2px 0 14px;
     padding: 8px 13px;
     border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(237, 245, 255, 0.96));
-    border: 1px solid #d4e4f2;
-    color: #1f5b96;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(234, 243, 251, 0.96));
+    border: 1px solid var(--theme-border);
+    color: var(--theme-accent);
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    box-shadow: 0 8px 16px rgba(47, 121, 195, 0.10);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .request-form__eyebrow::before {
@@ -39,26 +39,26 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #2f79c3;
-    box-shadow: 0 0 0 6px rgba(47, 121, 195, 0.16);
+    background: var(--theme-accent);
+    box-shadow: 0 0 0 6px rgba(45, 116, 173, 0.14);
 }
 
 .quick-actions {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin: 0 0 20px;
+    gap: 10px;
+    margin: 0 0 18px;
 }
 
 .quick-actions .btn {
-    padding: 12px 18px;
-    font-size: 0.95rem;
-    min-height: 48px;
-    border-radius: 14px;
-    border: 1px solid #dbe8f3;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 251, 255, 0.96));
-    color: #1f5b96;
-    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.04);
+    padding: 11px 16px;
+    font-size: 0.9rem;
+    min-height: 44px;
+    border-radius: var(--theme-radius-sm);
+    border: 1px solid var(--theme-border);
+    background: var(--theme-surface-gradient-soft);
+    color: var(--theme-accent-strong);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .quick-actions--priority {
@@ -68,26 +68,26 @@
 .quick-actions--priority .btn {
     justify-content: center;
     width: 100%;
-    min-height: 52px;
+    min-height: 48px;
 }
 
 .quick-actions--priority .btn:first-child {
     grid-column: 1 / -1;
-    min-height: 56px;
+    min-height: 50px;
 }
 
 .quick-actions--priority .btn-outline {
     background: rgba(255, 255, 255, 0.78);
-    border-color: rgba(22, 93, 171, 0.14);
+    border-color: rgba(45, 116, 173, 0.14);
 }
 
 .quick-actions--priority .btn-outline:hover {
-    background: rgba(22, 93, 171, 0.08);
+    background: rgba(45, 116, 173, 0.08);
 }
 
 .request-form--compact {
-    padding: 28px 24px 24px;
-    min-height: clamp(760px, 58vw, 860px);
+    padding: 24px 20px 20px;
+    min-height: clamp(670px, 54vw, 760px);
 }
 
 .request-form:before {
@@ -97,37 +97,37 @@
     left: 0;
     right: 0;
     height: 5px;
-    background: linear-gradient(90deg, #2f79c3, #b56f42);
+    background: linear-gradient(90deg, var(--theme-accent), var(--theme-accent-strong));
 }
 
 .request-form h3 {
-    color: #2c3e50;
-    margin-bottom: 14px;
+    color: var(--theme-text-strong);
+    margin-bottom: 12px;
     text-align: left;
-    font-size: 1.65rem;
+    font-size: 1.52rem;
     font-weight: 700;
 }
 
 /* Уведомление формы */
 .form-notice {
     text-align: left;
-    color: #64717d;
-    margin-bottom: 22px;
-    font-size: 0.98rem;
+    color: var(--theme-text-muted);
+    margin-bottom: 18px;
+    font-size: 0.95rem;
     line-height: 1.55;
-    padding: 13px 15px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 251, 255, 0.96));
-    border-radius: 16px;
-    border: 1px solid #dbe8f3;
-    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.04);
+    padding: 12px 14px;
+    background: var(--theme-surface-gradient-soft);
+    border-radius: var(--theme-radius-md);
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .yandex-form-frame {
-    background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
-    border: 1px solid #dbe8f3;
-    border-radius: 20px;
-    padding: 6px 12px 14px 6px;
-    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    background: var(--theme-surface-gradient);
+    border: 1px solid var(--theme-border);
+    border-radius: var(--theme-radius-lg);
+    padding: 6px 10px 12px 6px;
+    box-shadow: var(--theme-shadow-soft);
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
@@ -137,8 +137,8 @@
 
 .yandex-form-embed {
     width: 100%;
-    min-height: 640px;
-    height: 640px;
+    min-height: 600px;
+    height: 600px;
     border: 0;
     border-radius: 8px;
     display: block;
@@ -148,8 +148,8 @@
 }
 
 .request-form--compact .yandex-form-embed {
-    min-height: 700px;
-    height: 700px;
+    min-height: 620px;
+    height: 620px;
 }
 
 @media (max-width: 768px) {
@@ -159,18 +159,18 @@
     }
 
     .yandex-form-embed {
-        min-height: 680px;
-        height: 680px;
+        min-height: 620px;
+        height: 620px;
     }
 
     .request-form--compact {
-        padding: 22px;
+        padding: 22px 20px 20px;
         min-height: auto;
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 660px;
-        height: 660px;
+        min-height: 600px;
+        height: 600px;
     }
 }
 
@@ -181,8 +181,8 @@
     }
 
     .yandex-form-embed {
-        min-height: 700px;
-        height: 700px;
+        min-height: 640px;
+        height: 640px;
     }
 
     .request-form--compact {
@@ -191,8 +191,8 @@
     }
 
     .request-form--compact .yandex-form-embed {
-        min-height: 680px;
-        height: 680px;
+        min-height: 620px;
+        height: 620px;
     }
 
     .quick-actions {
@@ -215,22 +215,22 @@
 .form-group textarea {
     width: 100%;
     padding: 18px 20px;
-    border: 2px solid #e0e6ed;
-    border-radius: 10px;
+    border: 2px solid rgba(22, 47, 74, 0.12);
+    border-radius: var(--theme-radius-sm);
     font-size: 1.05rem;
     font-family: inherit;
     transition: all 0.3s;
-    background: #f8f9fa;
-    color: #333;
+    background: var(--theme-bg-soft);
+    color: var(--theme-text);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: var(--theme-accent);
     background: white;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    box-shadow: 0 0 0 3px rgba(45, 116, 173, 0.12);
 }
 
 /* Специфические стили полей */
@@ -246,8 +246,8 @@
     align-items: flex-start;
     gap: 15px;
     padding: 15px;
-    background: #f8f9fa;
-    border-radius: 10px;
+    background: var(--theme-surface-gradient-soft);
+    border-radius: var(--theme-radius-sm);
     margin-bottom: 30px;
 }
 
@@ -256,13 +256,13 @@
     height: 20px;
     margin-top: 2px;
     cursor: pointer;
-    accent-color: #3498db;
+    accent-color: var(--theme-accent);
     flex-shrink: 0;
 }
 
 .checkbox-group label {
     font-size: 0.95rem;
-    color: #555;
+    color: var(--theme-text-muted);
     line-height: 1.5;
     cursor: pointer;
     user-select: none;
@@ -273,10 +273,10 @@
 .btn-submit {
     width: 100%;
     padding: 18px;
-    background: linear-gradient(135deg, #3498db, #2980b9);
+    background: linear-gradient(135deg, var(--theme-accent), var(--theme-accent-strong));
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--theme-radius-sm);
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
@@ -288,9 +288,9 @@
 }
 
 .btn-submit:hover {
-    background: linear-gradient(135deg, #2980b9, #1f639e);
+    background: linear-gradient(135deg, var(--theme-accent-strong), #183d5d);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+    box-shadow: 0 12px 28px rgba(30, 82, 126, 0.28);
 }
 
 .btn-submit:disabled {
@@ -391,7 +391,7 @@
     display: none;
     justify-content: center;
     align-items: center;
-    border-radius: 15px;
+    border-radius: var(--theme-radius-md);
     z-index: 10;
 }
 
@@ -403,7 +403,7 @@
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
+    border-top: 5px solid var(--theme-accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

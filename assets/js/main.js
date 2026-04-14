@@ -38,6 +38,102 @@ document.addEventListener('DOMContentLoaded', function() {
         }).catch(() => {});
     }
 
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, (character) => {
+            switch (character) {
+                case '&':
+                    return '&amp;';
+                case '<':
+                    return '&lt;';
+                case '>':
+                    return '&gt;';
+                case '"':
+                    return '&quot;';
+                case "'":
+                    return '&#39;';
+                default:
+                    return character;
+            }
+        });
+    }
+
+    function syncPremiumFooterParagraphs(container, paragraphs) {
+        if (!container) return;
+
+        const items = Array.isArray(paragraphs) ? paragraphs : [];
+        const template = container.querySelector('.footer-premium__legal-text');
+        if (!template) return;
+
+        while (container.querySelectorAll('.footer-premium__legal-text').length < items.length) {
+            const clone = template.cloneNode(true);
+            clone.textContent = '';
+            container.appendChild(clone);
+        }
+
+        Array.from(container.querySelectorAll('.footer-premium__legal-text')).forEach((element, index) => {
+            const value = items[index];
+            element.hidden = !value;
+            if (value) {
+                element.textContent = value;
+            }
+        });
+    }
+
+    function applyPremiumFooterContent(site, policyHrefFallback) {
+        if (!site) return;
+
+        const footerCompany = document.querySelector('.footer-premium__column--company');
+        const footerBrand = document.querySelector('.footer-premium__brand');
+        const footerLogo = document.querySelector('.footer-premium__logo');
+        const footerCompanyTitle = document.querySelector('.footer-premium__company');
+        const contactList = document.querySelector('.footer-premium__list--contacts');
+        const footerBottom = document.querySelector('.footer-premium__bottom');
+        const currentYear = new Date().getFullYear();
+        const startYear = Number(site.brand?.copyrightStartYear) || currentYear;
+        const yearRange = startYear >= currentYear ? `${currentYear}` : `${startYear}-${currentYear}`;
+
+        if (footerBrand) {
+            footerBrand.setAttribute('href', '#top');
+        }
+
+        if (footerLogo && site.brand?.logo?.src) {
+            footerLogo.setAttribute('src', site.brand.logo.src);
+            footerLogo.setAttribute('alt', site.brand.logo.alt || site.brand.logoAlt || site.brand?.name || '');
+        }
+
+        if (footerCompanyTitle) {
+            footerCompanyTitle.textContent = site.footer?.companyTitle || '';
+        }
+
+        if (footerCompany) {
+            syncPremiumFooterParagraphs(footerCompany, site.footer?.companyParagraphs || []);
+        }
+
+        if (contactList) {
+            contactList.innerHTML = `
+                <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>${escapeHtml(site.contact?.address || '')}</span></li>
+                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
+                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.secondaryPhone?.href || '#')}">${escapeHtml(site.contact?.secondaryPhone?.label || '')}</a></li>
+                <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:${escapeHtml(site.contact?.email || '')}">${escapeHtml(site.contact?.email || '')}</a></li>
+                <li><i class="fas fa-clock" aria-hidden="true"></i><span>${escapeHtml(site.contact?.hours || '')}</span></li>
+                <li><i class="fab fa-telegram-plane" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.telegram?.label || 'Telegram')}</a></li>
+                <li><i class="fas fa-comment-dots" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.max?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.max?.label || 'Max')}</a></li>
+            `;
+        }
+
+        if (footerBottom) {
+            const paragraphs = footerBottom.querySelectorAll('p');
+
+            if (paragraphs[0]) {
+                paragraphs[0].innerHTML = `&copy; ${escapeHtml(yearRange)} ${escapeHtml(site.brand?.footerCaption || site.brand?.name || '')}`;
+            }
+
+            if (paragraphs[1]) {
+                paragraphs[1].innerHTML = `<a href="${escapeHtml(site.footer?.policyHref || policyHrefFallback || '#')}">${escapeHtml(site.footer?.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand?.domain || '')}`;
+            }
+        }
+    }
+
     window.addEventListener('load', () => {
         requestAnimationFrame(setHeaderHeight);
     }, { once: true });
@@ -343,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
         footer.innerHTML = `
             <div class="container">
                 <div class="footer-premium__layout">
-                    <div class="footer-premium__primary">
+                    <div class="footer-premium__column footer-premium__column--company">
                         <a class="footer-premium__brand" href="#top" aria-label="Наверх">
                             <span class="footer-premium__mark logo-main logo-main--image" aria-hidden="true">
                                 <img class="footer-premium__logo logo-image" src="${assetsPrefix}images/logo.png" alt="">
@@ -351,20 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             </span>
                         </a>
 
-                        <div class="footer-premium__socials" aria-label="Быстрые контакты">
-                            <a class="footer-premium__social" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
-                            </a>
-                            <a class="footer-premium__social" href="https://max.ru" target="_blank" rel="noopener noreferrer" aria-label="Max">
-                                <i class="fas fa-comment-dots" aria-hidden="true"></i>
-                            </a>
-                            <a class="footer-premium__social" href="${pageHref('contacts.html')}" aria-label="Контакты и адрес">
-                                <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="footer-premium__column footer-premium__column--company">
                         <span class="footer-premium__label">Компания</span>
                         <p class="footer-premium__company">ООО «Комфорт Плюс»</p>
                         <p class="footer-premium__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
@@ -386,6 +468,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79376154629">+7 (937) 615-46-29</a></li>
                             <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></li>
                             <li><i class="fas fa-clock" aria-hidden="true"></i><span>Пн-Пт: 8:00-18:00, Сб: 9:00-14:00</span></li>
+                            <li><i class="fab fa-telegram-plane" aria-hidden="true"></i><a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+                            <li><i class="fas fa-comment-dots" aria-hidden="true"></i><a href="https://max.ru" target="_blank" rel="noopener noreferrer">Max</a></li>
                         </ul>
                     </div>
                 </div>
@@ -396,6 +480,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
+
+        if (window.PokraskaContent?.loadContentFile) {
+            window.PokraskaContent.loadContentFile('site')
+                .then((site) => {
+                    applyPremiumFooterContent(site, policyHref);
+                })
+                .catch(() => {});
+        }
     }
 
     renderPremiumFooter();

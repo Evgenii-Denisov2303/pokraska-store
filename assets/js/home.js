@@ -7,6 +7,7 @@
     const heroMenuToggle = document.querySelector('.hero-menu-toggle');
     const heroNav = document.querySelector('.hero-scene__nav');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
+    const panelGalleryState = new WeakMap();
 
     if (heroHeader && heroMenuToggle && heroNav) {
         const closeHeroMenu = () => {
@@ -32,12 +33,12 @@
             openHeroMenu();
         });
 
-        heroNav.querySelectorAll('a').forEach((link) => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= HERO_MENU_BREAKPOINT) {
-                    closeHeroMenu();
-                }
-            });
+        heroNav.addEventListener('click', (event) => {
+            const link = event.target.closest('a');
+            if (!link || !heroNav.contains(link)) return;
+            if (window.innerWidth <= HERO_MENU_BREAKPOINT) {
+                closeHeroMenu();
+            }
         });
 
         document.addEventListener('click', (event) => {
@@ -75,8 +76,8 @@
                     observer.unobserve(entry.target);
                 });
             }, {
-                threshold: 0.2,
-                rootMargin: '0px 0px -10% 0px'
+                threshold: 0.14,
+                rootMargin: '0px 0px -6% 0px'
             });
 
             scenes.forEach((scene) => {
@@ -86,19 +87,30 @@
         }
     }
 
-    const panelGalleries = Array.from(document.querySelectorAll('[data-panel-gallery]'));
+    function initializePanelGallery(card) {
+        const existingState = panelGalleryState.get(card);
+        if (existingState) {
+            existingState.abortController.abort();
+            if (existingState.timerId) {
+                window.clearInterval(existingState.timerId);
+            }
+        }
 
-    panelGalleries.forEach((card) => {
         const slides = Array.from(card.querySelectorAll('.panel-scene__image'));
         const dots = Array.from(card.querySelectorAll('.panel-scene__dot'));
         const caption = card.querySelector('[data-panel-caption]');
         const media = card.querySelector('.panel-scene__media');
         const overlay = card.querySelector('.panel-scene__overlay');
 
-        if (slides.length < 2 || !caption) return;
+        if (slides.length < 2 || !caption) {
+            panelGalleryState.delete(card);
+            return;
+        }
 
         let activeIndex = 0;
         let timerId = null;
+        const abortController = new AbortController();
+        const { signal } = abortController;
 
         const setActiveSlide = (index) => {
             activeIndex = index;
@@ -153,12 +165,12 @@
             dot.addEventListener('click', () => {
                 setActiveSlide(index);
                 startRotation();
-            });
+            }, { signal });
         });
 
         [media, overlay].forEach((clickTarget) => {
             if (!clickTarget) return;
-            clickTarget.addEventListener('click', handleDirectionalClick);
+            clickTarget.addEventListener('click', handleDirectionalClick, { signal });
         });
 
         setActiveSlide(0);
@@ -171,7 +183,27 @@
             }
 
             startRotation();
+        }, { signal });
+
+        panelGalleryState.set(card, {
+            abortController,
+            get timerId() {
+                return timerId;
+            }
         });
+    }
+
+    function initializePanelGalleries(root = document) {
+        const scope = root instanceof Element || root instanceof Document ? root : document;
+        scope.querySelectorAll('[data-panel-gallery]').forEach((card) => {
+            initializePanelGallery(card);
+        });
+    }
+
+    initializePanelGalleries();
+
+    document.addEventListener('pokraska:panel-galleries-updated', (event) => {
+        initializePanelGalleries(event.detail?.root || document);
     });
 
     if (focusSection) {
