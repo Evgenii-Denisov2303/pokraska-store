@@ -67,8 +67,8 @@
 }
 
 .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active {
-    background: rgba(36, 166, 191, 0.12) !important;
-    border-color: rgba(36, 166, 191, 0.18) !important;
+    background: rgba(138, 111, 74, 0.12) !important;
+    border-color: rgba(138, 111, 74, 0.18) !important;
     box-shadow: none !important;
 }
 
@@ -95,8 +95,8 @@
 }
 
 .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-link.is-active {
-    background: rgba(36, 166, 191, 0.12) !important;
-    border-color: rgba(36, 166, 191, 0.18) !important;
+    background: rgba(138, 111, 74, 0.12) !important;
+    border-color: rgba(138, 111, 74, 0.18) !important;
     box-shadow: none !important;
 }
 
@@ -7644,6 +7644,79 @@
 
     .services-cta h2 {
         font-size: clamp(1.74rem, 7vw, 2.08rem);
+    }
+}
+
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    .catalog-page {
+        --catalog-accent: var(--theme-accent);
+        --catalog-accent-strong: var(--theme-accent-strong);
+        --catalog-accent-soft: rgba(138, 111, 74, 0.1);
+        --catalog-accent-shadow: rgba(111, 87, 65, 0.18);
+        --catalog-accent-glow: rgba(138, 111, 74, 0.12);
+        --group-tab-color: var(--theme-accent);
+        --group-tab-color-end: var(--theme-accent-strong);
+        --group-tab-soft: rgba(138, 111, 74, 0.1);
+        --group-tab-glow: rgba(138, 111, 74, 0.12);
+        --group-tab-shadow: rgba(111, 87, 65, 0.18);
+    }
+
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active:hover,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active:focus-visible {
+        background: rgba(138, 111, 74, 0.1) !important;
+        border-color: rgba(138, 111, 74, 0.16) !important;
+        color: var(--theme-accent-strong) !important;
+        box-shadow: none !important;
+    }
+
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active .catalog-group-tab__icon {
+        background: rgba(138, 111, 74, 0.1) !important;
+        color: var(--theme-accent-strong) !important;
+    }
+}
+
+/* ========== CATALOG FINAL WARM LOCK ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-link,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab .catalog-group-tab__icon {
+        transition:
+            transform 180ms ease,
+            box-shadow 180ms ease,
+            border-color 180ms ease,
+            color 180ms ease,
+            background 180ms ease !important;
+    }
+
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab:hover,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-link:hover {
+        color: var(--theme-accent-strong) !important;
+        border-color: rgba(138, 111, 74, 0.18) !important;
+        box-shadow: 0 14px 24px rgba(111, 87, 65, 0.08) !important;
+        transform: translateY(-2px);
+    }
+
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-link.is-active {
+        background: linear-gradient(135deg, rgba(138, 111, 74, 0.16), rgba(111, 87, 65, 0.12)) !important;
+        border-color: rgba(138, 111, 74, 0.22) !important;
+        color: var(--theme-accent-strong) !important;
+    }
+
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-group-tab.is-active .catalog-group-tab__icon,
+    .catalog-page > .container > .catalog-layout > .catalog-sidebar .catalog-category-tab.is-active .catalog-category-tab__icon {
+        background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+        color: #fffdf9 !important;
+        box-shadow: 0 12px 22px rgba(111, 87, 65, 0.16) !important;
+    }
+
+    .catalog-page ::-webkit-scrollbar-thumb {
+        background: rgba(138, 111, 74, 0.26) !important;
+    }
+
+    .catalog-page ::-webkit-scrollbar-track {
+        background: rgba(237, 228, 217, 0.72) !important;
     }
 }
 

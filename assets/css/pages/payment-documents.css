@@ -2,7 +2,7 @@
 .payment-docs-page {
     padding: 72px 0 84px;
     background:
-        radial-gradient(circle at top right, rgba(36, 166, 191, 0.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(138, 111, 74, 0.08), transparent 24%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
     min-height: 100vh;
 }
@@ -102,7 +102,7 @@
     justify-content: center;
     margin-bottom: 16px;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
     color: var(--theme-accent);
     font-size: 1.35rem;
 }
@@ -189,7 +189,7 @@
     justify-content: center;
     margin-bottom: 16px;
     border-radius: var(--theme-radius-sm);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
     color: var(--theme-accent);
     font-size: 1.25rem;
 }
@@ -361,7 +361,7 @@
 /* Unified warm palette overrides */
 .payment-docs-page {
     background:
-        radial-gradient(circle at top right, rgba(36, 166, 191, 0.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(138, 111, 74, 0.08), transparent 24%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
 }
 
@@ -383,7 +383,7 @@
 }
 
 .payment-docs-card__icon {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
     color: var(--theme-accent);
 }
 
@@ -398,7 +398,7 @@
 @media (min-width: 1101px) {
     .payment-docs-page {
         background:
-            radial-gradient(circle at top left, rgba(36, 166, 191, 0.08), transparent 26%),
+            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 26%),
             radial-gradient(circle at top right, rgba(138, 112, 86, 0.06), transparent 20%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
     }
@@ -429,7 +429,7 @@
     }
 
     .payment-docs-card__icon {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(234, 243, 251, 0.96));
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
         color: var(--theme-accent);
     }
 
