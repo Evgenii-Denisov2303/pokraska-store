@@ -1948,6 +1948,8 @@
         object-position: center 72%;
         transform: scale(1);
         animation: stageDrift 16s ease-in-out infinite;
+        animation-delay: var(--hero-stage-drift-delay, 0s);
+        animation-fill-mode: both;
         -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
         mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
     }
@@ -1960,5 +1962,4 @@
         margin-top: 20px !important;
     }
 }
-
 

@@ -104,6 +104,30 @@
     box-sizing: border-box;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
+@media (min-width: 1101px) {
+    .hero-header {
+        view-transition-name: hero-header;
+        contain: paint;
+    }
+
+    .hero-stage__picture {
+        view-transition-name: hero-stage-picture;
+        contain: paint;
+    }
+
+    ::view-transition-old(hero-header),
+    ::view-transition-new(hero-header),
+    ::view-transition-old(hero-stage-picture),
+    ::view-transition-new(hero-stage-picture) {
+        animation-duration: 240ms;
+        animation-timing-function: ease;
+    }
+}
+
 html {
     font-size: 16.5px;
     scroll-behavior: smooth;
@@ -1055,6 +1079,8 @@ button {
     object-position: center 72%;
     transform: scale(1);
     animation: stageDrift 16s ease-in-out infinite;
+    animation-delay: var(--hero-stage-drift-delay, 0s);
+    animation-fill-mode: both;
     -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
     mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
 }

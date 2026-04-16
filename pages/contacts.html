@@ -23,6 +23,13 @@
 
 
     <!-- CSS -->
+    <script>
+    (function () {
+        var cycle = 16000;
+        var delay = -((Date.now() % cycle) / 1000).toFixed(3) + 's';
+        document.documentElement.style.setProperty('--hero-stage-drift-delay', delay);
+    })();
+    </script>
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../assets/css/main.css?v=20260417-internal-hero-strip-4">
     <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">

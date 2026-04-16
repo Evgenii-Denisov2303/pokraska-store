@@ -9,6 +9,30 @@
     unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 
+@view-transition {
+    navigation: auto;
+}
+
+@media (min-width: 1101px) {
+    .hero-header {
+        view-transition-name: hero-header;
+        contain: paint;
+    }
+
+    .hero-stage__picture {
+        view-transition-name: hero-stage-picture;
+        contain: paint;
+    }
+
+    ::view-transition-old(hero-header),
+    ::view-transition-new(hero-header),
+    ::view-transition-old(hero-stage-picture),
+    ::view-transition-new(hero-stage-picture) {
+        animation-duration: 240ms;
+        animation-timing-function: ease;
+    }
+}
+
 /* ========== INTERNAL PAGES FINAL CLEAN FOUNDATION ========== */
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     body#top {
@@ -7313,6 +7337,8 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         background-position: center 72%;
         transform-origin: center;
         animation: internalHeroStripDrift 16s ease-in-out infinite;
+        animation-delay: var(--hero-stage-drift-delay, 0s);
+        animation-fill-mode: both;
     }
 
     .header.header--desktop-hero:not(.contacts-legacy-header):not(.internal-legacy-header)::after {
@@ -8318,6 +8344,8 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         object-position: center 72%;
         transform: scale(1);
         animation: stageDrift 16s ease-in-out infinite;
+        animation-delay: var(--hero-stage-drift-delay, 0s);
+        animation-fill-mode: both;
         -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
         mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
     }

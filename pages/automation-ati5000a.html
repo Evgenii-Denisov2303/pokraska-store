@@ -22,6 +22,13 @@
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
+    <script>
+    (function () {
+        var cycle = 16000;
+        var delay = -((Date.now() % cycle) / 1000).toFixed(3) + 's';
+        document.documentElement.style.setProperty('--hero-stage-drift-delay', delay);
+    })();
+    </script>
     <link rel="preload" href="../assets/fonts/manrope/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/manrope/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
@@ -46,6 +53,7 @@
 
 
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
     <link rel="stylesheet" href="../assets/css/main.css?v=20260417-internal-hero-strip-4">
     <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
@@ -164,7 +172,7 @@
             <picture class="hero-stage__picture">
                 <source media="(max-width: 640px)" srcset="../assets/images/hero/home-hero-main-mobile.jpg">
                 <source media="(max-width: 1080px)" srcset="../assets/images/hero/home-hero-main-tablet.jpg">
-                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="async">
+                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="sync">
             </picture>
         </div>
     </section>
