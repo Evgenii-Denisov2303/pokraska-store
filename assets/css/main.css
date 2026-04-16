@@ -5480,10 +5480,10 @@ h1, h2, h3, h4, h5, h6 {
     right: 28px;
     height: 1px;
     background: linear-gradient(90deg,
-        rgba(111, 87, 65, 0),
-        rgba(111, 87, 65, 0.16) 18%,
-        rgba(111, 87, 65, 0.16) 82%,
-        rgba(111, 87, 65, 0));
+        rgba(77, 98, 120, 0),
+        rgba(77, 98, 120, 0.16) 18%,
+        rgba(77, 98, 120, 0.16) 82%,
+        rgba(77, 98, 120, 0));
 }
 
 .footer.footer--premium > .container::after {
@@ -5493,7 +5493,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 12%;
     right: 12%;
     height: 44px;
-    background: radial-gradient(ellipse at center, rgba(138, 111, 74, 0.12), rgba(138, 111, 74, 0) 72%);
+    background: radial-gradient(ellipse at center, rgba(92, 122, 154, 0.12), rgba(92, 122, 154, 0) 72%);
     pointer-events: none;
 }
 
@@ -5536,9 +5536,9 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
     padding: 4px;
     border-radius: 14px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 233, 220, 0.92) 100%);
+    background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
     box-shadow:
-        0 10px 24px rgba(31, 38, 34, 0.08),
+        0 10px 24px rgba(15, 23, 42, 0.08),
         inset 0 1px 0 rgba(255, 255, 255, 0.75);
     isolation: isolate;
 }
@@ -5610,7 +5610,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 900;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .footer-premium__brand-copy .footer-premium__label {
@@ -5629,7 +5629,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-premium__legal-text {
     margin: 0;
-    color: rgba(120, 111, 102, 0.78);
+    color: rgba(72, 82, 93, 0.76);
     font-size: 1.02rem;
     line-height: 1.68;
     max-width: 38ch;
@@ -5646,7 +5646,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-premium__list li {
     margin: 0;
-    color: rgba(120, 111, 102, 0.76);
+    color: rgba(92, 100, 110, 0.72);
     font-size: 1.04rem;
     line-height: 1.68;
     min-width: 0;
@@ -5657,7 +5657,7 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex;
     align-items: flex-start;
     gap: 10px;
-    color: rgba(43, 51, 47, 0.86);
+    color: rgba(56, 60, 66, 0.82);
     text-decoration: none;
     font-weight: 540;
     min-width: 0;
@@ -5665,7 +5665,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-premium__list a:hover {
-    color: var(--theme-accent);
+    color: #2c5f93;
 }
 
 .footer-premium__list--contacts li {
@@ -5676,7 +5676,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-premium__list--contacts i {
-    color: rgba(138, 111, 74, 0.72);
+    color: rgba(68, 110, 153, 0.7);
     margin-top: 3px;
 }
 
@@ -5695,7 +5695,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer-premium__bottom p {
     margin: 0;
-    color: rgba(120, 111, 102, 0.7);
+    color: rgba(86, 94, 104, 0.68);
     font-size: 0.9rem;
     line-height: 1.62;
     max-width: 78ch;
@@ -5703,12 +5703,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-premium__bottom p:first-child {
-    color: rgba(95, 83, 69, 0.72);
+    color: rgba(73, 83, 92, 0.66);
     font-weight: 540;
 }
 
 .footer-premium__bottom p:last-child {
-    color: rgba(120, 111, 102, 0.66);
+    color: rgba(100, 110, 120, 0.64);
 }
 
 .footer-premium__bottom a {
@@ -5717,7 +5717,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-premium__bottom a:hover {
-    color: var(--theme-accent);
+    color: #2c5f93;
 }
 
 @media (max-width: 1200px) {
@@ -6298,9 +6298,9 @@ body#top .contacts-subtitle {
         flex: 0 0 78px;
         padding: 4px;
         border-radius: 14px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 233, 220, 0.92) 100%);
+        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
         box-shadow:
-            0 10px 24px rgba(31, 38, 34, 0.08),
+            0 10px 24px rgba(15, 23, 42, 0.08),
             inset 0 1px 0 rgba(255, 255, 255, 0.75);
         isolation: isolate;
     }
@@ -7078,13 +7078,6 @@ body#top {
 }
 
 body#top,
-body#top .footer.footer--premium > .container {
-    background:
-        radial-gradient(circle at top left, rgba(154, 124, 88, 0.08), transparent 24%),
-        radial-gradient(circle at 88% 5%, rgba(79, 68, 61, 0.05), transparent 18%),
-        linear-gradient(180deg, var(--theme-bg-soft) 0%, var(--theme-bg) 46%, var(--theme-bg-deep) 100%);
-}
-
 body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
     color: var(--theme-text);
 }

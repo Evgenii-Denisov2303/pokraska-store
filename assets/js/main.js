@@ -350,9 +350,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="footer-premium__column footer-premium__column--contacts">
                         <span class="footer-premium__label">Контакты</span>
                         <ul class="footer-premium__list footer-premium__list--contacts">
-                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Казань, Старое Победилово, ул. Садовая, 72</span></li>
-                            <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79625542260">+7 (962) 554-22-60</a></li>
                             <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79376154629">+7 (937) 615-46-29</a></li>
+                            <li><i class="fas fa-phone" aria-hidden="true"></i><a href="tel:+79625542260">+7 (962) 554-22-60</a></li>
+                            <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Старое Победилово, ул. Садовая, 72</span></li>
                             <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></li>
                             <li><i class="fas fa-clock" aria-hidden="true"></i><span>Пн-Пт: 8:00-18:00, Сб: 9:00-14:00</span></li>
                             <li><i class="fab fa-telegram-plane" aria-hidden="true"></i><a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">Telegram</a></li>

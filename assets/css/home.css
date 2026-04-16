@@ -438,7 +438,7 @@ button {
 .hero-brand__eyebrow {
     color: rgba(16, 38, 61, 0.58);
     font-size: 12.2px;
-    font-weight: 720;
+    font-weight: 760;
     line-height: 1.18;
     letter-spacing: 0.17em;
     text-transform: uppercase;
@@ -758,17 +758,7 @@ button {
 }
 
 .hero-copy::before {
-    content: '';
-    position: absolute;
-    inset: -42px 14% -36px -66px;
-    z-index: -1;
-    border-radius: 60px;
-    background:
-        linear-gradient(90deg, rgba(6, 10, 16, 0.56) 0%, rgba(6, 10, 16, 0.3) 34%, rgba(6, 10, 16, 0.12) 58%, rgba(6, 10, 16, 0) 84%),
-        radial-gradient(72% 76% at 12% 52%, rgba(10, 14, 20, 0.32) 0%, rgba(10, 14, 20, 0.14) 38%, rgba(10, 14, 20, 0.04) 62%, rgba(10, 14, 20, 0) 86%);
-    filter: blur(20px);
-    opacity: 0.86;
-    pointer-events: none;
+    content: none;
 }
 
 .hero-copy__eyebrow,
@@ -794,8 +784,8 @@ button {
     font-size: 0.78rem;
     gap: 10px;
     text-shadow:
-        0 1px 1px rgba(6, 10, 16, 0.14),
-        0 6px 14px rgba(6, 10, 16, 0.18);
+        0 1px 1px rgba(6, 10, 16, 0.08),
+        0 4px 10px rgba(6, 10, 16, 0.1);
 }
 
 .hero-copy__eyebrow::before {
@@ -822,9 +812,9 @@ button {
     max-width: 6.9ch;
     text-wrap: balance;
     text-shadow:
-        0 1px 1px rgba(6, 10, 16, 0.12),
-        0 10px 18px rgba(6, 10, 16, 0.24),
-        0 20px 34px rgba(6, 10, 16, 0.12);
+        0 1px 1px rgba(6, 10, 16, 0.08),
+        0 6px 12px rgba(6, 10, 16, 0.16),
+        0 12px 22px rgba(6, 10, 16, 0.08);
 }
 
 .hero-copy__title-main,
@@ -842,8 +832,8 @@ button {
     max-width: 14.6ch;
     text-wrap: balance;
     text-shadow:
-        0 1px 1px rgba(6, 10, 16, 0.12),
-        0 6px 14px rgba(6, 10, 16, 0.14);
+        0 1px 1px rgba(6, 10, 16, 0.08),
+        0 4px 10px rgba(6, 10, 16, 0.1);
 }
 
 .hero-copy__subtext {
@@ -859,8 +849,8 @@ button {
     font-size: 0.9rem;
     line-height: 1.44;
     text-shadow:
-        0 1px 1px rgba(6, 10, 16, 0.12),
-        0 6px 12px rgba(6, 10, 16, 0.12);
+        0 1px 1px rgba(6, 10, 16, 0.08),
+        0 4px 10px rgba(6, 10, 16, 0.08);
 }
 
 .hero-copy__actions {
@@ -910,15 +900,15 @@ button {
     line-height: 1.22;
     box-shadow: none;
     text-shadow:
-        0 1px 1px rgba(6, 10, 16, 0.1),
-        0 4px 10px rgba(6, 10, 16, 0.1);
+        0 1px 1px rgba(6, 10, 16, 0.08),
+        0 3px 8px rgba(6, 10, 16, 0.08);
     backdrop-filter: none;
 }
 
 .hero-copy__features span i {
     color: rgba(196, 232, 255, 0.94);
     font-size: 0.88rem;
-    filter: drop-shadow(0 2px 5px rgba(6, 10, 16, 0.14));
+    filter: drop-shadow(0 1px 3px rgba(6, 10, 16, 0.1));
 }
 
 .hero-copy__facts {
@@ -1075,8 +1065,7 @@ button {
     inset: 0;
     background:
         radial-gradient(34% 34% at 7% 7%, rgba(255, 231, 190, 0.16) 0%, rgba(255, 231, 190, 0.06) 30%, rgba(255, 231, 190, 0) 64%),
-        radial-gradient(40% 48% at 18% 34%, rgba(18, 20, 24, 0.065) 0%, rgba(18, 20, 24, 0.024) 40%, rgba(18, 20, 24, 0.006) 58%, rgba(18, 20, 24, 0) 78%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.012) 0%, rgba(34, 31, 26, 0.008) 24%, rgba(34, 31, 26, 0.02) 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 249, 240, 0.01) 24%, rgba(34, 31, 26, 0.012) 100%);
     z-index: 2;
     -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
     mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
