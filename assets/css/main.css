@@ -7302,7 +7302,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
     }
 }
 
-@keyframes internalHeroStripDrift {
+@keyframes stageDrift {
     0%, 100% {
         transform: scale(1.002) translate3d(0, 0, 0);
     }
@@ -7336,7 +7336,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         background-size: cover;
         background-position: center 72%;
         transform-origin: center;
-        animation: internalHeroStripDrift 16s ease-in-out infinite;
+        animation: stageDrift 16s ease-in-out infinite;
         animation-delay: var(--hero-stage-drift-delay, 0s);
         animation-fill-mode: both;
     }
@@ -7833,16 +7833,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .header.header--desktop-hero.internal-legacy-header {
-        position: static !important;
-        inset: auto !important;
-        width: auto !important;
-        min-height: 0 !important;
-        height: auto !important;
-        margin: 0 !important;
-        overflow: visible !important;
-        isolation: auto !important;
-        background: transparent !important;
-        box-shadow: none !important;
+        display: none !important;
     }
 
     .header.header--desktop-hero.internal-legacy-header::before,
