@@ -1441,7 +1441,7 @@
     .contacts-scene-header {
         position: absolute;
         inset: -20px 24px auto;
-        z-index: 4;
+        z-index: 7;
         display: grid;
         gap: 0;
         margin-bottom: 0;
@@ -1740,6 +1740,8 @@
     }
 
     .contacts-scene-header .hero-scene__nav {
+        position: relative;
+        z-index: 3;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
@@ -1843,9 +1845,22 @@
     .contacts-page {
         padding: 0 0 120px !important;
         margin-top: 0 !important;
+        background:
+            linear-gradient(
+                180deg,
+                rgba(245, 239, 230, 0.94) 0%,
+                rgba(246, 240, 232, 0.972) 92px,
+                rgba(247, 242, 235, 0.992) 192px,
+                var(--theme-bg) 300px
+            ),
+            radial-gradient(circle at 8% 0%, rgba(138, 111, 74, 0.05), transparent 28%),
+            radial-gradient(circle at 92% 8%, rgba(138, 112, 86, 0.05), transparent 24%),
+            linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 44%, var(--theme-bg-soft) 100%);
     }
 
     .contacts-page > .container {
+        position: relative;
+        z-index: 1;
         padding-top: 12px !important;
     }
 
@@ -1864,31 +1879,61 @@
         border: 0;
         border-radius: 0;
         background: transparent;
-        box-shadow:
-            0 42px 88px -34px rgba(16, 38, 61, 0.24),
-            0 18px 34px -24px rgba(16, 38, 61, 0.16);
+        box-shadow: none;
     }
 
     .contacts-hero-scene::before {
         content: '';
         position: absolute;
         inset: auto 0 0;
-        height: 68%;
+        height: 88%;
         background:
-            radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.34), transparent 26%),
-            linear-gradient(180deg, rgba(16, 38, 61, 0) 0%, rgba(16, 38, 61, 0.1) 100%);
+            radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.3), transparent 26%),
+            linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(246, 240, 232, 0.03) 50%,
+                rgba(246, 240, 232, 0.12) 74%,
+                rgba(246, 240, 232, 0.26) 90%,
+                rgba(246, 240, 232, 0.38) 100%
+            );
         pointer-events: none;
     }
 
     .contacts-hero-scene::after {
         content: '';
         position: absolute;
-        inset: auto 5% -58px;
-        height: 160px;
-        border-radius: 50%;
-        background: radial-gradient(circle at center, rgba(16, 38, 61, 0.22), rgba(16, 38, 61, 0) 70%);
-        filter: blur(26px);
-        opacity: 0.52;
+        inset: 132px 0 -20px;
+        z-index: 3;
+        background: linear-gradient(
+            180deg,
+            rgba(246, 240, 232, 0) 0%,
+            rgba(246, 240, 232, 0.05) 16%,
+            rgba(246, 240, 232, 0.2) 34%,
+            rgba(246, 240, 232, 0.5) 54%,
+            rgba(246, 240, 232, 0.9) 78%,
+            rgba(246, 240, 232, 1) 100%
+        );
+        -webkit-backdrop-filter: blur(400px) saturate(132%);
+        backdrop-filter: blur(400px) saturate(132%);
+        -webkit-mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.06) 16%,
+            rgba(0, 0, 0, 0.18) 34%,
+            rgba(0, 0, 0, 0.44) 54%,
+            rgba(0, 0, 0, 0.88) 78%,
+            rgba(0, 0, 0, 1) 100%
+        );
+        mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.06) 16%,
+            rgba(0, 0, 0, 0.18) 34%,
+            rgba(0, 0, 0, 0.44) 54%,
+            rgba(0, 0, 0, 0.88) 78%,
+            rgba(0, 0, 0, 1) 100%
+        );
         pointer-events: none;
     }
 
@@ -1902,20 +1947,55 @@
         overflow: hidden;
         border-radius: 0;
         border: 0;
-        background: linear-gradient(180deg, #f8fbff 0%, #f2f6fb 42%, #ebf1f7 100%);
-        box-shadow: 0 30px 68px -32px rgba(16, 38, 61, 0.16);
+        background:
+            radial-gradient(circle at 8% 8%, rgba(255, 230, 188, 0.14), transparent 28%),
+            linear-gradient(
+                180deg,
+                #f8fbff 0%,
+                #eef3fa 42%,
+                #f4f0e8 76%,
+                #f8f4ee 100%
+            );
+        box-shadow: none;
         margin: 0;
     }
 
     .contacts-hero-stage::before {
         content: '';
         position: absolute;
-        inset: auto 12% -38px;
-        height: 120px;
-        border-radius: 50%;
-        background: radial-gradient(circle at center, rgba(28, 28, 28, 0.14), rgba(28, 28, 28, 0) 72%);
-        filter: blur(26px);
-        opacity: 0.28;
+        inset: auto 0 -14px;
+        z-index: 1;
+        height: 104px;
+        border-radius: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(246, 240, 232, 0) 0%,
+            rgba(246, 240, 232, 0) 38%,
+            rgba(246, 240, 232, 0.05) 54%,
+            rgba(246, 240, 232, 0.16) 70%,
+            rgba(246, 240, 232, 0.36) 86%,
+            rgba(246, 240, 232, 0.62) 100%
+        );
+        -webkit-backdrop-filter: blur(16px) saturate(108%);
+        backdrop-filter: blur(16px) saturate(108%);
+        -webkit-mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) 36%,
+            rgba(0, 0, 0, 0.03) 54%,
+            rgba(0, 0, 0, 0.14) 72%,
+            rgba(0, 0, 0, 0.44) 88%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
+        mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0) 36%,
+            rgba(0, 0, 0, 0.03) 54%,
+            rgba(0, 0, 0, 0.14) 72%,
+            rgba(0, 0, 0, 0.44) 88%,
+            rgba(0, 0, 0, 0.8) 100%
+        );
         pointer-events: none;
     }
 
@@ -1926,10 +2006,31 @@
         z-index: 2;
         background:
             radial-gradient(34% 34% at 7% 7%, rgba(255, 231, 190, 0.16) 0%, rgba(255, 231, 190, 0.06) 30%, rgba(255, 231, 190, 0) 64%),
-            radial-gradient(40% 48% at 18% 34%, rgba(18, 20, 24, 0.065) 0%, rgba(18, 20, 24, 0.024) 40%, rgba(18, 20, 24, 0.006) 58%, rgba(18, 20, 24, 0) 78%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.012) 0%, rgba(34, 31, 26, 0.008) 24%, rgba(34, 31, 26, 0.02) 100%);
-        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
-        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+            linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.012) 0%,
+                rgba(255, 255, 255, 0.028) 52%,
+                rgba(246, 240, 232, 0.16) 84%,
+                rgba(246, 240, 232, 0.32) 100%
+            );
+        -webkit-mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 1) 0px,
+            rgba(0, 0, 0, 1) calc(100% - 148px),
+            rgba(0, 0, 0, 0.96) calc(100% - 110px),
+            rgba(0, 0, 0, 0.68) calc(100% - 68px),
+            rgba(0, 0, 0, 0.16) calc(100% - 24px),
+            rgba(0, 0, 0, 0) 100%
+        );
+        mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 1) 0px,
+            rgba(0, 0, 0, 1) calc(100% - 148px),
+            rgba(0, 0, 0, 0.96) calc(100% - 110px),
+            rgba(0, 0, 0, 0.68) calc(100% - 68px),
+            rgba(0, 0, 0, 0.16) calc(100% - 24px),
+            rgba(0, 0, 0, 0) 100%
+        );
         pointer-events: none;
     }
 
@@ -1950,8 +2051,24 @@
         animation: stageDrift 16s ease-in-out infinite;
         animation-delay: var(--hero-stage-drift-delay, 0s);
         animation-fill-mode: both;
-        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
-        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+        -webkit-mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 1) 0px,
+            rgba(0, 0, 0, 1) calc(100% - 152px),
+            rgba(0, 0, 0, 0.96) calc(100% - 114px),
+            rgba(0, 0, 0, 0.7) calc(100% - 72px),
+            rgba(0, 0, 0, 0.16) calc(100% - 26px),
+            rgba(0, 0, 0, 0) 100%
+        );
+        mask-image: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 1) 0px,
+            rgba(0, 0, 0, 1) calc(100% - 152px),
+            rgba(0, 0, 0, 0.96) calc(100% - 114px),
+            rgba(0, 0, 0, 0.7) calc(100% - 72px),
+            rgba(0, 0, 0, 0.16) calc(100% - 26px),
+            rgba(0, 0, 0, 0) 100%
+        );
     }
 
     .contacts-hero-card {
