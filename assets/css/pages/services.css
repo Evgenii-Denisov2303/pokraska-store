@@ -1054,7 +1054,7 @@
 }
 
 .catalog-subtitle {
-    color: #6b7280;
+    color: var(--theme-text-muted);
     max-width: 720px;
     margin: 0 auto;
     line-height: 1.6;
@@ -1862,13 +1862,13 @@
 
 .automation-step h3 {
     margin: 0 0 8px;
-    color: #1e293b;
+    color: var(--theme-text-strong);
     font-size: 1rem;
 }
 
 .automation-step p {
     margin: 0;
-    color: #526273;
+    color: var(--theme-text-muted);
     line-height: 1.5;
 }
 
@@ -2863,7 +2863,7 @@
 
 .catalog-panel__profnastil-note {
     margin: 8px 0 0;
-    color: #6b7280;
+    color: var(--theme-text-muted);
 }
 
 .catalog-palette-card {
@@ -5092,7 +5092,7 @@
     order: 2;
     max-width: none;
     padding: 8px 0 0 18px;
-    border-left: 1px solid rgba(34, 52, 70, 0.08);
+    border-left: 1px solid var(--theme-border);
 }
 
 .catalog-panel__text--feature-lead {
