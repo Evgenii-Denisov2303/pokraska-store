@@ -226,13 +226,13 @@
     font-size: clamp(2.75rem, 4.6vw, 4.05rem);
     line-height: 0.95;
     letter-spacing: -0.035em;
-    color: #1f3044;
+    color: var(--theme-text-strong);
     background: none;
     -webkit-text-fill-color: currentColor;
 }
 
 .price-header .subtitle {
-    color: #607285;
+    color: var(--theme-text-muted);
     font-size: 1.02rem;
     line-height: 1.72;
 }
@@ -240,7 +240,7 @@
 .price-factors,
 .guarantee-section {
     border-radius: 26px;
-    border: 1px solid rgba(20, 56, 89, 0.08);
+    border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow);
 }
 
@@ -258,10 +258,10 @@
 .factor-card {
     padding: 22px 20px;
     border-radius: 20px;
-    border: 1px solid rgba(20, 56, 89, 0.08);
+    border: 1px solid var(--theme-border);
     border-left: 0;
     background: var(--theme-surface-gradient-soft);
-    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.05);
+    box-shadow: var(--theme-shadow-soft);
 }
 
 .factor-card:hover {
@@ -270,7 +270,7 @@
 
 .factor-card p,
 .guarantee-text {
-    color: #65788d;
+    color: var(--theme-text-muted);
 }
 
 .calculator-section {

@@ -234,7 +234,7 @@ table th, table td {
 table th {
     background: #f8f4ee;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--theme-text-strong);
 }
 
 table tr:hover {

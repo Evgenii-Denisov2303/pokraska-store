@@ -240,7 +240,7 @@
 }
 
 .work-title {
-    color: #2c3e50;
+    color: var(--theme-text-strong);
     font-size: 1.3rem;
     margin-bottom: 10px;
     font-weight: 700;
