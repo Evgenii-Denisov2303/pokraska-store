@@ -3587,13 +3587,13 @@
     line-height: 0.95;
     letter-spacing: -0.035em;
     font-weight: 700;
-    color: #1e3044;
+    color: var(--theme-text-strong);
     background: none;
     -webkit-text-fill-color: currentColor;
 }
 
 .services-header .subtitle {
-    color: #607285;
+    color: var(--theme-text-muted);
     font-size: 1.04rem;
     line-height: 1.72;
     max-width: 720px;
@@ -3612,9 +3612,9 @@
     padding: 10px 16px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.76);
-    border: 1px solid rgba(20, 56, 89, 0.08);
+    border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow-soft);
-    color: #315066;
+    color: var(--theme-text);
     font-size: 0.92rem;
     font-weight: 700;
     text-decoration: none;
@@ -3636,13 +3636,13 @@
 .wheels-samples,
 .before-after-section .container {
     border-radius: 26px;
-    border: 1px solid rgba(20, 56, 89, 0.08);
+    border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow-soft);
 }
 
 .service-detail-card {
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.86);
+    background: var(--theme-surface-gradient);
 }
 
 .service-header {
@@ -3671,7 +3671,7 @@
 }
 
 .service-description {
-    color: #586c80;
+    color: var(--theme-text-muted);
     font-size: 1rem;
     line-height: 1.76;
 }
@@ -7106,21 +7106,21 @@
 
 /* ========== SERVICE PAGE RHYTHM PASS ========== */
 .services-page {
-    --service-rhythm-accent: #2d6f97;
-    --service-rhythm-accent-strong: #183e5a;
-    --service-rhythm-soft: rgba(45, 111, 151, 0.14);
-    --service-rhythm-line: rgba(45, 111, 151, 0.18);
-    --service-rhythm-ink: #1e3548;
-    --service-rhythm-muted: #587084;
+    --service-rhythm-accent: var(--theme-accent);
+    --service-rhythm-accent-strong: var(--theme-accent-strong);
+    --service-rhythm-soft: rgba(var(--theme-accent-rgb), 0.14);
+    --service-rhythm-line: rgba(var(--theme-accent-rgb), 0.2);
+    --service-rhythm-ink: var(--theme-text-strong);
+    --service-rhythm-muted: var(--theme-text-muted);
 }
 
 .services-page--sandblast {
-    --service-rhythm-accent: #8a6337;
-    --service-rhythm-accent-strong: #5f4120;
-    --service-rhythm-soft: rgba(138, 99, 55, 0.14);
-    --service-rhythm-line: rgba(138, 99, 55, 0.2);
-    --service-rhythm-ink: #2a3c4a;
-    --service-rhythm-muted: #667985;
+    --service-rhythm-accent: var(--theme-accent);
+    --service-rhythm-accent-strong: var(--theme-accent-strong);
+    --service-rhythm-soft: rgba(var(--theme-accent-rgb), 0.18);
+    --service-rhythm-line: rgba(var(--theme-accent-rgb), 0.24);
+    --service-rhythm-ink: var(--theme-text-strong);
+    --service-rhythm-muted: var(--theme-text-muted);
 }
 
 .services-page > .container {
@@ -7718,5 +7718,151 @@
     .catalog-page ::-webkit-scrollbar-track {
         background: rgba(237, 228, 217, 0.72) !important;
     }
+}
+
+/* ========== SERVICES THEME FINAL WARM PASS ========== */
+.services-page :is(
+    .catalog-panel__text h3,
+    .catalog-info-card h3,
+    .catalog-info-card h4,
+    .automation-guide h3,
+    .automation-guide h4,
+    .services-header h1,
+    .service-header h2,
+    .service-overview__title
+) {
+    color: var(--theme-text-strong) !important;
+}
+
+.services-page :is(
+    .catalog-panel__text,
+    .catalog-panel__text p,
+    .catalog-panel__feature-list li,
+    .catalog-info-card,
+    .catalog-info-card p,
+    .catalog-info-card ul,
+    .automation-guide,
+    .automation-guide p,
+    .automation-guide__list,
+    .automation-guide__text,
+    .services-header .subtitle,
+    .service-description,
+    .service-overview__text,
+    .service-overview__bridge-text,
+    .service-overview-card p,
+    .catalog-breadcrumbs
+) {
+    color: var(--theme-text-muted) !important;
+}
+
+.services-page :is(
+    .catalog-info-card,
+    .automation-guide,
+    .service-overview,
+    .service-overview-card,
+    .service-quick-nav,
+    .services-cta,
+    .before-after-section .container,
+    .services-page .section[aria-labelledby="services-faq-title"]
+) {
+    border-color: var(--theme-border) !important;
+    background: var(--theme-surface-gradient) !important;
+    box-shadow: var(--theme-shadow-soft) !important;
+}
+
+.services-page :is(
+    .service-overview__eyebrow,
+    .service-overview__bridge-label,
+    .catalog-panel__eyebrow
+) {
+    background: rgba(var(--theme-accent-rgb), 0.12) !important;
+    color: var(--theme-accent-strong) !important;
+}
+
+.services-page :is(
+    .service-nav-link,
+    .catalog-page > .container > .catalog-sidebar .catalog-group-tab,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-tab,
+    .catalog-page > .container > .catalog-sidebar .catalog-link,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-link
+) {
+    border-color: var(--theme-border-strong) !important;
+    background: var(--theme-surface-gradient) !important;
+    color: var(--theme-text) !important;
+}
+
+.services-page :is(
+    .catalog-page > .container > .catalog-sidebar .catalog-group-tab__icon,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-tab__icon
+) {
+    background: var(--theme-surface-gradient-soft) !important;
+    color: var(--theme-accent-strong) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 10px 18px rgba(var(--theme-text-strong-rgb), 0.05) !important;
+}
+
+.services-page :is(
+    .service-nav-link:hover,
+    .catalog-page > .container > .catalog-sidebar .catalog-group-tab:hover,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-tab:hover,
+    .catalog-page > .container > .catalog-sidebar .catalog-link:hover,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-link:hover
+) {
+    border-color: rgba(var(--theme-accent-rgb), 0.22) !important;
+    color: var(--theme-accent-strong) !important;
+    box-shadow: 0 16px 28px rgba(var(--theme-text-strong-rgb), 0.07) !important;
+}
+
+.services-page :is(
+    .service-nav-link.active,
+    .service-nav-link[aria-current="page"],
+    .catalog-page > .container > .catalog-sidebar .catalog-group-tab.is-active,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-tab.is-active,
+    .catalog-page > .container > .catalog-sidebar .catalog-link.is-active,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-link.is-active
+) {
+    background: linear-gradient(135deg, rgba(var(--theme-accent-rgb), 0.18), rgba(var(--theme-accent-strong-rgb), 0.14)) !important;
+    border-color: rgba(var(--theme-accent-rgb), 0.26) !important;
+    color: var(--theme-accent-strong) !important;
+    box-shadow: 0 16px 28px rgba(var(--theme-text-strong-rgb), 0.08) !important;
+}
+
+.services-page :is(
+    .catalog-page > .container > .catalog-sidebar .catalog-group-tab.is-active .catalog-group-tab__icon,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-tab.is-active .catalog-group-tab__icon
+) {
+    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+    color: #fffdf9 !important;
+    box-shadow: 0 12px 22px rgba(var(--theme-accent-strong-rgb), 0.18) !important;
+}
+
+.services-page :is(
+    .catalog-page > .container > .catalog-sidebar .catalog-group-panels__eyebrow,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-panels__eyebrow
+) {
+    background: rgba(var(--theme-accent-rgb), 0.1) !important;
+    color: var(--theme-accent-strong) !important;
+}
+
+.services-page :is(
+    .catalog-page > .container > .catalog-sidebar .catalog-group-panels__current,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-panels__current
+) {
+    color: var(--theme-text-muted) !important;
+}
+
+.services-page :is(
+    .catalog-page > .container > .catalog-sidebar .catalog-group-panel__links,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-panel__links
+) {
+    border-color: rgba(var(--theme-accent-rgb), 0.12) !important;
+    background: var(--theme-surface-gradient-soft) !important;
+    box-shadow: 0 12px 22px rgba(var(--theme-text-strong-rgb), 0.045) !important;
+}
+
+.services-page :is(
+    .catalog-panel__feature-list li::before,
+    .catalog-page > .container > [data-catalog-layout] > .catalog-sidebar .catalog-group-panels__current::before
+) {
+    background: rgba(var(--theme-accent-rgb), 0.72) !important;
 }
 
