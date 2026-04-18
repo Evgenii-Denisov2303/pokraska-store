@@ -102,7 +102,7 @@
     justify-content: center;
     margin-bottom: 16px;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
+    background: var(--theme-surface-gradient-soft);
     color: var(--theme-accent);
     font-size: 1.35rem;
 }
@@ -189,7 +189,7 @@
     justify-content: center;
     margin-bottom: 16px;
     border-radius: var(--theme-radius-sm);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
+    background: var(--theme-surface-gradient-soft);
     color: var(--theme-accent);
     font-size: 1.25rem;
 }
@@ -255,7 +255,7 @@
     border-radius: 26px;
     background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 28%),
-        linear-gradient(135deg, #1f2f3f 0%, #34506b 100%);
+        var(--theme-band);
     color: #ffffff;
     box-shadow: 0 22px 44px rgba(15, 23, 42, 0.18);
 }
@@ -594,7 +594,7 @@
     .payment-docs-page {
         background:
             radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-            radial-gradient(circle at 90% 6%, rgba(41, 73, 101, 0.06), transparent 18%),
+            radial-gradient(circle at 90% 6%, rgba(138, 111, 74, 0.06), transparent 18%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
     }
 
@@ -624,7 +624,7 @@
 
     .payment-docs-panel__icon,
     .payment-docs-card__icon {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(237, 243, 247, 0.96));
+        background: var(--theme-surface-gradient-soft);
         color: var(--theme-accent);
         box-shadow: var(--theme-shadow-soft);
     }
