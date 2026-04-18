@@ -245,6 +245,10 @@ html {
     --theme-band-from: #2a3237;
     --theme-band-mid: #4b443d;
     --theme-band-to: #7f6852;
+    --theme-on-band: #fffdf9;
+    --theme-on-band-muted: rgba(244, 237, 228, 0.76);
+    --theme-on-band-soft: rgba(255, 253, 249, 0.12);
+    --theme-focus-ring: rgba(var(--theme-accent-rgb), 0.26);
     --theme-border: rgba(43, 51, 47, 0.08);
     --theme-border-strong: rgba(43, 51, 47, 0.14);
     --theme-shadow-soft: 0 18px 34px rgba(31, 38, 34, 0.05);

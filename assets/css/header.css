@@ -53,9 +53,9 @@
         transform: translateY(0);
         padding: 4px;
         border-radius: 14px;
-        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
+        background: var(--theme-surface-gradient);
         box-shadow:
-            0 10px 24px rgba(15, 23, 42, 0.08),
+            0 10px 24px rgba(31, 38, 34, 0.08),
             inset 0 1px 0 rgba(255, 255, 255, 0.75);
     }
 
@@ -81,7 +81,7 @@
         width: 92px;
         height: 1px;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(24, 77, 122, 0.42), rgba(24, 77, 122, 0));
+        background: linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.42), rgba(var(--theme-accent-rgb), 0));
     }
 
     .header-top--compact .logo-tagline::after {
@@ -404,9 +404,9 @@
         flex: 0 0 78px;
         padding: 4px;
         border-radius: 14px;
-        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
+        background: var(--theme-surface-gradient);
         box-shadow:
-            0 10px 24px rgba(15, 23, 42, 0.08),
+            0 10px 24px rgba(31, 38, 34, 0.08),
             inset 0 1px 0 rgba(255, 255, 255, 0.75);
         isolation: isolate;
     }
@@ -435,7 +435,7 @@
     }
 
     .header.header--desktop-hero .desktop-hero-header .hero-brand__eyebrow {
-        color: rgba(87, 73, 58, 0.68);
+        color: rgba(var(--theme-accent-strong-rgb), 0.72);
         font-size: 12.2px;
         font-weight: 720;
         line-height: 1.18;
@@ -450,7 +450,7 @@
         font-synthesis: none;
         line-height: 0.92;
         letter-spacing: -0.015em;
-        color: #2b332f;
+        color: var(--theme-text);
         font-variant-numeric: lining-nums proportional-nums;
         font-feature-settings: "lnum" 1, "pnum" 1;
     }
@@ -463,7 +463,7 @@
         width: 92px;
         height: 1px;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(138, 111, 74, 0.56), rgba(138, 111, 74, 0));
+        background: linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.56), rgba(var(--theme-accent-rgb), 0));
     }
 
     .header.header--desktop-hero .desktop-hero-header .hero-brand__wave {
