@@ -12,6 +12,114 @@
             .replace(/'/g, '&#39;');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru',
+        address: 'Старое Победилово, ул. Садовая, 72'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function applyContactReplacements(html, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        const address = contact.address || fallbackSiteContact.address;
+        const cityAddress = `Казань, ${address}`;
+
+        return String(html || '')
+            .replace(/tel:\+79376154629/gi, primaryPhone.href || 'tel:+79376154629')
+            .replace(/tel:\+79625542260/gi, secondaryPhone.href || 'tel:+79625542260')
+            .replace(/\+7\s*\(937\)\s*615-46-29/g, primaryPhone.label || '+7 (937) 615-46-29')
+            .replace(/\+7\s*\(962\)\s*554-22-60/g, secondaryPhone.label || '+7 (962) 554-22-60')
+            .replace(/mailto:vorota404@mail\.ru/gi, email ? `mailto:${email}` : 'mailto:vorota404@mail.ru')
+            .replace(/vorota404@mail\.ru/gi, email || 'vorota404@mail.ru')
+            .replace(/Казань,\s*Старое Победилово,\s*ул\.\s*Садовая,\s*72/gi, cityAddress)
+            .replace(/Старое Победилово,\s*ул\.\s*Садовая,\s*72/gi, address);
+    }
+
+    function buildResolvedActions(actions, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+
+        return (Array.isArray(actions) ? actions : []).map((action) => {
+            const nextAction = { ...(action || {}) };
+            const href = String(nextAction.href || '').trim();
+            if (href.startsWith('tel:')) {
+                nextAction.href = primaryPhone.href || href;
+                if (!nextAction.label || isPhoneLikeLabel(nextAction.label)) {
+                    nextAction.label = primaryPhone.label || nextAction.label || '';
+                }
+                nextAction.icon = nextAction.icon || 'fas fa-phone';
+            } else if (href.startsWith('mailto:')) {
+                nextAction.href = email ? `mailto:${email}` : href;
+                if (!nextAction.label || isEmailLikeLabel(nextAction.label)) {
+                    nextAction.label = email || nextAction.label || '';
+                }
+                nextAction.icon = nextAction.icon || 'fas fa-envelope';
+            }
+            return nextAction;
+        });
+    }
+
+    function buildResolvedContactsContent(content, site) {
+        return {
+            ...content,
+            overview: {
+                ...(content?.overview || {}),
+                items: (content?.overview?.items || []).map((item) => ({
+                    ...(item || {}),
+                    valueHtml: applyContactReplacements(item?.valueHtml || '', site)
+                }))
+            },
+            connect: {
+                ...(content?.connect || {}),
+                actions: buildResolvedActions(content?.connect?.actions || [], site)
+            },
+            location: {
+                ...(content?.location || {}),
+                actions: buildResolvedActions(content?.location?.actions || [], site)
+            }
+        };
+    }
+
     function renderAction(action) {
         const className = action.style === 'primary' ? 'btn btn-primary' : 'btn btn-outline';
         const external = action.href?.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : '';
@@ -355,16 +463,20 @@
         if (!document.querySelector('.contacts-page')) return;
 
         try {
-            const content = await window.PokraskaContent.loadContentFile('contacts');
+            const [content, site] = await Promise.all([
+                window.PokraskaContent.loadContentFile('contacts'),
+                loadSiteShellData()
+            ]);
+            const resolvedContent = buildResolvedContactsContent(content || {}, site);
 
             const heroEyebrow = document.querySelector('.contacts-eyebrow');
             document.querySelectorAll('.contacts-title, .contacts-hero-copy h2').forEach((element) => {
-                element.textContent = content.hero?.title || '';
+                element.textContent = resolvedContent.hero?.title || '';
             });
             document.querySelectorAll('.contacts-subtitle, .contacts-hero-copy p:last-of-type').forEach((element) => {
-                element.textContent = content.hero?.subtitle || '';
+                element.textContent = resolvedContent.hero?.subtitle || '';
             });
-            if (heroEyebrow) heroEyebrow.textContent = content.hero?.eyebrow || '';
+            if (heroEyebrow) heroEyebrow.textContent = resolvedContent.hero?.eyebrow || '';
 
             const overviewCard = document.querySelector('.contact-info-card');
             if (overviewCard) {
@@ -373,12 +485,12 @@
                 const text = overviewCard.querySelector('.contacts-card-header p:last-of-type');
                 const list = overviewCard.querySelector('.contacts-overview-list');
 
-                if (kicker) kicker.textContent = content.overview?.kicker || '';
-                if (title) title.textContent = content.overview?.title || '';
-                if (text) text.textContent = content.overview?.text || '';
+                if (kicker) kicker.textContent = resolvedContent.overview?.kicker || '';
+                if (title) title.textContent = resolvedContent.overview?.title || '';
+                if (text) text.textContent = resolvedContent.overview?.text || '';
 
-                if (list && Array.isArray(content.overview?.items) && content.overview.items.length) {
-                    list.innerHTML = (content.overview?.items || []).map((item) => `
+                if (list && Array.isArray(resolvedContent.overview?.items) && resolvedContent.overview.items.length) {
+                    list.innerHTML = (resolvedContent.overview?.items || []).map((item) => `
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="${escapeHtml(item.icon || '')}"></i>
@@ -404,14 +516,14 @@
                 const actions = document.querySelector('.quick-actions--contacts');
                 const iframe = connectCard.querySelector('.yandex-form-embed');
 
-                if (kicker) kicker.textContent = content.connect?.kicker || '';
-                if (title) title.textContent = content.connect?.title || '';
-                if (notice) notice.textContent = content.connect?.notice || '';
+                if (kicker) kicker.textContent = resolvedContent.connect?.kicker || '';
+                if (title) title.textContent = resolvedContent.connect?.title || '';
+                if (notice) notice.textContent = resolvedContent.connect?.notice || '';
                 if (actions) {
-                    actions.innerHTML = (content.connect?.actions || []).map(renderAction).join('');
+                    actions.innerHTML = (resolvedContent.connect?.actions || []).map(renderAction).join('');
                 }
-                if (iframe && content.connect?.iframeSrc) {
-                    iframe.setAttribute('src', content.connect.iframeSrc);
+                if (iframe && resolvedContent.connect?.iframeSrc) {
+                    iframe.setAttribute('src', resolvedContent.connect.iframeSrc);
                 }
             }
 
@@ -425,16 +537,16 @@
                 const actions = locationCard.querySelector('.location-actions');
                 const map = locationCard.querySelector('.map-container iframe');
 
-                if (kicker) kicker.textContent = content.location?.kicker || '';
-                if (title) title.textContent = content.location?.title || '';
-                if (text) text.textContent = content.location?.text || '';
+                if (kicker) kicker.textContent = resolvedContent.location?.kicker || '';
+                if (title) title.textContent = resolvedContent.location?.title || '';
+                if (text) text.textContent = resolvedContent.location?.text || '';
                 if (badges) {
-                    badges.innerHTML = (content.location?.badges || []).map((item) => `
+                    badges.innerHTML = (resolvedContent.location?.badges || []).map((item) => `
                         <span class="location-badge"><i class="${escapeHtml(item.icon || '')}" aria-hidden="true"></i> ${escapeHtml(item.text || '')}</span>
                     `).join('');
                 }
                 if (points) {
-                    points.innerHTML = (content.location?.points || []).map((item) => `
+                    points.innerHTML = (resolvedContent.location?.points || []).map((item) => `
                         <li class="location-point">
                             <strong>${escapeHtml(item.title || '')}</strong>
                             <span>${escapeHtml(item.text || '')}</span>
@@ -442,10 +554,10 @@
                     `).join('');
                 }
                 if (actions) {
-                    actions.innerHTML = (content.location?.actions || []).map(renderAction).join('');
+                    actions.innerHTML = (resolvedContent.location?.actions || []).map(renderAction).join('');
                 }
-                if (map && content.location?.mapSrc) {
-                    map.setAttribute('src', content.location.mapSrc);
+                if (map && resolvedContent.location?.mapSrc) {
+                    map.setAttribute('src', resolvedContent.location.mapSrc);
                 }
             }
 

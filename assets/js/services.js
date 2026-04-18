@@ -7,24 +7,78 @@ document.addEventListener('DOMContentLoaded', function() {
         !window.location.hash &&
         navigationEntry &&
         navigationEntry.type === 'navigate';
-    const catalogContactListMarkup = `
-        <a href="tel:+79625542260"><i class="fas fa-phone"></i> +7 (962) 554-22-60</a>
-        <a href="tel:+79376154629"><i class="fas fa-phone"></i> +7 (937) 615-46-29</a>
-        <a href="mailto:vorota404@mail.ru"><i class="fas fa-envelope"></i> vorota404@mail.ru</a>
-    `.trim();
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
 
     const hasNav = navLinks.length && sections.length;
     const shouldHydrateCatalogContacts = Boolean(
         hasNav || document.querySelector('[data-catalog-layout], [data-catalog-gallery], [data-catalog-panel]')
     );
 
-    if (shouldHydrateCatalogContacts) {
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function buildCatalogContactListMarkup(contact) {
+        const primaryPhone = contact?.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact?.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact?.email || fallbackSiteContact.email;
+
+        return `
+            <a href="${escapeHtml(secondaryPhone.href || '#')}"><i class="fas fa-phone"></i> ${escapeHtml(secondaryPhone.label || '')}</a>
+            <a href="${escapeHtml(primaryPhone.href || '#')}"><i class="fas fa-phone"></i> ${escapeHtml(primaryPhone.label || '')}</a>
+            <a href="mailto:${escapeHtml(email)}"><i class="fas fa-envelope"></i> ${escapeHtml(email)}</a>
+        `.trim();
+    }
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function hydrateCatalogContacts() {
+        if (!shouldHydrateCatalogContacts) {
+            return;
+        }
+
+        const site = await loadSiteShellData();
+        const catalogContactListMarkup = buildCatalogContactListMarkup(site?.contact);
+
         document.querySelectorAll('.catalog-contact-list').forEach((contactList) => {
             if (contactList.innerHTML.trim() !== catalogContactListMarkup) {
                 contactList.innerHTML = catalogContactListMarkup;
             }
         });
     }
+
+    void hydrateCatalogContacts();
 
     function updateActiveLink() {
         if (!hasNav) {

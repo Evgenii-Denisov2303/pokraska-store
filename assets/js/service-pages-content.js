@@ -12,6 +12,124 @@
             .replace(/'/g, '&#39;');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function buildResolvedActions(actions, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        const nextActions = {
+            primary: { ...(actions?.primary || {}) },
+            secondary: { ...(actions?.secondary || {}) }
+        };
+
+        ['primary', 'secondary'].forEach((key) => {
+            const action = nextActions[key];
+            const href = String(action.href || '').trim();
+            if (href.startsWith('tel:')) {
+                action.href = primaryPhone.href || href;
+                if (!action.label || isPhoneLikeLabel(action.label)) {
+                    action.label = primaryPhone.label || action.label || '';
+                }
+                action.icon = action.icon || 'fas fa-phone';
+            } else if (href.startsWith('mailto:')) {
+                action.href = email ? `mailto:${email}` : href;
+                if (!action.label || isEmailLikeLabel(action.label)) {
+                    action.label = email || action.label || '';
+                }
+                action.icon = action.icon || 'fas fa-envelope';
+            }
+        });
+
+        return nextActions;
+    }
+
+    function buildResolvedPhoneList(items, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        let phoneIndex = 0;
+
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const nextItem = { ...(item || {}) };
+            const href = String(nextItem.href || '').trim();
+            if (!href.startsWith('tel:')) {
+                return nextItem;
+            }
+
+            const phone = phoneIndex === 0 ? primaryPhone : (secondaryPhone || primaryPhone);
+            phoneIndex += 1;
+            nextItem.href = phone?.href || href;
+            if (!nextItem.label || isPhoneLikeLabel(nextItem.label)) {
+                nextItem.label = phone?.label || nextItem.label || '';
+            }
+            return nextItem;
+        });
+    }
+
+    function buildResolvedServicePagesContent(content, site) {
+        const nextContent = {
+            ...content,
+            sharedCta: buildResolvedActions(content?.sharedCta || {}, site)
+        };
+
+        ['powderCoating', 'sandblasting'].forEach((pageKey) => {
+            if (!content?.[pageKey]) return;
+            nextContent[pageKey] = {
+                ...content[pageKey],
+                cta: {
+                    ...(content[pageKey].cta || {}),
+                    action: {
+                        ...(content[pageKey].cta?.action || {})
+                    },
+                    phones: buildResolvedPhoneList(content[pageKey].cta?.phones || [], site)
+                }
+            };
+        });
+
+        return nextContent;
+    }
+
     function renderButton(action, className) {
         return `
             <a href="${escapeHtml(action.href || '#')}" class="${escapeHtml(className)}">
@@ -887,15 +1005,19 @@
         if (!pageKey) return;
 
         try {
-            const content = await window.PokraskaContent.loadContentFile('service-pages');
-            const pageContent = content[pageKey];
+            const [content, site] = await Promise.all([
+                window.PokraskaContent.loadContentFile('service-pages'),
+                loadSiteShellData()
+            ]);
+            const resolvedContent = buildResolvedServicePagesContent(content || {}, site);
+            const pageContent = resolvedContent[pageKey];
             if (!pageContent) return;
 
             applyHeader(pageContent);
             applyOverview(pageContent);
             applyQuickNav(pageContent);
             applyBeforeAfter(pageContent);
-            applyServiceSections(pageContent, content.sharedCta || {});
+            applyServiceSections(pageContent, resolvedContent.sharedCta || {});
             applyFinalCta(pageContent);
             applyFaq(pageContent);
             registerInlineBindings(pageKey, pageContent);

@@ -226,6 +226,131 @@
         return (window.location.pathname.split('/').pop() || '').replace('.html', '');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function buildResolvedSharedActions(sharedActions, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const nextSharedActions = {
+            primary: { ...(sharedActions?.primary || {}) },
+            secondary: { ...(sharedActions?.secondary || {}) }
+        };
+        const secondaryHref = String(nextSharedActions.secondary.href || '').trim();
+
+        if (secondaryHref.startsWith('tel:')) {
+            nextSharedActions.secondary.href = primaryPhone.href || secondaryHref;
+            nextSharedActions.secondary.icon = nextSharedActions.secondary.icon || 'fas fa-phone';
+            if (!nextSharedActions.secondary.label) {
+                nextSharedActions.secondary.label = primaryPhone.label || '';
+            }
+        }
+
+        if (secondaryHref.startsWith('mailto:')) {
+            const email = contact.email || fallbackSiteContact.email;
+            nextSharedActions.secondary.href = email ? `mailto:${email}` : secondaryHref;
+            nextSharedActions.secondary.icon = nextSharedActions.secondary.icon || 'fas fa-envelope';
+            if (!nextSharedActions.secondary.label || isEmailLikeLabel(nextSharedActions.secondary.label)) {
+                nextSharedActions.secondary.label = email || nextSharedActions.secondary.label || '';
+            }
+        }
+
+        return nextSharedActions;
+    }
+
+    function buildResolvedCtaContacts(items, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        let phoneIndex = 0;
+
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const nextItem = { ...(item || {}) };
+            const href = String(nextItem.href || '').trim();
+
+            if (href.startsWith('tel:')) {
+                const phone = phoneIndex === 0 ? primaryPhone : (secondaryPhone || primaryPhone);
+                phoneIndex += 1;
+                nextItem.href = phone?.href || href;
+                nextItem.icon = nextItem.icon || 'fas fa-phone';
+                if (!nextItem.label || isPhoneLikeLabel(nextItem.label)) {
+                    nextItem.label = phone?.label || nextItem.label || '';
+                }
+                return nextItem;
+            }
+
+            if (href.startsWith('mailto:')) {
+                nextItem.href = email ? `mailto:${email}` : href;
+                nextItem.icon = nextItem.icon || 'fas fa-envelope';
+                if (!nextItem.label || isEmailLikeLabel(nextItem.label)) {
+                    nextItem.label = email || nextItem.label || '';
+                }
+                return nextItem;
+            }
+
+            return nextItem;
+        });
+    }
+
+    function buildResolvedAutomationContent(content, site) {
+        const nextContent = {
+            ...content,
+            sharedActions: buildResolvedSharedActions(content?.sharedActions || {}, site)
+        };
+
+        if (content?.swingLanding) {
+            nextContent.swingLanding = {
+                ...content.swingLanding,
+                cta: {
+                    ...(content.swingLanding.cta || {}),
+                    contacts: buildResolvedCtaContacts(content.swingLanding.cta?.contacts || [], site)
+                }
+            };
+        }
+
+        return nextContent;
+    }
+
     function applySwingLanding(content) {
         const hero = document.querySelector('.catalog-hero');
         if (hero) {
@@ -1048,23 +1173,25 @@
 
         try {
             const content = await window.PokraskaContent.loadContentFile('automation');
+            const site = await loadSiteShellData();
+            const resolvedContent = buildResolvedAutomationContent(content || {}, site);
 
             if (pageKey === 'automation-swing') {
-                applySwingLanding(content.swingLanding || {});
-                registerInlineBindings(pageKey, content, content.sharedActions || {});
+                applySwingLanding(resolvedContent.swingLanding || {});
+                registerInlineBindings(pageKey, resolvedContent, resolvedContent.sharedActions || {});
                 return;
             }
 
             if (pageKey === 'automation-sliding-components') {
-                applySlidingComponents(content.slidingComponentsPage || {}, content.sharedActions || {});
-                registerInlineBindings(pageKey, content, content.sharedActions || {});
+                applySlidingComponents(resolvedContent.slidingComponentsPage || {}, resolvedContent.sharedActions || {});
+                registerInlineBindings(pageKey, resolvedContent, resolvedContent.sharedActions || {});
                 return;
             }
 
-            const product = (content.productPages || []).find((item) => item.pageKey === pageKey);
+            const product = (resolvedContent.productPages || []).find((item) => item.pageKey === pageKey);
             if (product) {
-                applyProductPage(product, content.sharedActions || {});
-                registerInlineBindings(pageKey, content, content.sharedActions || {});
+                applyProductPage(product, resolvedContent.sharedActions || {});
+                registerInlineBindings(pageKey, resolvedContent, resolvedContent.sharedActions || {});
             }
         } catch (error) {
             console.warn('Failed to apply automation content', error);

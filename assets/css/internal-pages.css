@@ -753,8 +753,5 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         color: #6f5741 !important;
     }
 
-    body#top .footer.footer--premium > .container {
-        margin-top: 82px !important;
-    }
 }
 

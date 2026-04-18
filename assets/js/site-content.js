@@ -70,6 +70,10 @@
         document.head.appendChild(script);
     }
 
+    function shouldHydrateShell() {
+        return query.get('edit') === '1' || document.documentElement.dataset.pokraskaHydrateShell === '1';
+    }
+
     function queueInlineBindings(config) {
         window.PokraskaInlineEditorQueue = window.PokraskaInlineEditorQueue || [];
         window.PokraskaInlineEditorQueue.push(config);
@@ -102,6 +106,21 @@
             return path === '' || path === '/' ? '/index.html' : path;
         } catch (error) {
             return '/index.html';
+        }
+    }
+
+    function buildCurrentLinkHref(href, currentPath) {
+        try {
+            const url = new URL(href || '/index.html', window.location.origin);
+            const normalizedHref = normalizePath(url.pathname || '/index.html');
+
+            if (currentPath === '/index.html' && normalizedHref === '/index.html') {
+                return url.hash || '#top';
+            }
+
+            return `${url.pathname}${url.search}${url.hash}` || href || '#';
+        } catch (error) {
+            return href || '#';
         }
     }
 
@@ -199,6 +218,201 @@
         }
     }
 
+    function normalizePhoneHref(href) {
+        return String(href || '')
+            .replace(/^tel:/i, '')
+            .replace(/[^\d+]/g, '');
+    }
+
+    function isShellManagedElement(element) {
+        return Boolean(
+            element?.closest('.header-contact-stack, .hero-header-stack, .footer, .nav-list, .hero-scene__nav')
+        );
+    }
+
+    function uniqueElements(elements) {
+        return Array.from(new Set((Array.isArray(elements) ? elements : []).filter(Boolean)));
+    }
+
+    function setAnchorLabelPreserveIcon(anchor, label) {
+        if (!anchor) return;
+        const icon = anchor.querySelector('i');
+        if (!icon) {
+            if (anchor.textContent !== label) {
+                anchor.textContent = label;
+            }
+            return;
+        }
+
+        const nextLabel = label || '';
+        const currentLabel = anchor.textContent.replace(/\s+/g, ' ').trim();
+        if (currentLabel === nextLabel) {
+            return;
+        }
+
+        anchor.textContent = '';
+        anchor.appendChild(icon);
+        if (nextLabel) {
+            anchor.append(` ${nextLabel}`);
+        }
+    }
+
+    function renderContentPhoneAnchor(anchor, phone) {
+        if (!anchor || !phone) return;
+        const nextHref = phone.href || '#';
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
+
+        const text = anchor.textContent.replace(/\s+/g, ' ').trim();
+        if (/позвонить|связаться/i.test(text)) {
+            return;
+        }
+
+        const looksLikePhone = /^\+?[\d\s()\-]{10,}$/.test(text) || text === (phone.label || '');
+        if (looksLikePhone) {
+            setAnchorLabelPreserveIcon(anchor, phone.label || '');
+        }
+    }
+
+    function renderPhoneElement(element, phone) {
+        if (!element || !phone) return;
+        if (element.classList.contains('hero-header-link')) {
+            renderHeroPhoneLink(element, phone);
+            return;
+        }
+
+        if (element.classList.contains('contact-phone')) {
+            renderPhoneLink(element, phone);
+            return;
+        }
+
+        renderContentPhoneAnchor(element, phone);
+    }
+
+    function renderContentEmailAnchor(anchor, email) {
+        if (!anchor || !email) return;
+        const nextHref = `mailto:${email}`;
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
+
+        const text = anchor.textContent.replace(/\s+/g, ' ').trim();
+        if (!text || text.includes('@')) {
+            setAnchorLabelPreserveIcon(anchor, email);
+        }
+    }
+
+    function collectContentPhoneAnchors(phone, allPhones = []) {
+        if (!phone?.href) return [];
+
+        const expectedHref = normalizePhoneHref(phone.href);
+        const isSecondaryPhone = phone === allPhones[1];
+
+        return Array.from(document.querySelectorAll('a[href^="tel:"]')).filter((anchor) => {
+            if (isShellManagedElement(anchor)) return false;
+
+            const href = normalizePhoneHref(anchor.getAttribute('href'));
+            const text = anchor.textContent.replace(/\s+/g, ' ').trim();
+            const hrefMatches = href === expectedHref;
+            const textMatches = text === (phone.label || '');
+            const actionMatches = isSecondaryPhone
+                && /позвонить|связаться/i.test(text)
+                && anchor.closest('.automation-product-cta, .service-cta, .payment-docs-cta__actions, .order-cta__actions');
+
+            return hrefMatches || textMatches || actionMatches;
+        });
+    }
+
+    function collectContentEmailAnchors() {
+        return Array.from(document.querySelectorAll('a[href^="mailto:"]')).filter((anchor) => !isShellManagedElement(anchor));
+    }
+
+    function replaceExactContentText(needle, replacement) {
+        if (!needle || !replacement || needle === replacement || !document.body) return;
+
+        const walker = document.createTreeWalker(
+            document.body,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode(node) {
+                    const value = node.nodeValue || '';
+                    const trimmed = value.trim();
+                    const parent = node.parentElement;
+
+                    if (!trimmed || trimmed !== needle || !parent) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+
+                    if (parent.closest('script, style, noscript, a, .header-contact-stack, .hero-header-stack, .footer, .nav-list, .hero-scene__nav')) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            }
+        );
+
+        const matches = [];
+        while (walker.nextNode()) {
+            matches.push(walker.currentNode);
+        }
+
+        matches.forEach((node) => {
+            const currentValue = node.nodeValue || '';
+            const trimmed = currentValue.trim();
+            node.nodeValue = currentValue.replace(trimmed, replacement);
+        });
+    }
+
+    function applyContentContactText(site) {
+        const baseAddress = site.contact?.address || '';
+        const cityAddress = baseAddress ? `Казань, ${baseAddress}` : '';
+        const footerHours = site.contact?.hours || '';
+        const heroHours = site.contact?.primaryPhone?.note || '';
+
+        if (baseAddress) {
+            replaceExactContentText('Старое Победилово, ул. Садовая, 72', baseAddress);
+        }
+
+        if (cityAddress) {
+            replaceExactContentText('Казань, Старое Победилово, ул. Садовая, 72', cityAddress);
+        }
+
+        if (footerHours) {
+            replaceExactContentText('Пн-Пт: 8:00-18:00, Сб: 9:00-14:00', footerHours);
+        }
+
+        if (heroHours) {
+            replaceExactContentText('Пн-Пт 8:00-18:00, Сб 9:00-14:00', heroHours);
+        }
+    }
+
+    function applyContentContacts(site) {
+        const primaryPhone = site.contact?.primaryPhone;
+        const secondaryPhone = site.contact?.secondaryPhone;
+        const phones = [primaryPhone, secondaryPhone].filter(Boolean);
+
+        if (primaryPhone) {
+            collectContentPhoneAnchors(primaryPhone, phones).forEach((anchor) => {
+                renderContentPhoneAnchor(anchor, primaryPhone);
+            });
+        }
+
+        if (secondaryPhone) {
+            collectContentPhoneAnchors(secondaryPhone, phones).forEach((anchor) => {
+                renderContentPhoneAnchor(anchor, secondaryPhone);
+            });
+        }
+
+        const email = site.contact?.email || '';
+        if (email) {
+            collectContentEmailAnchors().forEach((anchor) => {
+                renderContentEmailAnchor(anchor, email);
+            });
+        }
+    }
+
     function updateAnchorWithIcon(anchor, item) {
         if (!anchor || !item) return;
         const icon = anchor.querySelector('i');
@@ -250,6 +464,35 @@
         });
     }
 
+    function applyHeroNavigationItem(anchor, item, currentPath) {
+        if (!anchor || !item) return;
+
+        const nextHref = buildCurrentLinkHref(item.href || '/index.html', currentPath);
+        const nextLabel = item.label || '';
+        if (anchor.getAttribute('href') !== nextHref) {
+            anchor.setAttribute('href', nextHref);
+        }
+        if (anchor.textContent !== nextLabel) {
+            anchor.textContent = nextLabel;
+        }
+
+        anchor.className = 'hero-nav__link';
+        const isActive = normalizePath(item.href || '/index.html') === currentPath;
+        anchor.classList.toggle('hero-nav__link--active', isActive);
+        if (isActive) {
+            anchor.setAttribute('aria-current', 'page');
+        } else {
+            anchor.removeAttribute('aria-current');
+        }
+    }
+
+    function syncHeroNavigation(navList, items, currentPath) {
+        if (!navList) return;
+        syncCollection(navList, '.hero-nav__link', Array.isArray(items) ? items : [], (anchor, item) => {
+            applyHeroNavigationItem(anchor, item, currentPath);
+        });
+    }
+
     function applyUsefulLinkItem(itemElement, item) {
         if (!itemElement || !item) return;
         const anchor = itemElement.querySelector('a');
@@ -259,8 +502,11 @@
     }
 
     function applyHeader(site) {
+        const currentPath = normalizePath(window.location.pathname);
+        const homeHref = buildCurrentLinkHref(site.navigation?.[0]?.href || '/index.html', currentPath);
+
         document.querySelectorAll('.logo-link').forEach((link) => {
-            const nextHref = site.navigation?.[0]?.href || '/index.html';
+            const nextHref = homeHref;
             if (link.getAttribute('href') !== nextHref) {
                 link.setAttribute('href', nextHref);
             }
@@ -280,6 +526,40 @@
                 }
             }
             const nextAlt = site.brand?.logo?.alt || site.brand?.logoAlt || image.alt;
+            if (image.alt !== nextAlt) {
+                image.alt = nextAlt;
+            }
+        });
+
+        document.querySelectorAll('.hero-brand__link').forEach((link) => {
+            if (link.getAttribute('href') !== homeHref) {
+                link.setAttribute('href', homeHref);
+            }
+            const nextLabel = site.brand?.name || link.getAttribute('aria-label') || '';
+            if (nextLabel && link.getAttribute('aria-label') !== nextLabel) {
+                link.setAttribute('aria-label', nextLabel);
+            }
+        });
+
+        document.querySelectorAll('.hero-brand__eyebrow').forEach((node) => {
+            const nextTagline = site.brand?.tagline || '';
+            if (node.textContent !== nextTagline) {
+                node.textContent = nextTagline;
+            }
+        });
+
+        document.querySelectorAll('.hero-brand__name').forEach((node) => {
+            const nextBrandName = site.brand?.name || '';
+            if (node.textContent !== nextBrandName) {
+                node.textContent = nextBrandName;
+            }
+        });
+
+        document.querySelectorAll('.hero-brand__logo').forEach((image) => {
+            if (site.brand?.logo?.src && image.getAttribute('src') !== site.brand.logo.src) {
+                image.setAttribute('src', site.brand.logo.src);
+            }
+            const nextAlt = site.brand?.logo?.alt || site.brand?.logoAlt || site.brand?.name || image.alt;
             if (image.alt !== nextAlt) {
                 image.alt = nextAlt;
             }
@@ -305,14 +585,28 @@
             }
         }
 
-        const currentPath = normalizePath(window.location.pathname);
+        const heroPhoneBlocks = document.querySelectorAll('.hero-header-stack .hero-header-link');
+        if (heroPhoneBlocks[0] && primaryPhone) {
+            renderHeroPhoneLink(heroPhoneBlocks[0], primaryPhone);
+        }
+
+        if (heroPhoneBlocks[1] && secondaryPhone) {
+            renderHeroPhoneLink(heroPhoneBlocks[1], secondaryPhone);
+        }
+
+        document.querySelectorAll('.hero-header-address span').forEach((node) => {
+            const nextAddress = site.contact?.address || '';
+            if (node.textContent !== nextAddress) {
+                node.textContent = nextAddress;
+            }
+        });
+
         document.querySelectorAll('.nav-list').forEach((navList) => {
             syncNavigationList(navList, site.navigation || [], currentPath);
         });
-
-        // Десктопная hero-шапка теперь является статичным шаблоном и не должна
-        // пересобираться после загрузки. Иначе появляются заметные рывки:
-        // перезагрузка логотипа, переустановка телефонов и вставка иконок в меню.
+        document.querySelectorAll('.hero-scene__nav').forEach((navList) => {
+            syncHeroNavigation(navList, site.navigation || [], currentPath);
+        });
     }
 
     function ensureLegacyFooterBrandMeta() {
@@ -376,20 +670,16 @@
     }
 
     function applyFooter(site) {
-        const premiumFooterCompany = document.querySelector('.footer-premium__column--company');
         const legacyFooterCompany = document.querySelector('.footer-column--company');
         const legacyFooterBrandMeta = ensureLegacyFooterBrandMeta();
-        const footerCompanyTitle = premiumFooterCompany?.querySelector('.footer-premium__company')
-            || legacyFooterCompany?.querySelector('h4')
+        const footerCompanyTitle = legacyFooterCompany?.querySelector('h4')
             || legacyFooterBrandMeta?.querySelector('.footer-brand-meta__company');
 
         if (footerCompanyTitle) {
             footerCompanyTitle.textContent = site.footer?.companyTitle || '';
         }
 
-        if (premiumFooterCompany) {
-            syncTextCollection(premiumFooterCompany, '.footer-premium__legal-text', site.footer?.companyParagraphs || []);
-        } else if (legacyFooterCompany) {
+        if (legacyFooterCompany) {
             syncTextCollection(legacyFooterCompany, ':scope > p', site.footer?.companyParagraphs || []);
         } else if (legacyFooterBrandMeta) {
             const legacyFooterBrandDescription = legacyFooterBrandMeta.querySelector('.footer-brand-meta__description');
@@ -398,19 +688,8 @@
             }
         }
 
-        const premiumContactList = document.querySelector('.footer-premium__list--contacts');
         const legacyContactList = document.querySelector('.footer .contact-list');
-        if (premiumContactList) {
-            premiumContactList.innerHTML = `
-                <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>${escapeHtml(site.contact?.address || '')}</span></li>
-                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
-                <li><i class="fas fa-phone" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.secondaryPhone?.href || '#')}">${escapeHtml(site.contact?.secondaryPhone?.label || '')}</a></li>
-                <li><i class="fas fa-envelope" aria-hidden="true"></i><a href="mailto:${escapeHtml(site.contact?.email || '')}">${escapeHtml(site.contact?.email || '')}</a></li>
-                <li><i class="fas fa-clock" aria-hidden="true"></i><span>${escapeHtml(site.contact?.hours || '')}</span></li>
-                <li><i class="fab fa-telegram-plane" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.telegram?.label || 'Telegram')}</a></li>
-                <li><i class="fas fa-comment-dots" aria-hidden="true"></i><a href="${escapeHtml(site.contact?.max?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.max?.label || 'Max')}</a></li>
-            `;
-        } else if (legacyContactList) {
+        if (legacyContactList) {
             legacyContactList.innerHTML = `
                 <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> ${escapeHtml(site.contact?.address || '')}</li>
                 <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
@@ -441,7 +720,7 @@
             }
         }
 
-        const footerBottom = document.querySelector('.footer-premium__bottom') || document.querySelector('.footer-bottom');
+        const footerBottom = document.querySelector('.footer-bottom');
         if (footerBottom) {
             const paragraphs = footerBottom.querySelectorAll('p');
             const currentYear = new Date().getFullYear();
@@ -463,7 +742,7 @@
 
         const bindings = [];
         const currentPath = normalizePath(window.location.pathname);
-        const taglineNodes = Array.from(document.querySelectorAll('.logo-tagline'));
+        const taglineNodes = Array.from(document.querySelectorAll('.logo-tagline, .hero-brand__eyebrow'));
         if (taglineNodes.length) {
             bindings.push({
                 path: 'brand.tagline',
@@ -471,6 +750,17 @@
                 label: 'Слоган рядом с логотипом',
                 hint: 'Короткая строка рядом с логотипом в шапке.',
                 element: taglineNodes
+            });
+        }
+
+        const brandNameNodes = Array.from(document.querySelectorAll('.hero-brand__name'));
+        if (brandNameNodes.length) {
+            bindings.push({
+                path: 'brand.name',
+                type: 'text',
+                label: 'Название бренда в hero-шапке',
+                hint: 'Большое название рядом с логотипом во внутренней шапке.',
+                element: brandNameNodes
             });
         }
 
@@ -499,43 +789,55 @@
         }
 
         const phoneLinks = Array.from(document.querySelectorAll('.header-contact-stack .contact-phone'));
-        if (phoneLinks[0]) {
+        const heroPhoneLinks = Array.from(document.querySelectorAll('.hero-header-stack .hero-header-link'));
+        const contentPhoneElements = [
+            collectContentPhoneAnchors(site.contact?.primaryPhone, [site.contact?.primaryPhone, site.contact?.secondaryPhone]),
+            collectContentPhoneAnchors(site.contact?.secondaryPhone, [site.contact?.primaryPhone, site.contact?.secondaryPhone])
+        ];
+
+        const primaryPhoneElements = uniqueElements([phoneLinks[0], heroPhoneLinks[0], ...contentPhoneElements[0]]);
+        if (primaryPhoneElements.length) {
             bindings.push({
                 path: 'contact.primaryPhone',
                 type: 'object',
                 label: 'Первый телефон в шапке',
                 hint: 'Номер, ссылка и подпись.',
-                element: phoneLinks[0],
+                element: primaryPhoneElements,
                 fields: [
                     { key: 'label', label: 'Номер', type: 'text' },
                     { key: 'href', label: 'Ссылка tel:', type: 'text' },
                     { key: 'note', label: 'Подпись', type: 'text' }
                 ],
                 render(value, binding) {
-                    binding.elements.forEach((element) => renderPhoneLink(element, value || {}));
+                    binding.elements.forEach((element) => {
+                        renderPhoneElement(element, value || {});
+                    });
                 }
             });
         }
 
-        if (phoneLinks[1]) {
+        const secondaryPhoneElements = uniqueElements([phoneLinks[1], heroPhoneLinks[1], ...contentPhoneElements[1]]);
+        if (secondaryPhoneElements.length) {
             bindings.push({
                 path: 'contact.secondaryPhone',
                 type: 'object',
                 label: 'Второй телефон в шапке',
                 hint: 'Меняет второй номер в шапке сайта.',
-                element: phoneLinks[1],
+                element: secondaryPhoneElements,
                 fields: [
                     { key: 'label', label: 'Номер', type: 'text' },
                     { key: 'href', label: 'Ссылка tel:', type: 'text' },
                     { key: 'note', label: 'Подпись', type: 'text' }
                 ],
                 render(value, binding) {
-                    binding.elements.forEach((element) => renderPhoneLink(element, value || {}));
+                    binding.elements.forEach((element) => {
+                        renderPhoneElement(element, value || {});
+                    });
                 }
             });
         }
 
-        const addressNodes = Array.from(document.querySelectorAll('.header-contact-stack .contact-address span'));
+        const addressNodes = Array.from(document.querySelectorAll('.header-contact-stack .contact-address span, .hero-header-address span'));
         if (addressNodes.length) {
             bindings.push({
                 path: 'contact.address',
@@ -591,8 +893,7 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerCompanyTitle = document.querySelector('.footer-premium__company')
-            || document.querySelector('.footer-column--company h4')
+        const footerCompanyTitle = document.querySelector('.footer-column--company h4')
             || document.querySelector('.footer-brand-meta__company');
         if (footerCompanyTitle) {
             bindings.push({
@@ -603,15 +904,12 @@
             });
         }
 
-        const footerCompany = document.querySelector('.footer-premium__column--company')
-            || document.querySelector('.footer-column--company')
+        const footerCompany = document.querySelector('.footer-column--company')
             || document.querySelector('.footer-brand-meta__description');
         if (footerCompany) {
             const paragraphContainer = footerCompany;
-            const paragraphSelector = footerCompany.classList.contains('footer-premium__column--company')
-                ? '.footer-premium__legal-text'
-                : footerCompany.classList.contains('footer-brand-meta__description')
-                    ? '.footer-brand-meta__text'
+            const paragraphSelector = footerCompany.classList.contains('footer-brand-meta__description')
+                ? '.footer-brand-meta__text'
                 : ':scope > p';
 
             bindings.push({
@@ -719,23 +1017,24 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerEmail = document.querySelector('.footer-premium__list--contacts a[href^="mailto:"]') || document.querySelector('.footer .contact-list a[href^="mailto:"]');
-        if (footerEmail) {
+        const footerEmail = document.querySelector('.footer .contact-list a[href^="mailto:"]');
+        const contentEmails = collectContentEmailAnchors();
+        const emailElements = uniqueElements([footerEmail, ...contentEmails]);
+        if (emailElements.length) {
             bindings.push({
                 path: 'contact.email',
                 type: 'text',
                 label: 'Почта в подвале',
-                element: footerEmail,
+                element: emailElements,
                 render(value, binding) {
                     binding.elements.forEach((element) => {
-                        element.textContent = value || '';
-                        element.setAttribute('href', `mailto:${value || ''}`);
+                        renderContentEmailAnchor(element, value || '');
                     });
                 }
             });
         }
 
-        const footerHoursItem = Array.from(document.querySelectorAll('.footer-premium__list--contacts li, .footer .contact-list li')).find((item) => item.querySelector('.fa-clock'));
+        const footerHoursItem = Array.from(document.querySelectorAll('.footer .contact-list li')).find((item) => item.querySelector('.fa-clock'));
         if (footerHoursItem) {
             bindings.push({
                 path: 'contact.hours',
@@ -744,18 +1043,13 @@
                 element: footerHoursItem,
                 render(value, binding) {
                     binding.elements.forEach((element) => {
-                        if (element.closest('.footer-premium__list--contacts')) {
-                            element.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i><span>${escapeHtml(value || '')}</span>`;
-                            return;
-                        }
-
                         element.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i> ${escapeHtml(value || '')}`;
                     });
                 }
             });
         }
 
-        const footerTelegram = Array.from(document.querySelectorAll('.footer-premium__list--contacts a, .footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent));
+        const footerTelegram = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent));
         if (footerTelegram) {
             bindings.push({
                 path: 'contact.telegram',
@@ -769,18 +1063,13 @@
                 render(value, binding) {
                     binding.elements.forEach((element) => {
                         element.setAttribute('href', value?.href || '#');
-                        if (element.closest('.footer-premium__list--contacts')) {
-                            element.textContent = value?.label || 'Telegram';
-                            return;
-                        }
-
                         element.innerHTML = `<i class="fab fa-telegram-plane" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Telegram')}`;
                     });
                 }
             });
         }
 
-        const footerMax = Array.from(document.querySelectorAll('.footer-premium__list--contacts a, .footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent));
+        const footerMax = Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent));
         if (footerMax) {
             bindings.push({
                 path: 'contact.max',
@@ -794,18 +1083,13 @@
                 render(value, binding) {
                     binding.elements.forEach((element) => {
                         element.setAttribute('href', value?.href || '#');
-                        if (element.closest('.footer-premium__list--contacts')) {
-                            element.textContent = value?.label || 'Max';
-                            return;
-                        }
-
                         element.innerHTML = `<i class="fas fa-comment-dots" aria-hidden="true"></i> ${escapeHtml(value?.label || 'Max')}`;
                     });
                 }
             });
         }
 
-        const footerPolicy = document.querySelector('.footer-premium__bottom p:last-child a') || document.querySelector('.footer-bottom p:last-child a');
+        const footerPolicy = document.querySelector('.footer-bottom p:last-child a');
         if (footerPolicy) {
             bindings.push({
                 path: 'footer.policyLabel',
@@ -841,9 +1125,18 @@
 
         try {
             const site = await window.PokraskaContent.loadContentFile('site');
-            applyHeader(site);
-            applyFooter(site);
+            window.POKRASKA_SITE_CONTENT = site;
+            if (shouldHydrateShell()) {
+                applyHeader(site);
+                applyFooter(site);
+            }
+            applyContentContacts(site);
+            applyContentContactText(site);
             registerInlineBindings(site);
+            window.addEventListener('load', () => {
+                applyContentContacts(site);
+                applyContentContactText(site);
+            }, { once: true });
         } catch (error) {
             console.warn('Failed to apply site content', error);
         }

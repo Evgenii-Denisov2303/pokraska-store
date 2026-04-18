@@ -12,6 +12,112 @@
             .replace(/'/g, '&#39;');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function buildResolvedContactItems(items, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        let phoneIndex = 0;
+
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const nextItem = { ...(item || {}) };
+            const href = String(nextItem.href || '').trim();
+
+            if (href.startsWith('tel:')) {
+                const phone = phoneIndex === 0 ? primaryPhone : (secondaryPhone || primaryPhone);
+                phoneIndex += 1;
+                nextItem.href = phone?.href || href;
+                if (!nextItem.label || isPhoneLikeLabel(nextItem.label)) {
+                    nextItem.label = phone?.label || nextItem.label || '';
+                }
+                nextItem.icon = nextItem.icon || 'fas fa-phone';
+                return nextItem;
+            }
+
+            if (href.startsWith('mailto:')) {
+                nextItem.href = email ? `mailto:${email}` : href;
+                if (!nextItem.label || isEmailLikeLabel(nextItem.label)) {
+                    nextItem.label = email || nextItem.label || '';
+                }
+                nextItem.icon = nextItem.icon || 'fas fa-envelope';
+                return nextItem;
+            }
+
+            return nextItem;
+        });
+    }
+
+    function buildResolvedCatalogData(content, panelContent, site) {
+        const nextContent = {
+            ...content,
+            cta: {
+                ...(content?.cta || {}),
+                contacts: buildResolvedContactItems(content?.cta?.contacts || [], site)
+            }
+        };
+
+        const nextPanelContent = Object.fromEntries(
+            Object.entries(panelContent || {}).map(([key, panel]) => ([
+                key,
+                panel && typeof panel === 'object'
+                    ? {
+                        ...panel,
+                        cta: panel.cta
+                            ? {
+                                ...panel.cta,
+                                contacts: buildResolvedContactItems(panel.cta.contacts || [], site)
+                            }
+                            : panel.cta
+                    }
+                    : panel
+            ]))
+        );
+
+        return { content: nextContent, panelContent: nextPanelContent };
+    }
+
     function renderContact(contact) {
         return `
             <a href="${escapeHtml(contact.href || '#')}">
@@ -1323,17 +1429,21 @@
         if (!document.querySelector('[data-catalog-layout]')) return;
 
         try {
-            const [content, panelContent] = await Promise.all([
+            const [content, panelContent, site] = await Promise.all([
                 window.PokraskaContent.loadContentFile('catalog'),
-                window.PokraskaContent.loadContentFile('catalog-panels').catch(() => ({}))
+                window.PokraskaContent.loadContentFile('catalog-panels').catch(() => ({})),
+                loadSiteShellData()
             ]);
+            const resolved = buildResolvedCatalogData(content || {}, panelContent || {}, site);
+            const resolvedContent = resolved.content;
+            const resolvedPanelContent = resolved.panelContent;
 
             const hiddenTitle = document.querySelector('.catalog-page .visually-hidden');
             if (hiddenTitle) {
-                hiddenTitle.textContent = content.pageTitle || '';
+                hiddenTitle.textContent = resolvedContent.pageTitle || '';
             }
 
-            (content.groups || []).forEach((group) => {
+            (resolvedContent.groups || []).forEach((group) => {
                 const tab = document.querySelector(`[data-catalog-group="${group.key}"]`);
                 const panel = document.querySelector(`[data-catalog-group-panel="${group.key}"]`);
 
@@ -1360,13 +1470,13 @@
                 }
             });
 
-            Object.values(panelContent || {})
+            Object.values(resolvedPanelContent || {})
                 .filter((panel) => panel && typeof panel === 'object')
                 .forEach(applyPanel);
 
             const partnersTitle = document.querySelector('.catalog-partners h3');
             if (partnersTitle) {
-                partnersTitle.innerHTML = `<i class="fas fa-handshake"></i> ${escapeHtml(content.partners?.title || '')}`;
+                partnersTitle.innerHTML = `<i class="fas fa-handshake"></i> ${escapeHtml(resolvedContent.partners?.title || '')}`;
             }
 
             const cta = document.querySelector('.catalog-cta');
@@ -1374,14 +1484,14 @@
                 const title = cta.querySelector('h3');
                 const text = cta.querySelector('p');
                 const contacts = cta.querySelector('.catalog-contact-list');
-                if (title) title.textContent = content.cta?.title || '';
-                if (text) text.textContent = content.cta?.text || '';
+                if (title) title.textContent = resolvedContent.cta?.title || '';
+                if (text) text.textContent = resolvedContent.cta?.text || '';
                 if (contacts) {
-                    syncContactLinks(contacts, content.cta?.contacts || []);
+                    syncContactLinks(contacts, resolvedContent.cta?.contacts || []);
                 }
             }
 
-            registerInlineBindings(content, panelContent);
+            registerInlineBindings(resolvedContent, resolvedPanelContent);
         } catch (error) {
             console.warn('Failed to apply catalog content', error);
         }

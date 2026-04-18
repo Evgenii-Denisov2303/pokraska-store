@@ -12,6 +12,112 @@
             .replace(/'/g, '&#39;');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function buildResolvedActions(actions, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        const nextActions = {
+            primary: { ...(actions?.primary || {}) },
+            secondary: { ...(actions?.secondary || {}) }
+        };
+
+        ['primary', 'secondary'].forEach((key) => {
+            const action = nextActions[key];
+            const href = String(action.href || '').trim();
+            if (href.startsWith('tel:')) {
+                action.href = primaryPhone.href || href;
+                if (!action.label || isPhoneLikeLabel(action.label)) {
+                    action.label = primaryPhone.label || action.label || '';
+                }
+                action.icon = action.icon || 'fas fa-phone';
+            } else if (href.startsWith('mailto:')) {
+                action.href = email ? `mailto:${email}` : href;
+                if (!action.label || isEmailLikeLabel(action.label)) {
+                    action.label = email || action.label || '';
+                }
+                action.icon = action.icon || 'fas fa-envelope';
+            }
+        });
+
+        return nextActions;
+    }
+
+    function buildResolvedPhoneList(items, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        let phoneIndex = 0;
+
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const nextItem = { ...(item || {}) };
+            const href = String(nextItem.href || '').trim();
+            if (!href.startsWith('tel:')) {
+                return nextItem;
+            }
+
+            const phone = phoneIndex === 0 ? primaryPhone : (secondaryPhone || primaryPhone);
+            phoneIndex += 1;
+            nextItem.href = phone?.href || href;
+            if (!nextItem.label || isPhoneLikeLabel(nextItem.label)) {
+                nextItem.label = phone?.label || nextItem.label || '';
+            }
+            return nextItem;
+        });
+    }
+
+    function buildResolvedPricesContent(content, site) {
+        return {
+            ...content,
+            calculator: {
+                ...(content?.calculator || {}),
+                phones: buildResolvedPhoneList(content?.calculator?.phones || [], site)
+            },
+            cta: buildResolvedActions(content?.cta || {}, site)
+        };
+    }
+
     function renderButton(action, className) {
         return `
             <a href="${escapeHtml(action.href || '#')}" class="${escapeHtml(className)}">
@@ -350,17 +456,21 @@
         if (!document.querySelector('.prices-page')) return;
 
         try {
-            const content = await window.PokraskaContent.loadContentFile('prices');
+            const [content, site] = await Promise.all([
+                window.PokraskaContent.loadContentFile('prices'),
+                loadSiteShellData()
+            ]);
+            const resolvedContent = buildResolvedPricesContent(content || {}, site);
 
             const header = document.querySelector('.price-header');
             if (header) {
                 const title = header.querySelector('h1');
                 const subtitle = header.querySelector('.subtitle');
                 if (title) {
-                    title.innerHTML = `<i class="fas fa-tags"></i> ${escapeHtml(content.header?.title || '')}`;
+                    title.innerHTML = `<i class="fas fa-tags"></i> ${escapeHtml(resolvedContent.header?.title || '')}`;
                 }
                 if (subtitle) {
-                    subtitle.textContent = content.header?.subtitle || '';
+                    subtitle.textContent = resolvedContent.header?.subtitle || '';
                 }
             }
 
@@ -368,9 +478,9 @@
             if (factors) {
                 const title = factors.querySelector('h2');
                 if (title) {
-                    title.innerHTML = `<i class="fas fa-chart-line"></i> ${escapeHtml(content.factors?.title || '')}`;
+                    title.innerHTML = `<i class="fas fa-chart-line"></i> ${escapeHtml(resolvedContent.factors?.title || '')}`;
                 }
-                syncFactorCards(factors, content.factors?.items || []);
+                syncFactorCards(factors, resolvedContent.factors?.items || []);
             }
 
             const calculator = document.querySelector('.calculator-section');
@@ -381,16 +491,16 @@
                 const actionWrap = calculator.querySelector('.btn.btn-primary');
 
                 if (title) {
-                    title.innerHTML = `<i class="fas fa-calculator"></i> ${escapeHtml(content.calculator?.title || '')}`;
+                    title.innerHTML = `<i class="fas fa-calculator"></i> ${escapeHtml(resolvedContent.calculator?.title || '')}`;
                 }
                 if (text) {
-                    text.textContent = content.calculator?.text || '';
+                    text.textContent = resolvedContent.calculator?.text || '';
                 }
-                if (actionWrap && content.calculator?.action) {
-                    actionWrap.outerHTML = renderButton(content.calculator.action, 'btn btn-primary');
+                if (actionWrap && resolvedContent.calculator?.action) {
+                    actionWrap.outerHTML = renderButton(resolvedContent.calculator.action, 'btn btn-primary');
                 }
                 if (contact) {
-                    renderCalculatorContactLine(contact, content.calculator?.contactLabel || '', content.calculator?.phones || []);
+                    renderCalculatorContactLine(contact, resolvedContent.calculator?.contactLabel || '', resolvedContent.calculator?.phones || []);
                 }
             }
 
@@ -399,16 +509,16 @@
                 const badge = guarantee.querySelector('.guarantee-badge span');
                 const title = guarantee.querySelector('.guarantee-title');
                 const text = guarantee.querySelector('.guarantee-text');
-                if (badge) badge.textContent = content.guarantee?.badge || '';
-                if (title) title.textContent = content.guarantee?.title || '';
-                if (text) text.textContent = content.guarantee?.text || '';
+                if (badge) badge.textContent = resolvedContent.guarantee?.badge || '';
+                if (title) title.textContent = resolvedContent.guarantee?.title || '';
+                if (text) text.textContent = resolvedContent.guarantee?.text || '';
             }
 
             const cta = document.querySelector('.price-cta');
             if (cta) {
                 cta.innerHTML = [
-                    renderButton(content.cta?.primary || {}, 'btn btn-primary'),
-                    renderButton(content.cta?.secondary || {}, 'btn btn-secondary')
+                    renderButton(resolvedContent.cta?.primary || {}, 'btn btn-primary'),
+                    renderButton(resolvedContent.cta?.secondary || {}, 'btn btn-secondary')
                 ].join('');
             }
 
@@ -416,12 +526,12 @@
             if (faqSection) {
                 const title = faqSection.querySelector('.section-title');
                 const subtitle = faqSection.querySelector('.section-subtitle');
-                if (title) title.textContent = content.faq?.title || '';
-                if (subtitle) subtitle.textContent = content.faq?.subtitle || '';
-                syncFaqItems(faqSection, content.faq?.items || []);
+                if (title) title.textContent = resolvedContent.faq?.title || '';
+                if (subtitle) subtitle.textContent = resolvedContent.faq?.subtitle || '';
+                syncFaqItems(faqSection, resolvedContent.faq?.items || []);
             }
 
-            registerInlineBindings(content);
+            registerInlineBindings(resolvedContent);
         } catch (error) {
             console.warn('Failed to apply prices content', error);
         }

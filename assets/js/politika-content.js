@@ -12,6 +12,106 @@
             .replace(/'/g, '&#39;');
     }
 
+    const fallbackSiteContact = {
+        primaryPhone: {
+            label: '+7 (937) 615-46-29',
+            href: 'tel:+79376154629'
+        },
+        secondaryPhone: {
+            label: '+7 (962) 554-22-60',
+            href: 'tel:+79625542260'
+        },
+        email: 'vorota404@mail.ru'
+    };
+
+    async function loadSiteShellData() {
+        if (window.POKRASKA_SITE_CONTENT) {
+            return window.POKRASKA_SITE_CONTENT;
+        }
+
+        if (!window.PokraskaContent?.loadContentFile) {
+            return null;
+        }
+
+        try {
+            const site = await window.PokraskaContent.loadContentFile('site');
+            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
+            return site;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function getSiteContact(site) {
+        return site?.contact || fallbackSiteContact;
+    }
+
+    function isPhoneLikeLabel(value) {
+        return /^[+\d\s()\-]+$/.test(String(value || '').trim());
+    }
+
+    function isEmailLikeLabel(value) {
+        return /@/.test(String(value || '').trim());
+    }
+
+    function applyContactReplacements(html, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+
+        return String(html || '')
+            .replace(/tel:\+79376154629/gi, primaryPhone.href || 'tel:+79376154629')
+            .replace(/tel:\+79625542260/gi, secondaryPhone.href || 'tel:+79625542260')
+            .replace(/\+7\s*\(937\)\s*615-46-29/g, primaryPhone.label || '+7 (937) 615-46-29')
+            .replace(/\+7\s*\(962\)\s*554-22-60/g, secondaryPhone.label || '+7 (962) 554-22-60')
+            .replace(/mailto:vorota404@mail\.ru/gi, email ? `mailto:${email}` : 'mailto:vorota404@mail.ru')
+            .replace(/vorota404@mail\.ru/gi, email || 'vorota404@mail.ru');
+    }
+
+    function buildResolvedContactItems(items, site) {
+        const contact = getSiteContact(site);
+        const primaryPhone = contact.primaryPhone || fallbackSiteContact.primaryPhone;
+        const secondaryPhone = contact.secondaryPhone || fallbackSiteContact.secondaryPhone;
+        const email = contact.email || fallbackSiteContact.email;
+        let phoneIndex = 0;
+
+        return (Array.isArray(items) ? items : []).map((item) => {
+            const nextItem = { ...(item || {}) };
+            const href = String(nextItem.href || '').trim();
+
+            if (href.startsWith('tel:')) {
+                const phone = phoneIndex === 0 ? primaryPhone : (secondaryPhone || primaryPhone);
+                phoneIndex += 1;
+                nextItem.href = phone?.href || href;
+                if (!nextItem.label || isPhoneLikeLabel(nextItem.label)) {
+                    nextItem.label = phone?.label || nextItem.label || '';
+                }
+            } else if (href.startsWith('mailto:')) {
+                nextItem.href = email ? `mailto:${email}` : href;
+                if (!nextItem.label || isEmailLikeLabel(nextItem.label)) {
+                    nextItem.label = email || nextItem.label || '';
+                }
+            }
+
+            return nextItem;
+        });
+    }
+
+    function buildResolvedPolitikaContent(content, site) {
+        return {
+            ...content,
+            sections: (content?.sections || []).map((section) => ({
+                ...(section || {}),
+                bodyHtml: applyContactReplacements(section?.bodyHtml || '', site)
+            })),
+            contact: {
+                ...(content?.contact || {}),
+                items: buildResolvedContactItems(content?.contact?.items || [], site)
+            }
+        };
+    }
+
     function resetInlineMarkers(root) {
         if (!root) return;
         root.removeAttribute('data-inline-edit-id');
@@ -357,8 +457,12 @@
         if (!document.querySelector('.privacy-page')) return;
 
         try {
-            const content = await window.PokraskaContent.loadContentFile('politika');
-            applyPolicyContent(content);
+            const [content, site] = await Promise.all([
+                window.PokraskaContent.loadContentFile('politika'),
+                loadSiteShellData()
+            ]);
+            const resolvedContent = buildResolvedPolitikaContent(content || {}, site);
+            applyPolicyContent(resolvedContent);
             registerInlineBindings();
         } catch (error) {
             console.warn('Failed to apply privacy policy content', error);
