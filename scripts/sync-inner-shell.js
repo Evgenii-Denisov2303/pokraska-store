@@ -30,6 +30,10 @@ function resolveRelativeHref(pageFile, href) {
         return href;
     }
 
+    if (href.startsWith('/#')) {
+        return `../index.html${href.slice(1)}`;
+    }
+
     if (href === '/index.html') {
         return '../index.html';
     }
@@ -186,30 +190,79 @@ ${buildHeroNav(pageFile)}
         `;
 }
 
-function buildFooterContactList() {
+function buildPreviewFooterContactList() {
     const fullAddress = normalizeWhitespace(site.contact.address || '').toLowerCase().startsWith('казань')
         ? site.contact.address || ''
         : `Казань, ${site.contact.address || ''}`;
 
-    return `                        <li><i class="fas fa-map-marker-alt"></i> ${escapeHtml(fullAddress)}</li>
-                        <li><i class="fas fa-phone"></i> <a href="${escapeHtml(site.contact.secondaryPhone?.href || '#')}">${escapeHtml(site.contact.secondaryPhone?.label || '')}</a></li>
-                        <li><i class="fas fa-phone"></i> <a href="${escapeHtml(site.contact.primaryPhone?.href || '#')}">${escapeHtml(site.contact.primaryPhone?.label || '')}</a></li>
-                        <li><i class="fas fa-envelope"></i> <a href="mailto:${escapeHtml(site.contact.email || '')}">${escapeHtml(site.contact.email || '')}</a></li>
-                        <li><i class="fas fa-clock"></i> ${escapeHtml(site.contact.hours || '')}</li>
-                        <li><a href="${escapeHtml(site.contact.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane" aria-hidden="true"></i> ${escapeHtml(site.contact.telegram?.label || 'Telegram')}</a></li>
-                        <li><a href="${escapeHtml(site.contact.max?.href || '#')}" target="_blank" rel="noopener noreferrer"><i class="fas fa-comment-dots" aria-hidden="true"></i> ${escapeHtml(site.contact.max?.label || 'Max')}</a></li>`;
+    return `                        <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> ${escapeHtml(fullAddress)}</li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact.secondaryPhone?.href || '#')}">${escapeHtml(site.contact.secondaryPhone?.label || '')}</a></li>
+                        <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact.primaryPhone?.href || '#')}">${escapeHtml(site.contact.primaryPhone?.label || '')}</a></li>
+                        <li><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:${escapeHtml(site.contact.email || '')}">${escapeHtml(site.contact.email || '')}</a></li>
+                        <li><i class="fas fa-clock" aria-hidden="true"></i> ${escapeHtml(site.contact.hours || '')}</li>
+                        <li><i class="fab fa-telegram-plane" aria-hidden="true"></i> <a href="${escapeHtml(site.contact.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact.telegram?.label || 'Telegram')}</a></li>
+                        <li><i class="fas fa-comment-dots" aria-hidden="true"></i> <a href="${escapeHtml(site.contact.max?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact.max?.label || 'Max')}</a></li>`;
 }
 
-function buildFooterBottom() {
-    const startYear = Number(site.brand.copyrightStartYear) || new Date().getFullYear();
-    const yearRange = startYear === new Date().getFullYear()
-        ? `${startYear}`
-        : `${startYear}-<span id="currentYear"></span>`;
+function buildPreviewFooterUsefulList(pageFile) {
+    return (site.footer?.usefulLinks || []).map((item) => {
+        const href = resolveRelativeHref(pageFile, item.href);
+        return `                        <li><a href="${escapeHtml(href)}">${escapeHtml(item.label || '')}</a></li>`;
+    }).join('\n');
+}
 
-    return `            <div class="footer-bottom">
-                <p>&copy; ${yearRange} ${escapeHtml(site.brand.footerCaption || '')}</p>
-                <p><a href="../politika.html">${escapeHtml(site.footer.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand.domain || '')}</p>
+function buildPreviewFooterBottom(pageFile) {
+    const currentYear = new Date().getFullYear();
+    const startYear = Number(site.brand?.copyrightStartYear) || currentYear;
+    const yearRange = startYear >= currentYear ? `${currentYear}` : `${startYear}-${currentYear}`;
+    const policyHref = resolveRelativeHref(pageFile, site.footer?.policyHref || '/politika.html');
+
+    return `            <div class="preview-footer__bottom">
+                <p>&copy; ${escapeHtml(yearRange)} ${escapeHtml(site.brand?.footerCaption || '')}</p>
+                <p><a href="${escapeHtml(policyHref)}">${escapeHtml(site.footer?.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand?.domain || '')}</p>
             </div>`;
+}
+
+function buildPreviewFooter(pageFile) {
+    const homeHref = resolveRelativeHref(pageFile, '/index.html');
+    const companyParagraphs = (site.footer?.companyParagraphs || [])
+        .map((text) => `                <p class="preview-footer__legal-text">${escapeHtml(text)}</p>`)
+        .join('\n');
+    const usefulLinks = buildPreviewFooterUsefulList(pageFile);
+
+    return `    <footer id="page-footer" class="preview-footer" aria-label="Футер сайта">
+        <div class="preview-footer__layout">
+            <div class="preview-footer__column preview-footer__column--company">
+                <a class="preview-footer__brand" href="${escapeHtml(homeHref)}#top" aria-label="Наверх">
+                    <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
+                        <img class="preview-footer__logo logo-image" src="../assets/images/logo.png" alt="">
+                        <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
+                    </span>
+                    <span class="preview-footer__brand-copy">
+                        <span class="preview-footer__label">Компания</span>
+                        <span class="preview-footer__company">${escapeHtml(site.footer?.companyTitle || 'ООО «Комфорт Плюс»')}</span>
+                    </span>
+                </a>
+${companyParagraphs}
+            </div>
+
+            <div class="preview-footer__column preview-footer__column--contacts">
+                <span class="preview-footer__label">Контакты</span>
+                <ul class="preview-footer__list preview-footer__list--contacts">
+${buildPreviewFooterContactList()}
+                </ul>
+            </div>
+
+            <div class="preview-footer__column preview-footer__column--useful">
+                <span class="preview-footer__label">${escapeHtml(site.footer?.usefulTitle || 'Полезное')}</span>
+                <ul class="preview-footer__list">
+${usefulLinks}
+                </ul>
+            </div>
+        </div>
+
+${buildPreviewFooterBottom(pageFile)}
+    </footer>`;
 }
 
 function replaceOrThrow(content, pattern, replacement, label, pageFile) {
@@ -243,17 +296,9 @@ function syncPage(pageFile) {
 
     next = replaceOrThrow(
         next,
-        /([ \t]*<ul class="contact-list">)[\s\S]*?([ \t]*<\/ul>)/,
-        `$1\n${buildFooterContactList()}\n$2`,
-        'footer-contact-list',
-        pageFile
-    );
-
-    next = replaceOrThrow(
-        next,
-        /[ \t]*<div class="footer-bottom">[\s\S]*?<\/div>/,
-        buildFooterBottom(),
-        'footer-bottom',
+        /[ \t]*<footer\b[^>]*class="(?:footer|preview-footer[^"]*)"[^>]*>[\s\S]*?<\/footer>/,
+        buildPreviewFooter(pageFile),
+        'footer-preview-replacement',
         pageFile
     );
 
