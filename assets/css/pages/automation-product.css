@@ -485,7 +485,7 @@
         padding: 11px 18px;
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(34, 52, 70, 0.08);
+        border: 1px solid var(--theme-border);
         box-shadow: 0 14px 22px rgba(20, 28, 39, 0.05);
     }
 
@@ -634,7 +634,7 @@
 
 .automation-product-section__title,
 .automation-accessories__title {
-    color: #1d3145;
+    color: var(--theme-text-strong);
 }
 
 .automation-accessories__text {

@@ -754,7 +754,7 @@
         border-radius: 30px;
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 241, 235, 0.96));
-        border: 1px solid rgba(34, 52, 70, 0.08);
+        border: 1px solid var(--theme-border);
         box-shadow: var(--theme-shadow-soft);
     }
 
@@ -771,7 +771,7 @@
         border-radius: 30px;
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 242, 236, 0.96));
-        border: 1px solid rgba(34, 52, 70, 0.08);
+        border: 1px solid var(--theme-border);
         box-shadow: var(--theme-shadow-soft);
     }
 
@@ -870,7 +870,7 @@
     align-items: center;
     gap: 10px;
     margin: 0 0 14px;
-    color: rgba(34, 52, 70, 0.56);
+    color: rgba(var(--theme-text-rgb), 0.56);
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.16em;
@@ -918,7 +918,7 @@
 }
 
 .price-summary__label {
-    color: rgba(34, 52, 70, 0.5);
+    color: rgba(var(--theme-text-rgb), 0.5);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.14em;

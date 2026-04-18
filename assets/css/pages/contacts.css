@@ -96,7 +96,7 @@
     padding: 11px 15px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.84);
-    border: 1px solid rgba(34, 52, 70, 0.08);
+    border: 1px solid var(--theme-border);
     color: var(--theme-text);
     font-size: 0.92rem;
     font-weight: 700;
@@ -170,7 +170,7 @@
 .contact-item:hover {
     transform: none;
     box-shadow: none;
-    border-color: rgba(34, 52, 70, 0.12);
+    border-color: var(--theme-border-strong);
 }
 
 .contact-icon {
@@ -216,7 +216,7 @@
 }
 
 .contacts-info-chip__label {
-    color: rgba(34, 52, 70, 0.56);
+    color: rgba(var(--theme-text-rgb), 0.56);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.14em;
@@ -275,7 +275,7 @@
     padding: 10px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(34, 52, 70, 0.08);
+    border: 1px solid var(--theme-border);
     color: var(--theme-text);
     font-size: 0.9rem;
     font-weight: 700;
@@ -290,7 +290,7 @@
     padding: 12px;
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(34, 52, 70, 0.08);
+    border: 1px solid var(--theme-border);
 }
 
 .contact-form-card .yandex-form-embed {

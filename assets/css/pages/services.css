@@ -1821,12 +1821,12 @@
 
 .catalog-panel__section-heading h3 {
     margin: 0;
-    color: #1e293b;
+    color: var(--theme-text-strong);
 }
 
 .catalog-panel__section-heading p {
     margin: 0;
-    color: #5b6b7b;
+    color: var(--theme-text-muted);
     line-height: 1.5;
 }
 
@@ -2228,7 +2228,7 @@
 .automation-guide h3,
 .automation-guide h4 {
     margin: 0 0 10px;
-    color: #1e293b;
+    color: var(--theme-text-strong);
 }
 
 .automation-guide h4 {
