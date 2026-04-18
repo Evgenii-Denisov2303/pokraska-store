@@ -299,66 +299,6 @@ body#top .contacts-subtitle {
     }
 }
 
-/* ========== FOOTER BRAND BLOCK & INNER PAGE READABILITY PASS ========== */
-.footer-brand-meta {
-    display: grid;
-    gap: 4px;
-    min-width: 0;
-    max-width: min(100%, 13.5rem);
-    text-align: left;
-}
-
-.footer-brand-meta__heading {
-    display: grid;
-    gap: 3px;
-    min-width: 0;
-}
-
-.footer-brand-meta__eyebrow {
-    color: rgba(171, 209, 247, 0.84);
-    font-size: 0.73rem;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-}
-
-.footer-brand-meta__company {
-    margin: 0;
-    color: #ffffff;
-    font-size: 0.98rem;
-    line-height: 1.06;
-    font-weight: 800;
-    text-wrap: pretty;
-}
-
-.footer-brand-meta__description {
-    display: grid;
-    gap: 6px;
-    margin-top: 1px;
-}
-
-.footer-brand-meta__text {
-    margin: 0;
-    color: rgba(220, 229, 238, 0.86);
-    font-size: 0.96rem;
-    line-height: 1.62;
-    text-wrap: pretty;
-}
-
-@media (max-width: 1100px) {
-    .footer-column--logo .footer-logo {
-        display: grid;
-        grid-template-columns: 1fr;
-        justify-items: start;
-        gap: 14px;
-    }
-
-    .footer-brand-meta {
-        max-width: min(100%, 12.75rem);
-    }
-}
-
 @media (min-width: 1101px) {
     .footer-content {
         width: min(100%, 1180px);
@@ -397,59 +337,6 @@ body#top .contacts-subtitle {
     .footer-content > .footer-column:nth-child(4) {
         grid-area: useful;
         padding-top: 2px;
-    }
-
-    .footer-column--logo .footer-logo {
-        width: 100%;
-        height: 100%;
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
-        grid-template-areas:
-            "logo heading"
-            "description description";
-        align-items: center;
-        justify-content: start;
-        gap: 8px 12px;
-        padding: 14px 16px 12px 14px;
-    }
-
-    .footer-column--logo .footer-logo-link {
-        grid-area: logo;
-        align-self: start;
-    }
-
-    .footer-brand-meta {
-        display: contents;
-    }
-
-    .footer-brand-meta__heading {
-        grid-area: heading;
-        max-width: min(100%, 12.75rem);
-        gap: 3px;
-        padding-top: 0;
-        align-self: center;
-    }
-
-    .footer-brand-meta__company {
-        font-size: 0.94rem;
-        line-height: 1.05;
-    }
-
-    .footer-brand-meta__eyebrow {
-        letter-spacing: 0.14em;
-    }
-
-    .footer-brand-meta__description {
-        grid-area: description;
-        max-width: 40ch;
-        gap: 6px;
-        margin-top: 0;
-        padding-top: 2px;
-    }
-
-    .footer-brand-meta__text {
-        font-size: 0.92rem;
-        line-height: 1.52;
     }
 
     .footer-column h4 {

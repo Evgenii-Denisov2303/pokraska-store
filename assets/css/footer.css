@@ -144,19 +144,6 @@
     border-radius: 2px;
 }
 
-.footer-column--company {
-    display: grid;
-    align-content: start;
-    gap: 12px;
-}
-
-.footer-column--company p {
-    margin: 0;
-    color: #bdc3c7;
-    line-height: 1.7;
-    font-size: 0.95rem;
-}
-
 .footer-column ul {
     list-style: none;
     padding: 0;
