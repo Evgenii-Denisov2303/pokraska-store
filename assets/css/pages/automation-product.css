@@ -67,7 +67,7 @@
     z-index: 2;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(36, 166, 191, 0.18);
+    border: 1px solid rgba(var(--theme-accent-rgb), 0.18);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.92);
     color: var(--theme-accent);
@@ -118,7 +118,7 @@
 
 .automation-product-thumb.is-active {
     border-color: var(--theme-accent);
-    box-shadow: 0 0 0 2px rgba(36, 166, 191, 0.16);
+    box-shadow: 0 0 0 2px rgba(var(--theme-accent-rgb), 0.16);
 }
 
 .automation-product-meta {
@@ -298,7 +298,7 @@
 .automation-product-page {
     padding: 72px 0 92px;
     background:
-    radial-gradient(circle at top left, rgba(36, 166, 191, 0.08), transparent 22%),
+    radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 22%),
     radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
     linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 52%, var(--theme-bg-soft) 100%);
 }
@@ -338,7 +338,7 @@
 }
 
 .automation-product-thumb.is-active {
-    box-shadow: 0 0 0 2px rgba(36, 166, 191, 0.16), 0 14px 24px rgba(23, 121, 149, 0.08);
+    box-shadow: 0 0 0 2px rgba(var(--theme-accent-rgb), 0.16), 0 14px 24px rgba(var(--theme-accent-strong-rgb), 0.08);
 }
 
 .automation-product-meta {
@@ -347,8 +347,8 @@
     width: fit-content;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(36, 166, 191, 0.08);
-    border: 1px solid rgba(36, 166, 191, 0.1);
+    background: rgba(var(--theme-accent-rgb), 0.08);
+    border: 1px solid rgba(var(--theme-accent-rgb), 0.1);
     color: var(--theme-text-muted);
     font-size: 0.82rem;
     font-weight: 800;

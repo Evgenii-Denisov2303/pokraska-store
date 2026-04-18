@@ -482,11 +482,11 @@
     }
 
     .price-header h1 {
-        color: #223446;
+        color: var(--theme-text-strong);
     }
 
     .price-header h1 i {
-        color: #274a68;
+        color: var(--theme-accent);
     }
 
     .price-header .subtitle {
@@ -505,7 +505,7 @@
     .price-factors h2 {
         margin-bottom: 30px;
         font-size: 2.25rem;
-        color: #223446;
+        color: var(--theme-text-strong);
     }
 
     .factors-grid {
@@ -523,7 +523,7 @@
     .factor-card i {
         margin-bottom: 14px;
         font-size: 1.72rem;
-        color: #274a68;
+        color: var(--theme-accent);
     }
 
     .factor-card h3 {
@@ -584,7 +584,7 @@
     .guarantee-title {
         font-size: 2rem;
         margin-bottom: 10px;
-        color: #223446;
+        color: var(--theme-text-strong);
     }
 
     .guarantee-text {
@@ -608,7 +608,7 @@
     }
 
     .prices-page .section-title {
-        color: #223446;
+        color: var(--theme-text-strong);
         margin-bottom: 10px;
     }
 

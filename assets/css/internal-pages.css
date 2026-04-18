@@ -1,0 +1,760 @@
+/* ========== INTERNAL PAGES CLEAN BASE ========== */
+body#top .catalog-page,
+body#top .services-page,
+body#top .gallery-page,
+body#top .prices-page,
+body#top .contacts-page,
+body#top .payment-docs-page,
+body#top .privacy-page,
+body#top .automation-product-page {
+    position: relative;
+    background: transparent !important;
+    background-image: none !important;
+}
+
+body#top .catalog-page::before,
+body#top .catalog-page::after,
+body#top .services-page::before,
+body#top .services-page::after,
+body#top .gallery-page::before,
+body#top .gallery-page::after,
+body#top .prices-page::before,
+body#top .prices-page::after,
+body#top .contacts-page::before,
+body#top .contacts-page::after,
+body#top .payment-docs-page::before,
+body#top .payment-docs-page::after,
+body#top .privacy-page::before,
+body#top .privacy-page::after,
+body#top .automation-product-page::before,
+body#top .automation-product-page::after {
+    content: none !important;
+}
+
+body#top .catalog-page > .container,
+body#top .services-page > .container,
+body#top .gallery-page > .container,
+body#top .prices-page > .container,
+body#top .contacts-page > .container,
+body#top .payment-docs-page > .container,
+body#top .privacy-page > .container,
+body#top .automation-product-page > .container {
+    position: relative;
+    z-index: 1;
+}
+
+body#top .services-header h1,
+body#top .gallery-header h1,
+body#top .price-header h1 {
+    background: none !important;
+    color: var(--theme-text-strong) !important;
+    -webkit-text-fill-color: currentColor !important;
+    background-clip: initial !important;
+    -webkit-background-clip: initial !important;
+}
+
+body#top .services-header .subtitle,
+body#top .gallery-header .subtitle,
+body#top .price-header .subtitle,
+body#top .contacts-subtitle {
+    color: #6a6f75 !important;
+}
+
+/* shared desktop hero header moved to header.css */
+
+/* ========== INTERNAL DESKTOP THEME BASE ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top {
+        --site-desktop-bg:
+            radial-gradient(circle at top left, rgba(97, 78, 58, 0.07), transparent 24%),
+            radial-gradient(circle at top right, rgba(131, 105, 75, 0.05), transparent 20%),
+            linear-gradient(180deg, #f8f5f0 0%, #f4efe8 48%, #fcfaf7 100%);
+        --site-desktop-surface: rgba(255, 255, 255, 0.98);
+        --site-desktop-surface-soft: rgba(248, 243, 237, 0.97);
+        --site-desktop-surface-warm: rgba(246, 240, 232, 0.96);
+        --site-desktop-border: rgba(31, 51, 74, 0.08);
+        --site-desktop-border-strong: rgba(36, 72, 99, 0.14);
+        --site-desktop-shadow: 0 22px 42px rgba(15, 23, 42, 0.07);
+        --site-desktop-shadow-soft: 0 14px 26px rgba(15, 23, 42, 0.04);
+        --site-desktop-radius-xl: 32px;
+        --site-desktop-radius-lg: 24px;
+        --site-desktop-radius-md: 18px;
+        --site-desktop-title: var(--theme-text-strong);
+        --site-desktop-text: var(--theme-text);
+        --site-desktop-muted: var(--theme-text-muted);
+        --site-desktop-accent: var(--theme-accent);
+        --site-desktop-accent-strong: var(--theme-accent-strong);
+        --site-desktop-accent-soft: rgba(var(--theme-accent-rgb), 0.08);
+        --site-desktop-warm: var(--theme-warm-strong);
+        --site-desktop-warm-soft: rgba(247, 241, 233, 0.98);
+        --site-desktop-container: min(1440px, calc(100vw - 96px));
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        background: var(--site-desktop-bg) !important;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page) > .container {
+        width: var(--site-desktop-container) !important;
+        max-width: none !important;
+    }
+
+    body#top .privacy-container {
+        width: min(1180px, calc(100vw - 160px));
+        max-width: none;
+        border-radius: var(--site-desktop-radius-xl);
+        border: 1px solid var(--site-desktop-border);
+        box-shadow: var(--site-desktop-shadow);
+        background: linear-gradient(180deg, var(--site-desktop-surface), var(--site-desktop-surface-soft));
+    }
+
+    body#top :is(.services-header h1, .price-header h1, .gallery-header h1, .privacy-header h1) {
+        color: var(--site-desktop-title) !important;
+    }
+
+    body#top :is(.services-header .subtitle, .price-header .subtitle, .gallery-header .subtitle, .contacts-subtitle, .privacy-header .date) {
+        color: var(--site-desktop-muted) !important;
+    }
+
+    body#top :is(.service-detail-card, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card) {
+        border-radius: var(--site-desktop-radius-xl);
+        border-color: var(--site-desktop-border);
+        box-shadow: var(--site-desktop-shadow);
+    }
+
+    body#top :is(.gallery-item, .gallery-empty, .price-factors, .guarantee-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card) {
+        background: linear-gradient(180deg, var(--site-desktop-surface), var(--site-desktop-surface-soft));
+    }
+
+    body#top :is(.service-header h2, .price-factors h2, .guarantee-title, .contacts-card-header h2, .gallery-header h1, .payment-docs-section__heading h2, .payment-docs-panel h2, .automation-product-title, .privacy-page .section h2) {
+        color: var(--site-desktop-title);
+    }
+
+    body#top :is(.service-description, .process-step p, .example-item, .catalog-group-panel__intro p, .catalog-palette-card__info p, .gallery-empty, .work-description, .factor-card p, .guarantee-text, .contact-details p, .contacts-fact p, .payment-docs-panel p, .payment-docs-section__heading p, .payment-docs-card p, .payment-docs-step p, .automation-product-description, .automation-accessories__text, .privacy-page .section p, .privacy-page .section li) {
+        color: var(--site-desktop-text);
+    }
+
+    body#top :is(.catalog-group-tab, .catalog-link, .filter-btn, .service-nav-link, .price-cta .btn, .payment-docs-hero__chips span, .payment-docs-step__number, .guarantee-badge) {
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease, color 0.22s ease;
+    }
+
+    body#top :is(.catalog-group-tab, .catalog-link, .filter-btn, .service-nav-link) {
+        border-radius: 999px;
+    }
+
+    body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover) {
+        transform: translateY(-2px);
+    }
+
+    body#top .payment-docs-hero__content,
+    body#top .calculator-section,
+    body#top .service-header,
+    body#top .pricing-table-header,
+    body#top .contact-manager-card,
+    body#top .contact-block {
+        background: var(--site-desktop-band);
+    }
+
+    body#top :is(.payment-docs-panel__icon, .payment-docs-card__icon, .guarantee-badge, .contact-icon, .catalog-group-tab__icon, .factor-card i, .price-header h1 i) {
+        color: var(--site-desktop-accent);
+    }
+
+    body#top :is(.payment-docs-panel__icon, .payment-docs-card__icon, .guarantee-badge) {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 233, 220, 0.96));
+    }
+
+    body#top .payment-docs-step__number,
+    body#top .process-step::before {
+        background: linear-gradient(135deg, var(--site-desktop-accent) 0%, var(--site-desktop-accent-strong) 100%);
+    }
+
+    body#top .footer,
+    body#top .preview-footer {
+        margin-top: 22px;
+    }
+}
+
+/* ========== INTERNAL DESKTOP ART DIRECTION ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top {
+        --site-desktop-bg:
+            radial-gradient(circle at top left, rgba(138, 111, 74, 0.1), transparent 24%),
+            radial-gradient(circle at 88% 4%, rgba(255, 255, 255, 0.58), transparent 18%),
+            linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 42%, var(--theme-bg-soft) 100%);
+        --site-desktop-surface: rgba(255, 255, 255, 0.98);
+        --site-desktop-surface-soft: rgba(246, 239, 230, 0.96);
+        --site-desktop-surface-warm: rgba(241, 233, 223, 0.96);
+        --site-desktop-border: var(--theme-border);
+        --site-desktop-border-strong: var(--theme-border-strong);
+        --site-desktop-shadow: var(--theme-shadow);
+        --site-desktop-shadow-soft: var(--theme-shadow-soft);
+        --site-desktop-radius-xl: var(--theme-radius-xl);
+        --site-desktop-radius-lg: var(--theme-radius-lg);
+        --site-desktop-radius-md: var(--theme-radius-md);
+        --site-desktop-title: var(--theme-text-strong);
+        --site-desktop-text: var(--theme-text);
+        --site-desktop-muted: var(--theme-text-muted);
+        --site-desktop-accent: var(--theme-accent);
+        --site-desktop-accent-strong: var(--theme-accent-strong);
+        --site-desktop-accent-soft: rgba(243, 233, 220, 0.96);
+        --site-desktop-warm: var(--theme-warm);
+        --site-desktop-warm-soft: rgba(249, 244, 237, 0.98);
+        --site-desktop-band:
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 28%),
+            linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 56%, var(--theme-band-to) 100%);
+        --site-desktop-band-soft:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 237, 228, 0.96));
+        --site-desktop-container: min(1500px, calc(100vw - 76px));
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        position: relative;
+        isolation: isolate;
+        overflow: clip;
+        padding-top: 198px !important;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 280px;
+        background:
+            radial-gradient(circle at 15% 18%, rgba(255, 255, 255, 0.72), transparent 34%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        pointer-events: none;
+        opacity: 0.92;
+        z-index: 0;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) > .container,
+    body#top .privacy-container {
+        position: relative;
+        z-index: 1;
+        padding-top: 18px;
+    }
+
+    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"]) {
+        position: relative;
+        overflow: clip;
+        isolation: isolate;
+    }
+
+    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::before {
+        content: "";
+        position: absolute;
+        top: -120px;
+        right: -70px;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(138, 111, 74, 0.08), rgba(138, 111, 74, 0));
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    body#top :is(.service-detail-card > *, .catalog-sidebar > *, .catalog-group-panels > *, .catalog-panel > *, .wheels-samples > *, .before-after-section .container > *, .gallery-item > *, .gallery-empty > *, .gallery-filters > *, .price-factors > *, .guarantee-section > *, .contacts-hero-card > *, .contact-info-card > *, .contact-form-card > *, .contacts-location-card > *, .payment-docs-panel > *, .payment-docs-section > *, .payment-docs-cta > *, .automation-product-card > *, .privacy-container > *, .prices-page .section[aria-labelledby="prices-faq-title"] > *) {
+        position: relative;
+        z-index: 1;
+    }
+
+    body#top :is(.services-header, .gallery-header, .price-header) {
+        position: relative;
+        max-width: 960px;
+        margin-left: 0;
+        text-align: left;
+    }
+
+    body#top :is(.services-header .subtitle, .gallery-header .subtitle, .price-header .subtitle) {
+        max-width: 780px;
+    }
+
+    body#top :is(.service-header, .pricing-table-header, .payment-docs-hero__content, .payment-docs-cta, .contact-manager-card, .calculator-section, .catalog-panel__cta) {
+        background: var(--site-desktop-band);
+        box-shadow: 0 26px 48px rgba(20, 28, 39, 0.16);
+    }
+
+    body#top :is(.catalog-group-tab, .catalog-link, .filter-btn, .service-nav-link, .catalog-panel__badge, .work-category, .detail) {
+        border-color: rgba(111, 87, 65, 0.12);
+        box-shadow: 0 12px 18px rgba(20, 28, 39, 0.035);
+    }
+
+    body#top :is(.payment-docs-card__icon, .payment-docs-panel__icon, .contact-icon, .catalog-group-tab__icon, .work-category, .detail.badge) {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(243, 233, 220, 0.94));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 12px 18px rgba(20, 28, 39, 0.04);
+    }
+
+    body#top :is(.service-detail-card:hover, .gallery-item:hover, .factor-card:hover, .catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .payment-docs-card:hover, .payment-docs-step:hover) {
+        box-shadow: 0 26px 48px rgba(20, 28, 39, 0.1);
+    }
+}
+
+/* ========== FOOTER BRAND BLOCK & INNER PAGE READABILITY PASS ========== */
+.footer-brand-meta {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    max-width: min(100%, 13.5rem);
+    text-align: left;
+}
+
+.footer-brand-meta__heading {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.footer-brand-meta__eyebrow {
+    color: rgba(171, 209, 247, 0.84);
+    font-size: 0.73rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.footer-brand-meta__company {
+    margin: 0;
+    color: #ffffff;
+    font-size: 0.98rem;
+    line-height: 1.06;
+    font-weight: 800;
+    text-wrap: pretty;
+}
+
+.footer-brand-meta__description {
+    display: grid;
+    gap: 6px;
+    margin-top: 1px;
+}
+
+.footer-brand-meta__text {
+    margin: 0;
+    color: rgba(220, 229, 238, 0.86);
+    font-size: 0.96rem;
+    line-height: 1.62;
+    text-wrap: pretty;
+}
+
+@media (max-width: 1100px) {
+    .footer-column--logo .footer-logo {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: 14px;
+    }
+
+    .footer-brand-meta {
+        max-width: min(100%, 12.75rem);
+    }
+}
+
+@media (min-width: 1101px) {
+    .footer-content {
+        width: min(100%, 1180px);
+        margin: 0 auto 28px;
+        grid-template-columns:
+            minmax(280px, 1.02fr)
+            minmax(240px, 0.99fr)
+            minmax(280px, 0.99fr);
+        grid-template-areas:
+            "brand catalog contacts"
+            "brand catalog useful";
+        gap: 20px clamp(22px, 2.2vw, 32px);
+        align-items: stretch;
+    }
+
+    .footer-content > .footer-column {
+        display: grid;
+        align-content: start;
+        min-width: 0;
+        height: 100%;
+    }
+
+    .footer-column--logo {
+        grid-area: brand;
+        justify-self: stretch;
+    }
+
+    .footer-content > .footer-column:nth-child(2) {
+        grid-area: catalog;
+    }
+
+    .footer-content > .footer-column:nth-child(3) {
+        grid-area: contacts;
+    }
+
+    .footer-content > .footer-column:nth-child(4) {
+        grid-area: useful;
+        padding-top: 2px;
+    }
+
+    .footer-column--logo .footer-logo {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            "logo heading"
+            "description description";
+        align-items: center;
+        justify-content: start;
+        gap: 8px 12px;
+        padding: 14px 16px 12px 14px;
+    }
+
+    .footer-column--logo .footer-logo-link {
+        grid-area: logo;
+        align-self: start;
+    }
+
+    .footer-brand-meta {
+        display: contents;
+    }
+
+    .footer-brand-meta__heading {
+        grid-area: heading;
+        max-width: min(100%, 12.75rem);
+        gap: 3px;
+        padding-top: 0;
+        align-self: center;
+    }
+
+    .footer-brand-meta__company {
+        font-size: 0.94rem;
+        line-height: 1.05;
+    }
+
+    .footer-brand-meta__eyebrow {
+        letter-spacing: 0.14em;
+    }
+
+    .footer-brand-meta__description {
+        grid-area: description;
+        max-width: 40ch;
+        gap: 6px;
+        margin-top: 0;
+        padding-top: 2px;
+    }
+
+    .footer-brand-meta__text {
+        font-size: 0.92rem;
+        line-height: 1.52;
+    }
+
+    .footer-column h4 {
+        margin-bottom: 13px;
+    }
+
+    .footer-column ul {
+        display: grid;
+        gap: 8px;
+    }
+
+    .footer-column ul li {
+        margin-bottom: 0;
+    }
+
+    .footer-column ul li:hover {
+        transform: translateX(2px);
+    }
+
+    .footer-column a {
+        align-items: flex-start;
+    }
+
+    .footer-column a:hover {
+        padding-left: 2px;
+    }
+
+    .contact-list li {
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr);
+        gap: 10px;
+        align-items: start;
+        margin-bottom: 0;
+        line-height: 1.42;
+    }
+
+    .contact-list i {
+        width: 18px;
+        font-size: 0.98rem;
+        margin-top: 2px;
+    }
+
+    .footer-bottom {
+        width: min(100%, 1180px);
+        margin: 28px auto 0;
+        padding-top: 18px;
+    }
+
+    body#top .gallery-page .subtitle,
+    body#top .gallery-page .gallery-summary__item p,
+    body#top .gallery-page .gallery-toolbar__copy p,
+    body#top .gallery-page .counter-text,
+    body#top .prices-page .subtitle,
+    body#top .prices-page .price-summary__item p,
+    body#top .prices-page .factor-card p,
+    body#top .prices-page .calculator-section > p:not(.price-card-kicker),
+    body#top .prices-page .guarantee-text,
+    body#top .prices-page .price-cta > p:not(.price-card-kicker),
+    body#top .prices-page .faq-answer p,
+    body#top .prices-page .section-subtitle,
+    body#top .contacts-page .contacts-subtitle,
+    body#top .contacts-page .contacts-hero-copy > p:last-of-type,
+    body#top .contacts-page .contacts-card-header > p:last-of-type,
+    body#top .contacts-page .contact-details p,
+    body#top .contacts-page .contacts-inline-note span,
+    body#top .contacts-page .contacts-location-copy > p:last-of-type,
+    body#top .contacts-page .location-points span,
+    body#top .contacts-page .form-notice,
+    body#top .payment-docs-page .payment-docs-hero__lead,
+    body#top .payment-docs-page .payment-docs-hero__text,
+    body#top .payment-docs-page .payment-docs-panel p,
+    body#top .payment-docs-page .payment-docs-section__heading p,
+    body#top .payment-docs-page .payment-docs-card p,
+    body#top .payment-docs-page .payment-docs-step p,
+    body#top .privacy-page .privacy-header > p:not(.date),
+    body#top .privacy-page .section p,
+    body#top .privacy-page .section li,
+    body#top .privacy-page .contact-block > p:not(.contact-response-note) {
+        color: #4c6478;
+        font-size: 1.04rem;
+        line-height: 1.74;
+    }
+
+    body#top .gallery-page .gallery-summary__item strong,
+    body#top .prices-page .price-summary__item strong,
+    body#top .contacts-page .contacts-card-header h2,
+    body#top .payment-docs-page .payment-docs-section__heading h2,
+    body#top .payment-docs-page .payment-docs-cta h2,
+    body#top .privacy-page .section h2,
+    body#top .privacy-page .section h3,
+    body#top .privacy-page .contact-block h3 {
+        color: var(--site-desktop-title);
+        letter-spacing: -0.02em;
+    }
+
+    body#top :is(.payment-docs-panel, .payment-docs-card, .payment-docs-step, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .price-header, .calculator-section, .price-cta, .privacy-page .section, .privacy-page .contact-block) {
+        box-shadow: 0 18px 30px rgba(20, 28, 39, 0.07);
+    }
+}
+
+/* ========== WARM THEME HARMONIZATION ========== */
+body#top {
+    --site-desktop-title: var(--theme-text-strong);
+    --site-accent: var(--theme-accent-strong);
+    --site-accent-soft: rgba(138, 111, 74, 0.12);
+}
+
+body#top,
+body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+    color: var(--theme-text);
+}
+
+body#top :is(.section-eyebrow, .contacts-eyebrow, .contacts-card-kicker, .payment-docs-card__eyebrow, .payment-docs-step__kicker, .price-card-kicker, .gallery-card__eyebrow, .gallery-summary__eyebrow) {
+    color: var(--theme-accent-strong);
+}
+
+body#top :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pill, .contacts-info-chip, .quick-actions .btn, .gallery-filter, .gallery-counter, .price-summary__item, .factor-card, .payment-docs-chip, .automation-product-page .product-badge) {
+    border-color: rgba(138, 111, 74, 0.14);
+    background: linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(243, 233, 220, 0.92));
+    color: var(--theme-text);
+    box-shadow: 0 14px 28px rgba(31, 38, 34, 0.05);
+}
+
+body#top :is(.request-form__eyebrow::before, .contact-icon, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon, .catalog-category-tab.is-active .catalog-category-tab__icon) {
+    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
+    box-shadow: 0 12px 24px rgba(111, 87, 65, 0.18);
+}
+
+body#top :is(a, .contact-details a, .gallery-card__link, .price-cta a, .payment-docs-page a):hover {
+    color: var(--theme-accent-strong);
+}
+
+body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+    border-color: var(--theme-border);
+    box-shadow: 0 20px 38px rgba(31, 38, 34, 0.06);
+}
+
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top {
+        --site-desktop-band:
+            radial-gradient(circle at top right, rgba(255, 253, 249, 0.08), transparent 28%),
+            linear-gradient(135deg, #2a3237 0%, #4b443d 54%, #7f6852 100%);
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 198px !important;
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-brand__eyebrow,
+    .header.header--desktop-hero .desktop-hero-header .hero-header-sub,
+    .header.header--desktop-hero .desktop-hero-header .hero-header-address {
+        color: rgba(31, 38, 34, 0.62) !important;
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-header-main,
+    .header-top--compact .phone-number {
+        color: var(--theme-accent-strong) !important;
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-brand__text::after {
+        background: linear-gradient(90deg, rgba(138, 111, 74, 0.54), rgba(138, 111, 74, 0));
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link,
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link:visited {
+        color: rgba(31, 38, 34, 0.84);
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link::after {
+        background: linear-gradient(90deg, rgba(111, 87, 65, 0) 0%, rgba(138, 111, 74, 0.24) 18%, rgba(138, 111, 74, 0.34) 50%, rgba(138, 111, 74, 0.24) 82%, rgba(111, 87, 65, 0) 100%);
+        box-shadow: 0 1px 3px rgba(111, 87, 65, 0.05);
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link:hover {
+        color: var(--theme-accent-strong);
+        border-color: rgba(138, 111, 74, 0.18);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.12)),
+            linear-gradient(90deg, rgba(138, 111, 74, 0.08), rgba(255, 255, 255, 0));
+        box-shadow:
+            0 10px 20px rgba(111, 87, 65, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.38);
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link--active,
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link--active:visited,
+    .header-top--compact .nav-list a.active {
+        color: var(--theme-accent-strong) !important;
+    }
+
+    .header.header--desktop-hero .desktop-hero-header .hero-nav__link--active::after {
+        background: linear-gradient(90deg, rgba(111, 87, 65, 0) 0%, rgba(138, 111, 74, 0.28) 18%, rgba(138, 111, 74, 0.52) 50%, rgba(138, 111, 74, 0.28) 82%, rgba(111, 87, 65, 0) 100%);
+        box-shadow: 0 1px 4px rgba(111, 87, 65, 0.08);
+    }
+
+    .header.header--desktop-hero .desktop-hero-header :is(.hero-header-link i, .hero-header-address i),
+    .header-top--compact :is(.contact-phone i, .contact-address i) {
+        color: var(--theme-accent-strong) !important;
+    }
+}
+
+/* ========== WARM THEME HARD OVERRIDE FOR INNER PAGES ========== */
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+    background:
+        radial-gradient(circle at top left, rgba(154, 124, 88, 0.08), transparent 24%) !important,
+        radial-gradient(circle at 88% 5%, rgba(79, 68, 61, 0.05), transparent 18%) !important,
+        linear-gradient(180deg, var(--theme-bg-soft) 0%, var(--theme-bg) 46%, var(--theme-bg-deep) 100%) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.section-eyebrow, .contacts-eyebrow, .contacts-card-kicker, .payment-docs-card__eyebrow, .payment-docs-step__kicker, .price-card-kicker, .gallery-card__eyebrow, .gallery-summary__eyebrow) {
+    color: var(--theme-accent-strong) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pill, .contacts-info-chip, .quick-actions .btn, .gallery-filter, .gallery-counter, .price-summary__item, .factor-card, .payment-docs-chip, .automation-product-page .product-badge, .service-nav-link, .catalog-category-tab, .catalog-group-tab) {
+    border-color: rgba(138, 111, 74, 0.14) !important;
+    background: linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(243, 233, 220, 0.92)) !important;
+    color: var(--theme-text) !important;
+    box-shadow: 0 14px 28px rgba(31, 38, 34, 0.05) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.catalog-category-tab.is-active, .catalog-group-tab.is-active, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
+    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+    border-color: transparent !important;
+    color: #fffdf9 !important;
+    box-shadow: 0 12px 24px rgba(111, 87, 65, 0.18) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.request-form__eyebrow::before, .contact-icon, .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon, .catalog-category-tab.is-active .catalog-category-tab__icon) {
+    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+    box-shadow: 0 12px 24px rgba(111, 87, 65, 0.18) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.contact-details a, .gallery-card__link, .payment-docs-page a, .prices-page a, .services-page a[href]:not(.btn):not(.catalog-category-tab):not(.catalog-group-tab)) {
+    color: var(--theme-accent-strong) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+    border-color: var(--theme-border) !important;
+    box-shadow: 0 20px 38px rgba(31, 38, 34, 0.06) !important;
+}
+
+/* ========== DESKTOP FINAL COLLECTION LANGUAGE ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        background:
+            radial-gradient(circle at top left, rgba(138, 111, 74, 0.07), transparent 26%) !important,
+            radial-gradient(circle at 90% 4%, rgba(95, 83, 69, 0.05), transparent 18%) !important,
+            linear-gradient(180deg, #fcfaf5 0%, #f6f0e7 44%, #efe6da 100%) !important;
+    }
+
+    body#top :is(.service-detail-card, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 239, 230, 0.94)) !important;
+        border: 1px solid rgba(111, 87, 65, 0.12) !important;
+        box-shadow:
+            0 22px 44px rgba(31, 38, 34, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+    }
+
+    body#top :is(.gallery-toolbar, .gallery-summary__item, .price-header, .payment-docs-hero__content) {
+        border-radius: 30px !important;
+    }
+
+    body#top :is(.gallery-item, .factor-card, .payment-docs-card, .payment-docs-step, .catalog-group-tab, .catalog-link, .filter-btn, .service-nav-link, .quick-actions .btn) {
+        transition:
+            transform 180ms ease,
+            box-shadow 180ms ease,
+            border-color 180ms ease,
+            color 180ms ease,
+            background 180ms ease !important;
+    }
+
+    body#top :is(.gallery-item:hover, .factor-card:hover, .payment-docs-card:hover, .payment-docs-step:hover, .catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .quick-actions .btn:hover) {
+        transform: translateY(-3px) !important;
+        box-shadow:
+            0 26px 48px rgba(31, 38, 34, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+        border-color: rgba(138, 111, 74, 0.18) !important;
+    }
+
+    body#top :is(.calculator-section, .payment-docs-hero__content, .work-counter) {
+        background:
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 28%),
+            linear-gradient(135deg, #2a3237 0%, #4b443d 56%, #7f6852 100%) !important;
+        box-shadow: 0 28px 52px rgba(31, 38, 34, 0.16) !important;
+    }
+
+    body#top :is(.catalog-group-tab.is-active, .catalog-link.is-active, .filter-btn.active, .filter-btn[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
+        background: linear-gradient(135deg, #8a6f52 0%, #6f5741 100%) !important;
+        color: #fffdf9 !important;
+        box-shadow: 0 14px 26px rgba(111, 87, 65, 0.18) !important;
+    }
+
+    body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .quick-actions .btn:hover) {
+        color: #6f5741 !important;
+    }
+
+    body#top .footer.footer--premium > .container {
+        margin-top: 82px !important;
+    }
+}
+

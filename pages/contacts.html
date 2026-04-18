@@ -31,10 +31,14 @@
     })();
     </script>
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260417-internal-hero-strip-6">
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260418-internal-hero-strip-12">
+    <link rel="stylesheet" href="../assets/css/header.css?v=20260418-header-1">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260418-hero-inner-1">
+    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260418-internal-pages-1">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260418-footer-1">
     <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">
     <link rel="stylesheet" href="../assets/css/fontawesome.css">
-    <link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20260417-contacts-hero-scene-74">
+    <link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20260418-contacts-theme-153">
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -75,7 +79,7 @@
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
-    <header class="header header--desktop-hero contacts-legacy-header">
+    <header class="header header--desktop-hero internal-legacy-header">
         <div class="container">
 <div class="header-top header-top--compact">
                 <div class="logo">
@@ -133,8 +137,8 @@
 </div>
     </header>
 
-    <section class="hero-scene contacts-hero-scene" aria-label="Контакты и способы связи">
-        <div class="hero-header desktop-hero-header contacts-scene-header">
+    <section class="hero-scene internal-hero-scene" aria-label="Верхняя сцена страницы">
+        <div class="hero-header desktop-hero-header internal-scene-header">
             <div class="hero-scene__topbar">
                 <div class="hero-brand">
                     <a class="hero-brand__link" href="../index.html" aria-label="KOMFORTPLUS116.RU">
@@ -172,7 +176,6 @@
                         <i class="fas fa-phone" aria-hidden="true"></i>
                         <span class="hero-header-text">
                             <strong class="hero-header-main">+7 (962) 554-22-60</strong>
-                            <span class="hero-header-sub">Дополнительный номер</span>
                         </span>
                     </a>
                     <div class="hero-header-address">
@@ -182,11 +185,11 @@
                 </div>
             </div>
         </div>
-        <div class="hero-stage contacts-hero-stage">
+        <div class="hero-stage internal-hero-stage">
             <picture class="hero-stage__picture">
                 <source media="(max-width: 640px)" srcset="../assets/images/hero/home-hero-main-mobile.jpg">
                 <source media="(max-width: 1080px)" srcset="../assets/images/hero/home-hero-main-tablet.jpg">
-                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="async">
+                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="sync">
             </picture>
         </div>
     </section>
@@ -429,3 +432,4 @@
     <script src="../assets/js/main.js?v=20260416-desktop-unify-4" defer></script>
 </body>
 </html>
+
