@@ -574,3 +574,94 @@
         padding-top: 0 !important;
     }
 }
+
+/* ========== INTERNAL HERO COMPOSITION PASS ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    .internal-scene-header {
+        inset: -20px auto auto 50%;
+        width: min(1480px, calc(100vw - 104px));
+        transform: translateX(-50%);
+    }
+
+    .internal-scene-header .hero-header-row {
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 392px);
+        gap: 8px 34px;
+        margin-top: -18px;
+    }
+
+    .internal-scene-header .hero-brand {
+        margin-top: 34px;
+        margin-left: 14px;
+        transform: translateY(10px);
+    }
+
+    .internal-scene-header .hero-brand__eyebrow {
+        font-size: 11.6px;
+        letter-spacing: 0.15em;
+    }
+
+    .internal-scene-header .hero-brand__name {
+        font-size: clamp(31px, 2.3vw, 35px);
+    }
+
+    .internal-scene-header .hero-header-stack {
+        width: min(100%, 378px);
+        max-width: 378px;
+        gap: 8px;
+        transform: translate3d(0, -4px, 0);
+    }
+
+    .internal-scene-header .hero-scene__nav {
+        gap: 8px 12px;
+        max-width: 1048px;
+    }
+
+    .internal-scene-header .hero-nav__link,
+    .internal-scene-header .hero-nav__link:visited {
+        min-height: 30px;
+        padding: 6px 13px;
+        font-size: 14.2px;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1380px) and (hover: hover) and (pointer: fine) {
+    .internal-scene-header {
+        width: min(1320px, calc(100vw - 72px));
+    }
+
+    .internal-scene-header .hero-header-row {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 356px);
+        gap: 8px 24px;
+    }
+
+    .internal-scene-header .hero-brand {
+        margin-left: 8px;
+    }
+
+    .internal-scene-header .hero-header-stack {
+        width: min(100%, 350px);
+        max-width: 350px;
+    }
+
+    .internal-scene-header .hero-header-main {
+        font-size: 16px;
+    }
+
+    .internal-scene-header .hero-header-link--primary .hero-header-main {
+        font-size: 19.5px;
+    }
+
+    .internal-scene-header .hero-header-link--primary .hero-header-sub {
+        font-size: 13.2px;
+    }
+
+    .internal-scene-header .hero-scene__nav {
+        gap: 8px 10px;
+    }
+
+    .internal-scene-header .hero-nav__link,
+    .internal-scene-header .hero-nav__link:visited {
+        padding: 6px 11px;
+        font-size: 13.6px;
+    }
+}
