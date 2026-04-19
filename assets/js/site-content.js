@@ -226,7 +226,7 @@
 
     function isShellManagedElement(element) {
         return Boolean(
-            element?.closest('.header-contact-stack, .hero-header-stack, .footer, .preview-footer, .nav-list, .hero-scene__nav')
+            element?.closest('.header-contact-stack, .hero-header-stack, .preview-footer, .nav-list, .hero-scene__nav')
         );
     }
 
@@ -610,19 +610,6 @@
     }
 
     function applyFooter(site) {
-        const legacyContactList = document.querySelector('.footer .contact-list');
-        if (legacyContactList) {
-            legacyContactList.innerHTML = `
-                <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i> ${escapeHtml(site.contact?.address || '')}</li>
-                <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.primaryPhone?.href || '#')}">${escapeHtml(site.contact?.primaryPhone?.label || '')}</a></li>
-                <li><i class="fas fa-phone" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.secondaryPhone?.href || '#')}">${escapeHtml(site.contact?.secondaryPhone?.label || '')}</a></li>
-                <li><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:${escapeHtml(site.contact?.email || '')}">${escapeHtml(site.contact?.email || '')}</a></li>
-                <li><i class="fas fa-clock" aria-hidden="true"></i> ${escapeHtml(site.contact?.hours || '')}</li>
-                <li><a href="${escapeHtml(site.contact?.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane" aria-hidden="true"></i> ${escapeHtml(site.contact?.telegram?.label || 'Telegram')}</a></li>
-                <li><a href="${escapeHtml(site.contact?.max?.href || '#')}" target="_blank" rel="noopener noreferrer"><i class="fas fa-comment-dots" aria-hidden="true"></i> ${escapeHtml(site.contact?.max?.label || 'Max')}</a></li>
-            `;
-        }
-
         const previewContactList = document.querySelector('.preview-footer__list--contacts');
         if (previewContactList) {
             const fullAddress = String(site.contact?.address || '').trim().toLowerCase().startsWith('казань')
@@ -638,25 +625,6 @@
                 <li><i class="fab fa-telegram-plane" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.telegram?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.telegram?.label || 'Telegram')}</a></li>
                 <li><i class="fas fa-comment-dots" aria-hidden="true"></i> <a href="${escapeHtml(site.contact?.max?.href || '#')}" target="_blank" rel="noopener noreferrer">${escapeHtml(site.contact?.max?.label || 'Max')}</a></li>
             `;
-        }
-
-        const footerColumns = Array.from(document.querySelectorAll('.footer-column'));
-        const usefulColumn = footerColumns.find((column) => {
-            const heading = column.querySelector('h4');
-            return heading && /Полезное/i.test(heading.textContent);
-        });
-
-        if (usefulColumn) {
-            const title = usefulColumn.querySelector('h4');
-            const list = usefulColumn.querySelector('ul');
-
-            if (title) {
-                title.textContent = site.footer?.usefulTitle || 'Полезное';
-            }
-
-            if (list) {
-                syncCollection(list, 'li', site.footer?.usefulLinks || [], applyUsefulLinkItem);
-            }
         }
 
         const previewUsefulColumn = document.querySelector('.preview-footer__column--useful');
@@ -685,22 +653,6 @@
                 '.preview-footer__legal-text',
                 Array.isArray(site.footer?.companyParagraphs) ? site.footer.companyParagraphs : []
             );
-        }
-
-        const footerBottom = document.querySelector('.footer-bottom');
-        if (footerBottom) {
-            const paragraphs = footerBottom.querySelectorAll('p');
-            const currentYear = new Date().getFullYear();
-            const startYear = Number(site.brand?.copyrightStartYear) || currentYear;
-            const yearRange = startYear >= currentYear ? `${currentYear}` : `${startYear}-${currentYear}`;
-
-            if (paragraphs[0]) {
-                paragraphs[0].innerHTML = `&copy; ${escapeHtml(yearRange)} ${escapeHtml(site.brand?.footerCaption || '')}`;
-            }
-
-            if (paragraphs[1]) {
-                paragraphs[1].innerHTML = `<a href="${escapeHtml(site.footer?.policyHref || '/politika.html')}">${escapeHtml(site.footer?.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand?.domain || '')}`;
-            }
         }
 
         const previewFooterBottom = document.querySelector('.preview-footer__bottom');
@@ -876,9 +828,7 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerUsefulTitle =
-            Array.from(document.querySelectorAll('.footer-column h4')).find((node) => /Полезное/i.test(node.textContent))
-            || document.querySelector('.preview-footer__column--useful .preview-footer__label');
+        const footerUsefulTitle = document.querySelector('.preview-footer__column--useful .preview-footer__label');
         if (footerUsefulTitle) {
             bindings.push({
                 path: 'footer.usefulTitle',
@@ -888,12 +838,7 @@
             });
         }
 
-        const usefulList =
-            Array.from(document.querySelectorAll('.footer-column')).find((column) => {
-                const heading = column.querySelector('h4');
-                return heading && /Полезное/i.test(heading.textContent);
-            })?.querySelector('ul')
-            || document.querySelector('.preview-footer__column--useful .preview-footer__list');
+        const usefulList = document.querySelector('.preview-footer__column--useful .preview-footer__list');
 
         const buildUsefulLinkBinding = (index) => {
             const element = usefulList?.querySelectorAll('li')[index];
@@ -938,9 +883,7 @@
             if (binding) bindings.push(binding);
         }
 
-        const footerEmail =
-            document.querySelector('.footer .contact-list a[href^="mailto:"]')
-            || document.querySelector('.preview-footer__list--contacts a[href^="mailto:"]');
+        const footerEmail = document.querySelector('.preview-footer__list--contacts a[href^="mailto:"]');
         const contentEmails = collectContentEmailAnchors();
         const emailElements = uniqueElements([footerEmail, ...contentEmails]);
         if (emailElements.length) {
@@ -957,9 +900,7 @@
             });
         }
 
-        const footerHoursItem =
-            Array.from(document.querySelectorAll('.footer .contact-list li')).find((item) => item.querySelector('.fa-clock'))
-            || Array.from(document.querySelectorAll('.preview-footer__list--contacts li')).find((item) => item.querySelector('.fa-clock'));
+        const footerHoursItem = Array.from(document.querySelectorAll('.preview-footer__list--contacts li')).find((item) => item.querySelector('.fa-clock'));
         if (footerHoursItem) {
             bindings.push({
                 path: 'contact.hours',
@@ -974,9 +915,7 @@
             });
         }
 
-        const footerTelegram =
-            Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /telegram/i.test(anchor.textContent))
-            || Array.from(document.querySelectorAll('.preview-footer__list--contacts a')).find((anchor) => /telegram/i.test(anchor.textContent));
+        const footerTelegram = Array.from(document.querySelectorAll('.preview-footer__list--contacts a')).find((anchor) => /telegram/i.test(anchor.textContent));
         if (footerTelegram) {
             bindings.push({
                 path: 'contact.telegram',
@@ -996,9 +935,7 @@
             });
         }
 
-        const footerMax =
-            Array.from(document.querySelectorAll('.footer .contact-list a')).find((anchor) => /max/i.test(anchor.textContent))
-            || Array.from(document.querySelectorAll('.preview-footer__list--contacts a')).find((anchor) => /max/i.test(anchor.textContent));
+        const footerMax = Array.from(document.querySelectorAll('.preview-footer__list--contacts a')).find((anchor) => /max/i.test(anchor.textContent));
         if (footerMax) {
             bindings.push({
                 path: 'contact.max',
@@ -1018,9 +955,7 @@
             });
         }
 
-        const footerPolicy =
-            document.querySelector('.footer-bottom p:last-child a')
-            || document.querySelector('.preview-footer__bottom p:last-child a');
+        const footerPolicy = document.querySelector('.preview-footer__bottom p:last-child a');
         if (footerPolicy) {
             bindings.push({
                 path: 'footer.policyLabel',
