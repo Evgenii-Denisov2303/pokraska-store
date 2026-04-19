@@ -34,6 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return document.querySelector('.gallery-show-more');
     }
 
+    function getShowMoreMeta() {
+        return document.querySelector('.gallery-more__meta');
+    }
+
     function getGalleryEmptyState() {
         return document.querySelector('.gallery-empty');
     }
@@ -82,9 +86,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateShowMore(totalItems) {
         const showMoreButton = getShowMoreButton();
+        const showMoreMeta = getShowMoreMeta();
         if (!showMoreButton) return;
         if (!showMoreButton.dataset.defaultLabel) {
             showMoreButton.dataset.defaultLabel = showMoreButton.textContent.trim();
+        }
+
+        if (showMoreMeta) {
+            const shownItems = totalItems > 0 ? Math.min(visibleCount, totalItems) : 0;
+            showMoreMeta.textContent = totalItems > 0
+                ? `Показано ${shownItems} из ${totalItems} работ`
+                : 'Сейчас в этой выборке ничего не показано';
         }
 
         const remaining = Math.max(totalItems - visibleCount, 0);
@@ -101,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateEmptyState(totalItems, filterValue) {
         const emptyState = getGalleryEmptyState();
+        const showMoreMeta = getShowMoreMeta();
         if (!emptyState) return;
 
         if (totalItems > 0) {
@@ -122,6 +135,12 @@ document.addEventListener('DOMContentLoaded', function () {
             copy.textContent = filterValue === 'all'
                 ? 'Попробуйте обновить страницу чуть позже или открыть галерею снова.'
                 : 'Вернитесь ко всем работам или переключитесь на соседнюю категорию, чтобы быстро найти похожие объекты.';
+        }
+
+        if (showMoreMeta) {
+            showMoreMeta.textContent = filterValue === 'all'
+                ? 'Галерея временно пуста'
+                : `Фильтр «${filterLabel}» сейчас пуст`;
         }
 
         emptyState.hidden = false;
