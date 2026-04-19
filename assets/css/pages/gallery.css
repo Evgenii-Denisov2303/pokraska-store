@@ -1445,6 +1445,15 @@
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow-soft);
+    text-align: center;
+}
+
+.gallery-empty[hidden] {
+    display: none !important;
+}
+
+.gallery-empty__reset {
+    margin-top: 18px;
 }
 
 .work-counter {

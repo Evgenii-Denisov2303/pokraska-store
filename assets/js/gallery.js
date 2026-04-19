@@ -34,6 +34,16 @@ document.addEventListener('DOMContentLoaded', function () {
         return document.querySelector('.gallery-show-more');
     }
 
+    function getGalleryEmptyState() {
+        return document.querySelector('.gallery-empty');
+    }
+
+    function getFilterLabel(filterValue) {
+        const button = getFilterButtons().find((node) => node.getAttribute('data-filter') === filterValue);
+        if (!button) return 'выбранной категории';
+        return button.textContent.replace(/\s+/g, ' ').trim();
+    }
+
     function setActiveFilterButton(filterValue) {
         getFilterButtons().forEach((button) => {
             button.classList.toggle('active', button.getAttribute('data-filter') === filterValue);
@@ -73,7 +83,48 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateShowMore(totalItems) {
         const showMoreButton = getShowMoreButton();
         if (!showMoreButton) return;
-        showMoreButton.style.display = totalItems > visibleCount ? 'inline-flex' : 'none';
+        if (!showMoreButton.dataset.defaultLabel) {
+            showMoreButton.dataset.defaultLabel = showMoreButton.textContent.trim();
+        }
+
+        const remaining = Math.max(totalItems - visibleCount, 0);
+        if (remaining > 0) {
+            const batchSize = Math.min(pageSize, remaining);
+            showMoreButton.style.display = 'inline-flex';
+            showMoreButton.textContent = `${showMoreButton.dataset.defaultLabel} (${batchSize})`;
+            return;
+        }
+
+        showMoreButton.style.display = 'none';
+        showMoreButton.textContent = showMoreButton.dataset.defaultLabel;
+    }
+
+    function updateEmptyState(totalItems, filterValue) {
+        const emptyState = getGalleryEmptyState();
+        if (!emptyState) return;
+
+        if (totalItems > 0) {
+            emptyState.hidden = true;
+            return;
+        }
+
+        const title = emptyState.querySelector('h3');
+        const copy = emptyState.querySelector('p');
+        const filterLabel = getFilterLabel(filterValue);
+
+        if (title) {
+            title.textContent = filterValue === 'all'
+                ? 'Пока нет карточек для показа'
+                : `По фильтру «${filterLabel}» пока нет карточек`;
+        }
+
+        if (copy) {
+            copy.textContent = filterValue === 'all'
+                ? 'Попробуйте обновить страницу чуть позже или открыть галерею снова.'
+                : 'Вернитесь ко всем работам или переключитесь на соседнюю категорию, чтобы быстро найти похожие объекты.';
+        }
+
+        emptyState.hidden = false;
     }
 
     function syncGalleryCardMeta(item) {
@@ -95,6 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const filterButtons = getFilterButtons();
         const galleryItems = getGalleryItems();
         if (!filterButtons.length || !galleryItems.length) return;
+
+        if (!filterButtons.some((button) => button.getAttribute('data-filter') === filterValue)) {
+            filterValue = 'all';
+        }
 
         activeFilter = filterValue;
         if (resetCount) {
@@ -124,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        updateEmptyState(filteredItems.length, filterValue);
         updateShowMore(filteredItems.length);
     }
 
@@ -263,6 +319,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (filters) {
                 filters.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+            return;
+        }
+
+        const externalFilterTrigger = event.target.closest('[data-gallery-filter-trigger]');
+        if (externalFilterTrigger) {
+            const filterValue = externalFilterTrigger.getAttribute('data-filter') || 'all';
+            applyFilter(filterValue, true);
+            window.history.pushState(null, '', filterValue === 'all' ? 'gallery.html' : `gallery.html?filter=${encodeURIComponent(filterValue)}`);
         }
     });
 
@@ -435,6 +499,11 @@ document.addEventListener('DOMContentLoaded', function () {
             activeFilter = 'all';
         }
         applyFilter(activeFilter, true);
+    });
+
+    window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(window.location.search);
+        applyFilter(params.get('filter') || 'all', true);
     });
 
     if (getFilterButtons().length && getGalleryItems().length) {
