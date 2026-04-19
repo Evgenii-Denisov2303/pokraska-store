@@ -181,6 +181,47 @@ document.addEventListener('DOMContentLoaded', function() {
     if (catalogTabs.length && catalogPanels.length) {
         const lastActiveTabByGroup = new Map();
 
+        const embedCatalogPanelHeaders = () => {
+            catalogPanels.forEach((panel) => {
+                if (panel.dataset.inlineHeaderReady === 'true') {
+                    return;
+                }
+
+                const panelHeader = panel.querySelector(':scope > .catalog-panel__header');
+                const panelGrid = panel.querySelector(':scope > .catalog-panel__grid');
+                const firstTextBlock = panelGrid?.querySelector('.catalog-panel__text');
+
+                if (!panelHeader || !firstTextBlock) {
+                    return;
+                }
+
+                const breadcrumbs = panelHeader.querySelector('.catalog-breadcrumbs');
+                const title = panelHeader.querySelector('h2');
+                const inlineHeader = document.createElement('div');
+                inlineHeader.className = 'catalog-panel__inline-header';
+
+                if (breadcrumbs?.textContent?.trim()) {
+                    const inlineBreadcrumbs = document.createElement('div');
+                    inlineBreadcrumbs.className = 'catalog-panel__inline-breadcrumbs';
+                    inlineBreadcrumbs.textContent = breadcrumbs.textContent.trim();
+                    inlineHeader.appendChild(inlineBreadcrumbs);
+                }
+
+                if (title?.textContent?.trim()) {
+                    const inlineTitle = document.createElement('h2');
+                    inlineTitle.className = 'catalog-panel__inline-title';
+                    inlineTitle.textContent = title.textContent.trim();
+                    inlineHeader.appendChild(inlineTitle);
+                }
+
+                if (inlineHeader.childNodes.length) {
+                    firstTextBlock.prepend(inlineHeader);
+                }
+
+                panel.dataset.inlineHeaderReady = 'true';
+            });
+        };
+
         const getCatalogGroupTab = (groupId) => Array.from(catalogGroupTabs).find((tab) => tab.dataset.catalogGroup === groupId);
         const getCatalogGroupPanel = (groupId) => Array.from(catalogGroupPanels).find((panel) => panel.dataset.catalogGroupPanel === groupId);
 
@@ -388,6 +429,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 initialTab = hashTab;
             }
         }
+
+        embedCatalogPanelHeaders();
 
         if (initialTab) {
             activateCatalogTab(initialTab.dataset.catalogTab);
