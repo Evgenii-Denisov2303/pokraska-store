@@ -121,7 +121,6 @@ ADMIN_ALLOWED_IPS=1.2.3.4,5.6.7.8
 Я уже подготовил задел под отдельный content-origin:
 
 - [runtime-config.js](c:/Users/Evgeny/VSCode/pokraska-store/assets/js/runtime-config.js)
-- [content-api.js](c:/Users/Evgeny/VSCode/pokraska-store/assets/js/content-api.js)
 
 То есть при желании можно оставить публичный сайт на одной площадке, а JSON и админку вынести на другую.
 

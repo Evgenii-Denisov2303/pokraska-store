@@ -8,6 +8,111 @@
     const heroNav = document.querySelector('.hero-scene__nav');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
     const panelGalleryState = new WeakMap();
+    const prefetchedUrls = new Set();
+
+    function canPrefetch() {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (!connection) return true;
+        if (connection.saveData) return false;
+        return !/^(slow-2g|2g)$/i.test(connection.effectiveType || '');
+    }
+
+    function normalizePrefetchUrl(link) {
+        const href = link?.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('javascript:')) {
+            return null;
+        }
+
+        const url = new URL(href, window.location.href);
+        if (url.origin !== window.location.origin) return null;
+        if (url.pathname === window.location.pathname && url.search === window.location.search) return null;
+        return url;
+    }
+
+    function prefetchDocument(url) {
+        if (!url || prefetchedUrls.has(url.href) || !canPrefetch()) return;
+        prefetchedUrls.add(url.href);
+
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.as = 'document';
+        link.href = url.href;
+        document.head.appendChild(link);
+
+        window.setTimeout(() => {
+            fetch(url.href, {
+                credentials: 'same-origin'
+            }).catch(() => {});
+        }, 0);
+    }
+
+    function collectPrefetchQueues(rootLinks) {
+        const entries = rootLinks
+            .map((link) => ({ link, url: normalizePrefetchUrl(link) }))
+            .filter((entry) => entry.url);
+
+        const priority = [];
+        const deferred = [];
+        const seen = new Set();
+        const activeIndex = entries.findIndex(({ link }) => (
+            link.matches('.active, [aria-current="page"], [aria-current="true"], .hero-nav__link--active')
+        ));
+
+        const addUnique = (bucket, url) => {
+            if (!url || seen.has(url.href)) return;
+            seen.add(url.href);
+            bucket.push(url);
+        };
+
+        if (activeIndex >= 0) {
+            [activeIndex - 1, activeIndex + 1, activeIndex - 2, activeIndex + 2].forEach((index) => {
+                if (index < 0 || index >= entries.length) return;
+                addUnique(priority, entries[index].url);
+            });
+        }
+
+        entries.forEach(({ url }, index) => {
+            if (index <= 1) {
+                addUnique(priority, url);
+            }
+        });
+
+        entries.forEach(({ url }) => {
+            addUnique(deferred, url);
+        });
+
+        return { priority, deferred };
+    }
+
+    function installNavPrefetch(rootLinks) {
+        if (!rootLinks.length || !canPrefetch()) return;
+
+        const { priority, deferred } = collectPrefetchQueues(rootLinks);
+
+        rootLinks.forEach((link) => {
+            const triggerPrefetch = () => {
+                prefetchDocument(normalizePrefetchUrl(link));
+            };
+
+            link.addEventListener('pointerenter', triggerPrefetch, { passive: true, once: true });
+            link.addEventListener('focus', triggerPrefetch, { passive: true, once: true });
+            link.addEventListener('touchstart', triggerPrefetch, { passive: true, once: true });
+        });
+
+        window.setTimeout(() => {
+            priority.forEach(prefetchDocument);
+        }, 140);
+
+        const idlePrefetch = () => {
+            deferred.forEach(prefetchDocument);
+        };
+
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(idlePrefetch, { timeout: 2200 });
+        } else {
+            window.setTimeout(idlePrefetch, 1800);
+        }
+    }
 
     if (heroHeader && heroMenuToggle && heroNav) {
         const closeHeroMenu = () => {
@@ -58,6 +163,8 @@
                 closeHeroMenu();
             }
         });
+
+        installNavPrefetch(Array.from(heroNav.querySelectorAll('a')));
     }
 
     if (scenes.length) {

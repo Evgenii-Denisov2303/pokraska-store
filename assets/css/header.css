@@ -23,13 +23,13 @@
     }
 
     .header-top--compact {
-        grid-template-columns: minmax(0, 1fr) minmax(448px, 520px);
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
         grid-template-areas:
             "logo ."
             "nav contacts";
         width: 100%;
         align-items: start;
-        gap: 10px 68px;
+        gap: 10px 52px;
         padding: 0;
         border-bottom: 0;
         background: none;
@@ -190,17 +190,18 @@
         justify-self: end;
         align-self: end;
         display: grid;
-        gap: 10px;
-        width: min(100%, 520px);
-        max-width: 520px;
+        gap: 8px;
+        width: min(100%, 352px);
+        max-width: 352px;
         margin-left: 0;
         margin-right: 0;
         padding-right: 0;
         min-height: 96px;
         align-content: end;
-        transform: translateY(-8px);
+        transform: translateY(0);
         position: relative;
         z-index: 1;
+        pointer-events: none;
     }
 
     .header-contact-stack .contact-phone:first-of-type,
@@ -214,6 +215,7 @@
         padding: 0;
         border-radius: 0;
         min-height: auto;
+        pointer-events: auto;
     }
 
     .header-contact-stack .contact-phone:first-of-type {
@@ -232,14 +234,14 @@
     }
 
     .header-contact-stack .contact-phone:first-of-type .phone-number {
-        font-size: 21.5px;
+        font-size: 20px;
         color: var(--theme-accent-strong);
         letter-spacing: -0.01em;
     }
 
     .header-contact-stack .contact-phone:first-of-type .phone-label {
         color: rgba(107, 96, 86, 0.78);
-        font-size: 14.2px;
+        font-size: 13.4px;
         font-weight: 700;
         display: block;
     }
@@ -264,7 +266,7 @@
     }
 
     .header-contact-stack .contact-phone:nth-of-type(2) .phone-number {
-        font-size: 16.8px;
+        font-size: 15.8px;
         font-weight: 760;
         color: var(--theme-accent-strong);
     }
@@ -280,7 +282,7 @@
         gap: 8px;
         max-width: 520px;
         color: rgba(107, 96, 86, 0.72);
-        font-size: 13.5px;
+        font-size: 12.8px;
         font-weight: 600;
     }
 
@@ -315,7 +317,33 @@
         padding: 0;
     }
 
-    .header.header--desktop-hero .header-top.header-top--compact {
+    .header.header--desktop-hero:not(.internal-legacy-header) .header-top.header-top--compact {
+        display: none !important;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .container {
+        max-width: none;
+        width: 100%;
+        padding: 28px 20px 0;
+        overflow-x: clip;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top {
+        margin-top: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        border-bottom: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        display: grid !important;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .desktop-hero-header {
         display: none !important;
     }
 
@@ -360,9 +388,9 @@
 
     .header.header--desktop-hero .desktop-hero-header .hero-header-row {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(448px, 520px);
+        grid-template-columns: minmax(0, 1fr) minmax(340px, 388px);
         align-items: end;
-        gap: 10px 68px;
+        gap: 10px 36px;
         margin-top: -24px;
     }
 

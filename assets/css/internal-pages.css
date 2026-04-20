@@ -116,7 +116,7 @@ body#top .contacts-subtitle {
         color: var(--site-desktop-muted) !important;
     }
 
-    body#top :is(.service-detail-card, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card) {
+    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card) {
         border-radius: var(--site-desktop-radius-xl);
         border-color: var(--site-desktop-border);
         box-shadow: var(--site-desktop-shadow);
@@ -130,7 +130,7 @@ body#top .contacts-subtitle {
         color: var(--site-desktop-title);
     }
 
-    body#top :is(.service-description, .process-step p, .example-item, .catalog-group-panel__intro p, .catalog-palette-card__info p, .gallery-empty, .work-description, .factor-card p, .guarantee-text, .contact-details p, .contacts-fact p, .payment-docs-panel p, .payment-docs-section__heading p, .payment-docs-card p, .payment-docs-step p, .automation-product-description, .automation-accessories__text, .privacy-page .section p, .privacy-page .section li) {
+    body#top :is(.service-description, .process-step p, .catalog-group-panel__intro p, .catalog-palette-card__info p, .gallery-empty, .work-description, .factor-card p, .guarantee-text, .contact-details p, .contacts-fact p, .payment-docs-panel p, .payment-docs-section__heading p, .payment-docs-card p, .payment-docs-step p, .automation-product-description, .automation-accessories__text, .privacy-page .section p, .privacy-page .section li) {
         color: var(--site-desktop-text);
     }
 
@@ -171,131 +171,6 @@ body#top .contacts-subtitle {
     body#top .footer,
     body#top .preview-footer {
         margin-top: 22px;
-    }
-}
-
-/* ========== INTERNAL DESKTOP ART DIRECTION ========== */
-@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
-    body#top {
-        --site-desktop-bg:
-            radial-gradient(circle at top left, rgba(138, 111, 74, 0.1), transparent 24%),
-            radial-gradient(circle at 88% 4%, rgba(255, 255, 255, 0.58), transparent 18%),
-            linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 42%, var(--theme-bg-soft) 100%);
-        --site-desktop-surface: rgba(255, 255, 255, 0.98);
-        --site-desktop-surface-soft: rgba(246, 239, 230, 0.96);
-        --site-desktop-surface-warm: rgba(241, 233, 223, 0.96);
-        --site-desktop-border: var(--theme-border);
-        --site-desktop-border-strong: var(--theme-border-strong);
-        --site-desktop-shadow: var(--theme-shadow);
-        --site-desktop-shadow-soft: var(--theme-shadow-soft);
-        --site-desktop-radius-xl: var(--theme-radius-xl);
-        --site-desktop-radius-lg: var(--theme-radius-lg);
-        --site-desktop-radius-md: var(--theme-radius-md);
-        --site-desktop-title: var(--theme-text-strong);
-        --site-desktop-text: var(--theme-text);
-        --site-desktop-muted: var(--theme-text-muted);
-        --site-desktop-accent: var(--theme-accent);
-        --site-desktop-accent-strong: var(--theme-accent-strong);
-        --site-desktop-accent-soft: rgba(243, 233, 220, 0.96);
-        --site-desktop-warm: var(--theme-warm);
-        --site-desktop-warm-soft: rgba(249, 244, 237, 0.98);
-        --site-desktop-band:
-            radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 28%),
-            linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 56%, var(--theme-band-to) 100%);
-        --site-desktop-band-soft:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 237, 228, 0.96));
-        --site-desktop-container: min(1500px, calc(100vw - 76px));
-    }
-
-    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
-        position: relative;
-        isolation: isolate;
-        overflow: clip;
-        padding-top: 198px !important;
-    }
-
-    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)::before {
-        content: "";
-        position: absolute;
-        inset: 0 0 auto;
-        height: 280px;
-        background:
-            radial-gradient(circle at 15% 18%, rgba(255, 255, 255, 0.72), transparent 34%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-        pointer-events: none;
-        opacity: 0.92;
-        z-index: 0;
-    }
-
-    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) > .container,
-    body#top .privacy-container {
-        position: relative;
-        z-index: 1;
-        padding-top: 18px;
-    }
-
-    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"]) {
-        position: relative;
-        overflow: clip;
-        isolation: isolate;
-    }
-
-    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::before {
-        content: "";
-        position: absolute;
-        top: -120px;
-        right: -70px;
-        width: 260px;
-        height: 260px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(138, 111, 74, 0.08), rgba(138, 111, 74, 0));
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        border: 1px solid rgba(255, 255, 255, 0.55);
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    body#top :is(.service-detail-card > *, .catalog-sidebar > *, .catalog-group-panels > *, .catalog-panel > *, .wheels-samples > *, .before-after-section .container > *, .gallery-item > *, .gallery-empty > *, .gallery-filters > *, .price-factors > *, .guarantee-section > *, .contacts-hero-card > *, .contact-info-card > *, .contact-form-card > *, .contacts-location-card > *, .payment-docs-panel > *, .payment-docs-section > *, .payment-docs-cta > *, .automation-product-card > *, .privacy-container > *, .prices-page .section[aria-labelledby="prices-faq-title"] > *) {
-        position: relative;
-        z-index: 1;
-    }
-
-    body#top :is(.services-header, .gallery-header, .price-header) {
-        position: relative;
-        max-width: 960px;
-        margin-left: 0;
-        text-align: left;
-    }
-
-    body#top :is(.services-header .subtitle, .gallery-header .subtitle, .price-header .subtitle) {
-        max-width: 780px;
-    }
-
-    body#top :is(.service-header, .pricing-table-header, .payment-docs-hero__content, .payment-docs-cta, .contact-manager-card, .calculator-section, .catalog-panel__cta) {
-        background: var(--site-desktop-band);
-        box-shadow: 0 26px 48px rgba(20, 28, 39, 0.16);
-    }
-
-    body#top :is(.catalog-group-tab, .catalog-link, .filter-btn, .service-nav-link, .catalog-panel__badge, .work-category, .detail) {
-        border-color: rgba(111, 87, 65, 0.12);
-        box-shadow: 0 12px 18px rgba(20, 28, 39, 0.035);
-    }
-
-    body#top :is(.payment-docs-card__icon, .payment-docs-panel__icon, .contact-icon, .catalog-group-tab__icon, .work-category, .detail.badge) {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(243, 233, 220, 0.94));
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 12px 18px rgba(20, 28, 39, 0.04);
-    }
-
-    body#top :is(.service-detail-card:hover, .gallery-item:hover, .factor-card:hover, .catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .payment-docs-card:hover, .payment-docs-step:hover) {
-        box-shadow: 0 26px 48px rgba(20, 28, 39, 0.1);
     }
 }
 
@@ -375,7 +250,7 @@ body#top :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pi
     box-shadow: 0 14px 28px rgba(31, 38, 34, 0.05);
 }
 
-body#top :is(.request-form__eyebrow::before, .contact-icon, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon, .catalog-category-tab.is-active .catalog-category-tab__icon) {
+body#top :is(.request-form__eyebrow::before, .contact-icon, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon) {
     background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
     box-shadow: 0 12px 24px rgba(111, 87, 65, 0.18);
 }
@@ -384,9 +259,21 @@ body#top :is(a, .contact-details a, .gallery-card__link, .price-cta a, .payment-
     color: var(--theme-accent-strong);
 }
 
-body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+body#top :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
     border-color: var(--theme-border);
     box-shadow: 0 20px 38px rgba(31, 38, 34, 0.06);
+}
+
+@supports (content-visibility: auto) {
+    body#top :is(.service-detail-card, .before-after-section .container, .price-factors, .guarantee-section, .calculator-section, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 720px;
+    }
+
+    body#top :is(.gallery-item, .gallery-empty) {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 440px;
+    }
 }
 
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
@@ -467,7 +354,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pill, .contacts-info-chip, .quick-actions .btn, .gallery-filter, .gallery-counter, .price-summary__item, .factor-card, .payment-docs-chip, .automation-product-page .product-badge, .service-nav-link, .catalog-category-tab, .catalog-group-tab) {
+    :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pill, .contacts-info-chip, .quick-actions .btn, .gallery-filter, .gallery-counter, .price-summary__item, .factor-card, .payment-docs-chip, .automation-product-page .product-badge, .service-nav-link, .catalog-group-tab) {
     border-color: rgba(138, 111, 74, 0.14) !important;
     background: linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(243, 233, 220, 0.92)) !important;
     color: var(--theme-text) !important;
@@ -475,7 +362,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.catalog-category-tab.is-active, .catalog-group-tab.is-active, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
+    :is(.catalog-group-tab.is-active, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
     background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
     border-color: transparent !important;
     color: #fffdf9 !important;
@@ -483,18 +370,18 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.request-form__eyebrow::before, .contact-icon, .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon, .catalog-category-tab.is-active .catalog-category-tab__icon) {
+    :is(.request-form__eyebrow::before, .contact-icon, .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon) {
     background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
     box-shadow: 0 12px 24px rgba(111, 87, 65, 0.18) !important;
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.contact-details a, .gallery-card__link, .payment-docs-page a, .prices-page a, .services-page a[href]:not(.btn):not(.catalog-category-tab):not(.catalog-group-tab)) {
+    :is(.contact-details a, .gallery-card__link, .payment-docs-page a, .prices-page a, .services-page a[href]:not(.btn):not(.catalog-group-tab)) {
     color: var(--theme-accent-strong) !important;
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .wheels-samples, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+    :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
     border-color: var(--theme-border) !important;
     box-shadow: 0 20px 38px rgba(31, 38, 34, 0.06) !important;
 }

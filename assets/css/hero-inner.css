@@ -3,6 +3,10 @@
     display: none;
 }
 
+@view-transition {
+    navigation: none;
+}
+
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .header.header--desktop-hero.internal-legacy-header {
         display: none !important;
@@ -33,40 +37,20 @@
         box-shadow: none;
     }
 
+    .internal-hero-scene .hero-stage__picture {
+        view-transition-name: none;
+    }
+
+    .internal-scene-header {
+        view-transition-name: none;
+    }
+
     .internal-hero-scene::before {
-        content: '';
-        position: absolute;
-        inset: 112px 0 0;
-        z-index: 1;
-        background: linear-gradient(
-            180deg,
-            rgba(244, 239, 232, 0) 0%,
-            rgba(245, 240, 233, 0.003) 16%,
-            rgba(246, 241, 234, 0.022) 32%,
-            rgba(246, 241, 234, 0.065) 52%,
-            rgba(247, 242, 235, 0.135) 74%,
-            rgba(247, 242, 235, 0.24) 100%
-        );
-        pointer-events: none;
+        content: none;
     }
 
     .internal-hero-scene::after {
-        content: '';
-        position: absolute;
-        inset: auto 0 -8px;
-        z-index: 2;
-        height: 46px;
-        background: linear-gradient(
-            180deg,
-            rgba(247, 242, 235, 0) 0%,
-            rgba(247, 242, 235, 0) 18%,
-            rgba(247, 242, 235, 0.015) 48%,
-            rgba(247, 242, 235, 0.075) 74%,
-            rgba(247, 242, 235, 0.28) 100%
-        );
-        -webkit-backdrop-filter: blur(16px) saturate(104%);
-        backdrop-filter: blur(16px) saturate(104%);
-        pointer-events: none;
+        content: none;
     }
 
     .internal-scene-header {
@@ -103,7 +87,6 @@
         align-items: end;
         gap: 10px 68px;
         margin-top: -24px;
-        position: relative;
     }
 
     .internal-scene-header .hero-brand {
@@ -121,7 +104,7 @@
         align-items: center;
         gap: 10px;
         min-width: 0;
-        color: var(--theme-text-strong) !important;
+        color: #10263d !important;
         text-decoration: none !important;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -184,11 +167,11 @@
         width: 92px;
         height: 1px;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(138, 111, 74, 0.54), rgba(138, 111, 74, 0));
+        background: linear-gradient(90deg, rgba(36, 166, 191, 0.56), rgba(36, 166, 191, 0));
     }
 
     .internal-scene-header .hero-brand__eyebrow {
-        color: rgba(31, 38, 34, 0.62) !important;
+        color: rgba(16, 38, 61, 0.58) !important;
         font-size: 12.2px;
         font-weight: 760;
         line-height: 1.18;
@@ -203,7 +186,7 @@
         font-synthesis: none;
         line-height: 0.92;
         letter-spacing: -0.015em;
-        color: var(--theme-text-strong);
+        color: #10263d;
         font-variant-numeric: lining-nums proportional-nums;
         font-feature-settings: "lnum" 1, "pnum" 1;
     }
@@ -212,12 +195,14 @@
         display: block;
         position: absolute;
         inset: -260% -260%;
-        background: linear-gradient(135deg,
+        background: linear-gradient(
+            135deg,
             rgba(255, 255, 255, 0) 0%,
             rgba(255, 255, 255, 0) 44%,
             rgba(255, 255, 255, 0.7) 50%,
             rgba(255, 255, 255, 0) 56%,
-            rgba(255, 255, 255, 0) 100%);
+            rgba(255, 255, 255, 0) 100%
+        );
         transform: translate(180%, -180%) rotate(10deg);
         opacity: 0.6;
         pointer-events: none;
@@ -247,8 +232,6 @@
         background: none;
         box-shadow: none;
         backdrop-filter: none;
-        position: relative;
-        z-index: 1;
     }
 
     .internal-scene-header .hero-header-link,
@@ -313,7 +296,7 @@
     }
 
     .internal-scene-header .hero-header-main {
-        color: var(--theme-text-strong) !important;
+        color: var(--apple-accent-deep) !important;
         font-size: 17.5px;
         line-height: 1.1;
         font-weight: 760;
@@ -331,7 +314,7 @@
     }
 
     .internal-scene-header .hero-header-sub {
-        color: var(--theme-text-strong) !important;
+        color: rgba(16, 38, 61, 0.6) !important;
         font-size: 13.5px;
         line-height: 1.24;
         font-weight: 640;
@@ -340,7 +323,7 @@
     }
 
     .internal-scene-header .hero-header-link--primary .hero-header-sub {
-        color: rgba(31, 38, 34, 0.62) !important;
+        color: rgba(16, 38, 61, 0.56) !important;
         font-size: 14.2px;
     }
 
@@ -349,7 +332,7 @@
         justify-self: stretch;
         max-width: none;
         border-top: 0;
-        color: var(--theme-text-strong) !important;
+        color: #10263d !important;
         font-size: 13.5px;
         line-height: 1.3;
         font-weight: 600;
@@ -357,11 +340,11 @@
     }
 
     .internal-scene-header .hero-header-address i {
-        color: var(--apple-accent-deep) !important;
+        color: var(--theme-accent-strong) !important;
     }
 
     .internal-scene-header .hero-header-address span {
-        color: var(--theme-text) !important;
+        color: #10263d !important;
     }
 
     .internal-scene-header .hero-scene__nav {
@@ -392,12 +375,12 @@
         justify-content: center;
         min-height: 32px;
         padding: 7px 14px;
-        border: 1px solid rgba(var(--theme-accent-rgb), 0.12);
+        border: 1px solid rgba(36, 166, 191, 0.1);
         border-radius: 999px;
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.1)),
-            linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.08), rgba(255, 255, 255, 0));
-        color: rgba(31, 38, 34, 0.84);
+            linear-gradient(90deg, rgba(36, 166, 191, 0.08), rgba(255, 255, 255, 0));
+        color: rgba(16, 38, 61, 0.78);
         font-size: 15.5px;
         font-weight: 800;
         letter-spacing: 0.012em;
@@ -406,7 +389,7 @@
         text-decoration: none !important;
         text-shadow: none;
         box-shadow:
-            0 8px 16px rgba(var(--theme-accent-strong-rgb), 0.05),
+            0 8px 16px rgba(23, 121, 149, 0.05),
             inset 0 1px 0 rgba(255, 255, 255, 0.16);
         transition:
             color 180ms ease,
@@ -425,8 +408,8 @@
         bottom: 0;
         height: 0.75px;
         border-radius: 999px;
-        background: linear-gradient(90deg, rgba(111, 87, 65, 0) 0%, rgba(138, 111, 74, 0.24) 18%, rgba(138, 111, 74, 0.34) 50%, rgba(138, 111, 74, 0.24) 82%, rgba(111, 87, 65, 0) 100%);
-        box-shadow: 0 1px 3px rgba(111, 87, 65, 0.05);
+        background: linear-gradient(90deg, rgba(23, 121, 149, 0) 0%, rgba(36, 166, 191, 0.28) 20%, rgba(36, 166, 191, 0.42) 50%, rgba(36, 166, 191, 0.28) 80%, rgba(23, 121, 149, 0) 100%);
+        box-shadow: 0 1px 3px rgba(23, 121, 149, 0.05);
         opacity: 0;
         transform: scaleX(0.42);
         transform-origin: center;
@@ -434,14 +417,14 @@
     }
 
     .internal-scene-header .hero-nav__link:hover {
-        color: var(--apple-accent-deep);
-        border-color: rgba(138, 111, 74, 0.18);
+        color: #2d74ad;
+        border-color: rgba(36, 166, 191, 0.24);
         background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.12)),
-            linear-gradient(90deg, rgba(138, 111, 74, 0.08), rgba(255, 255, 255, 0));
+            linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.16)),
+            linear-gradient(90deg, rgba(36, 166, 191, 0.14), rgba(255, 255, 255, 0));
         box-shadow:
-            0 10px 20px rgba(111, 87, 65, 0.06),
-            inset 0 1px 0 rgba(255, 255, 255, 0.38);
+            0 10px 20px rgba(23, 121, 149, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
         transform: translateY(-1px);
     }
 
@@ -454,7 +437,7 @@
         border: 1px solid transparent;
         background: none;
         border-color: transparent;
-        color: var(--apple-accent-deep) !important;
+        color: #2d74ad !important;
         box-shadow: none;
         text-shadow: none;
         transform: none;
@@ -463,40 +446,35 @@
     .internal-scene-header .hero-nav__link--active::after {
         opacity: 0.96;
         transform: scaleX(1);
-        background: linear-gradient(90deg, rgba(111, 87, 65, 0) 0%, rgba(138, 111, 74, 0.28) 18%, rgba(138, 111, 74, 0.52) 50%, rgba(138, 111, 74, 0.28) 82%, rgba(111, 87, 65, 0) 100%);
-        box-shadow: 0 1px 4px rgba(111, 87, 65, 0.08);
+        background: linear-gradient(90deg, rgba(23, 121, 149, 0) 0%, rgba(36, 166, 191, 0.34) 18%, rgba(36, 166, 191, 0.6) 50%, rgba(36, 166, 191, 0.34) 82%, rgba(23, 121, 149, 0) 100%);
+        box-shadow: 0 1px 4px rgba(23, 121, 149, 0.1);
     }
 
     .internal-hero-stage {
         position: relative;
         inset: auto;
         width: 100%;
-        height: auto;
-        min-height: 670px;
         aspect-ratio: 15 / 8;
+        min-height: 670px;
+        height: auto;
+        margin: 0;
         overflow: hidden;
         border-radius: 0;
         border: 0;
-        background: linear-gradient(180deg, rgba(236, 242, 248, 0.1) 0%, rgba(247, 242, 235, 0.04) 100%);
-        box-shadow: none;
-        margin: 0;
+        background: linear-gradient(180deg, #f8fbff 0%, #f2f6fb 42%, #ebf1f7 100%);
+        box-shadow: 0 30px 68px -32px rgba(16, 38, 61, 0.16);
     }
 
     .internal-hero-stage::before {
         content: '';
         position: absolute;
-        inset: 0 -12px 0 -2px;
-        z-index: 0;
-        background-image: url('../images/hero/home-hero-main.jpg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center 64%;
-        transform: scale(1.002) translate3d(0, 0, 0);
-        animation: stageDrift 16s ease-in-out infinite;
-        animation-delay: var(--hero-stage-drift-delay, 0s);
-        animation-fill-mode: both;
-        will-change: transform;
-        filter: saturate(1.12) contrast(1.08) brightness(1.01);
+        inset: auto 12% -38px;
+        height: 120px;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, rgba(28, 28, 28, 0.14), rgba(28, 28, 28, 0) 72%);
+        filter: blur(26px);
+        opacity: 0.28;
+        pointer-events: none;
     }
 
     .internal-hero-stage::after {
@@ -504,13 +482,11 @@
         position: absolute;
         inset: 0;
         z-index: 1;
-        background: linear-gradient(
-            180deg,
-            rgba(246, 240, 232, 0) 0%,
-            rgba(246, 240, 232, 0) 64%,
-            rgba(246, 240, 232, 0.004) 78%,
-            rgba(246, 240, 232, 0.025) 100%
-        );
+        background:
+            radial-gradient(34% 34% at 7% 7%, rgba(255, 231, 190, 0.16) 0%, rgba(255, 231, 190, 0.06) 30%, rgba(255, 231, 190, 0) 64%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 249, 240, 0.01) 24%, rgba(34, 31, 26, 0.012) 100%);
+        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
         pointer-events: none;
     }
 
@@ -518,7 +494,7 @@
         position: absolute;
         inset: 0 -12px 0 -2px;
         z-index: 0;
-        display: none;
+        display: block;
     }
 
     .internal-hero-scene .hero-stage__picture img {
@@ -531,9 +507,9 @@
         animation: stageDrift 16s ease-in-out infinite;
         animation-delay: var(--hero-stage-drift-delay, 0s);
         animation-fill-mode: both;
-        -webkit-mask-image: none;
-        mask-image: none;
-        display: none;
+        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0px, rgba(0, 0, 0, 1) calc(100% - 10px), rgba(0, 0, 0, 0.88) calc(100% - 4px), rgba(0, 0, 0, 0.28) 100%);
+        filter: none;
     }
 
     body#top .internal-hero-scene + .catalog-page,
@@ -541,6 +517,7 @@
     body#top .internal-hero-scene + .gallery-page,
     body#top .internal-hero-scene + .prices-page,
     body#top .internal-hero-scene + .payment-docs-page,
+    body#top .internal-hero-scene + .contacts-page,
     body#top .internal-hero-scene + .privacy-page,
     body#top .internal-hero-scene + .automation-product-page {
         position: relative;
@@ -549,10 +526,10 @@
         background:
             linear-gradient(
                 180deg,
-                rgba(244, 239, 232, 0.88) 0%,
-                rgba(246, 241, 234, 0.9) 44px,
-                rgba(247, 242, 235, 0.94) 102px,
-                var(--theme-bg) 164px
+                rgba(244, 239, 232, 0.992) 0%,
+                rgba(246, 241, 234, 0.996) 52px,
+                rgba(247, 242, 235, 0.999) 118px,
+                var(--theme-bg) 182px
             ),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 44%, var(--theme-bg-soft) 100%);
     }
@@ -562,6 +539,7 @@
     body#top .internal-hero-scene + .gallery-page::before,
     body#top .internal-hero-scene + .prices-page::before,
     body#top .internal-hero-scene + .payment-docs-page::before,
+    body#top .internal-hero-scene + .contacts-page::before,
     body#top .internal-hero-scene + .privacy-page::before,
     body#top .internal-hero-scene + .automation-product-page::before {
         content: '' !important;
@@ -573,12 +551,12 @@
         background: linear-gradient(
             180deg,
             rgba(244, 239, 232, 0) 0%,
-            rgba(245, 240, 233, 0.06) 20%,
-            rgba(246, 241, 234, 0.22) 52%,
-            rgba(247, 242, 235, 0.84) 100%
+            rgba(245, 240, 233, 0.12) 20%,
+            rgba(246, 241, 234, 0.38) 52%,
+            rgba(247, 242, 235, 1) 100%
         );
-        -webkit-backdrop-filter: blur(12px) saturate(104%);
-        backdrop-filter: blur(12px) saturate(104%);
+        -webkit-backdrop-filter: blur(18px) saturate(106%);
+        backdrop-filter: blur(18px) saturate(106%);
     }
 
     body#top .internal-hero-scene + .catalog-page > .container,
@@ -586,6 +564,7 @@
     body#top .internal-hero-scene + .gallery-page > .container,
     body#top .internal-hero-scene + .prices-page > .container,
     body#top .internal-hero-scene + .payment-docs-page > .container,
+    body#top .internal-hero-scene + .contacts-page > .container,
     body#top .internal-hero-scene + .privacy-page > .container,
     body#top .internal-hero-scene + .automation-product-page > .container {
         position: relative;
@@ -594,16 +573,12 @@
     }
 }
 
-@media (min-width: 1101px) and (hover: hover) and (pointer: fine) and (max-width: 1480px) {
-    .internal-hero-stage::before {
-        background-position: center 61%;
-    }
-}
-
 @keyframes stageDrift {
-    0%, 100% {
-        transform: scale(1.002) translate3d(0, 0, 0);
+    0%,
+    100% {
+        transform: scale(1) translate3d(0, 0, 0);
     }
+
     50% {
         transform: scale(1.01) translate3d(-0.4%, -0.18%, 0);
     }

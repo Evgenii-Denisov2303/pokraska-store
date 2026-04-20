@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const navLinks = document.querySelectorAll('.service-nav-link');
     const sections = document.querySelectorAll('.service-detail-card');
     const header = document.querySelector('.header');
@@ -7,78 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         !window.location.hash &&
         navigationEntry &&
         navigationEntry.type === 'navigate';
-    const fallbackSiteContact = {
-        primaryPhone: {
-            label: '+7 (937) 615-46-29',
-            href: 'tel:+79376154629'
-        },
-        secondaryPhone: {
-            label: '+7 (962) 554-22-60',
-            href: 'tel:+79625542260'
-        },
-        email: 'vorota404@mail.ru'
-    };
-
     const hasNav = navLinks.length && sections.length;
-    const shouldHydrateCatalogContacts = Boolean(
-        hasNav || document.querySelector('[data-catalog-layout], [data-catalog-gallery], [data-catalog-panel]')
-    );
-
-    function escapeHtml(value) {
-        return String(value ?? '')
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
-
-    function buildCatalogContactListMarkup(contact) {
-        const primaryPhone = contact?.primaryPhone || fallbackSiteContact.primaryPhone;
-        const secondaryPhone = contact?.secondaryPhone || fallbackSiteContact.secondaryPhone;
-        const email = contact?.email || fallbackSiteContact.email;
-
-        return `
-            <a href="${escapeHtml(secondaryPhone.href || '#')}"><i class="fas fa-phone"></i> ${escapeHtml(secondaryPhone.label || '')}</a>
-            <a href="${escapeHtml(primaryPhone.href || '#')}"><i class="fas fa-phone"></i> ${escapeHtml(primaryPhone.label || '')}</a>
-            <a href="mailto:${escapeHtml(email)}"><i class="fas fa-envelope"></i> ${escapeHtml(email)}</a>
-        `.trim();
-    }
-
-    async function loadSiteShellData() {
-        if (window.POKRASKA_SITE_CONTENT) {
-            return window.POKRASKA_SITE_CONTENT;
-        }
-
-        if (!window.PokraskaContent?.loadContentFile) {
-            return null;
-        }
-
-        try {
-            const site = await window.PokraskaContent.loadContentFile('site');
-            window.POKRASKA_SITE_CONTENT = window.POKRASKA_SITE_CONTENT || site;
-            return site;
-        } catch (error) {
-            return null;
-        }
-    }
-
-    async function hydrateCatalogContacts() {
-        if (!shouldHydrateCatalogContacts) {
-            return;
-        }
-
-        const site = await loadSiteShellData();
-        const catalogContactListMarkup = buildCatalogContactListMarkup(site?.contact);
-
-        document.querySelectorAll('.catalog-contact-list').forEach((contactList) => {
-            if (contactList.innerHTML.trim() !== catalogContactListMarkup) {
-                contactList.innerHTML = catalogContactListMarkup;
-            }
-        });
-    }
-
-    void hydrateCatalogContacts();
 
     function updateActiveLink() {
         if (!hasNav) {
@@ -171,12 +100,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    const catalogLayout = document.querySelector('[data-catalog-layout]');
+    const catalogContent = document.querySelector('.catalog-content[data-catalog-panels-source]');
+    const catalogGroupCurrent = document.querySelector('[data-catalog-group-current]');
+
+    async function loadDeferredCatalogPanels() {
+        if (!catalogContent || catalogContent.dataset.catalogPanelsLoaded === 'true') {
+            return;
+        }
+
+        const source = catalogContent.getAttribute('data-catalog-panels-source');
+        if (!source) {
+            catalogContent.dataset.catalogPanelsLoaded = 'true';
+            return;
+        }
+
+        catalogContent.setAttribute('aria-busy', 'true');
+
+        try {
+            const response = await fetch(source, { cache: 'default' });
+            if (!response.ok) {
+                throw new Error(`Failed to load catalog panels: ${response.status}`);
+            }
+
+            const markup = await response.text();
+            if (markup.trim()) {
+                catalogContent.insertAdjacentHTML('beforeend', markup);
+            }
+
+            catalogContent.dataset.catalogPanelsLoaded = 'true';
+        } catch (error) {
+            console.error(error);
+            catalogContent.dataset.catalogPanelsLoadError = 'true';
+        } finally {
+            catalogContent.removeAttribute('aria-busy');
+        }
+    }
+
+    await loadDeferredCatalogPanels();
+
     const catalogTabs = document.querySelectorAll('[data-catalog-tab]');
     const catalogPanels = document.querySelectorAll('[data-catalog-panel]');
     const catalogGroupTabs = document.querySelectorAll('[data-catalog-group]');
     const catalogGroupPanels = document.querySelectorAll('[data-catalog-group-panel]');
-    const catalogLayout = document.querySelector('[data-catalog-layout]');
-    const catalogGroupCurrent = document.querySelector('[data-catalog-group-current]');
 
     if (catalogTabs.length && catalogPanels.length) {
         const lastActiveTabByGroup = new Map();
@@ -187,30 +153,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                const panelHeader = panel.querySelector(':scope > .catalog-panel__header');
                 const panelGrid = panel.querySelector(':scope > .catalog-panel__grid');
                 const firstTextBlock = panelGrid?.querySelector('.catalog-panel__text');
+                let breadcrumbsText = panel.dataset.catalogBreadcrumb?.trim() || '';
+                let titleText = panel.dataset.catalogTitle?.trim() || '';
 
-                if (!panelHeader || !firstTextBlock) {
+                if (!breadcrumbsText || !titleText) {
+                    const panelHeader = panel.querySelector(':scope > .catalog-panel__header');
+                    breadcrumbsText ||= panelHeader?.querySelector('.catalog-breadcrumbs')?.textContent?.trim() || '';
+                    titleText ||= panelHeader?.querySelector('h2')?.textContent?.trim() || '';
+                }
+
+                if (!firstTextBlock || (!breadcrumbsText && !titleText)) {
                     return;
                 }
 
-                const breadcrumbs = panelHeader.querySelector('.catalog-breadcrumbs');
-                const title = panelHeader.querySelector('h2');
                 const inlineHeader = document.createElement('div');
                 inlineHeader.className = 'catalog-panel__inline-header';
 
-                if (breadcrumbs?.textContent?.trim()) {
+                if (breadcrumbsText) {
                     const inlineBreadcrumbs = document.createElement('div');
                     inlineBreadcrumbs.className = 'catalog-panel__inline-breadcrumbs';
-                    inlineBreadcrumbs.textContent = breadcrumbs.textContent.trim();
+                    inlineBreadcrumbs.textContent = breadcrumbsText;
                     inlineHeader.appendChild(inlineBreadcrumbs);
                 }
 
-                if (title?.textContent?.trim()) {
+                if (titleText) {
                     const inlineTitle = document.createElement('h2');
                     inlineTitle.className = 'catalog-panel__inline-title';
-                    inlineTitle.textContent = title.textContent.trim();
+                    inlineTitle.textContent = titleText;
                     inlineHeader.appendChild(inlineTitle);
                 }
 
@@ -475,7 +446,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const thumbsWrap = gallery.querySelector('.catalog-panel__media-thumbs');
 
         const getThumbs = () => Array.from(gallery.querySelectorAll('.catalog-panel__media-thumb')).filter((thumb) => !thumb.hidden);
-        const getHiddenLinks = () => Array.from(gallery.querySelectorAll('[data-gallery-lightbox-link]')).filter((link) => !link.hidden);
 
         if (!mainLink || !mainImage || !getThumbs().length) {
             return;
@@ -608,13 +578,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         mainLink.addEventListener('click', (event) => {
-            const hiddenLinks = getHiddenLinks();
-            const hiddenLink = hiddenLinks[activeIndex];
-            if (!hiddenLink) {
+            const lightboxApi = window.PokraskaLightbox;
+            const thumbs = getThumbs();
+            if (!lightboxApi || typeof lightboxApi.openGroup !== 'function' || !thumbs.length) {
                 return;
             }
+
             event.preventDefault();
-            hiddenLink.click();
+
+            lightboxApi.openGroup(
+                thumbs.map((thumb) => ({
+                    href: thumb.dataset.gallerySrc,
+                    alt: thumb.dataset.galleryAlt || '',
+                    title: thumb.dataset.galleryTitle || thumb.dataset.galleryAlt || ''
+                })).filter((item) => item.href),
+                activeIndex,
+                mainLink
+            );
         });
 
         syncGallery(activeIndex);

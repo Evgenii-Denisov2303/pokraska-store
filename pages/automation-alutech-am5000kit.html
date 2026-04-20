@@ -29,10 +29,75 @@
         document.documentElement.style.setProperty('--hero-stage-drift-delay', delay);
     })();
     </script>
-    <link rel="preload" href="../assets/fonts/manrope/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="../assets/fonts/manrope/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="../assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="../assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
+        <style>
+    .internal-hero-scene,
+    .internal-scene-header {
+        display: none;
+    }
+
+    @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+        .header.header--desktop-hero.internal-legacy-header {
+            display: none !important;
+        }
+
+        .header.header--desktop-hero.internal-legacy-header::before,
+        .header.header--desktop-hero.internal-legacy-header::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        .internal-hero-scene {
+            position: relative;
+            z-index: 1;
+            display: block;
+            overflow: hidden;
+            isolation: isolate;
+            min-height: 200px;
+            height: 200px;
+            max-height: 200px;
+            width: 100vw;
+            margin: 0 calc(50% - 50vw);
+            background: transparent;
+        }
+
+        .internal-hero-stage {
+            position: relative;
+            width: 100%;
+            min-height: 670px;
+            aspect-ratio: 15 / 8;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .internal-hero-scene .hero-stage__picture {
+            position: absolute;
+            inset: 0 -12px 0 -2px;
+            display: block;
+        }
+
+        .internal-hero-scene .hero-stage__picture img {
+            display: block;
+            width: calc(100% + 14px);
+            max-width: none;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 72%;
+            filter: none;
+        }
+
+        .internal-scene-header {
+            position: absolute;
+            inset: -20px 24px auto;
+            z-index: 4;
+            display: grid;
+        }
+    }
+</style>
+
+
+
+
+
 
     <script type="application/ld+json">
     {
@@ -51,21 +116,15 @@
         "url": "https://pokraska.store/pages/automation-alutech-am5000kit.html"
     }
     </script>
-
-
-
-
-
-    <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" as="image" href="../assets/images/logo.png" fetchpriority="high">
-    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
     <link rel="stylesheet" href="../assets/css/main.css?v=20260419-shell-theme-13">
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260420-header-2">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260420-hero-inner-6">
+    <link rel="preload" as="style" href="../assets/css/header.css?v=20260420-header-5">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260420-hero-inner-33">
+    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
+    <link rel="stylesheet" href="../assets/css/header.css?v=20260420-header-5">
+<link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260420-hero-inner-33">
     <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260418-internal-pages-1">
     <link rel="stylesheet" href="../assets/css/footer.css?v=20260419-preview-footer-1">
-    <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">
-    <link rel="stylesheet" href="../assets/css/fontawesome.css">
+<link rel="stylesheet" href="../assets/css/fontawesome.css">
     <link rel="stylesheet" href="../assets/css/pages/automation-product.css?v=20260419-automation-theme-2">
 </head>
 <body id="top">
@@ -78,7 +137,7 @@
                     <a href="../index.html" class="logo-link" aria-label="Перейти на главную страницу">
                         <div class="logo-premium">
                             <div class="logo-main logo-main--image">
-                                <img src="../assets/images/logo.png" width="700" height="700" alt="KOMFORTPLUS116.RU — ворота, заборы и порошковая покраска в Казани" class="logo-image">
+                                <img src="../assets/images/logo.png" width="700" height="700" alt="KOMFORTPLUS116.RU — ворота, заборы и порошковая покраска в Казани" class="logo-image" loading="lazy" decoding="async">
                                 <span class="logo-wave" aria-hidden="true"></span>
                             </div>
                             <div class="logo-tagline">
@@ -128,7 +187,7 @@
             </div>
         </div>
     </header>
-    <section class="hero-scene internal-hero-scene" aria-label="Верхняя сцена страницы">
+        <section class="hero-scene internal-hero-scene" aria-label="Верхняя сцена страницы">
         <div class="hero-header desktop-hero-header internal-scene-header">
             <div class="hero-scene__topbar">
                 <div class="hero-brand">
@@ -175,12 +234,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+                </div>
         <div class="hero-stage internal-hero-stage">
             <picture class="hero-stage__picture">
                 <source media="(max-width: 640px)" srcset="../assets/images/hero/home-hero-main-mobile.jpg">
                 <source media="(max-width: 1080px)" srcset="../assets/images/hero/home-hero-main-tablet.jpg">
-                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="sync">
+                <img src="../assets/images/hero/home-hero-main.jpg" alt="" loading="eager" fetchpriority="high" decoding="async" width="3000" height="2000">
             </picture>
         </div>
     </section>
@@ -193,7 +252,7 @@
                 <div class="automation-product-card">
                     <div class="automation-product-gallery" data-product-gallery>
                         <a class="automation-product-main" href="../assets/images/catalog/automation/automation-alutech-am5000kit-kit.jpg" data-main-link data-lightbox="product-main" title="Увеличить фото">
-                            <img src="../assets/images/catalog/automation/automation-alutech-am5000kit-kit.jpg" width="500" height="500" alt="Комплект автоматики Alutech AM-5000KIT" data-main-image loading="eager" fetchpriority="high" decoding="async">
+                            <img src="../assets/images/catalog/automation/automation-alutech-am5000kit-kit.jpg" width="500" height="500" alt="Комплект автоматики Alutech AM-5000KIT" data-main-image loading="eager" decoding="async">
                         </a>
                         <div class="automation-product-thumbs">
                             <button class="automation-product-thumb is-active" type="button" data-thumb-src="../assets/images/catalog/automation/automation-alutech-am5000kit-kit.jpg" data-thumb-alt="Комплект автоматики Alutech AM-5000KIT">
@@ -242,7 +301,7 @@
             <div class="preview-footer__column preview-footer__column--company">
                 <a class="preview-footer__brand" href="../index.html#top" aria-label="Наверх">
                     <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
-                        <img class="preview-footer__logo logo-image" src="../assets/images/logo.png" alt="">
+                        <img class="preview-footer__logo logo-image" src="../assets/images/logo.png" alt="" loading="lazy" decoding="async">
                         <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                     </span>
                     <span class="preview-footer__brand-copy">
@@ -287,18 +346,11 @@
             </div>
     </footer>
 
-    <script src="../assets/js/runtime-config.js" defer></script>
-    <script src="../assets/js/content-api.js" defer></script>
-    <script src="../assets/js/site-content.js?v=20260419-site-shell-5" defer></script>
-    <script src="../assets/js/automation-content.js?v=20260418-automation-shell-1" defer></script>
-    <script src="../assets/js/header.js?v=20260418-header-split-1" defer></script>
-    <script src="../assets/js/footer.js?v=20260418-footer-split-1" defer></script>
-    <script src="../assets/js/gallery.js?v=20260419-gallery-shell-3" defer></script>
-    <script src="../assets/js/sliders.js?v=20260418-sliders-split-1" defer></script>
+    <script src="../assets/js/header.js?v=20260420-header-split-9" defer></script>
+    <script src="../assets/js/lightbox.js?v=20260420-lightbox-1" defer></script>
     <script src="../assets/js/automation-product.js?v=20260414-automation-refine-1" defer></script>
 </body>
 </html>
-
 
 
 

@@ -1,9 +1,5 @@
-// ========== GALLERY.JS ==========
 document.addEventListener('DOMContentLoaded', function () {
     const pageSize = 12;
-    let visibleCount = pageSize;
-    let activeFilter = 'all';
-    const hideTimeouts = new WeakMap();
     const categoryNotes = {
         sliding: 'Надёжная откатная система для въезда, участка и фасада.',
         swing: 'Распашные створки под частный дом, двор и въездную группу.',
@@ -14,13 +10,18 @@ document.addEventListener('DOMContentLoaded', function () {
         sandblast: 'Подготовка металла перед грунтом и покраской.',
         powder: 'Цвет, фактура и стойкое покрытие для металла.'
     };
+
     const counterElement = document.querySelector('.counter-number');
+    const galleryGrid = document.querySelector('[data-gallery-grid]');
     const urlParams = new URLSearchParams(window.location.search);
     const filterFromUrl = urlParams.get('filter');
-    const paletteModal = document.querySelector('.palette-modal');
-    const paletteModalImage = paletteModal ? paletteModal.querySelector('.palette-modal__image') : null;
-    const paletteModalClose = paletteModal ? paletteModal.querySelector('.palette-modal__close') : null;
-    let paletteLastFocus = null;
+
+    let visibleCount = pageSize;
+    let activeFilter = 'all';
+    let galleryItemsData = [];
+    let galleryItemsLoaded = false;
+    let galleryItemsLoadError = false;
+    const hideTimeouts = new WeakMap();
 
     function getFilterButtons() {
         return Array.from(document.querySelectorAll('.gallery-filters .filter-btn'));
@@ -42,6 +43,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return document.querySelector('.gallery-empty');
     }
 
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function getCategoryNote(category) {
+        return categoryNotes[category] || 'Реальный объект из практики компании.';
+    }
+
     function getFilterLabel(filterValue) {
         const button = getFilterButtons().find((node) => node.getAttribute('data-filter') === filterValue);
         if (!button) return 'выбранной категории';
@@ -52,6 +66,79 @@ document.addEventListener('DOMContentLoaded', function () {
         getFilterButtons().forEach((button) => {
             button.classList.toggle('active', button.getAttribute('data-filter') === filterValue);
         });
+    }
+
+    function setGridBusy(isBusy) {
+        if (!galleryGrid) return;
+        galleryGrid.setAttribute('aria-busy', isBusy ? 'true' : 'false');
+    }
+
+    function renderGalleryItems(items) {
+        if (!galleryGrid) return;
+
+        galleryGrid.innerHTML = items.map((item) => `
+            <div class="gallery-item" data-category="${escapeHtml(item.category)}">
+                <div class="gallery-image">
+                    <img src="${escapeHtml(item.preview)}" width="${Number(item.width) || 1}" height="${Number(item.height) || 1}" alt="${escapeHtml(item.alt)}" loading="lazy" decoding="async">
+                    <a href="${escapeHtml(item.full)}" class="zoom-btn" data-lightbox="gallery" aria-label="${escapeHtml(item.alt || item.title || item.label || 'Открыть фото')}">
+                        <i class="fas fa-expand-alt"></i>
+                    </a>
+                </div>
+                <div class="work-info">
+                    <span class="work-category">${escapeHtml(item.label)}</span>
+                    <h3 class="work-title">${escapeHtml(item.title)}</h3>
+                    <p class="work-note">${escapeHtml(getCategoryNote(item.category))}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    async function ensureGalleryItems() {
+        if (!galleryGrid || galleryItemsLoaded || galleryItemsLoadError) {
+            return galleryItemsData;
+        }
+
+        const source = galleryGrid.getAttribute('data-gallery-source');
+        if (!source) {
+            galleryItemsLoadError = true;
+            return [];
+        }
+
+        setGridBusy(true);
+
+        try {
+            const response = await fetch(source, { cache: 'default' });
+            if (!response.ok) {
+                throw new Error(`Failed to load gallery items: ${response.status}`);
+            }
+
+            const payload = await response.json();
+            galleryItemsData = Array.isArray(payload) ? payload : [];
+            renderGalleryItems(galleryItemsData);
+            galleryItemsLoaded = true;
+            return galleryItemsData;
+        } catch (error) {
+            console.error(error);
+            galleryItemsLoadError = true;
+            const emptyState = getGalleryEmptyState();
+            const meta = getShowMoreMeta();
+
+            if (emptyState) {
+                const title = emptyState.querySelector('h3');
+                const copy = emptyState.querySelector('p');
+                if (title) title.textContent = 'Не удалось загрузить работы';
+                if (copy) copy.textContent = 'Попробуйте обновить страницу ещё раз. Если нужно, можно сразу перейти к контактам и обсудить задачу напрямую.';
+                emptyState.hidden = false;
+            }
+
+            if (meta) {
+                meta.textContent = 'Галерея временно недоступна';
+            }
+
+            return [];
+        } finally {
+            setGridBusy(false);
+        }
     }
 
     function hideItem(item) {
@@ -146,21 +233,6 @@ document.addEventListener('DOMContentLoaded', function () {
         emptyState.hidden = false;
     }
 
-    function syncGalleryCardMeta(item) {
-        if (!item) return;
-        const workInfo = item.querySelector('.work-info');
-        if (!workInfo) return;
-
-        let note = workInfo.querySelector('.work-note');
-        if (!note) {
-            note = document.createElement('p');
-            note.className = 'work-note';
-            workInfo.appendChild(note);
-        }
-
-        note.textContent = categoryNotes[item.getAttribute('data-category')] || 'Реальный объект из практики компании.';
-    }
-
     function applyFilter(filterValue, resetCount) {
         const filterButtons = getFilterButtons();
         const galleryItems = getGalleryItems();
@@ -190,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         filteredItems.forEach((item, index) => {
-            syncGalleryCardMeta(item);
             if (index < visibleCount) {
                 showItem(item, index);
             } else {
@@ -226,92 +297,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }, interval);
     }
 
-    function openPaletteModal(src, alt) {
-        if (!paletteModal || !paletteModalImage || !src) return;
-        paletteModalImage.hidden = false;
-        paletteModalImage.src = src;
-        paletteModalImage.alt = alt || 'Просмотр палитры';
-        paletteLastFocus = document.activeElement;
-        paletteModal.setAttribute('aria-hidden', 'false');
-        paletteModal.classList.add('is-open');
-        document.body.classList.add('modal-open');
-        if (paletteModalClose) {
-            paletteModalClose.focus();
-        }
-    }
-
-    function closePaletteModal() {
-        if (!paletteModal) return;
-        paletteModal.classList.remove('is-open');
-        paletteModal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-open');
-        if (paletteModalImage) {
-            paletteModalImage.hidden = true;
-            paletteModalImage.removeAttribute('src');
-            paletteModalImage.alt = '';
-        }
-        if (paletteLastFocus && typeof paletteLastFocus.focus === 'function') {
-            paletteLastFocus.focus();
-        }
-        paletteLastFocus = null;
-    }
-
-    if (paletteModal) {
-        paletteModal.addEventListener('click', (event) => {
-            if (event.target === paletteModal) {
-                closePaletteModal();
-            }
-        });
-    }
-
-    if (paletteModalClose) {
-        paletteModalClose.addEventListener('click', closePaletteModal);
-    }
-
-    document.addEventListener('keydown', (event) => {
-        if (!paletteModal || !paletteModal.classList.contains('is-open')) return;
-        if (event.key === 'Escape') {
-            closePaletteModal();
-        } else if (event.key === 'Tab') {
-            event.preventDefault();
-            if (paletteModalClose) {
-                paletteModalClose.focus();
-            }
-        }
-    });
-
-    document.querySelectorAll('[data-palette]').forEach((slider) => {
-        const mainImg = slider.querySelector('.palette-main img');
-        const zoomLink = slider.querySelector('.palette-zoom');
-        const thumbs = slider.querySelectorAll('.palette-thumb');
-        if (!mainImg) return;
-
-        if (thumbs.length) {
-            thumbs.forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const src = btn.getAttribute('data-src');
-                    const alt = btn.getAttribute('data-alt') || '';
-                    if (!src) return;
-                    mainImg.src = src;
-                    if (alt) mainImg.alt = alt;
-                    if (zoomLink) zoomLink.href = src;
-                    thumbs.forEach((b) => b.classList.remove('is-active'));
-                    btn.classList.add('is-active');
-                });
-            });
-        }
-
-        if (zoomLink) {
-            zoomLink.addEventListener('click', (event) => {
-                event.preventDefault();
-                openPaletteModal(mainImg.src, mainImg.alt);
-            });
-        }
-    });
-
-    document.addEventListener('click', (event) => {
+    document.addEventListener('click', async (event) => {
         const filterButton = event.target.closest('.gallery-filters .filter-btn');
         if (filterButton) {
+            await ensureGalleryItems();
             const filterValue = filterButton.getAttribute('data-filter') || 'all';
             applyFilter(filterValue, true);
 
@@ -332,6 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const filterLink = event.target.closest('a[data-filter]');
         if (filterLink) {
             event.preventDefault();
+            await ensureGalleryItems();
             const filterValue = filterLink.getAttribute('data-filter') || 'all';
             applyFilter(filterValue, true);
             const filters = document.querySelector('.gallery-filters');
@@ -343,192 +333,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const externalFilterTrigger = event.target.closest('[data-gallery-filter-trigger]');
         if (externalFilterTrigger) {
+            await ensureGalleryItems();
             const filterValue = externalFilterTrigger.getAttribute('data-filter') || 'all';
             applyFilter(filterValue, true);
             window.history.pushState(null, '', filterValue === 'all' ? 'gallery.html' : `gallery.html?filter=${encodeURIComponent(filterValue)}`);
         }
     });
 
-    const lightboxLinks = Array.from(document.querySelectorAll('a[data-lightbox]'));
-    if (lightboxLinks.length) {
-        let lightboxModal = document.querySelector('.lightbox-modal');
-        if (!lightboxModal) {
-            lightboxModal = document.createElement('div');
-            lightboxModal.className = 'lightbox-modal';
-            lightboxModal.setAttribute('role', 'dialog');
-            lightboxModal.setAttribute('aria-modal', 'true');
-            lightboxModal.setAttribute('aria-label', 'Просмотр изображения');
-            lightboxModal.setAttribute('aria-hidden', 'true');
-            lightboxModal.innerHTML = `
-                <div class="lightbox-modal__content">
-                    <button class="lightbox-modal__close" type="button" aria-label="Закрыть просмотр">
-                        <i class="fas fa-times" aria-hidden="true"></i>
-                    </button>
-                    <button class="lightbox-modal__nav lightbox-modal__nav--prev" type="button" aria-label="Предыдущее изображение">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <button class="lightbox-modal__nav lightbox-modal__nav--next" type="button" aria-label="Следующее изображение">
-                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                    </button>
-                    <figure class="lightbox-modal__figure">
-                        <img class="lightbox-modal__image" alt="Просмотр изображения" hidden>
-                        <figcaption class="lightbox-modal__caption"></figcaption>
-                    </figure>
-                </div>
-            `;
-            document.body.appendChild(lightboxModal);
-        }
-
-        const lightboxImage = lightboxModal.querySelector('.lightbox-modal__image');
-        const lightboxCaption = lightboxModal.querySelector('.lightbox-modal__caption');
-        const lightboxClose = lightboxModal.querySelector('.lightbox-modal__close');
-        const lightboxPrev = lightboxModal.querySelector('.lightbox-modal__nav--prev');
-        const lightboxNext = lightboxModal.querySelector('.lightbox-modal__nav--next');
-
-        let lightboxGroup = [];
-        let lightboxIndex = 0;
-        let lightboxLastFocus = null;
-
-        const getLinkedImageAlt = (link) => {
-            const img = link.closest('.work-image-container, .gallery-image, .work-item, .gallery-item')?.querySelector('img');
-            return img ? img.alt : '';
-        };
-
-        const getLinkCaption = (link) => {
-            return link.getAttribute('title') || link.getAttribute('aria-label') || getLinkedImageAlt(link) || '';
-        };
-
-        const updateLightbox = (index) => {
-            const link = lightboxGroup[index];
-            if (!link || !lightboxImage) return;
-            const href = link.getAttribute('href');
-            if (!href) return;
-            const caption = getLinkCaption(link);
-            const altText = getLinkedImageAlt(link) || caption || 'Изображение';
-            lightboxImage.hidden = false;
-            lightboxImage.src = href;
-            lightboxImage.alt = altText;
-            if (lightboxCaption) {
-                lightboxCaption.textContent = caption;
-                lightboxCaption.style.display = caption ? 'block' : 'none';
-            }
-
-            const isMulti = lightboxGroup.length > 1;
-            if (lightboxPrev && lightboxNext) {
-                lightboxPrev.style.display = isMulti ? 'inline-flex' : 'none';
-                lightboxNext.style.display = isMulti ? 'inline-flex' : 'none';
-                lightboxPrev.disabled = !isMulti;
-                lightboxNext.disabled = !isMulti;
-            }
-        };
-
-        const openLightbox = (link) => {
-            const groupName = link.getAttribute('data-lightbox') || '';
-            lightboxGroup = lightboxLinks.filter((item) => (item.getAttribute('data-lightbox') || '') === groupName);
-            if (!lightboxGroup.length) {
-                lightboxGroup = [link];
-            }
-            lightboxIndex = Math.max(0, lightboxGroup.indexOf(link));
-            lightboxLastFocus = document.activeElement;
-            updateLightbox(lightboxIndex);
-            lightboxModal.classList.add('is-open');
-            lightboxModal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('modal-open');
-            if (lightboxClose) {
-                lightboxClose.focus();
-            }
-        };
-
-        const closeLightbox = () => {
-            lightboxModal.classList.remove('is-open');
-            lightboxModal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('modal-open');
-            if (lightboxImage) {
-                lightboxImage.hidden = true;
-                lightboxImage.removeAttribute('src');
-                lightboxImage.alt = '';
-            }
-            if (lightboxLastFocus && typeof lightboxLastFocus.focus === 'function') {
-                lightboxLastFocus.focus();
-            }
-            lightboxLastFocus = null;
-        };
-
-        const navigateLightbox = (step) => {
-            if (lightboxGroup.length <= 1) return;
-            lightboxIndex = (lightboxIndex + step + lightboxGroup.length) % lightboxGroup.length;
-            updateLightbox(lightboxIndex);
-        };
-
-        document.addEventListener('click', (event) => {
-            const link = event.target.closest('a[data-lightbox]');
-            if (!link) return;
-            event.preventDefault();
-            openLightbox(link);
-        });
-
-        if (lightboxClose) {
-            lightboxClose.addEventListener('click', closeLightbox);
-        }
-
-        if (lightboxModal) {
-            lightboxModal.addEventListener('click', (event) => {
-                if (event.target === lightboxModal) {
-                    closeLightbox();
-                }
-            });
-        }
-
-        if (lightboxPrev) {
-            lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
-        }
-
-        if (lightboxNext) {
-            lightboxNext.addEventListener('click', () => navigateLightbox(1));
-        }
-
-        document.addEventListener('keydown', (event) => {
-            if (!lightboxModal.classList.contains('is-open')) return;
-            if (event.key === 'Escape') {
-                closeLightbox();
-            } else if (event.key === 'ArrowLeft') {
-                navigateLightbox(-1);
-            } else if (event.key === 'ArrowRight') {
-                navigateLightbox(1);
-            } else if (event.key === 'Tab') {
-                const focusable = [lightboxClose, lightboxPrev, lightboxNext].filter(
-                    (element) => element && !element.disabled
-                );
-                if (!focusable.length) return;
-                const currentIndex = focusable.indexOf(document.activeElement);
-                const direction = event.shiftKey ? -1 : 1;
-                const nextIndex = currentIndex === -1
-                    ? 0
-                    : (currentIndex + direction + focusable.length) % focusable.length;
-                event.preventDefault();
-                focusable[nextIndex].focus();
-            }
-        });
-    }
-
-    document.addEventListener('pokraska:gallery-updated', () => {
-        getGalleryItems().forEach(syncGalleryCardMeta);
-        const availableValues = new Set(getFilterButtons().map((button) => button.getAttribute('data-filter')));
-        if (!availableValues.has(activeFilter)) {
-            activeFilter = 'all';
-        }
-        applyFilter(activeFilter, true);
-    });
-
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', async () => {
+        await ensureGalleryItems();
         const params = new URLSearchParams(window.location.search);
         applyFilter(params.get('filter') || 'all', true);
     });
 
-    if (getFilterButtons().length && getGalleryItems().length) {
-        getGalleryItems().forEach(syncGalleryCardMeta);
-        applyFilter(filterFromUrl || 'all', true);
+    async function initializeGallery() {
+        if (!galleryGrid || !getFilterButtons().length) {
+            animateCounter();
+            return;
+        }
+
+        const items = await ensureGalleryItems();
+        if (items.length) {
+            applyFilter(filterFromUrl || 'all', true);
+        }
+
+        animateCounter();
     }
 
-    animateCounter();
+    initializeGallery();
 });
