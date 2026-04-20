@@ -211,8 +211,8 @@
 .prices-page {
     padding: 84px 0 96px;
     background:
-    radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-    radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 18%),
+    radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(var(--theme-accent-strong-rgb), 0.08), transparent 18%),
     linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
 }
 
@@ -466,9 +466,9 @@
     .prices-page {
         padding: 112px 0 118px;
         background:
-            radial-gradient(circle at top left, rgba(96, 80, 63, 0.07), transparent 25%),
-            radial-gradient(circle at top right, rgba(134, 106, 77, 0.05), transparent 20%),
-            linear-gradient(180deg, #f8f5f0 0%, #f4efe8 48%, #fcfaf7 100%);
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.07), transparent 25%),
+            radial-gradient(circle at top right, rgba(var(--theme-accent-strong-rgb), 0.05), transparent 20%),
+            linear-gradient(180deg, #f7fafd 0%, #eef4fa 48%, #fbfdff 100%);
     }
 
     .prices-page > .container {
@@ -542,7 +542,7 @@
         margin-bottom: 34px;
         background:
             radial-gradient(circle at top right, rgba(255,255,255,0.12), transparent 26%),
-            linear-gradient(135deg, #2c2f34 0%, #3b3b3f 52%, #5f5147 100%);
+            linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 52%, var(--theme-band-to) 100%);
     }
 
     .calculator-section h2 {
@@ -571,14 +571,14 @@
     .guarantee-section {
         padding: 34px 34px 32px;
         margin-bottom: 22px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(249, 245, 240, 0.97));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(239, 245, 251, 0.97));
     }
 
     .guarantee-badge {
         padding: 13px 24px;
         font-size: 0.94rem;
         margin-bottom: 20px;
-        color: #7b623a;
+        color: var(--theme-accent-strong);
     }
 
     .guarantee-title {
@@ -807,8 +807,8 @@
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .prices-page {
         background:
-            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-            radial-gradient(circle at 88% 8%, rgba(41, 73, 101, 0.06), transparent 18%),
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 24%),
+            radial-gradient(circle at 88% 8%, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 18%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
     }
 

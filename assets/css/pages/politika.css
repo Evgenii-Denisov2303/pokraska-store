@@ -371,8 +371,8 @@ table th {
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .privacy-page {
         background:
-            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-            radial-gradient(circle at 90% 6%, rgba(41, 73, 101, 0.06), transparent 18%),
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 24%),
+            radial-gradient(circle at 90% 6%, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 18%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
     }
 

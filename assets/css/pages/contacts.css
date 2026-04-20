@@ -2,8 +2,8 @@
 .contacts-page {
     padding: 80px 0 88px;
     background:
-        radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 30%),
-        radial-gradient(circle at top right, rgba(138, 112, 86, 0.08), transparent 22%),
+        radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(var(--theme-accent-strong-rgb), 0.08), transparent 22%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
     min-height: calc(100vh - 300px);
 }
@@ -25,8 +25,8 @@
 .contacts-page {
     padding: 108px 0 118px;
     background:
-    radial-gradient(circle at top left, rgba(138, 111, 74, 0.07), transparent 24%),
-    radial-gradient(circle at 92% 4%, rgba(138, 112, 86, 0.08), transparent 18%),
+    radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.07), transparent 24%),
+    radial-gradient(circle at 92% 4%, rgba(var(--theme-accent-strong-rgb), 0.08), transparent 18%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
 }
 
@@ -535,7 +535,7 @@
     width: 260px;
     height: 260px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(138, 111, 74, 0.12), rgba(138, 111, 74, 0));
+    background: radial-gradient(circle, rgba(var(--theme-accent-rgb), 0.12), rgba(var(--theme-accent-rgb), 0));
     pointer-events: none;
 }
 
@@ -804,8 +804,8 @@
     .contacts-page {
         padding: 118px 0 100px;
         background:
-            radial-gradient(circle at 8% 0%, rgba(138, 111, 74, 0.08), transparent 28%),
-            radial-gradient(circle at 92% 8%, rgba(138, 112, 86, 0.08), transparent 24%),
+            radial-gradient(circle at 8% 0%, rgba(var(--theme-accent-rgb), 0.08), transparent 28%),
+            radial-gradient(circle at 92% 8%, rgba(var(--theme-accent-strong-rgb), 0.08), transparent 24%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 44%, var(--theme-bg-soft) 100%);
     }
 
@@ -1328,8 +1328,8 @@
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .contacts-page {
         background:
-            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-            radial-gradient(circle at 88% 5%, rgba(41, 73, 101, 0.06), transparent 18%),
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 24%),
+            radial-gradient(circle at 88% 5%, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 18%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 46%, var(--theme-bg-soft) 100%);
     }
 

@@ -1700,14 +1700,14 @@
         --catalog-accent: var(--theme-accent);
         --catalog-accent-strong: var(--theme-accent-strong);
         --catalog-accent-soft: var(--theme-accent-soft);
-        --catalog-accent-surface: #faf7f2;
-        --catalog-accent-border: #eadfce;
+        --catalog-accent-surface: #f4f8fc;
+        --catalog-accent-border: #dbe7f2;
         --catalog-accent-shadow: rgba(36, 72, 99, 0.18);
         --catalog-accent-glow: rgba(36, 72, 99, 0.08);
     }
 
     .catalog-group-tab {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 239, 0.96));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 252, 0.96));
         border-color: rgba(31, 51, 74, 0.08);
         box-shadow: 0 12px 22px rgba(15, 23, 42, 0.04);
     }
@@ -1715,7 +1715,7 @@
     .catalog-group-tab:hover {
         border-color: rgba(36, 72, 99, 0.18);
         box-shadow: 0 16px 28px rgba(15, 23, 42, 0.06);
-        background: linear-gradient(180deg, #ffffff, rgba(249, 245, 239, 0.98));
+        background: linear-gradient(180deg, #ffffff, rgba(243, 248, 252, 0.98));
     }
 
     .catalog-group-tab.is-active {
@@ -1728,35 +1728,35 @@
     .catalog-group-tabs .catalog-group-tab[data-catalog-group="fences"],
     .catalog-group-tabs .catalog-group-tab[data-catalog-group="garage"],
     .catalog-group-tabs .catalog-group-tab[data-catalog-group="automation"] {
-        --group-tab-color: #8c734e;
-        --group-tab-color-end: #ac916d;
-        --group-tab-soft: #f5efe6;
-        --group-tab-glow: rgba(140, 115, 78, 0.08);
+        --group-tab-color: var(--theme-accent);
+        --group-tab-color-end: var(--theme-accent-strong);
+        --group-tab-soft: rgba(var(--theme-accent-rgb), 0.1);
+        --group-tab-glow: rgba(var(--theme-accent-rgb), 0.08);
         --group-tab-shadow: rgba(36, 72, 99, 0.16);
     }
 
     .catalog-group-tab[data-catalog-group="fences"] .catalog-group-tab__icon {
-        color: #57785b;
-        background: #ebf4ee;
+        color: var(--theme-accent-strong);
+        background: rgba(var(--theme-accent-rgb), 0.1);
     }
 
     .catalog-group-tab[data-catalog-group="garage"] .catalog-group-tab__icon {
-        color: #9a6f42;
-        background: #f8efe6;
+        color: var(--theme-accent);
+        background: rgba(var(--theme-accent-rgb), 0.12);
     }
 
     .catalog-group-tab[data-catalog-group="automation"] .catalog-group-tab__icon {
-        color: #6f675a;
-        background: #f1ece5;
+        color: var(--theme-accent-strong);
+        background: rgba(var(--theme-accent-strong-rgb), 0.1);
     }
 
     .catalog-group-tab[data-catalog-group="gates"] .catalog-group-tab__icon {
-        color: #8c734e;
-        background: #f5efe6;
+        color: var(--theme-accent);
+        background: rgba(var(--theme-accent-rgb), 0.1);
     }
 
     .catalog-group-panels {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 245, 239, 0.98));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 248, 252, 0.98));
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
     }
 
@@ -1783,9 +1783,9 @@
     .services-page {
         padding: 98px 0 110px;
         background:
-            radial-gradient(circle at top left, rgba(102, 84, 67, 0.08), transparent 26%),
-            radial-gradient(circle at top right, rgba(122, 94, 64, 0.06), transparent 22%),
-            linear-gradient(180deg, #f7f4ef 0%, #f4efe8 46%, #fbf8f4 100%);
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 26%),
+            radial-gradient(circle at top right, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 22%),
+            linear-gradient(180deg, #f7fafd 0%, #eef4fa 46%, #fbfdff 100%);
     }
 
     .services-page > .container {
@@ -2135,7 +2135,7 @@
 
     .catalog-panel__media--contain img {
         object-fit: contain;
-        background: linear-gradient(180deg, #fcfaf6 0%, #f4ede3 100%);
+        background: linear-gradient(180deg, #f9fbfe 0%, #eef4fa 100%);
     }
 
     .catalog-panel__media-thumb {
@@ -2154,8 +2154,8 @@
     .services-page,
     .catalog-page {
         background:
-            radial-gradient(circle at top left, rgba(138, 111, 74, 0.08), transparent 24%),
-            radial-gradient(circle at 92% 6%, rgba(41, 73, 101, 0.06), transparent 18%),
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 24%),
+            radial-gradient(circle at 92% 6%, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 18%),
             linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 48%, var(--theme-bg-soft) 100%);
     }
 
@@ -2953,14 +2953,14 @@
     .catalog-page {
         --catalog-accent: var(--theme-accent);
         --catalog-accent-strong: var(--theme-accent-strong);
-        --catalog-accent-soft: rgba(138, 111, 74, 0.1);
-        --catalog-accent-shadow: rgba(111, 87, 65, 0.18);
-        --catalog-accent-glow: rgba(138, 111, 74, 0.12);
+        --catalog-accent-soft: rgba(var(--theme-accent-rgb), 0.1);
+        --catalog-accent-shadow: rgba(var(--theme-accent-strong-rgb), 0.18);
+        --catalog-accent-glow: rgba(var(--theme-accent-rgb), 0.12);
         --group-tab-color: var(--theme-accent);
         --group-tab-color-end: var(--theme-accent-strong);
-        --group-tab-soft: rgba(138, 111, 74, 0.1);
-        --group-tab-glow: rgba(138, 111, 74, 0.12);
-        --group-tab-shadow: rgba(111, 87, 65, 0.18);
+        --group-tab-soft: rgba(var(--theme-accent-rgb), 0.1);
+        --group-tab-glow: rgba(var(--theme-accent-rgb), 0.12);
+        --group-tab-shadow: rgba(var(--theme-accent-strong-rgb), 0.18);
     }
 
 }
@@ -2968,11 +2968,11 @@
 /* ========== CATALOG FINAL WARM LOCK ========== */
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .catalog-page ::-webkit-scrollbar-thumb {
-        background: rgba(138, 111, 74, 0.26) !important;
+        background: rgba(var(--theme-accent-rgb), 0.26) !important;
     }
 
     .catalog-page ::-webkit-scrollbar-track {
-        background: rgba(237, 228, 217, 0.72) !important;
+        background: rgba(235, 242, 248, 0.72) !important;
     }
 }
 

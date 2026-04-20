@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getGalleryItems() {
-        return Array.from(document.querySelectorAll('.gallery-grid .gallery-item'));
+        return Array.from(document.querySelectorAll('.gallery-grid .gallery-item:not(.gallery-item--skeleton)'));
     }
 
     function getShowMoreButton() {
@@ -41,6 +41,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getGalleryEmptyState() {
         return document.querySelector('.gallery-empty');
+    }
+
+    function normalizeFilterValue(filterValue) {
+        const normalized = filterValue || 'all';
+        const buttons = getFilterButtons();
+        return buttons.some((button) => button.getAttribute('data-filter') === normalized)
+            ? normalized
+            : 'all';
     }
 
     function escapeHtml(value) {
@@ -73,11 +81,22 @@ document.addEventListener('DOMContentLoaded', function () {
         galleryGrid.setAttribute('aria-busy', isBusy ? 'true' : 'false');
     }
 
-    function renderGalleryItems(items) {
+    function renderGalleryItems(items, filterValue = 'all', initialVisibleCount = pageSize) {
         if (!galleryGrid) return;
 
-        galleryGrid.innerHTML = items.map((item) => `
-            <div class="gallery-item" data-category="${escapeHtml(item.category)}">
+        const normalizedFilter = normalizeFilterValue(filterValue);
+        let shownInFilter = 0;
+
+        galleryGrid.innerHTML = items.map((item) => {
+            const matchesFilter = normalizedFilter === 'all' || item.category === normalizedFilter;
+            const isVisible = matchesFilter && shownInFilter < initialVisibleCount;
+
+            if (matchesFilter) {
+                shownInFilter += 1;
+            }
+
+            return `
+            <div class="gallery-item" data-category="${escapeHtml(item.category)}" aria-hidden="${isVisible ? 'false' : 'true'}"${isVisible ? '' : ' style="display:none;opacity:0;transform:translateY(20px) scale(0.95)"'}>
                 <div class="gallery-image">
                     <img src="${escapeHtml(item.preview)}" width="${Number(item.width) || 1}" height="${Number(item.height) || 1}" alt="${escapeHtml(item.alt)}" loading="lazy" decoding="async">
                     <a href="${escapeHtml(item.full)}" class="zoom-btn" data-lightbox="gallery" aria-label="${escapeHtml(item.alt || item.title || item.label || 'Открыть фото')}">
@@ -90,7 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p class="work-note">${escapeHtml(getCategoryNote(item.category))}</p>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
     }
 
     async function ensureGalleryItems() {
@@ -114,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const payload = await response.json();
             galleryItemsData = Array.isArray(payload) ? payload : [];
-            renderGalleryItems(galleryItemsData);
+            renderGalleryItems(galleryItemsData, normalizeFilterValue(filterFromUrl), visibleCount);
             galleryItemsLoaded = true;
             return galleryItemsData;
         } catch (error) {
@@ -354,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const items = await ensureGalleryItems();
         if (items.length) {
-            applyFilter(filterFromUrl || 'all', true);
+            applyFilter(normalizeFilterValue(filterFromUrl), true);
         }
 
         animateCounter();

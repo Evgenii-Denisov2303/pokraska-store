@@ -24,13 +24,17 @@
         document.documentElement.style.setProperty('--hero-stage-drift-delay', delay);
     })();
     </script>
+    <link rel="preload" href="assets/fonts/manrope/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/manrope/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/main.css?v=20260418-internal-hero-strip-11">
-    <link rel="stylesheet" href="assets/css/header.css?v=20260420-header-5">
+    <link rel="stylesheet" href="assets/css/main.css?v=20260420-shell-theme-16">
+    <link rel="stylesheet" href="assets/css/header.css?v=20260420-header-17">
     <link rel="preload" as="image" href="assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="assets/css/hero-inner.css?v=20260420-hero-inner-33">
-    <link rel="stylesheet" href="assets/css/internal-pages.css?v=20260418-internal-pages-1">
-    <link rel="stylesheet" href="assets/css/footer.css?v=20260418-footer-1">
+    <link rel="stylesheet" href="assets/css/hero-inner.css?v=20260420-hero-inner-55">
+    <link rel="stylesheet" href="assets/css/internal-pages.css?v=20260420-internal-pages-4">
+    <link rel="stylesheet" href="assets/css/footer.css?v=20260420-preview-footer-10">
     <link rel="stylesheet" href="assets/css/fontawesome.css">
 
     <link rel="stylesheet" href="assets/css/pages/politika.css?v=20260419-politika-theme-2">
@@ -52,71 +56,7 @@
     }
     </script>
 
-    <style>
-    .internal-hero-scene,
-    .internal-scene-header {
-        display: none;
-    }
-
-    @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
-        .header.header--desktop-hero.internal-legacy-header {
-            display: none !important;
-        }
-
-        .header.header--desktop-hero.internal-legacy-header::before,
-        .header.header--desktop-hero.internal-legacy-header::after {
-            content: none !important;
-            display: none !important;
-        }
-
-        .internal-hero-scene {
-            position: relative;
-            z-index: 1;
-            display: block;
-            overflow: hidden;
-            isolation: isolate;
-            min-height: 200px;
-            height: 200px;
-            max-height: 200px;
-            width: 100vw;
-            margin: 0 calc(50% - 50vw);
-            background: transparent;
-        }
-
-        .internal-hero-stage {
-            position: relative;
-            width: 100%;
-            min-height: 670px;
-            aspect-ratio: 15 / 8;
-            height: auto;
-            overflow: hidden;
-        }
-
-        .internal-hero-scene .hero-stage__picture {
-            position: absolute;
-            inset: 0 -12px 0 -2px;
-            display: block;
-        }
-
-        .internal-hero-scene .hero-stage__picture img {
-            display: block;
-            width: calc(100% + 14px);
-            max-width: none;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 72%;
-            filter: none;
-        }
-
-        .internal-scene-header {
-            position: absolute;
-            inset: -20px 24px auto;
-            z-index: 4;
-            display: grid;
-        }
-    }
-</style>
-</head>
+    </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
     <header class="header header--desktop-hero internal-legacy-header">
@@ -468,9 +408,15 @@
     </footer>
 
     <!-- ========== SCRIPTS ========== -->
-    <script src="assets/js/header.js?v=20260420-header-split-3" defer></script>
+    <script src="assets/js/header.js?v=20260420-header-split-10" defer></script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 

@@ -83,6 +83,8 @@
   content: "\f3ed"; }
 .fa-layer-group::before {
   content: "\f5fd"; }
+.fa-ruler-combined::before {
+  content: "\f546"; }
 .fa-archway::before {
   content: "\f557"; }
 .fa-snowflake::before {
@@ -99,6 +101,8 @@
   content: "\f111"; }
 .fa-phone-alt::before {
   content: "\f879"; }
+.fa-truck::before {
+  content: "\f0d1"; }
 .fa-route::before {
   content: "\f4d7"; }
 .fa-tags::before {
