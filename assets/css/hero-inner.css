@@ -39,6 +39,11 @@
 
     .internal-hero-scene .hero-stage__picture {
         view-transition-name: none;
+        background-color: #dce6f0;
+        background-image: url('../images/hero/home-hero-main.jpg');
+        background-position: center 72%;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     .internal-scene-header {
@@ -495,6 +500,11 @@
         inset: 0 -12px 0 -2px;
         z-index: 0;
         display: block;
+        background-color: #dce6f0;
+        background-image: url('../images/hero/home-hero-main.jpg');
+        background-position: center 72%;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     .internal-hero-scene .hero-stage__picture img {
