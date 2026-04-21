@@ -166,16 +166,16 @@
 
 .preview-footer__legal-text {
     margin: 0;
-    color: rgba(72, 82, 93, 0.66);
-    font-size: 1.02rem;
-    line-height: 1.68;
+    color: rgba(58, 68, 79, 0.84);
+    font-size: 1.04rem;
+    line-height: 1.72;
     max-width: 37ch;
     text-wrap: pretty;
 }
 
 .preview-footer__label {
     display: block;
-    color: rgba(var(--footer-accent-rgb), 0.76);
+    color: rgba(var(--footer-accent-rgb), 0.86);
     font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 0.16em;
@@ -190,9 +190,9 @@
 .preview-footer__column p,
 .preview-footer__column a {
     margin: 0;
-    color: rgba(56, 60, 66, 0.82);
+    color: rgba(40, 46, 53, 0.92);
     font-size: 1.04rem;
-    line-height: 1.68;
+    line-height: 1.72;
     min-width: 0;
     text-wrap: pretty;
 }
@@ -201,13 +201,13 @@
     display: inline-flex;
     align-items: flex-start;
     gap: 10px;
-    font-weight: 540;
+    font-weight: 560;
     text-decoration: none;
 }
 
 .preview-footer__column p {
-    color: rgba(88, 96, 106, 0.74);
-    font-weight: 480;
+    color: rgba(68, 78, 88, 0.84);
+    font-weight: 510;
 }
 
 .preview-footer__column a:hover,
@@ -231,9 +231,9 @@
 
 .preview-footer__list li {
     margin: 0;
-    color: rgba(92, 100, 110, 0.72);
+    color: rgba(40, 46, 53, 0.92);
     font-size: 1.04rem;
-    line-height: 1.68;
+    line-height: 1.72;
     min-width: 0;
     text-wrap: pretty;
 }
@@ -242,9 +242,9 @@
     display: inline-flex;
     align-items: flex-start;
     gap: 10px;
-    color: rgba(56, 60, 66, 0.82);
+    color: rgba(40, 46, 53, 0.92);
     text-decoration: none;
-    font-weight: 540;
+    font-weight: 560;
     min-width: 0;
     overflow-wrap: break-word;
 }
@@ -268,26 +268,26 @@
     align-items: center;
     gap: 10px;
     padding-top: 26px;
-    border-top: 1px solid rgba(var(--footer-accent-rgb), 0.12);
+    border-top: 1px solid rgba(var(--footer-accent-rgb), 0.16);
     text-align: center;
 }
 
 .preview-footer__bottom p {
     margin: 0;
-    color: rgba(86, 94, 104, 0.68);
-    font-size: 0.9rem;
-    line-height: 1.62;
+    color: rgba(76, 86, 96, 0.8);
+    font-size: 0.94rem;
+    line-height: 1.66;
     max-width: 78ch;
     text-wrap: pretty;
 }
 
 .preview-footer__bottom p:first-child {
-    color: rgba(73, 83, 92, 0.66);
-    font-weight: 540;
+    color: rgba(66, 76, 86, 0.86);
+    font-weight: 560;
 }
 
 .preview-footer__bottom p:last-child {
-    color: rgba(100, 110, 120, 0.64);
+    color: rgba(84, 94, 104, 0.76);
 }
 
 .preview-footer__bottom a {

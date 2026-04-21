@@ -67,7 +67,7 @@
 .contacts-hero-copy h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2.05rem, 3.3vw, 3.2rem);
+    font-size: var(--type-title-section);
     line-height: 0.94;
     letter-spacing: -0.03em;
     color: var(--theme-text-strong);
@@ -77,8 +77,8 @@
     margin: 0;
     max-width: 58ch;
     color: var(--theme-text-muted);
-    font-size: 1rem;
-    line-height: 1.76;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .contacts-hero-pills {
@@ -130,6 +130,22 @@
     background: var(--theme-surface-gradient-soft);
 }
 
+.contact-form-card .contacts-card-header {
+    margin-bottom: 18px;
+}
+
+.contact-form-card .contacts-card-header h2 {
+    font-size: 1.86rem;
+    line-height: 1.08;
+}
+
+.contact-form-card .contacts-card-header p:last-child {
+    margin-top: 10px;
+    max-width: 36ch;
+    font-size: 0.98rem;
+    line-height: 1.58;
+}
+
 .contacts-card-header {
     margin-bottom: 16px;
 }
@@ -137,9 +153,9 @@
 .contacts-card-header h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-size: var(--type-title-section);
     line-height: 0.98;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     color: var(--theme-text-strong);
 }
 
@@ -147,8 +163,8 @@
     margin: 12px 0 0;
     max-width: 46ch;
     color: var(--theme-text-muted);
-    font-size: 0.98rem;
-    line-height: 1.72;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .contacts-overview-list {
@@ -185,14 +201,14 @@
 .contact-details h3 {
     margin: 0 0 6px;
     color: var(--theme-text);
-    font-size: 1rem;
+    font-size: var(--type-title-card);
     line-height: 1.3;
 }
 
 .contact-details p {
     color: var(--theme-text-muted);
-    font-size: 0.96rem;
-    line-height: 1.58;
+    font-size: var(--type-body-sm);
+    line-height: var(--leading-copy);
 }
 
 .contact-details a {
@@ -264,20 +280,20 @@
 .contact-form-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 14px;
 }
 
 .contact-form-meta__item {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 14px;
+    padding: 9px 13px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.86);
     border: 1px solid var(--theme-border);
     color: var(--theme-text);
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     font-weight: 700;
     line-height: 1.2;
 }
@@ -287,15 +303,15 @@
 }
 
 .yandex-form-frame {
-    padding: 12px;
+    padding: 10px;
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.86);
     border: 1px solid var(--theme-border);
 }
 
 .contact-form-card .yandex-form-embed {
-    min-height: 560px;
-    height: 560px;
+    min-height: 540px;
+    height: 540px;
 }
 
 .contacts-location-card {
@@ -314,15 +330,15 @@
 
 .contacts-location-copy h2 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 2.8vw, 2.6rem);
+    font-size: var(--type-title-section);
     line-height: 0.98;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 
 .contacts-location-copy > p:not(.contacts-card-kicker) {
     max-width: 42ch;
-    font-size: 0.98rem;
-    line-height: 1.72;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .location-badges {

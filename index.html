@@ -35,8 +35,10 @@
     <link rel="preload" href="assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" as="image" href="assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="assets/css/fontawesome.css?v=20260420-fa-2">
-    <link rel="stylesheet" href="assets/css/home.css?v=20260420-home-theme-53">
+    <link rel="preload" href="assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fontawesome.css?v=20260421-fa-3">
+    <link rel="stylesheet" href="assets/css/home.css?v=20260421-home-theme-94">
     <script id="home-structured-data" type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -260,7 +262,7 @@
                 </div>
             </article>
 
-            <article class="panel-scene__card panel-scene__card--light scene-reveal" data-scene-delay="120" data-panel-gallery>
+            <article class="panel-scene__card panel-scene__card--light panel-scene__card--powder scene-reveal" data-scene-delay="120" data-panel-gallery>
                 <div class="panel-scene__media" aria-hidden="true">
                     <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-powder-01.png" alt="Маляр наносит порошковое покрытие на металлические изделия" data-caption="Порошковая покраска">
                     <img class="panel-scene__image" src="assets/images/catalog/home-direction-powder-02.jpg" alt="Порошковая покраска металлических радиаторов" data-caption="Радиаторы и металлоизделия">
@@ -291,7 +293,7 @@
                             <span class="scene-chip">Порошковая покраска металла</span>
                             <span class="panel-scene__eyebrow"><i class="fas fa-spray-can-sparkles" aria-hidden="true"></i> Цвет, покрытие, фактура</span>
                             <h3>Диски, конструкции, оборудование и интерьер</h3>
-                            <p>Подготавливаем металл, подбираем цвет и покрытие и выполняем стойкую порошковую покраску для штампованных дисков, конструкций, оборудования и декоративных изделий.</p>
+                            <p>Подготавливаем металл, подбираем цвет и наносим стойкое порошковое покрытие для дисков, конструкций, оборудования и декоративных изделий.</p>
                         </div>
 
                         <div class="panel-scene__facts">
@@ -468,35 +470,47 @@
             <section id="request-form" class="home-tail__section home-tail__section--request" aria-label="Получить расчёт">
                 <div class="home-tail__request">
                     <div class="home-tail__request-copy">
-                        <span class="route-scene__eyebrow"><i class="fas fa-calculator" aria-hidden="true"></i> Получить расчёт</span>
-                        <h3>Рассчитайте стоимость ворот, забора или покраски</h3>
-                        <p>Оставьте заявку и получите предварительный расчёт с понятным подбором решения под объект, бюджет и задачу.</p>
+                        <div class="home-tail__request-intro">
+                            <span class="home-tail__request-kicker">Под объект, бюджет и задачу</span>
+                            <h3>Подготовим расчёт и предложим решение</h3>
+                            <p>Сориентируем по стоимости и подберём рабочий вариант под задачу и бюджет.</p>
+                        </div>
 
                         <div class="home-tail__advantages">
-                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Ворота, калитки и заборы</span>
-                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Каркасы и автоматика</span>
-                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Раздвижные решётки</span>
-                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Пескоструй и порошковая покраска</span>
+                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Ворота и заборы</span>
+                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Автоматика и монтаж</span>
+                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Каркасы и решётки</span>
+                            <span><i class="fas fa-check-circle" aria-hidden="true"></i> Пескоструй и покраска</span>
                         </div>
                         <div class="home-tail__contact">
-                            <span class="home-tail__contact-eyebrow">Быстрый контакт</span>
-                            <p>Если удобнее, свяжитесь с нами напрямую по телефону или в мессенджере.</p>
-                            <a class="home-tail__contact-link" href="tel:+79376154629">
-                                <i class="fas fa-phone" aria-hidden="true"></i>
-                                <span>8 937 615 46 29</span>
-                            </a>
-                            <a class="home-tail__contact-link" href="tel:+79625542260">
-                                <i class="fas fa-phone" aria-hidden="true"></i>
-                                <span>8 962 554 22 60</span>
-                            </a>
+                            <div class="home-tail__contact-header">
+                                <span class="home-tail__contact-eyebrow">Прямая связь</span>
+                                <p>Позвоните или напишите нам. Быстро уточним задачу и сориентируем по стоимости.</p>
+                            </div>
+                            <div class="home-tail__contact-links">
+                                <a class="home-tail__contact-link home-tail__contact-link--primary" href="tel:+79376154629">
+                                    <i class="fas fa-phone" aria-hidden="true"></i>
+                                    <span class="home-tail__contact-link-copy">
+                                        <strong>8 937 615 46 29</strong>
+                                        <small>Основной номер</small>
+                                    </span>
+                                </a>
+                                <a class="home-tail__contact-link home-tail__contact-link--secondary" href="tel:+79625542260">
+                                    <i class="fas fa-phone" aria-hidden="true"></i>
+                                    <span class="home-tail__contact-link-copy">
+                                        <strong>8 962 554 22 60</strong>
+                                        <small>Дополнительный номер</small>
+                                    </span>
+                                </a>
+                            </div>
                             <div class="home-tail__contact-actions">
                                 <a href="https://max.ru" target="_blank" rel="noopener noreferrer" class="panel-scene__action panel-scene__action--ghost panel-scene__action--ghost-light">
                                     <i class="fas fa-comment-dots" aria-hidden="true"></i>
-                                    Max
+                                    Написать в Max
                                 </a>
                                 <a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer" class="panel-scene__action panel-scene__action--ghost panel-scene__action--ghost-light">
                                     <i class="fab fa-telegram-plane" aria-hidden="true"></i>
-                                    Telegram
+                                    Написать в Telegram
                                 </a>
                             </div>
                         </div>
@@ -504,9 +518,8 @@
 
                     <div class="home-tail__request-side">
                         <div class="home-tail__form-card">
-                            <span class="home-tail__form-eyebrow">Быстрый расчёт</span>
-                            <h4>Оставить заявку</h4>
-                            <p>Оставьте контакты, и мы свяжемся с вами в течение 15 минут, чтобы уточнить задачу и предложить удобный вариант.</p>
+                            <h4><span>Оставить заявку</span><span>на расчёт</span></h4>
+                            <p>Оставьте контакты. Свяжемся, уточним задачу и подготовим расчёт.</p>
                             <div class="home-tail__iframe-frame">
                                 <iframe
                                     class="home-tail__iframe"
@@ -574,6 +587,7 @@
     <script src="assets/js/home.js?v=20260420-home-prefetch-2" defer></script>
 </body>
 </html>
+
 
 
 

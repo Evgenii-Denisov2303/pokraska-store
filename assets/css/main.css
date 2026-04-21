@@ -215,6 +215,18 @@ html {
 :root {
     --font-body: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+    --type-display-callout: clamp(4rem, 7vw, 6.6rem);
+    --type-display-feature: clamp(2.6rem, 4.2vw, 4.45rem);
+    --type-display-page: clamp(2.7rem, 4.4vw, 4.1rem);
+    --type-title-section: clamp(2.2rem, 3.25vw, 3.1rem);
+    --type-title-card: clamp(1.08rem, 0.98rem + 0.34vw, 1.3rem);
+    --type-body-lg: clamp(1.04rem, 1rem + 0.14vw, 1.12rem);
+    --type-body-md: clamp(1rem, 0.98rem + 0.08vw, 1.05rem);
+    --type-body-sm: clamp(0.94rem, 0.91rem + 0.08vw, 0.98rem);
+    --type-meta: 0.82rem;
+    --leading-display: 0.94;
+    --leading-body: 1.72;
+    --leading-copy: 1.58;
     --theme-bg: #f6f1e9;
     --theme-bg-deep: #eee5d8;
     --theme-bg-soft: #fcf9f4;
@@ -931,6 +943,9 @@ body {
 
 .faq-question {
     color: #24364b;
+    font-size: var(--type-title-card);
+    line-height: 1.26;
+    font-weight: 700;
 }
 
 .faq-question:after {
@@ -1234,12 +1249,12 @@ body {
     text-align: center;
     color: var(--theme-text-strong);
     font-family: var(--font-display);
-    font-size: clamp(2.15rem, 3.1vw, 3rem);
+    font-size: var(--type-title-section);
     margin-bottom: 0;
     font-weight: 700;
     position: relative;
     line-height: 0.98;
-    letter-spacing: -0.028em;
+    letter-spacing: -0.03em;
     text-wrap: balance;
 }
 
@@ -1257,9 +1272,9 @@ body {
     text-align: center;
     color: var(--theme-text-muted);
     margin: 12px auto 32px;
-    font-size: 1.02rem;
+    font-size: var(--type-body-md);
     max-width: 680px;
-    line-height: 1.72;
+    line-height: var(--leading-body);
 }
 
 /* ========== FAQ ========== */
@@ -1307,7 +1322,8 @@ body {
 .faq-answer {
     margin-top: 12px;
     color: var(--theme-text-muted);
-    line-height: 1.6;
+    font-size: var(--type-body-sm);
+    line-height: var(--leading-copy);
 }
 
 /* ========== PROCESS TIMELINE ========== */

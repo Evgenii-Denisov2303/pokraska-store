@@ -40,8 +40,10 @@
 
 .payment-docs-hero h1 {
     margin: 18px 0 16px;
-    font-size: clamp(2.1rem, 3.6vw, 3.4rem);
-    line-height: 0.98;
+    font-family: var(--font-display);
+    font-size: var(--type-display-page);
+    line-height: var(--leading-display);
+    letter-spacing: -0.03em;
     color: #ffffff;
 }
 
@@ -55,8 +57,8 @@
 .payment-docs-hero__text {
     max-width: 720px;
     color: rgba(255, 255, 255, 0.82);
-    font-size: 1rem;
-    line-height: 1.68;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .payment-docs-hero__chips {
@@ -110,12 +112,15 @@
 .payment-docs-panel h2 {
     margin-bottom: 12px;
     color: var(--theme-text-strong);
-    font-size: 1.45rem;
+    font-family: var(--font-display);
+    font-size: var(--type-title-card);
+    line-height: 1.1;
 }
 
 .payment-docs-panel p {
     color: var(--theme-text-muted);
-    line-height: 1.7;
+    font-size: var(--type-body-sm);
+    line-height: var(--leading-body);
 }
 
 .payment-docs-panel__meta {
@@ -158,13 +163,17 @@
 
 .payment-docs-section__heading h2 {
     color: var(--theme-text-strong);
-    font-size: 2rem;
+    font-family: var(--font-display);
+    font-size: var(--type-title-section);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
 }
 
 .payment-docs-section__heading p {
     color: var(--theme-text-muted);
     max-width: 720px;
-    line-height: 1.7;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .payment-docs-grid {
@@ -197,12 +206,14 @@
 .payment-docs-card h3 {
     margin-bottom: 10px;
     color: var(--theme-text-strong);
-    font-size: 1.12rem;
+    font-size: var(--type-title-card);
+    line-height: 1.22;
 }
 
 .payment-docs-card p {
     color: var(--theme-text-muted);
-    line-height: 1.65;
+    font-size: var(--type-body-sm);
+    line-height: var(--leading-copy);
 }
 
 .payment-docs-steps {
@@ -237,12 +248,14 @@
 .payment-docs-step h3 {
     margin-bottom: 10px;
     color: var(--theme-text-strong);
-    font-size: 1.15rem;
+    font-size: var(--type-title-card);
+    line-height: 1.22;
 }
 
 .payment-docs-step p {
     color: var(--theme-text-muted);
-    line-height: 1.7;
+    font-size: var(--type-body-sm);
+    line-height: var(--leading-body);
 }
 
 .payment-docs-cta {
@@ -263,13 +276,17 @@
 .payment-docs-cta h2 {
     margin-bottom: 10px;
     color: #ffffff;
-    font-size: 1.9rem;
+    font-family: var(--font-display);
+    font-size: var(--type-title-section);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
 }
 
 .payment-docs-cta p {
     max-width: 720px;
     color: rgba(255, 255, 255, 0.84);
-    line-height: 1.7;
+    font-size: var(--type-body-md);
+    line-height: var(--leading-body);
 }
 
 .payment-docs-cta__actions {
