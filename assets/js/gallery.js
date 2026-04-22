@@ -11,8 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
         powder: 'Цвет, фактура и стойкое покрытие для металла.'
     };
 
-    const counterElement = document.querySelector('.counter-number');
+    const proofCounterElement = document.querySelector('[data-gallery-proof-counter]');
+    const proofSectionElement = document.querySelector('[data-gallery-proof-section]');
     const galleryGrid = document.querySelector('[data-gallery-grid]');
+    const galleryToolbarTitle = document.querySelector('[data-gallery-toolbar-title]');
+    const galleryToolbarCopy = document.querySelector('[data-gallery-toolbar-copy]');
     const urlParams = new URLSearchParams(window.location.search);
     const filterFromUrl = urlParams.get('filter');
 
@@ -24,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const hideTimeouts = new WeakMap();
 
     function getFilterButtons() {
-        return Array.from(document.querySelectorAll('.gallery-filters .filter-btn'));
+        return Array.from(document.querySelectorAll('[data-gallery-filters] .filter-btn'));
     }
 
     function getGalleryItems() {
@@ -37,6 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function getShowMoreMeta() {
         return document.querySelector('.gallery-more__meta');
+    }
+
+    function getShowMoreHelper() {
+        return document.querySelector('.gallery-more__helper');
+    }
+
+    function getFiltersShell() {
+        return document.getElementById('gallery-filters');
     }
 
     function getGalleryEmptyState() {
@@ -64,6 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return categoryNotes[category] || 'Реальный объект из практики компании.';
     }
 
+    function getDisplayTitle(item) {
+        const rawTitle = String(item?.title || '').trim();
+        if (!rawTitle) return '';
+        return /^(Работа|Фото)\s+\d+$/i.test(rawTitle) ? '' : rawTitle;
+    }
+
     function getFilterLabel(filterValue) {
         const button = getFilterButtons().find((node) => node.getAttribute('data-filter') === filterValue);
         if (!button) return 'выбранной категории';
@@ -74,6 +91,22 @@ document.addEventListener('DOMContentLoaded', function () {
         getFilterButtons().forEach((button) => {
             button.classList.toggle('active', button.getAttribute('data-filter') === filterValue);
         });
+    }
+
+    function updateToolbarIntro(filterValue) {
+        const button = getFilterButtons().find((node) => node.getAttribute('data-filter') === filterValue)
+            || getFilterButtons().find((node) => node.getAttribute('data-filter') === 'all');
+
+        if (!button) return;
+
+        if (galleryToolbarTitle) {
+            galleryToolbarTitle.textContent = button.getAttribute('data-intro-title') || 'Ворота, заборы и покраска';
+        }
+
+        if (galleryToolbarCopy) {
+            galleryToolbarCopy.textContent = button.getAttribute('data-intro-copy')
+                || 'Для въезда, участка, фасада и производственных задач.';
+        }
     }
 
     function setGridBusy(isBusy) {
@@ -90,6 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
         galleryGrid.innerHTML = items.map((item) => {
             const matchesFilter = normalizedFilter === 'all' || item.category === normalizedFilter;
             const isVisible = matchesFilter && shownInFilter < initialVisibleCount;
+            const displayTitle = getDisplayTitle(item);
+            const workInfoClass = displayTitle ? 'work-info' : 'work-info work-info--compact';
 
             if (matchesFilter) {
                 shownInFilter += 1;
@@ -103,9 +138,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         <i class="fas fa-expand-alt"></i>
                     </a>
                 </div>
-                <div class="work-info">
+                <div class="${workInfoClass}">
                     <span class="work-category">${escapeHtml(item.label)}</span>
-                    <h3 class="work-title">${escapeHtml(item.title)}</h3>
+                    ${displayTitle ? `<h3 class="work-title">${escapeHtml(displayTitle)}</h3>` : ''}
                     <p class="work-note">${escapeHtml(getCategoryNote(item.category))}</p>
                 </div>
             </div>
@@ -194,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateShowMore(totalItems) {
         const showMoreButton = getShowMoreButton();
         const showMoreMeta = getShowMoreMeta();
+        const showMoreHelper = getShowMoreHelper();
         if (!showMoreButton) return;
         if (!showMoreButton.dataset.defaultLabel) {
             showMoreButton.dataset.defaultLabel = showMoreButton.textContent.trim();
@@ -211,11 +247,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const batchSize = Math.min(pageSize, remaining);
             showMoreButton.style.display = 'inline-flex';
             showMoreButton.textContent = `${showMoreButton.dataset.defaultLabel} (${batchSize})`;
+            if (showMoreHelper) {
+                showMoreHelper.hidden = visibleCount <= pageSize;
+            }
             return;
         }
 
         showMoreButton.style.display = 'none';
         showMoreButton.textContent = showMoreButton.dataset.defaultLabel;
+        if (showMoreHelper) {
+            showMoreHelper.hidden = !(totalItems > pageSize && visibleCount > pageSize);
+        }
     }
 
     function updateEmptyState(totalItems, filterValue) {
@@ -268,6 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         setActiveFilterButton(filterValue);
+        updateToolbarIntro(filterValue);
 
         const filteredItems = galleryItems.filter((item) => {
             const itemCategory = item.getAttribute('data-category');
@@ -293,12 +336,12 @@ document.addEventListener('DOMContentLoaded', function () {
         updateShowMore(filteredItems.length);
     }
 
-    function animateCounter() {
-        if (!counterElement) return;
-        if (counterElement.dataset.counterAnimated === 'true') return;
-        counterElement.dataset.counterAnimated = 'true';
+    function animateProofCounter() {
+        if (!proofCounterElement) return;
+        if (proofCounterElement.dataset.counterAnimated === 'true') return;
+        proofCounterElement.dataset.counterAnimated = 'true';
 
-        const rawValue = counterElement.textContent || '200+';
+        const rawValue = proofCounterElement.textContent || '200+';
         const match = rawValue.match(/\d+/);
         const finalNumber = match ? Number(match[0]) : 200;
         const suffix = rawValue.includes('+') ? '+' : '';
@@ -313,12 +356,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentNumber = finalNumber;
                 clearInterval(counterInterval);
             }
-            counterElement.textContent = Math.floor(currentNumber) + suffix;
+            proofCounterElement.textContent = Math.floor(currentNumber) + suffix;
         }, interval);
     }
 
+    function revealProofSection() {
+        if (proofSectionElement) {
+            proofSectionElement.classList.add('is-proof-visible');
+        }
+        window.setTimeout(() => {
+            animateProofCounter();
+        }, 180);
+    }
+
+    function setupProofCounter() {
+        if (!proofCounterElement) return;
+
+        if (!proofSectionElement || typeof IntersectionObserver !== 'function') {
+            revealProofSection();
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                revealProofSection();
+                observer.disconnect();
+            });
+        }, {
+            threshold: 0.35
+        });
+
+        observer.observe(proofSectionElement);
+    }
+
     document.addEventListener('click', async (event) => {
-        const filterButton = event.target.closest('.gallery-filters .filter-btn');
+        const filterButton = event.target.closest('[data-gallery-filters] .filter-btn');
         if (filterButton) {
             await ensureGalleryItems();
             const filterValue = filterButton.getAttribute('data-filter') || 'all';
@@ -338,13 +411,35 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        const backToFiltersButton = event.target.closest('[data-gallery-back-to-filters]');
+        if (backToFiltersButton) {
+            const filtersShell = getFiltersShell();
+            if (filtersShell) {
+                filtersShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            return;
+        }
+
+        const collapseButton = event.target.closest('[data-gallery-collapse]');
+        if (collapseButton) {
+            visibleCount = pageSize;
+            applyFilter(activeFilter, false);
+            const filtersShell = getFiltersShell() || galleryGrid;
+            if (filtersShell) {
+                window.setTimeout(() => {
+                    filtersShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 40);
+            }
+            return;
+        }
+
         const filterLink = event.target.closest('a[data-filter]');
         if (filterLink) {
             event.preventDefault();
             await ensureGalleryItems();
             const filterValue = filterLink.getAttribute('data-filter') || 'all';
             applyFilter(filterValue, true);
-            const filters = document.querySelector('.gallery-filters');
+            const filters = document.querySelector('[data-gallery-filters]');
             if (filters) {
                 filters.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
@@ -368,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function initializeGallery() {
         if (!galleryGrid || !getFilterButtons().length) {
-            animateCounter();
+            setupProofCounter();
             return;
         }
 
@@ -377,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function () {
             applyFilter(normalizeFilterValue(filterFromUrl), true);
         }
 
-        animateCounter();
+        setupProofCounter();
     }
 
     initializeGallery();

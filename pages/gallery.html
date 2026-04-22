@@ -56,17 +56,17 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../assets/css/main.css?v=20260421-shell-theme-17">
-    <link rel="preload" as="style" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
+    <link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
-    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260420-internal-pages-4">
-    <link rel="stylesheet" href="../assets/css/footer.css?v=20260421-preview-footer-11">
+    <link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
+    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260422-internal-pages-5">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-16">
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-3">
-    <link rel="stylesheet" href="../assets/css/pages/gallery.css?v=20260421-gallery-refine-15">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-4">
+    <link rel="stylesheet" href="../assets/css/pages/gallery.css?v=20260422-gallery-refine-55">
 
 </head>
 <body id="top">
@@ -192,70 +192,64 @@
         <div class="container">
             <!-- Заголовок -->
             <div class="gallery-header">
-                <span class="gallery-eyebrow"><i class="fas fa-camera-retro" aria-hidden="true"></i> Реальные объекты</span>
-                <h1><i class="fas fa-images"></i> Галерея наших работ</h1>
-                <p class="subtitle">
-                    Реальные ворота, заборы, калитки, пескоструйная обработка и порошковая покраска. Без абстрактных рендеров:
-                    только готовые объекты, выполненные в Казани и по республике.
-                </p>
-                <div class="gallery-summary" aria-label="Ключевые факты по галерее">
-                    <article class="gallery-summary__item">
-                        <span class="gallery-summary__label">С 2014 года</span>
-                        <strong>200+ объектов</strong>
-                        <p>Реальные выполненные работы по воротам, заборам, покраске и монтажу.</p>
-                    </article>
-                    <article class="gallery-summary__item">
-                        <span class="gallery-summary__label">По направлениям</span>
-                        <strong>Ворота, заборы, покраска</strong>
-                        <p>Откатные и распашные ворота, калитки, заборы, автоматика, пескоструй и порошковая покраска.</p>
-                    </article>
-                    <article class="gallery-summary__item">
-                        <span class="gallery-summary__label">По географии</span>
-                        <strong>Казань и область</strong>
-                        <p>Частные участки, въездные группы, фасады и производственные заказы.</p>
-                    </article>
+                <div class="gallery-heading">
+                    <div class="gallery-heading__lead">
+                        <p class="gallery-heading__eyebrow">Реальные объекты</p>
+                        <div class="gallery-heading__title-row">
+                            <span class="gallery-heading__icon" aria-hidden="true">
+                                <i class="fas fa-images"></i>
+                            </span>
+                            <h1 class="section-title gallery-title">Галерея наших работ</h1>
+                        </div>
+                    </div>
+                    <p class="section-subtitle gallery-subtitle">
+                        Реальные ворота, заборы, калитки и покраска.
+                        Ниже собрали объекты из Казани и по республике.
+                    </p>
                 </div>
             </div>
 
             <!-- Фильтры -->
-            <div class="gallery-toolbar">
-                <div class="gallery-toolbar__copy">
-                    <span class="gallery-toolbar__eyebrow">Категории работ</span>
-                    <p>Выберите нужное направление и быстро откройте похожие объекты. Так страница работает как понятный каталог реализованных работ, а не как случайная лента фотографий.</p>
+            <div class="gallery-filter-shell" id="gallery-filters">
+                <div class="gallery-filter-intro">
+                    <h2 class="gallery-filter-intro__title" data-gallery-toolbar-title>Ворота, заборы и покраска</h2>
+                    <p class="gallery-filter-intro__copy" data-gallery-toolbar-copy>Для въезда, участка, фасада и производственных задач.</p>
                 </div>
-                <div class="gallery-filters">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-layer-group"></i> Все работы
-                </button>
-                <button class="filter-btn" data-filter="sliding">
-                    <i class="fas fa-expand-alt"></i> Откатные
-                </button>
-                <button class="filter-btn" data-filter="swing">
-                    <i class="fas fa-archway"></i> Распашные
-                </button>
-                <button class="filter-btn" data-filter="wicket">
-                    <i class="fas fa-lock"></i> Калитки
-                </button>
-                <button class="filter-btn" data-filter="fence">
-                    <i class="fas fa-layer-group"></i> Заборы
-                </button>
-                <button class="filter-btn" data-filter="automation">
-                    <i class="fas fa-cogs"></i> Автоматика
-                </button>
-                <button class="filter-btn" data-filter="install">
-                    <i class="fas fa-tools"></i> Монтаж
-                </button>
-                <button class="filter-btn" data-filter="sandblast">
-                    <i class="fas fa-wind"></i> Пескоструй
-                </button>
-                <button class="filter-btn" data-filter="powder">
-                    <i class="fas fa-paint-roller"></i> Порошковая покраска
-                </button>
+                <div class="gallery-filter-body">
+                    <div class="gallery-filter-list" data-gallery-filters>
+                        <button class="filter-btn active" data-filter="all" data-intro-title="Ворота, заборы и покраска" data-intro-copy="Для въезда, участка, фасада и производственных задач.">
+                            <i class="fas fa-layer-group"></i> Все работы
+                        </button>
+                        <button class="filter-btn" data-filter="sliding" data-intro-title="Откатные ворота" data-intro-copy="Для въезда, фасада и участков с откатом вдоль забора.">
+                            <i class="fas fa-expand-alt"></i> Откатные
+                        </button>
+                        <button class="filter-btn" data-filter="swing" data-intro-title="Распашные ворота" data-intro-copy="Для частного дома, двора и въездной группы.">
+                            <i class="fas fa-archway"></i> Распашные
+                        </button>
+                        <button class="filter-btn" data-filter="wicket" data-intro-title="Калитки" data-intro-copy="Для прохода, отдельного входа и единого стиля с воротами.">
+                            <i class="fas fa-lock"></i> Калитки
+                        </button>
+                        <button class="filter-btn" data-filter="fence" data-intro-title="Заборы" data-intro-copy="Для участка, фасада, улицы и нужной приватности.">
+                            <i class="fas fa-layer-group"></i> Заборы
+                        </button>
+                        <button class="filter-btn" data-filter="automation" data-intro-title="Автоматика" data-intro-copy="Для управления воротами, привода и уверенной работы системы.">
+                            <i class="fas fa-cogs"></i> Автоматика
+                        </button>
+                        <button class="filter-btn" data-filter="install" data-intro-title="Монтаж" data-intro-copy="Для монтажа, точной геометрии и сдачи объекта.">
+                            <i class="fas fa-tools"></i> Монтаж
+                        </button>
+                        <button class="filter-btn" data-filter="sandblast" data-intro-title="Пескоструй" data-intro-copy="Для очистки металла перед грунтом и покрытием.">
+                            <i class="fas fa-wind"></i> Пескоструй
+                        </button>
+                        <button class="filter-btn" data-filter="powder" data-intro-title="Порошковая покраска" data-intro-copy="Для стойкого покрытия, цвета и фактуры металла.">
+                            <i class="fas fa-paint-roller"></i> Порошковая покраска
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Галерея -->
-            <div class="gallery-grid" data-gallery-grid data-gallery-source="../content/gallery-items.json?v=20260420-gallery-items-2" aria-live="polite" aria-busy="true">
+            <div class="gallery-grid" id="gallery-grid" data-gallery-grid data-gallery-source="../content/gallery-items.json?v=20260420-gallery-items-2" aria-live="polite" aria-busy="true">
                 <article class="gallery-item gallery-item--skeleton" aria-hidden="true"><div class="gallery-image"></div><div class="work-info"><span class="gallery-skeleton-pill"></span><span class="gallery-skeleton-line gallery-skeleton-line--title"></span><span class="gallery-skeleton-line gallery-skeleton-line--note"></span></div></article>
                 <article class="gallery-item gallery-item--skeleton" aria-hidden="true"><div class="gallery-image"></div><div class="work-info"><span class="gallery-skeleton-pill"></span><span class="gallery-skeleton-line gallery-skeleton-line--title"></span><span class="gallery-skeleton-line gallery-skeleton-line--note"></span></div></article>
                 <article class="gallery-item gallery-item--skeleton" aria-hidden="true"><div class="gallery-image"></div><div class="work-info"><span class="gallery-skeleton-pill"></span><span class="gallery-skeleton-line gallery-skeleton-line--title"></span><span class="gallery-skeleton-line gallery-skeleton-line--note"></span></div></article>
@@ -277,34 +271,42 @@
             <div class="gallery-more">
                 <p class="gallery-more__meta" aria-live="polite">Показано 12 из всех работ</p>
                 <button class="btn btn-outline gallery-show-more" type="button">Показать еще</button>
-            </div>
-
-            <!-- Счетчик работ -->
-            <div class="work-counter">
-                <div class="work-counter__lead">
-                    <span class="work-counter__eyebrow">Опыт и объём работ</span>
-                    <div class="counter-number">200+</div>
+                <div class="gallery-more__helper" hidden>
+                    <div class="gallery-more__actions">
+                        <button class="btn btn-outline gallery-more__action" type="button" data-gallery-back-to-filters>
+                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            Наверх к фильтрам
+                        </button>
+                        <button class="btn btn-outline gallery-more__action gallery-more__action--quiet" type="button" data-gallery-collapse>
+                            <i class="fas fa-compress-alt" aria-hidden="true"></i>
+                            Свернуть список
+                        </button>
+                    </div>
                 </div>
-                <p class="counter-text">
-                    Объектов выполнено с 2014 года. Контроль качества на каждом этапе изготовления, монтажа и покраски,
-                    с понятным сопровождением заказа и гарантией на готовые конструкции.
-                </p>
             </div>
 
             <!-- Призыв к действию -->
-            <div class="order-cta">
-                <div class="order-cta__copy">
-                    <span class="order-cta__eyebrow">Нужен похожий результат</span>
-                    <h2>Подберём решение под участок, фасад или производство</h2>
-                    <p>Если в галерее нашли близкий пример, оставьте заявку или свяжитесь с нами напрямую. Поможем подобрать конструкцию, покрытие, автоматику и подготовим расчёт под вашу задачу.</p>
-                </div>
-                <div class="order-cta__actions">
-                    <a href="../index.html#request-form" class="btn btn-primary">
-                        <i class="fas fa-calculator"></i> Получить расчет
-                    </a>
-                    <a href="contacts.html" class="btn btn-secondary">
-                        <i class="fas fa-phone-alt"></i> Контакты и консультация
-                    </a>
+            <div class="order-cta" data-gallery-proof-section>
+                <div class="order-cta__layout">
+                    <div class="order-cta__copy">
+                        <p class="order-cta__eyebrow">Похожий проект</p>
+                        <h2>Подберём похожее решение под ваш объект</h2>
+                        <p>Если в галерее нашли подходящий пример, подскажем конструкцию, покрытие и автоматику под задачу, бюджет и условия монтажа.</p>
+                        <div class="order-cta__actions">
+                            <a href="../index.html#request-form" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i> Подобрать решение
+                            </a>
+                            <a href="contacts.html" class="btn btn-secondary">
+                                <i class="fas fa-comments"></i> Обсудить проект
+                            </a>
+                        </div>
+                    </div>
+                    <aside class="order-cta__proof" aria-label="Опыт и объём работ">
+                        <span class="order-cta__proof-label">С 2014 года</span>
+                        <span class="order-cta__proof-value"><span class="order-cta__proof-number" data-gallery-proof-counter>200+</span></span>
+                        <span class="order-cta__proof-note">реальных объектов</span>
+                        <span class="order-cta__proof-meta">Ворота, заборы, покраска и монтаж</span>
+                    </aside>
                 </div>
             </div>
         </div>
@@ -365,24 +367,9 @@
 <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/header.js?v=20260420-header-split-11" defer></script>
     <script src="../assets/js/lightbox.js?v=20260420-lightbox-1" defer></script>
-    <script src="../assets/js/gallery.js?v=20260420-gallery-shell-7" defer></script>
+    <script src="../assets/js/gallery.js?v=20260422-gallery-shell-16" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

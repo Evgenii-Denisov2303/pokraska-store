@@ -46,41 +46,41 @@
         }
     }
     </script>
-    <script type="application/ld+json">
+    <script id="catalog-faq-schema" type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [
             {
                 "@type": "Question",
-                "name": "Сколько стоят откатные ворота?",
+                "name": "От чего зависит стоимость откатных ворот?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Стоимость зависит от размеров, заполнения, автоматики и комплекта фурнитуры. Рассчитаем под ключ."
+                    "text": "Стоимость рассчитываем по размерам проема, заполнению, каркасу, автоматике, фундаменту и монтажу. Итог зависит от комплектации и условий объекта."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Какие материалы заполнения доступны?",
+                "name": "Нужен ли фундамент под откатные ворота?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Профнастил, металлический сайдинг, штакетник, жалюзи."
+                    "text": "Обычно да. Тип основания зависит от проема, грунта, веса конструкции и схемы монтажа, поэтому решение уточняем после замера."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Какие сроки изготовления?",
+                "name": "Можно сразу подобрать автоматику?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Сроки фиксируем в договоре. Обычно выполняем заказ в течение трёх недель, точные даты зависят от выбранной комплектации."
+                    "text": "Да. Подбираем привод по весу створки, интенсивности использования и условиям работы на объекте."
                 }
             },
             {
                 "@type": "Question",
-                "name": "Есть ли гарантия?",
+                "name": "Какие сроки изготовления и монтажа?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Гарантия на конструкцию — 1 год. На порошковую покраску — 6 месяцев. На автоматику — 2 года от завода-изготовителя."
+                    "text": "Сроки называем после замера и согласования комплектации. Отдельно учитываем подготовку основания, покраску и монтаж на объекте."
                 }
             }
         ]
@@ -94,17 +94,17 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../assets/css/main.css?v=20260421-shell-theme-17">
-    <link rel="preload" as="style" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
+    <link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
-    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260420-internal-pages-4">
-    <link rel="stylesheet" href="../assets/css/footer.css?v=20260421-preview-footer-11">
+    <link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
+    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260422-internal-pages-5">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-16">
 <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-3">
-    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260421-services-theme-18">
+<link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-4">
+    <link rel="stylesheet" href="../assets/css/pages/services.css?v=20260422-services-theme-56">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
@@ -228,30 +228,29 @@
     <section class="catalog-page">
         <div class="container">
             <h1 class="visually-hidden">Каталог ворот, заборов и автоматики в Казани</h1>
-                <div class="catalog-layout" data-catalog-layout data-active-group="gates">
+                <div class="catalog-layout" id="catalog-categories" data-catalog-layout data-active-group="gates">
                     <aside class="catalog-sidebar" aria-label="Категории каталога">
                         <div class="catalog-nav-shell">
                             <div class="catalog-nav-intro">
-                                <span class="catalog-nav-eyebrow">Каталог</span>
-                                <h2 class="catalog-nav-title">Ворота, заборы и автоматика</h2>
-                                <p class="catalog-nav-caption">Слева смысл, справа выбор: откройте раздел и сразу переключайтесь по типам без лишней прокрутки.</p>
+                                <h2 class="catalog-nav-intro__title" data-catalog-nav-intro-title>Ворота и калитки</h2>
+                                <p class="catalog-nav-intro__copy" data-catalog-nav-intro-copy>Для въезда, прохода и нестандартных проемов.</p>
                             </div>
 
                             <div class="catalog-nav-body">
                                 <div class="catalog-group-tabs" role="tablist" aria-label="Группы каталога">
-                                    <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates">
+                                    <button class="catalog-group-tab is-active" type="button" data-catalog-group="gates" data-catalog-group-description="Решения для въезда, прохода и нестандартных проемов под размеры объекта." data-catalog-group-intro-title="Ворота и калитки" data-catalog-group-intro-copy="Для въезда, прохода и нестандартных проемов.">
                                         <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-archway"></i></span>
                                         <span class="catalog-group-tab__title">Ворота</span>
                                     </button>
-                                    <button class="catalog-group-tab" type="button" data-catalog-group="fences">
+                                    <button class="catalog-group-tab" type="button" data-catalog-group="fences" data-catalog-group-description="Ограждения под приватность, защиту и внешний вид участка." data-catalog-group-intro-title="Заборы" data-catalog-group-intro-copy="Для приватности, защиты и аккуратного силуэта участка.">
                                         <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-layer-group"></i></span>
                                         <span class="catalog-group-tab__title">Заборы</span>
                                     </button>
-                                    <button class="catalog-group-tab" type="button" data-catalog-group="garage">
+                                    <button class="catalog-group-tab" type="button" data-catalog-group="garage" data-catalog-group-description="Решения для гаража, фасада и защищенных проемов." data-catalog-group-intro-title="Гараж и защита" data-catalog-group-intro-copy="Для гаража, фасада и защищенных проемов.">
                                         <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></span>
                                         <span class="catalog-group-tab__title">Гараж и защита</span>
                                     </button>
-                                    <button class="catalog-group-tab" type="button" data-catalog-group="automation">
+                                    <button class="catalog-group-tab" type="button" data-catalog-group="automation" data-catalog-group-description="Приводы, комплекты и аксессуары для удобного управления воротами." data-catalog-group-intro-title="Автоматика" data-catalog-group-intro-copy="Для легкого управления и ежедневного комфорта.">
                                         <span class="catalog-group-tab__icon" aria-hidden="true"><i class="fas fa-cogs"></i></span>
                                         <span class="catalog-group-tab__title">Автоматика</span>
                                     </button>
@@ -260,37 +259,37 @@
                                 <div class="catalog-group-panels">
                                     <div class="catalog-group-panel is-active" data-catalog-group-panel="gates">
                                         <div class="catalog-group-panel__links">
-                                            <button class="catalog-link is-active" type="button" data-catalog-tab="catalog-panel-sliding">Откатные ворота</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sliding-frame">Каркас откатных ворот</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing">Распашные ворота</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-swing-frame">Каркас распашных ворот</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-wicket">Калитки</button>
+                                            <button class="catalog-link is-active" type="button" aria-label="Откатные ворота" data-catalog-tab="catalog-panel-sliding" data-catalog-tab-short="Откатные" data-catalog-tab-description="Когда важно освободить пространство перед въездом.">Откатные</button>
+                                            <button class="catalog-link" type="button" aria-label="Каркас откатных ворот" data-catalog-tab="catalog-panel-sliding-frame" data-catalog-tab-short="Каркас откатных" data-catalog-tab-description="Силовая база под обшивку, фурнитуру и автоматику.">Каркас откатных</button>
+                                            <button class="catalog-link" type="button" aria-label="Распашные ворота" data-catalog-tab="catalog-panel-swing" data-catalog-tab-short="Распашные" data-catalog-tab-description="Классическое решение под частный и коммерческий въезд.">Распашные</button>
+                                            <button class="catalog-link" type="button" aria-label="Каркас распашных ворот" data-catalog-tab="catalog-panel-swing-frame" data-catalog-tab-short="Каркас распашных" data-catalog-tab-description="Надежный каркас под заполнение, замки и автоматику.">Каркас распашных</button>
+                                            <button class="catalog-link" type="button" aria-label="Калитки" data-catalog-tab="catalog-panel-wicket" data-catalog-tab-short="Калитки" data-catalog-tab-description="Отдельный вход в едином стиле с воротами и ограждением.">Калитки</button>
                                         </div>
                                     </div>
 
                                     <div class="catalog-group-panel" data-catalog-group-panel="fences" hidden>
                                         <div class="catalog-group-panel__links">
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-profnastil">Заборы из профнастила</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-siding">Заборы из металлосайдинга</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-picket">Заборы из металлоштакетника</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-fence-louver">Заборы из жалюзи</button>
+                                            <button class="catalog-link" type="button" aria-label="Заборы из профнастила" data-catalog-tab="catalog-panel-fence-profnastil" data-catalog-tab-short="Профнастил" data-catalog-tab-description="Сплошное ограждение с понятной стоимостью и хорошей защитой участка.">Профнастил</button>
+                                            <button class="catalog-link" type="button" aria-label="Заборы из металлосайдинга" data-catalog-tab="catalog-panel-fence-siding" data-catalog-tab-short="Металлосайдинг" data-catalog-tab-description="Более выразительный вариант, когда важен внешний вид фасада.">Металлосайдинг</button>
+                                            <button class="catalog-link" type="button" aria-label="Заборы из металлоштакетника" data-catalog-tab="catalog-panel-fence-picket" data-catalog-tab-short="Штакетник" data-catalog-tab-description="Аккуратное ограждение с регулируемой приватностью.">Штакетник</button>
+                                            <button class="catalog-link" type="button" aria-label="Заборы из жалюзи" data-catalog-tab="catalog-panel-fence-louver" data-catalog-tab-short="Жалюзи" data-catalog-tab-description="Современный формат с вентиляцией и спокойным силуэтом.">Жалюзи</button>
                                         </div>
                                     </div>
 
                                     <div class="catalog-group-panel" data-catalog-group-panel="garage" hidden>
                                         <div class="catalog-group-panel__links">
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-sectional">Секционные гаражные ворота</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-roller">Рольворота</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-shutters">Рольставни</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-grilles">Металлические раздвижные решетки</button>
+                                            <button class="catalog-link" type="button" aria-label="Секционные гаражные ворота" data-catalog-tab="catalog-panel-sectional" data-catalog-tab-short="Секционные" data-catalog-tab-description="Теплые подъемные ворота без лишнего места перед гаражом.">Секционные</button>
+                                            <button class="catalog-link" type="button" aria-label="Рольворота" data-catalog-tab="catalog-panel-roller" data-catalog-tab-short="Рольворота" data-catalog-tab-description="Компактное решение для гаражей и хозяйственных проемов.">Рольворота</button>
+                                            <button class="catalog-link" type="button" aria-label="Рольставни" data-catalog-tab="catalog-panel-shutters" data-catalog-tab-short="Рольставни" data-catalog-tab-description="Защита окон, дверей, витрин и технических проемов.">Рольставни</button>
+                                            <button class="catalog-link" type="button" aria-label="Раздвижные решетки" data-catalog-tab="catalog-panel-grilles" data-catalog-tab-short="Решетки" data-catalog-tab-description="Раздвижная защита там, где важны обзор и безопасность.">Решетки</button>
                                         </div>
                                     </div>
 
                                     <div class="catalog-group-panel" data-catalog-group-panel="automation" hidden>
                                         <div class="catalog-group-panel__links">
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-sliding">Автоматика для откатных ворот</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-swing">Автоматика для распашных ворот</button>
-                                            <button class="catalog-link" type="button" data-catalog-tab="catalog-panel-automation-components">Аксессуары и комплектующие</button>
+                                            <button class="catalog-link" type="button" aria-label="Автоматика для откатных ворот" data-catalog-tab="catalog-panel-automation-sliding" data-catalog-tab-short="Откатные" data-catalog-tab-description="Приводы и комплекты под вес створки и режим работы.">Откатные</button>
+                                            <button class="catalog-link" type="button" aria-label="Автоматика для распашных ворот" data-catalog-tab="catalog-panel-automation-swing" data-catalog-tab-short="Распашные" data-catalog-tab-description="Линейные приводы под длину, вес и сценарий открывания.">Распашные</button>
+                                            <button class="catalog-link" type="button" aria-label="Комплектующие и аксессуары" data-catalog-tab="catalog-panel-automation-components" data-catalog-tab-short="Комплектующие" data-catalog-tab-description="Пульты, лампы, фотоэлементы и другие полезные дополнения.">Комплектующие</button>
                                         </div>
                                     </div>
                                 </div>
@@ -298,7 +297,7 @@
                         </div>
                     </aside>
 
-                <div class="catalog-content" data-catalog-panels-source="../content/catalog-panels-fragment.html?v=20260420-catalog-panels-1">
+                <div class="catalog-content" data-catalog-panels-source="../content/catalog-panels-fragment.html?v=20260421-catalog-panels-12">
                     <div class="catalog-panel is-active" id="catalog-panel-sliding" data-catalog-panel data-catalog-breadcrumb="Главная / Каталог / Ворота / Откатные ворота" data-catalog-title="Откатные ворота">
                         <div class="catalog-panel__grid catalog-panel__grid--feature">
                             <div class="catalog-panel__text catalog-panel__text--feature-lead">
@@ -373,36 +372,6 @@
                             </div>
                         </div>
 
-                        <section class="section faq-section" aria-labelledby="sliding-faq-title">
-                            <h3 class="section-title" id="sliding-faq-title">Частые вопросы</h3>
-                            <p class="section-subtitle">Коротко о сроках, гарантиях и расчете стоимости</p>
-                            <div class="faq-list">
-                                <details class="faq-item">
-                                    <summary class="faq-question">Сколько стоят откатные ворота?</summary>
-                                    <div class="faq-answer">
-                                        <p>Стоимость зависит от размеров, заполнения, автоматики и комплекта фурнитуры. Рассчитаем под ключ.</p>
-                                    </div>
-                                </details>
-                                <details class="faq-item">
-                                    <summary class="faq-question">Какие материалы заполнения доступны?</summary>
-                                    <div class="faq-answer">
-                                        <p>Профнастил, металлический сайдинг, штакетник и жалюзи.</p>
-                                    </div>
-                                </details>
-                                <details class="faq-item">
-                                    <summary class="faq-question">Какие сроки изготовления?</summary>
-                                    <div class="faq-answer">
-                                        <p>Сроки фиксируем в договоре. Обычно выполняем заказ в течение трёх недель, точные даты зависят от выбранной комплектации.</p>
-                                    </div>
-                                </details>
-                                <details class="faq-item">
-                                    <summary class="faq-question">Есть ли гарантия?</summary>
-                                    <div class="faq-answer">
-                                        <p>Гарантия на конструкцию — 1 год. На порошковую покраску — 6 месяцев. На автоматику — 2 года от завода-изготовителя.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </section>
                     </div>
 
                     
@@ -411,6 +380,39 @@
 
                 </div>
             </div>
+
+            <section class="section faq-section faq-section--catalog" aria-labelledby="catalog-faq-title">
+                <div class="faq-section__intro">
+                    <h3 class="section-title" id="catalog-faq-title" data-catalog-faq-title>Вопросы по откатным воротам</h3>
+                    <p class="section-subtitle" data-catalog-faq-copy>Проем, фундамент, автоматика и комплектация под въезд.</p>
+                </div>
+                <div class="faq-list" data-catalog-faq-list>
+                    <details class="faq-item">
+                        <summary class="faq-question">От чего зависит стоимость откатных ворот?</summary>
+                        <div class="faq-answer">
+                            <p>Стоимость рассчитываем по размерам проёма, заполнению, каркасу, автоматике, фундаменту и монтажу. Итог зависит от комплектации и условий объекта.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">Нужен ли фундамент под откатные ворота?</summary>
+                        <div class="faq-answer">
+                            <p>Обычно да. Тип основания зависит от проёма, грунта, веса конструкции и схемы монтажа, поэтому решение уточняем после замера.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">Можно сразу подобрать автоматику?</summary>
+                        <div class="faq-answer">
+                            <p>Да. Подбираем привод по весу створки, интенсивности использования и условиям работы на объекте.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">Какие сроки изготовления и монтажа?</summary>
+                        <div class="faq-answer">
+                            <p>Сроки называем после замера и согласования комплектации. Отдельно учитываем подготовку основания, покраску и монтаж на объекте.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
 
             <div class="catalog-partners">
                 <h3><i class="fas fa-handshake"></i> Бренды, с которыми работаем</h3>
@@ -427,17 +429,41 @@
                 </div>
             </div>
 
-            <div class="catalog-cta">
-                <div>
-                    <h3>Нужна консультация по каталогу?</h3>
-                    <p>Ответим на вопросы и рассчитаем стоимость под ключ.</p>
+            <section class="catalog-assistant" id="catalog-assistant" data-catalog-assistant aria-labelledby="catalog-assistant-title">
+                <div class="catalog-assistant__lead">
+                    <span class="catalog-assistant__eyebrow" data-catalog-assistant-eyebrow>Откатные ворота</span>
+                    <h3 class="catalog-assistant__title" id="catalog-assistant-title" data-catalog-assistant-title>Подберем откатные ворота под ваш проем</h3>
+                    <p class="catalog-assistant__copy" data-catalog-assistant-copy>Подскажем по фундаменту, автоматике и комплектации. Если есть размеры или фото, расчет пойдет быстрее.</p>
+                    <div class="catalog-assistant__points" data-catalog-assistant-points>
+                        <span>Проем и размеры</span>
+                        <span>Фундамент</span>
+                        <span>Автоматика</span>
+                    </div>
                 </div>
-                <div class="catalog-contact-list">
-                    <a href="tel:+79625542260"><i class="fas fa-phone"></i> +7 (962) 554-22-60</a>
-                    <a href="tel:+79376154629"><i class="fas fa-phone"></i> +7 (937) 615-46-29</a>
-                    <a href="mailto:vorota404@mail.ru"><i class="fas fa-envelope"></i> vorota404@mail.ru</a>
+                <div class="catalog-assistant__actions">
+                    <span class="catalog-assistant__status"><i class="fas fa-bolt" aria-hidden="true"></i> Ответим сегодня</span>
+                    <a class="catalog-assistant__primary" href="#catalog-panel-sliding" data-catalog-assistant-primary>
+                        <i class="fas fa-images" aria-hidden="true"></i>
+                        <span>Смотреть варианты</span>
+                    </a>
+                    <div class="catalog-assistant__secondary">
+                        <a class="catalog-assistant__action" href="#catalog-categories" data-catalog-assistant-secondary>
+                            <i class="fas fa-folder-open" aria-hidden="true"></i>
+                            <span>Открыть категорию</span>
+                        </a>
+                    </div>
+                    <div class="catalog-assistant__meta">
+                        <a href="tel:+79625542260">
+                            <i class="fas fa-phone" aria-hidden="true"></i>
+                            <span>+7 (962) 554-22-60</span>
+                        </a>
+                        <a href="mailto:vorota404@mail.ru">
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <span>vorota404@mail.ru</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </section>
 
@@ -505,18 +531,9 @@
     <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/header.js?v=20260420-header-split-11" defer></script>
     <script src="../assets/js/lightbox.js?v=20260420-lightbox-1" defer></script>
-    <script src="../assets/js/services.js?v=20260420-service-shell-4" defer></script>
+    <script src="../assets/js/services.js?v=20260422-service-shell-20" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 
 
 

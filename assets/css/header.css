@@ -23,13 +23,12 @@
     }
 
     .header-top--compact {
-        grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+        grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
         grid-template-areas:
-            "logo ."
-            "nav contacts";
+            "logo nav .";
         width: 100%;
-        align-items: start;
-        gap: 10px 52px;
+        align-items: end;
+        gap: 0 26px;
         padding: 0;
         border-bottom: 0;
         background: none;
@@ -97,11 +96,12 @@
     }
 
     .header-top--compact .nav {
-        justify-self: start;
+        grid-area: nav;
+        justify-self: center;
         align-self: end;
         width: auto;
         min-width: 0;
-        margin-top: -24px;
+        margin-top: 0;
         position: relative;
         z-index: 3;
     }
@@ -187,21 +187,7 @@
     }
 
     .header-contact-stack {
-        justify-self: end;
-        align-self: end;
-        display: grid;
-        gap: 8px;
-        width: min(100%, 352px);
-        max-width: 352px;
-        margin-left: 0;
-        margin-right: 0;
-        padding-right: 0;
-        min-height: 96px;
-        align-content: end;
-        transform: translateY(0);
-        position: relative;
-        z-index: 1;
-        pointer-events: none;
+        display: none !important;
     }
 
     .header-contact-stack .contact-phone:first-of-type,

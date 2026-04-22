@@ -142,9 +142,14 @@ body#top .contacts-subtitle {
         border-radius: 999px;
     }
 
-    body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover) {
-        transform: translateY(-2px);
-    }
+body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover) {
+    transform: translateY(-2px);
+}
+
+body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .catalog-link.is-active:hover, .catalog-link.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
+    transform: none;
+    color: #fffdf9 !important;
+}
 
     body#top .payment-docs-hero__content,
     body#top .calculator-section,
@@ -446,6 +451,11 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 
     body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .quick-actions .btn:hover) {
         color: var(--theme-accent-strong) !important;
+    }
+
+    body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .catalog-link.is-active:hover, .catalog-link.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
+        color: #fffdf9 !important;
+        transform: none !important;
     }
 
 }

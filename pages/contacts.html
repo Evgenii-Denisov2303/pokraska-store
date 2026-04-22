@@ -35,18 +35,18 @@
     <link rel="preload" href="../assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="../assets/css/main.css?v=20260421-shell-theme-17">
-    <link rel="preload" as="style" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
+    <link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260420-header-18">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260420-hero-inner-66">
-    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260418-internal-pages-1">
-    <link rel="stylesheet" href="../assets/css/footer.css?v=20260421-preview-footer-11">
+    <link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-20">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
+    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260422-internal-pages-5">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-16">
     <link rel="stylesheet" href="../assets/css/form.css?v=20260413-layout-pass-1">
-    <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-3">
-    <link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20260421-contacts-theme-179">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-4">
+    <link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20260422-contacts-theme-221">
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -201,146 +201,152 @@
     <!-- ========== CONTACTS PAGE ========== -->
     <section class="contacts-page">
         <div class="container">
-            <h1 class="section-title contacts-title">Контакты</h1>
-            <p class="section-subtitle contacts-subtitle">
-                Телефоны, адрес производства, режим работы и быстрая форма связи для расчёта ворот, заборов и порошковой покраски.
-            </p>
-
-            <div class="contacts-hero-card">
-                <div class="contacts-hero-copy">
-                    <p class="contacts-eyebrow">Заявка и контакты</p>
-                    <h2>Оставьте заявку или напишите нам.</h2>
-                    <p>Короткой заявки достаточно для расчёта. Ниже собрали форму и все способы связи.</p>
+            <div class="contacts-heading">
+                <div class="contacts-heading__lead">
+                    <p class="contacts-heading__eyebrow">Заявка и контакты</p>
+                    <div class="contacts-heading__title-row">
+                        <span class="contacts-heading__icon" aria-hidden="true">
+                            <i class="fas fa-address-book"></i>
+                        </span>
+                        <h1 class="section-title contacts-title">Контакты</h1>
+                    </div>
                 </div>
+                <p class="section-subtitle contacts-subtitle">
+                    Оставьте заявку или свяжитесь напрямую. Ниже собрали телефоны, адрес и маршрут.
+                </p>
             </div>
 
-            <div class="contacts-main-grid">
-                <section class="contact-info-card" aria-labelledby="contact-overview-title">
-                    <div class="contacts-card-header">
-                        <p class="contacts-card-kicker">Связаться напрямую</p>
-                        <h2 id="contact-overview-title">Все контакты в одном месте</h2>
-                        <p>Позвоните, напишите или приезжайте на производство. Ниже собрали все способы связи.</p>
+            <div class="contacts-core">
+                <section class="contacts-panel contacts-panel--direct" aria-labelledby="contacts-direct-title">
+                    <div class="contacts-panel__header">
+                        <p class="contacts-panel__kicker">Связаться напрямую</p>
+                        <h2 id="contacts-direct-title">Телефон, почта и адрес</h2>
+                        <p>Позвоните, напишите или приезжайте на производство. Для расчёта достаточно короткого описания задачи.</p>
                     </div>
 
-                    <div class="contacts-overview-list">
-                        <div class="contact-item contact-item--primary contact-item--full">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Основной номер</h3>
-                                <p>
-                                    <a href="tel:+79376154629">+7 (937) 615-46-29</a>
-                                    <br>
-                                    <span>Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
-                                </p>
+                    <a class="contacts-primary-link" href="tel:+79376154629">
+                        <span class="contacts-primary-icon">
+                            <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                        </span>
+                        <span class="contacts-primary-copy">
+                            <span class="contacts-primary-label">Основной номер</span>
+                            <strong>+7 (937) 615-46-29</strong>
+                            <span>Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
+                        </span>
+                    </a>
+
+                    <div class="contacts-secondary-grid">
+                        <div class="contacts-contact-tile">
+                            <span class="contacts-contact-icon">
+                                <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                            </span>
+                            <div class="contacts-contact-copy">
+                                <span class="contacts-contact-label">Дополнительный номер</span>
+                                <a href="tel:+79625542260">+7 (962) 554-22-60</a>
                             </div>
                         </div>
 
-                        <div class="contact-item contact-item--secondary">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Дополнительный номер</h3>
-                                <p><a href="tel:+79625542260">+7 (962) 554-22-60</a></p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item contact-item--secondary">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Почта</h3>
-                                <p><a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></p>
-                            </div>
-                        </div>
-
-                        <div class="contact-item contact-item--address contact-item--full">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h3>Адрес производства</h3>
-                                <p>Казань, Старое Победилово, ул. Садовая, 72</p>
+                        <div class="contacts-contact-tile">
+                            <span class="contacts-contact-icon">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                            </span>
+                            <div class="contacts-contact-copy">
+                                <span class="contacts-contact-label">Почта</span>
+                                <a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="quick-actions quick-actions--contacts">
+                    <div class="contacts-address-row">
+                        <span class="contacts-contact-icon">
+                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                        </span>
+                        <div class="contacts-contact-copy">
+                            <span class="contacts-contact-label">Адрес производства</span>
+                            <strong>Казань, Старое Победилово, ул. Садовая, 72</strong>
+                        </div>
+                    </div>
+
+                    <div class="contacts-direct-actions">
                         <a class="btn btn-outline" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-telegram-plane" aria-hidden="true"></i> Написать в Telegram
+                            <i class="fab fa-telegram-plane" aria-hidden="true"></i>
+                            Написать в Telegram
                         </a>
                         <a class="btn btn-outline" href="https://max.ru" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-comment-dots" aria-hidden="true"></i> Написать в Max
+                            <i class="fas fa-comments" aria-hidden="true"></i>
+                            Написать в Max
                         </a>
                     </div>
 
-                    <div class="contacts-info-summary" aria-label="Короткие факты">
-                        <div class="contacts-info-chip">
-                            <span class="contacts-info-chip__label">Режим</span>
+                    <div class="contacts-meta-row" aria-label="Дополнительная информация">
+                        <div class="contacts-meta-chip">
+                            <span class="contacts-meta-label">Режим работы</span>
                             <strong>Пн-Пт 8:00-18:00, Сб 9:00-14:00</strong>
                         </div>
-                        <div class="contacts-info-chip">
-                            <span class="contacts-info-chip__label">Выезд замерщика</span>
+                        <div class="contacts-meta-chip">
+                            <span class="contacts-meta-label">Выезд замерщика</span>
                             <strong>По предварительной записи</strong>
                         </div>
                     </div>
                 </section>
 
-                <section class="contact-form-card" id="contact-form" aria-labelledby="contact-connect-title">
-                    <div class="contacts-card-header">
-                        <h2 id="contact-connect-title"><span>Оставить заявку</span><span>на расчёт</span></h2>
-                        <p class="form-notice">Оставьте контакты. Уточним задачу и подготовим расчёт.</p>
+                <section class="contacts-panel contacts-panel--request" id="contact-form" aria-labelledby="contact-connect-title">
+                    <div class="contacts-panel__header contacts-panel__header--request">
+                        <h2 id="contact-connect-title">Оставить заявку</h2>
+                        <p class="contacts-request-note">Оставьте контакты и задачу. Уточним детали и подготовим расчёт.</p>
                     </div>
 
-                    <div class="yandex-form-frame">
-                        <iframe class="yandex-form-embed" title="Заявка KOMFORTPLUS116.RU" src="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" name="ya-form-696e3c3ee010db8992425918" loading="lazy"></iframe>
+                    <div class="contacts-form-frame">
+                        <iframe class="contacts-form-embed" title="Заявка KOMFORTPLUS116.RU" src="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" name="ya-form-696e3c3ee010db8992425918" loading="lazy"></iframe>
                     </div>
                 </section>
             </div>
 
-            <section class="contacts-location-card" aria-labelledby="contact-location-title">
-                <div class="contacts-location-copy">
-                    <p class="contacts-card-kicker">Схема проезда</p>
-                    <h2 id="contact-location-title">Как нас найти</h2>
-                    <p>Производство находится в промышленной зоне. Ниже собрали карту, основные ориентиры и быстрые действия, чтобы доехать без лишних звонков.</p>
-
-                    <div class="location-badges">
-                        <span class="location-badge"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Цех №3</span>
-                        <span class="location-badge"><i class="fas fa-info-circle" aria-hidden="true"></i> Бесплатная парковка</span>
+            <section class="contacts-route" aria-labelledby="contact-location-title">
+                <div class="contacts-panel contacts-panel--route-copy">
+                    <div class="contacts-panel__header">
+                        <p class="contacts-panel__kicker">Схема проезда</p>
+                        <h2 id="contact-location-title">Как нас найти</h2>
+                        <p>Производство находится в Старом Победилово. Ниже собрали карту, ориентиры и быстрые действия, чтобы доехать без лишних звонков.</p>
                     </div>
 
-                    <ul class="location-points">
+                    <div class="contacts-route-highlights">
+                        <span class="contacts-route-badge"><i class="fas fa-warehouse" aria-hidden="true"></i> Цех №3</span>
+                        <span class="contacts-route-badge"><i class="fas fa-car" aria-hidden="true"></i> Парковка на площадке</span>
+                    </div>
+
+                    <ul class="contacts-route-steps">
                         <li>
-                            <strong>Промышленная зона</strong>
-                            <span>Находимся в Старом Победилово, на территории производства.</span>
+                            <strong>Производственная площадка</strong>
+                            <span>Находимся в Старом Победилово, на территории производства по адресу ул. Садовая, 72.</span>
                         </li>
                         <li>
-                            <strong>Вход и ориентир</strong>
-                            <span>Вход со стороны ворот, цех №3. Если нужно, подскажем по телефону уже на месте.</span>
+                            <strong>Вход через цех №3</strong>
+                            <span>Заезжайте со стороны ворот и ориентируйтесь на цех №3. Если потребуется, подскажем по телефону уже на месте.</span>
                         </li>
                         <li>
-                            <strong>Выезд замерщика</strong>
+                            <strong>Замер и выезд</strong>
                             <span>По воротам и заборам возможен выезд специалиста по предварительной записи.</span>
                         </li>
                     </ul>
 
-                    <div class="location-actions">
+                    <div class="contacts-route-actions">
                         <a class="btn btn-primary" href="https://yandex.ru/maps/?text=%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C%2C%20%D0%A1%D1%82%D0%B0%D1%80%D0%BE%D0%B5%20%D0%9F%D0%BE%D0%B1%D0%B5%D0%B4%D0%B8%D0%BB%D0%BE%D0%B2%D0%BE%2C%20%D1%83%D0%BB.%20%D0%A1%D0%B0%D0%B4%D0%BE%D0%B2%D0%B0%D1%8F%2C%2072" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Открыть маршрут
+                            <i class="fas fa-route" aria-hidden="true"></i>
+                            Проложить маршрут
                         </a>
                         <a class="btn btn-outline" href="tel:+79625542260">
-                            <i class="fas fa-phone" aria-hidden="true"></i> Позвонить
+                            <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                            Позвонить на производство
                         </a>
                     </div>
                 </div>
 
-                <div class="map-container">
+                <div class="contacts-panel contacts-panel--route-map">
                     <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Aab3bc93404c3f188901f7a43c1876e3c7b022de010170252fc805114e1c98ce5&amp;source=constructor&amp;z=18" width="500" height="400" frameborder="0" allowfullscreen loading="lazy" title="Карта с нашим расположением" aria-label="Интерактивная карта с нашим расположением"></iframe>
                 </div>
             </section>
+
         </div>
     </section>
 
@@ -371,7 +377,7 @@
                         <li><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></li>
                         <li><i class="fas fa-clock" aria-hidden="true"></i> Пн-Пт: 8:00-18:00, Сб: 9:00-14:00</li>
                         <li><i class="fab fa-telegram-plane" aria-hidden="true"></i> <a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-                        <li><i class="fas fa-comment-dots" aria-hidden="true"></i> <a href="https://max.ru" target="_blank" rel="noopener noreferrer">Max</a></li>
+                        <li><i class="fas fa-comments" aria-hidden="true"></i> <a href="https://max.ru" target="_blank" rel="noopener noreferrer">Max</a></li>
                 </ul>
             </div>
 
@@ -400,6 +406,9 @@
     <script src="../assets/js/header.js?v=20260420-header-split-11" defer></script>
 </body>
 </html>
+
+
+
 
 
 
