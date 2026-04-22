@@ -660,4 +660,83 @@
     }
 }
 
+/* ========== INTRO ALIGNMENT WITH INTERNAL PAGES ========== */
+.automation-product-page {
+    padding: 104px 0 92px;
+}
+
+.automation-product-info {
+    display: grid;
+    align-content: start;
+    gap: 18px;
+}
+
+.automation-product-meta {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    color: rgba(var(--theme-accent-rgb), 0.82);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.automation-product-title {
+    margin: 0;
+    max-width: none;
+    font-family: var(--font-display);
+    font-size: clamp(1.96rem, 2.18vw, 2.34rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: rgba(10, 24, 40, 0.99);
+    text-wrap: balance;
+}
+
+.automation-product-title::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 2px;
+    margin: 12px 0 0;
+    background: linear-gradient(90deg, rgba(var(--theme-accent-rgb), 0.78), rgba(var(--theme-accent-rgb), 0.12));
+    border-radius: 999px;
+}
+
+.automation-product-description {
+    margin: 0 0 4px;
+    max-width: 46ch;
+    color: rgba(96, 78, 58, 0.92);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.42;
+    text-wrap: pretty;
+}
+
+@media (max-width: 980px) {
+    .automation-product-page {
+        padding: 82px 0 78px;
+    }
+}
+
+@media (max-width: 640px) {
+    .automation-product-page {
+        padding: 42px 0 64px;
+    }
+
+    .automation-product-title {
+        font-size: clamp(1.88rem, 7vw, 2.34rem);
+    }
+
+    .automation-product-description {
+        font-size: 0.94rem;
+        line-height: 1.42;
+    }
+}
+
 

@@ -151,7 +151,6 @@ body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:fo
     color: #fffdf9 !important;
 }
 
-    body#top .payment-docs-hero__content,
     body#top .calculator-section,
     body#top .service-header,
     body#top .pricing-table-header,
@@ -415,7 +414,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
             inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
     }
 
-    body#top :is(.gallery-toolbar, .gallery-summary__item, .price-header, .payment-docs-hero__content) {
+    body#top :is(.gallery-toolbar, .gallery-summary__item, .price-header) {
         border-radius: 30px !important;
     }
 
@@ -436,7 +435,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         border-color: rgba(var(--theme-accent-rgb), 0.18) !important;
     }
 
-    body#top :is(.calculator-section, .payment-docs-hero__content, .work-counter) {
+    body#top :is(.calculator-section, .work-counter) {
         background:
             radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 28%),
             linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 56%, var(--theme-band-to) 100%) !important;
