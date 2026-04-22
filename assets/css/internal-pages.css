@@ -146,7 +146,7 @@ body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .
     transform: translateY(-2px);
 }
 
-body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .catalog-link.is-active:hover, .catalog-link.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
+body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
     transform: none;
     color: #fffdf9 !important;
 }
@@ -255,8 +255,8 @@ body#top :is(.request-form__eyebrow, .contact-form-meta__item, .contacts-hero-pi
 }
 
 body#top :is(.request-form__eyebrow::before, .contact-icon, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon) {
-    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%);
-    box-shadow: 0 12px 24px rgba(var(--theme-accent-strong-rgb), 0.18);
+    background: linear-gradient(135deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%);
+    box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14);
 }
 
 body#top :is(a, .contact-details a, .gallery-card__link, .price-cta a, .payment-docs-page a):hover {
@@ -372,17 +372,26 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.catalog-group-tab.is-active, .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
-    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+    :is(.btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child) {
+    background: var(--site-action-matte) !important;
+    background-image: none !important;
+    border-color: var(--site-action-matte-border) !important;
+    color: var(--site-action-matte-text) !important;
+    box-shadow: 0 12px 24px rgba(var(--site-action-slate-rgb), 0.12) !important;
+}
+
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.catalog-group-tab.is-active, .filter-btn.active, .filter-btn[aria-pressed="true"], .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .service-nav-link.active, .service-nav-link[aria-current="page"]) {
+    background: linear-gradient(135deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     border-color: transparent !important;
     color: #fffdf9 !important;
-    box-shadow: 0 12px 24px rgba(var(--theme-accent-strong-rgb), 0.18) !important;
+    box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14) !important;
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
     :is(.request-form__eyebrow::before, .contact-icon, .payment-docs-card__icon, .payment-docs-step__icon, .automation-product-page .product-icon, .catalog-group-tab.is-active .catalog-group-tab__icon) {
-    background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
-    box-shadow: 0 12px 24px rgba(var(--theme-accent-strong-rgb), 0.18) !important;
+    background: linear-gradient(135deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14) !important;
 }
 
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
@@ -442,17 +451,25 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         box-shadow: 0 28px 52px rgba(31, 38, 34, 0.16) !important;
     }
 
-    body#top :is(.catalog-group-tab.is-active, .catalog-link.is-active, .filter-btn.active, .filter-btn[aria-pressed="true"], .btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child, .services-cta .btn:first-child) {
-        background: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-accent-strong) 100%) !important;
+    body#top :is(.btn-primary, .btn--primary, .panel-scene__action--primary, .service-overview__bridge-link, .service-cta .btn:first-child) {
+        background: var(--site-action-matte) !important;
+        background-image: none !important;
+        border-color: var(--site-action-matte-border) !important;
+        color: var(--site-action-matte-text) !important;
+        box-shadow: 0 12px 24px rgba(var(--site-action-slate-rgb), 0.12) !important;
+    }
+
+    body#top :is(.catalog-group-tab.is-active, .filter-btn.active, .filter-btn[aria-pressed="true"], .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .service-nav-link.active, .service-nav-link[aria-current="page"]) {
+        background: linear-gradient(135deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
         color: #fffdf9 !important;
-        box-shadow: 0 14px 26px rgba(var(--theme-accent-strong-rgb), 0.18) !important;
+        box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14) !important;
     }
 
     body#top :is(.catalog-group-tab:hover, .catalog-link:hover, .filter-btn:hover, .service-nav-link:hover, .quick-actions .btn:hover) {
         color: var(--theme-accent-strong) !important;
     }
 
-    body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .catalog-link.is-active:hover, .catalog-link.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
+    body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:focus-visible, .filter-btn.active:hover, .filter-btn.active:focus-visible, .filter-btn[aria-pressed="true"]:hover, .filter-btn[aria-pressed="true"]:focus-visible, .gallery-filter.is-active:hover, .gallery-filter.is-active:focus-visible, .gallery-filter[aria-pressed="true"]:hover, .gallery-filter[aria-pressed="true"]:focus-visible, .service-nav-link.active:hover, .service-nav-link.active:focus-visible, .service-nav-link[aria-current="page"]:hover, .service-nav-link[aria-current="page"]:focus-visible) {
         color: #fffdf9 !important;
         transform: none !important;
     }

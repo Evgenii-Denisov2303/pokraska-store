@@ -85,18 +85,19 @@
 
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260421-shell-theme-17">
-    <link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-20">
-    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260423-shell-theme-19">
+<link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-23">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-77">
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-20">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
-    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260422-internal-pages-5">
-    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-16">
+<link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-23">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-77">
+<link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260423-internal-pages-7">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-20">
 <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-4">
-    <link rel="stylesheet" href="../assets/css/pages/prices.css?v=20260422-prices-theme-11">
+    <link rel="stylesheet" href="../assets/css/pages/prices.css?v=20260423-prices-theme-42">
+    <link rel="stylesheet" href="../assets/css/faq-system.css?v=20260422-faq-system-3">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
@@ -220,11 +221,11 @@
     <section class="prices-page">
         <div class="container">
             <!-- Заголовок -->
-            <div class="price-header">
-                <div class="price-header__lead">
+            <div class="prices-heading">
+                <div class="prices-heading__lead">
                     <p class="price-eyebrow">Стоимость и расчёт</p>
-                    <div class="price-header__title-row">
-                        <span class="price-header__icon" aria-hidden="true">
+                    <div class="prices-heading__title-row">
+                        <span class="prices-heading__icon" aria-hidden="true">
                             <i class="fas fa-tags"></i>
                         </span>
                         <h1 class="section-title">Цены на ворота и заборы</h1>
@@ -236,113 +237,115 @@
                 </p>
             </div>
 
-            <div class="price-summary" aria-label="Коротко о расчёте">
-                <article class="price-summary__item">
-                    <span class="price-summary__label">Под задачу</span>
-                    <strong>Смета под проём и участок</strong>
-                    <p>Считаем не по шаблону, а по размерам, фасаду и выбранной комплектации.</p>
-                </article>
-                <article class="price-summary__item">
-                    <span class="price-summary__label">Быстрый старт</span>
-                    <strong>Фото, размеры или замер</strong>
-                    <p>Можно прислать фото объекта или заранее договориться о выезде замерщика.</p>
-                </article>
-                <article class="price-summary__item">
-                    <span class="price-summary__label">По договору</span>
-                    <strong>Состав работ и сроки</strong>
-                    <p>Сразу проговариваем изготовление, монтаж и запуск объекта без скрытых этапов.</p>
-                </article>
-            </div>
-
-            <div class="pricing-lead-grid">
-                <!-- Факторы влияющие на цену -->
-                <div class="price-factors">
-                    <h2><i class="fas fa-chart-line"></i> Из чего складывается стоимость</h2>
-                    <div class="factors-grid">
-                        <div class="factor-card">
-                            <i class="fas fa-expand-alt"></i>
-                            <h3>Размер проема</h3>
-                            <p>Ширина и высота определяют объем металла, фурнитуры и схему монтажа.</p>
-                        </div>
-
-                        <div class="factor-card">
-                            <i class="fas fa-layer-group"></i>
-                            <h3>Заполнение</h3>
-                            <p>Профнастил, сайдинг, штакетник или жалюзи по-разному влияют на вес и стоимость.</p>
-                        </div>
-
-                        <div class="factor-card">
-                            <i class="fas fa-palette"></i>
-                            <h3>Автоматика</h3>
-                            <p>Привод, комплектация и дополнительные опции влияют на итоговый бюджет и комфорт.</p>
-                        </div>
-
-                        <div class="factor-card">
-                            <i class="fas fa-boxes"></i>
-                            <h3>Монтаж</h3>
-                            <p>Смотрим на основание, участок, столбы и особенности установки на месте.</p>
+            <section class="pricing-playbook" aria-labelledby="pricing-playbook-title">
+                <div class="pricing-playbook__lead">
+                    <div class="pricing-playbook__lead-intro">
+                        <p class="pricing-playbook__eyebrow">Как считаем</p>
+                        <h2 class="pricing-playbook__title" id="pricing-playbook-title">Цена зависит от проёма, заполнения и монтажа</h2>
+                        <p class="pricing-playbook__copy">Для первого ориентира достаточно фото, размеров или короткого описания задачи. Сразу покажем, что сильнее всего влияет на смету.</p>
+                    </div>
+                    <div class="pricing-playbook__lead-meta">
+                        <div class="pricing-playbook__chips" aria-label="Что можно прислать для расчёта">
+                            <span>Фото и размеры</span>
+                            <span>С подбором автоматики</span>
+                            <span>Замер при необходимости</span>
+                            <span>Под ключ по договору</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Калькулятор -->
-                <div class="calculator-section">
-                    <p class="price-card-kicker">Быстрый расчёт</p>
-                    <h2><i class="fas fa-calculator"></i> Нужен ориентир по цене?</h2>
-                    <p>Отправьте фото проёма, участка или описание задачи. Подскажем по комплектации и сориентируем по стоимости.</p>
+                <aside class="pricing-estimate-card">
+                    <div class="pricing-estimate-card__intro">
+                        <p class="price-card-kicker">Быстрый расчёт</p>
+                        <h2><i class="fas fa-calculator"></i> Нужен ориентир по цене?</h2>
+                        <p>Сориентируем по комплектации, срокам и следующему шагу. Можно начать с фото объекта или размеров проёма.</p>
+                    </div>
                     <ul class="calculator-points">
-                        <li>По фото и размерам</li>
-                        <li>С подбором заполнения и автоматики</li>
-                        <li>С понятным следующим шагом по замеру</li>
+                        <li>По фото объекта</li>
+                        <li>По размерам проёма</li>
+                        <li>С подбором заполнения</li>
                     </ul>
-                    <a href="../index.html#request-form" class="btn btn-primary">
-                        <i class="fas fa-calculator"></i> Узнать стоимость
-                    </a>
-                    <p class="calculator-contact">
-                        <i class="fas fa-phone"></i> Можно сразу позвонить:
-                        <a href="tel:+79625542260">+7 (962) 554-22-60</a>,
-                        <a href="tel:+79376154629">+7 (937) 615-46-29</a>
-                    </p>
-                </div>
-            </div>
-
-            <div class="pricing-assurance-grid">
-                <!-- Гарантии -->
-                <div class="guarantee-section">
-                    <div class="guarantee-badge">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>ГАРАНТИЯ 1 ГОД</span>
-                    </div>
-                    <h3 class="guarantee-title">Гарантия на изготовление и монтаж</h3>
-                    <p class="guarantee-text">
-                        Фиксируем состав работ, контролируем изготовление и сопровождаем проект до сдачи объекта.
-                    </p>
-                    <ul class="guarantee-list">
-                        <li>Работа по согласованной комплектации</li>
-                        <li>Контроль изготовления и монтажа</li>
-                        <li>Поддержка после сдачи объекта</li>
-                    </ul>
-                </div>
-
-                <!-- Призыв к действию -->
-                <div class="price-cta">
-                    <p class="price-card-kicker">Следующий шаг</p>
-                    <h3>Нужно сравнить варианты и понять бюджет?</h3>
-                    <p>Можно начать с расчёта или сначала открыть каталог и выбрать тип конструкции, заполнение и автоматику.</p>
-                    <div class="price-cta__actions">
-                        <a href="../index.html#request-form" class="btn btn-primary">
+                    <div class="pricing-estimate-card__footer">
+                        <a href="../index.html#request-form" class="btn btn-secondary pricing-estimate-card__action">
                             <i class="fas fa-calculator"></i> Узнать стоимость
                         </a>
-                        <a href="services.html" class="btn btn-secondary">
-                            <i class="fas fa-layer-group"></i> Сравнить варианты
-                        </a>
+                        <p class="calculator-contact">
+                            <span class="calculator-contact__label"><i class="fas fa-phone"></i> Можно сразу позвонить</span>
+                            <span class="calculator-contact__links">
+                                <a href="tel:+79625542260">+7 (962) 554-22-60</a>
+                                <a href="tel:+79376154629">+7 (937) 615-46-29</a>
+                            </span>
+                        </p>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="pricing-breakdown" aria-labelledby="pricing-breakdown-title">
+                <div class="pricing-breakdown__heading">
+                    <p class="price-card-kicker">Что влияет на смету</p>
+                    <h2 id="pricing-breakdown-title">Четыре вещи, которые сильнее всего меняют бюджет</h2>
+                    <p>Смотрим не только на размеры, но и на заполнение, автоматику и реальные условия монтажа на объекте.</p>
+                </div>
+
+                <div class="factors-grid">
+                    <div class="factor-card">
+                        <i class="fas fa-expand-alt"></i>
+                        <h3>Размеры проёма</h3>
+                        <p>Ширина и высота влияют на объём металла, фурнитуру и общую схему конструкции.</p>
+                    </div>
+
+                    <div class="factor-card">
+                        <i class="fas fa-layer-group"></i>
+                        <h3>Заполнение и материал</h3>
+                        <p>Профнастил, сайдинг, штакетник или жалюзи по-разному влияют на вес, вид и стоимость.</p>
+                    </div>
+
+                    <div class="factor-card">
+                        <i class="fas fa-palette"></i>
+                        <h3>Автоматика и опции</h3>
+                        <p>Привод, аксессуары и дополнительные опции добавляют комфорт и меняют итоговую смету.</p>
+                    </div>
+
+                    <div class="factor-card">
+                        <i class="fas fa-boxes"></i>
+                        <h3>Монтаж на объекте</h3>
+                        <p>Учитываем основание, столбы, участок и всё, что влияет на установку на месте.</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <section class="section" aria-labelledby="prices-faq-title">
-                <h2 class="section-title" id="prices-faq-title">Что обычно уточняют перед расчётом</h2>
-                <p class="section-subtitle">Коротко о смете, фото и условиях для объёмных заказов.</p>
+            <section class="pricing-clarity" aria-labelledby="pricing-clarity-title">
+                <div class="pricing-clarity__lead">
+                    <div class="guarantee-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Гарантия 1 год</span>
+                    </div>
+                    <h3 id="pricing-clarity-title">Что фиксируем до старта работ</h3>
+                    <p>Чтобы смета не менялась по ходу проекта, заранее согласуем комплектацию, сроки и монтажный сценарий.</p>
+                </div>
+
+                <div class="pricing-clarity__grid" aria-label="Что уточняем заранее">
+                    <article class="pricing-clarity__item">
+                        <h4>Комплектация</h4>
+                        <p>Заполнение, автоматика и дополнительные опции под ваш объект.</p>
+                    </article>
+                    <article class="pricing-clarity__item">
+                        <h4>Монтаж</h4>
+                        <p>Основание, столбы, участок и выезд на объект без скрытых этапов.</p>
+                    </article>
+                    <article class="pricing-clarity__item">
+                        <h4>Сроки и этапы</h4>
+                        <p>Когда делаем замер, изготовление и установку, чтобы процесс был понятным заранее.</p>
+                    </article>
+                </div>
+
+            </section>
+
+            <section class="section faq-section faq-section--catalog faq-system" aria-labelledby="prices-faq-title">
+                <div class="faq-section__intro">
+                    <h2 class="section-title" id="prices-faq-title">Что обычно уточняют перед расчётом</h2>
+                    <p class="section-subtitle">Коротко о смете, фото и условиях для объёмных заказов.</p>
+                </div>
                 <div class="faq-list">
                     <details class="faq-item">
                         <summary class="faq-question">Из чего складывается стоимость?</summary>
@@ -381,8 +384,8 @@
                         <span class="preview-footer__company">ООО «Комфорт Плюс»</span>
                     </span>
                 </a>
-                <p class="preview-footer__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
-                <p class="preview-footer__legal-text">Более 10 лет опыта в изготовлении и монтаже конструкций для частных и коммерческих объектов.</p>
+                <p class="preview-footer__legal-text">Производим ворота, каркасы, ограждения и подбираем автоматику под объект.</p>
+                <p class="preview-footer__legal-text">Более 10 лет работаем с частными домами, коммерческими объектами и металлоконструкциями под покраску.</p>
             </div>
 
             <div class="preview-footer__column preview-footer__column--contacts">
@@ -403,7 +406,7 @@
                 <ul class="preview-footer__list">
                         <li><a href="powder-coating.html">Порошковая покраска</a></li>
                         <li><a href="sandblasting.html">Пескоструйная обработка</a></li>
-                        <li><a href="prices.html">Цены и расчет</a></li>
+                        <li><a href="prices.html">Цены и расчёт</a></li>
                         <li><a href="payment-documents.html">Оплата и документы</a></li>
                         <li><a href="gallery.html">Наши работы</a></li>
                         <li><a href="../index.html#request-form">Оставить заявку</a></li>
@@ -424,6 +427,11 @@
     <script src="../assets/js/prices.js" defer></script>
 </body>
 </html>
+
+
+
+
+
 
 
 

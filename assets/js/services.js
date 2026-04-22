@@ -768,9 +768,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 mainLink.classList.toggle('catalog-panel__media--contain', fitMode === 'contain' || fitMode === 'scheme');
                 mainLink.classList.toggle('catalog-panel__media--scheme', fitMode === 'scheme');
                 if (mainFrame) {
+                    const resolvedFrameImage = new URL(src, window.location.href).href;
                     mainFrame.classList.toggle('catalog-panel__media-frame--contain', fitMode === 'contain' || fitMode === 'scheme');
                     mainFrame.classList.toggle('catalog-panel__media-frame--scheme', fitMode === 'scheme');
-                    mainFrame.style.setProperty('--catalog-media-frame-image', `url(${JSON.stringify(src)})`);
+                    mainFrame.style.setProperty('--catalog-media-frame-image', `url(${JSON.stringify(resolvedFrameImage)})`);
                 }
                 mainImage.src = src;
                 mainImage.alt = alt;

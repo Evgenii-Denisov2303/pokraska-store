@@ -9,6 +9,71 @@
     gap: 24px;
 }
 
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-sidebar {
+    display: grid;
+    gap: 14px;
+    padding: 24px;
+    border-radius: 30px;
+    border: 1px solid rgba(var(--theme-accent-rgb), 0.12);
+    background:
+        radial-gradient(circle at 16% 12%, rgba(var(--theme-accent-rgb), 0.08), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 239, 230, 0.92));
+    box-shadow: 0 20px 36px rgba(31, 38, 34, 0.06);
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tabs,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-panel {
+    display: grid;
+    gap: 12px;
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--theme-accent-rgb), 0.12);
+    background: linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(243, 233, 220, 0.92));
+    color: var(--theme-text);
+    font-weight: 700;
+    text-decoration: none !important;
+    text-align: center;
+    box-shadow: 0 14px 28px rgba(31, 38, 34, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab:hover,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab:focus-visible,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link:hover,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(var(--theme-accent-rgb), 0.18);
+    outline: none;
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab.is-active,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-active {
+    background: linear-gradient(135deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    border-color: transparent !important;
+    color: #fffdf9 !important;
+    box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14) !important;
+}
+
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab.is-active:hover,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab.is-active:focus-visible,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-active:hover,
+body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-active:focus-visible {
+    transform: none;
+    color: #fffdf9 !important;
+}
+
 .automation-product-back {
     display: inline-flex;
     align-items: center;
@@ -258,6 +323,24 @@
 @media (max-width: 640px) {
     .automation-product-page {
         padding: 40px 0 56px;
+    }
+
+    body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-sidebar {
+        padding: 18px;
+        gap: 12px;
+    }
+
+    body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tabs {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-group-tab,
+    body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link {
+        min-height: 52px;
+        padding: 12px 14px;
+        font-size: 0.98rem;
+        line-height: 1.28;
     }
 
     .automation-product-card {
@@ -718,9 +801,140 @@
     text-wrap: pretty;
 }
 
+.automation-faq-wrap {
+    padding: 0 0 92px;
+}
+
+.automation-faq-wrap > .container {
+    width: min(1540px, calc(100vw - 72px));
+    max-width: none;
+}
+
+.automation-product-page .faq-section--catalog,
+.catalog-page .faq-section--catalog,
+.automation-faq-wrap .faq-section--catalog {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: minmax(15rem, 0.64fr) minmax(0, 1.36fr);
+    align-items: start;
+    gap: 18px 22px;
+    padding: 20px 22px 22px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 240, 232, 0.96));
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--theme-shadow);
+}
+
+.automation-product-page .faq-section__intro,
+.catalog-page .faq-section__intro,
+.automation-faq-wrap .faq-section__intro {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-width: 0;
+    padding: 2px 0 0;
+}
+
+.automation-product-page .faq-list,
+.catalog-page .faq-list,
+.automation-faq-wrap .faq-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 0;
+}
+
+.automation-product-page .faq-item,
+.catalog-page .faq-item,
+.automation-faq-wrap .faq-item {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border-radius: 22px;
+    border: 1px solid var(--theme-border);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow:
+        0 12px 22px rgba(85, 69, 48, 0.026),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.automation-product-page .faq-item:hover,
+.catalog-page .faq-item:hover,
+.automation-faq-wrap .faq-item:hover {
+    border-color: rgba(var(--theme-accent-rgb), 0.16);
+    box-shadow: 0 14px 24px rgba(74, 58, 44, 0.08);
+}
+
+.automation-product-page .faq-item[open],
+.catalog-page .faq-item[open],
+.automation-faq-wrap .faq-item[open] {
+    border-color: rgba(var(--theme-accent-rgb), 0.2);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 30px rgba(74, 58, 44, 0.1);
+}
+
+.automation-product-page .faq-question:hover,
+.automation-product-page .faq-question:focus-visible,
+.automation-faq-wrap .faq-question:hover,
+.automation-faq-wrap .faq-question:focus-visible,
+.catalog-page .faq-question:hover,
+.catalog-page .faq-question:focus-visible {
+    background: rgba(var(--theme-accent-rgb), 0.04);
+    outline: none;
+}
+
+.automation-product-page .faq-question::-webkit-details-marker,
+.catalog-page .faq-question::-webkit-details-marker,
+.automation-faq-wrap .faq-question::-webkit-details-marker {
+    display: none;
+}
+
+.automation-product-page .faq-question::after,
+.catalog-page .faq-question::after,
+.automation-faq-wrap .faq-question::after {
+    content: "+";
+    flex: 0 0 auto;
+    color: rgba(var(--theme-accent-strong-rgb), 0.92);
+    font-size: 1.4rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.automation-product-page .faq-item[open] .faq-question::after,
+.catalog-page .faq-item[open] .faq-question::after,
+.automation-faq-wrap .faq-item[open] .faq-question::after {
+    transform: rotate(45deg);
+}
+
+.automation-product-page .faq-answer,
+.catalog-page .faq-answer,
+.automation-faq-wrap .faq-answer {
+    padding: 0 18px 18px;
+    border-top: 1px solid rgba(var(--theme-accent-strong-rgb), 0.08);
+}
+
 @media (max-width: 980px) {
     .automation-product-page {
         padding: 82px 0 78px;
+    }
+
+    .automation-faq-wrap {
+        padding: 0 0 78px;
+    }
+
+    .automation-product-page .faq-section--catalog,
+    .catalog-page .faq-section--catalog,
+    .automation-faq-wrap .faq-section--catalog {
+        grid-template-columns: 1fr;
+    }
+
+    .automation-faq-wrap > .container {
+        width: min(100%, calc(100vw - 40px));
     }
 }
 
@@ -736,6 +950,29 @@
     .automation-product-description {
         font-size: 0.94rem;
         line-height: 1.42;
+    }
+
+    .automation-product-page .faq-section--catalog,
+    .catalog-page .faq-section--catalog,
+    .automation-faq-wrap .faq-section--catalog {
+        margin-top: 22px;
+        gap: 14px;
+        padding: 22px 18px;
+    }
+
+    .automation-product-page .faq-section--catalog .section-subtitle,
+    .catalog-page .faq-section--catalog .section-subtitle,
+    .automation-faq-wrap .faq-section--catalog .section-subtitle {
+        max-width: 34ch;
+        font-size: 0.92rem;
+    }
+
+    .automation-faq-wrap {
+        padding: 0 0 64px;
+    }
+
+    .automation-faq-wrap > .container {
+        width: min(100%, calc(100vw - 28px));
     }
 }
 

@@ -85,18 +85,19 @@
 
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260421-shell-theme-17">
-    <link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-20">
-    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
+<link rel="stylesheet" href="../assets/css/main.css?v=20260423-shell-theme-19">
+<link rel="preload" as="style" href="../assets/css/header.css?v=20260422-header-23">
+    <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260422-hero-inner-77">
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
-    <link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-20">
-    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-75">
-    <link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260422-internal-pages-5">
-    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-16">
+<link rel="stylesheet" href="../assets/css/header.css?v=20260422-header-23">
+    <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20260422-hero-inner-77">
+<link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260423-internal-pages-7">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=20260422-preview-footer-20">
 <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260421-fa-4">
-    <link rel="stylesheet" href="../assets/css/pages/process-services.css?v=20260422-process-pages-4">
+    <link rel="stylesheet" href="../assets/css/pages/process-services.css?v=20260423-process-pages-93">
+    <link rel="stylesheet" href="../assets/css/faq-system.css?v=20260422-faq-system-3">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
@@ -228,62 +229,245 @@
                         <h1 class="section-title">Пескоструйная обработка металла</h1>
                     </div>
                 </div>
-                <p class="section-subtitle subtitle">
-                    Пришлите фото металла или коротко опишите задачу.
+                <p class="section-subtitle subtitle services-header__subtitle--wide">
+                    Пришлите фото металла или коротко опишите задачу.<br>
                     Ниже собрали этапы очистки, подготовку поверхности и частые вопросы.
                 </p>
             </div>
 
-            <section class="service-overview" aria-label="Ключевой обзор услуги">
-                <div class="service-overview__lead">
-                    <span class="service-overview__eyebrow">Очистка перед покрытием</span>
-                    <h2 class="service-overview__title">Чистый металл перед грунтом, покраской и защитным циклом</h2>
-                    <p class="service-overview__text">Пескоструй снимает старый слой и формирует поверхность, на которую уже можно уверенно наносить грунт, порошковую краску или другой защитный состав.</p>
-                </div>
-                <div class="service-overview__cards">
-                    <article class="service-overview-card">
-                        <span class="service-overview-card__label">Для чего</span>
-                        <p>Чтобы снять старую краску, коррозию, окалину и плотные загрязнения без лишних ручных доработок.</p>
-                    </article>
-                    <article class="service-overview-card">
-                        <span class="service-overview-card__label">Где применяем</span>
-                        <p>На воротах, заборах, дисках, конструкциях, каркасах и деталях перед окраской или ремонтом.</p>
-                    </article>
-                    <article class="service-overview-card">
-                        <span class="service-overview-card__label">Что дальше</span>
-                        <p>После очистки можно переходить к грунту, порошковому покрытию или полному циклу защиты металла.</p>
-                    </article>
-                </div>
-                <div class="service-overview__bridge">
-                    <span class="service-overview__bridge-label">Следующий этап</span>
-                    <p class="service-overview__bridge-text">Если после очистки нужен не просто чистый металл, а готовое покрытие с цветом и фактурой, сразу переводим изделие в цикл порошковой покраски.</p>
-                    <a href="powder-coating.html#metal" class="service-overview__bridge-link">
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i> Перейти к покрытию
-                    </a>
-                </div>
-            </section>
-
             <div class="service-quick-nav" id="service-nav">
+                <a href="#decor" class="service-nav-link active" aria-current="page">
+                    <span class="service-nav-link__icon" aria-hidden="true"><i class="fas fa-car"></i></span>
+                    <span class="service-nav-link__label">Диски</span>
+                </a>
                 <a href="#metal" class="service-nav-link">
-                    <i class="fas fa-industry"></i> Конструкции
+                    <span class="service-nav-link__icon" aria-hidden="true"><i class="fas fa-industry"></i></span>
+                    <span class="service-nav-link__label">Конструкции</span>
                 </a>
                 <a href="#rust" class="service-nav-link">
-                    <i class="fas fa-shield-alt"></i> Очистка
+                    <span class="service-nav-link__icon" aria-hidden="true"><i class="fas fa-shield-alt"></i></span>
+                    <span class="service-nav-link__label">Очистка</span>
                 </a>
                 <a href="#prep" class="service-nav-link">
-                    <i class="fas fa-layer-group"></i> Под покраску
-                </a>
-                <a href="#decor" class="service-nav-link">
-                    <i class="fas fa-brush"></i> Диски
+                    <span class="service-nav-link__icon" aria-hidden="true"><i class="fas fa-layer-group"></i></span>
+                    <span class="service-nav-link__label">Под покраску</span>
                 </a>
             </div>
 
-            <section class="section before-after-section" aria-labelledby="sandblast-before-after-title">
-                <div class="container">
-                    <h2 class="section-title" id="sandblast-before-after-title">До и после очистки</h2>
-                    <p class="section-subtitle">Сдвиньте ползунок и посмотрите, как меняется поверхность после очистки.</p>
+            <div class="service-detail-card service-detail-card--featured" id="decor">
+                <div class="service-header">
+                    <i class="fas fa-car"></i>
+                    <h2>Штампованные диски</h2>
+                    <div class="service-id">Для деликатной очистки</div>
+                </div>
+                <div class="service-content">
+                    <p class="service-description">
+                        Аккуратно очищаем и матируем диски, убираем загрязнения и готовим металл к дальнейшему защитному покрытию.
+                    </p>
+                    <div class="service-advantages">
+                        <h3><i class="fas fa-check-circle"></i> Что делаем</h3>
+                        <div class="advantages-grid">
+                            <div class="advantage-item">
+                                <i class="fas fa-wind"></i>
+                                <span>Снимаем налёт, загрязнения и слабый старый слой без лишней грубости.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-circle-notch"></i>
+                                <span>Матируем поверхность под дальнейший грунт и защитное покрытие.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-snowflake"></i>
+                                <span>Готовим металл к сезонной нагрузке, влаге и реагентам.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-clipboard-check"></i>
+                                <span>Смотрим на состояние диска и подбираем деликатный режим очистки.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <h4>Осматриваем поверхность</h4>
+                            <p>Смотрим на состояние диска и выбираем более деликатный режим очистки под металл.</p>
+                        </div>
+                        <div class="process-step">
+                            <h4>Очищаем и матируем</h4>
+                            <p>Снимаем налёт, загрязнения и слабый старый слой и готовим поверхность к следующему этапу.</p>
+                        </div>
+                        <div class="process-step">
+                            <h4>Готовим к покрытию</h4>
+                            <p>После очистки диск можно спокойно отдавать под грунт и дальнейшее защитное покрытие.</p>
+                        </div>
+                        <div class="process-step">
+                            <h4>Проверяем результат</h4>
+                            <p>Контролируем равномерность обработки, чтобы поверхность была готова к следующему циклу.</p>
+                        </div>
+                    </div>
+                    <div class="service-image equipment-slider" data-image-slider aria-label="Пескоструй штампованных дисков — примеры работ">
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--prev" aria-label="Предыдущее фото">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="equipment-slider__viewport">
+                            <img class="equipment-slider__slide is-active" src="../assets/images/gallery/sandblast/sandblast-disks-01-preview.jpg" width="2400" height="1800" alt="Пескоструй штампованных дисков — пример 1" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-disks-02-preview.png" width="1536" height="1024" alt="Пескоструй штампованных дисков — пример 2" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-disks-03-preview.jpg" width="1600" height="900" alt="Пескоструй штампованных дисков — пример 3" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-disks-04-preview.jpg" width="1280" height="720" alt="Пескоструй штампованных дисков — пример 4" loading="lazy" decoding="async">
+                        </div>
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--next" aria-label="Следующее фото">
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="before-after before-after--before-left" data-before-after>
+            <div class="service-detail-card" id="metal">
+                <div class="service-header">
+                    <i class="fas fa-industry"></i>
+                    <h2>Металлоконструкции</h2>
+                    <div class="service-id">Для очистки конструкций</div>
+                </div>
+                <div class="service-content">
+                    <p class="service-description">
+                        Снимаем старое покрытие, окалину и коррозию и готовим конструкции к дальнейшему защитному циклу.
+                    </p>
+                    <div class="service-advantages">
+                        <h3><i class="fas fa-check-circle"></i> Где применяем</h3>
+                        <div class="advantages-grid">
+                            <div class="advantage-item">
+                                <i class="fas fa-home"></i>
+                                <span>Ворота, калитки, заборы</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-warehouse"></i>
+                                <span>Каркасы и навесы</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-store"></i>
+                                <span>Торговые павильоны</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-wind"></i>
+                                <span>Металлоконструкции любой сложности</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service-image equipment-slider" data-image-slider aria-label="Пескоструй металлоконструкций — примеры работ">
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--prev" aria-label="Предыдущее фото">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="equipment-slider__viewport">
+                            <img class="equipment-slider__slide is-active" src="../assets/images/gallery/sandblast/sandblast-metal-02-preview.jpg" width="1280" height="960" alt="Пескоструй металлоконструкций — пример 1" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-metal-01-preview.jpg" width="4000" height="3000" alt="Пескоструй металлоконструкций — пример 2" loading="lazy" decoding="async">
+                        </div>
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--next" aria-label="Следующее фото">
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-detail-card" id="rust">
+                <div class="service-header">
+                    <i class="fas fa-shield-alt"></i>
+                    <h2>Очистка от ржавчины</h2>
+                    <div class="service-id">Для глубокой очистки металла</div>
+                </div>
+                <div class="service-content">
+                    <p class="service-description">
+                        Снимаем многослойные покрытия, ржавчину и нагар без деформации поверхности.
+                        Подбираем абразив и давление под материал.
+                    </p>
+                    <div class="service-advantages">
+                        <h3><i class="fas fa-check-circle"></i> Что убираем</h3>
+                        <div class="advantages-grid">
+                            <div class="advantage-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Плотную коррозию и очаги ржавчины перед защитным циклом.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-layer-group"></i>
+                                <span>Старую краску, окалину и многослойные загрязнения.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-sliders-h"></i>
+                                <span>Подбираем абразив и давление под металл и состояние поверхности.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-paint-roller"></i>
+                                <span>Готовим изделие к дальнейшему грунту и финишному покрытию.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service-image equipment-slider" data-image-slider aria-label="Очистка от ржавчины — примеры работ">
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--prev" aria-label="Предыдущее фото">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="equipment-slider__viewport">
+                            <img class="equipment-slider__slide is-active" src="../assets/images/gallery/sandblast/sandblast-rust-01-preview.jpg" width="2400" height="1800" alt="Удаление ржавчины пескоструйной обработкой" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-rust-02-preview.png" width="1536" height="1024" alt="Удаление старой краски пескоструем" loading="lazy" decoding="async">
+                        </div>
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--next" aria-label="Следующее фото">
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-detail-card" id="prep">
+                <div class="service-header">
+                    <i class="fas fa-layer-group"></i>
+                    <h2>Подготовка под покраску</h2>
+                    <div class="service-id">Для подготовки под покрытие</div>
+                </div>
+                <div class="service-content">
+                    <p class="service-description">
+                        Формируем чистую и ровную поверхность под грунт и порошковую покраску. Это помогает продлить срок службы покрытия и получить более аккуратный финиш.
+                    </p>
+                    <div class="service-advantages">
+                        <h3><i class="fas fa-check-circle"></i> Что даёт подготовка</h3>
+                        <div class="advantages-grid">
+                            <div class="advantage-item">
+                                <i class="fas fa-link"></i>
+                                <span>Лучшее сцепление грунта и порошкового слоя с металлом.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-fill-drip"></i>
+                                <span>Более ровный и спокойный финиш без лишних следов на поверхности.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Меньше риска ранней коррозии и переделок после запуска в работу.</span>
+                            </div>
+                            <div class="advantage-item">
+                                <i class="fas fa-clipboard-check"></i>
+                                <span>Заранее понимаем, какой цикл нужен перед грунтом и покраской.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="service-image equipment-slider equipment-slider--prep" data-image-slider aria-label="Подготовка поверхности под покраску — примеры работ">
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--prev" aria-label="Предыдущее фото">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="equipment-slider__viewport">
+                            <img class="equipment-slider__slide is-active" src="../assets/images/gallery/sandblast/sandblast-prep-01-preview.png" width="621" height="714" alt="Общий вид изделия после подготовки под покраску" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-prep-02-preview.png" width="617" height="321" alt="Верхняя часть изделия после подготовки под покраску" loading="lazy" decoding="async">
+                            <img class="equipment-slider__slide" src="../assets/images/gallery/sandblast/sandblast-prep-03-preview.png" width="617" height="380" alt="Крупный план поверхности после подготовки под покраску" loading="lazy" decoding="async">
+                        </div>
+                        <button type="button" class="equipment-slider__btn equipment-slider__btn--next" aria-label="Следующее фото">
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="section before-after-section before-after-section--sandblast" aria-labelledby="sandblast-before-after-title">
+                <div class="container">
+                    <div class="before-after-section__header">
+                        <h2 class="section-title" id="sandblast-before-after-title">До и после очистки</h2>
+                        <p class="section-subtitle">Сдвиньте ползунок и посмотрите, как меняется поверхность после очистки.</p>
+                    </div>
+
+                    <div class="before-after before-after--before-left before-after--portrait before-after--service-wide" data-before-after style="--before-image: url('/assets/images/gallery/sandblast/sandblast-20-preview.jpg'); --after-image: url('/assets/images/gallery/sandblast/sandblast-after-new-preview.png');">
                         <div class="before-after__media">
                             <div class="before-after__after">
                                 <img class="before-after__image before-after__image--after" src="../assets/images/gallery/sandblast/sandblast-after-new-preview.png" width="1024" height="1536" alt="После пескоструйной обработки" loading="lazy" decoding="async">
@@ -313,168 +497,17 @@
                         </div>
                     </div>
 
-                    <p class="before-after__note">Один из типичных примеров пескоструйной подготовки металла.</p>
-
+                    <div class="before-after-section__footer">
+                        <p class="before-after__note">Один из типичных примеров пескоструйной подготовки металла.</p>
+                    </div>
                 </div>
             </section>
 
-            <div class="service-detail-card" id="metal">
-                <div class="service-header">
-                    <i class="fas fa-industry"></i>
-                    <h2>Металлоконструкции</h2>
-                    <div class="service-id">Очистка основы</div>
+            <section class="section faq-section faq-section--catalog faq-system" aria-labelledby="services-faq-title">
+                <div class="faq-section__intro">
+                    <h2 class="section-title" id="services-faq-title">Что обычно спрашивают перед пескоструем</h2>
+                    <p class="section-subtitle">Коротко о материале, защите металла и выезде на объект.</p>
                 </div>
-                <div class="service-content">
-                    <p class="service-description">
-                        Снимаем старое покрытие, окалину и коррозию и подготавливаем конструкции под дальнейший защитный цикл.
-                    </p>
-                    <div class="service-advantages">
-                        <h3><i class="fas fa-check-circle"></i> Где применяем</h3>
-                        <div class="advantages-grid">
-                            <div class="advantage-item">
-                                <i class="fas fa-home"></i>
-                                <span>Ворота, калитки, заборы</span>
-                            </div>
-                            <div class="advantage-item">
-                                <i class="fas fa-warehouse"></i>
-                                <span>Каркасы и навесы</span>
-                            </div>
-                            <div class="advantage-item">
-                                <i class="fas fa-store"></i>
-                                <span>Торговые павильоны</span>
-                            </div>
-                            <div class="advantage-item">
-                                <i class="fas fa-wind"></i>
-                                <span>Металлоконструкции любой сложности</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="service-image service-image--double">
-                        <img src="../assets/images/gallery/sandblast/sandblast-metal-02-preview.jpg" width="1280" height="960" alt="Пескоструй металлоконструкций — пример 2" loading="lazy" decoding="async">
-                        <img src="../assets/images/gallery/sandblast/sandblast-metal-01-preview.jpg" width="4000" height="3000" alt="Пескоструй металлоконструкций — пример 1" loading="lazy" decoding="async">
-                    </div>
-                    <div class="service-cta">
-                        <a href="prices.html" class="btn btn-primary">
-                            <i class="fas fa-tag"></i> Узнать цены
-                        </a>
-                        <a href="../index.html#request-form" class="btn btn-secondary">
-                            <i class="fas fa-calculator"></i> Рассчитать стоимость
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="service-detail-card" id="rust">
-                <div class="service-header">
-                    <i class="fas fa-shield-alt"></i>
-                    <h2>Очистка от ржавчины</h2>
-                    <div class="service-id">Глубокая очистка</div>
-                </div>
-                <div class="service-content">
-                    <p class="service-description">
-                        Снимаем многослойные покрытия, ржавчину и нагар без деформации поверхности.
-                        Подбираем абразив и давление под материал.
-                    </p>
-                    <div class="service-image service-image--double">
-                        <img src="../assets/images/gallery/sandblast/sandblast-rust-01-preview.jpg" width="2400" height="1800" alt="Удаление ржавчины пескоструйной обработкой" loading="lazy" decoding="async">
-                        <img src="../assets/images/gallery/sandblast/sandblast-rust-02-preview.png" width="1536" height="1024" alt="Удаление старой краски пескоструем" loading="lazy" decoding="async">
-                    </div>
-                    <div class="service-cta">
-                        <a href="prices.html" class="btn btn-primary">
-                            <i class="fas fa-tag"></i> Узнать цены
-                        </a>
-                        <a href="../index.html#request-form" class="btn btn-secondary">
-                            <i class="fas fa-calculator"></i> Рассчитать стоимость
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="service-detail-card" id="prep">
-                <div class="service-header">
-                    <i class="fas fa-layer-group"></i>
-                    <h2>Подготовка под покраску</h2>
-                    <div class="service-id">Перед грунтом и порошком</div>
-                </div>
-                <div class="service-content">
-                    <p class="service-description">
-                        Формируем чистую и ровную поверхность для последующей грунтовки и порошковой покраски. Это увеличивает срок службы покрытия и помогает получить более аккуратный финиш.
-                    </p>
-                    <div class="service-image">
-                        <img src="../assets/images/gallery/sandblast/sandblast-prep-new-preview.png" width="1536" height="1024" alt="Подготовка поверхности под покраску" loading="lazy" decoding="async">
-                    </div>
-                    <div class="service-cta">
-                        <a href="prices.html" class="btn btn-primary">
-                            <i class="fas fa-tag"></i> Узнать цены
-                        </a>
-                        <a href="../index.html#request-form" class="btn btn-secondary">
-                            <i class="fas fa-calculator"></i> Рассчитать стоимость
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="service-detail-card" id="decor">
-                <div class="service-header">
-                    <i class="fas fa-brush"></i>
-                    <h2>Штампованные диски</h2>
-                    <div class="service-id">Деликатная обработка</div>
-                </div>
-                <div class="service-content">
-                    <p class="service-description">
-                        Аккуратно очищаем и матируем диски, убираем загрязнения и готовим металл к дальнейшему защитному покрытию.
-                    </p>
-                    <div class="service-image equipment-slider equipment-slider--double" data-image-slider aria-label="Пескоструй штампованных дисков — примеры работ">
-                        <button type="button" class="equipment-slider__btn equipment-slider__btn--prev" aria-label="Предыдущая пара фото">
-                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                        </button>
-                        <div class="equipment-slider__viewport">
-                            <div class="equipment-slider__slide equipment-slider__slide--double is-active">
-                                <img src="../assets/images/gallery/sandblast/sandblast-disks-01-preview.jpg" width="2400" height="1800" alt="Пескоструй штампованных дисков — пример 1" loading="lazy" decoding="async">
-                                <img src="../assets/images/gallery/sandblast/sandblast-disks-02-preview.png" width="1536" height="1024" alt="Пескоструй штампованных дисков — пример 2" loading="lazy" decoding="async">
-                            </div>
-                            <div class="equipment-slider__slide equipment-slider__slide--double">
-                                <img src="../assets/images/gallery/sandblast/sandblast-disks-03-preview.jpg" width="1600" height="900" alt="Пескоструй штампованных дисков — пример 3" loading="lazy" decoding="async">
-                                <img src="../assets/images/gallery/sandblast/sandblast-disks-04-preview.jpg" width="1280" height="720" alt="Пескоструй штампованных дисков — пример 4" loading="lazy" decoding="async">
-                            </div>
-                        </div>
-                        <button type="button" class="equipment-slider__btn equipment-slider__btn--next" aria-label="Следующая пара фото">
-                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <div class="service-cta">
-                        <a href="prices.html" class="btn btn-primary">
-                            <i class="fas fa-tag"></i> Узнать цены
-                        </a>
-                        <a href="../index.html#request-form" class="btn btn-secondary">
-                            <i class="fas fa-calculator"></i> Рассчитать стоимость
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="services-cta">
-                <div class="services-cta__copy">
-                    <p class="services-cta__eyebrow">Следующий шаг</p>
-                    <h2>Нужна консультация по пескострую?</h2>
-                    <p class="cta-text">
-                        Подскажем по степени очистки, абразиву и следующему этапу перед грунтом или покраской.
-                    </p>
-                </div>
-                <div class="services-cta__actions">
-                    <a href="../index.html#request-form" class="btn btn-primary">
-                        <i class="fas fa-headset"></i> Получить консультацию
-                    </a>
-                    <p class="cta-phone">
-                        <i class="fas fa-phone"></i> Или позвоните:
-                        <a href="tel:+79625542260">+7 (962) 554-22-60</a> и <a href="tel:+79376154629">+7 (937) 615-46-29</a>
-                    </p>
-                </div>
-            </div>
-
-            <section class="section" aria-labelledby="services-faq-title">
-                <h2 class="section-title" id="services-faq-title">Что обычно спрашивают перед пескоструем</h2>
-                <p class="section-subtitle">Коротко о материале, защите металла и выезде на объект.</p>
                 <div class="faq-list">
                     <details class="faq-item">
                         <summary class="faq-question">Можно ли обрабатывать тонкий металл?</summary>
@@ -513,8 +546,8 @@
                         <span class="preview-footer__company">ООО «Комфорт Плюс»</span>
                     </span>
                 </a>
-                <p class="preview-footer__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
-                <p class="preview-footer__legal-text">Более 10 лет опыта в изготовлении и монтаже конструкций для частных и коммерческих объектов.</p>
+                <p class="preview-footer__legal-text">Производим ворота, каркасы, ограждения и подбираем автоматику под объект.</p>
+                <p class="preview-footer__legal-text">Более 10 лет работаем с частными домами, коммерческими объектами и металлоконструкциями под покраску.</p>
             </div>
 
             <div class="preview-footer__column preview-footer__column--contacts">
@@ -535,7 +568,7 @@
                 <ul class="preview-footer__list">
                         <li><a href="powder-coating.html">Порошковая покраска</a></li>
                         <li><a href="sandblasting.html">Пескоструйная обработка</a></li>
-                        <li><a href="prices.html">Цены и расчет</a></li>
+                        <li><a href="prices.html">Цены и расчёт</a></li>
                         <li><a href="payment-documents.html">Оплата и документы</a></li>
                         <li><a href="gallery.html">Наши работы</a></li>
                         <li><a href="../index.html#request-form">Оставить заявку</a></li>
@@ -564,9 +597,14 @@
     <script src="../assets/js/header.js?v=20260420-header-split-11" defer></script>
     <script src="../assets/js/lightbox.js?v=20260420-lightbox-1" defer></script>
     <script src="../assets/js/sliders.js?v=20260418-sliders-split-1" defer></script>
-    <script src="../assets/js/process-pages.js?v=20260422-process-pages-1" defer></script>
+    <script src="../assets/js/process-pages.js?v=20260422-process-pages-2" defer></script>
 </body>
 </html>
+
+
+
+
+
 
 
 

@@ -755,7 +755,103 @@
     }
 
     body#top .desktop-hero-header.internal-scene-header .hero-header-stack {
+        position: absolute;
+        top: 58px;
+        right: 62px;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        width: auto;
+        max-width: none;
+        gap: 0;
+        margin: 0;
+        transform: none;
+        z-index: 4;
+        pointer-events: auto;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--secondary,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-address {
         display: none !important;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:visited,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:hover,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:focus-visible {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        width: auto;
+        padding: 6px 0 8px;
+        color: rgba(16, 38, 61, 0.9) !important;
+        text-decoration: none !important;
+        transform: none;
+        opacity: 1;
+        position: relative;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary .hero-header-text {
+        display: block;
+        min-width: 0;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary .hero-header-main {
+        color: #10263d !important;
+        font-size: clamp(16.2px, 1vw, 18.4px);
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: 0.018em;
+        font-variant-numeric: tabular-nums lining-nums;
+        font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary .hero-header-sub {
+        display: none !important;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 28px;
+        width: 28px;
+        height: 28px;
+        font-size: 12.5px;
+        color: rgba(24, 61, 93, 0.8) !important;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(244, 248, 252, 0.42));
+        border: 1px solid rgba(24, 61, 93, 0.08);
+        border-radius: 999px;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.46),
+            0 4px 10px rgba(24, 61, 93, 0.05);
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary::after {
+        content: '';
+        position: absolute;
+        left: 39px;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(24, 61, 93, 0.18), rgba(24, 61, 93, 0));
+        opacity: 0.52;
+        transition: opacity 180ms ease, transform 180ms ease;
+        transform-origin: left center;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:hover,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:focus-visible {
+        color: #10263d !important;
+        opacity: 0.92;
+        box-shadow: none;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:hover::after,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:focus-visible::after {
+        opacity: 0.8;
+        transform: scaleX(1.02);
     }
 
     body#top .desktop-hero-header.internal-scene-header .hero-brand__link,

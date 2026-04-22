@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const quickNav = document.querySelector('.service-quick-nav');
     const navLinks = Array.from(document.querySelectorAll('.service-quick-nav .service-nav-link'))
         .filter((link) => {
             const hash = link.getAttribute('href');
@@ -13,6 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = navLinks
         .map((link) => document.querySelector(link.getAttribute('href')))
         .filter(Boolean);
+
+    if (quickNav) {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (reducedMotion || !('IntersectionObserver' in window)) {
+            window.setTimeout(() => quickNav.classList.add('is-revealed'), 60);
+        } else {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        quickNav.classList.add('is-revealed');
+                        observer.disconnect();
+                    }
+                });
+            }, {
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.35
+            });
+
+            observer.observe(quickNav);
+        }
+    }
 
     function getOffset() {
         const headerHeight = header ? header.offsetHeight : 120;
