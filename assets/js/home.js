@@ -46,6 +46,7 @@
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
     const heroHeader = document.querySelector('.hero-header');
+    const body = document.body;
     const heroMenuToggle = document.querySelector('.hero-menu-toggle');
     const heroNav = document.querySelector('.hero-scene__nav');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
@@ -54,7 +55,9 @@
 
     function setHeroHeaderHeight() {
         if (!heroHeader) return;
-        document.documentElement.style.setProperty('--home-hero-header-height', `${Math.ceil(heroHeader.offsetHeight)}px`);
+        const headerHeight = `${Math.ceil(heroHeader.offsetHeight)}px`;
+        document.documentElement.style.setProperty('--home-hero-header-height', headerHeight);
+        document.documentElement.style.setProperty('--header-top-height', headerHeight);
     }
 
     function canPrefetch() {
@@ -162,23 +165,46 @@
     }
 
     if (heroHeader && heroMenuToggle && heroNav) {
+        let lastHeroScrollY = window.scrollY;
+
         const closeHeroMenu = () => {
             heroHeader.classList.remove('is-menu-open');
+            heroNav.classList.remove('active');
+            body.classList.remove('menu-open');
             heroMenuToggle.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('menu-open');
             heroMenuToggle.classList.remove('is-active');
+            heroNav.setAttribute('aria-hidden', 'true');
             setHeroHeaderHeight();
         };
 
         const openHeroMenu = () => {
             heroHeader.classList.add('is-menu-open');
+            heroNav.classList.add('active');
+            body.classList.add('menu-open');
             heroMenuToggle.setAttribute('aria-expanded', 'true');
-            document.body.classList.add('menu-open');
             heroMenuToggle.classList.add('is-active');
+            heroNav.setAttribute('aria-hidden', 'false');
+            lastHeroScrollY = window.scrollY;
             setHeroHeaderHeight();
         };
 
+        const syncHeroMenuOnScroll = () => {
+            const currentScrollY = window.scrollY;
+            const scrollingDown = currentScrollY > lastHeroScrollY + 4;
+
+            if (
+                window.innerWidth <= HERO_MENU_BREAKPOINT
+                && heroHeader.classList.contains('is-menu-open')
+                && scrollingDown
+            ) {
+                closeHeroMenu();
+            }
+
+            lastHeroScrollY = currentScrollY;
+        };
+
         setHeroHeaderHeight();
+        heroNav.setAttribute('aria-hidden', 'true');
 
         heroMenuToggle.addEventListener('click', () => {
             if (heroHeader.classList.contains('is-menu-open')) {
@@ -213,10 +239,12 @@
             if (window.innerWidth > HERO_MENU_BREAKPOINT) {
                 closeHeroMenu();
             }
+            lastHeroScrollY = window.scrollY;
             setHeroHeaderHeight();
         });
 
         window.addEventListener('load', setHeroHeaderHeight, { once: true });
+        window.addEventListener('scroll', syncHeroMenuOnScroll, { passive: true });
 
         installNavPrefetch(Array.from(heroNav.querySelectorAll('a')));
     }

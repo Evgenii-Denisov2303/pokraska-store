@@ -793,16 +793,9 @@
         height: 40px;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:first-of-type {
-        padding-top: 2px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:first-of-type .phone-number {
-        font-size: 0.92rem;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:first-of-type .phone-label {
-        font-size: 0.78rem;
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
+        display: none !important;
+        margin-top: 0;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {

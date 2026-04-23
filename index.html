@@ -29,7 +29,8 @@
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/home.css?v=20260423-home-theme-143">
+    <link rel="stylesheet" href="assets/css/home.css?v=20260423-home-theme-149">
+    <link rel="stylesheet" href="assets/css/footer.css?v=20260423-preview-footer-22">
     <script id="home-structured-data" type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -129,7 +130,9 @@
                 <div class="hero-copy">
                     <span class="hero-copy__eyebrow"><i class="fas fa-circle" aria-hidden="true"></i> Производство и монтаж</span>
                     <h1>
-                        <span class="hero-copy__title-main">Автоматические ворота в Казани</span>
+                        <span class="hero-copy__title-main">Автоматические</span>
+                        <span class="hero-copy__title-main hero-copy__title-main--offset">ворота&nbsp;в</span>
+                        <span class="hero-copy__title-main hero-copy__title-main--city">Казани</span>
                         <span class="hero-copy__title-sub">с установкой по доступным ценам</span>
                     </h1>
                     <div class="hero-copy__subtext">
@@ -470,6 +473,14 @@
                             <span><i class="fas fa-check-circle" aria-hidden="true"></i> Раздвижные решётки</span>
                             <span><i class="fas fa-check-circle" aria-hidden="true"></i> Пескоструй и порошковая покраска</span>
                         </div>
+                        <div class="home-tail__request-source">
+                            <span class="home-tail__request-source-label">Для расчёта подойдут</span>
+                            <div class="home-tail__request-source-items">
+                                <span>Фото объекта</span>
+                                <span>Размеры проёма</span>
+                                <span>Короткое описание</span>
+                            </div>
+                        </div>
                         <div class="home-tail__contact">
                             <span class="home-tail__contact-eyebrow">Быстрый контакт</span>
                             <p>Если удобнее, свяжитесь с нами напрямую по телефону или в мессенджере.</p>
@@ -513,19 +524,21 @@
             </section>
         </section>
 
-        <footer id="page-footer" class="scene preview-footer scene-reveal" aria-label="Футер сайта">
+        <footer id="page-footer" class="preview-footer" aria-label="Футер сайта">
             <div class="preview-footer__layout">
                 <div class="preview-footer__column preview-footer__column--company">
                     <a class="preview-footer__brand" href="#top" aria-label="Наверх">
                         <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
-                            <img class="preview-footer__logo logo-image" src="assets/images/logo.png" alt="">
+                            <img class="preview-footer__logo logo-image" src="assets/images/logo.png" alt="" loading="lazy" decoding="async">
                             <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                         </span>
+                        <span class="preview-footer__brand-copy">
+                            <span class="preview-footer__label">Компания</span>
+                            <span class="preview-footer__company">ООО «Комфорт Плюс»</span>
+                        </span>
                     </a>
-                    <span class="preview-footer__label">Компания</span>
-                    <p class="preview-footer__company">ООО «Комфорт Плюс»</p>
-                    <p class="preview-footer__legal-text">Производство металлоконструкций, изготовление ворот, каркасов и установка автоматики.</p>
-                    <p class="preview-footer__legal-text">Более 10 лет опыта в изготовлении и монтаже конструкций для частных и коммерческих объектов.</p>
+                    <p class="preview-footer__legal-text">Производим ворота, каркасы, ограждения и подбираем автоматику под объект.</p>
+                    <p class="preview-footer__legal-text">Более 10 лет работаем с частными домами, коммерческими объектами и металлоконструкциями под покраску.</p>
                 </div>
 
                 <div class="preview-footer__column preview-footer__column--contacts">
@@ -537,7 +550,7 @@
                         <li><i class="fas fa-envelope" aria-hidden="true"></i> <a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a></li>
                         <li><i class="fas fa-clock" aria-hidden="true"></i> Пн-Пт: 8:00-18:00, Сб: 9:00-14:00</li>
                         <li><i class="fab fa-telegram-plane" aria-hidden="true"></i> <a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-                        <li><i class="fas fa-comment-dots" aria-hidden="true"></i> <a href="https://max.ru" target="_blank" rel="noopener noreferrer">Max</a></li>
+                        <li><i class="fas fa-comments" aria-hidden="true"></i> <a href="https://max.ru" target="_blank" rel="noopener noreferrer">Max</a></li>
                     </ul>
                 </div>
 
@@ -563,9 +576,10 @@
     </main>
     <script src="assets/js/content-api.js" defer></script>
     <script src="assets/js/home-content.js?v=20260414-came-brand-1" defer></script>
-    <script src="assets/js/home.js?v=20260413-footer-3col-1" defer></script>
+    <script src="assets/js/home.js?v=20260423-home-header-3" defer></script>
 </body>
 </html>
+
 
 
 
