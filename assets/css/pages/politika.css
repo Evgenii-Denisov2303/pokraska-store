@@ -491,4 +491,16 @@ table tr:hover {
     }
 }
 
+@media (max-width: 1100px) {
+    .privacy-page > .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .privacy-container {
+        width: min(900px, 100%);
+        margin-inline: auto;
+    }
+}
+
 

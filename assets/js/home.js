@@ -42,6 +42,7 @@
     })();
 
     const HERO_MENU_BREAKPOINT = 1080;
+    const HERO_SCROLL_BREAKPOINT = 768;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
@@ -55,7 +56,9 @@
 
     function setHeroHeaderHeight() {
         if (!heroHeader) return;
-        const headerHeight = `${Math.ceil(heroHeader.offsetHeight)}px`;
+        const compactHeaderSource = heroHeader.querySelector('.hero-scene__topbar');
+        const useCompactSource = window.innerWidth <= HERO_MENU_BREAKPOINT && compactHeaderSource;
+        const headerHeight = `${Math.ceil((useCompactSource ? compactHeaderSource : heroHeader).offsetHeight)}px`;
         document.documentElement.style.setProperty('--home-hero-header-height', headerHeight);
         document.documentElement.style.setProperty('--header-top-height', headerHeight);
     }
@@ -168,7 +171,7 @@
         let lastHeroScrollY = window.scrollY;
         let isHeroHeaderHidden = false;
 
-        const isCompactHeroViewport = () => window.innerWidth <= HERO_MENU_BREAKPOINT || window.innerHeight <= 520;
+        const isCompactHeroViewport = () => window.innerWidth <= HERO_SCROLL_BREAKPOINT || window.innerHeight <= 520;
 
         const updateHeroHeaderVisibility = () => {
             if (!isCompactHeroViewport()) {
@@ -236,7 +239,7 @@
             const scrollingDown = currentScrollY > lastHeroScrollY + 4;
 
             if (
-                window.innerWidth <= HERO_MENU_BREAKPOINT
+                isCompactHeroViewport()
                 && heroHeader.classList.contains('is-menu-open')
                 && scrollingDown
             ) {

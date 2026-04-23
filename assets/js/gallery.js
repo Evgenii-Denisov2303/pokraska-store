@@ -50,8 +50,61 @@ document.addEventListener('DOMContentLoaded', function () {
         return document.getElementById('gallery-filters');
     }
 
+    function getFilterList() {
+        return document.querySelector('[data-gallery-filters]');
+    }
+
     function getGalleryEmptyState() {
         return document.querySelector('.gallery-empty');
+    }
+
+    function updateFilterSwipeState() {
+        const filterList = getFilterList();
+        const filterBody = filterList?.closest('.gallery-filter-body');
+        if (!filterList || !filterBody) return;
+
+        const maxScroll = Math.max(0, filterList.scrollWidth - filterList.clientWidth);
+        const edgeThreshold = 4;
+        const hasOverflow = maxScroll > edgeThreshold;
+        const isAtStart = !hasOverflow || filterList.scrollLeft <= edgeThreshold;
+        const isAtEnd = !hasOverflow || filterList.scrollLeft >= maxScroll - edgeThreshold;
+
+        filterBody.classList.toggle('has-overflow', hasOverflow);
+        filterBody.classList.toggle('is-at-start', isAtStart);
+        filterBody.classList.toggle('is-at-end', isAtEnd);
+    }
+
+    function bindFilterSwipeState() {
+        const filterList = getFilterList();
+        const filterBody = filterList?.closest('.gallery-filter-body');
+        if (!filterList || !filterBody) return;
+
+        if (filterBody.dataset.swipeStateBound === 'true') {
+            updateFilterSwipeState();
+            return;
+        }
+
+        const syncSwipeState = () => {
+            window.requestAnimationFrame(updateFilterSwipeState);
+        };
+
+        filterList.addEventListener('scroll', syncSwipeState, { passive: true });
+        filterList.addEventListener('touchstart', syncSwipeState, { passive: true });
+        filterList.addEventListener('touchmove', syncSwipeState, { passive: true });
+        filterList.addEventListener('touchend', syncSwipeState, { passive: true });
+        filterList.addEventListener('pointerdown', syncSwipeState, { passive: true });
+        filterList.addEventListener('pointerup', syncSwipeState, { passive: true });
+        window.addEventListener('resize', syncSwipeState);
+        window.addEventListener('load', syncSwipeState, { once: true });
+
+        if (document.fonts && typeof document.fonts.ready?.then === 'function') {
+            document.fonts.ready.then(syncSwipeState).catch(() => {});
+        }
+
+        filterBody.dataset.swipeStateBound = 'true';
+        updateFilterSwipeState();
+        window.setTimeout(updateFilterSwipeState, 120);
+        window.setTimeout(updateFilterSwipeState, 480);
     }
 
     function normalizeFilterValue(filterValue) {
@@ -334,6 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateEmptyState(filteredItems.length, filterValue);
         updateShowMore(filteredItems.length);
+        updateFilterSwipeState();
     }
 
     function animateProofCounter() {
@@ -472,6 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
             applyFilter(normalizeFilterValue(filterFromUrl), true);
         }
 
+        bindFilterSwipeState();
         setupProofCounter();
     }
 
