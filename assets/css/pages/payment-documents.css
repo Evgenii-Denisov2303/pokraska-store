@@ -29,7 +29,8 @@ body#top .payment-docs-heading {
     display: grid;
     gap: 6px;
     align-items: start;
-    margin-bottom: 2px;
+    max-width: 860px;
+    margin: 0 0 34px;
 }
 
 body#top .payment-docs-heading__lead {
@@ -121,7 +122,7 @@ body#top .payment-order-sheet {
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
     gap: 22px;
-    margin-top: 24px;
+    margin: 0 0 22px;
     padding: 30px;
     background:
         radial-gradient(circle at 86% 18%, rgba(var(--theme-accent-rgb), 0.15), transparent 25%),

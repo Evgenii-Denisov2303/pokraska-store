@@ -166,6 +166,45 @@
 
     if (heroHeader && heroMenuToggle && heroNav) {
         let lastHeroScrollY = window.scrollY;
+        let isHeroHeaderHidden = false;
+
+        const isCompactHeroViewport = () => window.innerWidth <= HERO_MENU_BREAKPOINT || window.innerHeight <= 520;
+
+        const updateHeroHeaderVisibility = () => {
+            if (!isCompactHeroViewport()) {
+                isHeroHeaderHidden = false;
+                heroHeader.classList.remove('is-hidden');
+                lastHeroScrollY = window.scrollY;
+                return;
+            }
+
+            if (heroHeader.classList.contains('is-menu-open')) {
+                isHeroHeaderHidden = false;
+                heroHeader.classList.remove('is-hidden');
+                lastHeroScrollY = window.scrollY;
+                return;
+            }
+
+            const currentScrollY = window.scrollY;
+            const scrollingDown = currentScrollY > lastHeroScrollY + 4;
+            const nearTop = currentScrollY < 20;
+
+            if (scrollingDown && currentScrollY > 12) {
+                if (!isHeroHeaderHidden) {
+                    heroHeader.classList.add('is-hidden');
+                    isHeroHeaderHidden = true;
+                }
+            } else if (!scrollingDown || nearTop) {
+                if (isHeroHeaderHidden) {
+                    heroHeader.classList.remove('is-hidden');
+                    isHeroHeaderHidden = false;
+                } else {
+                    heroHeader.classList.remove('is-hidden');
+                }
+            }
+
+            lastHeroScrollY = currentScrollY;
+        };
 
         const closeHeroMenu = () => {
             heroHeader.classList.remove('is-menu-open');
@@ -174,6 +213,8 @@
             heroMenuToggle.setAttribute('aria-expanded', 'false');
             heroMenuToggle.classList.remove('is-active');
             heroNav.setAttribute('aria-hidden', 'true');
+            heroHeader.classList.remove('is-hidden');
+            isHeroHeaderHidden = false;
             setHeroHeaderHeight();
         };
 
@@ -184,6 +225,8 @@
             heroMenuToggle.setAttribute('aria-expanded', 'true');
             heroMenuToggle.classList.add('is-active');
             heroNav.setAttribute('aria-hidden', 'false');
+            heroHeader.classList.remove('is-hidden');
+            isHeroHeaderHidden = false;
             lastHeroScrollY = window.scrollY;
             setHeroHeaderHeight();
         };
@@ -200,10 +243,11 @@
                 closeHeroMenu();
             }
 
-            lastHeroScrollY = currentScrollY;
+            updateHeroHeaderVisibility();
         };
 
         setHeroHeaderHeight();
+        updateHeroHeaderVisibility();
         heroNav.setAttribute('aria-hidden', 'true');
 
         heroMenuToggle.addEventListener('click', () => {
@@ -241,6 +285,7 @@
             }
             lastHeroScrollY = window.scrollY;
             setHeroHeaderHeight();
+            updateHeroHeaderVisibility();
         });
 
         window.addEventListener('load', setHeroHeaderHeight, { once: true });
