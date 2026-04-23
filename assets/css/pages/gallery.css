@@ -1027,8 +1027,8 @@ body#top .gallery-page .gallery-filter-list {
     align-content: stretch;
     height: 100%;
     overflow: hidden;
-    gap: 12px;
-    padding: 12px;
+    gap: 0;
+    padding: 0;
     border-radius: 30px;
     border: 1px solid var(--theme-border);
     background:
@@ -1066,10 +1066,10 @@ body#top .gallery-page .gallery-filter-list {
     aspect-ratio: 15 / 10;
     overflow: hidden;
     cursor: zoom-in;
-    border-radius: 24px;
-    border: 1px solid rgba(var(--theme-accent-strong-rgb), 0.1);
-    background: linear-gradient(180deg, rgba(253, 250, 246, 0.98), rgba(245, 237, 227, 0.94));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 12px 26px rgba(20, 28, 39, 0.08);
+    border-radius: 30px 30px 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .gallery-image img {
@@ -1107,7 +1107,7 @@ body#top .gallery-page .gallery-filter-list {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.46);
+    border: 0;
     pointer-events: none;
     z-index: 2;
 }
@@ -1210,6 +1210,8 @@ body#top .gallery-page .gallery-filter-list {
     align-content: start;
     gap: 12px;
     min-height: 154px;
+    margin: 14px;
+    margin-top: 12px;
     padding: 18px 18px 20px;
     border-radius: 22px;
     border: 1px solid rgba(var(--theme-accent-strong-rgb), 0.08);

@@ -1,4 +1,46 @@
 // ========== HEADER.JS ==========
+(function injectInlineEditorAssets() {
+    const query = new URLSearchParams(window.location.search);
+    const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
+        || query.get('edit') === '1'
+        || ['localhost', '127.0.0.1'].includes(window.location.hostname)
+        || window.location.port === '4173';
+
+    if (!wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
+        return;
+    }
+
+    window.POKRASKA_INLINE_ASSETS_LOADING = true;
+
+    const assetVersion = '20260423-inline-admin-10';
+    const assets = [
+        `/assets/js/inline-editor.js?v=${assetVersion}`,
+        `/assets/js/inline-editor-bootstrap.js?v=${assetVersion}`
+    ];
+
+    const loadScript = (src) => new Promise((resolve, reject) => {
+        if (document.querySelector(`script[data-inline-asset="${src}"]`)) {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false;
+        script.defer = true;
+        script.dataset.inlineAsset = src;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Не удалось загрузить ${src}`));
+        document.head.appendChild(script);
+    });
+
+    window.POKRASKA_INLINE_ASSETS_READY = assets
+        .reduce((chain, src) => chain.then(() => loadScript(src)), Promise.resolve())
+        .catch((error) => {
+            console.warn('[inline-editor]', error.message);
+        });
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('.nav');

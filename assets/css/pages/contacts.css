@@ -345,6 +345,10 @@ body#top .contacts-page .contacts-subtitle {
     box-shadow:
         0 10px 16px rgba(88, 70, 48, 0.022),
         inset 0 1px 0 rgba(255, 255, 255, 0.54);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease;
 }
 
 .contacts-panel--direct .contacts-contact-tile,
@@ -375,10 +379,31 @@ body#top .contacts-page .contacts-subtitle {
 
 .contacts-contact-copy a {
     color: rgba(16, 31, 47, 0.95);
+    transition: color 0.18s ease;
 }
 
 .contacts-contact-copy a:hover {
     text-decoration: underline;
+}
+
+.contacts-contact-tile:hover,
+.contacts-contact-tile:focus-within,
+.contacts-address-row:hover,
+.contacts-address-row:focus-within,
+.contacts-meta-chip:hover,
+.contacts-meta-chip:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(var(--theme-accent-rgb), 0.18);
+    box-shadow:
+        0 14px 24px rgba(18, 46, 74, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.54);
+}
+
+.contacts-contact-tile:hover .contacts-contact-copy a,
+.contacts-contact-tile:focus-within .contacts-contact-copy a,
+.contacts-address-row:hover .contacts-contact-copy a,
+.contacts-address-row:focus-within .contacts-contact-copy a {
+    color: rgba(var(--theme-accent-strong-rgb), 0.96);
 }
 
 .contacts-contact-copy span:last-child,
@@ -532,6 +557,10 @@ body#top .contacts-page .contacts-subtitle {
     box-shadow:
         0 6px 14px rgba(88, 70, 48, 0.018),
         inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease;
 }
 
 .contacts-route-badge i {
@@ -559,10 +588,32 @@ body#top .contacts-page .contacts-subtitle {
     box-shadow:
         0 8px 16px rgba(88, 70, 48, 0.024),
         inset 0 1px 0 rgba(255, 255, 255, 0.54);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease;
 }
 
 .contacts-route-steps li::before {
     content: none;
+}
+
+.contacts-route-badge:hover,
+.contacts-route-badge:focus-within {
+    transform: translateY(-1px);
+    border-color: rgba(var(--theme-accent-rgb), 0.16);
+    box-shadow:
+        0 10px 18px rgba(18, 46, 74, 0.032),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.contacts-route-steps li:hover,
+.contacts-route-steps li:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(var(--theme-accent-rgb), 0.16);
+    box-shadow:
+        0 14px 24px rgba(18, 46, 74, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.54);
 }
 
 .contacts-route-steps strong {

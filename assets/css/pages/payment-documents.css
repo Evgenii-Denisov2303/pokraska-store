@@ -224,6 +224,10 @@ body#top .payment-order-sheet__facts span {
     box-shadow:
         0 10px 18px rgba(84, 67, 47, 0.016),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    transition:
+        transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.22s ease,
+        border-color 0.2s ease;
 }
 
 body#top .payment-order-sheet__facts span::before {
@@ -268,6 +272,10 @@ body#top .payment-doc-card {
         0 18px 32px rgba(25, 39, 55, 0.085),
         0 8px 18px rgba(88, 70, 48, 0.03),
         inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease;
 }
 
 body#top .payment-doc-card--payment {
@@ -349,6 +357,10 @@ body#top .payment-docs-kit {
     box-shadow:
         0 12px 20px rgba(32, 43, 57, 0.03),
         inset 0 1px 0 rgba(255, 255, 255, 0.62);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease;
 }
 
 body#top .payment-docs-kit__label {
@@ -382,6 +394,10 @@ body#top .payment-docs-kit__items span {
     box-shadow:
         0 10px 18px rgba(84, 67, 47, 0.018),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    transition:
+        transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.22s ease,
+        border-color 0.2s ease;
 }
 
 body#top .payment-docs-kit__note {
@@ -391,6 +407,29 @@ body#top .payment-docs-kit__note {
     font-size: 0.96rem;
     line-height: 1.54;
     text-wrap: pretty;
+}
+
+body#top .payment-order-sheet__facts span:hover,
+body#top .payment-order-sheet__facts span:focus-within,
+body#top .payment-docs-kit__items span:hover,
+body#top .payment-docs-kit__items span:focus-within {
+    transform: translateY(-1px);
+    border-color: rgba(var(--theme-accent-rgb), 0.18);
+    box-shadow:
+        0 12px 20px rgba(18, 46, 74, 0.032),
+        inset 0 1px 0 rgba(255, 255, 255, 0.68);
+}
+
+body#top .payment-doc-card:hover,
+body#top .payment-doc-card:focus-within,
+body#top .payment-docs-kit:hover,
+body#top .payment-docs-kit:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(var(--theme-accent-rgb), 0.18);
+    box-shadow:
+        0 20px 34px rgba(18, 46, 74, 0.05),
+        0 8px 18px rgba(88, 70, 48, 0.028),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 body#top .payment-route__heading {

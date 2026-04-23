@@ -59,6 +59,20 @@
     background: var(--theme-surface-gradient-soft);
     color: var(--theme-accent-strong);
     box-shadow: var(--theme-shadow-soft);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.quick-actions .btn:hover,
+.quick-actions .btn:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(36, 166, 191, 0.2);
+    box-shadow:
+        0 12px 24px rgba(18, 46, 74, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.56);
 }
 
 .quick-actions--priority {
@@ -372,12 +386,17 @@
     text-decoration: none;
     display: inline-block;
     font-weight: 500;
-    transition: background 0.3s;
+    transition:
+        background 0.3s ease,
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.24s ease;
 }
 
 .btn-call:hover {
     background: #c82333;
     color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(200, 35, 51, 0.2);
 }
 
 /* Индикатор загрузки */

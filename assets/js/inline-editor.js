@@ -13,7 +13,7 @@
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
     const OVERVIEW_ENABLED = true;
-    const HOVER_LABEL_ENABLED = false;
+    const HOVER_LABEL_ENABLED = true;
     const INLINE_ICON_OPTIONS = [
         { value: '', label: 'Без иконки', preview: '—', group: 'common', keywords: ['пусто', 'убрать', 'без'], featured: true },
         { value: 'fas fa-phone', label: 'Телефон', group: 'contact', keywords: ['звонок', 'трубка', 'call'], featured: true },
@@ -182,11 +182,13 @@
 
             body.${MODE_CLASS} [data-inline-edit-id] {
                 cursor: pointer;
-                outline: 2px solid transparent;
+                outline: 2px solid rgba(37, 99, 235, 0.28);
                 outline-offset: 4px;
                 border-radius: 14px;
                 scroll-margin-top: 80px;
-                transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+                background-color: rgba(37, 99, 235, 0.025);
+                box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.12) inset;
+                transition: outline-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
             }
 
             body.${MODE_CLASS} [data-inline-edit-id]:hover,
@@ -2911,7 +2913,7 @@
         requestedFocus,
         overviewOpen: false,
         overviewQuery: '',
-        overviewFocus: 'all',
+        overviewFocus: 'main',
         bindings: [],
         bindingMap: new Map(),
         files: new Map(),
@@ -3025,6 +3027,7 @@
                 </div>
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save" hidden>Сохранить</button>
+                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="session" hidden>Войти</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
@@ -3350,6 +3353,8 @@
     function getBindingKindLabel(binding) {
         if (!binding) return 'Правка на странице';
         if (binding.editorKindLabel) return binding.editorKindLabel;
+        if (/\.faq\./i.test(binding.path || '') || /^FAQ:/i.test(binding.label || '')) return 'FAQ';
+        if (/^contact\./i.test(binding.path || '')) return 'Контакт';
         if (binding.type === 'image') return 'Фото';
         if (binding.type === 'list') return 'Список';
         if (binding.type === 'object') {
@@ -3365,6 +3370,12 @@
 
     function getBindingWorkHint(binding) {
         if (!binding) return 'Нажмите на текст, фото или кнопку на странице.';
+        if (/\.faq\./i.test(binding.path || '') || /^FAQ:/i.test(binding.label || '')) {
+            return 'Меняйте вопрос и ответ справа.';
+        }
+        if (/^contact\./i.test(binding.path || '')) {
+            return 'Меняйте контактные данные справа.';
+        }
         if (binding.type === 'image') return 'Замените фото или поправьте подпись справа.';
         if (binding.type === 'object') {
             const fields = getBindingEditorFields(binding);
@@ -3419,6 +3430,13 @@
 
         if (focus === 'image') {
             return binding.type === 'image';
+        }
+
+        if (focus === 'main') {
+            if (state.activeBindingId === binding.id || bindingIsDirty(binding)) {
+                return true;
+            }
+            return Number(binding.overviewPriority || 50) <= 4;
         }
 
         if (focus === 'text') {
@@ -3510,6 +3528,7 @@
 
     function getToolbarJumpDefinitions() {
         const definitions = [
+            { focus: 'main', label: 'Главное' },
             { focus: 'text', label: 'Текст' },
             { focus: 'image', label: 'Фото' },
             { focus: 'contacts', label: 'Связь' },
@@ -3534,12 +3553,12 @@
     function getOverviewFilterDefinitions() {
         const dirtyBindings = getDirtyBindings();
         return [
-            { focus: 'all', label: 'Все', bindings: getVisibleBindings() },
-            ...(dirtyBindings.length ? [{ focus: 'dirty', label: 'Правки', bindings: dirtyBindings }] : []),
             ...getToolbarJumpDefinitions().map((item) => ({
                 ...item,
                 bindings: getBindingsForFocus(item.focus)
-            }))
+            })),
+            ...(dirtyBindings.length ? [{ focus: 'dirty', label: 'Правки', bindings: dirtyBindings }] : []),
+            { focus: 'all', label: 'Все', bindings: getVisibleBindings() }
         ].filter((item) => item.bindings.length || item.focus === 'all');
     }
 
@@ -3590,12 +3609,10 @@
 
     function getOverviewBindingPriority(binding) {
         if (!binding) return 999;
-        if (state.activeBindingId === binding.id) return 0;
-        if (bindingIsDirty(binding)) return 1;
-        if (binding.type === 'image') return 2;
-        if (binding.type === 'object') return 3;
-        if (binding.type === 'list') return 4;
-        return 5;
+        if (state.activeBindingId === binding.id) return -2;
+        if (bindingIsDirty(binding)) return -1;
+        const priority = Number(binding.overviewPriority);
+        return Number.isFinite(priority) ? priority : 50;
     }
 
     function getBindingOverviewGroups(queryValue = '', focus = 'all') {
@@ -3688,6 +3705,7 @@
         const totalItems = groups.reduce((sum, group) => sum + group.items.length, 0);
         const totalGroups = groups.length;
         const filterLabels = {
+            main: 'главные блоки',
             all: 'все блоки',
             dirty: 'изменённые блоки',
             text: 'текст',
@@ -3877,6 +3895,11 @@
         ui.saveBtn.textContent = dirtyCount
             ? `Сохранить ${formatCompactCount(dirtyCount)}`
             : ((dirtyFilesCount || pendingPanel || hasIssue) ? 'Сохранить' : 'Готово');
+        const overviewBtn = ui.root.querySelector('[data-inline-action="overview"]');
+        if (overviewBtn) {
+            overviewBtn.hidden = !state.enabled;
+            overviewBtn.disabled = !state.enabled;
+        }
         if (ui.adminBtn) {
             ui.adminBtn.hidden = true;
         }
@@ -3925,10 +3948,43 @@
                 ? 'На странице есть изменения. Сохраните их, когда закончите.'
                 : 'Нажмите на текст, фото или кнопку на странице.';
         }
-        ui.toolbarNotice.hidden = true;
-        ui.toolbarNotice.textContent = '';
+        if (!activeBinding) {
+            ui.toolbarNotice.hidden = false;
+            ui.toolbarNotice.textContent = 'Кликайте по блокам с мягкой рамкой. Если удобнее, откройте «Обзор» и выберите нужный текст или фото из списка.';
+        } else {
+            ui.toolbarNotice.hidden = true;
+            ui.toolbarNotice.textContent = '';
+        }
         updateDockOffset();
         renderOverviewPanel();
+    }
+
+    function highlightVisibleBindingsOnEnter() {
+        const visibleBindings = state.bindings
+            .map((binding) => {
+                const visibleElement = binding.elements.find((element) => {
+                    if (!(element instanceof HTMLElement) || !element.isConnected) return false;
+                    const style = window.getComputedStyle(element);
+                    if (style.display === 'none' || style.visibility === 'hidden') return false;
+                    const rect = element.getBoundingClientRect();
+                    return rect.width > 18 && rect.height > 12 && rect.bottom > 0 && rect.top < window.innerHeight;
+                });
+
+                return visibleElement ? { binding, element: visibleElement } : null;
+            })
+            .filter(Boolean)
+            .slice(0, 12);
+
+        visibleBindings.forEach(({ element }, index) => {
+            window.setTimeout(() => {
+                element.classList.remove(REVEAL_CLASS);
+                void element.offsetWidth;
+                element.classList.add(REVEAL_CLASS);
+                window.setTimeout(() => {
+                    element.classList.remove(REVEAL_CLASS);
+                }, 850);
+            }, index * 55);
+        });
     }
 
     async function refreshEnvironment() {
@@ -4042,6 +4098,7 @@
         rememberEditingContext();
         state.restoredDrafts = await restoreDraftsForVisibleBindings();
         renderToolbar();
+        highlightVisibleBindingsOnEnter();
 
         if (!state.apiAvailable) {
             showToast('Сейчас открыт обычный сервер. Для сохранения нужен сервер сохранения.');
@@ -4178,6 +4235,7 @@
             label: config.label || config.path,
             hint: config.hint || '',
             editorKindLabel: config.editorKindLabel || '',
+            editorMode: config.editorMode || '',
             fileName: sectionConfig.fileName,
             sectionKey: sectionConfig.sectionKey || sectionConfig.fileName,
             sectionLabel: sectionConfig.sectionLabel || sectionConfig.fileName,
@@ -4190,7 +4248,16 @@
             collectionPath: config.collectionPath || '',
             collectionRender: config.collectionRender || null,
             collectionItemFactory: config.collectionItemFactory || null,
-            collectionCreateValue: config.collectionCreateValue
+            collectionCreateValue: config.collectionCreateValue,
+            collectionAllowAdd: config.collectionAllowAdd !== undefined ? Boolean(config.collectionAllowAdd) : true,
+            collectionAllowDuplicate: config.collectionAllowDuplicate !== undefined ? Boolean(config.collectionAllowDuplicate) : true,
+            collectionAllowRemove: config.collectionAllowRemove !== undefined ? Boolean(config.collectionAllowRemove) : true,
+            collectionAllowReorder: config.collectionAllowReorder !== undefined ? Boolean(config.collectionAllowReorder) : true,
+            overviewPriority: Number.isFinite(Number(config.overviewPriority))
+                ? Number(config.overviewPriority)
+                : (Number.isFinite(Number(sectionConfig.overviewPriority))
+                    ? Number(sectionConfig.overviewPriority)
+                    : 50)
         };
 
         elements.forEach((element) => {
@@ -5043,6 +5110,9 @@
         if (isStyleField(field)) {
             return 'Вид кнопки';
         }
+        if (binding?.editorMode === 'module') {
+            return label || field.key;
+        }
         if (isLinkLikeField(field)) {
             if (key.includes('phone')) return 'Номер для кнопки';
             if (key.includes('email')) return 'Почта для кнопки';
@@ -5362,6 +5432,7 @@
 
     function isActionLikeObjectBinding(binding, editorFields = null) {
         if (!binding || binding.type !== 'object') return false;
+        if (binding.editorMode === 'module') return false;
 
         const fields = Array.isArray(editorFields) && editorFields.length
             ? editorFields
@@ -5652,6 +5723,42 @@
         }
 
         if (binding.type === 'object') {
+            if (binding.editorMode === 'module') {
+                const textFields = editorFields.filter((field) => (
+                    !isLinkLikeField(field) && !isIconField(field) && !isStyleField(field) && field.type !== 'list'
+                ));
+                const listFields = editorFields.filter((field) => field?.type === 'list');
+                const linkFields = editorFields.filter(isLinkLikeField);
+                const styleFields = editorFields.filter((field) => isIconField(field) || isStyleField(field));
+
+                return [
+                    textFields.length ? {
+                        title: 'Смысл и тексты',
+                        meta: 'Здесь меняются заголовки, подписи и основной текст всего блока.',
+                        fields: textFields,
+                        importance: 'primary'
+                    } : null,
+                    listFields.length ? {
+                        title: 'Списки и пункты',
+                        meta: 'Каждая строка станет отдельным пунктом или короткой опорой внутри блока.',
+                        fields: listFields,
+                        importance: 'primary'
+                    } : null,
+                    linkFields.length ? {
+                        title: 'Кнопки и ссылки',
+                        meta: 'Здесь меняется текст действий и куда они ведут.',
+                        fields: linkFields,
+                        importance: 'secondary'
+                    } : null,
+                    styleFields.length ? {
+                        title: 'Вид и иконки',
+                        meta: 'Редкие визуальные параметры этого блока.',
+                        fields: styleFields,
+                        importance: 'secondary'
+                    } : null
+                ].filter(Boolean);
+            }
+
             const primaryFields = editorFields.filter(isPrimaryTextField);
             const linkFields = editorFields.filter(isLinkLikeField);
             const iconFields = editorFields.filter(isIconField);
@@ -6627,6 +6734,7 @@
 
     function appendBindingVisualPresets(binding, value) {
         if (!binding) return;
+        if (binding.editorMode === 'module') return;
 
         const editorFields = getBindingEditorFields(binding);
 
@@ -7200,6 +7308,22 @@
         };
     }
 
+    function canAddToCollection(binding) {
+        return Boolean(binding?.collectionAllowAdd);
+    }
+
+    function canDuplicateInCollection(binding) {
+        return Boolean(binding?.collectionAllowDuplicate);
+    }
+
+    function canRemoveFromCollection(binding) {
+        return Boolean(binding?.collectionAllowRemove);
+    }
+
+    function canReorderCollection(binding) {
+        return Boolean(binding?.collectionAllowReorder);
+    }
+
     function getCollectionItemPreviewData(binding, item, index, total) {
         if (binding?.type === 'image') {
             const title = String(item?.caption || item?.title || item?.alt || `Фото ${index + 1}`).trim();
@@ -7332,11 +7456,13 @@
         collectionActions.className = 'p-inline-panel__collection-actions';
 
         const actionSet = [
-            { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
-            { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
-            { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 },
-            { action: 'duplicate', label: nouns.duplicate, disabled: false },
-            { action: 'add', label: nouns.add, disabled: false }
+            ...(canReorderCollection(binding) ? [
+                { action: 'first', label: nouns.makeFirst, disabled: collectionState.index === 0 },
+                { action: 'prev', label: nouns.movePrev, disabled: collectionState.index === 0 },
+                { action: 'next', label: nouns.moveNext, disabled: collectionState.index >= collectionState.total - 1 }
+            ] : []),
+            ...(canDuplicateInCollection(binding) ? [{ action: 'duplicate', label: nouns.duplicate, disabled: false }] : []),
+            ...(canAddToCollection(binding) ? [{ action: 'add', label: nouns.add, disabled: false }] : [])
         ];
 
         actionSet.forEach((item) => {
@@ -7425,7 +7551,7 @@
             });
             itemActions.appendChild(openButton);
 
-            if (index !== 0) {
+            if (index !== 0 && canReorderCollection(binding)) {
                 const firstButton = document.createElement('button');
                 firstButton.type = 'button';
                 firstButton.className = 'p-inline-panel__example-chip';
@@ -7619,7 +7745,7 @@
 
         if (binding.type === 'object') {
             const editorFields = getBindingEditorFields(binding);
-            if (!isActionLikeObjectBinding(binding, editorFields)) {
+            if (binding.editorMode !== 'module' && !isActionLikeObjectBinding(binding, editorFields)) {
                 const preview = createObjectCardPreview(binding, value);
                 ui.panelForm.appendChild(preview);
             }
@@ -8167,6 +8293,10 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            if (!canAddToCollection(binding)) {
+                showToast('Для этого блока нельзя добавлять новые элементы');
+                return;
+            }
             const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
@@ -8218,6 +8348,10 @@
         try {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (!binding) return;
+            if (!canDuplicateInCollection(binding)) {
+                showToast('Для этого блока нельзя дублировать элементы');
+                return;
+            }
             const toastLabels = getCollectionToastLabels(binding);
 
             const fileState = await ensureFileState(binding.fileName, binding.sectionLabel);
@@ -8259,6 +8393,10 @@
                 ? state.bindingMap.get(bindingTarget)
                 : bindingTarget;
             if (!binding) return;
+            if (!canRemoveFromCollection(binding)) {
+                showToast('Для этого блока нельзя удалять элементы');
+                return;
+            }
             const toastLabels = getCollectionToastLabels(binding);
             const nouns = getCollectionItemNouns(binding);
 
@@ -8587,7 +8725,7 @@
             if (OVERVIEW_ENABLED) {
                 event.preventDefault();
                 if (!state.overviewOpen) {
-                    state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'all';
+                    state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'main';
                 }
                 toggleOverview(true);
                 return;
@@ -8739,8 +8877,8 @@
         });
 
         ui.root.querySelector('[data-inline-action="overview"]')?.addEventListener('click', () => {
-            if (!state.overviewOpen && hasDirtyBindings() && state.overviewFocus === 'all') {
-                state.overviewFocus = 'dirty';
+            if (!state.overviewOpen) {
+                state.overviewFocus = hasDirtyBindings() ? 'dirty' : 'main';
             }
             toggleOverview();
         });

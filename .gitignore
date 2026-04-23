@@ -9,4 +9,13 @@ tmp/
 tmp_*
 *.tmp
 *.bak
+node_modules/
+test-results/
+.tmp-edge-opencheck/
+tmp_*.png
+tmp_*.json
+powder-*.png
+sand-*.png
+prices-*.png
+services-*.png
 services-desktop-etalon-current.png
