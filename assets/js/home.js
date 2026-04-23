@@ -52,6 +52,11 @@
     const panelGalleryState = new WeakMap();
     const prefetchedUrls = new Set();
 
+    function setHeroHeaderHeight() {
+        if (!heroHeader) return;
+        document.documentElement.style.setProperty('--home-hero-header-height', `${Math.ceil(heroHeader.offsetHeight)}px`);
+    }
+
     function canPrefetch() {
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         if (!connection) return true;
@@ -162,6 +167,7 @@
             heroMenuToggle.setAttribute('aria-expanded', 'false');
             document.body.classList.remove('menu-open');
             heroMenuToggle.classList.remove('is-active');
+            setHeroHeaderHeight();
         };
 
         const openHeroMenu = () => {
@@ -169,7 +175,10 @@
             heroMenuToggle.setAttribute('aria-expanded', 'true');
             document.body.classList.add('menu-open');
             heroMenuToggle.classList.add('is-active');
+            setHeroHeaderHeight();
         };
+
+        setHeroHeaderHeight();
 
         heroMenuToggle.addEventListener('click', () => {
             if (heroHeader.classList.contains('is-menu-open')) {
@@ -204,7 +213,10 @@
             if (window.innerWidth > HERO_MENU_BREAKPOINT) {
                 closeHeroMenu();
             }
+            setHeroHeaderHeight();
         });
+
+        window.addEventListener('load', setHeroHeaderHeight, { once: true });
 
         installNavPrefetch(Array.from(heroNav.querySelectorAll('a')));
     }
