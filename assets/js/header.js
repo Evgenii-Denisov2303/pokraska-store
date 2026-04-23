@@ -42,6 +42,8 @@
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
+    const COMPACT_HEADER_BREAKPOINT = 1100;
+    const HEADER_SCROLL_BREAKPOINT = 768;
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('.nav');
     const body = document.body;
@@ -50,6 +52,27 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
     const prefetchedUrls = new Set();
+
+    function makeLogoOnlyClickable(root) {
+        root.querySelectorAll('.hero-brand__link').forEach((link) => {
+            if (link.dataset.logoClickBound === 'true') return;
+            link.dataset.logoClickBound = 'true';
+
+            link.addEventListener('click', (event) => {
+                if (event.target.closest('.hero-brand__text')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
+            link.addEventListener('pointerdown', (event) => {
+                if (event.target.closest('.hero-brand__text')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        });
+    }
 
     function canPrefetch() {
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -155,29 +178,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function isCompactViewport() {
-        return window.innerWidth <= 768 || window.innerHeight <= 520;
+    function isCompactHeaderViewport() {
+        return window.innerWidth <= COMPACT_HEADER_BREAKPOINT;
+    }
+
+    function isScrollHideViewport() {
+        return window.innerWidth <= HEADER_SCROLL_BREAKPOINT || window.innerHeight <= 520;
     }
 
     function setHeaderHeight() {
         if (!headerTop && !header) return;
-        const isMobile = isCompactViewport();
+        const isCompact = isCompactHeaderViewport();
         const desktopHeroHeader = header ? header.querySelector('.desktop-hero-header') : null;
         const desktopHeaderTarget = desktopHeroHeader && header?.classList.contains('header--desktop-hero')
             ? desktopHeroHeader
             : (headerTop || header);
-        const heightTarget = isMobile ? (header || headerTop) : desktopHeaderTarget;
+        const compactHeaderTarget = headerTop || header;
+        const heightTarget = isCompact ? compactHeaderTarget : desktopHeaderTarget;
         document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
         if (headerTop) {
             document.documentElement.style.setProperty('--header-top-height', `${heightTarget.offsetHeight}px`);
         }
     }
 
+    makeLogoOnlyClickable(document);
+
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
-        const isMobile = isCompactViewport();
+        const isCompactScroll = isScrollHideViewport();
 
-        if (!isMobile) {
+        if (!isCompactScroll) {
             if (isHeaderCollapsed) {
                 isHeaderCollapsed = false;
                 setHeaderHeight();
@@ -291,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         window.addEventListener('resize', () => {
-            if (!isCompactViewport() && nav.classList.contains('active')) {
+            if (!isCompactHeaderViewport() && nav.classList.contains('active')) {
                 toggleMenu(false);
             }
         });
@@ -315,8 +345,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!target) return;
 
         event.preventDefault();
-        const headerHeight = isCompactViewport()
-            ? (header ? header.offsetHeight : (headerTop ? headerTop.offsetHeight : 100))
+        const headerHeight = isCompactHeaderViewport()
+            ? (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100))
             : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
         const extraOffset = Number(target.dataset.scrollOffset || 0);
         window.scrollTo({

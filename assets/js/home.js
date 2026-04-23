@@ -56,11 +56,30 @@
 
     function setHeroHeaderHeight() {
         if (!heroHeader) return;
-        const compactHeaderSource = heroHeader.querySelector('.hero-scene__topbar');
-        const useCompactSource = window.innerWidth <= HERO_MENU_BREAKPOINT && compactHeaderSource;
-        const headerHeight = `${Math.ceil((useCompactSource ? compactHeaderSource : heroHeader).offsetHeight)}px`;
+        const headerHeight = `${Math.ceil(heroHeader.offsetHeight)}px`;
         document.documentElement.style.setProperty('--home-hero-header-height', headerHeight);
         document.documentElement.style.setProperty('--header-top-height', headerHeight);
+    }
+
+    function makeLogoOnlyClickable(root) {
+        root.querySelectorAll('.hero-brand__link').forEach((link) => {
+            if (link.dataset.logoClickBound === 'true') return;
+            link.dataset.logoClickBound = 'true';
+
+            link.addEventListener('click', (event) => {
+                if (event.target.closest('.hero-brand__text')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
+            link.addEventListener('pointerdown', (event) => {
+                if (event.target.closest('.hero-brand__text')) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+        });
     }
 
     function canPrefetch() {
@@ -168,6 +187,8 @@
     }
 
     if (heroHeader && heroMenuToggle && heroNav) {
+        makeLogoOnlyClickable(heroHeader);
+
         let lastHeroScrollY = window.scrollY;
         let isHeroHeaderHidden = false;
 

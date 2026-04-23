@@ -2035,6 +2035,7 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
 @media (max-width: 540px) {
     .gallery-page {
         padding: 72px 0 40px;
+        overflow-x: clip;
     }
 
     .order-cta {
@@ -2098,7 +2099,7 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
 
     body#top .gallery-page .gallery-filter-hint {
         position: absolute;
-        top: 50%;
+        top: calc(50% - 8px);
         display: grid;
         place-items: center;
         pointer-events: none;

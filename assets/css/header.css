@@ -1652,10 +1652,10 @@
         z-index: 1600 !important;
         overflow: visible !important;
         isolation: isolate !important;
-        background: linear-gradient(180deg, rgba(252, 252, 251, 0.985), rgba(242, 246, 251, 0.965)) !important;
-        border-bottom: 1px solid rgba(20, 56, 89, 0.08) !important;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
-        backdrop-filter: blur(16px) saturate(108%) !important;
+        background: transparent !important;
+        border-bottom: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header.is-hidden {
@@ -1675,9 +1675,12 @@
         margin: 0 !important;
         padding: 12px 18px !important;
         min-height: 0 !important;
-        background: transparent !important;
+        background: linear-gradient(180deg, rgba(252, 252, 251, 0.985), rgba(242, 246, 251, 0.965)) !important;
         border: 0 !important;
-        box-shadow: none !important;
+        border-bottom: 1px solid rgba(20, 56, 89, 0.08) !important;
+        border-radius: 0 0 18px 18px !important;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
+        backdrop-filter: blur(16px) saturate(108%) !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo,
@@ -1868,34 +1871,50 @@
 
 @media (min-width: 641px) and (max-width: 1100px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: auto minmax(0, 1fr) auto !important;
+        gap: 0 14px !important;
         padding: 12px 18px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo,
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
-        max-width: min(252px, calc(50% - 136px)) !important;
+        grid-column: 1 !important;
+        justify-self: start !important;
+        align-self: center !important;
+        width: auto !important;
+        max-width: min(100%, 284px) !important;
+        min-width: 0 !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        position: absolute !important;
+        grid-column: 2 !important;
+        position: static !important;
         inset: auto !important;
-        left: 50% !important;
-        top: 50% !important;
+        left: auto !important;
+        top: auto !important;
         right: auto !important;
         bottom: auto !important;
         grid-area: auto !important;
         justify-self: auto !important;
         align-self: auto !important;
-        transform: translate(-50%, -50%) !important;
+        justify-self: center !important;
+        align-self: center !important;
+        transform: none !important;
         display: grid !important;
         grid-template-columns: 1fr !important;
         gap: 0 !important;
-        width: 228px !important;
-        max-width: 228px !important;
+        width: max-content !important;
+        max-width: min(100%, 320px) !important;
         margin: 0 !important;
         padding: 0 !important;
         text-align: center !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
+        grid-column: 3 !important;
+        justify-self: end !important;
+        align-self: center !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type,
@@ -1905,8 +1924,9 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 7px !important;
-        width: auto !important;
+        gap: 6px !important;
+        width: max-content !important;
+        max-width: 100% !important;
         min-height: 0 !important;
         padding: 0 2px !important;
         border: 0 !important;
@@ -1918,7 +1938,8 @@
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type i {
-        width: 18px !important;
+        width: auto !important;
+        min-width: 16px !important;
         font-size: 17px !important;
         color: rgba(24, 61, 93, 0.82) !important;
         background: none !important;
@@ -1931,8 +1952,9 @@
         flex-direction: column !important;
         gap: 2px !important;
         min-width: 0 !important;
-        justify-items: center !important;
-        text-align: center !important;
+        align-items: flex-start !important;
+        justify-items: start !important;
+        text-align: left !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type .phone-number {
@@ -2086,4 +2108,24 @@
         border-top: 0 !important;
         border-radius: 0 0 16px 16px !important;
     }
+}
+
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    tap-highlight-color: transparent !important;
+}
+
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text {
+    cursor: default !important;
+    -webkit-tap-highlight-color: transparent !important;
+    tap-highlight-color: transparent !important;
+}
+
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *,
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *::before,
+body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *::after {
+    -webkit-tap-highlight-color: transparent !important;
+    tap-highlight-color: transparent !important;
 }

@@ -657,19 +657,25 @@ body.modal-open {
     transform: translateY(-50%);
     width: 44px;
     height: 44px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    background: rgba(15, 23, 42, 0.75);
-    color: #fff;
+    background: rgba(15, 23, 42, 0.26);
+    color: rgba(255, 255, 255, 0.58);
     font-size: 1.1rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    backdrop-filter: blur(12px);
+    opacity: 0.5;
+    transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .lightbox-modal__nav:hover {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(15, 23, 42, 0.42);
+    color: #fff;
+    opacity: 0.76;
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.14);
 }
 
 .lightbox-modal__nav--prev {
@@ -866,6 +872,19 @@ body {
         radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.12), transparent 28%),
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.62), transparent 20%),
         var(--site-shell);
+}
+
+@media (max-width: 1100px) {
+    :root {
+        --site-shell: linear-gradient(180deg, #fbfbfa 0%, #f1f5f8 52%, #fafbfd 100%);
+    }
+
+    body {
+        background:
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 30%),
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.76), transparent 22%),
+            var(--site-shell);
+    }
 }
 
 .btn {

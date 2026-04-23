@@ -1067,6 +1067,72 @@ body#top .pricing-estimate-card .calculator-contact a {
     }
 }
 
+@media (min-width: 761px) and (max-width: 1180px) {
+    body#top .prices-page > .container {
+        width: min(980px, calc(100vw - 56px));
+    }
+
+    body#top .pricing-playbook {
+        grid-template-columns: minmax(0, 0.98fr) minmax(17rem, 0.82fr);
+        gap: 28px;
+        padding: 24px 26px;
+        align-items: start;
+    }
+
+    body#top .pricing-playbook__lead {
+        gap: 18px;
+        padding-right: 0;
+    }
+
+    body#top .pricing-playbook__lead-intro {
+        max-width: 33rem;
+    }
+
+    body#top .pricing-playbook__title {
+        max-width: 15ch;
+        font-size: clamp(1.92rem, 2.18vw, 2.42rem);
+    }
+
+    body#top .pricing-playbook__copy {
+        max-width: 32ch;
+    }
+
+    body#top .pricing-playbook__chips {
+        gap: 10px;
+    }
+
+    body#top .pricing-playbook__chips span {
+        min-height: 40px;
+        padding: 9px 14px;
+        font-size: 0.92rem;
+    }
+
+    body#top .pricing-estimate-card {
+        padding: 0 0 0 20px;
+        gap: 16px;
+        align-self: stretch;
+    }
+
+    body#top .pricing-estimate-card__intro {
+        max-width: 26rem;
+    }
+
+    body#top .pricing-estimate-card h2 {
+        font-size: clamp(1.62rem, 1.8vw, 1.94rem);
+    }
+
+    body#top .pricing-estimate-card .calculator-points {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    body#top .pricing-estimate-card .calculator-points li,
+    body#top .pricing-estimate-card .calculator-points li:last-child {
+        grid-column: auto;
+        width: 100%;
+    }
+}
+
 @media (max-width: 760px) {
     body#top .prices-page {
         padding: 82px 0 46px;
