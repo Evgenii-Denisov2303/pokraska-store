@@ -254,6 +254,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const isOpen = typeof forceState === 'boolean' ? forceState : !nav.classList.contains('active');
             nav.classList.toggle('active', isOpen);
             body.classList.toggle('menu-open', isOpen);
+            header?.classList.toggle('is-menu-open', isOpen);
+            headerTop?.classList.toggle('is-menu-open', isOpen);
+            mobileMenuBtn.classList.toggle('active', isOpen);
+            mobileMenuBtn.classList.toggle('is-active', isOpen);
+            nav.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
 
             if (icon) {
                 icon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';

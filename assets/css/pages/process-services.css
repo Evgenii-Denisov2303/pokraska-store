@@ -2006,7 +2006,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .service-detail-card,
     body#top .before-after-section > .container,
     body#top .services-page .section[aria-labelledby="services-faq-title"] {
-        padding: 22px 18px;
+        padding: 20px 16px;
     }
 
     body#top .before-after-section__header {
@@ -2014,7 +2014,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-quick-nav {
-        padding: 14px;
+        padding: 12px;
         margin-bottom: 0;
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -2022,22 +2022,22 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .services-page .service-quick-nav .service-nav-link {
         width: 100%;
         justify-self: stretch;
-        min-height: 74px;
-        padding: 15px 18px;
-        border-radius: 22px;
-        gap: 14px;
+        min-height: 68px;
+        padding: 14px 16px;
+        border-radius: 20px;
+        gap: 12px;
     }
 
     body#top .services-page .service-quick-nav .service-nav-link__icon {
-        width: 1.54rem;
-        height: 1.54rem;
-        min-width: 1.54rem;
+        width: 1.42rem;
+        height: 1.42rem;
+        min-width: 1.42rem;
         border-radius: 0;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     body#top .services-page .service-quick-nav .service-nav-link__label {
-        font-size: 1.18rem;
+        font-size: 1.06rem;
     }
 
     body#top .equipment-slider {
@@ -2061,16 +2061,16 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .palette-card {
-        padding: 16px;
+        padding: 14px;
     }
 
     body#top .palette-card--standalone {
-        margin-top: 16px;
-        padding: 18px;
+        margin-top: 14px;
+        padding: 16px;
     }
 
     body#top .palette-card--standalone .palette-card__media {
-        min-height: clamp(240px, 74vw, 360px);
+        min-height: clamp(228px, 70vw, 336px);
     }
 
     body#top .service-detail-card--featured .service-header {
@@ -2078,7 +2078,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-header h2 {
-        font-size: clamp(1.52rem, 6.2vw, 1.82rem);
+        font-size: clamp(1.46rem, 5.8vw, 1.74rem);
         line-height: 1.1;
     }
 
@@ -2101,32 +2101,37 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-description {
-        font-size: 1.12rem;
-        line-height: 1.66;
+        font-size: 1.04rem;
+        line-height: 1.58;
     }
 
     body#top .service-detail-card--featured .service-description {
-        font-size: 1.14rem;
-        line-height: 1.66;
+        font-size: 1.07rem;
+        line-height: 1.6;
     }
 
     body#top .service-detail-card--featured .service-advantages {
-        gap: 12px;
+        gap: 10px;
     }
 
     body#top .advantage-item,
     body#top .process-step {
-        padding: 16px;
+        padding: 14px;
+    }
+
+    body#top .process-step h4 {
+        font-size: 1.08rem;
+        line-height: 1.22;
     }
 
     body#top .advantage-item span,
     body#top .process-step p {
-        font-size: 1.06rem;
-        line-height: 1.56;
+        font-size: 1rem;
+        line-height: 1.52;
     }
 
     body#top .before-after-section .before-after--service-wide .before-after__media {
-        height: clamp(280px, 74vw, 380px);
+        height: clamp(264px, 70vw, 352px);
         border-radius: 24px;
     }
 
@@ -2149,7 +2154,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .before-after-section .before-after--service-wide .before-after__prompt-hint {
-        padding: 6px 11px;
+        padding: 5px 10px;
     }
 
     body#top .services-page .section[aria-labelledby="services-faq-title"] .section-title {
@@ -2177,16 +2182,22 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-quick-nav {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     body#top .services-page .service-quick-nav .service-nav-link {
-        min-height: 60px;
-        padding: 12px 16px;
+        min-height: 56px;
+        padding: 11px 15px;
     }
 
     body#top .services-page .service-quick-nav .service-nav-link__label {
-        font-size: 1rem;
+        font-size: 0.94rem;
+    }
+}
+
+@media (max-width: 360px) {
+    body#top .service-quick-nav {
+        grid-template-columns: 1fr;
     }
 }
 

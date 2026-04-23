@@ -91,6 +91,7 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    contain: paint;
     padding: 4px;
     border-radius: 16px;
     border: 1px solid rgba(var(--footer-accent-rgb), 0.08);
@@ -135,7 +136,7 @@
 .preview-footer__wave {
     display: block;
     position: absolute;
-    inset: -260% -260%;
+    inset: -185% -185%;
     background: linear-gradient(
         135deg,
         rgba(255, 255, 255, 0) 0%,
@@ -144,7 +145,7 @@
         rgba(255, 255, 255, 0) 56%,
         rgba(255, 255, 255, 0) 100%
     );
-    transform: translate(180%, -180%) rotate(10deg);
+    transform: translate(150%, -150%) rotate(10deg);
     opacity: 0.6;
     pointer-events: none;
     filter: blur(0.6px);

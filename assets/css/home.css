@@ -429,6 +429,7 @@ button {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    contain: paint;
     width: 78px;
     height: 78px;
     flex: 0 0 78px;
@@ -500,14 +501,14 @@ button {
 .hero-brand__wave {
     display: block;
     position: absolute;
-    inset: -260% -260%;
+    inset: -185% -185%;
     background: linear-gradient(135deg,
         rgba(255,255,255,0) 0%,
         rgba(255,255,255,0) 44%,
         rgba(255,255,255,0.7) 50%,
         rgba(255,255,255,0) 56%,
         rgba(255,255,255,0) 100%);
-    transform: translate(180%, -180%) rotate(10deg);
+    transform: translate(150%, -150%) rotate(10deg);
     opacity: 0.6;
     pointer-events: none;
     filter: blur(0.6px);
@@ -746,7 +747,7 @@ button {
     box-shadow: 0 1px 4px rgba(24, 61, 93, 0.1);
 }
 
-@media (min-width: 1081px) {
+@media (min-width: 1101px) {
     .hero-header {
         inset: -20px 24px auto;
         grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
@@ -1210,13 +1211,13 @@ button {
 
 .hero-stage__picture {
     position: absolute;
-    inset: 0 -12px 0 -2px;
+    inset: 0 -8px 0 -1px;
     z-index: 0;
     display: block;
 }
 
 .hero-stage__picture img {
-    width: calc(100% + 14px);
+    width: calc(100% + 9px);
     max-width: none;
     height: 100%;
     object-fit: cover;
@@ -3524,12 +3525,12 @@ button {
     grid-template-rows: auto 1fr;
     justify-items: start;
     align-content: start;
-    gap: 20px;
+    gap: 16px;
     text-align: left;
     width: 100%;
     max-width: none;
     min-height: 100%;
-    padding: 26px 26px 24px;
+    padding: 22px 22px 18px;
     border-radius: 28px;
     background:
         radial-gradient(circle at top left, rgba(198, 165, 118, 0.14), rgba(198, 165, 118, 0) 38%),
@@ -3560,17 +3561,18 @@ button {
 .home-tail__request-body {
     display: grid;
     grid-template-columns: 1fr;
-    align-content: start;
-    gap: 16px;
+    grid-template-rows: auto 1fr;
+    align-content: stretch;
+    gap: 12px;
     width: 100%;
     min-height: 100%;
 }
 
 .home-tail__service-group {
     display: grid;
-    gap: 14px;
+    gap: 10px;
     width: 100%;
-    padding: 16px 16px 14px;
+    padding: 14px 14px 12px;
     border-radius: 22px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(250, 245, 238, 0.56));
     border: 1px solid rgba(120, 98, 70, 0.08);
@@ -3581,7 +3583,7 @@ button {
 
 .home-tail__group-label {
     color: rgba(38, 49, 63, 0.62);
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -3594,7 +3596,7 @@ button {
     gap: 8px;
     width: 100%;
     margin-top: 0;
-    padding: 12px 0 0;
+    padding: 10px 0 0;
     border-radius: 0;
     background: none;
     border: 0;
@@ -3769,7 +3771,7 @@ button {
 .home-tail__request {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 16px;
     align-items: stretch;
     padding: 0;
     border-radius: 0;
@@ -3782,44 +3784,45 @@ button {
 .home-tail__advantages {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px 28px;
+    gap: 12px 16px;
     width: 100%;
     padding: 2px 0 0;
 }
 
 .home-tail__advantages span {
     display: inline-flex;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     min-height: 100%;
-    padding: 11px 12px;
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(247, 241, 234, 0.8));
-    border: 1px solid rgba(120, 98, 70, 0.07);
+    padding: 14px 15px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 241, 234, 0.86));
+    border: 1px solid rgba(120, 98, 70, 0.08);
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.48),
-        0 8px 14px rgba(88, 70, 48, 0.018);
+        0 10px 16px rgba(88, 70, 48, 0.024);
     color: rgba(16, 38, 61, 0.9);
-    font-size: 0.95rem;
-    line-height: 1.32;
-    font-weight: 730;
+    font-size: 1.02rem;
+    line-height: 1.28;
+    font-weight: 760;
     transition:
         transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.22s ease,
         border-color 0.2s ease,
         background 0.2s ease;
+    text-wrap: balance;
 }
 
 .home-tail__advantages i {
     display: grid;
     place-items: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: rgba(var(--theme-accent-rgb), 0.12);
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: rgba(var(--theme-accent-rgb), 0.1);
     color: var(--apple-accent-deep);
-    margin-top: 1px;
-    font-size: 0.64rem;
+    margin-top: 0;
+    font-size: 0.74rem;
     flex: 0 0 auto;
     box-shadow: none;
 }
@@ -3840,16 +3843,16 @@ button {
 .home-tail__advantages span:hover,
 .home-tail__advantages span:focus-within {
     transform: translateY(-1px);
-    border-color: rgba(120, 98, 70, 0.11);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(248, 242, 234, 0.88));
+    border-color: rgba(120, 98, 70, 0.12);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 242, 234, 0.9));
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.48),
-        0 12px 20px rgba(88, 70, 48, 0.028);
+        0 12px 20px rgba(88, 70, 48, 0.032);
 }
 
 .home-tail__request-side {
     display: grid;
-    gap: 18px;
+    gap: 14px;
     align-content: start;
     align-self: stretch;
     height: 100%;
@@ -3862,11 +3865,13 @@ button {
         "links"
         "footer"
         "actions";
+    grid-template-rows: auto auto 1fr;
     align-items: start;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
     max-width: none;
-    padding: 16px 16px 15px;
+    min-height: 100%;
+    padding: 12px 12px 11px;
     border-radius: 22px;
     background: linear-gradient(180deg, rgba(255, 254, 251, 0.94), rgba(248, 242, 234, 0.9));
     border: 1px solid rgba(120, 98, 70, 0.1);
@@ -3894,7 +3899,7 @@ button {
     display: grid;
     grid-area: links;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .home-tail__contact-footer {
@@ -3902,7 +3907,7 @@ button {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px 14px;
+    gap: 6px 12px;
     padding: 2px 2px 0;
     color: rgba(92, 104, 116, 0.72);
     font-size: 0.76rem;
@@ -3934,8 +3939,8 @@ button {
     align-items: center;
     gap: 14px;
     width: 100%;
-    min-height: 60px;
-    padding: 13px 15px;
+    min-height: 52px;
+    padding: 10px 13px;
     border-radius: 18px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(251, 246, 239, 0.9));
     border: 1px solid rgba(120, 98, 70, 0.08);
@@ -4009,7 +4014,7 @@ button {
 }
 
 .home-tail__contact-link--primary .home-tail__contact-link-copy strong {
-    font-size: 1.22rem;
+    font-size: 1.15rem;
 }
 
 .home-tail__contact-link--secondary {
@@ -4026,7 +4031,7 @@ button {
 
 .home-tail__contact-link--secondary .home-tail__contact-link-copy strong {
     color: rgba(24, 40, 58, 0.84);
-    font-size: 1.04rem;
+    font-size: 0.98rem;
 }
 
 .home-tail__contact-link--secondary .home-tail__contact-link-copy small {
@@ -4050,10 +4055,10 @@ button {
 }
 
 .home-tail__contact-actions .panel-scene__action {
-    min-height: 44px;
+    min-height: 42px;
     justify-content: flex-start;
     gap: 10px;
-    padding: 11px 13px;
+    padding: 10px 12px;
     border-radius: 16px;
     font-size: 0.94rem;
     letter-spacing: 0.02em;
@@ -4066,6 +4071,7 @@ button {
 .home-tail__contact-actions {
     grid-area: actions;
     align-self: end;
+    margin-top: auto;
 }
 
 .home-tail__contact-actions .panel-scene__action i {
@@ -4089,7 +4095,7 @@ button {
     .home-tail__request-copy {
         display: grid;
         grid-template-rows: auto 1fr;
-        padding: 20px 20px 18px;
+        padding: 18px 18px 16px;
     }
 
     .home-tail__request-side {
@@ -4106,10 +4112,10 @@ button {
 .home-tail__form-card {
     display: grid;
     align-content: start;
-    gap: 12px;
+    gap: 6px;
     width: 100%;
     min-height: 100%;
-    padding: 24px 24px 20px;
+    padding: 15px 17px 15px;
     border-radius: 28px;
     background:
         radial-gradient(circle at top right, rgba(198, 165, 118, 0.12), rgba(198, 165, 118, 0) 34%),
@@ -4151,8 +4157,8 @@ button {
 }
 
 .home-tail__iframe-frame {
-    margin-top: 0;
-    min-height: 560px;
+    margin-top: 2px;
+    min-height: 650px;
     overflow: hidden;
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.94);
@@ -4163,8 +4169,8 @@ button {
 .home-tail__iframe {
     display: block;
     width: 100%;
-    min-height: 560px;
-    height: 560px;
+    min-height: 650px;
+    height: 650px;
     border: 0;
     background: #ffffff;
 }
@@ -4253,6 +4259,7 @@ button {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    contain: paint;
     padding: 4px;
     border-radius: 16px;
     border: 1px solid rgba(var(--footer-accent-rgb), 0.08);
@@ -4292,14 +4299,14 @@ button {
 .preview-footer__wave {
     display: block;
     position: absolute;
-    inset: -260% -260%;
+    inset: -185% -185%;
     background: linear-gradient(135deg,
         rgba(255,255,255,0) 0%,
         rgba(255,255,255,0) 44%,
         rgba(255,255,255,0.7) 50%,
         rgba(255,255,255,0) 56%,
         rgba(255,255,255,0) 100%);
-    transform: translate(180%, -180%) rotate(10deg);
+    transform: translate(150%, -150%) rotate(10deg);
     opacity: 0.6;
     pointer-events: none;
     filter: blur(0.6px);
@@ -4555,10 +4562,10 @@ button {
 
 @keyframes stageDrift {
     0%, 100% {
-        transform: scale(1.002) translate3d(0, 0, 0);
+        transform: scale(1.001) translate3d(0, 0, 0);
     }
     50% {
-        transform: scale(1.01) translate3d(-0.4%, -0.18%, 0);
+        transform: scale(1.005) translate3d(-0.2%, -0.08%, 0);
     }
 }
 
@@ -4593,11 +4600,11 @@ button {
 
 @keyframes logo-wave-shine {
     0% {
-        transform: translate(180%, -180%) rotate(10deg);
+        transform: translate(150%, -150%) rotate(10deg);
         opacity: 0.6;
     }
     100% {
-        transform: translate(-180%, 180%) rotate(10deg);
+        transform: translate(-150%, 150%) rotate(10deg);
         opacity: 0.6;
     }
 }
@@ -5303,7 +5310,7 @@ button {
 
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1100px) {
     html {
         font-size: 16px;
     }
