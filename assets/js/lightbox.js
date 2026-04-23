@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const EMPTY_IMAGE_SRC = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
     const paletteModal = document.querySelector('.palette-modal');
     const paletteModalImage = paletteModal ? paletteModal.querySelector('.palette-modal__image') : null;
     const paletteModalClose = paletteModal ? paletteModal.querySelector('.palette-modal__close') : null;
     let paletteLastFocus = null;
+
+    if (paletteModalImage && !paletteModalImage.getAttribute('src')) {
+        paletteModalImage.src = EMPTY_IMAGE_SRC;
+    }
 
     function openPaletteModal(src, alt) {
         if (!paletteModal || !paletteModalImage || !src) return;
@@ -24,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (paletteModalImage) {
             paletteModalImage.hidden = true;
-            paletteModalImage.removeAttribute('src');
+            paletteModalImage.src = EMPTY_IMAGE_SRC;
             paletteModalImage.alt = '';
         }
 
@@ -101,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <i class="fas fa-chevron-right" aria-hidden="true"></i>
                 </button>
                 <figure class="lightbox-modal__figure">
-                    <img class="lightbox-modal__image" alt="Просмотр изображения" hidden>
+                    <img class="lightbox-modal__image" src="${EMPTY_IMAGE_SRC}" alt="Просмотр изображения" hidden>
                     <figcaption class="lightbox-modal__caption"></figcaption>
                 </figure>
             </div>
@@ -231,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (lightboxImage) {
             lightboxImage.hidden = true;
-            lightboxImage.removeAttribute('src');
+            lightboxImage.src = EMPTY_IMAGE_SRC;
             lightboxImage.alt = '';
         }
 
