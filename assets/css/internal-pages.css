@@ -172,10 +172,6 @@ body#top :is(.catalog-group-tab.is-active:hover, .catalog-group-tab.is-active:fo
         background: linear-gradient(135deg, var(--site-desktop-accent) 0%, var(--site-desktop-accent-strong) 100%);
     }
 
-    body#top .footer,
-    body#top .preview-footer {
-        margin-top: 22px;
-    }
 }
 
 @media (min-width: 1101px) {

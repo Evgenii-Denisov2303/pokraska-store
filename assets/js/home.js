@@ -41,8 +41,8 @@
             });
     })();
 
-    const HERO_MENU_BREAKPOINT = 1080;
-    const HERO_SCROLL_BREAKPOINT = 768;
+    const COMPACT_HEADER_BREAKPOINT = 1100;
+    const HEADER_SCROLL_BREAKPOINT = 768;
     const searchParams = new URLSearchParams(window.location.search);
     const forceReveal = searchParams.get('reveal') === '1';
     const focusSection = searchParams.get('section');
@@ -50,13 +50,25 @@
     const body = document.body;
     const heroMenuToggle = document.querySelector('.hero-menu-toggle');
     const heroNav = document.querySelector('.hero-scene__nav');
+    const heroTopbar = document.querySelector('.hero-scene__topbar');
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
     const panelGalleryState = new WeakMap();
     const prefetchedUrls = new Set();
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    function isCompactHeroViewport() {
+        return window.innerWidth <= COMPACT_HEADER_BREAKPOINT;
+    }
+
+    function isScrollHideViewport() {
+        return window.innerWidth <= HEADER_SCROLL_BREAKPOINT || window.innerHeight <= 520;
+    }
 
     function setHeroHeaderHeight() {
         if (!heroHeader) return;
-        const headerHeight = `${Math.ceil(heroHeader.offsetHeight)}px`;
+        const desktopHeaderTarget = (heroTopbar && heroTopbar.offsetHeight > 0) ? heroTopbar : heroHeader;
+        const heightTarget = isCompactHeroViewport() ? heroHeader : desktopHeaderTarget;
+        const headerHeight = `${Math.ceil(heightTarget.offsetHeight || heroHeader.offsetHeight)}px`;
         document.documentElement.style.setProperty('--home-hero-header-height', headerHeight);
         document.documentElement.style.setProperty('--header-top-height', headerHeight);
     }
@@ -80,6 +92,15 @@
                 }
             });
         });
+    }
+
+    function ensureSceneCurtain(scene) {
+        if (window.innerWidth > 1100) return;
+        if (scene.querySelector(':scope > .scene-reveal__curtain')) return;
+        const curtain = document.createElement('span');
+        curtain.className = 'scene-reveal__curtain';
+        curtain.setAttribute('aria-hidden', 'true');
+        scene.appendChild(curtain);
     }
 
     function canPrefetch() {
@@ -191,20 +212,49 @@
 
         let lastHeroScrollY = window.scrollY;
         let isHeroHeaderHidden = false;
+        let isHeroHeaderCollapsed = false;
 
-        const isCompactHeroViewport = () => window.innerWidth <= HERO_SCROLL_BREAKPOINT || window.innerHeight <= 520;
+        const syncHeroHeaderShellState = () => {
+            if (!isCompactHeroViewport()) {
+                heroHeader.classList.remove('is-scrolled');
+                return;
+            }
+
+            const shouldShowShell = window.scrollY > 18;
+            heroHeader.classList.toggle('is-scrolled', shouldShowShell);
+        };
 
         const updateHeroHeaderVisibility = () => {
-            if (!isCompactHeroViewport()) {
-                isHeroHeaderHidden = false;
+            if (!isScrollHideViewport()) {
+                if (isHeroHeaderCollapsed) {
+                    isHeroHeaderCollapsed = false;
+                    setHeroHeaderHeight();
+                }
+
                 heroHeader.classList.remove('is-hidden');
-                lastHeroScrollY = window.scrollY;
+                isHeroHeaderHidden = false;
+
+                const currentScrollY = window.scrollY;
+                const scrollingDown = currentScrollY > lastHeroScrollY;
+                const nearTop = currentScrollY < 20;
+
+                if (scrollingDown && currentScrollY > 120) {
+                    heroHeader.classList.add('is-hidden');
+                    isHeroHeaderHidden = true;
+                } else if (!scrollingDown || nearTop) {
+                    heroHeader.classList.remove('is-hidden');
+                    isHeroHeaderHidden = false;
+                }
+
+                syncHeroHeaderShellState();
+                lastHeroScrollY = currentScrollY;
                 return;
             }
 
             if (heroHeader.classList.contains('is-menu-open')) {
                 isHeroHeaderHidden = false;
                 heroHeader.classList.remove('is-hidden');
+                syncHeroHeaderShellState();
                 lastHeroScrollY = window.scrollY;
                 return;
             }
@@ -214,11 +264,19 @@
             const nearTop = currentScrollY < 20;
 
             if (scrollingDown && currentScrollY > 12) {
+                if (!isHeroHeaderCollapsed) {
+                    isHeroHeaderCollapsed = true;
+                    setHeroHeaderHeight();
+                }
                 if (!isHeroHeaderHidden) {
                     heroHeader.classList.add('is-hidden');
                     isHeroHeaderHidden = true;
                 }
             } else if (!scrollingDown || nearTop) {
+                if (isHeroHeaderCollapsed) {
+                    isHeroHeaderCollapsed = false;
+                    setHeroHeaderHeight();
+                }
                 if (isHeroHeaderHidden) {
                     heroHeader.classList.remove('is-hidden');
                     isHeroHeaderHidden = false;
@@ -227,6 +285,7 @@
                 }
             }
 
+            syncHeroHeaderShellState();
             lastHeroScrollY = currentScrollY;
         };
 
@@ -239,6 +298,7 @@
             heroNav.setAttribute('aria-hidden', 'true');
             heroHeader.classList.remove('is-hidden');
             isHeroHeaderHidden = false;
+            syncHeroHeaderShellState();
             setHeroHeaderHeight();
         };
 
@@ -252,6 +312,7 @@
             heroHeader.classList.remove('is-hidden');
             isHeroHeaderHidden = false;
             lastHeroScrollY = window.scrollY;
+            syncHeroHeaderShellState();
             setHeroHeaderHeight();
         };
 
@@ -260,7 +321,7 @@
             const scrollingDown = currentScrollY > lastHeroScrollY + 4;
 
             if (
-                isCompactHeroViewport()
+                isScrollHideViewport()
                 && heroHeader.classList.contains('is-menu-open')
                 && scrollingDown
             ) {
@@ -272,6 +333,7 @@
 
         setHeroHeaderHeight();
         updateHeroHeaderVisibility();
+        syncHeroHeaderShellState();
         heroNav.setAttribute('aria-hidden', 'true');
 
         heroMenuToggle.addEventListener('click', () => {
@@ -286,13 +348,13 @@
         heroNav.addEventListener('click', (event) => {
             const link = event.target.closest('a');
             if (!link || !heroNav.contains(link)) return;
-            if (window.innerWidth <= HERO_MENU_BREAKPOINT) {
+            if (window.innerWidth <= COMPACT_HEADER_BREAKPOINT) {
                 closeHeroMenu();
             }
         });
 
         document.addEventListener('click', (event) => {
-            if (window.innerWidth > HERO_MENU_BREAKPOINT) return;
+            if (window.innerWidth > COMPACT_HEADER_BREAKPOINT) return;
             if (!heroHeader.classList.contains('is-menu-open')) return;
             if (heroHeader.contains(event.target)) return;
             closeHeroMenu();
@@ -304,15 +366,18 @@
         });
 
         window.addEventListener('resize', () => {
-            if (window.innerWidth > HERO_MENU_BREAKPOINT) {
+            if (window.innerWidth > COMPACT_HEADER_BREAKPOINT) {
                 closeHeroMenu();
             }
             lastHeroScrollY = window.scrollY;
             setHeroHeaderHeight();
             updateHeroHeaderVisibility();
+            syncHeroHeaderShellState();
         });
 
-        window.addEventListener('load', setHeroHeaderHeight, { once: true });
+        window.addEventListener('load', () => {
+            setHeroHeaderHeight();
+        }, { once: true });
         window.addEventListener('scroll', syncHeroMenuOnScroll, { passive: true });
 
         installNavPrefetch(Array.from(heroNav.querySelectorAll('a')));
@@ -322,11 +387,15 @@
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
             scene.style.setProperty('--scene-delay', `${delay}ms`);
+            ensureSceneCurtain(scene);
         });
 
-        if (forceReveal || !('IntersectionObserver' in window)) {
+        if (forceReveal || reducedMotion || !('IntersectionObserver' in window)) {
             scenes.forEach((scene) => scene.classList.add('is-visible'));
         } else {
+            const immediateScenes = scenes.filter((scene) => scene.getBoundingClientRect().top < window.innerHeight * 0.92);
+            immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;

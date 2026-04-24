@@ -282,616 +282,6 @@
     }
 }
 
-/* ========== INTERNAL MOBILE HEADER PARITY WITH HOME HERO ========== */
-@media (max-width: 1100px) {
-    body#top .header.header--desktop-hero.internal-legacy-header {
-        position: fixed;
-        inset: 0 0 auto;
-        width: 100%;
-        z-index: 1002;
-        background: linear-gradient(180deg, rgba(252, 252, 251, 0.97), rgba(242, 246, 251, 0.94));
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
-        backdrop-filter: blur(16px) saturate(108%);
-        border-bottom: 1px solid rgba(20, 56, 89, 0.08);
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        max-width: none;
-        width: 100%;
-        padding: 16px 12px 0;
-        overflow: visible;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top {
-        position: relative;
-        top: auto;
-        z-index: 1002;
-        margin-top: 0;
-        padding: 16px;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        backdrop-filter: none;
-        overflow: visible;
-        transform: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-areas:
-            "logo actions"
-            "contacts contacts";
-        align-items: start;
-        justify-items: stretch;
-        gap: 12px 14px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo {
-        grid-area: logo;
-        justify-self: start;
-        align-self: start;
-        margin: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
-        display: flex;
-        align-items: flex-start;
-        min-width: 0;
-        width: max-content;
-        margin: 0;
-        transform: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 0;
-        color: #10263d !important;
-        text-decoration: none !important;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *::before,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *::after {
-        color: inherit !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-        width: 74px;
-        height: 74px;
-        flex: 0 0 74px;
-        padding: 3px;
-        border-radius: 14px;
-        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98), rgba(201, 212, 227, 0.92));
-        box-shadow:
-            0 10px 24px rgba(15, 23, 42, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.75);
-        isolation: isolate;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
-        display: block;
-        width: 68px;
-        height: 68px;
-        max-width: 198px;
-        aspect-ratio: 1 / 1;
-        border-radius: 11px;
-        border: 0;
-        background: transparent;
-        object-fit: contain;
-        position: relative;
-        z-index: 1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
-        display: grid;
-        gap: 4px;
-        min-width: 0;
-        width: max-content;
-        position: relative;
-        padding-bottom: 6px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 72px;
-        height: 1px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, rgba(24, 61, 93, 0.54), rgba(24, 61, 93, 0));
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
-        color: rgba(14, 18, 24, 0.84) !important;
-        font-size: 0.66rem;
-        font-weight: 760;
-        line-height: 1.18;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.48rem;
-        font-weight: 700;
-        line-height: 0.92;
-        letter-spacing: -0.015em;
-        color: #10263d;
-        font-variant-numeric: lining-nums proportional-nums;
-        font-feature-settings: "lnum" 1, "pnum" 1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__wave {
-        display: block;
-        position: absolute;
-        inset: -185% -185%;
-        background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0) 44%,
-            rgba(255, 255, 255, 0.7) 50%,
-            rgba(255, 255, 255, 0) 56%,
-            rgba(255, 255, 255, 0) 100%);
-        transform: translate(150%, -150%) rotate(10deg);
-        opacity: 0.6;
-        pointer-events: none;
-        filter: blur(0.6px);
-        z-index: 2;
-        animation: logo-wave-shine 3.1s linear infinite;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        display: flex;
-        grid-area: actions;
-        justify-self: end;
-        align-self: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 46px;
-        height: 46px;
-        padding: 0;
-        border: 1px solid rgba(20, 56, 89, 0.14);
-        border-radius: 16px;
-        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98), rgba(232, 238, 246, 0.92));
-        color: rgba(16, 38, 61, 0.92);
-        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
-        transform: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars {
-        position: relative;
-        display: grid;
-        gap: 5px;
-        width: 18px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
-        display: block;
-        width: 18px;
-        height: 1.75px;
-        border-radius: 999px;
-        background: rgba(16, 38, 61, 0.88);
-        transform-origin: center;
-        transition:
-            transform 180ms ease,
-            opacity 160ms ease,
-            background-color 180ms ease,
-            width 180ms ease;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span:nth-child(2) {
-        width: 13px;
-        justify-self: end;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span {
-        background: rgba(16, 38, 61, 0.92);
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(1) {
-        transform: translateY(6.75px) rotate(45deg);
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(2) {
-        opacity: 0;
-        transform: translateX(4px);
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(3) {
-        transform: translateY(-6.75px) rotate(-45deg);
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
-        display: grid;
-        grid-area: contacts;
-        justify-self: center;
-        justify-content: center;
-        align-items: center;
-        width: max-content;
-        max-width: 100%;
-        gap: 0;
-        margin-top: 8px;
-        padding: 0;
-        text-align: center;
-        transform: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type:focus-visible {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        width: auto;
-        min-height: 0;
-        padding: 0 2px;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        color: rgba(16, 38, 61, 0.96) !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type * {
-        color: inherit !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type i {
-        display: inline-block;
-        flex: 0 0 19px;
-        width: 19px;
-        height: auto;
-        margin-top: 0;
-        font-size: 18.5px;
-        color: rgba(24, 61, 93, 0.8) !important;
-        text-align: center;
-        line-height: 1;
-        background: none;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        transform: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-info {
-        display: grid;
-        gap: 3px;
-        min-width: 0;
-        justify-items: center;
-        text-align: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-number {
-        display: block;
-        color: #10263d !important;
-        font-size: 0.92rem;
-        line-height: 1.1;
-        font-weight: 760;
-        letter-spacing: 0.018em;
-        font-variant-numeric: tabular-nums lining-nums;
-        font-feature-settings: "tnum" 1, "lnum" 1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-label {
-        display: block;
-        color: #5e6977 !important;
-        font-size: 0.78rem;
-        line-height: 1.18;
-        font-weight: 640;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:nth-of-type(2),
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
-        display: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        position: fixed;
-        top: calc(var(--header-top-height, 82px) + 8px);
-        left: 12px;
-        right: 12px;
-        z-index: 1200;
-        display: none;
-        flex-direction: column;
-        gap: 0;
-        width: auto;
-        margin: 0;
-        padding: 18px;
-        border: 1px solid rgba(20, 56, 89, 0.1);
-        border-radius: 0 0 18px 18px;
-        background: linear-gradient(180deg, rgba(252, 252, 251, 0.985), rgba(241, 246, 251, 0.97));
-        backdrop-filter: blur(18px) saturate(108%);
-        box-shadow: 0 22px 42px rgba(15, 23, 42, 0.14);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transform: translateY(-8px);
-        transition: opacity 180ms ease, visibility 180ms ease, transform 180ms ease;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .header-top.header-top--compact .nav,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav.active {
-        display: flex;
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list li {
-        width: 100%;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:focus-visible {
-        justify-content: flex-start;
-        min-height: 0;
-        width: 100%;
-        padding: 15px 0;
-        border: 0;
-        border-bottom: 1px solid rgba(20, 56, 89, 0.08);
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        color: rgba(16, 38, 61, 0.72);
-        font-size: 1rem;
-        font-weight: 720;
-        line-height: 1.22;
-        white-space: normal;
-        transform: none !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a i {
-        display: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list li:last-child a {
-        border-bottom: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a::after {
-        display: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a.active,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a[aria-current="page"] {
-        color: rgba(38, 92, 142, 0.96) !important;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1100px) {
-    body#top .internal-hero-scene + .catalog-page,
-    body#top .internal-hero-scene + .services-page,
-    body#top .internal-hero-scene + .gallery-page,
-    body#top .internal-hero-scene + .prices-page,
-    body#top .internal-hero-scene + .contacts-page,
-    body#top .internal-hero-scene + .payment-docs-page,
-    body#top .internal-hero-scene + .privacy-page,
-    body#top .internal-hero-scene + .automation-product-page {
-        padding-top: calc(var(--header-top-height, 118px) + 28px) !important;
-    }
-}
-
-@media (max-width: 768px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 12px 14px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top {
-        padding: 12px 14px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        gap: 10px 12px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
-        width: 60px;
-        height: 60px;
-        flex-basis: 60px;
-        padding: 3px;
-        border-radius: 13px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
-        width: 54px;
-        height: 54px;
-        max-width: 180px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
-        font-size: 0.64rem;
-        letter-spacing: 0.12em;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        font-size: 1.4rem;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        margin-top: 8px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:first-of-type .phone-number {
-        font-size: 0.92rem;
-        line-height: 1.1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 76px) + 6px);
-        left: 12px;
-        right: 12px;
-        padding: 16px;
-        border-radius: 0 0 16px 16px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:focus-visible {
-        padding: 13px 0;
-        font-size: 0.96rem;
-        line-height: 1.22;
-    }
-}
-
-@media (max-width: 480px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 8px 12px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top {
-        padding: 8px 12px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        gap: 6px 8px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link {
-        gap: 6px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
-        width: 52px;
-        height: 52px;
-        flex-basis: 52px;
-        padding: 2px;
-        border-radius: 12px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
-        width: 48px;
-        height: 48px;
-        max-width: 152px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
-        font-size: 0.58rem;
-        letter-spacing: 0.11em;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        font-size: 1.2rem;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        width: 40px;
-        height: 40px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        display: none !important;
-        margin-top: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 70px) + 4px);
-        left: 10px;
-        right: 10px;
-        padding: 14px 16px;
-        border-radius: 0 0 15px 15px;
-    }
-}
-
-@media (max-width: 640px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        display: none !important;
-    }
-}
-
-@media (max-width: 1100px) {
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary:visited,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary:hover,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary:focus-visible {
-        color: rgba(16, 38, 61, 0.96) !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary *,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary *::before,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--primary *::after {
-        color: inherit !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-link--secondary,
-    body#top .header.header--desktop-hero .desktop-hero-header .hero-header-address {
-        display: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone:focus-visible {
-        color: rgba(16, 38, 61, 0.96) !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone *,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone *::before,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone *::after {
-        color: inherit !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone i,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone i::before {
-        color: rgba(24, 61, 93, 0.9) !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone .phone-number {
-        color: rgba(16, 38, 61, 0.96) !important;
-        font-weight: 800;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-phone .phone-label {
-        color: rgba(16, 38, 61, 0.72) !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .contact-address {
-        display: none !important;
-    }
-}
-
 /* ========== DESKTOP HEADER HOMEPAGE PARITY ========== */
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     .header.header--desktop-hero,
@@ -1316,333 +706,6 @@
     }
 }
 
-/* ========== FINAL COMPACT HEADER PASS ========== */
-@media (min-width: 641px) and (max-width: 1100px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 16px 18px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-areas:
-            "logo actions"
-            "contacts contacts";
-        align-items: start;
-        gap: 10px 20px;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo {
-        grid-area: logo;
-        justify-self: start;
-        align-self: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        grid-area: contacts;
-        justify-self: center;
-        align-self: center;
-        width: max-content;
-        max-width: min(100%, 360px);
-        margin-top: 0;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type {
-        gap: 8px;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-info {
-        gap: 2px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        grid-area: actions;
-        justify-self: end;
-        align-self: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        display: inline-flex !important;
-        position: relative;
-        z-index: 12;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
-        background: rgba(16, 38, 61, 0.92);
-        opacity: 1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 92px) + 8px);
-        left: 18px;
-        right: 18px;
-    }
-}
-
-@media (max-width: 640px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 8px 12px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-areas: "logo actions";
-        align-items: center;
-        gap: 0 8px;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo {
-        grid-area: logo;
-        justify-self: start;
-        align-self: center;
-        width: min(100%, calc(100% - 48px));
-        max-width: calc(100% - 48px);
-        min-width: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        grid-area: actions;
-        justify-self: end;
-        align-self: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        display: inline-flex !important;
-        position: relative;
-        z-index: 12;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
-        background: rgba(16, 38, 61, 0.92);
-        opacity: 1;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        display: grid;
-        grid-template-columns: 52px minmax(0, 1fr);
-        width: 100%;
-        min-width: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
-        width: auto;
-        min-width: 0;
-        max-width: 100%;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
-        display: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 70px) + 4px);
-        left: 10px;
-        right: 10px;
-        z-index: 1400;
-    }
-}
-
-@media (max-width: 1100px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        box-sizing: border-box;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
-        width: 56px;
-        height: 56px;
-        flex: 0 0 56px;
-        padding: 4px;
-        border-radius: 14px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__logo {
-        width: 48px;
-        height: 48px;
-        max-width: none;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        gap: 10px;
-        align-items: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
-        min-width: 0;
-        padding-bottom: 6px;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
-        font-size: 11px;
-        letter-spacing: 0.14em;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        font-size: clamp(1.45rem, 2.6vw, 1.92rem);
-        line-height: 0.96;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-header-row {
-        display: block;
-        height: 0;
-        margin: 0;
-        padding: 0;
-        overflow: visible;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        position: fixed;
-        width: auto;
-        max-height: calc(100dvh - var(--header-top-height, 92px) - 26px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
-        z-index: 1600;
-    }
-}
-
-@media (min-width: 641px) and (max-width: 1100px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 12px 18px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        position: relative;
-        grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-areas:
-            "logo actions"
-            "contacts contacts";
-        align-items: center;
-        gap: 10px 18px;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo {
-        width: min(100%, calc(100% - 84px));
-        max-width: calc(100% - 84px);
-        min-width: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        display: inline-flex !important;
-        opacity: 1;
-        visibility: visible;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 92px) + 8px);
-        left: 18px;
-        right: 18px;
-    }
-}
-
-@media (max-width: 640px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .container {
-        padding: 8px 12px 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        position: relative;
-        display: block !important;
-        min-height: 56px;
-        padding: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo {
-        width: min(100%, calc(100% - 52px));
-        max-width: calc(100% - 52px);
-        min-width: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        position: absolute;
-        top: 8px;
-        right: 0;
-        z-index: 14;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        display: inline-flex !important;
-        width: 40px;
-        height: 40px;
-        opacity: 1;
-        visibility: visible;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        display: grid;
-        grid-template-columns: 56px minmax(0, 1fr);
-        width: 100%;
-        min-width: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 70px) + 8px);
-        left: 12px;
-        right: 12px;
-        grid-template-columns: 1fr;
-        padding: 14px;
-    }
-}
-
-@media (max-width: 640px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        align-items: center;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-self: center;
-        min-height: 56px;
-        padding-bottom: 0;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text::after {
-        display: none;
-    }
-}
-
 /* ========== CLEAN COMPACT INTERNAL HEADER REBUILD ========== */
 @media (max-width: 1100px) {
     body#top .header.header--desktop-hero.internal-legacy-header {
@@ -1666,37 +729,56 @@
         padding: 0 !important;
     }
 
+    body#top .header.header--desktop-hero.internal-legacy-header .desktop-hero-header {
+        display: none !important;
+    }
+
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
         position: relative !important;
         display: grid !important;
-        grid-template-columns: minmax(0, 1fr) auto !important;
         align-items: center !important;
-        gap: 0 16px !important;
         margin: 0 !important;
-        padding: 12px 18px !important;
         min-height: 0 !important;
-        background: linear-gradient(180deg, rgba(252, 252, 251, 0.985), rgba(242, 246, 251, 0.965)) !important;
+        background: transparent !important;
         border: 0 !important;
-        border-bottom: 1px solid rgba(20, 56, 89, 0.08) !important;
-        border-radius: 0 0 18px 18px !important;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
+        border-bottom: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        isolation: isolate !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact::before {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        border: 1px solid rgba(20, 56, 89, 0.12) !important;
+        background: linear-gradient(180deg, rgba(249, 251, 253, 0.96), rgba(236, 242, 248, 0.92)) !important;
+        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1) !important;
         backdrop-filter: blur(16px) saturate(108%) !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact > * {
+        position: relative !important;
+        z-index: 1 !important;
+        min-width: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .logo,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
         justify-self: start !important;
         align-self: center !important;
         width: auto !important;
-        max-width: calc(100% - 62px) !important;
         min-width: 0 !important;
         margin: 0 !important;
         transform: none !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:hover {
         display: grid !important;
         grid-template-columns: 56px minmax(0, 1fr) !important;
         align-items: center !important;
@@ -1705,7 +787,7 @@
         min-width: 0 !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
         width: 56px !important;
         height: 56px !important;
         flex: 0 0 56px !important;
@@ -1713,50 +795,59 @@
         border-radius: 14px !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__logo {
         width: 48px !important;
         height: 48px !important;
         max-width: none !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
-        align-self: center !important;
         gap: 4px !important;
         min-width: 0 !important;
-        min-height: 56px !important;
         width: auto !important;
         padding-bottom: 0 !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text::after {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text::after {
         display: none !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
         max-width: 100% !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         white-space: nowrap !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow {
         font-size: 0.68rem !important;
         letter-spacing: 0.12em !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
         font-size: 1.34rem !important;
         line-height: 0.96 !important;
     }
 
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
+        transition: none !important;
+        animation: none !important;
+    }
+
     body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        position: static !important;
+        display: flex !important;
         justify-self: end !important;
         align-self: center !important;
+        margin: 0 !important;
         z-index: 12 !important;
     }
 
@@ -1786,9 +877,6 @@
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
         position: fixed !important;
-        top: calc(var(--header-top-height, 84px) + 8px) !important;
-        left: 12px !important;
-        right: 12px !important;
         z-index: 2200 !important;
         display: none !important;
         flex-direction: column !important;
@@ -1797,11 +885,9 @@
         margin: 0 !important;
         padding: 18px !important;
         border: 1px solid rgba(20, 56, 89, 0.1) !important;
-        border-radius: 0 0 18px 18px !important;
         background: linear-gradient(180deg, rgba(252, 252, 251, 0.99), rgba(241, 246, 251, 0.975)) !important;
         backdrop-filter: blur(18px) saturate(108%) !important;
         box-shadow: 0 22px 42px rgba(15, 23, 42, 0.14) !important;
-        max-height: calc(100dvh - var(--header-top-height, 84px) - 24px) !important;
         overflow-y: auto !important;
         overscroll-behavior: contain !important;
         -webkit-overflow-scrolling: touch !important;
@@ -1869,211 +955,94 @@
     }
 }
 
-@media (min-width: 641px) and (max-width: 1100px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: auto minmax(0, 1fr) auto !important;
-        gap: 0 14px !important;
-        padding: 12px 18px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
-        grid-column: 1 !important;
-        justify-self: start !important;
-        align-self: center !important;
-        width: auto !important;
-        max-width: min(100%, 284px) !important;
-        min-width: 0 !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        grid-column: 2 !important;
-        position: static !important;
-        inset: auto !important;
-        left: auto !important;
-        top: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        grid-area: auto !important;
-        justify-self: auto !important;
-        align-self: auto !important;
-        justify-self: center !important;
-        align-self: center !important;
-        transform: none !important;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 0 !important;
-        width: max-content !important;
-        max-width: min(100%, 320px) !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        text-align: center !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
-        grid-column: 3 !important;
-        justify-self: end !important;
-        align-self: center !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type,
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type:focus-visible {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 6px !important;
-        width: max-content !important;
-        max-width: 100% !important;
-        min-height: 0 !important;
-        padding: 0 2px !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        color: rgba(16, 38, 61, 0.96) !important;
-        text-decoration: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type i {
-        width: auto !important;
-        min-width: 16px !important;
-        font-size: 17px !important;
-        color: rgba(24, 61, 93, 0.82) !important;
-        background: none !important;
-        border: 0 !important;
-        box-shadow: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type .phone-info {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-        min-width: 0 !important;
-        align-items: flex-start !important;
-        justify-items: start !important;
-        text-align: left !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type .phone-number {
-        font-size: 0.92rem !important;
-        line-height: 1.1 !important;
-        font-weight: 760 !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:first-of-type .phone-label {
-        display: block !important;
-        font-size: 0.77rem !important;
-        line-height: 1.16 !important;
-        color: #5e6977 !important;
-        font-weight: 640 !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-phone:not(:first-of-type),
-    body#top .header.header--desktop-hero.internal-legacy-header .contact-address {
-        display: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 86px) + 8px) !important;
-        left: 18px !important;
-        right: 18px !important;
-    }
-}
-
-@media (max-width: 640px) {
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        padding: 8px 12px !important;
-        gap: 0 8px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .logo,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
-        max-width: calc(100% - 48px) !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
-        grid-template-columns: 52px minmax(0, 1fr) !important;
-        gap: 8px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
-        width: 52px !important;
-        height: 52px !important;
-        flex-basis: 52px !important;
-        padding: 2px !important;
-        border-radius: 12px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
-        width: 48px !important;
-        height: 48px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
-        min-height: 52px !important;
-        gap: 2px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
-        font-size: 0.58rem !important;
-        letter-spacing: 0.11em !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
-        font-size: 1.16rem !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:hover,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
-    body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
-        width: 40px !important;
-        height: 40px !important;
-        border-radius: 14px !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .header-contact-stack {
-        display: none !important;
-    }
-
-    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
-        top: calc(var(--header-top-height, 68px) + 6px) !important;
-        left: 10px !important;
-        right: 10px !important;
-        bottom: auto !important;
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: min(520px, calc(100dvh - var(--header-top-height, 68px) - 18px)) !important;
-        justify-content: flex-start !important;
-        padding: 14px 16px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
-        border-top: 1px solid rgba(20, 56, 89, 0.08) !important;
-        border-radius: 0 0 16px 16px !important;
-        background: #f8fbff !important;
-        backdrop-filter: none !important;
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
-    }
-}
-
 /* ========== FINAL COMPACT MENU GLUE ========== */
 @media (min-width: 641px) and (max-width: 1100px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: 284px minmax(0, 1fr) 44px !important;
+        gap: 0 16px !important;
+        padding: 12px 18px !important;
         min-height: 56px !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text,
-    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
-        transition: none !important;
-        animation: none !important;
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact::before {
+        border-radius: 18px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .logo,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        max-width: 284px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        display: flex !important;
+        grid-column: 2 !important;
+        justify-self: center !important;
+        align-self: center !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        min-width: 0 !important;
+        width: auto !important;
+        margin: 0 !important;
+        text-align: center !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type {
+        display: inline-grid !important;
+        grid-template-columns: 16px auto !important;
+        align-items: start !important;
+        column-gap: 8px !important;
+        width: auto !important;
+        line-height: 1.1 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type i {
+        font-size: 0.98rem !important;
+        margin-top: 2px !important;
+        color: var(--theme-accent-strong) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-info {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        min-width: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-number {
+        display: block !important;
+        font-size: 15.8px !important;
+        line-height: 1.08 !important;
+        font-weight: 760 !important;
+        letter-spacing: -0.01em !important;
+        color: var(--theme-accent-strong) !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-label {
+        display: block !important;
+        font-size: 11.4px !important;
+        line-height: 1.12 !important;
+        font-weight: 660 !important;
+        color: rgba(107, 96, 86, 0.82) !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:nth-of-type(2),
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
+        display: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
@@ -2083,21 +1052,66 @@
         margin-top: -1px !important;
         border-top: 0 !important;
         border-radius: 0 0 18px 18px !important;
+        max-height: calc(100dvh - var(--header-top-height, 80px) - 24px) !important;
     }
 }
 
 @media (max-width: 640px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: minmax(0, 1fr) 44px !important;
+        gap: 0 12px !important;
+        padding: 8px 10px !important;
         min-height: 52px !important;
     }
 
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact::before {
+        border-radius: 16px !important;
+        background: linear-gradient(180deg, rgba(250, 252, 254, 0.97), rgba(238, 244, 249, 0.94)) !important;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .logo,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        max-width: calc(100% - 56px) !important;
+    }
+
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
-    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
-        transition: none !important;
-        animation: none !important;
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:hover {
+        grid-template-columns: 42px minmax(0, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
+        width: 42px !important;
+        height: 42px !important;
+        flex: 0 0 42px !important;
+        padding: 3px !important;
+        border-radius: 12px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__logo {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text {
+        gap: 2px !important;
+        min-height: 42px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow {
+        font-size: 0.56rem !important;
+        letter-spacing: 0.11em !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
+        font-size: 1.02rem !important;
+        line-height: 0.96 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        display: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
@@ -2107,6 +1121,7 @@
         margin-top: -1px !important;
         border-top: 0 !important;
         border-radius: 0 0 16px 16px !important;
+        max-height: calc(100dvh - var(--header-top-height, 68px) - 20px) !important;
     }
 }
 

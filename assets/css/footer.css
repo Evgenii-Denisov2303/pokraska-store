@@ -1,6 +1,6 @@
 /* ========== SHARED FOOTER LAYER ========== */
 
-/* ========== PREVIEW FOOTER (MATCHES HOME) ========== */
+/* ========== PREVIEW FOOTER ========== */
 .preview-footer {
     --footer-accent: #183d5d;
     --footer-accent-soft: #2f5d88;
@@ -647,5 +647,38 @@
     .preview-footer__logo {
         height: 64px;
         max-width: 220px;
+    }
+}
+
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) + .preview-footer {
+        margin-top: 22px;
+    }
+}
+
+@media (max-width: 1100px) {
+    body#top .gallery-page + .preview-footer {
+        margin-top: 52px;
+    }
+}
+
+@media (max-width: 760px) {
+    body#top .gallery-page + .preview-footer {
+        margin-top: 34px;
+    }
+}
+
+@media (max-width: 540px) {
+    body#top .gallery-page + .preview-footer {
+        margin-top: 28px;
     }
 }

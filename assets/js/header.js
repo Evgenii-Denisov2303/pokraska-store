@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
     const prefetchedUrls = new Set();
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
     function makeLogoOnlyClickable(root) {
         root.querySelectorAll('.hero-brand__link').forEach((link) => {
@@ -71,6 +72,53 @@ document.addEventListener('DOMContentLoaded', function () {
                     event.stopPropagation();
                 }
             });
+        });
+    }
+
+    function ensureSceneCurtain(scene) {
+        if (window.innerWidth > COMPACT_HEADER_BREAKPOINT) return;
+        if (scene.querySelector(':scope > .scene-reveal__curtain')) return;
+        const curtain = document.createElement('span');
+        curtain.className = 'scene-reveal__curtain';
+        curtain.setAttribute('aria-hidden', 'true');
+        scene.appendChild(curtain);
+    }
+
+    function initializeSceneReveal() {
+        const revealTargets = [];
+        const internalHeroScene = document.querySelector('.internal-hero-scene');
+
+        if (internalHeroScene) {
+            internalHeroScene.classList.add('scene-reveal');
+            revealTargets.push(internalHeroScene);
+        }
+
+        if (!revealTargets.length) return;
+
+        revealTargets.forEach((scene) => ensureSceneCurtain(scene));
+
+        if (reducedMotion || !('IntersectionObserver' in window)) {
+            revealTargets.forEach((scene) => scene.classList.add('is-visible'));
+            return;
+        }
+
+        const immediateScenes = revealTargets.filter((scene) => scene.getBoundingClientRect().top < window.innerHeight * 0.92);
+        immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -8% 0px'
+        });
+
+        revealTargets.forEach((scene) => {
+            if (scene.classList.contains('is-visible')) return;
+            observer.observe(scene);
         });
     }
 
@@ -202,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     makeLogoOnlyClickable(document);
+    initializeSceneReveal();
 
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
