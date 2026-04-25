@@ -3,21 +3,21 @@ body#top .payment-docs-page {
     --payment-border-strong: rgba(var(--theme-accent-rgb), 0.16);
     --payment-shadow:
         0 22px 42px rgba(25, 39, 55, 0.06),
-        0 8px 18px rgba(88, 70, 48, 0.03),
+        0 8px 18px rgba(16, 38, 61, 0.024),
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
     --payment-card-shadow:
         0 18px 34px rgba(25, 39, 55, 0.07),
-        0 7px 16px rgba(88, 70, 48, 0.026),
+        0 7px 16px rgba(16, 38, 61, 0.022),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
     --payment-surface:
-        linear-gradient(180deg, rgba(250, 247, 243, 0.998), rgba(243, 237, 229, 0.982));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.998), rgba(239, 245, 250, 0.982));
     --payment-card:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(248, 242, 234, 0.978));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(246, 250, 253, 0.978));
     padding: 104px 0 96px !important;
     background:
         radial-gradient(circle at 8% 0%, rgba(var(--theme-accent-rgb), 0.05), transparent 28%),
         radial-gradient(circle at 91% 8%, rgba(var(--theme-accent-strong-rgb), 0.05), transparent 20%),
-        linear-gradient(180deg, rgba(247, 243, 237, 0.992) 0%, rgba(241, 235, 227, 0.994) 44%, rgba(245, 240, 233, 0.996) 100%) !important;
+        linear-gradient(180deg, #f9fbfd 0%, #f1f5f8 44%, #f7fafc 100%) !important;
 }
 
 body#top .payment-docs-page > .container {
@@ -99,7 +99,7 @@ body#top .payment-docs-heading__title::after {
 body#top .payment-docs-heading__subtitle {
     margin: 0;
     max-width: 46ch;
-    color: rgba(96, 78, 58, 0.92) !important;
+    color: rgba(72, 89, 106, 0.92) !important;
     font-size: 0.95rem;
     font-weight: 500 !important;
     letter-spacing: 0;
@@ -126,11 +126,11 @@ body#top .payment-order-sheet {
     padding: 30px;
     background:
         radial-gradient(circle at 86% 18%, rgba(var(--theme-accent-rgb), 0.15), transparent 25%),
-        radial-gradient(circle at 16% 108%, rgba(226, 207, 175, 0.36), transparent 35%),
-        linear-gradient(180deg, rgba(249, 242, 232, 0.998), rgba(233, 224, 212, 0.99));
+        radial-gradient(circle at 16% 108%, rgba(149, 173, 195, 0.18), transparent 35%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(239, 245, 250, 0.94));
     box-shadow:
         0 28px 48px rgba(25, 39, 55, 0.075),
-        0 10px 24px rgba(88, 70, 48, 0.04),
+        0 10px 24px rgba(16, 38, 61, 0.026),
         inset 0 1px 0 rgba(255, 255, 255, 0.66);
 }
 
@@ -223,7 +223,7 @@ body#top .payment-order-sheet__facts span {
     font-weight: 640;
     letter-spacing: -0.01em;
     box-shadow:
-        0 10px 18px rgba(84, 67, 47, 0.016),
+        0 10px 18px rgba(16, 38, 61, 0.016),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
     transition:
         transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
@@ -268,10 +268,10 @@ body#top .payment-doc-card {
     border-radius: 24px;
     border: 1px solid rgba(var(--theme-accent-rgb), 0.15);
     background:
-        linear-gradient(180deg, rgba(255, 251, 245, 0.996), rgba(243, 234, 223, 0.988));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.996), rgba(246, 250, 253, 0.988));
     box-shadow:
         0 18px 32px rgba(25, 39, 55, 0.085),
-        0 8px 18px rgba(88, 70, 48, 0.03),
+        0 8px 18px rgba(16, 38, 61, 0.024),
         inset 0 1px 0 rgba(255, 255, 255, 0.72);
     transition:
         transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
@@ -333,12 +333,12 @@ body#top .payment-route {
     padding: 26px 28px;
     background:
         radial-gradient(circle at 84% 18%, rgba(var(--theme-accent-rgb), 0.12), transparent 24%),
-        radial-gradient(circle at 14% 112%, rgba(226, 207, 175, 0.28), transparent 34%),
-        linear-gradient(180deg, rgba(249, 242, 232, 0.98), rgba(233, 224, 212, 0.95));
+        radial-gradient(circle at 14% 112%, rgba(149, 173, 195, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.965), rgba(241, 246, 251, 0.93));
     border-color: rgba(var(--theme-accent-rgb), 0.09);
     box-shadow:
         0 16px 28px rgba(25, 39, 55, 0.04),
-        0 6px 12px rgba(88, 70, 48, 0.018),
+        0 6px 12px rgba(16, 38, 61, 0.018),
         inset 0 1px 0 rgba(255, 255, 255, 0.58);
 }
 
@@ -353,8 +353,8 @@ body#top .payment-docs-kit {
     border: 1px solid rgba(var(--theme-accent-rgb), 0.1);
     background:
         radial-gradient(circle at 84% 18%, rgba(var(--theme-accent-rgb), 0.12), transparent 24%),
-        radial-gradient(circle at 14% 112%, rgba(226, 207, 175, 0.28), transparent 34%),
-        linear-gradient(180deg, rgba(249, 242, 232, 0.98), rgba(233, 224, 212, 0.95));
+        radial-gradient(circle at 14% 112%, rgba(149, 173, 195, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.965), rgba(241, 246, 251, 0.93));
     box-shadow:
         0 12px 20px rgba(32, 43, 57, 0.03),
         inset 0 1px 0 rgba(255, 255, 255, 0.62);
@@ -388,12 +388,12 @@ body#top .payment-docs-kit__items span {
     padding: 8px 14px;
     border-radius: 999px;
     border: 1px solid rgba(var(--theme-accent-rgb), 0.12);
-    background: linear-gradient(180deg, rgba(255, 250, 244, 0.96), rgba(243, 234, 223, 0.9));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 240, 247, 0.9));
     color: rgba(54, 69, 85, 0.92);
     font-size: 0.95rem;
     font-weight: 650;
     box-shadow:
-        0 10px 18px rgba(84, 67, 47, 0.018),
+        0 10px 18px rgba(16, 38, 61, 0.018),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
     transition:
         transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
@@ -429,7 +429,7 @@ body#top .payment-docs-kit:focus-within {
     border-color: rgba(var(--theme-accent-rgb), 0.18);
     box-shadow:
         0 20px 34px rgba(18, 46, 74, 0.05),
-        0 8px 18px rgba(88, 70, 48, 0.028),
+        0 8px 18px rgba(16, 38, 61, 0.024),
         inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
@@ -483,7 +483,7 @@ body#top .payment-route__step {
     padding: 20px;
     border-radius: 24px;
     border: 1px solid rgba(var(--theme-accent-rgb), 0.11);
-    background: linear-gradient(180deg, rgba(255, 250, 244, 0.98), rgba(243, 234, 223, 0.95));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(232, 240, 247, 0.95));
     box-shadow:
         0 12px 20px rgba(32, 43, 57, 0.045),
         inset 0 1px 0 rgba(255, 255, 255, 0.68);
@@ -548,6 +548,14 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
 @media (max-width: 1180px) {
     body#top .payment-docs-page {
         padding: 82px 0 46px !important;
+        --payment-surface:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(241, 246, 251, 0.95));
+        --payment-card:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.995), rgba(245, 249, 253, 0.97));
+        background:
+            radial-gradient(circle at 9% 0%, rgba(var(--theme-accent-rgb), 0.055), transparent 28%),
+            radial-gradient(circle at 92% 6%, rgba(var(--theme-accent-strong-rgb), 0.04), transparent 20%),
+            linear-gradient(180deg, #f9fbfd 0%, #f1f5f8 48%, #f7fafc 100%) !important;
     }
 
     body#top .payment-docs-page > .container {
@@ -556,11 +564,39 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
 
     body#top .payment-order-sheet {
         grid-template-columns: 1fr;
+        background:
+            radial-gradient(circle at 86% 18%, rgba(var(--theme-accent-rgb), 0.08), transparent 25%),
+            radial-gradient(circle at 16% 108%, rgba(149, 173, 195, 0.18), transparent 35%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(239, 245, 250, 0.94));
+        border-color: rgba(24, 61, 93, 0.1);
+        box-shadow:
+            0 24px 42px rgba(16, 38, 61, 0.055),
+            0 10px 22px rgba(16, 38, 61, 0.025),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }
 
     body#top .payment-docs-kit {
         grid-template-columns: 1fr;
         align-items: start;
+        background:
+            radial-gradient(circle at 84% 18%, rgba(var(--theme-accent-rgb), 0.075), transparent 24%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.965), rgba(241, 246, 251, 0.93));
+        border-color: rgba(24, 61, 93, 0.1);
+    }
+
+    body#top .payment-route {
+        background:
+            radial-gradient(circle at 84% 18%, rgba(var(--theme-accent-rgb), 0.075), transparent 24%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.965), rgba(241, 246, 251, 0.93));
+        border-color: rgba(24, 61, 93, 0.1);
+    }
+
+    body#top .payment-doc-card,
+    body#top .payment-order-sheet__facts span,
+    body#top .payment-docs-kit__items span,
+    body#top .payment-route__step {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 250, 253, 0.94));
+        border-color: rgba(24, 61, 93, 0.1);
     }
 
     body#top .payment-order-sheet__stack {
@@ -675,5 +711,25 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
         min-height: 40px;
         padding: 9px 12px;
         font-size: 0.86rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    body#top .payment-docs-page {
+        padding-top: 92px !important;
+    }
+
+    body#top .payment-docs-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    body#top .payment-docs-page {
+        padding-top: 72px !important;
+    }
+
+    body#top .payment-docs-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
     }
 }

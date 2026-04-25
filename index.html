@@ -29,8 +29,10 @@
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/home.css?v=20260424-home-theme-256">
-    <link rel="stylesheet" href="assets/css/footer.css?v=20260424-preview-footer-36">
+    <link rel="stylesheet" href="assets/css/home.css?v=20260425-home-theme-275">
+    <link rel="preload" as="style" href="assets/css/header.css?v=20260424-header-69">
+    <link rel="stylesheet" href="assets/css/header.css?v=20260424-header-69">
+    <link rel="stylesheet" href="assets/css/footer.css?v=20260424-preview-footer-37">
     <script id="home-structured-data" type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -61,9 +63,69 @@
     </script>
 </head>
 <body id="top">
+    <header class="header header--desktop-hero internal-legacy-header header--home">
+        <div class="container">
+            <div class="header-top header-top--compact">
+                <div class="logo hero-brand">
+                    <a href="#top" class="logo-link hero-brand__link" aria-label="Перейти к началу главной страницы">
+                        <div class="hero-brand__mark logo-main logo-main--image">
+                            <img class="hero-brand__logo logo-image" src="assets/images/logo.png" width="700" height="700" alt="KOMFORTPLUS116.RU - ворота, заборы и порошковая покраска в Казани" loading="eager" decoding="async">
+                            <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
+                        </div>
+                        <div class="hero-brand__text">
+                            <span class="hero-brand__eyebrow">Ворота, заборы, покраска</span>
+                            <span class="hero-brand__name">KOMFORTPLUS116.RU</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="header-contact-stack">
+                    <a href="tel:+79376154629" class="contact-phone">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        <div class="phone-info">
+                            <span class="phone-number">+7 (937) 615-46-29</span>
+                            <span class="phone-label">Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
+                        </div>
+                    </a>
+                    <a href="tel:+79625542260" class="contact-phone">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        <div class="phone-info">
+                            <span class="phone-number">+7 (962) 554-22-60</span>
+                        </div>
+                    </a>
+                    <div class="contact-address">
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                        <span>Старое Победилово, ул. Садовая, 72</span>
+                    </div>
+                </div>
+
+                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация">
+                    <ul class="nav-list">
+                        <li><a href="#top" class="active" aria-current="page"><i class="fas fa-home" aria-hidden="true"></i> Главная</a></li>
+                        <li><a href="pages/services.html"><i class="fas fa-store" aria-hidden="true"></i> Каталог</a></li>
+                        <li><a href="pages/powder-coating.html"><i class="fas fa-paint-roller" aria-hidden="true"></i> Порошковая покраска</a></li>
+                        <li><a href="pages/sandblasting.html"><i class="fas fa-wind" aria-hidden="true"></i> Пескоструйная обработка</a></li>
+                        <li><a href="pages/gallery.html"><i class="fas fa-images" aria-hidden="true"></i> Наши работы</a></li>
+                        <li><a href="pages/prices.html"><i class="fas fa-tag" aria-hidden="true"></i> Цены</a></li>
+                        <li><a href="pages/payment-documents.html"><i class="fas fa-receipt" aria-hidden="true"></i> Оплата</a></li>
+                        <li><a href="pages/contacts.html"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="hero-menu-toggle mobile-menu-btn" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-mobile-nav">
+                        <span class="hero-menu-toggle__bars" aria-hidden="true">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
     <main class="apple-shell">
-        <section class="scene hero-scene scene-reveal" aria-label="Главный экран">
-            <div class="hero-header">
+        <section class="scene hero-scene" aria-label="Главный экран">
+            <div class="hero-header hero-header--desktop-home" aria-label="Шапка главной страницы">
                 <div class="hero-scene__topbar">
                     <div class="hero-brand">
                         <a class="hero-brand__link" href="#top" aria-label="KOMFORTPLUS116.RU">
@@ -77,26 +139,10 @@
                             </div>
                         </a>
                     </div>
-                    <div class="hero-header-stack hero-header-stack--compact" aria-label="Контакты компании">
-                        <a class="hero-header-link hero-header-link--primary" href="tel:+79376154629">
-                            <i class="fas fa-phone" aria-hidden="true"></i>
-                            <span class="hero-header-text">
-                                <strong class="hero-header-main">+7 (937) 615-46-29</strong>
-                                <span class="hero-header-sub">Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
-                            </span>
-                        </a>
-                    </div>
-                    <button class="hero-menu-toggle mobile-menu-btn" type="button" aria-expanded="false" aria-controls="hero-mobile-nav" aria-label="Открыть меню">
-                        <span class="hero-menu-toggle__bars" aria-hidden="true">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </button>
                 </div>
 
                 <div class="hero-header-row">
-                    <nav class="hero-scene__nav" id="hero-mobile-nav" aria-label="Основная навигация">
+                    <nav class="hero-scene__nav" id="hero-desktop-nav" aria-label="Основная навигация">
                         <a class="hero-nav__link hero-nav__link--active" href="#top" aria-current="page">Главная</a>
                         <a class="hero-nav__link" href="pages/services.html">Каталог</a>
                         <a class="hero-nav__link" href="pages/powder-coating.html">Порошковая покраска</a>
@@ -294,7 +340,7 @@
                         <div class="panel-scene__copy-block">
                             <span class="scene-chip">Порошковая покраска металла</span>
                             <span class="panel-scene__eyebrow"><i class="fas fa-spray-can-sparkles" aria-hidden="true"></i> Цвет, покрытие, фактура</span>
-                            <h3>Диски, конструкции, оборудование и интерьер</h3>
+                            <h3 class="panel-scene__title--powder"><span>Диски, конструкции,</span><span>оборудование и интерьер</span></h3>
                             <p>Подготавливаем металл, подбираем цвет и покрытие и выполняем стойкую порошковую покраску для штампованных дисков, конструкций, оборудования и декоративных изделий.</p>
                         </div>
 
@@ -515,10 +561,10 @@
                     </div>
 
                     <div class="home-tail__request-side">
-                        <div class="home-tail__form-card">
-                            <span class="home-tail__form-eyebrow">Быстрый расчёт</span>
-                            <h4>Оставить заявку</h4>
-                            <p>Оставьте контакты, и мы свяжемся с вами в течение 15 минут, чтобы уточнить задачу и предложить удобный вариант.</p>
+                        <div class="home-tail__form-card" aria-labelledby="home-request-title">
+                            <div class="home-tail__form-header">
+                                <h4 id="home-request-title">Оставить заявку</h4>
+                            </div>
                             <div class="home-tail__iframe-frame">
                                 <iframe
                                     class="home-tail__iframe"
@@ -586,6 +632,7 @@
         </footer>
     </main>
     <script src="assets/js/content-api.js" defer></script>
+    <script src="assets/js/header.js?v=20260424-header-split-15" defer></script>
     <script src="assets/js/home-content.js?v=20260414-came-brand-1" defer></script>
     <script src="assets/js/home.js?v=20260424-home-header-18" defer></script>
 </body>

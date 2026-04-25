@@ -387,7 +387,7 @@ table th {
     .privacy-container,
     .privacy-page .section,
     .highlight {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 240, 232, 0.96));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(239, 245, 250, 0.96));
     }
 
     .privacy-header {
@@ -457,7 +457,7 @@ table th {
 .highlight {
     background:
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.7), transparent 34%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 240, 232, 0.94));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 245, 250, 0.94));
     box-shadow: var(--theme-shadow-soft);
 }
 
@@ -470,7 +470,7 @@ table {
 }
 
 table th {
-    background: linear-gradient(180deg, rgba(245, 239, 231, 0.96), rgba(239, 231, 220, 0.92));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 240, 247, 0.92));
 }
 
 table tr:hover {

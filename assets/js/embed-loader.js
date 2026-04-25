@@ -12,16 +12,23 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (frame.src !== src) {
-            frame.src = src;
-        }
-
-        frame.hidden = false;
-        container.classList.add('is-loaded');
-
         const trigger = container.querySelector('[data-embed-trigger]');
+
         if (trigger instanceof HTMLButtonElement) {
             trigger.disabled = true;
+        }
+
+        const revealFrame = () => {
+            frame.hidden = false;
+            container.classList.add('is-loaded');
+            container.classList.remove('is-loading');
+        };
+
+        container.classList.add('is-loading');
+        frame.addEventListener('load', revealFrame, { once: true });
+
+        if (frame.src !== src) {
+            frame.src = src;
         }
     });
 });

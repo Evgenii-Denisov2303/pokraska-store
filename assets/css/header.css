@@ -107,7 +107,11 @@
     }
 
     .header-top--compact .nav-list {
+        display: flex;
         flex-wrap: nowrap;
+        margin: 0;
+        padding: 0;
+        list-style: none;
         justify-content: flex-start;
         align-items: center;
         gap: 12px 26px;
@@ -120,6 +124,9 @@
 
     .header-top--compact .nav-list a {
         position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
         min-height: 30px;
         padding: 6px 0;
         border: 0;
@@ -331,6 +338,161 @@
 
     .header.header--desktop-hero.internal-legacy-header .desktop-hero-header {
         display: none !important;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand {
+        display: flex;
+        align-items: flex-start;
+        min-width: 0;
+        width: max-content;
+        margin-top: 38px;
+        margin-left: 38px;
+        transform: translateY(16px);
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link,
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:visited,
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link:hover {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        color: #10263d !important;
+        text-decoration: none !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *,
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *::before,
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__link *::after {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        width: 78px;
+        height: 78px;
+        flex: 0 0 78px;
+        padding: 4px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
+        box-shadow:
+            0 10px 24px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        isolation: isolate;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__logo {
+        display: block;
+        width: 70px;
+        height: 70px;
+        max-width: 328px;
+        aspect-ratio: 1 / 1;
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        object-fit: contain;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text {
+        display: grid;
+        gap: 6px;
+        min-width: 0;
+        width: max-content;
+        position: relative;
+        padding-bottom: 8px;
+        font-family: 'Manrope', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: normal;
+        font-synthesis: none;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__text::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 92px;
+        height: 1px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(24, 61, 93, 0.56), rgba(24, 61, 93, 0));
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__eyebrow {
+        color: rgba(14, 18, 24, 0.84) !important;
+        font-family: 'Manrope', sans-serif;
+        font-size: 13.8px;
+        font-weight: 760;
+        font-synthesis: none;
+        line-height: 1.18;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 39px;
+        font-weight: 700;
+        font-synthesis: none;
+        line-height: 0.92;
+        letter-spacing: -0.015em;
+        color: #10263d;
+        font-variant-numeric: lining-nums proportional-nums;
+        font-feature-settings: "lnum" 1, "pnum" 1;
+    }
+
+    .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .hero-brand__wave {
+        display: block;
+        position: absolute;
+        inset: -185% -185%;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 44%,
+            rgba(255, 255, 255, 0.7) 50%,
+            rgba(255, 255, 255, 0) 56%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: translate(150%, -150%) rotate(10deg);
+        opacity: 0.6;
+        pointer-events: none;
+        filter: blur(0.6px);
+        z-index: 2;
+        animation: logo-wave-shine 3.1s linear infinite;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: max-content minmax(0, 1fr) !important;
+        grid-template-areas: "logo nav" !important;
+        gap: 0 clamp(34px, 3.8vw, 58px) !important;
+        align-items: end !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
+        justify-self: end !important;
+        width: 100% !important;
+        max-width: calc(100vw - 620px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list {
+        justify-content: flex-end !important;
+        gap: 12px clamp(14px, 1.35vw, 20px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a {
+        font-size: clamp(0.82rem, 0.66rem + 0.18vw, 0.9rem) !important;
     }
 
     .header.header--desktop-hero .desktop-hero-header {
@@ -706,6 +868,114 @@
     }
 }
 
+/* ========== DESKTOP HEADER COMPOSITION ========== */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: max-content minmax(0, 1fr) minmax(310px, 392px) !important;
+        grid-template-areas:
+            "logo . contacts"
+            "nav nav nav" !important;
+        gap: 14px clamp(34px, 4vw, 64px) !important;
+        align-items: start !important;
+        min-height: 170px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        grid-area: logo !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        display: flex !important;
+        grid-area: contacts !important;
+        justify-self: end !important;
+        align-self: start !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: min(100%, 392px) !important;
+        max-width: 392px !important;
+        min-height: 0 !important;
+        gap: 8px !important;
+        margin: 52px 38px 0 0 !important;
+        padding: 0 !important;
+        text-align: left !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: #10263d !important;
+        text-decoration: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type {
+        display: inline-grid !important;
+        grid-template-columns: 20px auto !important;
+        align-items: start !important;
+        column-gap: 10px !important;
+        width: max-content !important;
+        max-width: 100% !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type i {
+        display: inline-block !important;
+        width: 20px !important;
+        margin-top: 3px !important;
+        color: #183d5d !important;
+        font-size: 1.02rem !important;
+        line-height: 1 !important;
+        text-align: center !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-info {
+        display: grid !important;
+        gap: 3px !important;
+        min-width: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-number {
+        display: block !important;
+        color: #10263d !important;
+        font-size: 21.5px !important;
+        font-weight: 780 !important;
+        line-height: 1.04 !important;
+        letter-spacing: -0.012em !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-label {
+        display: block !important;
+        color: rgba(94, 105, 119, 0.92) !important;
+        font-size: 13.8px !important;
+        font-weight: 660 !important;
+        line-height: 1.18 !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:nth-of-type(2),
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
+        display: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
+        grid-area: nav !important;
+        justify-self: center !important;
+        align-self: start !important;
+        width: max-content !important;
+        max-width: calc(100vw - 120px) !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list {
+        justify-content: center !important;
+        gap: 12px clamp(16px, 1.55vw, 24px) !important;
+    }
+}
+
 /* ========== CLEAN COMPACT INTERNAL HEADER REBUILD ========== */
 @media (max-width: 1100px) {
     body#top .header.header--desktop-hero.internal-legacy-header {
@@ -768,6 +1038,7 @@
 
     body#top .header.header--desktop-hero.internal-legacy-header .logo,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        display: flex !important;
         justify-self: start !important;
         align-self: center !important;
         width: auto !important;
@@ -785,6 +1056,17 @@
         gap: 10px !important;
         width: 100% !important;
         min-width: 0 !important;
+        color: #10263d !important;
+        text-decoration: none !important;
+        -webkit-text-fill-color: currentColor !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *::before,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *::after {
+        color: inherit !important;
+        text-decoration: none !important;
+        -webkit-text-fill-color: currentColor !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
@@ -806,9 +1088,16 @@
         flex-direction: column !important;
         justify-content: center !important;
         gap: 4px !important;
+        position: relative !important;
         min-width: 0 !important;
         width: auto !important;
         padding-bottom: 0 !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        line-height: normal !important;
+        letter-spacing: normal !important;
+        font-synthesis: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text::after {
@@ -824,13 +1113,24 @@
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow {
-        font-size: 0.68rem !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 11px !important;
+        line-height: 1.18 !important;
+        font-weight: 760 !important;
+        font-synthesis: none !important;
         letter-spacing: 0.12em !important;
+        text-transform: uppercase !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
-        font-size: 1.34rem !important;
+        font-family: 'Cormorant Garamond', serif !important;
+        font-size: 22px !important;
+        font-weight: 700 !important;
+        font-synthesis: none !important;
         line-height: 0.96 !important;
+        letter-spacing: -0.015em !important;
+        font-variant-numeric: lining-nums proportional-nums !important;
+        font-feature-settings: "lnum" 1, "pnum" 1 !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack,
@@ -845,6 +1145,7 @@
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
         display: flex !important;
+        grid-area: actions !important;
         justify-self: end !important;
         align-self: center !important;
         margin: 0 !important;
@@ -856,6 +1157,8 @@
     body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle:focus-visible,
     body#top .header.header--desktop-hero.internal-legacy-header.is-menu-open .hero-menu-toggle {
         display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         position: relative !important;
         width: 44px !important;
         height: 44px !important;
@@ -870,9 +1173,42 @@
         transform: none !important;
     }
 
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars {
+        position: relative !important;
+        display: grid !important;
+        grid-auto-rows: max-content !important;
+        align-content: center !important;
+        justify-items: center !important;
+        gap: 5px !important;
+        width: 18px !important;
+    }
+
     body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span {
+        display: block !important;
+        width: 18px !important;
+        height: 1.75px !important;
+        border-radius: 999px !important;
         background: rgba(16, 38, 61, 0.92) !important;
         opacity: 1 !important;
+        transform-origin: center !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle__bars span:nth-child(2) {
+        width: 13px !important;
+        justify-self: end !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(1) {
+        transform: translateY(6.75px) rotate(45deg) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(2) {
+        opacity: 0 !important;
+        transform: translateX(4px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle.is-active .hero-menu-toggle__bars span:nth-child(3) {
+        transform: translateY(-6.75px) rotate(-45deg) !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
@@ -912,6 +1248,9 @@
         display: flex !important;
         flex-direction: column !important;
         gap: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list li {
@@ -923,6 +1262,9 @@
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:hover,
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:focus-visible {
         justify-content: flex-start !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
         width: 100% !important;
         min-height: 0 !important;
         padding: 14px 0 !important;
@@ -939,6 +1281,10 @@
         text-align: left !important;
         text-decoration: none !important;
         transform: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a i {
+        display: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list li:last-child a {
@@ -959,6 +1305,7 @@
 @media (min-width: 641px) and (max-width: 1100px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
         grid-template-columns: 284px minmax(0, 1fr) 44px !important;
+        grid-template-areas: "logo contacts actions" !important;
         gap: 0 16px !important;
         padding: 12px 18px !important;
         min-height: 56px !important;
@@ -970,12 +1317,14 @@
 
     body#top .header.header--desktop-hero.internal-legacy-header .logo,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        grid-area: logo !important;
         max-width: 284px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
         display: flex !important;
         grid-column: 2 !important;
+        grid-area: contacts !important;
         justify-self: center !important;
         align-self: center !important;
         flex-direction: column !important;
@@ -995,6 +1344,8 @@
         box-shadow: none !important;
         padding: 0 !important;
         margin: 0 !important;
+        color: var(--theme-accent-strong) !important;
+        text-decoration: none !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type {
@@ -1059,6 +1410,7 @@
 @media (max-width: 640px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
         grid-template-columns: minmax(0, 1fr) 44px !important;
+        grid-template-areas: "logo actions" !important;
         gap: 0 12px !important;
         padding: 8px 10px !important;
         min-height: 52px !important;
@@ -1072,6 +1424,7 @@
 
     body#top .header.header--desktop-hero.internal-legacy-header .logo,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        grid-area: logo !important;
         max-width: calc(100% - 56px) !important;
     }
 
@@ -1101,12 +1454,12 @@
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow {
-        font-size: 0.56rem !important;
+        font-size: 9px !important;
         letter-spacing: 0.11em !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
-        font-size: 1.02rem !important;
+        font-size: 16.5px !important;
         line-height: 0.96 !important;
     }
 
@@ -1143,4 +1496,10 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
 body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *::after {
     -webkit-tap-highlight-color: transparent !important;
     tap-highlight-color: transparent !important;
+}
+
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top .header.header--desktop-hero.internal-legacy-header.header--home {
+        display: none !important;
+    }
 }
