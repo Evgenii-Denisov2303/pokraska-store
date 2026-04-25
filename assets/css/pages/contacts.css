@@ -1578,3 +1578,19 @@ body#top .contacts-page .contacts-subtitle {
         justify-content: center;
     }
 }
+
+@media (max-width: 640px) {
+    body#top .contacts-page {
+        --contacts-form-height: clamp(720px, 190vw, 780px);
+    }
+
+    body#top .contacts-panel--request {
+        min-height: 0;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height);
+        height: var(--contacts-form-height);
+    }
+}

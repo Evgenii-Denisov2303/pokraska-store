@@ -18,7 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
             trigger.disabled = true;
         }
 
+        let revealTimer = 0;
+
         const revealFrame = () => {
+            if (revealTimer) {
+                window.clearTimeout(revealTimer);
+                revealTimer = 0;
+            }
+
             frame.hidden = false;
             container.classList.add('is-loaded');
             container.classList.remove('is-loading');
@@ -26,9 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         container.classList.add('is-loading');
         frame.addEventListener('load', revealFrame, { once: true });
+        frame.loading = 'eager';
 
         if (frame.src !== src) {
             frame.src = src;
         }
+
+        revealTimer = window.setTimeout(revealFrame, 1200);
     });
 });

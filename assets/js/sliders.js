@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('[data-image-slider]').forEach((slider) => {
         const slides = Array.from(slider.querySelectorAll('.equipment-slider__slide'));
+        const viewport = slider.querySelector('.equipment-slider__viewport');
         const prevBtn = slider.querySelector('.equipment-slider__btn--prev');
         const nextBtn = slider.querySelector('.equipment-slider__btn--next');
         if (!slides.length) return;
@@ -204,9 +205,62 @@ document.addEventListener('DOMContentLoaded', function () {
             slides[0].classList.add('is-active');
         }
 
+        if (viewport && !slider.querySelector('.equipment-slider__stage')) {
+            const stage = document.createElement('div');
+            stage.className = 'equipment-slider__stage';
+            slider.insertBefore(stage, viewport);
+
+            if (prevBtn) stage.appendChild(prevBtn);
+            stage.appendChild(viewport);
+            if (nextBtn) stage.appendChild(nextBtn);
+        }
+
+        let thumbs = slider.querySelector('.equipment-slider__thumbs');
+        if (!thumbs) {
+            thumbs = document.createElement('div');
+            thumbs.className = 'equipment-slider__thumbs';
+            thumbs.setAttribute('aria-label', 'Миниатюры фотографий');
+
+            slides.forEach((slide, index) => {
+                const thumb = document.createElement('button');
+                const image = document.createElement('img');
+                const imageSrc = slide.currentSrc || slide.getAttribute('src') || '';
+                const imageAlt = slide.getAttribute('alt') || `Фото ${index + 1}`;
+
+                thumb.type = 'button';
+                thumb.className = 'equipment-slider__thumb';
+                thumb.setAttribute('aria-label', imageAlt);
+                thumb.setAttribute('aria-pressed', index === activeIndex ? 'true' : 'false');
+
+                image.src = imageSrc;
+                image.alt = '';
+                image.loading = 'lazy';
+                image.decoding = 'async';
+
+                thumb.appendChild(image);
+                thumbs.appendChild(thumb);
+            });
+
+            slider.appendChild(thumbs);
+        }
+
+        const thumbButtons = Array.from(thumbs.querySelectorAll('.equipment-slider__thumb'));
+
+        const syncSliderState = () => {
+            slider.dataset.slideIndex = String(activeIndex + 1);
+            slider.dataset.slideCount = String(slides.length);
+
+            thumbButtons.forEach((thumb, index) => {
+                const isActive = index === activeIndex;
+                thumb.classList.toggle('is-active', isActive);
+                thumb.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        };
+
         if (slides.length === 1) {
             if (prevBtn) prevBtn.style.display = 'none';
             if (nextBtn) nextBtn.style.display = 'none';
+            thumbs.hidden = true;
             return;
         }
 
@@ -214,7 +268,14 @@ document.addEventListener('DOMContentLoaded', function () {
             slides[activeIndex].classList.remove('is-active');
             activeIndex = (nextIndex + slides.length) % slides.length;
             slides[activeIndex].classList.add('is-active');
+            syncSliderState();
         };
+
+        syncSliderState();
+
+        thumbButtons.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => showSlide(index));
+        });
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => showSlide(activeIndex - 1));

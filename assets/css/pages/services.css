@@ -908,7 +908,7 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
 .catalog-panel__media-thumbs {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(92px, 116px);
+    grid-auto-columns: minmax(88px, 112px);
     gap: 10px;
     overflow-x: auto;
     padding-bottom: 4px;
@@ -933,16 +933,32 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     position: relative;
     overflow: hidden;
     min-width: 0;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 10;
     padding: 0;
     border: 1px solid rgba(var(--catalog-section-strong-rgb), 0.1);
-    border-radius: 16px;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.8);
     cursor: pointer;
     transition:
         transform 0.2s ease,
         border-color 0.2s ease,
         box-shadow 0.2s ease;
+}
+
+.catalog-panel__media-thumb::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    z-index: 2;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0);
+    box-shadow: inset 0 0 0 1px rgba(var(--catalog-section-rgb), 0);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
 }
 
 .catalog-panel__media-thumb:hover,
@@ -954,25 +970,52 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
 }
 
 .catalog-panel__media-thumb.is-active {
-    border-color: rgba(var(--catalog-section-rgb), 0.34);
-    box-shadow: 0 16px 28px rgba(var(--catalog-section-strong-rgb), 0.16);
+    border-color: rgba(255, 255, 255, 0.66);
+    box-shadow:
+        0 0 0 1px rgba(210, 218, 226, 0.54),
+        0 12px 22px rgba(18, 31, 45, 0.12);
+}
+
+.catalog-panel__media-thumb.is-active::before {
+    border-color: rgba(255, 255, 255, 0.72);
+    box-shadow:
+        inset 0 0 0 1px rgba(210, 218, 226, 0.32),
+        inset 0 -18px 24px rgba(255, 255, 255, 0.18);
+    opacity: 1;
 }
 
 .catalog-panel__media-thumb::after {
     content: "";
     position: absolute;
-    inset: auto 10px 10px 10px;
-    height: 3px;
+    inset: auto 14px 8px 14px;
+    z-index: 3;
+    height: 4px;
     border-radius: 999px;
     background: rgba(var(--theme-accent-rgb), 0);
-    transition: background-color 0.2s ease;
+    box-shadow: none;
+    opacity: 0;
+    transform: scaleX(0.58);
+    transform-origin: center;
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease,
+        transform 0.2s ease;
 }
 
 .catalog-panel__media-thumb.is-active::after {
-    background: linear-gradient(90deg, rgba(var(--catalog-section-rgb), 1), rgba(var(--catalog-section-strong-rgb), 1));
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.96) 18%, rgba(205, 214, 222, 0.88) 52%, rgba(255, 255, 255, 0.9) 82%, rgba(255, 255, 255, 0));
+    box-shadow:
+        0 2px 8px rgba(18, 31, 45, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.48);
+    opacity: 0.88;
+    transform: scaleX(0.74);
 }
 
 .catalog-panel__media-thumb img {
+    position: relative;
+    z-index: 1;
     display: block;
     width: 100%;
     height: 100%;
@@ -2171,7 +2214,7 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .catalog-panel__media-thumbs {
-        grid-auto-columns: minmax(80px, 100px);
+        grid-auto-columns: minmax(74px, 94px);
         gap: 8px;
     }
 }
@@ -2402,8 +2445,8 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .catalog-panel__media-thumbs {
-        grid-auto-columns: minmax(68px, 86px);
-        gap: 8px;
+        grid-auto-columns: minmax(70px, 88px);
+        gap: 7px;
     }
 
     .catalog-info-grid:not(.catalog-info-grid--single),
@@ -2505,7 +2548,8 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .catalog-panel__media-thumbs {
-        grid-auto-columns: minmax(80px, 92px);
+        grid-auto-columns: minmax(66px, 80px);
+        gap: 7px;
     }
 
     .catalog-assistant__secondary {

@@ -2191,17 +2191,16 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
     }
 
     .zoom-btn {
-        top: 12px;
-        right: 12px;
-        width: 40px;
-        height: 40px;
+        inset: 0;
+        width: auto;
+        height: auto;
     }
 
     .zoom-btn::before {
         top: 12px;
-        left: 12px;
-        right: auto;
+        right: 12px;
         bottom: auto;
+        left: auto;
         width: 40px;
         height: 40px;
         border-radius: 14px;
@@ -2209,10 +2208,10 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
 
     .zoom-btn i {
         top: 32px;
-        left: 32px;
-        right: auto;
+        right: 32px;
+        left: auto;
         font-size: 0.9rem;
-        transform: translate(-50%, -50%);
+        transform: translate(50%, -50%);
     }
 
 }
@@ -2589,4 +2588,9 @@ body#top .gallery-page .filter-btn[aria-pressed="true"]:focus-visible {
     border-color: transparent !important;
     color: #ffffff !important;
     box-shadow: 0 12px 20px rgba(var(--site-action-slate-rgb), 0.16) !important;
+}
+
+body#top .gallery-page .zoom-btn::after {
+    content: none !important;
+    display: none !important;
 }
