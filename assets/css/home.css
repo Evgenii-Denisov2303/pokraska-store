@@ -1381,6 +1381,26 @@ button {
     z-index: 1;
 }
 
+@supports (content-visibility: auto) {
+    .statement-scene,
+    .panel-scene,
+    .route-scene,
+    .reviews-scene,
+    .home-tail-scene {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 820px;
+    }
+
+    .route-scene,
+    .reviews-scene {
+        contain-intrinsic-size: 1px 680px;
+    }
+
+    .home-tail-scene {
+        contain-intrinsic-size: 1px 920px;
+    }
+}
+
 .statement-scene::before {
     content: '';
     position: absolute;

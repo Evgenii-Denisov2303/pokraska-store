@@ -17,6 +17,13 @@
     color: rgba(28, 30, 34, 0.9);
 }
 
+@supports (content-visibility: auto) {
+    .preview-footer {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 520px;
+    }
+}
+
 .preview-footer::before {
     content: '';
     position: absolute;

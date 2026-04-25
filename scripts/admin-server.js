@@ -2,6 +2,11 @@ const crypto = require('crypto');
 const http = require('http');
 const fs = require('fs/promises');
 const path = require('path');
+const { promisify } = require('util');
+const zlib = require('zlib');
+
+const gzipAsync = promisify(zlib.gzip);
+const brotliAsync = promisify(zlib.brotliCompress);
 
 function parseBoolean(value, fallback = false) {
     if (value == null || value === '') return fallback;
@@ -185,6 +190,71 @@ function getSecurityHeaders(pathname) {
 function writeResponse(response, statusCode, headers, body) {
     response.writeHead(statusCode, headers);
     response.end(body);
+}
+
+function isCompressibleContentType(contentType) {
+    const normalized = String(contentType || '').toLowerCase();
+
+    return normalized.startsWith('text/')
+        || normalized.includes('application/javascript')
+        || normalized.includes('application/json')
+        || normalized.includes('application/manifest+json')
+        || normalized.includes('application/xml')
+        || normalized.includes('image/svg+xml');
+}
+
+function mergeVaryHeader(currentValue, nextValue) {
+    const values = new Set(
+        String(currentValue || '')
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+    );
+
+    values.add(nextValue);
+    return Array.from(values).join(', ');
+}
+
+async function prepareCompressedResponse(request, headers, body) {
+    const buffer = Buffer.isBuffer(body) ? body : Buffer.from(String(body || ''));
+
+    if (buffer.length < 1024 || headers['Content-Encoding'] || !isCompressibleContentType(headers['Content-Type'])) {
+        return { headers, body: buffer };
+    }
+
+    const acceptEncoding = String(request.headers['accept-encoding'] || '').toLowerCase();
+
+    try {
+        if (acceptEncoding.includes('br')) {
+            return {
+                headers: {
+                    ...headers,
+                    'Content-Encoding': 'br',
+                    Vary: mergeVaryHeader(headers.Vary, 'Accept-Encoding')
+                },
+                body: await brotliAsync(buffer, {
+                    params: {
+                        [zlib.constants.BROTLI_PARAM_QUALITY]: 5
+                    }
+                })
+            };
+        }
+
+        if (acceptEncoding.includes('gzip')) {
+            return {
+                headers: {
+                    ...headers,
+                    'Content-Encoding': 'gzip',
+                    Vary: mergeVaryHeader(headers.Vary, 'Accept-Encoding')
+                },
+                body: await gzipAsync(buffer)
+            };
+        }
+    } catch {
+        return { headers, body: buffer };
+    }
+
+    return { headers, body: buffer };
 }
 
 function sendJson(request, response, statusCode, payload, headers = {}) {
@@ -933,11 +1003,14 @@ async function handleStaticFile(request, response, pathname) {
             cacheControl = 'public, max-age=3600';
         }
 
-        writeResponse(response, 200, {
+        const responseHeaders = {
             'Content-Type': contentType,
             'Cache-Control': cacheControl,
             ...getSecurityHeaders(pathname)
-        }, data);
+        };
+        const compressed = await prepareCompressedResponse(request, responseHeaders, data);
+
+        writeResponse(response, 200, compressed.headers, compressed.body);
     } catch (error) {
         sendJson(request, response, 404, { ok: false, error: 'Файл не найден' });
     }
