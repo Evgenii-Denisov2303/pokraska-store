@@ -648,6 +648,18 @@
     }
 }
 
+/* Phone browsers in "desktop site" mode can report a desktop-wide, very tall viewport. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    .header.header--desktop-hero.internal-legacy-header {
+        display: block !important;
+    }
+
+    .internal-hero-scene,
+    .internal-scene-header {
+        display: none !important;
+    }
+}
+
 /* ========== UNIFIED DESKTOP HEADER SYSTEM ========== */
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     body#top .desktop-hero-header.internal-scene-header {

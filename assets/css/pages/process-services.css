@@ -3005,3 +3005,15 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         opacity: 0.72 !important;
     }
 }
+
+/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    body#top .services-page {
+        padding-top: 136px !important;
+    }
+
+    body#top .services-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

@@ -1505,3 +1505,15 @@ body#top .pricing-estimate-card .calculator-contact a {
         padding: 42px 0 38px;
     }
 }
+
+/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    body#top .prices-page {
+        padding-top: 136px !important;
+    }
+
+    body#top .prices-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

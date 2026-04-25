@@ -977,7 +977,7 @@
 }
 
 /* ========== CLEAN COMPACT INTERNAL HEADER REBUILD ========== */
-@media (max-width: 1100px) {
+@media (max-width: 1100px), (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top .header.header--desktop-hero.internal-legacy-header {
         position: fixed !important;
         inset: 0 0 auto 0 !important;
@@ -1517,7 +1517,7 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     --header-panel-shadow: 0 18px 42px rgba(16, 38, 61, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.68);
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1100px), (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top .header.header--desktop-hero.internal-legacy-header {
         transition: transform 220ms ease !important;
     }
@@ -1927,9 +1927,13 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
 }
 
 /* Android Chrome "Desktop site" on phones: wide CSS viewport, but still a very tall portrait screen. */
-@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     :root {
         --header-top-height: 68px;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header.header--home {
+        display: block !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header {

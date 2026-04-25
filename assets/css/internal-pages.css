@@ -498,3 +498,15 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         max-width: none !important;
     }
 }
+
+/* Phone "desktop site" mode: desktop-wide CSS viewport, but portrait phone rhythm. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 136px !important;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

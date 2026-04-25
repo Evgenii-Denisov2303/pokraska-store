@@ -2908,3 +2908,15 @@ body#top .gallery-page .zoom-btn::after {
     content: none !important;
     display: none !important;
 }
+
+/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    body#top .gallery-page {
+        padding-top: 136px !important;
+    }
+
+    body#top .gallery-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}
