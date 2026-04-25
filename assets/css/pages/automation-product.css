@@ -114,7 +114,8 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 .automation-product-main img {
     width: 100%;
-    height: 440px;
+    height: clamp(300px, 23vw, 380px);
+    padding: clamp(8px, 1vw, 14px);
     object-fit: contain;
     display: block;
     background: var(--theme-surface-gradient-soft);
@@ -123,7 +124,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 .automation-product-thumbs {
     display: grid;
     grid-column: 1 / -1;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
     gap: 8px;
 }
 
@@ -179,7 +180,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 .automation-product-thumb img {
     width: 100%;
-    height: 86px;
+    height: 72px;
     object-fit: contain;
     display: block;
     background: var(--theme-surface);
@@ -522,7 +523,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 /* Editorial desktop redesign */
 @media (min-width: 1101px) {
     .automation-product-page {
-        padding: 118px 0 112px;
+        padding: 0 0 88px;
     }
 
     .automation-product-page > .container,
@@ -595,9 +596,10 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
     }
 
     .automation-product-main img {
-        min-height: 440px;
-        height: 440px;
-        object-fit: cover;
+        min-height: 0;
+        height: clamp(320px, 20vw, 360px);
+        padding: clamp(10px, 1vw, 16px);
+        object-fit: contain;
     }
 
     .automation-product-thumb {
@@ -786,7 +788,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 /* ========== INTRO ALIGNMENT WITH INTERNAL PAGES ========== */
 .automation-product-page {
-    padding: 104px 0 92px;
+    padding: 0 0 82px;
 }
 
 .automation-product-info {
@@ -843,7 +845,11 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 }
 
 .automation-faq-wrap {
-    padding: 0 0 92px;
+    padding: 0 0 18px;
+}
+
+body#top .automation-faq-wrap + .automation-product-page {
+    padding-top: 0 !important;
 }
 
 .automation-faq-wrap > .container {
@@ -864,6 +870,11 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(239, 245, 250, 0.96));
     border: 1px solid var(--theme-border);
     box-shadow: var(--theme-shadow);
+}
+
+body#top .automation-product-page .faq-section.faq-system,
+.automation-product-page .faq-section--catalog {
+    margin-top: 0;
 }
 
 .automation-product-page .faq-section__intro,
@@ -961,11 +972,11 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 @media (max-width: 980px) {
     .automation-product-page {
-        padding: 82px 0 78px;
+        padding: 0 0 70px;
     }
 
     .automation-faq-wrap {
-        padding: 0 0 78px;
+        padding: 0 0 16px;
     }
 
     .automation-product-page .faq-section--catalog,
@@ -981,7 +992,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 @media (max-width: 640px) {
     .automation-product-page {
-        padding: 42px 0 64px;
+        padding: 0 0 56px;
     }
 
     .automation-product-title {
@@ -1009,7 +1020,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
     }
 
     .automation-faq-wrap {
-        padding: 0 0 64px;
+        padding: 0 0 12px;
     }
 
     .automation-faq-wrap > .container {
@@ -1019,7 +1030,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 @media (min-width: 769px) and (max-width: 1100px) {
     .automation-faq-wrap {
-        padding-top: 92px !important;
+        padding-top: 28px !important;
     }
 
     .automation-faq-wrap > .container {
@@ -1158,8 +1169,8 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
     }
 
     .automation-product-card--components .automation-product-main img {
-        height: 390px;
-        min-height: 390px;
+        height: 340px;
+        min-height: 340px;
         object-fit: contain;
     }
 }

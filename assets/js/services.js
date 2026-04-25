@@ -844,6 +844,21 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     };
 
+    document.addEventListener('click', (event) => {
+        const media = event.target.closest('.automation-products--accessories-grid .automation-card__media');
+        if (!media || event.target.closest('a, button')) {
+            return;
+        }
+
+        const zoomLink = media.querySelector('a[data-lightbox]');
+        if (!zoomLink) {
+            return;
+        }
+
+        event.preventDefault();
+        zoomLink.click();
+    });
+
     const createCatalogBreadcrumbs = (breadcrumbsText) => {
         const segments = breadcrumbsText
             .split('/')

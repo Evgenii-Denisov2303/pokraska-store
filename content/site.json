@@ -38,42 +38,58 @@
     {
       "label": "Главная",
       "href": "/index.html",
-      "icon": "fas fa-home"
+      "icon": "fas fa-home",
+      "group": "Старт",
+      "note": "главный экран"
     },
     {
       "label": "Каталог",
       "href": "/pages/services.html",
-      "icon": "fas fa-store"
+      "icon": "fas fa-store",
+      "group": "Каталог",
+      "note": "ворота и автоматика"
     },
     {
       "label": "Порошковая покраска",
       "href": "/pages/powder-coating.html",
-      "icon": "fas fa-paint-roller"
+      "icon": "fas fa-paint-roller",
+      "group": "Покрытия",
+      "note": "цвет и фактура"
     },
     {
       "label": "Пескоструйная обработка",
       "href": "/pages/sandblasting.html",
-      "icon": "fas fa-wind"
-    },
-    {
-      "label": "Цены",
-      "href": "/pages/prices.html",
-      "icon": "fas fa-tag"
-    },
-    {
-      "label": "Оплата",
-      "href": "/pages/payment-documents.html",
-      "icon": "fas fa-receipt"
+      "icon": "fas fa-wind",
+      "group": "Подготовка",
+      "note": "очистка металла"
     },
     {
       "label": "Наши работы",
       "href": "/pages/gallery.html",
-      "icon": "fas fa-images"
+      "icon": "fas fa-images",
+      "group": "Портфолио",
+      "note": "готовые объекты"
+    },
+    {
+      "label": "Цены",
+      "href": "/pages/prices.html",
+      "icon": "fas fa-tag",
+      "group": "Расчёт",
+      "note": "стоимость и смета"
+    },
+    {
+      "label": "Оплата",
+      "href": "/pages/payment-documents.html",
+      "icon": "fas fa-receipt",
+      "group": "Документы",
+      "note": "счета и условия"
     },
     {
       "label": "Контакты",
       "href": "/pages/contacts.html",
-      "icon": "fas fa-map-marker-alt"
+      "icon": "fas fa-map-marker-alt",
+      "group": "Связь",
+      "note": "телефон и адрес"
     }
   ],
   "footer": {

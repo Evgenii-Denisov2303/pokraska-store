@@ -57,6 +57,13 @@ function resolveActiveHref(pageFile) {
     return `/pages/${pageFile}`;
 }
 
+function buildMenuDataAttrs(item) {
+    const attrs = [];
+    if (item.group) attrs.push(`data-menu-group="${escapeHtml(item.group)}"`);
+    if (item.note) attrs.push(`data-menu-note="${escapeHtml(item.note)}"`);
+    return attrs.length ? ` ${attrs.join(' ')}` : '';
+}
+
 function buildHeaderNav(pageFile) {
     const activeHref = resolveActiveHref(pageFile);
 
@@ -64,9 +71,9 @@ function buildHeaderNav(pageFile) {
         const href = resolveRelativeHref(pageFile, item.href);
         const isActive = item.href === activeHref;
         const activeAttr = isActive ? ' class="active" aria-current="page"' : '';
-        const icon = item.icon ? `<i class="${escapeHtml(item.icon)}"></i> ` : '';
+        const icon = item.icon ? `<i class="${escapeHtml(item.icon)}" aria-hidden="true"></i> ` : '';
 
-        return `                    <li><a href="${escapeHtml(href)}"${activeAttr}>${icon}${escapeHtml(item.label)}</a></li>`;
+        return `                        <li><a href="${escapeHtml(href)}"${activeAttr}${buildMenuDataAttrs(item)}>${icon}<span class="nav-link__text">${escapeHtml(item.label)}</span></a></li>`;
     }).join('\n');
 }
 
@@ -83,7 +90,7 @@ function buildHeroNav(pageFile) {
             attrs.push('aria-current="page"');
         }
 
-        return `                    <a class="${classes.join(' ')}" href="${escapeHtml(href)}"${attrs.length ? ` ${attrs.join(' ')}` : ''}>${escapeHtml(item.label)}</a>`;
+        return `                    <a class="${classes.join(' ')}" href="${escapeHtml(href)}"${attrs.length ? ` ${attrs.join(' ')}` : ''}${buildMenuDataAttrs(item)}>${escapeHtml(item.label)}</a>`;
     }).join('\n');
 }
 
@@ -93,48 +100,52 @@ function buildHeaderTop(pageFile) {
     const secondary = site.contact.secondaryPhone || {};
 
     return `            <div class="header-top header-top--compact">
-                <div class="logo">
-                    <a href="${escapeHtml(homeHref)}" class="logo-link" aria-label="Перейти на главную страницу">
-                        <div class="logo-premium">
-                            <div class="logo-main logo-main--image">
-                                <img src="../assets/images/logo.png" width="700" height="700" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" class="logo-image">
-                                <span class="logo-wave" aria-hidden="true"></span>
-                            </div>
-                            <div class="logo-tagline">
-                                ${escapeHtml(site.brand.tagline)}
-                            </div>
+                <div class="logo hero-brand">
+                    <a href="${escapeHtml(homeHref)}" class="logo-link hero-brand__link" aria-label="Перейти на главную страницу">
+                        <div class="hero-brand__mark logo-main logo-main--image">
+                            <img class="hero-brand__logo logo-image" src="../assets/images/logo.png" width="700" height="700" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" loading="lazy" decoding="async">
+                            <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
+                        </div>
+                        <div class="hero-brand__text">
+                            <span class="hero-brand__eyebrow">${escapeHtml(site.brand.tagline)}</span>
+                            <span class="hero-brand__name">${escapeHtml(site.brand.name)}</span>
                         </div>
                     </a>
                 </div>
 
                 <div class="header-contact-stack">
                     <a href="${escapeHtml(primary.href || '#')}" class="contact-phone">
-                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-phone" aria-hidden="true"></i>
                         <div class="phone-info">
                             <span class="phone-number">${escapeHtml(primary.label || '')}</span>
                             <span class="phone-label">${escapeHtml(primary.note || '')}</span>
                         </div>
                     </a>
                     <a href="${escapeHtml(secondary.href || '#')}" class="contact-phone">
-                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-phone" aria-hidden="true"></i>
                         <div class="phone-info">
                             <span class="phone-number">${escapeHtml(secondary.label || '')}</span>
                         </div>
                     </a>
                     <div class="contact-address">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                         <span>${escapeHtml(site.contact.address || '')}</span>
                     </div>
                 </div>
 
-                <nav class="nav" aria-label="Основная навигация">
+                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация">
                     <ul class="nav-list">
 ${buildHeaderNav(pageFile)}
                     </ul>
                 </nav>
                 <div class="header-actions">
-                    <button class="mobile-menu-btn" aria-label="Открыть меню" aria-expanded="false">
-                        <i class="fas fa-bars"></i>
+                    <button class="hero-menu-toggle mobile-menu-btn" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-mobile-nav">
+                        <span class="hero-menu-toggle__bars" aria-hidden="true">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                        <span class="hero-menu-toggle__label">Меню</span>
                     </button>
                 </div>
             </div>

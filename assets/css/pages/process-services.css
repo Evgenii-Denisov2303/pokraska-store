@@ -510,11 +510,12 @@ body#top .services-page .service-quick-nav .service-nav-link__icon i.fa-fill-dri
 }
 
 body#top .services-page .service-quick-nav .service-nav-link__label {
-    display: block;
+    display: inline-flex;
+    align-items: center;
     min-width: 0;
     font-size: 1.14rem;
     font-weight: 820;
-    line-height: 1.04;
+    line-height: 1;
     letter-spacing: -0.014em;
     white-space: nowrap;
     background: none !important;
@@ -2151,11 +2152,12 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .services-page .service-quick-nav .service-nav-link__label {
-        display: block;
+        display: inline-flex;
+        align-items: center;
         min-width: 0;
         font-size: 0.9rem;
         font-weight: 790;
-        line-height: 1.06;
+        line-height: 1;
         white-space: nowrap;
         text-wrap: nowrap;
     }
@@ -2464,9 +2466,9 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
 
     body#top .service-header {
         grid-template-columns: auto minmax(0, 1fr);
-        gap: 0 14px;
+        gap: 0 10px;
         align-items: center;
-        padding: 14px 16px 14px 14px !important;
+        padding: 12px 14px 12px 12px !important;
     }
 
     body#top .service-header::before {
@@ -2487,9 +2489,12 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-header h2 {
-        font-size: clamp(1.46rem, 5.8vw, 1.74rem);
-        line-height: 1.1;
+        font-size: clamp(1.22rem, 4.75vw, 1.46rem);
+        line-height: 1.05;
         align-self: center;
+        text-wrap: pretty;
+        overflow-wrap: normal;
+        word-break: normal;
     }
 
     body#top .service-header .service-id {
@@ -2510,13 +2515,13 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .service-description {
-        font-size: 1.04rem;
-        line-height: 1.58;
+        font-size: 0.98rem;
+        line-height: 1.5;
     }
 
     body#top .service-detail-card--featured .service-description {
-        font-size: 1.07rem;
-        line-height: 1.6;
+        font-size: 1rem;
+        line-height: 1.52;
     }
 
     body#top .service-detail-card--featured .service-advantages {
@@ -2612,7 +2617,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .services-page .service-quick-nav .service-nav-link__label {
         color: rgba(var(--service-nav-text-strong-rgb), 0.94) !important;
         font-size: 0.82rem;
-        line-height: 1.06;
+        line-height: 1;
         white-space: nowrap;
         text-wrap: nowrap;
         text-align: center;
@@ -2692,20 +2697,20 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
 
     body#top .advantage-item {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 6px;
         align-content: start;
-        padding: 12px;
-        border-radius: 16px;
+        padding: 10px;
+        border-radius: 15px;
     }
 
     body#top .advantage-item i {
         margin-top: 0;
-        font-size: 0.95rem;
+        font-size: 0.86rem;
     }
 
     body#top .advantage-item span {
-        font-size: 0.82rem;
-        line-height: 1.44;
+        font-size: 0.74rem;
+        line-height: 1.32;
     }
 
     body#top .process-steps {
@@ -2872,6 +2877,10 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         grid-row: 1;
         align-self: center;
         margin-top: 0;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        font-size: 0.98rem;
     }
 
     body#top .service-header h2 {

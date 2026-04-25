@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 64 64" fill="none">
+  <path d="M13 8 49 39l-17 2-8 15L13 8Z" fill="#10263D" stroke="#F7FAFC" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M17.9 15.1 43.3 36.6 29.1 38.1 23.2 48.7 17.9 15.1Z" fill="url(#arrow)"/>
+  <rect x="32" y="29" width="18" height="25" rx="6" fill="url(#remote)" stroke="#F7FAFC" stroke-width="1.8" transform="rotate(-14 41 41.5)"/>
+  <circle cx="39" cy="37" r="2.7" fill="#6FA6D2"/>
+  <circle cx="43" cy="44" r="2.2" fill="#F7FAFC"/>
+  <path d="M38.7 50.2 47.4 48" stroke="#F7FAFC" stroke-width="1.7" stroke-linecap="round" opacity=".62"/>
+  <path d="M47 24c4 1 7 4 8 8" stroke="#6FA6D2" stroke-width="2" stroke-linecap="round"/>
+  <path d="M45.2 28c2.25.62 4.02 2.24 4.82 4.37" stroke="#6FA6D2" stroke-width="1.8" stroke-linecap="round" opacity=".74"/>
+  <defs>
+    <linearGradient id="arrow" x1="17" y1="14" x2="37" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#244E73"/>
+      <stop offset=".58" stop-color="#10263D"/>
+      <stop offset="1" stop-color="#091827"/>
+    </linearGradient>
+    <linearGradient id="remote" x1="35" y1="29" x2="50" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#244E73"/>
+      <stop offset=".62" stop-color="#183D5D"/>
+      <stop offset="1" stop-color="#10263D"/>
+    </linearGradient>
+  </defs>
+</svg>

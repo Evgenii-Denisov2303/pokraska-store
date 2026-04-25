@@ -758,6 +758,22 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
         padding: 9px 12px;
         font-size: 0.86rem;
     }
+
+    body#top .payment-docs-kit__items {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+        width: 100%;
+    }
+
+    body#top .payment-docs-kit__items span {
+        justify-content: center;
+        min-height: 36px;
+        padding: 7px 6px;
+        font-size: 0.78rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {

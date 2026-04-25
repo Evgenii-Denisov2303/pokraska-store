@@ -1287,6 +1287,46 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     align-items: stretch;
 }
 
+.automation-products--accessories-grid .automation-card {
+    --automation-card-media-height: clamp(124px, 8.2vw, 150px);
+    grid-template-rows: var(--automation-card-media-height) auto auto minmax(2.35em, auto) auto auto;
+    gap: 8px;
+    min-height: 0;
+    padding: 14px;
+}
+
+.automation-products--accessories-grid .automation-card__description {
+    min-height: 0;
+    line-height: 1.36;
+    -webkit-line-clamp: 2;
+}
+
+.automation-products--accessories-grid .automation-card__specs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.automation-products--accessories-grid .automation-card__specs li {
+    min-height: 28px;
+    padding: 6px 8px 6px 24px;
+    border-radius: 12px;
+    line-height: 1.2;
+}
+
+.automation-products--accessories-grid .automation-card__specs li::before {
+    left: 10px;
+}
+
+.automation-products--accessories-grid .automation-card__cta {
+    min-height: 36px;
+    padding: 8px 14px;
+}
+
+.automation-products--accessories-grid .automation-card__media,
+.automation-products--accessories-grid .automation-card__media a {
+    cursor: zoom-in;
+}
+
 .automation-card {
     --automation-card-media-height: clamp(168px, 13vw, 210px);
     position: relative;
@@ -2370,6 +2410,10 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
         line-height: 1.38;
     }
 
+    .automation-products--accessories-grid .automation-card__specs {
+        grid-template-columns: 1fr;
+    }
+
     .catalog-info-card ul li::before {
         top: calc(6px + 0.72em);
     }
@@ -2446,6 +2490,31 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
 
     .catalog-palette-card__gallery {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 561px) and (max-width: 760px) {
+    .catalog-group-panel__links {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .catalog-link {
+        flex: 0 1 auto;
+        min-height: 28px;
+        padding: 5px 7px;
+        font-size: clamp(0.7rem, 1.75vw, 0.78rem);
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .catalog-link::before {
+        width: 5px;
+        height: 5px;
+        margin-right: 6px;
+        box-shadow: 0 0 0 4px rgba(var(--catalog-nav-family-rgb), 0.16);
     }
 }
 
@@ -2556,6 +2625,106 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .catalog-assistant {
+        grid-template-columns: minmax(0, 0.88fr) minmax(238px, 1.12fr);
+        gap: clamp(12px, 2vw, 18px);
+        align-items: stretch;
+        padding: clamp(18px, 2.3vw, 22px);
+        border-radius: 28px;
+    }
+
+    .catalog-assistant__lead {
+        gap: 10px;
+        align-content: center;
+        padding: 0;
+    }
+
+    .catalog-assistant__eyebrow {
+        min-height: 28px;
+        padding: 6px 10px;
+        font-size: clamp(0.62rem, 0.9vw, 0.72rem);
+        letter-spacing: 0.12em;
+    }
+
+    .catalog-assistant__title {
+        max-width: 15ch;
+        font-size: clamp(1.5rem, 2.8vw, 2.08rem);
+        line-height: 0.96;
+    }
+
+    .catalog-assistant__copy {
+        max-width: 34ch;
+        font-size: clamp(0.82rem, 1.18vw, 0.94rem);
+        line-height: 1.42;
+    }
+
+    .catalog-assistant__points {
+        gap: 7px;
+    }
+
+    .catalog-assistant__points span {
+        min-height: 32px;
+        padding: 7px 10px;
+        font-size: clamp(0.72rem, 1vw, 0.84rem);
+        line-height: 1.12;
+    }
+
+    .catalog-assistant__actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "status status"
+            "primary secondary"
+            "meta meta";
+        gap: 9px;
+        padding: clamp(13px, 1.8vw, 16px);
+        border-radius: 22px;
+    }
+
+    .catalog-assistant__status {
+        grid-area: status;
+        min-height: 28px;
+        padding: 5px 10px;
+        font-size: clamp(0.62rem, 0.86vw, 0.7rem);
+        letter-spacing: 0.1em;
+    }
+
+    .catalog-assistant__primary {
+        grid-area: primary;
+        min-height: 40px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        gap: 7px;
+        font-size: clamp(0.76rem, 1.06vw, 0.88rem);
+    }
+
+    .catalog-assistant__secondary {
+        grid-area: secondary;
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .catalog-assistant__action {
+        min-height: 40px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        gap: 7px;
+        font-size: clamp(0.76rem, 1.06vw, 0.88rem);
+    }
+
+    .catalog-assistant__meta {
+        grid-area: meta;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        justify-content: start;
+        gap: 5px 14px;
+        padding-top: 8px;
+    }
+
+    .catalog-assistant__meta a {
+        gap: 7px;
+        font-size: clamp(0.74rem, 1vw, 0.84rem);
+    }
+
     .catalog-info-grid:not(.catalog-info-grid--single) > .catalog-info-card:last-child:nth-child(odd),
     .automation-steps > :last-child:nth-child(odd),
     .automation-products > :last-child:nth-child(odd),
@@ -2573,6 +2742,45 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     .catalog-panel__media-gallery {
         width: min(100%, 30rem);
         justify-self: center;
+    }
+
+    .catalog-assistant {
+        grid-template-columns: minmax(0, 0.86fr) minmax(220px, 1.14fr);
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .catalog-assistant__title {
+        max-width: 14ch;
+        font-size: clamp(1.38rem, 3.1vw, 1.62rem);
+    }
+
+    .catalog-assistant__copy {
+        max-width: 30ch;
+        font-size: 0.78rem;
+        line-height: 1.36;
+    }
+
+    .catalog-assistant__points span {
+        min-height: 30px;
+        padding: 6px 9px;
+        font-size: 0.68rem;
+    }
+
+    .catalog-assistant__actions {
+        padding: 12px;
+    }
+
+    .catalog-assistant__primary,
+    .catalog-assistant__action {
+        min-height: 38px;
+        padding-inline: 9px;
+        font-size: 0.7rem;
+    }
+
+    .catalog-assistant__meta {
+        grid-template-columns: 1fr;
+        gap: 5px;
     }
 }
 
@@ -2592,8 +2800,8 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .catalog-nav-shell {
-        padding: 12px;
-        border-radius: 22px;
+        padding: 10px;
+        border-radius: 20px;
     }
 
     .faq-section--catalog .section-title {
@@ -2601,7 +2809,7 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .catalog-nav-intro__title {
-        font-size: 1.6rem;
+        font-size: 1.42rem;
         max-width: none;
         white-space: normal;
     }
@@ -2617,16 +2825,34 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
 
     .catalog-group-tabs {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
     }
 
     .catalog-group-tab {
-        min-height: 46px;
+        min-height: 40px;
+        gap: 7px;
+        padding: 6px 8px;
+        border-radius: 13px;
+    }
+
+    .catalog-group-tab__icon {
+        flex-basis: 28px;
+        width: 28px;
+        height: 28px;
+        border-radius: 9px;
+        font-size: 0.78rem;
+    }
+
+    .catalog-group-tab__title {
+        font-size: 0.82rem;
+        line-height: 1.05;
     }
 
     .catalog-link {
-        min-height: 32px;
-        padding: 6px 10px;
-        font-size: 0.82rem;
+        min-height: 28px;
+        padding: 5px 9px;
+        font-size: 0.76rem;
+        line-height: 1.05;
     }
 
     .catalog-link.is-active,
@@ -2684,7 +2910,38 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     }
 
     .partner-card {
-        min-height: 108px;
+        min-height: 76px;
+        padding: 10px;
+        border-radius: 18px;
+    }
+
+    .catalog-partners {
+        gap: 12px;
+    }
+
+    .catalog-partners h3 {
+        gap: 9px;
+        font-size: clamp(1.58rem, 7vw, 1.94rem);
+        line-height: 0.96;
+    }
+
+    .partners-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .partner-card::before {
+        inset-inline: 22%;
+        bottom: 9px;
+    }
+
+    .partner-card--logo img {
+        max-width: 92%;
+        max-height: 36px;
+    }
+
+    .partner-card--logo[data-brand="came"] img {
+        max-height: 40px;
     }
 
     .automation-products--single {
