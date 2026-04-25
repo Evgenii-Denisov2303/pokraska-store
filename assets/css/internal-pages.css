@@ -481,7 +481,13 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 
 @media (min-width: 641px) and (max-width: 768px) {
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
-        padding-top: 72px !important;
+        padding-top: 12px !important;
+    }
+}
+
+@media (min-width: 561px) and (max-width: 640px) {
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 32px !important;
     }
 }
 

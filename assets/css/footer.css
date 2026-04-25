@@ -622,6 +622,105 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 819px) {
+    .preview-footer {
+        width: min(100%, calc(100% - 28px));
+        padding: 28px 20px 16px;
+    }
+
+    .preview-footer__layout {
+        width: min(100%, 720px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "company company"
+            "contacts useful";
+        column-gap: clamp(28px, 5vw, 44px);
+        row-gap: 20px;
+        padding-bottom: 16px;
+        justify-items: stretch;
+    }
+
+    .preview-footer__column--company {
+        display: grid;
+        grid-template-columns: minmax(12rem, 0.88fr) minmax(0, 1.12fr);
+        grid-template-areas:
+            "footer-brand footer-text-one"
+            "footer-brand footer-text-two";
+        gap: 8px 24px;
+        align-items: start;
+        max-width: none;
+        padding: 0 0 16px;
+        border-bottom: 1px solid rgba(var(--footer-accent-rgb), 0.1);
+    }
+
+    .preview-footer__column--company .preview-footer__brand {
+        grid-area: footer-brand;
+        align-self: start;
+        margin-bottom: 0;
+    }
+
+    .preview-footer__column--company .preview-footer__legal-text:nth-of-type(1) {
+        grid-area: footer-text-one;
+    }
+
+    .preview-footer__column--company .preview-footer__legal-text:nth-of-type(2) {
+        grid-area: footer-text-two;
+    }
+
+    .preview-footer__brand-copy {
+        max-width: 9.6rem;
+    }
+
+    .preview-footer__logo {
+        height: 62px;
+        max-width: 190px;
+    }
+
+    .preview-footer__legal-text {
+        max-width: none;
+        font-size: 0.86rem;
+        line-height: 1.44;
+        text-wrap: pretty;
+    }
+
+    .preview-footer__column--contacts,
+    .preview-footer__column--useful {
+        max-width: none;
+        justify-self: stretch;
+    }
+
+    .preview-footer__column--contacts {
+        padding-right: clamp(12px, 3vw, 22px);
+        border-right: 1px solid rgba(var(--footer-accent-rgb), 0.08);
+    }
+
+    .preview-footer__label {
+        font-size: 0.7rem;
+    }
+
+    .preview-footer__list {
+        gap: 7px;
+    }
+
+    .preview-footer__list--contacts li {
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 9px;
+    }
+
+    .preview-footer__column a,
+    .preview-footer__column p,
+    .preview-footer__list a,
+    .preview-footer__list li {
+        font-size: 0.84rem;
+        line-height: 1.38;
+    }
+
+    .preview-footer__bottom {
+        width: min(100%, 720px);
+        padding-top: 14px;
+    }
+}
+
 @media (max-width: 640px) {
     .preview-footer__brand {
         grid-template-columns: auto minmax(0, 1fr);

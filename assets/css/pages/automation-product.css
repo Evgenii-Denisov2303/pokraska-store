@@ -710,6 +710,43 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
     -webkit-backface-visibility: hidden;
 }
 
+.automation-product-main {
+    position: relative;
+    background:
+        radial-gradient(circle at 50% 34%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0) 48%),
+        linear-gradient(135deg, rgba(229, 238, 246, 0.96), rgba(248, 251, 253, 0.98) 44%, rgba(219, 231, 240, 0.88));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.74),
+        0 18px 30px rgba(15, 23, 42, 0.06);
+}
+
+.automation-product-main::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    z-index: 0;
+    border-radius: max(14px, calc(var(--theme-radius-sm) - 4px));
+    border: 1px solid rgba(20, 56, 89, 0.06);
+    background:
+        linear-gradient(90deg, rgba(20, 56, 89, 0.025) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(20, 56, 89, 0.022) 1px, transparent 1px);
+    background-size: 42px 42px;
+    opacity: 0.42;
+    pointer-events: none;
+}
+
+.automation-product-main img,
+.automation-product-thumb img {
+    position: relative;
+    z-index: 1;
+}
+
+.automation-product-main img[src*="-kit"],
+.automation-product-thumb img[src*="-kit"] {
+    mix-blend-mode: normal;
+    filter: brightness(0.965) contrast(1.12) saturate(1.02);
+}
+
 .automation-product-description {
     color: #4d6479;
     font-size: var(--type-body-md);
@@ -982,7 +1019,7 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
 @media (min-width: 769px) and (max-width: 1100px) {
     .automation-faq-wrap {
-        padding-top: 23px !important;
+        padding-top: 92px !important;
     }
 
     .automation-faq-wrap > .container {
@@ -997,6 +1034,297 @@ body#top :is(.automation-product-page, .automation-faq-wrap) .catalog-link.is-ac
 
     .automation-faq-wrap > .container {
         width: min(100%, calc(100vw - 24px)) !important;
+    }
+}
+
+/* ========== AUTOMATION CTA AND COMPACT COPY PASS ========== */
+.automation-product-back {
+    width: fit-content;
+    max-width: 100%;
+    min-height: 40px;
+    padding: 9px 15px;
+    gap: 8px;
+    font-size: 0.94rem;
+    line-height: 1.12;
+    color: rgba(var(--theme-accent-strong-rgb), 0.86);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.68),
+        0 10px 18px rgba(15, 23, 42, 0.04);
+}
+
+.automation-product-cta {
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.automation-product-cta .btn {
+    min-height: 40px;
+    padding: 10px 17px;
+    border-radius: 16px;
+    gap: 8px;
+    font-size: 0.94rem;
+    line-height: 1.12;
+    font-weight: 720;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        0 10px 18px rgba(var(--site-action-slate-rgb), 0.09);
+}
+
+.automation-product-cta .btn i {
+    font-size: 0.92em;
+}
+
+.automation-product-cta .btn-primary,
+.automation-product-cta .btn--primary {
+    background: linear-gradient(180deg, rgba(216, 226, 233, 0.94), rgba(197, 211, 221, 0.92));
+    border-color: rgba(20, 56, 89, 0.12);
+    color: rgba(36, 58, 78, 0.95);
+}
+
+.automation-product-cta .btn-secondary {
+    border-width: 1px;
+    border-color: rgba(var(--theme-accent-rgb), 0.62);
+    background: rgba(255, 255, 255, 0.88);
+    color: rgba(var(--theme-accent-strong-rgb), 0.92);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        0 8px 15px rgba(var(--theme-accent-strong-rgb), 0.055);
+}
+
+.automation-product-cta .btn:hover,
+.automation-product-cta .btn:focus-visible {
+    transform: translateY(-1px);
+}
+
+.automation-product-card--components .automation-product-info {
+    align-content: start;
+    gap: 14px;
+}
+
+.automation-product-card--components .automation-product-title {
+    max-width: 17ch;
+}
+
+.automation-product-card--components .automation-product-description {
+    max-width: 43ch;
+    font-size: 0.92rem;
+    line-height: 1.38;
+}
+
+.automation-product-card--components .automation-product-section {
+    gap: 9px;
+}
+
+.automation-product-card--components .automation-product-section__title {
+    font-size: clamp(1.08rem, 1.5vw, 1.26rem);
+}
+
+.automation-product-card--components .automation-product-specs {
+    gap: 8px;
+}
+
+.automation-product-card--components .automation-product-specs li {
+    min-height: 0;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.34;
+}
+
+.automation-product-card,
+.automation-product-gallery,
+.automation-product-main,
+.automation-product-info,
+.automation-product-section,
+.automation-product-specs,
+.automation-product-specs li {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.automation-product-main {
+    width: 100%;
+}
+
+.automation-product-main img {
+    max-width: 100%;
+}
+
+@media (min-width: 981px) {
+    .automation-product-card--components {
+        grid-template-columns: minmax(330px, 0.82fr) minmax(0, 1.18fr);
+        align-items: start;
+    }
+
+    .automation-product-card--components .automation-product-main img {
+        height: 390px;
+        min-height: 390px;
+        object-fit: contain;
+    }
+}
+
+@media (max-width: 980px) {
+    .automation-product-cta .btn {
+        min-height: 38px;
+        padding: 9px 15px;
+        border-radius: 15px;
+        font-size: 0.91rem;
+    }
+
+    .automation-product-card--components .automation-product-specs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .automation-product-card {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .automation-product-info {
+        width: 100%;
+    }
+
+    .automation-product-back {
+        min-height: 38px;
+        padding: 8px 13px;
+        font-size: 0.9rem;
+    }
+
+    .automation-product-cta {
+        gap: 8px;
+    }
+
+    .automation-product-cta .btn {
+        min-height: 38px;
+        padding: 9px 13px;
+        font-size: 0.9rem;
+    }
+
+    .automation-product-card--components .automation-product-specs {
+        grid-template-columns: 1fr;
+    }
+}
+
+.automation-products--single {
+    align-items: stretch;
+}
+
+.automation-products--single .automation-product-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-content: stretch;
+    gap: 14px;
+    height: 100%;
+    min-height: clamp(438px, 35vw, 480px);
+    padding: 18px;
+}
+
+.automation-products--single .automation-product-gallery {
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    gap: 8px;
+}
+
+.automation-products--single .automation-product-main img {
+    height: clamp(158px, 14vw, 190px);
+    padding: 6px;
+}
+
+.automation-products--single .automation-product-thumbs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.automation-products--single .automation-product-thumbs::-webkit-scrollbar {
+    display: none;
+}
+
+.automation-products--single .automation-product-thumb {
+    flex: 0 0 calc((100% - 12px) / 3);
+    min-width: 86px;
+}
+
+.automation-products--single .automation-product-thumb img {
+    height: 54px;
+}
+
+.automation-products--single .automation-product-info {
+    display: grid;
+    grid-template-rows: auto auto minmax(3em, auto) auto auto;
+    align-content: start;
+    gap: 10px;
+    height: 100%;
+}
+
+.automation-products--single .automation-product-meta {
+    font-size: 0.74rem;
+    letter-spacing: 0.11em;
+}
+
+.automation-products--single .automation-product-title {
+    font-size: clamp(1.32rem, 1.12rem + 0.45vw, 1.58rem);
+    line-height: 1.08;
+}
+
+.automation-products--single .automation-product-description {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 3em;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.automation-products--single .automation-product-specs {
+    grid-template-columns: 1fr;
+    gap: 7px;
+}
+
+.automation-products--single .automation-product-specs li {
+    min-height: 34px;
+    padding: 8px 10px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.24;
+}
+
+.automation-products--single .automation-product-cta {
+    margin-top: auto;
+}
+
+.automation-products--single .automation-product-cta .btn {
+    min-height: 38px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 980px) {
+    .automation-products--single .automation-product-card {
+        min-height: 0;
+    }
+
+    .automation-products--single .automation-product-main img {
+        height: clamp(150px, 23vw, 180px);
+    }
+}
+
+@media (max-width: 640px) {
+    .automation-products--single .automation-product-card {
+        padding: 16px;
+    }
+
+    .automation-products--single .automation-product-main img {
+        height: clamp(150px, 45vw, 190px);
+    }
+
+    .automation-products--single .automation-product-description {
+        min-height: 0;
     }
 }
 

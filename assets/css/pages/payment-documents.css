@@ -674,6 +674,52 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
     }
 }
 
+@media (min-width: 641px) and (max-width: 768px) {
+    body#top .payment-order-sheet__stack,
+    body#top .payment-route__track {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    body#top .payment-doc-card,
+    body#top .payment-route__step {
+        padding: 14px 12px;
+        border-radius: 18px;
+    }
+
+    body#top .payment-doc-card__top {
+        margin-bottom: 8px;
+    }
+
+    body#top .payment-doc-card__label {
+        gap: 7px;
+        font-size: 0.72rem;
+        letter-spacing: 0.055em;
+    }
+
+    body#top .payment-doc-card__label::before {
+        width: 12px;
+    }
+
+    body#top .payment-doc-card h3,
+    body#top .payment-route__step h3 {
+        font-size: 1rem;
+        line-height: 1.22;
+    }
+
+    body#top .payment-doc-card p,
+    body#top .payment-route__step p {
+        font-size: 0.82rem;
+        line-height: 1.42;
+    }
+
+    body#top .payment-route__index {
+        min-width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+    }
+}
+
 @media (max-width: 560px) {
     body#top .payment-docs-page {
         padding: 42px 0 38px !important;
@@ -726,10 +772,16 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
 
 @media (min-width: 641px) and (max-width: 768px) {
     body#top .payment-docs-page {
-        padding-top: 72px !important;
+        padding-top: 12px !important;
     }
 
     body#top .payment-docs-page > .container {
         width: min(100%, calc(100vw - 24px)) !important;
+    }
+}
+
+@media (min-width: 561px) and (max-width: 640px) {
+    body#top .payment-docs-page {
+        padding-top: 32px !important;
     }
 }
