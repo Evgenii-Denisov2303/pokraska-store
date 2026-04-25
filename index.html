@@ -29,7 +29,7 @@
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/home.css?v=20260425-home-theme-288">
+    <link rel="stylesheet" href="assets/css/home.css?v=20260425-home-theme-289">
     <link rel="preload" as="style" href="assets/css/header.css?v=20260425-header-control-74">
     <link rel="stylesheet" href="assets/css/header.css?v=20260425-header-control-74">
     <link rel="stylesheet" href="assets/css/footer.css?v=20260425-preview-footer-40">
@@ -181,7 +181,7 @@
                     <picture class="hero-stage__picture">
                         <source media="(max-width: 640px)" srcset="assets/images/hero/home-hero-main-mobile.jpg">
                         <source media="(max-width: 1080px)" srcset="assets/images/hero/home-hero-main-tablet.jpg">
-                        <img src="assets/images/hero/home-hero-main.jpg" alt="Автоматические ворота на главном экране сайта">
+                        <img src="assets/images/hero/home-hero-main.jpg" width="3000" height="2000" alt="Автоматические ворота на главном экране сайта" loading="eager" fetchpriority="high" decoding="async">
                     </picture>
                 <div class="hero-copy">
                     <span class="hero-copy__eyebrow"><i class="fas fa-circle" aria-hidden="true"></i> Производство и монтаж</span>
@@ -229,10 +229,10 @@
         <section class="scene panel-scene" aria-label="Каталог и порошковая покраска">
             <article class="panel-scene__card panel-scene__card--dark scene-reveal" data-panel-gallery>
                 <div class="panel-scene__media" aria-hidden="true">
-                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-gates-05.png" alt="Откатные ворота и калитка на частном участке" data-caption="Откатные ворота">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-gates-01.png" alt="Распашные ворота на частном участке" data-caption="Распашные ворота">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-gates-02.png" alt="Металлическая калитка между каменными столбами" data-caption="Калитки">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-gates-03.png" alt="Современный металлический забор" data-caption="Заборы">
+                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-gates-05.png" alt="Откатные ворота и калитка на частном участке" data-caption="Откатные ворота" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-01.png" alt="Распашные ворота на частном участке" data-caption="Распашные ворота" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-02.png" alt="Металлическая калитка между каменными столбами" data-caption="Калитки" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-03.png" alt="Современный металлический забор" data-caption="Заборы" loading="lazy" fetchpriority="low" decoding="async">
                 </div>
                 <div class="panel-scene__overlay" aria-hidden="true"></div>
                 <div class="panel-scene__stamp panel-scene__stamp--dark" aria-hidden="true">
@@ -291,7 +291,7 @@
                             </a>
                             <a class="panel-scene__item" href="pages/services.html#catalog-panel-fence-profnastil">
                                 <strong>Заборы</strong>
-                                <span>Профнастил, сайдинг, металлоштакетник, жалюзи</span>
+                                <span>Профнастил, каркас, цвет и монтаж</span>
                             </a>
                         </div>
 
@@ -313,11 +313,11 @@
 
             <article class="panel-scene__card panel-scene__card--light scene-reveal" data-scene-delay="120" data-panel-gallery>
                 <div class="panel-scene__media" aria-hidden="true">
-                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-powder-01.png" alt="Маляр наносит порошковое покрытие на металлические изделия" data-caption="Порошковая покраска">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-powder-02.jpg" alt="Порошковая покраска металлических радиаторов" data-caption="Радиаторы и металлоизделия">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-powder-03.jpg" alt="Порошковая покраска секций ограждения" data-caption="Секции и ограждения">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-powder-04.png" alt="Порошковая покраска металлических панелей" data-caption="Панели и фасадные элементы">
-                    <img class="panel-scene__image" src="assets/images/catalog/home-direction-powder-05.jpg" alt="Порошковая покраска каркасов и стоек" data-caption="Каркасы и стойки">
+                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-powder-01.png" alt="Маляр наносит порошковое покрытие на металлические изделия" data-caption="Порошковая покраска" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-02.jpg" alt="Порошковая покраска металлических радиаторов" data-caption="Радиаторы и металлоизделия" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-03.jpg" alt="Порошковая покраска секций ограждения" data-caption="Секции и ограждения" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-04.png" alt="Порошковая покраска металлических панелей" data-caption="Панели и фасадные элементы" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-05.jpg" alt="Порошковая покраска каркасов и стоек" data-caption="Каркасы и стойки" loading="lazy" fetchpriority="low" decoding="async">
                 </div>
                 <div class="panel-scene__overlay" aria-hidden="true"></div>
                 <div class="panel-scene__stamp panel-scene__stamp--light" aria-hidden="true">
@@ -632,9 +632,7 @@
             </div>
         </footer>
     </main>
-    <script src="assets/js/content-api.js" defer></script>
-    <script src="assets/js/header.js?v=20260424-header-split-15" defer></script>
-    <script src="assets/js/home-content.js?v=20260414-came-brand-1" defer></script>
-    <script src="assets/js/home.js?v=20260424-home-header-18" defer></script>
+    <script src="assets/js/header.js?v=20260425-header-speed-17" defer></script>
+    <script src="assets/js/home.js?v=20260425-home-speed-21" defer></script>
 </body>
 </html>

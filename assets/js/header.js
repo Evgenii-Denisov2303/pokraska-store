@@ -1,12 +1,13 @@
 // ========== HEADER.JS ==========
 (function injectInlineEditorAssets() {
     const query = new URLSearchParams(window.location.search);
+    const skipInlineEditor = query.get('noedit') === '1' || query.get('perf') === '1';
     const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
         || query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
         || window.location.port === '4173';
 
-    if (!wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
+    if (skipInlineEditor || !wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
         return;
     }
 
@@ -150,56 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
         link.as = 'document';
         link.href = url.href;
         document.head.appendChild(link);
-
-        window.setTimeout(() => {
-            fetch(url.href, {
-                credentials: 'same-origin'
-            }).catch(() => {});
-        }, 0);
-    }
-
-    function collectPrefetchQueues(rootLinks) {
-        const entries = rootLinks
-            .map((link) => ({ link, url: normalizePrefetchUrl(link) }))
-            .filter((entry) => entry.url);
-
-        const priority = [];
-        const deferred = [];
-        const seen = new Set();
-        const activeIndex = entries.findIndex(({ link }) => (
-            link.matches('.active, [aria-current="page"], [aria-current="true"], .hero-nav__link--active')
-        ));
-
-        const addUnique = (bucket, url) => {
-            if (!url || seen.has(url.href)) return;
-            seen.add(url.href);
-            bucket.push(url);
-        };
-
-        if (activeIndex >= 0) {
-            [activeIndex - 1, activeIndex + 1, activeIndex - 2, activeIndex + 2].forEach((index) => {
-                if (index < 0 || index >= entries.length) return;
-                addUnique(priority, entries[index].url);
-            });
-        }
-
-        entries.forEach(({ url }, index) => {
-            if (index <= 1) {
-                addUnique(priority, url);
-            }
-        });
-
-        entries.forEach(({ url }) => {
-            addUnique(deferred, url);
-        });
-
-        return { priority, deferred };
     }
 
     function installNavPrefetch(rootLinks) {
         if (!rootLinks.length || !canPrefetch()) return;
-
-        const { priority, deferred } = collectPrefetchQueues(rootLinks);
 
         rootLinks.forEach((link) => {
             const triggerPrefetch = () => {
@@ -210,20 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
             link.addEventListener('focus', triggerPrefetch, { passive: true, once: true });
             link.addEventListener('touchstart', triggerPrefetch, { passive: true, once: true });
         });
-
-        window.setTimeout(() => {
-            priority.forEach(prefetchDocument);
-        }, 140);
-
-        const idlePrefetch = () => {
-            deferred.forEach(prefetchDocument);
-        };
-
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(idlePrefetch, { timeout: 2200 });
-        } else {
-            window.setTimeout(idlePrefetch, 1800);
-        }
     }
 
     function isCompactHeaderViewport() {

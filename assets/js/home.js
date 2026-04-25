@@ -1,12 +1,13 @@
 (function() {
     (function injectInlineEditorAssets() {
         const query = new URLSearchParams(window.location.search);
+        const skipInlineEditor = query.get('noedit') === '1' || query.get('perf') === '1';
         const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
             || query.get('edit') === '1'
             || ['localhost', '127.0.0.1'].includes(window.location.hostname)
             || window.location.port === '4173';
 
-        if (!wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
+        if (skipInlineEditor || !wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
             return;
         }
 
@@ -48,9 +49,9 @@
     const focusSection = searchParams.get('section');
     const heroHeader = document.querySelector('.hero-header');
     const body = document.body;
-    const heroMenuToggle = document.querySelector('.hero-menu-toggle');
-    const heroNav = document.querySelector('.hero-scene__nav');
-    const heroTopbar = document.querySelector('.hero-scene__topbar');
+    const heroMenuToggle = heroHeader ? heroHeader.querySelector('.hero-menu-toggle') : null;
+    const heroNav = heroHeader ? heroHeader.querySelector('.hero-scene__nav') : null;
+    const heroTopbar = heroHeader ? heroHeader.querySelector('.hero-scene__topbar') : null;
     const scenes = Array.from(document.querySelectorAll('.scene-reveal'));
     const panelGalleryState = new WeakMap();
     const prefetchedUrls = new Set();
@@ -131,56 +132,10 @@
         link.as = 'document';
         link.href = url.href;
         document.head.appendChild(link);
-
-        window.setTimeout(() => {
-            fetch(url.href, {
-                credentials: 'same-origin'
-            }).catch(() => {});
-        }, 0);
-    }
-
-    function collectPrefetchQueues(rootLinks) {
-        const entries = rootLinks
-            .map((link) => ({ link, url: normalizePrefetchUrl(link) }))
-            .filter((entry) => entry.url);
-
-        const priority = [];
-        const deferred = [];
-        const seen = new Set();
-        const activeIndex = entries.findIndex(({ link }) => (
-            link.matches('.active, [aria-current="page"], [aria-current="true"], .hero-nav__link--active')
-        ));
-
-        const addUnique = (bucket, url) => {
-            if (!url || seen.has(url.href)) return;
-            seen.add(url.href);
-            bucket.push(url);
-        };
-
-        if (activeIndex >= 0) {
-            [activeIndex - 1, activeIndex + 1, activeIndex - 2, activeIndex + 2].forEach((index) => {
-                if (index < 0 || index >= entries.length) return;
-                addUnique(priority, entries[index].url);
-            });
-        }
-
-        entries.forEach(({ url }, index) => {
-            if (index <= 1) {
-                addUnique(priority, url);
-            }
-        });
-
-        entries.forEach(({ url }) => {
-            addUnique(deferred, url);
-        });
-
-        return { priority, deferred };
     }
 
     function installNavPrefetch(rootLinks) {
         if (!rootLinks.length || !canPrefetch()) return;
-
-        const { priority, deferred } = collectPrefetchQueues(rootLinks);
 
         rootLinks.forEach((link) => {
             const triggerPrefetch = () => {
@@ -191,20 +146,6 @@
             link.addEventListener('focus', triggerPrefetch, { passive: true, once: true });
             link.addEventListener('touchstart', triggerPrefetch, { passive: true, once: true });
         });
-
-        window.setTimeout(() => {
-            priority.forEach(prefetchDocument);
-        }, 140);
-
-        const idlePrefetch = () => {
-            deferred.forEach(prefetchDocument);
-        };
-
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(idlePrefetch, { timeout: 2200 });
-        } else {
-            window.setTimeout(idlePrefetch, 1800);
-        }
     }
 
     if (heroHeader && heroMenuToggle && heroNav) {
@@ -436,11 +377,21 @@
 
         let activeIndex = 0;
         let timerId = null;
+        let isGalleryVisible = !('IntersectionObserver' in window);
         const abortController = new AbortController();
         const { signal } = abortController;
 
+        const loadSlideImage = (slide) => {
+            if (!slide || slide.getAttribute('src')) return;
+            const deferredSrc = slide.dataset.src;
+            if (deferredSrc) {
+                slide.src = deferredSrc;
+            }
+        };
+
         const setActiveSlide = (index) => {
             activeIndex = index;
+            loadSlideImage(slides[index]);
 
             slides.forEach((slide, slideIndex) => {
                 slide.classList.toggle('is-active', slideIndex === index);
@@ -454,6 +405,7 @@
         };
 
         const startRotation = () => {
+            if (!isGalleryVisible) return;
             if (timerId) window.clearInterval(timerId);
             timerId = window.setInterval(() => {
                 setActiveSlide((activeIndex + 1) % slides.length);
@@ -501,7 +453,28 @@
         });
 
         setActiveSlide(0);
-        startRotation();
+
+        if ('IntersectionObserver' in window) {
+            const visibilityObserver = new IntersectionObserver((entries) => {
+                const entry = entries[0];
+                isGalleryVisible = Boolean(entry?.isIntersecting);
+
+                if (isGalleryVisible) {
+                    startRotation();
+                    return;
+                }
+
+                stopRotation();
+            }, {
+                threshold: 0.08,
+                rootMargin: '80px 0px'
+            });
+
+            visibilityObserver.observe(card);
+            signal.addEventListener('abort', () => visibilityObserver.disconnect(), { once: true });
+        } else {
+            startRotation();
+        }
 
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {

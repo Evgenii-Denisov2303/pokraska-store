@@ -37,7 +37,9 @@
 <link rel="stylesheet" href="../assets/css/main.css?v=20260424-shell-theme-26">
 <link rel="preload" as="style" href="../assets/css/header.css?v=20260425-header-control-74">
     <link rel="preload" as="style" href="../assets/css/hero-inner.css?v=20260425-hero-inner-86">
-    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main-mobile.jpg" media="(max-width: 640px)" fetchpriority="high">
+    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main-tablet.jpg" media="(min-width: 641px) and (max-width: 1080px)" fetchpriority="high">
+    <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.jpg" media="(min-width: 1081px)" fetchpriority="high">
     <link rel="preload" href="../assets/fonts/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/header.css?v=20260425-header-control-74">
@@ -359,7 +361,7 @@
                     </div>
                 </div>
 
-                <div class="contacts-panel contacts-panel--route-map" data-embed-loader>
+                <div class="contacts-panel contacts-panel--route-map" data-embed-loader data-embed-lazy>
                     <div class="contacts-map-placeholder" data-embed-placeholder>
                         <span class="contacts-map-placeholder__eyebrow">Карта и маршрут</span>
                         <h3>Открыть карту прямо на странице</h3>
@@ -432,7 +434,7 @@
 
 
 <!-- ========== SCRIPTS ========== -->
-    <script src="../assets/js/header.js?v=20260424-header-split-15" defer></script>
-    <script src="../assets/js/embed-loader.js?v=20260425-embed-loader-4" defer></script>
+    <script src="../assets/js/header.js?v=20260425-header-speed-17" defer></script>
+    <script src="../assets/js/embed-loader.js?v=20260425-embed-loader-5" defer></script>
 </body>
 </html>

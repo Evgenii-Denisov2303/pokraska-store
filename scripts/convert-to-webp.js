@@ -52,6 +52,12 @@ async function convert(filePath) {
 
         const newSize = fs.statSync(webpPath).size;
         const saving = originalSize - newSize;
+        if (saving <= 0) {
+            fs.unlinkSync(webpPath);
+            skipped++;
+            return;
+        }
+
         savedBytes += saving;
 
         const rel = path.relative(ROOT, filePath).replace(/\\/g, '/');

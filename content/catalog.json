@@ -40,18 +40,6 @@
         {
           "panelId": "catalog-panel-fence-profnastil",
           "label": "Заборы из профнастила"
-        },
-        {
-          "panelId": "catalog-panel-fence-siding",
-          "label": "Заборы из металлосайдинга"
-        },
-        {
-          "panelId": "catalog-panel-fence-picket",
-          "label": "Заборы из металлоштакетника"
-        },
-        {
-          "panelId": "catalog-panel-fence-louver",
-          "label": "Заборы из жалюзи"
         }
       ]
     },
