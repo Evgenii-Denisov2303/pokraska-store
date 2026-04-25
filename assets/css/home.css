@@ -9313,7 +9313,11 @@ body#top .hero-header--desktop-home {
 }
 
 /* Android Chrome "Desktop site" on phones: keep the home hero in mobile-like proportions. */
-@media (min-width: 900px) and (max-width: 1100px) and (pointer: coarse) and (max-aspect-ratio: 2 / 3) {
+@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: none !important;
+    }
+
     body#top .hero-scene > .hero-header {
         padding: 8px 10px 0 !important;
         min-height: 60px !important;

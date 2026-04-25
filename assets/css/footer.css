@@ -873,7 +873,7 @@
 }
 
 /* Android Chrome "Desktop site" on phones should keep the compact footer rhythm. */
-@media (min-width: 900px) and (max-width: 1100px) and (pointer: coarse) and (max-aspect-ratio: 2 / 3) {
+@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     .preview-footer {
         width: min(100%, calc(100% - 24px));
         margin-top: 34px;
@@ -887,22 +887,35 @@
 
     .preview-footer__layout {
         width: min(100%, 720px);
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-areas:
-            "company"
-            "contacts"
-            "useful";
-        gap: 18px;
+            "company company"
+            "contacts useful";
+        column-gap: clamp(28px, 5vw, 44px);
+        row-gap: 16px;
         padding-bottom: 14px;
         margin-inline: auto;
+        justify-items: stretch;
     }
 
     .preview-footer__column,
-    .preview-footer__column--company,
     .preview-footer__column--contacts,
     .preview-footer__column--useful {
         max-width: none;
         padding-left: 0;
+    }
+
+    .preview-footer__column--company {
+        display: grid;
+        grid-template-columns: minmax(11.5rem, 0.82fr) minmax(0, 1.18fr);
+        grid-template-areas:
+            "footer-brand footer-text-one"
+            "footer-brand footer-text-two";
+        gap: 7px 20px;
+        align-items: start;
+        max-width: none;
+        padding: 0 0 14px;
+        border-bottom: 1px solid rgba(var(--footer-accent-rgb), 0.1);
     }
 
     .preview-footer__brand {
@@ -911,19 +924,33 @@
         align-items: center;
     }
 
+    .preview-footer__column--company .preview-footer__brand {
+        grid-area: footer-brand;
+        align-self: start;
+        margin-bottom: 0;
+    }
+
+    .preview-footer__column--company .preview-footer__legal-text:nth-of-type(1) {
+        grid-area: footer-text-one;
+    }
+
+    .preview-footer__column--company .preview-footer__legal-text:nth-of-type(2) {
+        grid-area: footer-text-two;
+    }
+
     .preview-footer__brand-copy {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-self: center;
         min-height: 64px;
-        max-width: none;
+        max-width: 9.6rem;
         padding-top: 0;
     }
 
     .preview-footer__logo {
-        height: 64px;
-        max-width: 220px;
+        height: 62px;
+        max-width: 190px;
     }
 
     .preview-footer__company {
@@ -934,8 +961,33 @@
     .preview-footer__legal-text {
         max-width: none;
         color: rgba(32, 47, 64, 0.86);
-        font-size: 0.96rem;
-        line-height: 1.54;
+        font-size: 0.84rem;
+        line-height: 1.4;
+        text-wrap: pretty;
+    }
+
+    .preview-footer__column--contacts,
+    .preview-footer__column--useful {
+        max-width: none;
+        justify-self: stretch;
+    }
+
+    .preview-footer__column--contacts {
+        padding-right: clamp(12px, 3vw, 22px);
+        border-right: 1px solid rgba(var(--footer-accent-rgb), 0.08);
+    }
+
+    .preview-footer__label {
+        font-size: 0.7rem;
+    }
+
+    .preview-footer__list {
+        gap: 7px;
+    }
+
+    .preview-footer__list--contacts li {
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 9px;
     }
 
     .preview-footer__column a,
@@ -945,6 +997,14 @@
 
     .preview-footer__list li {
         gap: 10px;
+    }
+
+    .preview-footer__column a,
+    .preview-footer__column p,
+    .preview-footer__list a,
+    .preview-footer__list li {
+        font-size: 0.84rem;
+        line-height: 1.38;
     }
 
     .preview-footer__bottom {

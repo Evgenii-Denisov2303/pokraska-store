@@ -1926,8 +1926,8 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     }
 }
 
-/* Android Chrome "Desktop site" on phones: wide CSS viewport, but touch + tall portrait. */
-@media (min-width: 900px) and (max-width: 1100px) and (pointer: coarse) and (max-aspect-ratio: 2 / 3) {
+/* Android Chrome "Desktop site" on phones: wide CSS viewport, but still a very tall portrait screen. */
+@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     :root {
         --header-top-height: 68px;
     }
@@ -1946,9 +1946,9 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(0, 1fr) 44px !important;
-        grid-template-areas: "logo actions" !important;
-        gap: 0 12px !important;
+        grid-template-columns: minmax(0, 1fr) minmax(170px, auto) 44px !important;
+        grid-template-areas: "logo contacts actions" !important;
+        gap: 0 10px !important;
         min-height: 52px !important;
         max-width: none !important;
         padding: 8px 10px !important;
@@ -1966,7 +1966,7 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     body#top .header.header--desktop-hero.internal-legacy-header .logo,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
         grid-area: logo !important;
-        max-width: calc(100% - 56px) !important;
+        max-width: 100% !important;
         min-width: 0 !important;
     }
 
@@ -2007,6 +2007,68 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        display: grid !important;
+        grid-area: contacts !important;
+        justify-self: center !important;
+        align-self: center !important;
+        width: max-content !important;
+        max-width: 210px !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        text-align: left !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type {
+        display: grid !important;
+        grid-template-columns: 16px minmax(0, 1fr) !important;
+        align-items: center !important;
+        gap: 6px !important;
+        min-width: 0 !important;
+        width: max-content !important;
+        max-width: 210px !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        color: #183d5d !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type i {
+        display: inline-grid !important;
+        place-items: center !important;
+        width: 16px !important;
+        height: 16px !important;
+        font-size: 0.78rem !important;
+        color: #183d5d !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-info {
+        min-width: 0 !important;
+        gap: 1px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-number {
+        font-size: 0.86rem !important;
+        line-height: 1 !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.01em !important;
+        white-space: nowrap !important;
+        color: #12334f !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:first-of-type .phone-label {
+        display: block !important;
+        font-size: 0.56rem !important;
+        line-height: 1.08 !important;
+        letter-spacing: 0 !important;
+        white-space: nowrap !important;
+        color: rgba(27, 47, 66, 0.68) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-phone:nth-of-type(2),
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack .contact-address {
         display: none !important;
     }
 
