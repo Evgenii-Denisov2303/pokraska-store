@@ -1528,3 +1528,14 @@ body#top .pricing-estimate-card .calculator-contact a {
         max-width: none !important;
     }
 }
+
+@media (min-width: 1101px) and (max-width: 2600px) and (min-height: 901px) and (pointer: coarse) {
+    body#top .prices-page {
+        padding-top: 92px !important;
+    }
+
+    body#top .prices-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

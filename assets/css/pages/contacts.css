@@ -1845,3 +1845,17 @@ body#top .contacts-page .contacts-subtitle {
         max-width: none !important;
     }
 }
+
+@media (min-width: 1101px) and (max-width: 2600px) and (min-height: 901px) and (pointer: coarse) {
+    body#top .contacts-page {
+        padding-top: 92px !important;
+        --contacts-gap: 18px;
+        --contacts-form-height: clamp(620px, 72vw, 700px);
+        --contacts-map-height: clamp(420px, 56vw, 560px);
+    }
+
+    body#top .contacts-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

@@ -2931,3 +2931,14 @@ body#top .gallery-page .zoom-btn::after {
         max-width: none !important;
     }
 }
+
+@media (min-width: 1101px) and (max-width: 2600px) and (min-height: 901px) and (pointer: coarse) {
+    body#top .gallery-page {
+        padding-top: 92px !important;
+    }
+
+    body#top .gallery-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

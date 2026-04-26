@@ -874,7 +874,8 @@
 
 /* Android Chrome "Desktop site" on phones should keep the compact footer rhythm. */
 @media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
-    (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse),
+    (min-width: 1101px) and (max-width: 2600px) and (min-height: 901px) and (pointer: coarse) {
     .preview-footer {
         width: min(100%, calc(100% - 24px));
         margin-top: 34px;
