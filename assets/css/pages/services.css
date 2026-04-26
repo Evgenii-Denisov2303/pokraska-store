@@ -3068,3 +3068,14 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
         max-width: none !important;
     }
 }
+
+@media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    body#top .catalog-page {
+        padding-top: 92px !important;
+    }
+
+    body#top .catalog-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

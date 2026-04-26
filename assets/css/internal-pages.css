@@ -510,3 +510,15 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         max-width: none !important;
     }
 }
+
+/* Phone "desktop site" landscape: keep the first content below the compact header. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 92px !important;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}

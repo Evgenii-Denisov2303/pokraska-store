@@ -648,8 +648,9 @@
     }
 }
 
-/* Phone browsers in "desktop site" mode can report a desktop-wide, very tall viewport. */
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+/* Phone browsers in "desktop site" mode can report a desktop-wide viewport. */
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
     .header.header--desktop-hero.internal-legacy-header {
         display: block !important;
     }

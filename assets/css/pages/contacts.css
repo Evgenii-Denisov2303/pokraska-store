@@ -1786,6 +1786,58 @@ body#top .contacts-page .contacts-subtitle {
 @media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top .contacts-page {
         padding-top: 136px !important;
+        --contacts-gap: 18px;
+        --contacts-form-height: clamp(720px, 76vw, 780px);
+        --contacts-map-height: clamp(520px, 72vw, 640px);
+    }
+
+    body#top .contacts-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+
+    body#top .contacts-core,
+    body#top .contacts-route {
+        grid-template-columns: 1fr !important;
+        justify-items: stretch !important;
+        gap: var(--contacts-gap) !important;
+    }
+
+    body#top .contacts-core {
+        margin-top: 22px !important;
+    }
+
+    body#top .contacts-panel--direct,
+    body#top .contacts-panel--request,
+    body#top .contacts-panel--route-copy,
+    body#top .contacts-panel--route-map {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 0 !important;
+    }
+
+    body#top .contacts-panel--request {
+        justify-self: stretch !important;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height) !important;
+        height: var(--contacts-form-height) !important;
+    }
+
+    body#top .contacts-panel--route-map iframe {
+        min-height: var(--contacts-map-height) !important;
+        height: var(--contacts-map-height) !important;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    body#top .contacts-page {
+        padding-top: 92px !important;
+        --contacts-gap: 18px;
+        --contacts-form-height: clamp(620px, 72vw, 700px);
+        --contacts-map-height: clamp(420px, 56vw, 560px);
     }
 
     body#top .contacts-page > .container {

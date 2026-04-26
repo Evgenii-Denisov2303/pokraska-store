@@ -1351,4 +1351,15 @@ body#top .automation-product-page .faq-section.faq-system,
     }
 }
 
+@media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    body#top .automation-product-page {
+        padding-top: 92px !important;
+    }
+
+    body#top .automation-product-page > .container {
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
+    }
+}
+
 
