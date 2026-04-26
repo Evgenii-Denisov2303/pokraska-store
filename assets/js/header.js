@@ -168,11 +168,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function isCompactHeaderViewport() {
-        return window.innerWidth <= COMPACT_HEADER_BREAKPOINT;
+        const phoneDesktopPortrait = window.matchMedia?.('(min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3)').matches;
+        const wideTouchTablet = window.matchMedia?.('(min-width: 1101px) and (max-width: 1600px) and (pointer: coarse)').matches;
+        const phoneDesktopLandscape = window.matchMedia?.('(min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse)').matches;
+        return window.innerWidth <= COMPACT_HEADER_BREAKPOINT
+            || Boolean(phoneDesktopPortrait)
+            || Boolean(wideTouchTablet)
+            || Boolean(phoneDesktopLandscape)
+            || isLargeSquareHeaderViewport();
+    }
+
+    function isLargeSquareHeaderViewport() {
+        return Boolean(window.matchMedia?.('(min-width: 2200px) and (min-height: 2200px) and (min-aspect-ratio: 9 / 10) and (max-aspect-ratio: 10 / 9)').matches);
     }
 
     function isScrollHideViewport() {
-        return window.innerWidth <= HEADER_SCROLL_BREAKPOINT || window.innerHeight <= 520;
+        return (isCompactHeaderViewport() && !isLargeSquareHeaderViewport()) || window.innerHeight <= 520;
     }
 
     function setHeaderHeight() {
@@ -195,6 +206,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
+
+        if (isLargeSquareHeaderViewport()) {
+            header.classList.remove('is-hidden');
+            body.classList.remove('header-hidden');
+            lastScrollY = window.scrollY;
+            return;
+        }
+
         const isCompactScroll = isScrollHideViewport();
 
         if (!isCompactScroll) {
@@ -269,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (mobileMenuBtn && nav) {
         const icon = mobileMenuBtn.querySelector('i');
+        nav.setAttribute('aria-hidden', 'true');
 
         function toggleMenu(forceState) {
             const isOpen = typeof forceState === 'boolean' ? forceState : !nav.classList.contains('active');

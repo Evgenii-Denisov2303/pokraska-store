@@ -29,12 +29,18 @@
     --catalog-feature-copy-track: minmax(0, 1fr);
     --catalog-feature-media-track: minmax(0, 1fr);
     --catalog-feature-gap: 0px;
-    padding: 54px 0 76px;
-    min-height: 100vh;
+    padding: 54px 0 clamp(46px, 5vw, 64px);
+    min-height: 0;
     background:
         radial-gradient(circle at 12% 0%, rgba(var(--theme-accent-rgb), 0.08), transparent 26%),
         radial-gradient(circle at 92% 8%, rgba(var(--theme-accent-strong-rgb), 0.06), transparent 20%),
         linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-deep) 42%, var(--theme-bg-soft) 100%);
+}
+
+.catalog-page--faq-tail {
+    min-height: 0;
+    padding-top: clamp(28px, 3.2vw, 46px);
+    padding-bottom: clamp(34px, 4vw, 58px);
 }
 
 .catalog-page > .container {
@@ -3070,17 +3076,6 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
 }
 
 @media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
-    body#top .catalog-page {
-        padding-top: 92px !important;
-    }
-
-    body#top .catalog-page > .container {
-        width: min(100%, calc(100vw - 24px)) !important;
-        max-width: none !important;
-    }
-}
-
-@media (min-width: 1101px) and (max-width: 2600px) and (min-height: 901px) and (pointer: coarse) {
     body#top .catalog-page {
         padding-top: 92px !important;
     }
