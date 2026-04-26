@@ -9601,8 +9601,8 @@ body#top .hero-header--desktop-home {
     }
 }
 
-/* Compact landscape tablets / smart displays: keep the home preview photos visually wider. */
-@media (min-width: 1101px) and (max-width: 1366px) and (max-height: 900px) {
+/* Compact landscape tablets / small desktop-site canvases: keep the home preview photos wide and low. */
+@media (min-width: 1101px) and (max-width: 1440px) and (max-height: 1000px) {
     body#top .panel-scene {
         width: calc(100% + 44px) !important;
         max-width: none !important;
