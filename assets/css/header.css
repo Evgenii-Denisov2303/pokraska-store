@@ -2123,11 +2123,14 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     }
 }
 
-/* Wide touch desktop-site viewports should keep the tablet header balance:
-   logo on the left, phone in the middle lane, burger on the right. */
-@media (min-width: 1101px) and (max-width: 2600px) and (pointer: coarse) {
+/* Balanced compact header for tablet and desktop-site viewports:
+   logo on the left, phone in the center lane, burger pinned to the right. */
+@media (min-width: 760px) and (max-width: 1100px),
+    (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse),
+    (min-width: 1101px) and (max-width: 2600px) and (pointer: coarse) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(210px, 296px) minmax(206px, 1fr) 96px !important;
+        grid-template-columns: minmax(250px, 1fr) minmax(190px, auto) minmax(76px, 1fr) !important;
         grid-template-areas: "logo contacts actions" !important;
         gap: 0 18px !important;
     }
@@ -2135,5 +2138,9 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
         justify-self: center !important;
         max-width: 220px !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
+        justify-self: end !important;
     }
 }
