@@ -1958,9 +1958,9 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
-        grid-template-columns: minmax(0, 1fr) minmax(170px, auto) 64px !important;
+        grid-template-columns: minmax(0, 1fr) minmax(170px, auto) 96px !important;
         grid-template-areas: "logo contacts actions" !important;
-        gap: 0 12px !important;
+        gap: 0 18px !important;
         min-height: 52px !important;
         max-width: none !important;
         padding: 8px 10px !important;
@@ -2090,8 +2090,8 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
         justify-self: end !important;
         align-self: center !important;
         justify-content: flex-end !important;
-        width: 64px !important;
-        min-width: 64px !important;
+        width: 96px !important;
+        min-width: 96px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-menu-toggle,
