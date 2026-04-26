@@ -1470,4 +1470,21 @@ body#top .automation-product-page .faq-section.faq-system,
         margin-top: 16px !important;
         padding: 18px !important;
     }
+
+    body#top .automation-products--single .automation-product-card {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr !important;
+        align-content: stretch !important;
+        gap: 12px !important;
+        padding: 16px !important;
+    }
+
+    body#top .automation-products--single .automation-product-gallery {
+        grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+        width: 100% !important;
+    }
+
+    body#top .automation-products--single .automation-product-main img {
+        height: clamp(150px, 20vw, 184px) !important;
+    }
 }

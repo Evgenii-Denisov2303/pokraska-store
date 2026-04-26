@@ -554,6 +554,7 @@
     body#top .internal-hero-scene + .payment-docs-page,
     body#top .internal-hero-scene + .contacts-page,
     body#top .internal-hero-scene + .privacy-page,
+    body#top .internal-hero-scene + .automation-faq-wrap,
     body#top .internal-hero-scene + .automation-product-page {
         position: relative;
         z-index: 1;
@@ -571,6 +572,7 @@
     body#top .internal-hero-scene + .payment-docs-page::before,
     body#top .internal-hero-scene + .contacts-page::before,
     body#top .internal-hero-scene + .privacy-page::before,
+    body#top .internal-hero-scene + .automation-faq-wrap::before,
     body#top .internal-hero-scene + .automation-product-page::before {
         content: '' !important;
         position: absolute;
@@ -597,6 +599,7 @@
     body#top .internal-hero-scene + .payment-docs-page > .container,
     body#top .internal-hero-scene + .contacts-page > .container,
     body#top .internal-hero-scene + .privacy-page > .container,
+    body#top .internal-hero-scene + .automation-faq-wrap > .container,
     body#top .internal-hero-scene + .automation-product-page > .container {
         position: relative;
         z-index: 3;
@@ -673,6 +676,7 @@
     body#top .internal-hero-scene + .payment-docs-page,
     body#top .internal-hero-scene + .contacts-page,
     body#top .internal-hero-scene + .privacy-page,
+    body#top .internal-hero-scene + .automation-faq-wrap,
     body#top .internal-hero-scene + .automation-product-page {
         padding-top: var(--internal-compact-page-start) !important;
     }

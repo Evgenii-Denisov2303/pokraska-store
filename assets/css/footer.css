@@ -325,6 +325,18 @@
     grid-template-columns: 18px 1fr;
     gap: 13px;
     align-items: start;
+    min-width: 0;
+}
+
+.preview-footer__list--contacts a,
+.preview-footer__list--contacts span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.preview-footer__list--contacts a {
+    margin-right: 0;
+    padding-right: 0;
 }
 
 .preview-footer__list--contacts i {

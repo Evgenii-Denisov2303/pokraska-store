@@ -1802,20 +1802,22 @@ body#top .contacts-page .contacts-subtitle {
     body#top .contacts-page {
         padding-top: 136px !important;
         --contacts-gap: 18px;
-        --contacts-form-height: clamp(720px, 76vw, 780px);
+        --contacts-form-height: clamp(620px, 70vw, 660px);
         --contacts-map-height: clamp(520px, 72vw, 640px);
     }
 
     body#top .contacts-page > .container {
-        width: min(100%, calc(100vw - 24px)) !important;
-        max-width: none !important;
+        width: min(760px, calc(100vw - 40px)) !important;
+        max-width: 760px !important;
     }
 
     body#top .contacts-core,
     body#top .contacts-route {
         grid-template-columns: 1fr !important;
-        justify-items: stretch !important;
+        justify-items: center !important;
         gap: var(--contacts-gap) !important;
+        width: 100% !important;
+        margin-inline: auto !important;
     }
 
     body#top .contacts-core {
@@ -1826,13 +1828,13 @@ body#top .contacts-page .contacts-subtitle {
     body#top .contacts-panel--request,
     body#top .contacts-panel--route-copy,
     body#top .contacts-panel--route-map {
-        width: 100% !important;
-        max-width: none !important;
+        width: min(100%, 620px) !important;
+        max-width: 620px !important;
         min-height: 0 !important;
     }
 
     body#top .contacts-panel--request {
-        justify-self: stretch !important;
+        justify-self: center !important;
     }
 
     body#top .contacts-form-frame,
@@ -1858,5 +1860,36 @@ body#top .contacts-page .contacts-subtitle {
     body#top .contacts-page > .container {
         width: min(100%, calc(100vw - 24px)) !important;
         max-width: none !important;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1023px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    body#top .contacts-page {
+        --contacts-form-height: clamp(620px, 70vw, 660px);
+    }
+
+    body#top .contacts-page > .container {
+        width: min(760px, calc(100vw - 40px)) !important;
+        max-width: 760px !important;
+    }
+
+    body#top .contacts-core,
+    body#top .contacts-route {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+    }
+
+    body#top .contacts-panel--direct,
+    body#top .contacts-panel--request,
+    body#top .contacts-panel--route-copy,
+    body#top .contacts-panel--route-map {
+        width: min(100%, 620px) !important;
+        max-width: 620px !important;
+    }
+
+    body#top .contacts-panel--request {
+        justify-self: center !important;
     }
 }
