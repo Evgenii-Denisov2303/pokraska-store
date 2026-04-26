@@ -409,6 +409,43 @@ function getStaticFilePath(requestPath) {
     return fullPath;
 }
 
+function shouldExposeInlineEditor(request, pathname, searchParams) {
+    const isAdminPage = pathname === '/admin'
+        || pathname === '/admin/'
+        || pathname.startsWith('/admin/');
+
+    if (isAdminPage) return false;
+    if (isLocalDevelopmentRequest(request)) return true;
+    if (!AUTH_ENABLED) return true;
+    if (searchParams?.get('edit') === '1') return true;
+
+    return Boolean(getSession(request));
+}
+
+function createInlineEditorConfigScript(request) {
+    const session = getSession(request);
+    const payload = {
+        authEnabled: AUTH_ENABLED,
+        authenticated: AUTH_ENABLED ? Boolean(session) : true,
+        username: session?.username || ''
+    };
+
+    const safePayload = JSON.stringify(payload).replace(/</g, '\\u003c');
+
+    return `<script>window.POKRASKA_INLINE_EDITOR_ENABLED=true;window.POKRASKA_INLINE_SESSION=${safePayload};</script>`;
+}
+
+function injectInlineEditorConfig(html, script) {
+    const marker = '</head>';
+    const markerIndex = html.toLowerCase().indexOf(marker);
+
+    if (markerIndex === -1) {
+        return `${script}\n${html}`;
+    }
+
+    return `${html.slice(0, markerIndex)}${script}\n${html.slice(markerIndex)}`;
+}
+
 async function readRequestBody(request) {
     const chunks = [];
     for await (const chunk of request) {
@@ -948,7 +985,7 @@ async function handlePublicContent(request, response, pathname) {
     return true;
 }
 
-async function handleStaticFile(request, response, pathname) {
+async function handleStaticFile(request, response, pathname, searchParams) {
     const filePath = getStaticFilePath(pathname);
     if (!filePath) {
         sendJson(request, response, 403, { ok: false, error: 'Недопустимый путь' });
@@ -988,7 +1025,14 @@ async function handleStaticFile(request, response, pathname) {
         }
 
         const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-        const data = await fs.readFile(filePath);
+        let data = await fs.readFile(filePath);
+
+        if (isHtml && shouldExposeInlineEditor(request, pathname, searchParams)) {
+            data = Buffer.from(
+                injectInlineEditorConfig(data.toString('utf-8'), createInlineEditorConfigScript(request)),
+                'utf-8'
+            );
+        }
 
         let cacheControl;
         if (isLocalDev) {
@@ -1070,7 +1114,7 @@ const server = http.createServer(async (request, response) => {
             return;
         }
 
-        await handleStaticFile(request, response, pathname);
+        await handleStaticFile(request, response, pathname, url.searchParams);
     } catch (error) {
         sendJson(request, response, 500, {
             ok: false,

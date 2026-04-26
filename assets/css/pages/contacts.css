@@ -1807,16 +1807,16 @@ body#top .contacts-page .contacts-subtitle {
     }
 
     body#top .contacts-page > .container {
-        width: min(760px, calc(100vw - 40px)) !important;
-        max-width: 760px !important;
+        width: min(1280px, calc(100vw - 88px)) !important;
+        max-width: none !important;
     }
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
+        grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr) !important;
+        justify-items: stretch !important;
         gap: var(--contacts-gap) !important;
-        width: 100% !important;
+        width: auto !important;
         margin-inline: auto !important;
     }
 
@@ -1825,15 +1825,16 @@ body#top .contacts-page .contacts-subtitle {
     }
 
     body#top .contacts-panel--direct,
-    body#top .contacts-panel--request,
     body#top .contacts-panel--route-copy,
     body#top .contacts-panel--route-map {
-        width: min(100%, 620px) !important;
-        max-width: 620px !important;
+        width: auto !important;
+        max-width: none !important;
         min-height: 0 !important;
     }
 
     body#top .contacts-panel--request {
+        width: min(100%, 520px) !important;
+        max-width: 520px !important;
         justify-self: center !important;
     }
 
@@ -1869,27 +1870,28 @@ body#top .contacts-page .contacts-subtitle {
     }
 
     body#top .contacts-page > .container {
-        width: min(760px, calc(100vw - 40px)) !important;
-        max-width: 760px !important;
+        width: min(100%, calc(100vw - 24px)) !important;
+        max-width: none !important;
     }
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
-        width: 100% !important;
+        grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr) !important;
+        justify-items: stretch !important;
+        width: auto !important;
         margin-inline: auto !important;
     }
 
     body#top .contacts-panel--direct,
-    body#top .contacts-panel--request,
     body#top .contacts-panel--route-copy,
     body#top .contacts-panel--route-map {
-        width: min(100%, 620px) !important;
-        max-width: 620px !important;
+        width: auto !important;
+        max-width: none !important;
     }
 
     body#top .contacts-panel--request {
+        width: min(100%, 520px) !important;
+        max-width: 520px !important;
         justify-self: center !important;
     }
 }

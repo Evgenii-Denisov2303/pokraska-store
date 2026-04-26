@@ -2,18 +2,22 @@
 (function injectInlineEditorAssets() {
     const query = new URLSearchParams(window.location.search);
     const skipInlineEditor = query.get('noedit') === '1' || query.get('perf') === '1';
+    const inlineEditorMinWidth = 641;
+    const inlineEditorMinHeight = 560;
+    const supportsInlineEditorViewport = window.innerWidth >= inlineEditorMinWidth
+        && window.innerHeight >= inlineEditorMinHeight;
     const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
         || query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
         || window.location.port === '4173';
 
-    if (skipInlineEditor || !wantsInlineEditor || window.POKRASKA_INLINE_ASSETS_LOADING) {
+    if (skipInlineEditor || !wantsInlineEditor || !supportsInlineEditorViewport || window.POKRASKA_INLINE_ASSETS_LOADING) {
         return;
     }
 
     window.POKRASKA_INLINE_ASSETS_LOADING = true;
 
-    const assetVersion = '20260423-inline-admin-10';
+    const assetVersion = '20260427-inline-admin-11';
     const assets = [
         `/assets/js/inline-editor.js?v=${assetVersion}`,
         `/assets/js/inline-editor-bootstrap.js?v=${assetVersion}`

@@ -155,6 +155,10 @@
     const requestedFocus = (query.get('focus') || '').trim().toLowerCase();
     const requestedResumeFile = (query.get('resumeFile') || '').trim();
     const requestedResumePath = (query.get('resumePath') || '').trim();
+    const INLINE_EDITOR_MIN_WIDTH = 641;
+    const INLINE_EDITOR_MIN_HEIGHT = 560;
+    const supportsInlineEditorViewport = window.innerWidth >= INLINE_EDITOR_MIN_WIDTH
+        && window.innerHeight >= INLINE_EDITOR_MIN_HEIGHT;
     const inlineBootstrapSession = window.POKRASKA_INLINE_SESSION && typeof window.POKRASKA_INLINE_SESSION === 'object'
         ? {
             authEnabled: Boolean(window.POKRASKA_INLINE_SESSION.authEnabled),
@@ -163,10 +167,10 @@
         }
         : null;
     let inlineSessionCache = inlineBootstrapSession;
-    const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
+    const wantsInlineEditor = supportsInlineEditorViewport && (Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
         || query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
-        || window.location.port === '4173';
+        || window.location.port === '4173');
 
     if (!wantsInlineEditor) return;
 
@@ -2644,7 +2648,7 @@
                     right: 12px;
                     bottom: var(--p-inline-dock-offset);
                     width: auto;
-                    max-height: none;
+                    max-height: calc(100vh - var(--p-inline-dock-offset) - 24px);
                 }
 
                 .p-inline-overview {
@@ -2653,65 +2657,20 @@
                     right: 12px;
                     bottom: var(--p-inline-dock-offset);
                     width: auto;
-                    max-height: none;
+                    max-height: calc(100vh - var(--p-inline-dock-offset) - 24px);
                 }
             }
 
-            @media (max-width: 640px) {
-                .p-inline-toolbar {
-                    border-radius: 18px;
-                }
-
-                .p-inline-toolbar__actions {
-                    justify-content: flex-start;
-                }
-
-                .p-inline-toolbar__btn {
-                    flex: 0 0 auto;
-                }
-
+            @media (max-width: 640px), (max-height: 559px) {
+                .p-inline-root,
+                .p-inline-toolbar,
                 .p-inline-panel,
-                .p-inline-overview {
-                    left: 8px;
-                    right: 8px;
-                    bottom: var(--p-inline-dock-offset);
-                    max-height: none;
-                    border-radius: 20px;
-                    padding: 16px 16px 12px;
-                }
-
-                .p-inline-panel__head,
-                .p-inline-overview__sticky {
-                    top: -16px;
-                    margin: -16px -16px 14px;
-                    padding: 16px 16px 12px;
-                    border-radius: 20px 20px 16px 16px;
-                }
-
-                .p-inline-panel__actions {
-                    grid-template-columns: 1fr;
-                    margin-top: 16px;
-                    padding: 14px;
-                    border-radius: 16px;
-                }
-
-                .p-inline-panel__actions-row {
-                    flex-wrap: wrap;
-                    justify-content: stretch;
-                }
-
-                .p-inline-panel__actions-row .p-inline-panel__btn {
-                    flex: 1 1 100%;
-                    min-width: 0;
-                }
-
-                .p-inline-overview__search-row {
-                    align-items: stretch;
-                }
-
-                .p-inline-overview__search-clear {
-                    min-width: 42px;
-                    height: auto;
+                .p-inline-overview,
+                .p-inline-auth-modal,
+                .p-inline-icon-modal,
+                .p-inline-toast,
+                .p-inline-hover {
+                    display: none !important;
                 }
             }
 
@@ -3015,7 +2974,7 @@
         root.innerHTML = `
             <button class="p-inline-launcher" type="button">
                 <i class="fas fa-pen-to-square" aria-hidden="true"></i>
-                <span>Редактировать на странице</span>
+                <span>Редактировать сайт</span>
             </button>
             <div class="p-inline-toolbar" hidden>
                 <div class="p-inline-toolbar__top">
@@ -3858,8 +3817,8 @@
             return;
         }
 
-        ui.launcherLabel.textContent = 'Редактировать на странице';
-        ui.launcher.title = 'Включить редактирование прямо на странице';
+        ui.launcherLabel.textContent = 'Редактировать сайт';
+        ui.launcher.title = 'Включить визуальное редактирование сайта';
     }
 
     function renderToolbar() {

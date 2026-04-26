@@ -1,9 +1,13 @@
 (function() {
     const query = new URLSearchParams(window.location.search);
-    const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
+    const INLINE_EDITOR_MIN_WIDTH = 641;
+    const INLINE_EDITOR_MIN_HEIGHT = 560;
+    const supportsInlineEditorViewport = window.innerWidth >= INLINE_EDITOR_MIN_WIDTH
+        && window.innerHeight >= INLINE_EDITOR_MIN_HEIGHT;
+    const wantsInlineEditor = supportsInlineEditorViewport && (Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
         || query.get('edit') === '1'
         || ['localhost', '127.0.0.1'].includes(window.location.hostname)
-        || window.location.port === '4173';
+        || window.location.port === '4173');
 
     if (!wantsInlineEditor || window.POKRASKA_INLINE_SITE_BOOTSTRAP_READY) {
         return;
