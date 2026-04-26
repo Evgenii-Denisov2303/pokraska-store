@@ -344,8 +344,8 @@
                     observer.unobserve(entry.target);
                 });
             }, {
-                threshold: 0.14,
-                rootMargin: '0px 0px -6% 0px'
+                threshold: 0.02,
+                rootMargin: '0px 0px 18% 0px'
             });
 
             scenes.forEach((scene) => {

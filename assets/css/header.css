@@ -2155,3 +2155,65 @@ body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link *
         justify-self: end !important;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1100px) and (orientation: portrait) {
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        grid-template-columns: minmax(286px, 1fr) minmax(198px, auto) minmax(52px, 0.35fr) !important;
+        gap: 0 clamp(8px, 1.6vw, 14px) !important;
+        padding-inline: clamp(10px, 2.1vw, 18px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .logo,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        max-width: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:hover {
+        grid-template-columns: clamp(46px, 7.6vw, 56px) minmax(0, 1fr) !important;
+        gap: clamp(7px, 1.4vw, 10px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
+        width: clamp(46px, 7.6vw, 56px) !important;
+        height: clamp(46px, 7.6vw, 56px) !important;
+        flex-basis: clamp(46px, 7.6vw, 56px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__logo {
+        width: clamp(40px, 6.7vw, 48px) !important;
+        height: clamp(40px, 6.7vw, 48px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text {
+        width: min(228px, 100%) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__eyebrow {
+        font-size: clamp(9px, 1.45vw, 11px) !important;
+        letter-spacing: clamp(0.07em, 0.13vw, 0.11em) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__name {
+        font-size: clamp(18px, 3vw, 22px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        max-width: clamp(198px, 30vw, 220px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .phone-link,
+    body#top .header.header--desktop-hero.internal-legacy-header .phone-link:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .phone-link:hover {
+        gap: clamp(6px, 1.2vw, 8px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .phone-number {
+        font-size: clamp(16px, 2.9vw, 20px) !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .phone-label {
+        font-size: clamp(9px, 1.35vw, 10.5px) !important;
+    }
+}
