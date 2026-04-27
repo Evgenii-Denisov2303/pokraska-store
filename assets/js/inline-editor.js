@@ -12,7 +12,7 @@
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
-    const OVERVIEW_ENABLED = true;
+    const OVERVIEW_ENABLED = false;
     const HOVER_LABEL_ENABLED = true;
     const INLINE_ICON_OPTIONS = [
         { value: '', label: 'Без иконки', preview: '—', group: 'common', keywords: ['пусто', 'убрать', 'без'], featured: true },
@@ -1106,6 +1106,24 @@
                 z-index: 5001;
             }
 
+            .p-inline-panel::after {
+                content: '';
+                position: absolute;
+                top: 128px;
+                right: 12px;
+                bottom: 92px;
+                width: 4px;
+                border-radius: 999px;
+                background: linear-gradient(180deg, rgba(37, 99, 235, 0.5), rgba(37, 99, 235, 0.12));
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.18s ease;
+            }
+
+            .p-inline-panel--has-scroll::after {
+                opacity: 1;
+            }
+
             .p-inline-panel,
             .p-inline-panel *,
             .p-inline-overview,
@@ -1309,13 +1327,13 @@
             }
 
             .p-inline-panel__accordion {
-                display: grid;
+                display: block;
                 gap: 0;
                 border: 1px solid rgba(148, 163, 184, 0.18);
                 border-radius: 20px;
                 background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.98));
                 box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
-                overflow: hidden;
+                overflow: visible;
             }
 
             .p-inline-panel__accordion-summary {
@@ -1379,8 +1397,51 @@
                 overflow-x: hidden;
                 overflow-y: auto;
                 overscroll-behavior: contain;
-                padding-right: 6px;
+                scrollbar-gutter: stable;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(37, 99, 235, 0.42) rgba(226, 232, 240, 0.52);
+                -webkit-overflow-scrolling: touch;
+                touch-action: pan-y;
+                padding-right: 10px;
                 padding-bottom: 10px;
+            }
+
+            .p-inline-panel--has-scroll .p-inline-panel__form {
+                border-right: 1px solid rgba(37, 99, 235, 0.14);
+            }
+
+            .p-inline-panel--scroll-top .p-inline-panel__form {
+                box-shadow: inset 0 24px 22px -26px rgba(37, 99, 235, 0.24);
+            }
+
+            .p-inline-panel--scroll-bottom .p-inline-panel__form {
+                box-shadow: inset 0 -24px 22px -26px rgba(37, 99, 235, 0.28);
+            }
+
+            .p-inline-panel--scroll-top.p-inline-panel--scroll-bottom .p-inline-panel__form {
+                box-shadow:
+                    inset 0 24px 22px -26px rgba(37, 99, 235, 0.24),
+                    inset 0 -24px 22px -26px rgba(37, 99, 235, 0.28);
+            }
+
+            .p-inline-panel__form::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            .p-inline-panel__form::-webkit-scrollbar-track {
+                border-radius: 999px;
+                background: rgba(226, 232, 240, 0.48);
+            }
+
+            .p-inline-panel__form::-webkit-scrollbar-thumb {
+                min-height: 56px;
+                border: 2px solid rgba(248, 250, 252, 0.92);
+                border-radius: 999px;
+                background: linear-gradient(180deg, rgba(37, 99, 235, 0.58), rgba(30, 64, 175, 0.5));
+            }
+
+            .p-inline-panel__form::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, rgba(37, 99, 235, 0.78), rgba(30, 64, 175, 0.68));
             }
 
             .p-inline-panel__form > *,
@@ -2986,7 +3047,6 @@
                 </div>
                 <div class="p-inline-toolbar__actions">
                     <button class="p-inline-toolbar__btn p-inline-toolbar__btn--primary" type="button" data-inline-action="save" hidden>Сохранить</button>
-                    <button class="p-inline-toolbar__btn" type="button" data-inline-action="overview">Обзор</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="session" hidden>Войти</button>
                     <button class="p-inline-toolbar__btn" type="button" data-inline-action="close">Закрыть</button>
                 </div>
@@ -3808,6 +3868,41 @@
         document.documentElement.style.setProperty('--p-inline-dock-offset', `${offset}px`);
     }
 
+    function updatePanelScrollState() {
+        if (!ui.panel || !ui.panelForm) return;
+
+        const maxScroll = Math.max(0, ui.panelForm.scrollHeight - ui.panelForm.clientHeight);
+        const hasScroll = maxScroll > 2;
+        const scrollTop = ui.panelForm.scrollTop || 0;
+
+        ui.panel.classList.toggle('p-inline-panel--has-scroll', hasScroll);
+        ui.panel.classList.toggle('p-inline-panel--scroll-top', hasScroll && scrollTop > 2);
+        ui.panel.classList.toggle('p-inline-panel--scroll-bottom', hasScroll && scrollTop < maxScroll - 2);
+    }
+
+    function schedulePanelScrollStateUpdate() {
+        window.requestAnimationFrame(updatePanelScrollState);
+    }
+
+    function handlePanelWheel(event) {
+        if (!ui.panel || !ui.panelForm || ui.panel.hidden || !ui.panel.contains(event.target)) return;
+
+        const deltaY = Number(event.deltaY || 0);
+        if (!deltaY) return;
+
+        const maxScroll = Math.max(0, ui.panelForm.scrollHeight - ui.panelForm.clientHeight);
+        if (maxScroll <= 2) return;
+
+        const current = ui.panelForm.scrollTop || 0;
+        const next = Math.min(maxScroll, Math.max(0, current + deltaY));
+        if (Math.abs(next - current) < 0.5) return;
+
+        ui.panelForm.scrollTop = next;
+        updatePanelScrollState();
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     function updateLauncherState() {
         if (!ui.launcher || !ui.launcherLabel) return;
 
@@ -3856,8 +3951,8 @@
             : ((dirtyFilesCount || pendingPanel || hasIssue) ? 'Сохранить' : 'Готово');
         const overviewBtn = ui.root.querySelector('[data-inline-action="overview"]');
         if (overviewBtn) {
-            overviewBtn.hidden = !state.enabled;
-            overviewBtn.disabled = !state.enabled;
+            overviewBtn.hidden = true;
+            overviewBtn.disabled = true;
         }
         if (ui.adminBtn) {
             ui.adminBtn.hidden = true;
@@ -3909,7 +4004,7 @@
         }
         if (!activeBinding) {
             ui.toolbarNotice.hidden = false;
-            ui.toolbarNotice.textContent = 'Кликайте по блокам с мягкой рамкой. Если удобнее, откройте «Обзор» и выберите нужный текст или фото из списка.';
+            ui.toolbarNotice.textContent = 'Кликайте по блокам с мягкой рамкой: текст, фото и кнопки открываются прямо на странице.';
         } else {
             ui.toolbarNotice.hidden = true;
             ui.toolbarNotice.textContent = '';
@@ -5585,72 +5680,91 @@
         ui.panelForm.appendChild(accordion.element);
     }
 
+    function getSectionFields(sectionConfigs) {
+        return (Array.isArray(sectionConfigs) ? sectionConfigs : [])
+            .flatMap((sectionConfig) => Array.isArray(sectionConfig?.fields) ? sectionConfig.fields : []);
+    }
+
+    function getFieldPathPrefixCandidates(fieldKey) {
+        const parts = String(fieldKey || '').split('.').map((part) => part.trim()).filter(Boolean);
+        if (parts.length < 2) return [];
+
+        const prefixes = [];
+        for (let index = parts.length - 1; index >= 1; index -= 1) {
+            prefixes.push(parts.slice(0, index).join('.'));
+        }
+        return prefixes;
+    }
+
+    function fieldHasPathPrefix(field, prefix) {
+        const key = String(field?.key || '');
+        return key === prefix || key.startsWith(`${prefix}.`);
+    }
+
+    function isActionGroupTextField(field) {
+        const key = String(field?.key || '').toLowerCase();
+        const label = String(field?.label || '').toLowerCase();
+        const lastKey = key.split('.').pop();
+        return ['label', 'text', 'title', 'name', 'buttontext', 'actionlabel'].includes(lastKey)
+            || /кнопк|действ|подпись/.test(label);
+    }
+
+    function isActionGroupVisualField(field) {
+        return isIconField(field) || isStyleField(field);
+    }
+
+    function isQuickActionGroup(prefix, fields) {
+        const normalizedPrefix = String(prefix || '').toLowerCase();
+        const hasText = fields.some(isActionGroupTextField);
+        const hasLink = fields.some(isLinkLikeField);
+        const hasVisual = fields.some(isActionGroupVisualField);
+        const prefixLooksAction = /^(actions\.\d+|action|cta)$/.test(normalizedPrefix);
+        const labelLooksAction = fields.some((field) =>
+            /кнопк|действ/.test(String(field?.label || '').toLowerCase())
+        );
+
+        return hasText && hasLink && (hasVisual || prefixLooksAction || labelLooksAction);
+    }
+
+    function getFocusedFields(sectionConfigs, focusFieldKey) {
+        const fields = getSectionFields(sectionConfigs);
+        const focusField = fields.find((field) => field?.key === focusFieldKey);
+        if (!focusField) return [];
+
+        const actionPrefix = getFieldPathPrefixCandidates(focusFieldKey).find((prefix) => {
+            const groupFields = fields.filter((field) => fieldHasPathPrefix(field, prefix));
+            return groupFields.length > 1 && isQuickActionGroup(prefix, groupFields);
+        });
+
+        if (!actionPrefix) {
+            return [focusField];
+        }
+
+        const selectedFields = fields.filter((field) => fieldHasPathPrefix(field, actionPrefix));
+        return Array.from(new Set(selectedFields));
+    }
+
     function appendFocusedFieldSections(binding, value, sectionConfigs, focusFieldKey = '') {
         if (!Array.isArray(sectionConfigs) || !sectionConfigs.length || !focusFieldKey) {
             appendFieldSections(binding, value, sectionConfigs);
             return;
         }
 
-        const primarySections = [];
-        const secondarySections = [];
-
-        sectionConfigs.forEach((sectionConfig) => {
-            const fields = Array.isArray(sectionConfig.fields) ? sectionConfig.fields : [];
-            const focusField = fields.find((field) => field.key === focusFieldKey);
-            if (!focusField) {
-                secondarySections.push(sectionConfig);
-                return;
-            }
-
-            const compactActionGroup = fields.length <= 3
-                && (fields.some(isLinkLikeField) || fields.some(isIconField));
-            const primaryFields = compactActionGroup
-                ? fields
-                : [focusField];
-            const secondaryFields = fields.filter((field) => !primaryFields.includes(field));
-
-            primarySections.push({
-                title: 'Быстрая правка',
-                meta: compactActionGroup
-                    ? 'Открыта нужная часть блока. Соседние поля для этого действия тоже показаны сразу.'
-                    : `Открыта точечная правка поля «${focusField.label || focusField.key}».`,
-                fields: primaryFields,
-                importance: 'primary'
-            });
-
-            if (secondaryFields.length) {
-                secondarySections.push({
-                    ...sectionConfig,
-                    fields: secondaryFields,
-                    importance: 'secondary'
-                });
-            }
-        });
-
-        if (!primarySections.length) {
+        const focusedFields = getFocusedFields(sectionConfigs, focusFieldKey);
+        const focusField = focusedFields[0];
+        if (!focusField) {
             appendFieldSections(binding, value, sectionConfigs);
             return;
         }
 
-        primarySections.forEach((section) => appendFieldSectionContent(ui.panelForm, section, value, binding));
-
-        if (!secondarySections.length) {
-            return;
-        }
-
-        const accordionConfig = getSecondaryAccordionConfig(
-            binding,
-            secondarySections,
-            'Остальное в блоке',
-            'Раскройте, если нужно отредактировать соседние поля этого же блока.'
-        );
-        const accordion = createPanelAccordion(
-            accordionConfig.title,
-            accordionConfig.meta,
-            { open: accordionConfig.open }
-        );
-        secondarySections.forEach((section) => appendFieldSectionContent(accordion.body, section, value, binding));
-        ui.panelForm.appendChild(accordion.element);
+        appendFieldSectionContent(ui.panelForm, {
+            title: 'Быстрая правка',
+            meta: focusedFields.length > 1
+                ? 'Открыта конкретная кнопка: текст, ссылка, значок и вид.'
+                : `Открыта точечная правка поля «${focusField.label || focusField.key}».`,
+            fields: focusedFields,
+            importance: 'primary'
+        }, value, binding);
     }
 
     function getFieldGroupsForBinding(binding, editorFields) {
@@ -6992,11 +7106,79 @@
         return fields.find((field) => isPrimaryTextField(field))?.key || '';
     }
 
-    function resolveInlineInteractionContext(eventTarget) {
+    function isStackedBindingTargetVisible(element) {
+        if (!(element instanceof HTMLElement)) return false;
+        const rect = element.getBoundingClientRect();
+        if (rect.width <= 1 || rect.height <= 1) return false;
+        const style = window.getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+    }
+
+    function findStackedBindingTarget(clientX, clientY) {
+        if (!Number.isFinite(clientX) || !Number.isFinite(clientY) || typeof document.elementsFromPoint !== 'function') {
+            return null;
+        }
+
+        const candidates = document.elementsFromPoint(clientX, clientY)
+            .map((element) => {
+                if (!(element instanceof Element)) return null;
+                return element.matches?.('[data-inline-edit-id]')
+                    ? element
+                    : element.closest?.('[data-inline-edit-id]');
+            })
+            .filter((element) => element instanceof HTMLElement && state.bindingMap.has(element.dataset.inlineEditId || ''));
+
+        if (!candidates.length) return null;
+
+        return candidates.find((element) => {
+            const binding = state.bindingMap.get(element.dataset.inlineEditId || '');
+            return binding?.type === 'image' && isStackedBindingTargetVisible(element);
+        }) || candidates.find((element) => {
+            const binding = state.bindingMap.get(element.dataset.inlineEditId || '');
+            return binding?.type === 'image';
+        }) || candidates[0];
+    }
+
+    function isTextIntentTarget(sourceElement, bindingTarget) {
+        if (!(sourceElement instanceof Element) || !(bindingTarget instanceof HTMLElement)) {
+            return false;
+        }
+
+        const textTarget = sourceElement.closest?.(
+            'h1, h2, h3, h4, h5, h6, p, span, strong, small, em, b, i, li, dt, dd, label, figcaption, blockquote, button, a'
+        );
+        if (!(textTarget instanceof HTMLElement) || !bindingTarget.contains(textTarget)) {
+            return false;
+        }
+
+        return normalizeInlineTextSpaces(textTarget.textContent || '').length > 0;
+    }
+
+    function resolveInlineInteractionContext(eventTarget, coordinates = null) {
         const sourceElement = eventTarget instanceof Element ? eventTarget : eventTarget?.parentElement;
         if (!(sourceElement instanceof Element)) return null;
 
-        const bindingTarget = sourceElement.closest?.('[data-inline-edit-id]');
+        const directTarget = sourceElement.closest?.('[data-inline-edit-id]');
+        const stackedTarget = coordinates
+            ? findStackedBindingTarget(Number(coordinates.clientX), Number(coordinates.clientY))
+            : null;
+        const directBinding = directTarget instanceof HTMLElement
+            ? state.bindingMap.get(directTarget.dataset.inlineEditId || '')
+            : null;
+        const stackedBinding = stackedTarget instanceof HTMLElement
+            ? state.bindingMap.get(stackedTarget.dataset.inlineEditId || '')
+            : null;
+        const shouldKeepDirectTextTarget = Boolean(
+            directBinding
+            && directBinding.type !== 'image'
+            && directTarget instanceof HTMLElement
+            && isTextIntentTarget(sourceElement, directTarget)
+        );
+        const bindingTarget = directBinding?.type === 'image'
+            ? directTarget
+            : (shouldKeepDirectTextTarget
+                ? directTarget
+                : (stackedBinding?.type === 'image' ? stackedTarget : (directTarget instanceof HTMLElement ? directTarget : stackedTarget)));
         if (!(bindingTarget instanceof HTMLElement)) return null;
 
         const binding = state.bindingMap.get(bindingTarget.dataset.inlineEditId || '');
@@ -7738,6 +7920,7 @@
         }
 
         updatePanelMeta(binding);
+        schedulePanelScrollStateUpdate();
     }
 
     function revealBindingElement(element) {
@@ -7844,6 +8027,7 @@
             ui.panel.hidden = false;
             rememberEditingContext(binding);
             renderToolbar();
+            schedulePanelScrollStateUpdate();
         } catch (error) {
             showToast(error.message || 'Не удалось открыть редактор');
         }
@@ -8603,7 +8787,7 @@
         if (!state.enabled) return;
         if (ui.panel?.contains(event.target) || ui.root?.contains(event.target) || ui.overview?.contains(event.target) || ui.iconModal?.contains(event.target)) return;
 
-        const context = resolveInlineInteractionContext(event.target);
+        const context = resolveInlineInteractionContext(event.target, event);
         if (!context) {
             if (state.overviewOpen) {
                 toggleOverview(false);
@@ -8656,7 +8840,7 @@
             return;
         }
 
-        const context = resolveInlineInteractionContext(event.target);
+        const context = resolveInlineInteractionContext(event.target, event);
         if (!context) {
             clearHoverMarks();
             return;
@@ -8861,6 +9045,9 @@
             saveDirtyFiles();
         });
         ui.panel.addEventListener('click', handlePanelClick);
+        ui.panel.addEventListener('wheel', handlePanelWheel, { passive: false });
+        ui.panelForm.addEventListener('scroll', updatePanelScrollState);
+        ui.panelForm.addEventListener('toggle', schedulePanelScrollStateUpdate, true);
         ui.panelForm.addEventListener('input', () => {
             const binding = state.bindingMap.get(state.activeBindingId);
             if (binding) {
@@ -8868,6 +9055,7 @@
                 updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
+                schedulePanelScrollStateUpdate();
             }
         });
         ui.panelForm.addEventListener('change', () => {
@@ -8877,6 +9065,7 @@
                 updatePanelActionPreview();
                 updatePanelMeta(binding);
                 renderToolbar();
+                schedulePanelScrollStateUpdate();
             }
         });
         ui.iconModal?.addEventListener('click', (event) => {
@@ -8969,6 +9158,7 @@
                 hideHoverLabel();
             }
             updateDockOffset();
+            schedulePanelScrollStateUpdate();
         });
         window.addEventListener('beforeunload', handleBeforeUnload);
         refreshEnvironment();

@@ -258,6 +258,27 @@
                     0 0 0 10px rgba(var(--p-inline-accent-rgb), 0.15);
             }
 
+            [data-inline-action-style="primary"] {
+                border-color: rgba(var(--p-inline-accent-rgb), 0.28) !important;
+                background: linear-gradient(135deg, var(--p-inline-accent) 0%, var(--p-inline-accent-strong) 100%) !important;
+                color: #fff !important;
+                box-shadow: 0 16px 30px rgba(var(--p-inline-accent-rgb), 0.2) !important;
+            }
+
+            [data-inline-action-style="secondary"] {
+                border-color: rgba(var(--p-inline-accent-rgb), 0.16) !important;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 240, 232, 0.9)) !important;
+                color: var(--p-inline-text) !important;
+                box-shadow: 0 12px 24px rgba(27, 34, 40, 0.08) !important;
+            }
+
+            [data-inline-action-style="outline"] {
+                border-color: rgba(var(--p-inline-accent-rgb), 0.34) !important;
+                background: rgba(255, 255, 255, 0.54) !important;
+                color: var(--p-inline-accent-strong) !important;
+                box-shadow: inset 0 0 0 1px rgba(var(--p-inline-accent-rgb), 0.08) !important;
+            }
+
             .p-inline-launcher {
                 border: 1px solid rgba(255, 255, 255, 0.72);
                 background:
@@ -669,7 +690,6 @@
     function isEditableImage(element) {
         if (!(element instanceof HTMLImageElement)) return false;
         if (isIgnoredElement(element) || !isElementVisible(element)) return false;
-        if (element.closest('picture')) return false;
         if (element.closest('.gallery-item, .catalog-panel, .catalog-palette-card')) return false;
         if (element.closest('.automation-product-card, .catalog-sidebar, .catalog-hero, .catalog-panel__header')) return false;
 
@@ -765,6 +785,112 @@
         }
 
         element.textContent = normalizeText(text);
+    }
+
+    function getActionIconClass(element) {
+        if (!(element instanceof HTMLElement)) return '';
+        const icon = element.querySelector('i[class]');
+        return icon instanceof HTMLElement ? normalizeText(icon.getAttribute('class') || '') : '';
+    }
+
+    function applyActionIcon(element, iconClass) {
+        if (!(element instanceof HTMLElement)) return;
+
+        const normalizedIcon = normalizeText(iconClass || '');
+        let icon = element.querySelector('i[data-inline-action-icon], i[class]');
+
+        if (!normalizedIcon) {
+            if (icon instanceof HTMLElement) icon.remove();
+            element.removeAttribute('data-inline-action-icon');
+            return;
+        }
+
+        if (!(icon instanceof HTMLElement)) {
+            icon = document.createElement('i');
+            element.insertBefore(icon, element.firstChild);
+        }
+
+        icon.className = normalizedIcon;
+        icon.dataset.inlineActionIcon = '1';
+        icon.setAttribute('aria-hidden', 'true');
+        element.dataset.inlineActionIcon = normalizedIcon;
+    }
+
+    function inferActionStyle(element) {
+        if (!(element instanceof HTMLElement)) return 'secondary';
+        const explicit = normalizeText(element.dataset.inlineActionStyle || '');
+        if (explicit) return explicit;
+
+        const classText = normalizeText(element.className || '').toLowerCase();
+        if (/primary|главн|accent/.test(classText)) return 'primary';
+        if (/outline|border|контур/.test(classText)) return 'outline';
+        if (/ghost|secondary|light|quiet|спокой/.test(classText)) return 'secondary';
+        return 'secondary';
+    }
+
+    function applyActionStyle(element, style) {
+        if (!(element instanceof HTMLElement)) return;
+        const normalizedStyle = ['primary', 'secondary', 'outline'].includes(normalizeText(style))
+            ? normalizeText(style)
+            : 'secondary';
+
+        element.dataset.inlineActionStyle = normalizedStyle;
+        element.classList.remove(
+            'p-inline-action-style--primary',
+            'p-inline-action-style--secondary',
+            'p-inline-action-style--outline'
+        );
+        element.classList.add(`p-inline-action-style--${normalizedStyle}`);
+
+        if (element.classList.contains('apple-button')) {
+            element.classList.toggle('apple-button--primary', normalizedStyle === 'primary');
+            element.classList.toggle('apple-button--ghost', normalizedStyle !== 'primary');
+        }
+
+        if (element.classList.contains('panel-scene__action')) {
+            element.classList.toggle('panel-scene__action--primary', normalizedStyle === 'primary');
+            element.classList.toggle('panel-scene__action--ghost', normalizedStyle !== 'primary');
+        }
+
+        if (element.classList.contains('order-cta__button')) {
+            element.classList.toggle('order-cta__button--primary', normalizedStyle === 'primary');
+            element.classList.toggle('order-cta__button--secondary', normalizedStyle !== 'primary');
+        }
+
+        if (element.classList.contains('btn')) {
+            element.classList.toggle('btn--primary', normalizedStyle === 'primary');
+        }
+    }
+
+    function readActionValue(element) {
+        return {
+            label: normalizeText(element?.textContent || ''),
+            href: element instanceof HTMLAnchorElement ? normalizeText(element.getAttribute('href')) : '',
+            icon: getActionIconClass(element),
+            style: inferActionStyle(element)
+        };
+    }
+
+    function appendActionFields(fields, prefix, labelPrefix) {
+        fields.push({ key: `${prefix}.label`, label: `${labelPrefix} — текст` });
+        fields.push({ key: `${prefix}.href`, label: `${labelPrefix} — ссылка` });
+        fields.push({ key: `${prefix}.icon`, label: `${labelPrefix} — иконка` });
+        fields.push({
+            key: `${prefix}.style`,
+            label: `${labelPrefix} — стиль кнопки`,
+            hint: 'primary/secondary/outline'
+        });
+    }
+
+    function applyActionValue(element, value) {
+        if (!(element instanceof HTMLElement)) return;
+        const nextValue = value && typeof value === 'object' ? value : {};
+        applyActionText(element, nextValue.label || '');
+        applyActionIcon(element, nextValue.icon || '');
+        applyActionStyle(element, nextValue.style || inferActionStyle(element));
+        if (element instanceof HTMLAnchorElement && nextValue.href) {
+            element.setAttribute('href', normalizeText(nextValue.href));
+        }
     }
 
     function buildActionLabel(element, index) {
@@ -1266,7 +1392,7 @@
 
         return thumbButtons.map((button, imageIndex) => ({
             id: `inline-media-${pageMeta.key}-${panelKey}-${imageIndex + 1}`,
-            element: button,
+            element: imageIndex === 0 ? [mainImage, button] : button,
             type: 'image',
             path: `${collectionPath}.${imageIndex}`,
             collectionPath,
@@ -1355,16 +1481,15 @@
                 { key: 'items', label: 'Пункты', type: 'list', hint: 'Каждый пункт с новой строки.' },
                 { key: 'action.label', label: 'Кнопка — текст' },
                 { key: 'action.href', label: 'Кнопка — ссылка' },
+                { key: 'action.icon', label: 'Кнопка — иконка' },
+                { key: 'action.style', label: 'Кнопка — стиль кнопки', hint: 'primary/secondary/outline' },
                 { key: 'note', label: 'Нижняя заметка', type: 'textarea' }
             ],
             defaultValue: {
                 title: normalizeText(titleNode.textContent),
                 copy: normalizeText(copyNode.textContent),
                 items: Array.from(listNode.querySelectorAll('li')).map((item) => normalizeText(item.textContent)),
-                action: {
-                    label: normalizeText(actionNode.textContent),
-                    href: normalizeText(actionNode.getAttribute('href'))
-                },
+                action: readActionValue(actionNode),
                 note: normalizeText(noteNode?.textContent || '')
             },
             render: function(value) {
@@ -1372,8 +1497,7 @@
                 applyTextToNode(titleNode, next.title || '');
                 applyTextToNode(copyNode, next.copy || '');
                 rebuildListItems(listNode, next.items || []);
-                applyActionText(actionNode, next.action?.label || '');
-                if (next.action?.href) actionNode.setAttribute('href', normalizeText(next.action.href));
+                applyActionValue(actionNode, next.action || {});
                 if (noteNode) applyTextToNode(noteNode, next.note || '');
             }
         };
@@ -1413,22 +1537,20 @@
                 { key: 'titleLines.2', label: 'Заголовок — строка 3' },
                 { key: 'subtitle', label: 'Подстрока под заголовком' },
                 { key: 'lead', label: 'Основное описание', type: 'textarea' },
-                { key: 'features', label: 'Преимущества', type: 'list', hint: 'Каждый пункт с новой строки.' },
-                { key: 'actions.0.label', label: 'Кнопка 1 — текст' },
-                { key: 'actions.0.href', label: 'Кнопка 1 — ссылка' },
-                { key: 'actions.1.label', label: 'Кнопка 2 — текст' },
-                { key: 'actions.1.href', label: 'Кнопка 2 — ссылка' }
-            ],
+                { key: 'features', label: 'Преимущества', type: 'list', hint: 'Каждый пункт с новой строки.' }
+            ].concat(actionNodes.slice(0, 2).flatMap((_, actionIndex) => [
+                { key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` },
+                { key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` },
+                { key: `actions.${actionIndex}.icon`, label: `Кнопка ${actionIndex + 1} — иконка` },
+                { key: `actions.${actionIndex}.style`, label: `Кнопка ${actionIndex + 1} — стиль кнопки`, hint: 'primary/secondary/outline' }
+            ])),
             defaultValue: {
                 eyebrow: normalizeText(eyebrowNode.textContent),
                 titleLines: titleNodes.map((node) => normalizeText(node.textContent)),
                 subtitle: normalizeText(subtitleNode.textContent),
                 lead: normalizeText(leadNode.textContent),
                 features: featureNodes.map((node) => normalizeText(node.textContent)),
-                actions: actionNodes.slice(0, 2).map((node) => ({
-                    label: normalizeText(node.textContent),
-                    href: normalizeText(node.getAttribute('href'))
-                }))
+                actions: actionNodes.slice(0, 2).map(readActionValue)
             },
             render: function(value) {
                 const next = value && typeof value === 'object' ? value : {};
@@ -1438,9 +1560,7 @@
                 applyTextToNode(leadNode, next.lead || '');
                 applyIconTextCollection(featureNodes, next.features || []);
                 actionNodes.slice(0, 2).forEach((node, index) => {
-                    const actionValue = next.actions?.[index] || {};
-                    applyActionText(node, actionValue.label || '');
-                    if (actionValue.href) node.setAttribute('href', normalizeText(actionValue.href));
+                    applyActionValue(node, next.actions?.[index] || {});
                 });
             }
         };
@@ -1493,8 +1613,7 @@
         }
 
         actionNodes.slice(0, 2).forEach((_, actionIndex) => {
-            fields.push({ key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` });
-            fields.push({ key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` });
+            appendActionFields(fields, `actions.${actionIndex}`, `Кнопка ${actionIndex + 1}`);
         });
 
         return {
@@ -1525,10 +1644,7 @@
                     title: normalizeText(trustStrongNode?.textContent || ''),
                     copy: trustCopyText
                 },
-                actions: actionNodes.slice(0, 2).map((node) => ({
-                    label: normalizeText(node.textContent),
-                    href: normalizeText(node.getAttribute('href'))
-                }))
+                actions: actionNodes.slice(0, 2).map(readActionValue)
             },
             render: function(value) {
                 const next = value && typeof value === 'object' ? value : {};
@@ -1565,9 +1681,7 @@
                     }
                 }
                 actionNodes.slice(0, 2).forEach((node, actionIndex) => {
-                    const action = next.actions?.[actionIndex] || {};
-                    applyActionText(node, action.label || '');
-                    if (action.href) node.setAttribute('href', normalizeText(action.href));
+                    applyActionValue(node, next.actions?.[actionIndex] || {});
                 });
             }
         };
@@ -1792,21 +1906,50 @@
         const requestSection = document.querySelector('.home-tail__request');
         if (!(requestSection instanceof HTMLElement) || requestSection.dataset.inlineEditId) return null;
 
-        const kickerNode = requestSection.querySelector('.home-tail__request-kicker');
-        const titleNode = requestSection.querySelector('.home-tail__request-intro h3');
-        const copyNode = requestSection.querySelector('.home-tail__request-intro p');
-        const groupLabelNode = requestSection.querySelector('.home-tail__group-label');
+        const requestCopy = requestSection.querySelector('.home-tail__request-copy');
+        const requestIntro = requestSection.querySelector('.home-tail__request-intro') || requestCopy;
+        const sourceItemsNode = requestSection.querySelector('.home-tail__request-source-items');
+        const contactNode = requestSection.querySelector('.home-tail__contact');
+        const kickerNode = requestSection.querySelector('.home-tail__request-kicker, .route-scene__eyebrow');
+        const titleNode = requestIntro?.querySelector('h3') || requestSection.querySelector('.home-tail__request-copy h3');
+        const copyNode = requestIntro?.querySelector('p') || Array.from(requestCopy?.children || [])
+            .find((node) => node instanceof HTMLElement && node.tagName === 'P');
+        const sourceLabelNode = requestSection.querySelector('.home-tail__group-label, .home-tail__request-source-label');
+        const sourceItemNodes = Array.from(requestSection.querySelectorAll('.home-tail__request-source-items span'));
         const advantageNodes = Array.from(requestSection.querySelectorAll('.home-tail__advantages span'));
         const noteNode = requestSection.querySelector('.home-tail__request-note');
+        const contactEyebrowNode = contactNode?.querySelector('.home-tail__contact-eyebrow');
+        const contactCopyNode = Array.from(contactNode?.children || [])
+            .find((node) => node instanceof HTMLElement && node.tagName === 'P');
         const phoneNodes = Array.from(requestSection.querySelectorAll('.home-tail__contact-link'));
         const footerNode = requestSection.querySelector('.home-tail__contact-footer');
         const actionNodes = Array.from(requestSection.querySelectorAll('.home-tail__contact-actions a'));
         const formTitleNode = requestSection.querySelector('.home-tail__form-card h4');
         const formCopyNode = requestSection.querySelector('.home-tail__form-card > p');
 
-        if (!(kickerNode instanceof HTMLElement) || !(titleNode instanceof HTMLElement) || !(copyNode instanceof HTMLElement) || !(groupLabelNode instanceof HTMLElement) || !(noteNode instanceof HTMLElement) || !(footerNode instanceof HTMLElement) || !(formTitleNode instanceof HTMLElement) || !(formCopyNode instanceof HTMLElement)) {
+        if (!(kickerNode instanceof HTMLElement) || !(titleNode instanceof HTMLElement) || !(copyNode instanceof HTMLElement) || !(sourceLabelNode instanceof HTMLElement) || !(formTitleNode instanceof HTMLElement)) {
             return null;
         }
+
+        const readTextLines = (node) => {
+            if (!(node instanceof HTMLElement)) return [];
+            const spans = Array.from(node.querySelectorAll('span'))
+                .map((item) => normalizeText(item.textContent))
+                .filter(Boolean);
+            return spans.length ? spans : [normalizeText(node.textContent)].filter(Boolean);
+        };
+
+        const applyIconAwareText = (node, text) => {
+            if (!(node instanceof HTMLElement)) return;
+            if (node.querySelector('i')) {
+                replaceIconLineText(node, 'i', text || '');
+                return;
+            }
+            applyTextToNode(node, text || '');
+        };
+
+        const getPhoneLabelNode = (node) => node?.querySelector?.('strong, .hero-header-main, .phone-number, span');
+        const getPhoneNoteNode = (node) => node?.querySelector?.('small, .hero-header-sub, .phone-label');
 
         return {
             id: `inline-module-${pageMeta.key}-request-section`,
@@ -1822,9 +1965,12 @@
                 { key: 'kicker', label: 'Подпись сверху' },
                 { key: 'titleLines', label: 'Заголовок', type: 'list', hint: 'Каждая строка с новой строки.' },
                 { key: 'copyLines', label: 'Описание', type: 'list', hint: 'Каждая строка с новой строки.' },
-                { key: 'groupLabel', label: 'Подпись группы' },
+                { key: 'sourceLabel', label: 'Подпись группы' },
                 { key: 'advantages', label: 'Преимущества', type: 'list', hint: 'Каждый пункт с новой строки.' },
+                { key: 'sourceItems', label: 'Что подготовить для расчёта', type: 'list', hint: 'Каждый пункт с новой строки.' },
                 { key: 'note', label: 'Заметка под преимуществами', type: 'textarea' },
+                { key: 'contactEyebrow', label: 'Подпись контактов' },
+                { key: 'contactCopy', label: 'Текст перед быстрым контактом', type: 'textarea' },
                 { key: 'phones.0.label', label: 'Телефон 1 — номер' },
                 { key: 'phones.0.note', label: 'Телефон 1 — подпись' },
                 { key: 'phones.0.href', label: 'Телефон 1 — ссылка' },
@@ -1832,57 +1978,76 @@
                 { key: 'phones.1.note', label: 'Телефон 2 — подпись' },
                 { key: 'phones.1.href', label: 'Телефон 2 — ссылка' },
                 { key: 'footerFacts', label: 'Факты под телефонами', type: 'list', hint: 'Каждый факт с новой строки.' },
-                { key: 'actions.0.label', label: 'Кнопка 1 — текст' },
-                { key: 'actions.0.href', label: 'Кнопка 1 — ссылка' },
-                { key: 'actions.1.label', label: 'Кнопка 2 — текст' },
-                { key: 'actions.1.href', label: 'Кнопка 2 — ссылка' },
+                ...actionNodes.slice(0, 2).flatMap((_, actionIndex) => [
+                    { key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` },
+                    { key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` },
+                    { key: `actions.${actionIndex}.icon`, label: `Кнопка ${actionIndex + 1} — иконка` },
+                    { key: `actions.${actionIndex}.style`, label: `Кнопка ${actionIndex + 1} — стиль кнопки`, hint: 'primary/secondary/outline' }
+                ]),
                 { key: 'formTitleLines', label: 'Заголовок формы', type: 'list', hint: 'Каждая строка с новой строки.' },
                 { key: 'formCopy', label: 'Описание формы', type: 'textarea' }
             ],
             defaultValue: {
                 kicker: normalizeText(kickerNode.textContent),
-                titleLines: Array.from(titleNode.querySelectorAll('span')).map((node) => normalizeText(node.textContent)),
-                copyLines: Array.from(copyNode.querySelectorAll('span')).map((node) => normalizeText(node.textContent)),
-                groupLabel: normalizeText(groupLabelNode.textContent),
+                titleLines: readTextLines(titleNode),
+                copyLines: readTextLines(copyNode),
+                sourceLabel: normalizeText(sourceLabelNode.textContent),
                 advantages: advantageNodes.map((node) => normalizeText(node.textContent)),
-                note: normalizeText(noteNode.textContent),
+                sourceItems: sourceItemNodes.map((node) => normalizeText(node.textContent)),
+                note: normalizeText(noteNode?.textContent || ''),
+                contactEyebrow: normalizeText(contactEyebrowNode?.textContent || ''),
+                contactCopy: normalizeText(contactCopyNode?.textContent || ''),
                 phones: phoneNodes.slice(0, 2).map((node) => ({
-                    label: normalizeText(node.querySelector('strong')?.textContent || ''),
-                    note: normalizeText(node.querySelector('small')?.textContent || ''),
+                    label: normalizeText(getPhoneLabelNode(node)?.textContent || node.textContent || ''),
+                    note: normalizeText(getPhoneNoteNode(node)?.textContent || ''),
                     href: normalizeText(node.getAttribute('href'))
                 })),
-                footerFacts: Array.from(footerNode.querySelectorAll('span')).map((node) => normalizeText(node.textContent)),
-                actions: actionNodes.slice(0, 2).map((node) => ({
-                    label: normalizeText(node.textContent),
-                    href: normalizeText(node.getAttribute('href'))
-                })),
-                formTitleLines: Array.from(formTitleNode.querySelectorAll('span')).map((node) => normalizeText(node.textContent)),
-                formCopy: normalizeText(formCopyNode.textContent)
+                footerFacts: Array.from(footerNode?.querySelectorAll('span') || []).map((node) => normalizeText(node.textContent)),
+                actions: actionNodes.slice(0, 2).map(readActionValue),
+                formTitleLines: readTextLines(formTitleNode),
+                formCopy: normalizeText(formCopyNode?.textContent || '')
             },
             render: function(value) {
                 const next = value && typeof value === 'object' ? value : {};
-                applyTextToNode(kickerNode, next.kicker || '');
+                applyIconAwareText(kickerNode, next.kicker || '');
                 rebuildSpanItems(titleNode, next.titleLines || []);
                 rebuildSpanItems(copyNode, next.copyLines || []);
-                applyTextToNode(groupLabelNode, next.groupLabel || '');
+                applyTextToNode(sourceLabelNode, next.sourceLabel || '');
                 applyIconTextCollection(advantageNodes, next.advantages || []);
-                replaceIconLineText(noteNode, 'i', next.note || '');
+                if (sourceItemsNode instanceof HTMLElement) {
+                    rebuildSpanItems(sourceItemsNode, next.sourceItems || []);
+                }
+                if (noteNode instanceof HTMLElement) {
+                    applyIconAwareText(noteNode, next.note || '');
+                }
+                if (contactEyebrowNode instanceof HTMLElement) {
+                    applyTextToNode(contactEyebrowNode, next.contactEyebrow || '');
+                }
+                if (contactCopyNode instanceof HTMLElement) {
+                    applyTextToNode(contactCopyNode, next.contactCopy || '');
+                }
                 phoneNodes.slice(0, 2).forEach((node, phoneIndex) => {
                     const phone = next.phones?.[phoneIndex] || {};
-                    const strongNode = node.querySelector('strong');
-                    const smallNode = node.querySelector('small');
-                    if (strongNode) applyTextToNode(strongNode, phone.label || '');
-                    if (smallNode) applyTextToNode(smallNode, phone.note || '');
+                    const labelNode = getPhoneLabelNode(node);
+                    const noteNode = getPhoneNoteNode(node);
+                    if (labelNode) {
+                        applyTextToNode(labelNode, phone.label || '');
+                    } else {
+                        applyLinkText(node, phone.label || '');
+                    }
+                    if (noteNode) applyTextToNode(noteNode, phone.note || '');
                     if (phone.href) node.setAttribute('href', normalizeText(phone.href));
                 });
-                rebuildSpanItems(footerNode, next.footerFacts || []);
+                if (footerNode instanceof HTMLElement) {
+                    rebuildSpanItems(footerNode, next.footerFacts || []);
+                }
                 actionNodes.slice(0, 2).forEach((node, actionIndex) => {
-                    const action = next.actions?.[actionIndex] || {};
-                    applyActionText(node, action.label || '');
-                    if (action.href) node.setAttribute('href', normalizeText(action.href));
+                    applyActionValue(node, next.actions?.[actionIndex] || {});
                 });
                 rebuildSpanItems(formTitleNode, next.formTitleLines || []);
-                applyTextToNode(formCopyNode, next.formCopy || '');
+                if (formCopyNode instanceof HTMLElement) {
+                    applyTextToNode(formCopyNode, next.formCopy || '');
+                }
             }
         };
     }
@@ -2141,8 +2306,7 @@
         });
 
         actionNodes.slice(0, 2).forEach((_, actionIndex) => {
-            fields.push({ key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` });
-            fields.push({ key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` });
+            appendActionFields(fields, `actions.${actionIndex}`, `Кнопка ${actionIndex + 1}`);
         });
 
         return {
@@ -2167,10 +2331,7 @@
                     title: normalizeText(section.querySelector('.automation-product-section__title')?.textContent || ''),
                     items: Array.from(section.querySelectorAll('.automation-product-specs li')).map((item) => normalizeText(item.textContent))
                 })),
-                actions: actionNodes.slice(0, 2).map((action) => ({
-                    label: normalizeText(action.textContent),
-                    href: normalizeText(action.getAttribute('href'))
-                }))
+                actions: actionNodes.slice(0, 2).map(readActionValue)
             },
             render: function(value) {
                 const next = value && typeof value === 'object' ? value : {};
@@ -2188,9 +2349,7 @@
                     if (sectionList) rebuildListItems(sectionList, sectionValue.items || []);
                 });
                 actionNodes.slice(0, 2).forEach((action, actionIndex) => {
-                    const actionValue = next.actions?.[actionIndex] || {};
-                    applyActionText(action, actionValue.label || '');
-                    if (actionValue.href) action.setAttribute('href', normalizeText(actionValue.href));
+                    applyActionValue(action, next.actions?.[actionIndex] || {});
                 });
             }
         };
@@ -2326,6 +2485,16 @@
 
         if (src) {
             image.setAttribute('src', src);
+            const picture = image.closest('picture');
+            if (picture instanceof HTMLPictureElement) {
+                picture.querySelectorAll('source').forEach((source) => {
+                    source.setAttribute('srcset', src);
+                });
+            }
+            const imageLink = image.closest('a[href]');
+            if (imageLink instanceof HTMLAnchorElement) {
+                imageLink.setAttribute('href', src);
+            }
         }
         image.removeAttribute('srcset');
         image.setAttribute('alt', alt);
@@ -2392,18 +2561,13 @@
                 overviewPriority: getActionOverviewPriority(element),
                 fields: [
                     { key: 'label', label: 'Текст кнопки' },
-                    { key: 'href', label: 'Ссылка', hint: 'Можно оставить пустым для кнопки без ссылки.' }
+                    { key: 'href', label: 'Ссылка', hint: 'Можно оставить пустым для кнопки без ссылки.' },
+                    { key: 'icon', label: 'Иконка кнопки' },
+                    { key: 'style', label: 'Стиль кнопки', hint: 'primary/secondary/outline' }
                 ],
-                defaultValue: {
-                    label: normalizeText(element.textContent || ''),
-                    href: element instanceof HTMLAnchorElement ? String(element.getAttribute('href') || '').trim() : ''
-                },
+                defaultValue: readActionValue(element),
                 render: function(value) {
-                    const nextValue = value && typeof value === 'object' ? value : {};
-                    applyActionText(element, nextValue.label || '');
-                    if (element instanceof HTMLAnchorElement && nextValue.href) {
-                        element.setAttribute('href', String(nextValue.href).trim());
-                    }
+                    applyActionValue(element, value);
                 }
             }));
     }
@@ -2498,7 +2662,7 @@
                 label: 'Фотоблок "Порошковая покраска"',
                 hint: 'Слайды второй большой сцены на главной. Можно менять кадры и их порядок.',
                 overviewPriority: 3,
-                images: Array.from(document.querySelectorAll('.panel-scene__card--powder .panel-scene__image'))
+                images: Array.from(document.querySelectorAll('.panel-scene__card--powder .panel-scene__image, .panel-scene__card--light .panel-scene__image'))
             }));
 
             bindings.push(...createFixedImageCollectionBindings(pageMeta, {
@@ -2532,6 +2696,14 @@
                 if (productBinding) bindings.push(productBinding);
                 bindings.push(...createAutomationGalleryBindings(pageMeta, card, index));
             });
+
+            bindings.push(...createFixedImageCollectionBindings(pageMeta, {
+                collectionKey: 'automationGuide',
+                label: 'Фотоблок "Инструкция по автоматике"',
+                hint: 'Фото в нижнем пояснительном блоке автоматики. Можно заменить кадры и подписи к изображениям.',
+                overviewPriority: 5,
+                images: Array.from(document.querySelectorAll('.automation-guide__gallery img'))
+            }));
         }
 
         if (pageMeta.key === 'gallery') {
@@ -2567,8 +2739,12 @@
                         { key: 'copy', label: 'Описание', type: 'textarea' },
                         { key: 'primary.label', label: 'Главная кнопка' },
                         { key: 'primary.href', label: 'Ссылка главной кнопки' },
+                        { key: 'primary.icon', label: 'Главная кнопка — иконка' },
+                        { key: 'primary.style', label: 'Главная кнопка — стиль кнопки', hint: 'primary/secondary/outline' },
                         { key: 'secondary.label', label: 'Вторая кнопка' },
                         { key: 'secondary.href', label: 'Ссылка второй кнопки' },
+                        { key: 'secondary.icon', label: 'Вторая кнопка — иконка' },
+                        { key: 'secondary.style', label: 'Вторая кнопка — стиль кнопки', hint: 'primary/secondary/outline' },
                         { key: 'proof.label', label: 'Подпись proof' },
                         { key: 'proof.value', label: 'Большое значение' },
                         { key: 'proof.note', label: 'Нижняя подпись' },
@@ -2578,14 +2754,8 @@
                         eyebrow: normalizeText(eyebrowNode.textContent),
                         title: normalizeText(titleNode.textContent),
                         copy: normalizeText(copyNode.textContent),
-                        primary: {
-                            label: normalizeText(primaryNode.textContent),
-                            href: String(primaryNode.getAttribute('href') || '').trim()
-                        },
-                        secondary: {
-                            label: normalizeText(secondaryNode.textContent),
-                            href: String(secondaryNode.getAttribute('href') || '').trim()
-                        },
+                        primary: readActionValue(primaryNode),
+                        secondary: readActionValue(secondaryNode),
                         proof: {
                             label: normalizeText(proofLabelNode?.textContent || ''),
                             value: normalizeText(proofValueNode?.textContent || ''),
@@ -2598,10 +2768,8 @@
                         applyTextToNode(eyebrowNode, next.eyebrow || '');
                         applyTextToNode(titleNode, next.title || '');
                         applyTextToNode(copyNode, next.copy || '');
-                        applyActionText(primaryNode, next.primary?.label || '');
-                        applyActionText(secondaryNode, next.secondary?.label || '');
-                        if (next.primary?.href) primaryNode.setAttribute('href', String(next.primary.href).trim());
-                        if (next.secondary?.href) secondaryNode.setAttribute('href', String(next.secondary.href).trim());
+                        applyActionValue(primaryNode, next.primary || {});
+                        applyActionValue(secondaryNode, next.secondary || {});
                         if (proofLabelNode) applyTextToNode(proofLabelNode, next.proof?.label || '');
                         if (proofValueNode) applyTextToNode(proofValueNode, next.proof?.value || '');
                         if (proofNoteNode) applyTextToNode(proofNoteNode, next.proof?.note || '');
@@ -2641,8 +2809,12 @@
                         { key: 'status', label: 'Статус справа' },
                         { key: 'primary.label', label: 'Главное действие' },
                         { key: 'primary.href', label: 'Ссылка главного действия' },
+                        { key: 'primary.icon', label: 'Главное действие — иконка' },
+                        { key: 'primary.style', label: 'Главное действие — стиль кнопки', hint: 'primary/secondary/outline' },
                         { key: 'secondary.label', label: 'Второе действие' },
                         { key: 'secondary.href', label: 'Ссылка второго действия' },
+                        { key: 'secondary.icon', label: 'Второе действие — иконка' },
+                        { key: 'secondary.style', label: 'Второе действие — стиль кнопки', hint: 'primary/secondary/outline' },
                         { key: 'contactPhone.label', label: 'Телефон' },
                         { key: 'contactPhone.href', label: 'Ссылка телефона' },
                         { key: 'contactEmail.label', label: 'Почта' },
@@ -2654,14 +2826,8 @@
                         copy: normalizeText(copyNode.textContent),
                         points: Array.from(pointsNode.querySelectorAll('span')).map((item) => normalizeText(item.textContent)),
                         status: normalizeText(statusNode?.textContent || ''),
-                        primary: {
-                            label: normalizeText(primaryNode.textContent),
-                            href: String(primaryNode.getAttribute('href') || '').trim()
-                        },
-                        secondary: {
-                            label: normalizeText(secondaryNode.textContent),
-                            href: String(secondaryNode.getAttribute('href') || '').trim()
-                        },
+                        primary: readActionValue(primaryNode),
+                        secondary: readActionValue(secondaryNode),
                         contactPhone: {
                             label: normalizeText(metaLinks[0]?.textContent || ''),
                             href: String(metaLinks[0]?.getAttribute('href') || '').trim()
@@ -2682,10 +2848,8 @@
                             return span;
                         }));
                         if (statusNode) applyTextToNode(statusNode, next.status || '');
-                        applyActionText(primaryNode, next.primary?.label || '');
-                        applyActionText(secondaryNode, next.secondary?.label || '');
-                        if (next.primary?.href) primaryNode.setAttribute('href', String(next.primary.href).trim());
-                        if (next.secondary?.href) secondaryNode.setAttribute('href', String(next.secondary.href).trim());
+                        applyActionValue(primaryNode, next.primary || {});
+                        applyActionValue(secondaryNode, next.secondary || {});
                         if (metaLinks[0]) {
                             applyActionText(metaLinks[0], next.contactPhone?.label || '');
                             if (next.contactPhone?.href) metaLinks[0].setAttribute('href', String(next.contactPhone.href).trim());
@@ -2772,6 +2936,8 @@
                         { key: 'points', label: 'Пункты', type: 'list', hint: 'Каждый пункт с новой строки.' },
                         { key: 'action.label', label: 'Текст кнопки' },
                         { key: 'action.href', label: 'Ссылка кнопки' },
+                        { key: 'action.icon', label: 'Иконка кнопки' },
+                        { key: 'action.style', label: 'Стиль кнопки', hint: 'primary/secondary/outline' },
                         { key: 'contactLabel', label: 'Подпись под кнопкой' },
                         { key: 'phones.primary.label', label: 'Первый телефон' },
                         { key: 'phones.primary.href', label: 'Ссылка первого телефона' },
@@ -2783,10 +2949,7 @@
                         title: normalizeText(titleNode.textContent),
                         copy: normalizeText(copyNode.textContent),
                         points: Array.from(pointsNode.querySelectorAll('li')).map((item) => normalizeText(item.textContent)),
-                        action: {
-                            label: normalizeText(actionNode.textContent),
-                            href: String(actionNode.getAttribute('href') || '').trim()
-                        },
+                        action: readActionValue(actionNode),
                         contactLabel: normalizeText(contactLabelNode?.textContent || ''),
                         phones: {
                             primary: {
@@ -2809,8 +2972,7 @@
                             li.textContent = point;
                             return li;
                         }));
-                        applyActionText(actionNode, next.action?.label || '');
-                        if (next.action?.href) actionNode.setAttribute('href', String(next.action.href).trim());
+                        applyActionValue(actionNode, next.action || {});
                         if (contactLabelNode) applyTextToNode(contactLabelNode, next.contactLabel || '');
                         if (contactLinks[0]) {
                             applyActionText(contactLinks[0], next.phones?.primary?.label || '');
@@ -3072,10 +3234,12 @@
                         { key: 'primary.number', label: 'Главный номер' },
                         { key: 'primary.note', label: 'Подпись под номером' },
                         { key: 'primary.href', label: 'Ссылка главного номера' },
-                        { key: 'actions.0.label', label: 'Кнопка 1 — текст' },
-                        { key: 'actions.0.href', label: 'Кнопка 1 — ссылка' },
-                        { key: 'actions.1.label', label: 'Кнопка 2 — текст' },
-                        { key: 'actions.1.href', label: 'Кнопка 2 — ссылка' },
+                        ...actionNodes.slice(0, 2).flatMap((_, actionIndex) => [
+                            { key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` },
+                            { key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` },
+                            { key: `actions.${actionIndex}.icon`, label: `Кнопка ${actionIndex + 1} — иконка` },
+                            { key: `actions.${actionIndex}.style`, label: `Кнопка ${actionIndex + 1} — стиль кнопки`, hint: 'primary/secondary/outline' }
+                        ]),
                         { key: 'meta.0.label', label: 'Мета 1 — подпись' },
                         { key: 'meta.0.value', label: 'Мета 1 — значение' },
                         { key: 'meta.1.label', label: 'Мета 2 — подпись' },
@@ -3091,10 +3255,7 @@
                             note: normalizeText(primaryNoteNode.textContent),
                             href: String(primaryLink.getAttribute('href') || '').trim()
                         },
-                        actions: actionNodes.slice(0, 2).map((action) => ({
-                            label: normalizeText(action.textContent),
-                            href: String(action.getAttribute('href') || '').trim()
-                        })),
+                        actions: actionNodes.slice(0, 2).map(readActionValue),
                         meta: metaNodes.slice(0, 2).map((meta) => ({
                             label: normalizeText(meta.querySelector('.contacts-meta-label')?.textContent || ''),
                             value: normalizeText(meta.querySelector('strong')?.textContent || '')
@@ -3110,9 +3271,7 @@
                         applyTextToNode(primaryNoteNode, next.primary?.note || '');
                         if (next.primary?.href) primaryLink.setAttribute('href', String(next.primary.href).trim());
                         actionNodes.slice(0, 2).forEach((action, index) => {
-                            const actionValue = next.actions?.[index] || {};
-                            applyActionText(action, actionValue.label || '');
-                            if (actionValue.href) action.setAttribute('href', String(actionValue.href).trim());
+                            applyActionValue(action, next.actions?.[index] || {});
                         });
                         metaNodes.slice(0, 2).forEach((meta, index) => {
                             const metaValue = next.meta?.[index] || {};
@@ -3157,10 +3316,12 @@
                         { key: 'steps.1.copy', label: 'Шаг 2 — текст', type: 'textarea' },
                         { key: 'steps.2.title', label: 'Шаг 3 — заголовок' },
                         { key: 'steps.2.copy', label: 'Шаг 3 — текст', type: 'textarea' },
-                        { key: 'actions.0.label', label: 'Кнопка 1 — текст' },
-                        { key: 'actions.0.href', label: 'Кнопка 1 — ссылка' },
-                        { key: 'actions.1.label', label: 'Кнопка 2 — текст' },
-                        { key: 'actions.1.href', label: 'Кнопка 2 — ссылка' }
+                        ...actionNodes.slice(0, 2).flatMap((_, actionIndex) => [
+                            { key: `actions.${actionIndex}.label`, label: `Кнопка ${actionIndex + 1} — текст` },
+                            { key: `actions.${actionIndex}.href`, label: `Кнопка ${actionIndex + 1} — ссылка` },
+                            { key: `actions.${actionIndex}.icon`, label: `Кнопка ${actionIndex + 1} — иконка` },
+                            { key: `actions.${actionIndex}.style`, label: `Кнопка ${actionIndex + 1} — стиль кнопки`, hint: 'primary/secondary/outline' }
+                        ])
                     ],
                     defaultValue: {
                         kicker: normalizeText(kickerNode.textContent),
@@ -3171,10 +3332,7 @@
                             title: normalizeText(step.querySelector('strong')?.textContent || ''),
                             copy: normalizeText(step.querySelector('span')?.textContent || '')
                         })),
-                        actions: actionNodes.slice(0, 2).map((action) => ({
-                            label: normalizeText(action.textContent),
-                            href: String(action.getAttribute('href') || '').trim()
-                        }))
+                        actions: actionNodes.slice(0, 2).map(readActionValue)
                     },
                     render: function(value) {
                         const next = value && typeof value === 'object' ? value : {};
@@ -3196,9 +3354,7 @@
                             if (stepCopy) applyTextToNode(stepCopy, stepValue.copy || '');
                         });
                         actionNodes.slice(0, 2).forEach((action, index) => {
-                            const actionValue = next.actions?.[index] || {};
-                            applyActionText(action, actionValue.label || '');
-                            if (actionValue.href) action.setAttribute('href', String(actionValue.href).trim());
+                            applyActionValue(action, next.actions?.[index] || {});
                         });
                     }
                 });
@@ -3260,16 +3416,15 @@
                         { key: 'copy', label: 'Описание', type: 'textarea' },
                         { key: 'items', label: 'Пункты', type: 'list', hint: 'Каждый пункт с новой строки.' },
                         { key: 'action.label', label: 'Текст действия' },
-                        { key: 'action.href', label: 'Ссылка действия' }
+                        { key: 'action.href', label: 'Ссылка действия' },
+                        { key: 'action.icon', label: 'Иконка действия' },
+                        { key: 'action.style', label: 'Стиль действия', hint: 'primary/secondary/outline' }
                     ],
                     defaultValue: {
                         title: normalizeText(titleNode.textContent),
                         copy: normalizeText(copyNode.textContent),
                         items: Array.from(listNode.querySelectorAll('li')).map((item) => normalizeText(item.textContent)),
-                        action: {
-                            label: normalizeText(actionNode.textContent),
-                            href: String(actionNode.getAttribute('href') || '').trim()
-                        }
+                        action: readActionValue(actionNode)
                     },
                     render: function(value) {
                         const next = value && typeof value === 'object' ? value : {};
@@ -3280,8 +3435,7 @@
                             li.textContent = item;
                             return li;
                         }));
-                        applyActionText(actionNode, next.action?.label || '');
-                        if (next.action?.href) actionNode.setAttribute('href', String(next.action.href).trim());
+                        applyActionValue(actionNode, next.action || {});
                     }
                 });
             }
