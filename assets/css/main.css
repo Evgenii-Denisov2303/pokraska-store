@@ -33,9 +33,10 @@ html {
             linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 52%, var(--theme-band-to) 100%);
         --site-desktop-container: min(1500px, calc(100vw - 76px));
         background:
-            radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.08), transparent 28%),
+            radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.07), transparent 28%),
+            radial-gradient(circle at 78% 8%, rgba(var(--theme-champagne-rgb), 0.14), transparent 24%),
             radial-gradient(circle at 89% 2%, rgba(255, 255, 255, 0.82), transparent 26%),
-            linear-gradient(180deg, #f9fbfd 0%, #f1f5f8 52%, #f7fafc 100%) !important;
+            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%) !important;
     }
 
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
@@ -43,9 +44,10 @@ html {
         isolation: isolate;
         overflow: visible !important;
         background:
-            radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.08), transparent 28%),
+            radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.07), transparent 28%),
+            radial-gradient(circle at 78% 8%, rgba(var(--theme-champagne-rgb), 0.14), transparent 24%),
             radial-gradient(circle at 89% 2%, rgba(255, 255, 255, 0.82), transparent 26%),
-            linear-gradient(180deg, #f9fbfd 0%, #f1f5f8 52%, #f7fafc 100%) !important;
+            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%) !important;
         padding-top: 198px !important;
     }
 
@@ -227,13 +229,13 @@ html {
     --leading-display: 0.94;
     --leading-body: 1.72;
     --leading-copy: 1.58;
-    --theme-bg: #f1f5f8;
-    --theme-bg-deep: #e6edf4;
-    --theme-bg-soft: #f9fbfd;
+    --theme-bg: #f2f6f7;
+    --theme-bg-deep: #e8eef2;
+    --theme-bg-soft: #fbfcfd;
     --theme-surface: #ffffff;
-    --theme-surface-soft: #eef4f9;
-    --theme-surface-muted: #e5edf4;
-    --theme-surface-strong: #edf3f8;
+    --theme-surface-soft: #f2f5f6;
+    --theme-surface-muted: #eceff0;
+    --theme-surface-strong: #f3f2ee;
     --theme-text: #2b332f;
     --theme-text-strong: #1f2622;
     --theme-text-muted: #627386;
@@ -244,8 +246,11 @@ html {
     --theme-accent-soft: #e7eef6;
     --theme-accent-rgb: 47, 93, 136;
     --theme-accent-strong-rgb: 24, 61, 93;
-    --theme-warm: #54789c;
-    --theme-warm-strong: #345777;
+    --theme-champagne: #d8b879;
+    --theme-champagne-strong: #a7773c;
+    --theme-champagne-rgb: 216, 184, 121;
+    --theme-warm: #9b7444;
+    --theme-warm-strong: #725331;
     --theme-band-from: #1d2f42;
     --theme-band-mid: #274c69;
     --theme-band-to: #4f78a0;
@@ -253,18 +258,18 @@ html {
     --theme-on-band-muted: rgba(232, 241, 249, 0.78);
     --theme-on-band-soft: rgba(248, 251, 255, 0.12);
     --theme-focus-ring: rgba(var(--theme-accent-rgb), 0.26);
-    --theme-border: rgba(43, 51, 47, 0.08);
-    --theme-border-strong: rgba(43, 51, 47, 0.14);
-    --theme-shadow-soft: 0 18px 34px rgba(31, 38, 34, 0.05);
-    --theme-shadow: 0 24px 46px rgba(31, 38, 34, 0.08);
-    --theme-shadow-strong: 0 30px 60px rgba(31, 38, 34, 0.14);
+    --theme-border: rgba(58, 64, 58, 0.08);
+    --theme-border-strong: rgba(58, 64, 58, 0.14);
+    --theme-shadow-soft: 0 18px 34px rgba(63, 53, 38, 0.045);
+    --theme-shadow: 0 24px 46px rgba(63, 53, 38, 0.075);
+    --theme-shadow-strong: 0 30px 60px rgba(63, 53, 38, 0.13);
     --theme-radius-xl: 32px;
     --theme-radius-lg: 24px;
     --theme-radius-md: 18px;
     --theme-radius-sm: 14px;
-    --theme-surface-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 245, 250, 0.95));
-    --theme-surface-gradient-soft: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(232, 240, 247, 0.92));
-    --theme-surface-gradient-muted: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(225, 235, 244, 0.9));
+    --theme-surface-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 240, 232, 0.9));
+    --theme-surface-gradient-soft: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 237, 229, 0.82));
+    --theme-surface-gradient-muted: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(234, 229, 219, 0.78));
     --theme-band: linear-gradient(135deg, var(--theme-band-from) 0%, var(--theme-band-mid) 56%, var(--theme-band-to) 100%);
     --premium-ink: #1b1f24;
     --premium-ink-soft: #2f3640;
@@ -802,7 +807,7 @@ body.modal-open {
     contain: paint;
     padding: 6px;
     border-radius: 16px;
-    background: linear-gradient(180deg, #f7f9fc 0%, #c4d0e2 100%);
+    background: linear-gradient(180deg, #fffdf8 0%, #e4d9c8 100%);
     border: none;
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
     isolation: isolate;
@@ -846,30 +851,31 @@ body.modal-open {
 
 /* ========== 2026 GLOBAL VISUAL POLISH ========== */
 :root {
-    --site-shell: linear-gradient(180deg, #f9fbfd 0%, #f1f5f8 52%, #f7fafc 100%);
+    --site-shell: linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%);
     --site-glass: rgba(255, 255, 255, 0.82);
     --site-glass-strong: rgba(255, 255, 255, 0.92);
     --site-line: rgba(43, 51, 47, 0.08);
     --site-line-strong: rgba(43, 51, 47, 0.12);
-    --site-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
-    --site-shadow-soft: 0 16px 32px rgba(15, 23, 42, 0.05);
+    --site-shadow: 0 24px 48px rgba(63, 53, 38, 0.075);
+    --site-shadow-soft: 0 16px 32px rgba(63, 53, 38, 0.045);
     --site-text: #2b332f;
     --site-text-soft: #786f66;
     --site-accent: var(--theme-accent-strong);
     --site-accent-soft: rgba(var(--theme-accent-rgb), 0.12);
-    --site-action-slate: #7f95a6;
-    --site-action-slate-strong: #667d90;
-    --site-action-slate-rgb: 102, 125, 144;
-    --site-action-matte: #d5dde2;
-    --site-action-matte-hover: #c6d1d8;
+    --site-action-slate: #8294a0;
+    --site-action-slate-strong: #667b89;
+    --site-action-slate-rgb: 102, 123, 137;
+    --site-action-matte: #e4d9c8;
+    --site-action-matte-hover: #d9c8af;
     --site-action-matte-text: #31495e;
-    --site-action-matte-border: rgba(98, 121, 139, 0.18);
+    --site-action-matte-border: rgba(var(--theme-champagne-rgb), 0.28);
 }
 
 body {
     color: var(--site-text);
     background:
-        radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.12), transparent 28%),
+        radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.09), transparent 28%),
+        radial-gradient(circle at 80% 12%, rgba(var(--theme-champagne-rgb), 0.16), transparent 26%),
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.62), transparent 20%),
         var(--site-shell);
 }
@@ -929,12 +935,13 @@ body {
 
 @media (max-width: 1100px) {
     :root {
-        --site-shell: linear-gradient(180deg, #fbfbfa 0%, #f1f5f8 52%, #fafbfd 100%);
+        --site-shell: linear-gradient(180deg, #fbfbfa 0%, #f2f6f7 52%, #fbf7ef 100%);
     }
 
     body {
         background:
-            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.08), transparent 30%),
+            radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.07), transparent 30%),
+            radial-gradient(circle at 76% 10%, rgba(var(--theme-champagne-rgb), 0.14), transparent 28%),
             radial-gradient(circle at top right, rgba(255, 255, 255, 0.76), transparent 22%),
             var(--site-shell);
     }
@@ -1118,7 +1125,7 @@ body {
 }
 
 .nav-list a:hover {
-    background: rgba(234, 243, 251, 0.94);
+    background: rgba(247, 241, 230, 0.94);
     color: var(--theme-accent);
 }
 
@@ -1136,8 +1143,8 @@ body {
 /* Кнопка мобильного меню */
 .mobile-menu-btn {
     display: none;
-    background: #f1f5f9;
-    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: #f7f2e8;
+    border: 1px solid rgba(64, 49, 32, 0.12);
     font-size: 1.35rem;
     color: #0f172a;
     cursor: pointer;
@@ -1152,7 +1159,7 @@ body {
 }
 
 .mobile-menu-btn:hover {
-    background: #e2e8f0;
+    background: #efe5d5;
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.22);
     transform: translateY(-1px);
 }
