@@ -12,6 +12,8 @@
     const RECENT_PAGES_STORAGE_KEY = 'pokraska:inline-recent-pages:v1';
     const DRAFT_FILES_STORAGE_KEY = 'pokraska:inline-draft-files:v1';
     const MAX_RECENT_PAGES = 6;
+    const RECOMMENDED_UPLOAD_IMAGE_BYTES = 2 * 1024 * 1024;
+    const MAX_UPLOAD_IMAGE_BYTES = 4 * 1024 * 1024;
     const OVERVIEW_ENABLED = false;
     const HOVER_LABEL_ENABLED = true;
     const INLINE_ICON_OPTIONS = [
@@ -3444,7 +3446,7 @@
     function matchesRequestedFocus(binding, focus) {
         if (!binding || !focus) return false;
 
-        const label = `${binding.label || ''} ${binding.path || ''} ${binding.hint || ''}`.toLowerCase();
+        const label = `${binding.sectionKey || ''} ${binding.sectionLabel || ''} ${binding.label || ''} ${binding.path || ''} ${binding.hint || ''}`.toLowerCase();
         const hasCollection = Boolean(binding.collectionPath);
 
         if (focus === 'image') {
@@ -3464,6 +3466,10 @@
 
         if (focus === 'contacts') {
             return /phone|address|email|contact|hours|manager|connect|quickactions|quick_actions|actions/.test(label);
+        }
+
+        if (focus === 'shell' || focus === 'footer') {
+            return /site-shell|шапка|подвал|footer|brand|логотип|компания|полезн|policy|domain|домен|копирайт/.test(label);
         }
 
         if (focus === 'collection') {
@@ -7807,7 +7813,7 @@
 
             const uploadMeta = document.createElement('div');
             uploadMeta.className = 'p-inline-panel__upload-meta';
-            uploadMeta.textContent = 'Выберите файл, перетащите сюда или вставьте (Ctrl+V). Лучше брать JPG или PNG не менее 800×600 пкс и до 2 МБ.';
+            uploadMeta.textContent = 'Выберите файл, перетащите сюда или вставьте (Ctrl+V). Лучше JPG/PNG от 800×600 пкс, до 4 МБ.';
             uploadZone.appendChild(uploadMeta);
 
             const uploadFile = document.createElement('div');
@@ -7823,6 +7829,10 @@
 
             fileInput.addEventListener('change', () => {
                 const nextFile = fileInput.files?.[0];
+                if (nextFile && !validateUploadImageFile(nextFile)) {
+                    fileInput.value = '';
+                    return;
+                }
                 updateImagePreviewFromFile(nextFile, image, uploadFile);
             });
 
@@ -7863,6 +7873,9 @@
                 const nextFile = extractImageFileFromTransfer(event.dataTransfer);
                 if (!nextFile) {
                     showToast('Перетащите файл изображения');
+                    return;
+                }
+                if (!validateUploadImageFile(nextFile)) {
                     return;
                 }
                 if (!assignUploadFile(fileInput, nextFile)) {
@@ -8070,6 +8083,8 @@
     }
 
     async function uploadImage(file, directory) {
+        validateUploadImageFile(file, { throwOnError: true });
+
         const dataUrl = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result);
@@ -8090,11 +8105,41 @@
         });
 
         if (!response.ok) {
-            throw new Error('Не удалось загрузить изображение');
+            let details = '';
+            try {
+                const payload = await response.json();
+                details = payload?.details || payload?.error || '';
+            } catch (error) {
+                details = '';
+            }
+            throw new Error(details || 'Не удалось загрузить изображение');
         }
 
         const payload = await response.json();
         return payload.path;
+    }
+
+    function validateUploadImageFile(file, options = {}) {
+        const throwOnError = Boolean(options.throwOnError);
+        const message = (() => {
+            if (!file) return 'Выберите файл изображения';
+            if (!/^image\//i.test(file.type || '')) return 'Можно загрузить только изображение';
+            if ((file.size || 0) > MAX_UPLOAD_IMAGE_BYTES) {
+                return `Фото слишком тяжёлое (${formatFileSize(file.size)}). Максимум ${formatFileSize(MAX_UPLOAD_IMAGE_BYTES)}.`;
+            }
+            return '';
+        })();
+
+        if (!message) return true;
+        if (throwOnError) throw new Error(message);
+        showToast(message);
+        return false;
+    }
+
+    function formatFileSize(bytes) {
+        const size = Number(bytes) || 0;
+        if (size >= 1024 * 1024) return `${(size / 1024 / 1024).toFixed(1)} МБ`;
+        return `${Math.max(1, Math.round(size / 1024))} КБ`;
     }
 
     function extractImageFileFromTransfer(source) {
@@ -8129,6 +8174,7 @@
 
     function updateImagePreviewFromFile(file, previewImage, fileBadge) {
         if (!file) return;
+        if (!validateUploadImageFile(file)) return;
         const objectUrl = URL.createObjectURL(file);
         if (previewImage) {
             previewImage.src = objectUrl;
@@ -8142,14 +8188,14 @@
             };
         }
         if (fileBadge) {
-            const sizeKb = Math.max(1, Math.round((file.size || 0) / 1024));
-            const sizeMb = (file.size || 0) / (1024 * 1024);
-            const sizeWarning = sizeMb > 2 ? ` ⚠ Файл крупный (${sizeMb.toFixed(1)} МБ)` : '';
-            fileBadge.textContent = `${file.name} · ${sizeKb} КБ${sizeWarning}`;
+            const sizeWarning = (file.size || 0) > RECOMMENDED_UPLOAD_IMAGE_BYTES
+                ? ` ⚠ Лучше сжать до ${formatFileSize(RECOMMENDED_UPLOAD_IMAGE_BYTES)}`
+                : '';
+            fileBadge.textContent = `${file.name} · ${formatFileSize(file.size)}${sizeWarning}`;
             fileBadge.hidden = false;
         }
-        if ((file.size || 0) > 3 * 1024 * 1024) {
-            showToast(`Файл ${(file.size / 1024 / 1024).toFixed(1)} МБ — рекомендуем уменьшить до 2 МБ перед загрузкой.`);
+        if ((file.size || 0) > RECOMMENDED_UPLOAD_IMAGE_BYTES) {
+            showToast(`Файл ${formatFileSize(file.size)} — рекомендуем уменьшить до ${formatFileSize(RECOMMENDED_UPLOAD_IMAGE_BYTES)} перед загрузкой.`);
         }
     }
 
@@ -8943,6 +8989,9 @@
         if (!uploadControl) return;
 
         event.preventDefault();
+        if (!validateUploadImageFile(nextFile)) {
+            return;
+        }
         if (!assignUploadFile(uploadControl, nextFile)) {
             showToast('Не удалось вставить изображение');
             return;

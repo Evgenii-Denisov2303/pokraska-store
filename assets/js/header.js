@@ -17,7 +17,7 @@
 
     window.POKRASKA_INLINE_ASSETS_LOADING = true;
 
-    const assetVersion = '20260427-inline-admin-22';
+    const assetVersion = '20260428-inline-admin-actionfix-1';
     const assets = [
         `/assets/js/inline-editor.js?v=${assetVersion}`,
         `/assets/js/inline-editor-bootstrap.js?v=${assetVersion}`

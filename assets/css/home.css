@@ -9271,20 +9271,20 @@ body#top .hero-header--desktop-home {
     body#top .panel-scene__viewer--light {
         width: min(calc(100% - 28px), 214px) !important;
         max-width: calc(100% - 28px) !important;
-        padding: 7px 9px !important;
-        border: 1px solid rgba(255, 255, 255, 0.28) !important;
-        border-radius: 16px !important;
-        background: rgba(255, 255, 255, 0.16) !important;
-        box-shadow: 0 8px 18px rgba(12, 25, 38, 0.08) !important;
-        backdrop-filter: blur(13px) saturate(118%) !important;
-        -webkit-backdrop-filter: blur(13px) saturate(118%) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     body#top .panel-scene__viewer--light,
     body#top .panel-scene__card--light .panel-scene__viewer,
     body#top .panel-scene__card--light .panel-scene__viewer--light {
         width: min(calc(100% - 28px), 200px) !important;
-        background: rgba(255, 255, 255, 0.2) !important;
+        background: none !important;
     }
 
     body#top .panel-scene__dots,

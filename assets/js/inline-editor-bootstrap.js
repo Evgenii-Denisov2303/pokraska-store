@@ -57,7 +57,7 @@
         '.gallery-item',
         '.faq-item',
         '.faq-card',
-        '.preview-footer__group',
+        '.preview-footer__column',
         '.palette-card',
         '.before-after-section'
     ];
@@ -756,35 +756,61 @@
         return text.length >= 2;
     }
 
+    function getActionLabelNode(element) {
+        if (!(element instanceof HTMLElement)) return null;
+        return element.querySelector('.btn__label, .button__label, .nav-link__text, .apple-button__label, span:not([aria-hidden="true"])');
+    }
+
+    function clearDirectTextNodes(element) {
+        if (!(element instanceof HTMLElement)) return;
+        Array.from(element.childNodes)
+            .filter((node) => node.nodeType === Node.TEXT_NODE)
+            .forEach((node) => {
+                node.textContent = '';
+            });
+    }
+
+    function getInlineIconTextPrefix(element) {
+        return element?.querySelector?.('i[class]') ? ' ' : '';
+    }
+
     function applyActionText(element, text) {
         if (!(element instanceof HTMLElement)) return;
+        const normalizedText = normalizeText(text);
+
+        const labelNode = getActionLabelNode(element);
+        if (labelNode instanceof HTMLElement) {
+            labelNode.textContent = normalizedText;
+            clearDirectTextNodes(element);
+            return;
+        }
 
         if (element instanceof HTMLAnchorElement) {
-            applyLinkText(element, text);
+            applyLinkText(element, normalizedText);
             return;
         }
 
         const directTextNodes = Array.from(element.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE);
         if (directTextNodes.length) {
             let used = false;
+            const textPrefix = getInlineIconTextPrefix(element);
             directTextNodes.forEach((node) => {
                 if (used) {
                     node.textContent = '';
                     return;
                 }
-                node.textContent = ` ${normalizeText(text)}`;
+                node.textContent = `${textPrefix}${normalizedText}`;
                 used = true;
             });
             return;
         }
 
-        const labelNode = element.querySelector('.btn__label, .button__label, span:not([aria-hidden="true"])');
-        if (labelNode instanceof HTMLElement) {
-            labelNode.textContent = normalizeText(text);
+        if (element.childNodes.length) {
+            element.append(document.createTextNode(`${getInlineIconTextPrefix(element)}${normalizedText}`));
             return;
         }
 
-        element.textContent = normalizeText(text);
+        element.textContent = normalizedText;
     }
 
     function getActionIconClass(element) {
@@ -910,22 +936,36 @@
 
     function applyLinkText(anchor, text) {
         if (!(anchor instanceof HTMLAnchorElement)) return;
+        const normalizedText = normalizeText(text);
+
+        const labelNode = getActionLabelNode(anchor);
+        if (labelNode instanceof HTMLElement) {
+            labelNode.textContent = normalizedText;
+            clearDirectTextNodes(anchor);
+            return;
+        }
 
         const textNodes = Array.from(anchor.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE);
         if (textNodes.length) {
             let used = false;
+            const textPrefix = getInlineIconTextPrefix(anchor);
             textNodes.forEach((node) => {
                 if (used) {
                     node.textContent = '';
                     return;
                 }
-                node.textContent = ` ${String(text ?? '').trim()}`;
+                node.textContent = `${textPrefix}${normalizedText}`;
                 used = true;
             });
             return;
         }
 
-        anchor.textContent = normalizeText(text);
+        if (anchor.childNodes.length) {
+            anchor.append(document.createTextNode(`${getInlineIconTextPrefix(anchor)}${normalizedText}`));
+            return;
+        }
+
+        anchor.textContent = normalizedText;
     }
 
     function applyPhoneBlock(anchor, value) {
@@ -975,6 +1015,57 @@
         line.textContent = '';
         line.appendChild(clonedIcon);
         line.append(document.createTextNode(` ${normalizeText(text)}`));
+    }
+
+    function renderFooterCompanyParagraphs(columns, value) {
+        const paragraphs = toListValue(value);
+        columns.forEach((column) => {
+            if (!(column instanceof HTMLElement)) return;
+            Array.from(column.querySelectorAll('.preview-footer__legal-text')).forEach((node) => node.remove());
+
+            paragraphs.forEach((text) => {
+                const paragraph = document.createElement('p');
+                paragraph.className = 'preview-footer__legal-text';
+                paragraph.textContent = text;
+                column.appendChild(paragraph);
+            });
+        });
+    }
+
+    function resolveFooterYearRange(node) {
+        const fallbackStartYear = 2014;
+        const currentYear = new Date().getFullYear();
+        const text = normalizeText(node?.textContent);
+        const match = text.match(/©\s*([0-9]{4})(?:-([0-9]{4}))?/);
+        const startYear = Number(match?.[1]) || fallbackStartYear;
+        const endYear = Number(match?.[2]) || currentYear;
+        return endYear > startYear ? `${startYear}-${endYear}` : `${startYear}`;
+    }
+
+    function applyFooterCaption(nodes, value) {
+        nodes.forEach((node) => {
+            if (!(node instanceof HTMLElement)) return;
+            const yearRange = resolveFooterYearRange(node);
+            node.textContent = `© ${yearRange} ${normalizeText(value)}`;
+        });
+    }
+
+    function applyFooterDomain(nodes, value) {
+        nodes.forEach((node) => {
+            if (!(node instanceof HTMLElement)) return;
+            const link = node.querySelector('a') || document.createElement('a');
+            if (!link.isConnected) {
+                link.href = 'politika.html';
+                link.textContent = 'Политика конфиденциальности';
+                node.textContent = '';
+                node.appendChild(link);
+            }
+
+            Array.from(node.childNodes).forEach((child) => {
+                if (child !== link) child.remove();
+            });
+            node.append(document.createTextNode(` | Домен: ${normalizeText(value)}`));
+        });
     }
 
     function applyIconClass(iconNode, iconClass, fallbackClass = 'fas fa-star') {
@@ -3710,6 +3801,64 @@
             '.preview-footer__company'
         ]);
 
+        const footerCompanyColumnNodes = selectMany([
+            '.preview-footer__column--company'
+        ]);
+
+        const footerCompanyParagraphNodes = selectMany([
+            '.preview-footer__column--company .preview-footer__legal-text'
+        ]);
+
+        const footerUsefulTitleNodes = selectMany([
+            '.preview-footer__column--useful > .preview-footer__label'
+        ]);
+
+        const footerUsefulLinkNodes = selectMany([
+            '.preview-footer__column--useful .preview-footer__list a'
+        ]);
+
+        const telegramNodes = selectMany([
+            '.preview-footer__list--contacts a[href*="t.me"]',
+            '.preview-footer__list--contacts a[href*="telegram"]'
+        ]);
+
+        const maxNodes = selectMany([
+            '.preview-footer__list--contacts a[href*="max.ru"]',
+            '.preview-footer__list--contacts a[href*="max."]'
+        ]);
+
+        const footerBottomNodes = selectMany([
+            '.preview-footer__bottom p:first-child'
+        ]);
+
+        const footerMetaNodes = selectMany([
+            '.preview-footer__bottom p:last-child'
+        ]);
+
+        const footerPolicyNodes = selectMany([
+            '.preview-footer__bottom p:last-child a'
+        ]);
+
+        const footerCompanyParagraphDefault = footerCompanyParagraphNodes.map((node) => normalizeText(node.textContent));
+        const footerUsefulLinkBindings = footerUsefulLinkNodes.map((node, index) => ({
+            element: node,
+            type: 'object',
+            path: `footer.usefulLinks.${index}`,
+            label: `Полезная ссылка ${index + 1}`,
+            hint: 'Текст и переход ссылки в правой колонке футера.',
+            fields: [
+                { key: 'label', label: 'Текст ссылки' },
+                { key: 'href', label: 'Адрес перехода' }
+            ],
+            defaultValue: {
+                label: normalizeText(node.textContent),
+                href: node.getAttribute('href') || ''
+            },
+            render: function(value) {
+                applyAnchorValue(node, value || {});
+            }
+        }));
+
         registerInlineSection({
             fileName: 'site',
             sectionKey: 'site-shell',
@@ -3773,19 +3922,16 @@
                 } : null,
                 emailNodes.length ? {
                     element: emailNodes,
-                    type: 'object',
+                    type: 'text',
                     path: 'contact.email',
                     label: 'Электронная почта',
                     hint: 'Почта в футере и контактных блоках.',
-                    fields: [
-                        { key: 'label', label: 'Текст ссылки' },
-                        { key: 'href', label: 'Почта для кнопки' }
-                    ],
                     render: function(value) {
-                        const normalized = typeof value === 'string'
-                            ? { label: value, href: `mailto:${value}` }
-                            : (value || {});
-                        emailNodes.forEach((node) => applyAnchorValue(node, normalized));
+                        const email = normalizeText(value);
+                        emailNodes.forEach((node) => applyAnchorValue(node, {
+                            label: email,
+                            href: email ? `mailto:${email}` : ''
+                        }));
                     }
                 } : null,
                 hoursLineNodes.length ? {
@@ -3804,6 +3950,94 @@
                     path: 'footer.companyTitle',
                     label: 'Название компании в футере',
                     hint: 'Юридическое имя или краткая подпись компании внизу сайта.'
+                } : null,
+                (footerCompanyColumnNodes.length || footerCompanyParagraphNodes.length) ? {
+                    element: footerCompanyParagraphNodes.length ? footerCompanyParagraphNodes : footerCompanyColumnNodes,
+                    type: 'list',
+                    path: 'footer.companyParagraphs',
+                    label: 'Описание компании в футере',
+                    hint: 'Каждый абзац с новой строки. Эти строки идут под логотипом в первой колонке футера.',
+                    defaultValue: footerCompanyParagraphDefault,
+                    render: function(value) {
+                        renderFooterCompanyParagraphs(footerCompanyColumnNodes, value);
+                    }
+                } : null,
+                footerUsefulTitleNodes.length ? {
+                    element: footerUsefulTitleNodes,
+                    type: 'text',
+                    path: 'footer.usefulTitle',
+                    label: 'Заголовок полезных ссылок',
+                    hint: 'Подпись над правой колонкой ссылок в футере.'
+                } : null,
+                ...footerUsefulLinkBindings,
+                telegramNodes.length ? {
+                    element: telegramNodes,
+                    type: 'object',
+                    path: 'contact.telegram',
+                    label: 'Telegram в футере',
+                    hint: 'Текст и ссылка Telegram в контактной колонке футера.',
+                    fields: [
+                        { key: 'label', label: 'Текст ссылки' },
+                        { key: 'href', label: 'Адрес перехода' }
+                    ],
+                    render: function(value) {
+                        telegramNodes.forEach((node) => applyAnchorValue(node, value || {}));
+                    }
+                } : null,
+                maxNodes.length ? {
+                    element: maxNodes,
+                    type: 'object',
+                    path: 'contact.max',
+                    label: 'Max в футере',
+                    hint: 'Текст и ссылка Max в контактной колонке футера.',
+                    fields: [
+                        { key: 'label', label: 'Текст ссылки' },
+                        { key: 'href', label: 'Адрес перехода' }
+                    ],
+                    render: function(value) {
+                        maxNodes.forEach((node) => applyAnchorValue(node, value || {}));
+                    }
+                } : null,
+                footerBottomNodes.length ? {
+                    element: footerBottomNodes,
+                    type: 'text',
+                    path: 'brand.footerCaption',
+                    label: 'Подпись копирайта',
+                    hint: 'Текст после года в нижней строке футера.',
+                    render: function(value) {
+                        applyFooterCaption(footerBottomNodes, value);
+                    }
+                } : null,
+                footerPolicyNodes.length ? {
+                    element: footerPolicyNodes,
+                    type: 'text',
+                    path: 'footer.policyLabel',
+                    label: 'Текст ссылки политики',
+                    hint: 'Название ссылки в самой нижней строке футера.'
+                } : null,
+                footerPolicyNodes.length ? {
+                    element: footerPolicyNodes,
+                    type: 'text',
+                    path: 'footer.policyHref',
+                    label: 'Ссылка политики',
+                    hint: 'Адрес страницы политики конфиденциальности.',
+                    render: function(value) {
+                        footerPolicyNodes.forEach((node) => {
+                            if (node instanceof HTMLAnchorElement && normalizeText(value)) {
+                                node.setAttribute('href', normalizeText(value));
+                            }
+                        });
+                    }
+                } : null,
+                footerMetaNodes.length ? {
+                    element: footerMetaNodes,
+                    type: 'text',
+                    path: 'brand.domain',
+                    label: 'Домен в футере',
+                    hint: 'Домен в нижней строке футера.',
+                    render: function(value) {
+                        applyFooterDomain(footerMetaNodes, value);
+                    }
                 } : null
             ]
         });

@@ -1,10 +1,12 @@
 const crypto = require('crypto');
+const { execFile } = require('child_process');
 const http = require('http');
 const fs = require('fs/promises');
 const path = require('path');
 const { promisify } = require('util');
 const zlib = require('zlib');
 
+const execFileAsync = promisify(execFile);
 const gzipAsync = promisify(zlib.gzip);
 const brotliAsync = promisify(zlib.brotliCompress);
 
@@ -35,6 +37,7 @@ const HOST = process.env.HOST || '127.0.0.1';
 const ROOT_DIR = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(ROOT_DIR, 'content');
 const IMAGE_ROOT_DIR = path.join(ROOT_DIR, 'assets', 'images');
+const MAX_MEDIA_UPLOAD_BYTES = Number(process.env.MEDIA_UPLOAD_MAX_BYTES || 4 * 1024 * 1024);
 const ADMIN_DATA_DIR = path.resolve(ROOT_DIR, '..', '.pokraska-store-admin');
 const ADMIN_STATE_FILE = path.join(ADMIN_DATA_DIR, 'admin-state.json');
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || '';
@@ -89,7 +92,6 @@ function isAdminPath(pathname) {
         || pathname === '/api/content'
         || pathname.startsWith('/api/content/')
         || pathname === '/api/admin/state'
-        || pathname === '/api/admin/publish'
         || pathname === '/api/media/upload';
 }
 
@@ -538,8 +540,6 @@ function createClientAdminState(adminState) {
                     label: entry.label || sectionKey,
                     lastSavedAt: entry.lastSavedAt || null,
                     lastSavedBy: entry.lastSavedBy || null,
-                    lastPublishedAt: entry.lastPublishedAt || null,
-                    lastPublishedBy: entry.lastPublishedBy || null,
                     history: Array.isArray(entry.history)
                         ? entry.history.map((item) => ({
                             id: item.id,
@@ -617,6 +617,30 @@ function decodeDataUrlImage(dataUrl) {
         mimeType: match[1].toLowerCase(),
         buffer: Buffer.from(match[2], 'base64')
     };
+}
+
+async function syncShellAfterSiteSave(contentKey) {
+    if (contentKey !== 'site') return null;
+
+    const scriptPath = path.join(__dirname, 'sync-inner-shell.js');
+
+    try {
+        const { stdout, stderr } = await execFileAsync(process.execPath, [scriptPath], {
+            cwd: ROOT_DIR,
+            windowsHide: true,
+            timeout: 20000,
+            maxBuffer: 1024 * 1024
+        });
+
+        return {
+            ok: true,
+            stdout: String(stdout || '').trim(),
+            stderr: String(stderr || '').trim()
+        };
+    } catch (error) {
+        const details = String(error.stderr || error.stdout || error.message || '').trim();
+        throw new Error(`Глобальные блоки сохранены в JSON, но HTML не синхронизирован: ${details || error.message}`);
+    }
 }
 
 function shouldAllowContentCors(origin) {
@@ -761,63 +785,6 @@ async function handleAdminStateApi(request, response, pathname) {
         return true;
     }
 
-    if (pathname === '/api/admin/publish') {
-        if (request.method !== 'POST') {
-            sendJson(request, response, 405, { error: 'Метод не поддерживается' });
-            return true;
-        }
-
-        if (AUTH_ENABLED && !getSession(request)) {
-            sendJson(request, response, 401, {
-                ok: false,
-                error: 'Нужен вход в админку'
-            });
-            return true;
-        }
-
-        try {
-            const body = await readRequestBody(request);
-            const parsed = JSON.parse(body || '{}');
-            const sectionKey = String(parsed.sectionKey || '').trim();
-            const fileName = String(parsed.fileName || '').trim();
-            const label = String(parsed.label || '').trim();
-
-            if (!sectionKey || !fileName) {
-                throw new Error('Не указан раздел для публикации');
-            }
-
-            const adminState = await readAdminState();
-            const entry = getSectionStateEntry(adminState, sectionKey, fileName, label || sectionKey);
-            const actor = getActorName(request);
-            const savedAt = new Date().toISOString();
-
-            entry.lastPublishedAt = savedAt;
-            entry.lastPublishedBy = actor;
-            pushSectionHistoryEntry(entry, {
-                id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-                action: 'publish',
-                savedAt,
-                savedBy: actor,
-                label: label || entry.label
-            });
-
-            await writeAdminState(adminState);
-
-            sendJson(request, response, 200, {
-                ok: true,
-                state: createClientAdminState(adminState),
-                section: createClientAdminState({ sections: { [sectionKey]: entry } }).sections[sectionKey]
-            });
-        } catch (error) {
-            sendJson(request, response, 400, {
-                ok: false,
-                error: 'Не удалось обновить статус публикации',
-                details: error.message
-            });
-        }
-        return true;
-    }
-
     return false;
 }
 
@@ -852,6 +819,10 @@ async function handleMediaApi(request, response, pathname) {
 
         const { relativeDirectory, fullDirectory } = resolveUploadDirectory(directory);
         const { mimeType, buffer } = decodeDataUrlImage(imageData);
+        if (buffer.length > MAX_MEDIA_UPLOAD_BYTES) {
+            const sizeMb = (MAX_MEDIA_UPLOAD_BYTES / 1024 / 1024).toFixed(0);
+            throw new Error(`Файл слишком тяжёлый. Максимум ${sizeMb} МБ, лучше загрузить сжатое фото.`);
+        }
         const { baseName } = sanitizeFileName(fileName);
         const extension = inferImageExtension(fileName, mimeType);
         const nextFileName = `${baseName}-${Date.now()}${extension}`;
@@ -910,10 +881,11 @@ async function handleContentApi(request, response, pathname) {
         try {
             const body = await readRequestBody(request);
             const parsed = JSON.parse(body);
-            await fs.mkdir(CONTENT_DIR, { recursive: true });
-            await fs.writeFile(filePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
             const sectionKey = String(request.headers['x-admin-section-key'] || '').trim() || match[1];
             const sectionLabel = decodeHeaderValue(request.headers['x-admin-section-label']) || sectionKey;
+            await fs.mkdir(CONTENT_DIR, { recursive: true });
+            await fs.writeFile(filePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
+            const syncResult = await syncShellAfterSiteSave(match[1]);
             const actor = getActorName(request);
             const savedAt = new Date().toISOString();
             const adminState = await readAdminState();
@@ -935,6 +907,7 @@ async function handleContentApi(request, response, pathname) {
             sendJson(request, response, 200, {
                 ok: true,
                 file: fileName,
+                sync: syncResult,
                 state: createClientAdminState(adminState),
                 section: createClientAdminState({ sections: { [sectionKey]: entry } }).sections[sectionKey]
             });

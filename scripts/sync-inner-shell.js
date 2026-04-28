@@ -4,6 +4,7 @@ const path = require('path');
 const repoRoot = path.resolve(__dirname, '..');
 const pagesDir = path.join(repoRoot, 'pages');
 const sitePath = path.join(repoRoot, 'content', 'site.json');
+const rootPageFiles = ['index.html', 'politika.html'];
 
 const site = JSON.parse(fs.readFileSync(sitePath, 'utf8'));
 
@@ -24,37 +25,56 @@ function escapeHtml(value) {
         .replace(/'/g, '&#39;');
 }
 
+function isRootPage(pageFile) {
+    return rootPageFiles.includes(pageFile);
+}
+
 function resolveRelativeHref(pageFile, href) {
     if (!href) return '#';
+    const rootPage = isRootPage(pageFile);
+
     if (/^(https?:)?\/\//.test(href) || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('#')) {
         return href;
     }
 
     if (href.startsWith('/#')) {
-        return `../index.html${href.slice(1)}`;
+        if (pageFile === 'index.html') return href.slice(1);
+        return rootPage ? `index.html${href.slice(1)}` : `../index.html${href.slice(1)}`;
     }
 
     if (href === '/index.html') {
-        return '../index.html';
+        return pageFile === 'index.html' ? '#top' : (rootPage ? 'index.html' : '../index.html');
     }
 
     if (href === '/politika.html') {
-        return '../politika.html';
+        return rootPage ? 'politika.html' : '../politika.html';
     }
 
     if (href.startsWith('/pages/')) {
-        return href.replace('/pages/', '');
+        return rootPage ? href.replace(/^\//, '') : href.replace('/pages/', '');
     }
 
     return href.replace(/^\/+/, '');
 }
 
 function resolveActiveHref(pageFile) {
+    if (pageFile === 'index.html') {
+        return '/index.html';
+    }
+
+    if (pageFile === 'politika.html') {
+        return '/politika.html';
+    }
+
     if (pageFile === 'services.html' || pageFile.startsWith('automation-')) {
         return '/pages/services.html';
     }
 
     return `/pages/${pageFile}`;
+}
+
+function resolveLogoSrc(pageFile) {
+    return isRootPage(pageFile) ? 'assets/images/logo.png' : '../assets/images/logo.png';
 }
 
 function buildMenuDataAttrs(item) {
@@ -103,7 +123,7 @@ function buildHeaderTop(pageFile) {
                 <div class="logo hero-brand">
                     <a href="${escapeHtml(homeHref)}" class="logo-link hero-brand__link" aria-label="Перейти на главную страницу">
                         <div class="hero-brand__mark logo-main logo-main--image">
-                            <img class="hero-brand__logo logo-image" src="../assets/images/logo.png" width="700" height="700" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" loading="lazy" decoding="async">
+                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" width="700" height="700" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" loading="lazy" decoding="async">
                             <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                         </div>
                         <div class="hero-brand__text">
@@ -163,7 +183,7 @@ function buildHeroHeader(pageFile) {
                 <div class="hero-brand">
                     <a class="hero-brand__link" href="${escapeHtml(homeHref)}" aria-label="${escapeHtml(site.brand.name)}">
                         <div class="hero-brand__mark logo-main logo-main--image">
-                            <img class="hero-brand__logo logo-image" src="../assets/images/logo.png" alt="${escapeHtml(site.brand.name)}">
+                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" alt="${escapeHtml(site.brand.name)}">
                             <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                         </div>
                         <div class="hero-brand__text">
@@ -236,6 +256,7 @@ function buildPreviewFooterBottom(pageFile) {
 
 function buildPreviewFooter(pageFile) {
     const homeHref = resolveRelativeHref(pageFile, '/index.html');
+    const topHref = pageFile === 'index.html' ? '#top' : `${homeHref}#top`;
     const companyParagraphs = (site.footer?.companyParagraphs || [])
         .map((text) => `                <p class="preview-footer__legal-text">${escapeHtml(text)}</p>`)
         .join('\n');
@@ -244,9 +265,9 @@ function buildPreviewFooter(pageFile) {
     return `    <footer id="page-footer" class="preview-footer" aria-label="Футер сайта">
         <div class="preview-footer__layout">
             <div class="preview-footer__column preview-footer__column--company">
-                <a class="preview-footer__brand" href="${escapeHtml(homeHref)}#top" aria-label="Наверх">
+                <a class="preview-footer__brand" href="${escapeHtml(topHref)}" aria-label="Наверх">
                     <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
-                        <img class="preview-footer__logo logo-image" src="../assets/images/logo.png" alt="">
+                        <img class="preview-footer__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" alt="">
                         <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                     </span>
                     <span class="preview-footer__brand-copy">
@@ -321,6 +342,47 @@ function syncPage(pageFile) {
     return false;
 }
 
+function syncRootPage(pageFile) {
+    const filePath = path.join(repoRoot, pageFile);
+    if (!fs.existsSync(filePath)) return false;
+
+    const original = fs.readFileSync(filePath, 'utf8');
+    let next = original;
+
+    next = replaceOrThrow(
+        next,
+        /[ \t]*<div class="header-top header-top--compact">[\s\S]*?<\/div>\s*<\/header>/,
+        `${buildHeaderTop(pageFile)}</header>`,
+        'root-header-top',
+        pageFile
+    );
+
+    if (pageFile !== 'index.html') {
+        next = replaceOrThrow(
+            next,
+            /[ \t]*<div class="hero-header desktop-hero-header internal-scene-header">[\s\S]*?(?=<div class="hero-stage internal-hero-stage">|<main\b)/,
+            buildHeroHeader(pageFile),
+            'root-hero-header',
+            pageFile
+        );
+    }
+
+    next = replaceOrThrow(
+        next,
+        /[ \t]*<footer\b[^>]*class="(?:footer|preview-footer[^"]*)"[^>]*>[\s\S]*?<\/footer>/,
+        buildPreviewFooter(pageFile),
+        'root-footer',
+        pageFile
+    );
+
+    if (next !== original) {
+        fs.writeFileSync(filePath, next, 'utf8');
+        return true;
+    }
+
+    return false;
+}
+
 let updatedCount = 0;
 for (const pageFile of pageFiles) {
     if (syncPage(pageFile)) {
@@ -328,4 +390,11 @@ for (const pageFile of pageFiles) {
     }
 }
 
-console.log(`Synced inner shell on ${updatedCount} page(s).`);
+let updatedRootCount = 0;
+for (const pageFile of rootPageFiles) {
+    if (syncRootPage(pageFile)) {
+        updatedRootCount += 1;
+    }
+}
+
+console.log(`Synced shell on ${updatedCount} inner page(s) and ${updatedRootCount} root page(s).`);
