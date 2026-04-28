@@ -522,3 +522,33 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
         max-width: none !important;
     }
 }
+
+/* Unified inner-page footer join: trims the empty page tail before the scenic footer. */
+html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+    --inner-page-footer-bottom: clamp(18px, 2.2vw, 30px);
+    padding-bottom: var(--inner-page-footer-bottom) !important;
+}
+
+@media (max-width: 1100px) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        --inner-page-footer-bottom: clamp(10px, 1.4vw, 16px);
+    }
+}
+
+@media (max-width: 640px) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        --inner-page-footer-bottom: clamp(6px, 2.2vw, 10px);
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        --inner-page-footer-bottom: clamp(12px, 1.5vw, 20px);
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        --inner-page-footer-bottom: clamp(10px, 1.2vw, 16px);
+    }
+}
