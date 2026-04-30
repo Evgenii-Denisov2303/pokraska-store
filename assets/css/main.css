@@ -34,9 +34,9 @@ html {
         --site-desktop-container: min(1500px, calc(100vw - 76px));
         background:
             radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.07), transparent 28%),
-            radial-gradient(circle at 78% 8%, rgba(var(--theme-champagne-rgb), 0.14), transparent 24%),
+            radial-gradient(circle at 78% 8%, rgba(var(--theme-accent-rgb), 0.05), transparent 24%),
             radial-gradient(circle at 89% 2%, rgba(255, 255, 255, 0.82), transparent 26%),
-            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%) !important;
+            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #f7fafc 100%) !important;
     }
 
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
@@ -45,9 +45,9 @@ html {
         overflow: visible !important;
         background:
             radial-gradient(circle at 11% 0%, rgba(var(--theme-accent-rgb), 0.07), transparent 28%),
-            radial-gradient(circle at 78% 8%, rgba(var(--theme-champagne-rgb), 0.14), transparent 24%),
+            radial-gradient(circle at 78% 8%, rgba(var(--theme-accent-rgb), 0.05), transparent 24%),
             radial-gradient(circle at 89% 2%, rgba(255, 255, 255, 0.82), transparent 26%),
-            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%) !important;
+            linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #f7fafc 100%) !important;
         padding-top: 198px !important;
     }
 
@@ -851,7 +851,7 @@ body.modal-open {
 
 /* ========== 2026 GLOBAL VISUAL POLISH ========== */
 :root {
-    --site-shell: linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #fbf7ef 100%);
+    --site-shell: linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #f7fafc 100%);
     --site-glass: rgba(255, 255, 255, 0.82);
     --site-glass-strong: rgba(255, 255, 255, 0.92);
     --site-line: rgba(43, 51, 47, 0.08);
@@ -875,7 +875,7 @@ body {
     color: var(--site-text);
     background:
         radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.09), transparent 28%),
-        radial-gradient(circle at 80% 12%, rgba(var(--theme-champagne-rgb), 0.16), transparent 26%),
+        radial-gradient(circle at 80% 12%, rgba(var(--theme-accent-rgb), 0.05), transparent 26%),
         radial-gradient(circle at top right, rgba(255, 255, 255, 0.62), transparent 20%),
         var(--site-shell);
 }
@@ -935,13 +935,13 @@ body {
 
 @media (max-width: 1100px) {
     :root {
-        --site-shell: linear-gradient(180deg, #fbfbfa 0%, #f2f6f7 52%, #fbf7ef 100%);
+        --site-shell: linear-gradient(180deg, #fbfcfd 0%, #f2f6f7 52%, #f7fafc 100%);
     }
 
     body {
         background:
             radial-gradient(circle at top left, rgba(var(--theme-accent-rgb), 0.07), transparent 30%),
-            radial-gradient(circle at 76% 10%, rgba(var(--theme-champagne-rgb), 0.14), transparent 28%),
+            radial-gradient(circle at 76% 10%, rgba(var(--theme-accent-rgb), 0.05), transparent 28%),
             radial-gradient(circle at top right, rgba(255, 255, 255, 0.76), transparent 22%),
             var(--site-shell);
     }

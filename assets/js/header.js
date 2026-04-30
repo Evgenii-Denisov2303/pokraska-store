@@ -173,13 +173,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function isCompactHeaderViewport() {
         const phoneDesktopPortrait = window.matchMedia?.('(min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3)').matches;
+        const nearSquareDesktop = isNearSquareDesktopHeaderViewport();
         const wideTouchTablet = window.matchMedia?.('(min-width: 1101px) and (max-width: 1600px) and (pointer: coarse)').matches;
         const phoneDesktopLandscape = window.matchMedia?.('(min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse)').matches;
         return window.innerWidth <= COMPACT_HEADER_BREAKPOINT
             || Boolean(phoneDesktopPortrait)
+            || Boolean(nearSquareDesktop)
             || Boolean(wideTouchTablet)
             || Boolean(phoneDesktopLandscape)
             || isLargeSquareHeaderViewport();
+    }
+
+    function isNearSquareDesktopHeaderViewport() {
+        return Boolean(window.matchMedia?.('(min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5)').matches);
+    }
+
+    function isPersistentCompactHeaderViewport() {
+        return isLargeSquareHeaderViewport() || isNearSquareDesktopHeaderViewport();
     }
 
     function isLargeSquareHeaderViewport() {
@@ -211,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateHeaderOnScroll() {
         if (!header || !headerTop) return;
 
-        if (isLargeSquareHeaderViewport()) {
+        if (isPersistentCompactHeaderViewport()) {
             header.classList.remove('is-hidden');
             body.classList.remove('header-hidden');
             lastScrollY = window.scrollY;
