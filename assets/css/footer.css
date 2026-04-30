@@ -1121,6 +1121,25 @@
     }
 }
 
+/* Phone desktop-site portrait reports a wide, very tall viewport; tighten the footer scene there. */
+@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    .preview-footer {
+        --footer-gap-before: clamp(6px, 1vw, 12px);
+        --footer-scene-y: clamp(-54px, -4.6vw, -36px);
+        --footer-scene-space: clamp(138px, 16vw, 166px);
+        --footer-floor-height: 54%;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3) {
+    .preview-footer {
+        --footer-gap-before: clamp(6px, 0.9vw, 12px);
+        --footer-scene-y: clamp(-40px, -2.4vw, -24px);
+        --footer-scene-space: clamp(178px, 14.5vw, 196px);
+        --footer-floor-height: 58%;
+    }
+}
+
 @media (min-width: 641px) and (max-width: 819px) {
     .preview-footer {
         --footer-gap-before: clamp(8px, 1.4vw, 14px);
