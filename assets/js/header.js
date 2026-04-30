@@ -363,8 +363,9 @@ document.addEventListener('DOMContentLoaded', function () {
             ? (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100))
             : (headerTop ? headerTop.offsetHeight : (header ? header.offsetHeight : 100));
         const extraOffset = Number(target.dataset.scrollOffset || 0);
+        const targetTop = target.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
-            top: target.offsetTop - headerHeight - extraOffset,
+            top: Math.max(0, targetTop - headerHeight - extraOffset),
             behavior: 'smooth'
         });
     });
