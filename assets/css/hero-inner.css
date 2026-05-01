@@ -40,7 +40,7 @@
     .internal-hero-scene .hero-stage__picture {
         contain: paint;
         background-color: #f7fafc;
-        background-image: url('../images/hero/home-hero-main.jpg');
+        background-image: url('../images/hero/home-hero-main.webp');
         background-position: center 72%;
         background-repeat: no-repeat;
         background-size: cover;
@@ -526,7 +526,7 @@
         z-index: 0;
         display: block;
         background-color: #f7fafc;
-        background-image: url('../images/hero/home-hero-main.jpg');
+        background-image: url('../images/hero/home-hero-main.webp');
         background-position: center 72%;
         background-repeat: no-repeat;
         background-size: cover;

@@ -111,28 +111,28 @@
       ],
       "slides": [
         {
-          "src": "/assets/images/catalog/home-direction-gates-05.png",
+          "src": "/assets/images/catalog/home-direction-gates-05.webp",
           "alt": "Откатные ворота и калитка на частном участке",
           "caption": "Откатные ворота",
           "width": 1536,
           "height": 1024
         },
         {
-          "src": "/assets/images/catalog/home-direction-gates-01.png",
+          "src": "/assets/images/catalog/home-direction-gates-01.webp",
           "alt": "Распашные ворота на частном участке",
           "caption": "Распашные ворота",
           "width": 1536,
           "height": 1024
         },
         {
-          "src": "/assets/images/catalog/home-direction-gates-02.png",
+          "src": "/assets/images/catalog/home-direction-gates-02.webp",
           "alt": "Металлическая калитка между каменными столбами",
           "caption": "Калитки",
           "width": 1024,
           "height": 1024
         },
         {
-          "src": "/assets/images/catalog/home-direction-gates-03.png",
+          "src": "/assets/images/catalog/home-direction-gates-03.webp",
           "alt": "Современный металлический забор",
           "caption": "Заборы",
           "width": 1536,
@@ -207,39 +207,39 @@
       ],
       "slides": [
         {
-          "src": "/assets/images/catalog/home-direction-powder-01.png",
+          "src": "/assets/images/catalog/home-direction-powder-01.webp",
           "alt": "Маляр наносит порошковое покрытие на металлические изделия",
           "caption": "Порошковая покраска",
           "width": 1536,
           "height": 1024
         },
         {
-          "src": "/assets/images/catalog/home-direction-powder-02.jpg",
+          "src": "/assets/images/catalog/home-direction-powder-02.webp",
           "alt": "Порошковая покраска металлических радиаторов",
           "caption": "Радиаторы и металлоизделия",
-          "width": 4000,
-          "height": 3000
+          "width": 1600,
+          "height": 1200
         },
         {
-          "src": "/assets/images/catalog/home-direction-powder-03.jpg",
+          "src": "/assets/images/catalog/home-direction-powder-03.webp",
           "alt": "Порошковая покраска секций ограждения",
           "caption": "Секции и ограждения",
-          "width": 4000,
-          "height": 3000
+          "width": 1600,
+          "height": 1200
         },
         {
-          "src": "/assets/images/catalog/home-direction-powder-04.png",
+          "src": "/assets/images/catalog/home-direction-powder-04.webp",
           "alt": "Порошковая покраска металлических панелей",
           "caption": "Панели и фасадные элементы",
           "width": 1420,
           "height": 1024
         },
         {
-          "src": "/assets/images/catalog/home-direction-powder-05.jpg",
+          "src": "/assets/images/catalog/home-direction-powder-05.webp",
           "alt": "Порошковая покраска каркасов и стоек",
           "caption": "Каркасы и стойки",
-          "width": 4000,
-          "height": 3000
+          "width": 1200,
+          "height": 1600
         }
       ]
     }
