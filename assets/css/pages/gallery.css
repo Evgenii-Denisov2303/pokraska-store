@@ -2741,6 +2741,10 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
         margin-bottom: 18px;
     }
 
+    .gallery-heading__lead {
+        min-height: 93px;
+    }
+
     .gallery-heading__title-row {
         gap: 10px;
     }
