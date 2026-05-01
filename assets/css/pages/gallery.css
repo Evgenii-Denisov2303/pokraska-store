@@ -73,7 +73,11 @@
 }
 
 .filter-btn i {
+    flex: 0 0 1.1em;
+    width: 1.1em;
+    min-width: 1.1em;
     font-size: 1.1em;
+    text-align: center;
 }
 
 /* Галерея */

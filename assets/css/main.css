@@ -217,6 +217,8 @@ html {
 :root {
     --font-body: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+    --header-height: 140px;
+    --header-top-height: 140px;
     --type-display-callout: clamp(4rem, 7vw, 6.6rem);
     --type-display-feature: clamp(2.6rem, 4.2vw, 4.45rem);
     --type-display-page: clamp(2.7rem, 4.4vw, 4.1rem);
@@ -283,6 +285,21 @@ html {
     --premium-hero: var(--theme-band);
     --card-radius: var(--theme-radius-md);
     --card-shadow: var(--theme-shadow);
+}
+
+/* Match the compact fixed header before header.js refines the measured height. */
+@media (min-width: 641px) and (max-width: 1100px) {
+    :root {
+        --header-height: 73px;
+        --header-top-height: 73px;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --header-height: 61px;
+        --header-top-height: 61px;
+    }
 }
 
 body {
