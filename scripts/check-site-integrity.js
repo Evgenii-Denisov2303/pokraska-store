@@ -15,6 +15,7 @@ const ignoredDirs = new Set([
     'node_modules'
 ]);
 const localAttrs = ['href', 'src', 'srcset'];
+const deferredHtmlSourceAttrs = ['data-catalog-panels-source'];
 const tempNamePattern = /^(tmp_|\.codex-temp$|\.codex-temp-|.*\.tmp$|.*\.bak$)/i;
 
 const errors = [];
@@ -183,7 +184,7 @@ function checkLocalAssets(publicHtmlFiles) {
         const html = readText(htmlPath);
         const baseDir = path.dirname(htmlPath);
 
-        for (const attr of localAttrs) {
+        for (const attr of [...localAttrs, ...deferredHtmlSourceAttrs]) {
             for (const value of getAttrValues(html, attr)) {
                 if (!value || value.includes('${')) continue;
 
@@ -208,7 +209,24 @@ function checkAnchorWarnings(publicHtmlFiles) {
 
     function idsFor(filePath) {
         if (!idCache.has(filePath)) {
-            idCache.set(filePath, getIds(readText(filePath)));
+            const html = readText(filePath);
+            const ids = getIds(html);
+            const baseDir = path.dirname(filePath);
+
+            for (const attr of deferredHtmlSourceAttrs) {
+                for (const value of getAttrValues(html, attr)) {
+                    const fragmentPath = resolveLocalUrl(baseDir, value);
+                    if (!fragmentPath || !isInsideRoot(fragmentPath) || !fs.existsSync(fragmentPath)) {
+                        continue;
+                    }
+
+                    for (const id of getIds(readText(fragmentPath))) {
+                        ids.add(id);
+                    }
+                }
+            }
+
+            idCache.set(filePath, ids);
         }
 
         return idCache.get(filePath);
