@@ -14,22 +14,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const trigger = container.querySelector('[data-embed-trigger]');
 
-        if (trigger instanceof HTMLButtonElement) {
-            trigger.disabled = true;
-        }
-
-        let revealTimer = 0;
+        let fallbackTimer = 0;
         let didStartLoading = false;
 
+        const setTriggerDisabled = (disabled) => {
+            if (trigger instanceof HTMLButtonElement) {
+                trigger.disabled = disabled;
+            }
+        };
+
+        setTriggerDisabled(false);
+
         const revealFrame = () => {
-            if (revealTimer) {
-                window.clearTimeout(revealTimer);
-                revealTimer = 0;
+            if (fallbackTimer) {
+                window.clearTimeout(fallbackTimer);
+                fallbackTimer = 0;
             }
 
             frame.hidden = false;
             container.classList.add('is-loaded');
             container.classList.remove('is-loading');
+            container.classList.remove('is-timeout');
+            container.removeAttribute('aria-busy');
+            setTriggerDisabled(false);
+        };
+
+        const keepFallbackVisible = () => {
+            fallbackTimer = 0;
+            container.classList.add('is-timeout');
+            container.classList.remove('is-loading');
+            container.removeAttribute('aria-busy');
         };
 
         const startLoading = () => {
@@ -39,6 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             didStartLoading = true;
             container.classList.add('is-loading');
+            container.classList.remove('is-timeout');
+            container.setAttribute('aria-busy', 'true');
+            setTriggerDisabled(true);
+            frame.hidden = false;
             frame.addEventListener('load', revealFrame, { once: true });
             frame.loading = container.hasAttribute('data-embed-lazy') ? 'lazy' : 'eager';
 
@@ -46,8 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 frame.src = src;
             }
 
-            revealTimer = window.setTimeout(revealFrame, 1200);
+            fallbackTimer = window.setTimeout(keepFallbackVisible, 8000);
         };
+
+        if (trigger instanceof HTMLButtonElement) {
+            trigger.addEventListener('click', startLoading);
+        }
 
         if (container.hasAttribute('data-embed-lazy') && 'IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {

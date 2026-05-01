@@ -149,7 +149,7 @@
     "actions": [
       {
         "label": "Открыть маршрут",
-        "href": "https://yandex.ru/maps/?text=%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C%2C%20%D0%A1%D1%82%D0%B0%D1%80%D0%BE%D0%B5%20%D0%9F%D0%BE%D0%B1%D0%B5%D0%B4%D0%B8%D0%BB%D0%BE%D0%B2%D0%BE%2C%20%D1%83%D0%BB.%20%D0%A1%D0%B0%D0%B4%D0%BE%D0%B2%D0%B0%D1%8F%2C%2072",
+        "href": "https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17",
         "icon": "fas fa-map-marker-alt",
         "style": "primary"
       },
@@ -160,6 +160,6 @@
         "style": "outline"
       }
     ],
-    "mapSrc": "https://yandex.ru/map-widget/v1/?um=constructor%3Aab3bc93404c3f188901f7a43c1876e3c7b022de010170252fc805114e1c98ce5&amp;source=constructor&amp;z=18"
+    "mapSrc": "https://yandex.ru/map-widget/v1/?ll=49.083482%2C55.703165&amp;z=17&amp;pt=49.083482,55.703165,pm2rdm"
   }
 }
