@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node scripts/admin-server.js",
     "convert-webp": "node scripts/convert-to-webp.js",
-    "sync-inner-shell": "node scripts/sync-inner-shell.js"
+    "sync-inner-shell": "node scripts/sync-inner-shell.js",
+    "check:site": "node scripts/check-site-integrity.js"
   },
   "devDependencies": {
     "sharp": "^0.33.0"
