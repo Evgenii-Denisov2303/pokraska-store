@@ -167,6 +167,15 @@ document.addEventListener('DOMContentLoaded', function () {
         galleryGrid.setAttribute('aria-busy', isBusy ? 'true' : 'false');
     }
 
+    function withGalleryImageVersion(url) {
+        const version = galleryGrid?.getAttribute('data-gallery-image-version');
+        if (!version || !url || url.includes('?') || url.startsWith('data:')) {
+            return url;
+        }
+
+        return `${url}?v=${encodeURIComponent(version)}`;
+    }
+
     function renderGalleryItems(items, filterValue = 'all', initialVisibleCount = pageSize) {
         if (!galleryGrid) return;
 
@@ -175,9 +184,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         galleryGrid.innerHTML = items.map((item) => {
             const matchesFilter = normalizedFilter === 'all' || item.category === normalizedFilter;
-            const isVisible = matchesFilter && shownInFilter < initialVisibleCount;
+            const visibleIndex = matchesFilter ? shownInFilter : -1;
+            const isVisible = matchesFilter && visibleIndex < initialVisibleCount;
+            const isPriorityImage = isVisible && visibleIndex < 2;
             const displayTitle = getDisplayTitle(item);
             const workInfoClass = displayTitle ? 'work-info' : 'work-info work-info--compact';
+            const previewSrc = withGalleryImageVersion(item.preview);
 
             if (matchesFilter) {
                 shownInFilter += 1;
@@ -186,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return `
             <div class="gallery-item" data-category="${escapeHtml(item.category)}" aria-hidden="${isVisible ? 'false' : 'true'}"${isVisible ? '' : ' style="display:none;opacity:0;transform:translateY(20px) scale(0.95)"'}>
                 <div class="gallery-image">
-                    <img src="${escapeHtml(item.preview)}" width="${Number(item.width) || 1}" height="${Number(item.height) || 1}" alt="${escapeHtml(item.alt)}" loading="lazy" decoding="async">
+                    <img src="${escapeHtml(previewSrc)}" width="${Number(item.width) || 1}" height="${Number(item.height) || 1}" alt="${escapeHtml(item.alt)}" loading="${isPriorityImage ? 'eager' : 'lazy'}" fetchpriority="${isPriorityImage ? 'high' : 'low'}" decoding="async">
                     <a href="${escapeHtml(item.full)}" class="zoom-btn" data-lightbox="gallery" aria-label="${escapeHtml(item.alt || item.title || item.label || 'Открыть фото')}">
                         <i class="fas fa-expand-alt"></i>
                     </a>

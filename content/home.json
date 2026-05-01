@@ -377,7 +377,7 @@
     "items": [
       {
         "slug": "came",
-        "src": "/assets/images/catalog/came-logo.jpg",
+        "src": "/assets/images/catalog/came-logo.webp",
         "alt": "CAME",
         "title": "CAME",
         "width": 800,
@@ -385,7 +385,7 @@
       },
       {
         "slug": "alutech",
-        "src": "/assets/images/catalog/alutech-logo.png",
+        "src": "/assets/images/catalog/alutech-logo.webp",
         "alt": "ALUTECH",
         "title": "ALUTECH",
         "width": 890,
@@ -393,7 +393,7 @@
       },
       {
         "slug": "doorhan",
-        "src": "/assets/images/catalog/doorhan-logo.png",
+        "src": "/assets/images/catalog/doorhan-logo.webp",
         "alt": "DoorHan",
         "title": "DoorHan",
         "width": 1242,
