@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Визуальное редактирование | KOMFORTPLUS116.RU</title>
     <meta name="robots" content="noindex, nofollow">
+    <script>
+        (function() {
+            var host = window.location.hostname;
+            var isLocalAdminHost = host === 'localhost'
+                || host === '127.0.0.1'
+                || host === '::1'
+                || window.location.port === '4173';
+
+            if (isLocalAdminHost) {
+                document.documentElement.classList.add('is-local-admin-host');
+            } else {
+                document.documentElement.classList.add('is-public-admin-host');
+            }
+        })();
+    </script>
     <style>
         :root {
             color-scheme: light;
@@ -36,6 +51,48 @@
                 radial-gradient(circle at 8% 0%, rgba(113, 136, 154, 0.16), transparent 26%),
                 radial-gradient(circle at 92% 2%, rgba(255, 255, 255, 0.82), transparent 20%),
                 linear-gradient(180deg, #fbf7f1 0%, #f4eee5 56%, #f8f3ec 100%);
+        }
+
+        .local-admin-only {
+            display: grid;
+            min-height: 100vh;
+            place-items: center;
+            padding: 28px 18px;
+        }
+
+        .is-local-admin-host .local-admin-only {
+            display: none;
+        }
+
+        html:not(.is-local-admin-host) .shell {
+            display: none;
+        }
+
+        .local-admin-only__card {
+            width: min(720px, 100%);
+            padding: 30px;
+            border-radius: 30px;
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: var(--shadow);
+        }
+
+        .local-admin-only__card h1 {
+            margin: 12px 0 12px;
+            font-size: clamp(30px, 6vw, 48px);
+        }
+
+        .local-admin-only__card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .local-admin-only__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
         }
 
         .shell {
@@ -600,6 +657,18 @@
     </style>
 </head>
 <body>
+    <section class="local-admin-only" data-local-admin-only aria-labelledby="localAdminOnlyTitle">
+        <div class="local-admin-only__card">
+            <span class="eyebrow">Локальный доступ</span>
+            <h1 id="localAdminOnlyTitle">Админка доступна только локально</h1>
+            <p>Публичный сайт не принимает правки через GitHub Pages. Для редактирования запустите проект на своем компьютере командой <strong>npm start</strong>, откройте локальный адрес и используйте кнопку инлайн-редактора на страницах сайта.</p>
+            <div class="local-admin-only__actions">
+                <a class="button button--primary" href="/">На главную</a>
+                <a class="button" href="/pages/contacts.html">Контакты</a>
+            </div>
+        </div>
+    </section>
+
     <main class="shell">
         <section class="hero">
             <span class="eyebrow">KOMFORTPLUS116.RU</span>
@@ -778,6 +847,13 @@
 
     <script>
         (function() {
+            const isLocalAdminHost = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+                || window.location.port === '4173';
+
+            if (!isLocalAdminHost) {
+                return;
+            }
+
             const sessionBadge = document.getElementById('sessionBadge');
             const returnBadge = document.getElementById('returnBadge');
             const draftBadge = document.getElementById('draftBadge');

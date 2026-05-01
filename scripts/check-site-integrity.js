@@ -280,6 +280,28 @@ function checkMetadata(publicHtmlFiles) {
     }
 }
 
+function checkAdminLocalOnlyGuard() {
+    const adminPath = path.join(rootDir, 'admin', 'index.html');
+    if (!fs.existsSync(adminPath)) {
+        return;
+    }
+
+    const html = readText(adminPath);
+    const requiredMarkers = [
+        'data-local-admin-only',
+        'is-local-admin-host',
+        'is-public-admin-host',
+        "window.location.port === '4173'",
+        'Админка доступна только локально'
+    ];
+
+    for (const marker of requiredMarkers) {
+        if (!html.includes(marker)) {
+            errors.push(`admin/index.html: missing local-only guard marker: ${marker}`);
+        }
+    }
+}
+
 function main() {
     const allFiles = walk(rootDir);
     checkTempArtifacts(allFiles);
@@ -287,6 +309,7 @@ function main() {
     checkLocalAssets(publicHtmlFiles);
     checkAnchorWarnings(publicHtmlFiles);
     checkMetadata(publicHtmlFiles);
+    checkAdminLocalOnlyGuard();
 
     for (const warning of warnings) {
         console.warn(`WARN: ${warning}`);
