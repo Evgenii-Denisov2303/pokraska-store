@@ -11,6 +11,7 @@ tmp_*
 *.bak
 node_modules/
 test-results/
+playwright-report/
 .tmp-edge-opencheck/
 tmp_*.png
 tmp_*.json

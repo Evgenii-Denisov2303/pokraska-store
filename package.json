@@ -6,9 +6,13 @@
     "start": "node scripts/admin-server.js",
     "convert-webp": "node scripts/convert-to-webp.js",
     "sync-inner-shell": "node scripts/sync-inner-shell.js",
-    "check:site": "node scripts/check-site-integrity.js"
+    "check:site": "node scripts/check-site-integrity.js",
+    "test:responsive": "playwright test",
+    "test:responsive:headed": "playwright test --headed",
+    "test:responsive:debug": "playwright test --debug"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "sharp": "^0.33.0"
   }
 }

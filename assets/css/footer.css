@@ -1211,6 +1211,13 @@ body#top .apple-shell > .preview-footer {
 }
 
 @media (min-width: 1200px) {
+    .preview-footer {
+        background-image: var(--footer-scene);
+        background-repeat: no-repeat;
+        background-position: var(--footer-scene-x) var(--footer-scene-y);
+        background-size: var(--footer-scene-size);
+    }
+
     body#top > .preview-footer,
     body#top :is(
         .catalog-page,
