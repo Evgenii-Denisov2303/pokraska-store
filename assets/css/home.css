@@ -7167,13 +7167,27 @@ button {
         gap: 0;
     }
 
-    .hero-copy h1,
     .hero-copy__subtext,
     .hero-copy__actions,
     .hero-copy__features,
     .hero-copy__facts,
     .hero-copy__routes {
         display: none;
+    }
+
+    .hero-copy h1 {
+        position: absolute;
+        top: auto;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: visible;
+        clip: auto;
+        clip-path: inset(50%);
+        white-space: normal;
+        border: 0;
     }
 
     .hero-copy__eyebrow {
