@@ -9,7 +9,7 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/catalog/sliding-gate-1.jpg</image:loc>
+      <image:loc>https://pokraska.store/assets/images/hero/home-hero-main.jpg</image:loc>
       <image:title>pokraska.store — Ворота, заборы и порошковая покраска в Казани</image:title>
     </image:image>
   </url>
@@ -127,11 +127,11 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/catalog/sliding-gate-1.jpg</image:loc>
+      <image:loc>https://pokraska.store/assets/images/gallery/sliding/sliding-01.webp</image:loc>
       <image:title>Откатные ворота — примеры работ</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://pokraska.store/assets/images/catalog/swing-gate-1.jpg</image:loc>
+      <image:loc>https://pokraska.store/assets/images/gallery/swing/swing-01.webp</image:loc>
       <image:title>Распашные ворота — примеры работ</image:title>
     </image:image>
   </url>
