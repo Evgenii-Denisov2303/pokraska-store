@@ -14,7 +14,7 @@ const ignoredDirs = new Set([
     '.github',
     'node_modules'
 ]);
-const localAttrs = ['href', 'src', 'srcset'];
+const localAttrs = ['href', 'src', 'srcset', 'data-src', 'data-thumb-src'];
 const deferredHtmlSourceAttrs = ['data-catalog-panels-source'];
 const tempNamePattern = /^(tmp_|\.codex-temp$|\.codex-temp-|.*\.tmp$|.*\.bak$)/i;
 

@@ -205,6 +205,22 @@ document.addEventListener('DOMContentLoaded', function () {
             slides[0].classList.add('is-active');
         }
 
+        const getSlideSource = (slide) => (
+            slide.currentSrc || slide.getAttribute('src') || slide.dataset.src || ''
+        );
+
+        const ensureSlideLoaded = (index) => {
+            const slide = slides[index];
+            if (!slide || slide.getAttribute('src')) return;
+
+            const deferredSrc = slide.dataset.src;
+            if (deferredSrc) {
+                slide.src = deferredSrc;
+            }
+        };
+
+        ensureSlideLoaded(activeIndex);
+
         if (viewport && !slider.querySelector('.equipment-slider__stage')) {
             const stage = document.createElement('div');
             stage.className = 'equipment-slider__stage';
@@ -224,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
             slides.forEach((slide, index) => {
                 const thumb = document.createElement('button');
                 const image = document.createElement('img');
-                const imageSrc = slide.currentSrc || slide.getAttribute('src') || '';
+                const imageSrc = slide.dataset.thumbSrc || getSlideSource(slide);
                 const imageAlt = slide.getAttribute('alt') || `Фото ${index + 1}`;
 
                 thumb.type = 'button';
@@ -267,6 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const showSlide = (nextIndex) => {
             slides[activeIndex].classList.remove('is-active');
             activeIndex = (nextIndex + slides.length) % slides.length;
+            ensureSlideLoaded(activeIndex);
             slides[activeIndex].classList.add('is-active');
             syncSliderState();
         };

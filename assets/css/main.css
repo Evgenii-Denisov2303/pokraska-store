@@ -1187,7 +1187,7 @@ body {
 
 /* ========== HERO SECTION (Variant A) ========== */
 .hero {
-  --hero-img: url('../images/hero/hero-gates-clean.png');
+  --hero-img: url('../images/hero/hero-gates-clean.webp');
   background-color: #0b0f16;
 
   color: #fff;
