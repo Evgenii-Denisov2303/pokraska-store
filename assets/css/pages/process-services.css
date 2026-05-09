@@ -1908,9 +1908,9 @@ body#top .before-after-section .before-after--service-wide .before-after__media 
 }
 
 body#top .before-after-section--sandblast .before-after--service-wide .before-after__image {
-    object-fit: contain;
+    object-fit: cover;
     object-position: center center;
-    transform: scale(1.35);
+    transform: none;
     transform-origin: center center;
 }
 
