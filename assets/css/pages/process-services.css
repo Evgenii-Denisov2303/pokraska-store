@@ -1345,13 +1345,14 @@ body#top .equipment-slider__btn {
     transform: translateY(-50%);
     border: 0;
     border-radius: 999px;
-    border: 1px solid rgba(var(--service-accent-rgb), 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.78);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(246, 240, 233, 0.09));
-    color: rgba(26, 45, 63, 0.82);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(247, 241, 232, 0.86));
+    color: rgba(13, 28, 43, 0.95);
     box-shadow:
-        0 6px 12px rgba(28, 40, 54, 0.018),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 12px 24px rgba(13, 28, 43, 0.18),
+        0 2px 6px rgba(13, 28, 43, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
@@ -1366,17 +1367,18 @@ body#top .equipment-slider__btn {
 
 body#top .equipment-slider__btn i {
     opacity: 1;
-    filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.4));
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.65));
 }
 
 body#top .equipment-slider__btn:hover,
 body#top .equipment-slider__btn:focus-visible {
-    color: rgba(16, 34, 51, 0.96);
+    color: rgba(8, 22, 36, 1);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(246, 240, 233, 0.2));
+        linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(246, 239, 228, 0.94));
     box-shadow:
-        0 8px 16px rgba(28, 40, 54, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        0 16px 30px rgba(13, 28, 43, 0.22),
+        0 3px 8px rgba(13, 28, 43, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.88);
     opacity: 1;
     transform: translateY(-50%) scale(1.01);
     outline: none;
@@ -1531,7 +1533,7 @@ body#top .palette-card {
 @media (hover: hover) and (pointer: fine) {
     body#top .service-detail-card:hover,
     body#top .service-detail-card:focus-within {
-        transform: translateY(-4px);
+        transform: none;
         box-shadow:
             0 26px 38px rgba(16, 38, 61, 0.052),
             inset 0 1px 0 rgba(255, 255, 255, 0.74);
@@ -2962,15 +2964,18 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .equipment-slider__btn {
         width: 34px !important;
         height: 34px !important;
-        border-color: rgba(var(--service-accent-rgb), 0.08) !important;
-        background: rgba(255, 255, 255, 0.18) !important;
-        box-shadow: 0 8px 16px rgba(18, 31, 45, 0.045) !important;
+        border-color: rgba(255, 255, 255, 0.76) !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        box-shadow:
+            0 10px 20px rgba(18, 31, 45, 0.18),
+            0 2px 6px rgba(18, 31, 45, 0.08) !important;
         backdrop-filter: blur(12px) saturate(112%) !important;
         -webkit-backdrop-filter: blur(12px) saturate(112%) !important;
     }
 
     body#top .equipment-slider__btn i {
         font-size: 0.78rem !important;
+        color: rgba(11, 26, 40, 0.98) !important;
     }
 
     body#top .equipment-slider__btn--prev {
