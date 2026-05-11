@@ -10139,3 +10139,127 @@ body#top .hero-header--desktop-home {
         margin-left: -20px !important;
     }
 }
+
+/* Wide home preview cards: keep gallery photos photographic instead of stretching to text height. */
+@media (min-width: 1101px) and (min-aspect-ratio: 121/100) {
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-areas:
+            "media top"
+            "dock dock" !important;
+        gap: 16px 18px !important;
+        align-items: start !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: 14px !important;
+        overflow: visible !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-areas:
+            "top media"
+            "dock dock" !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media,
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        grid-area: media !important;
+        position: relative !important;
+        inset: auto !important;
+        justify-self: stretch !important;
+        align-self: start !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 3 / 2 !important;
+        margin: 0 !important;
+        border-radius: 26px !important;
+    }
+
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        display: block !important;
+        z-index: 1 !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        display: contents !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        display: none !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        grid-area: top !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        align-content: start !important;
+    }
+
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: dock !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: 12px 18px !important;
+        align-items: end !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items {
+        grid-column: 1 / -1 !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 8px 12px !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .panel-scene__trust,
+    body#top .panel-scene__card--light .panel-scene__trust,
+    body#top .panel-scene__card--dark .panel-scene__trust {
+        grid-column: 1 / 2 !important;
+        max-width: none !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .panel-scene__actions {
+        grid-column: 2 / 3 !important;
+        justify-self: end !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: media !important;
+        position: relative !important;
+        z-index: 2 !important;
+        align-self: end !important;
+        justify-self: start !important;
+        margin: 0 0 18px 18px !important;
+        padding: 0 !important;
+        background: none !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        justify-self: end !important;
+        justify-items: end !important;
+        text-align: right !important;
+        margin: 0 18px 18px 0 !important;
+    }
+}
