@@ -10140,7 +10140,7 @@ body#top .hero-header--desktop-home {
     }
 }
 
-/* Wide home preview cards: keep gallery photos photographic instead of stretching to text height. */
+/* Wide home preview cards: keep photo and copy balanced in equal halves. */
 @media (min-width: 1101px) and (min-aspect-ratio: 121/100) {
     body#top .panel-scene__card,
     body#top .panel-scene__card--light {
@@ -10172,11 +10172,11 @@ body#top .hero-header--desktop-home {
         position: relative !important;
         inset: auto !important;
         justify-self: stretch !important;
-        align-self: start !important;
+        align-self: stretch !important;
         width: 100% !important;
         height: auto !important;
-        min-height: 0 !important;
-        aspect-ratio: 3 / 2 !important;
+        min-height: clamp(340px, 30vw, 500px) !important;
+        aspect-ratio: auto !important;
         margin: 0 !important;
         border-radius: 26px !important;
     }
@@ -10202,8 +10202,46 @@ body#top .hero-header--desktop-home {
         grid-area: top !important;
         display: grid !important;
         grid-template-columns: 1fr !important;
+        grid-template-rows: auto minmax(0, 1fr) !important;
         gap: 12px !important;
-        align-content: start !important;
+        align-content: stretch !important;
+        align-self: stretch !important;
+        padding: clamp(18px, 1.55vw, 24px) !important;
+        border-radius: 26px !important;
+        border: 1px solid rgba(var(--theme-accent-rgb), 0.07) !important;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 251, 255, 0.34)) !important;
+        box-shadow:
+            0 14px 28px rgba(var(--theme-accent-rgb), 0.035),
+            inset 0 1px 0 rgba(255, 255, 255, 0.54) !important;
+        backdrop-filter: blur(16px) !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__top {
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(252, 249, 244, 0.36)) !important;
+    }
+
+    body#top .panel-scene__copy-block,
+    body#top .panel-scene__card--light .panel-scene__copy-block,
+    body#top .panel-scene__card--powder .panel-scene__copy-block {
+        gap: 10px !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene h3 {
+        margin: 4px 0 6px !important;
+    }
+
+    body#top .panel-scene p,
+    body#top .panel-scene__card--light p {
+        max-width: none !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        align-self: end !important;
+        margin-top: 0 !important;
     }
 
     body#top .panel-scene__dock,
