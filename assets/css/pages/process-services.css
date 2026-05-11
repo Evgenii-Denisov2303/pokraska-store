@@ -864,6 +864,10 @@ body#top .service-detail-card + .service-detail-card {
     margin-top: 24px;
 }
 
+body#top .service-detail-card + .before-after-section {
+    margin-top: var(--service-gap);
+}
+
 body#top .service-detail-card {
     padding: 28px;
     transition:
@@ -1557,6 +1561,11 @@ body#top .palette-card {
         box-shadow:
             0 22px 34px rgba(16, 38, 61, 0.045),
             inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    body#top .palette-card--standalone:hover,
+    body#top .palette-card--standalone:focus-within {
+        transform: none;
     }
 }
 
