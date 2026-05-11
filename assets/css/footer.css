@@ -1029,7 +1029,7 @@
     width: 100%;
     max-width: none;
     margin: calc(var(--footer-gap-before) + var(--footer-gap-adjust)) 0 0;
-    padding: var(--footer-scene-space) clamp(22px, 3vw, 34px) 12px;
+    padding: var(--footer-scene-space) clamp(22px, 3vw, 34px) 0;
     border: 0;
     border-radius: 0;
     background-color: #fffdf9;
@@ -1096,6 +1096,12 @@
     .preview-footer {
         --footer-scene-space: clamp(245px, 14.2vw, 342px);
         --footer-scene-size: 100% auto;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1919px) {
+    .preview-footer {
+        --footer-scene-size: auto calc(100% + 36px);
     }
 }
 
@@ -1168,7 +1174,7 @@
         --footer-scene: url("../images/footer/footer-gates-mobile-tight.webp");
         --footer-scene-y: clamp(-18px, -3.8vw, -10px);
         --footer-scene-space: clamp(102px, 27vw, 120px);
-        --footer-scene-size: 100% auto;
+        --footer-scene-size: auto calc(100% + 36px);
         --footer-floor-height: 70%;
         --footer-floor-tint: rgba(240, 222, 194, 0.54);
         --footer-floor-glow: rgba(211, 172, 112, 0.12);
@@ -1207,7 +1213,10 @@ body#top .apple-shell:has(> .preview-footer) {
 }
 
 body#top .apple-shell > .preview-footer {
-    --footer-gap-adjust: 12px;
+    --footer-gap-adjust: 0px;
+    width: calc(100% + 40px);
+    margin-right: -20px;
+    margin-left: -20px;
 }
 
 @media (min-width: 1200px) {
@@ -1218,6 +1227,7 @@ body#top .apple-shell > .preview-footer {
         background-size: var(--footer-scene-size);
     }
 
+    body#top .apple-shell > .preview-footer,
     body#top > .preview-footer,
     body#top :is(
         .catalog-page,
@@ -1236,6 +1246,14 @@ body#top .apple-shell > .preview-footer {
 @media (max-width: 640px) {
     body#top .apple-shell:has(> .preview-footer) {
         padding-bottom: 0;
+    }
+}
+
+@media (max-width: 1100px) {
+    body#top .apple-shell > .preview-footer {
+        width: calc(100% + 24px);
+        margin-right: -12px;
+        margin-left: -12px;
     }
 }
 
