@@ -548,6 +548,11 @@ body#top .services-page .catalog-group-panel .catalog-link:not(.is-active):focus
     overflow-anchor: none;
 }
 
+body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-panel) {
+    border-color: transparent;
+    box-shadow: none;
+}
+
 .catalog-panel[hidden] {
     display: none !important;
 }
