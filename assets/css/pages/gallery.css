@@ -2341,19 +2341,19 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
 
     body#top .gallery-page .gallery-filter-hint {
         position: absolute;
-        top: calc(50% - 8px);
+        top: 50%;
         display: grid;
         place-items: center;
         pointer-events: none;
         z-index: 4;
-        min-width: 18px;
-        width: 18px;
-        height: 18px;
+        min-width: 21px;
+        width: 21px;
+        height: 21px;
         padding: 0;
         border-radius: 999px;
-        border: 1px solid rgba(160, 188, 218, 0.42);
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(242, 248, 252, 0.86));
-        box-shadow: 0 6px 16px rgba(86, 112, 142, 0.12);
+        border: 1px solid rgba(130, 165, 202, 0.48);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(238, 246, 252, 0.9));
+        box-shadow: 0 7px 18px rgba(62, 92, 126, 0.15);
         color: transparent;
         font-size: 0;
         font-weight: 800;
@@ -2370,8 +2370,8 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
     body#top .gallery-page .gallery-filter-hint::before {
         content: "";
         display: block;
-        width: 10px;
-        height: 7px;
+        width: 12px;
+        height: 8px;
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
@@ -2522,24 +2522,24 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
 @keyframes galleryMobileSwipeCueRight {
     0%, 100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate(0, -50%) scale(1);
     }
 
     50% {
         opacity: 0.78;
-        transform: translateX(1.5px);
+        transform: translate(1.5px, -50%) scale(1);
     }
 }
 
 @keyframes galleryMobileSwipeCueLeft {
     0%, 100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate(0, -50%) scale(1);
     }
 
     50% {
         opacity: 0.78;
-        transform: translateX(-1.5px);
+        transform: translate(-1.5px, -50%) scale(1);
     }
 }
 
@@ -2556,9 +2556,9 @@ body#top .order-cta .order-cta__button--secondary:focus-visible {
     }
 
     body#top .gallery-page .gallery-filter-hint {
-        min-width: 16px;
-        width: 16px;
-        height: 16px;
+        min-width: 19px;
+        width: 19px;
+        height: 19px;
     }
 
     body#top .gallery-page .gallery-filter-hint--left {
