@@ -135,23 +135,18 @@
 .catalog-nav-shell::after {
     content: "";
     position: absolute;
+    inset: 0;
+    border-radius: inherit;
     pointer-events: none;
+    z-index: 0;
 }
 
 .catalog-nav-shell::before {
-    inset: -92px auto auto -56px;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--catalog-nav-title-glow), rgba(255, 255, 255, 0));
+    background: radial-gradient(circle at 0% 0%, var(--catalog-nav-title-glow), rgba(255, 255, 255, 0) 42%);
 }
 
 .catalog-nav-shell::after {
-    right: -96px;
-    bottom: -118px;
-    width: 300px;
-    height: 240px;
-    background: radial-gradient(circle, rgba(var(--catalog-nav-family-strong-rgb), 0.14), rgba(255, 255, 255, 0));
+    background: radial-gradient(ellipse at 100% 100%, rgba(var(--catalog-nav-family-strong-rgb), 0.1), rgba(255, 255, 255, 0) 58%);
 }
 
 .catalog-nav-shell > * {
@@ -257,12 +252,12 @@
 .catalog-group-tab::before {
     content: "";
     position: absolute;
-    inset: auto -34px -34px auto;
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(var(--catalog-group-rgb), 0.24), rgba(255, 255, 255, 0));
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 100% 100%, rgba(var(--catalog-group-rgb), 0.18), rgba(255, 255, 255, 0) 58%);
+    opacity: 0.82;
     pointer-events: none;
+    z-index: 0;
 }
 
 .catalog-group-tab:hover,
