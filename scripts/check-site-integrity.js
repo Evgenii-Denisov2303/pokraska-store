@@ -12,7 +12,9 @@ const allowedHtmlOutsideSitemap = new Set([
 const ignoredDirs = new Set([
     '.git',
     '.github',
-    'node_modules'
+    'node_modules',
+    'playwright-report',
+    'test-results'
 ]);
 const localAttrs = ['href', 'src', 'srcset', 'data-src', 'data-thumb-src'];
 const deferredHtmlSourceAttrs = ['data-catalog-panels-source'];
