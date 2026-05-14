@@ -1342,21 +1342,21 @@ body#top .equipment-slider__btn {
     position: absolute;
     top: 50%;
     z-index: 2;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     display: inline-grid;
     place-items: center;
     transform: translateY(-50%);
-    border: 0;
+    padding: 0;
     border-radius: 999px;
-    border: 1px solid rgba(255, 248, 238, 0.58);
+    border: 1px solid rgba(255, 248, 238, 0.72);
     background:
-        linear-gradient(180deg, rgba(255, 248, 238, 0.74), rgba(238, 226, 209, 0.58));
+        linear-gradient(180deg, rgba(255, 251, 244, 0.88), rgba(238, 226, 209, 0.72));
     color: rgba(13, 28, 43, 0.95);
     box-shadow:
-        0 10px 22px rgba(13, 28, 43, 0.16),
-        0 2px 6px rgba(13, 28, 43, 0.07),
-        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+        0 12px 24px rgba(13, 28, 43, 0.18),
+        0 3px 7px rgba(13, 28, 43, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.62);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     cursor: pointer;
@@ -1370,6 +1370,9 @@ body#top .equipment-slider__btn {
 }
 
 body#top .equipment-slider__btn i {
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1;
     opacity: 1;
     filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.65));
 }
@@ -2434,8 +2437,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .equipment-slider__btn {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
         top: 50%;
         bottom: auto;
         transform: translateY(-50%);
@@ -2971,28 +2974,30 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .equipment-slider__btn {
-        width: 34px !important;
-        height: 34px !important;
-        border-color: rgba(255, 248, 238, 0.58) !important;
-        background: rgba(255, 248, 238, 0.72) !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-color: rgba(255, 248, 238, 0.72) !important;
+        background:
+            linear-gradient(180deg, rgba(255, 251, 244, 0.88), rgba(238, 226, 209, 0.72)) !important;
         box-shadow:
-            0 9px 18px rgba(18, 31, 45, 0.16),
-            0 2px 6px rgba(18, 31, 45, 0.08) !important;
+            0 10px 20px rgba(18, 31, 45, 0.18),
+            0 2px 6px rgba(18, 31, 45, 0.09),
+            inset 0 1px 0 rgba(255, 255, 255, 0.58) !important;
         backdrop-filter: blur(12px) saturate(112%) !important;
         -webkit-backdrop-filter: blur(12px) saturate(112%) !important;
     }
 
     body#top .equipment-slider__btn i {
-        font-size: 0.78rem !important;
+        font-size: 0.86rem !important;
         color: rgba(11, 26, 40, 0.98) !important;
     }
 
     body#top .equipment-slider__btn--prev {
-        left: 8px !important;
+        left: 10px !important;
     }
 
     body#top .equipment-slider__btn--next {
-        right: 8px !important;
+        right: 10px !important;
     }
 
     body#top .equipment-slider__thumbs {
