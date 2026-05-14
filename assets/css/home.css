@@ -2719,7 +2719,7 @@ button {
 
 .panel-scene__card--light .panel-scene__eyebrow {
     background: rgba(255, 255, 255, 0.16);
-    color: rgba(86, 72, 56, 0.9);
+    color: rgba(var(--theme-accent-strong-rgb), 0.86);
 }
 
 .panel-scene__dock {
