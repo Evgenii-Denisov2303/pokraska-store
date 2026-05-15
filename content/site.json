@@ -50,18 +50,18 @@
       "note": "ворота и автоматика"
     },
     {
-      "label": "Порошковая покраска",
-      "href": "/pages/powder-coating.html",
-      "icon": "fas fa-paint-roller",
-      "group": "Покрытия",
-      "note": "цвет и фактура"
-    },
-    {
       "label": "Пескоструйная обработка",
       "href": "/pages/sandblasting.html",
       "icon": "fas fa-wind",
       "group": "Подготовка",
       "note": "очистка металла"
+    },
+    {
+      "label": "Порошковая покраска",
+      "href": "/pages/powder-coating.html",
+      "icon": "fas fa-paint-roller",
+      "group": "Покрытия",
+      "note": "цвет и фактура"
     },
     {
       "label": "Наши работы",
@@ -101,12 +101,12 @@
     "usefulTitle": "Полезное",
     "usefulLinks": [
       {
-        "label": "Порошковая покраска",
-        "href": "/pages/powder-coating.html"
-      },
-      {
         "label": "Пескоструйная обработка",
         "href": "/pages/sandblasting.html"
+      },
+      {
+        "label": "Порошковая покраска",
+        "href": "/pages/powder-coating.html"
       },
       {
         "label": "Цены и расчет",

@@ -3106,3 +3106,56 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         max-width: none !important;
     }
 }
+
+/* Powder coating: keep the wheel coating benefits compact in one mobile row. */
+@media (max-width: 640px) {
+    body#top .services-page--powder #wheels .advantages-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item,
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item:nth-child(3):last-child {
+        grid-column: auto !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        align-content: start !important;
+        justify-items: center !important;
+        min-height: 104px !important;
+        padding: 10px 7px !important;
+        gap: 7px !important;
+        text-align: center !important;
+    }
+
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item i {
+        display: grid !important;
+        place-items: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        margin: 0 auto !important;
+        font-size: 0.78rem !important;
+    }
+
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item span {
+        font-size: clamp(0.62rem, 2.45vw, 0.72rem) !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 360px) {
+    body#top .services-page--powder #wheels .advantages-grid {
+        gap: 6px !important;
+    }
+
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item,
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item:nth-child(3):last-child {
+        min-height: 108px !important;
+        padding: 9px 5px !important;
+    }
+
+    body#top .services-page--powder #wheels .advantages-grid > .advantage-item span {
+        font-size: 0.6rem !important;
+        line-height: 1.18 !important;
+    }
+}
