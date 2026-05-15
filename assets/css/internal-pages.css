@@ -475,7 +475,7 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 
 }
 
-/* ========== UNIFIED TABLET PAGE START ========== */
+/* ========== UNIFIED INNER PAGE START ========== */
 @media (min-width: 769px) and (max-width: 1100px) {
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
         padding-top: 92px !important;
@@ -489,8 +489,18 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
 }
 
 @media (min-width: 561px) and (max-width: 640px) {
-    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
-        padding-top: 32px !important;
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 24px !important;
+    }
+}
+
+@media (max-width: 560px) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        padding-top: 24px !important;
+    }
+
+    html body#top .gallery-page .gallery-heading__lead {
+        min-height: 0 !important;
     }
 }
 
