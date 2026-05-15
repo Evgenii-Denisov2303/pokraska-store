@@ -824,3 +824,58 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
         max-width: none !important;
     }
 }
+
+/* Open mobile layout: remove heavy wrappers, keep the document cards. */
+@media (max-width: 640px) {
+    body#top .payment-docs-page > .container {
+        width: calc(100vw - 28px) !important;
+        max-width: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body#top .payment-order-sheet,
+    body#top .payment-docs-kit,
+    body#top .payment-route,
+    body#top .payment-docs-page .faq-section.faq-system {
+        overflow: visible !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .payment-order-sheet::before,
+    body#top .payment-order-sheet::after,
+    body#top .payment-route::before,
+    body#top .payment-docs-page .faq-section.faq-system::before {
+        content: none !important;
+        display: none !important;
+    }
+
+    body#top .payment-order-sheet {
+        gap: 18px !important;
+        margin-bottom: 28px !important;
+    }
+
+    body#top .payment-docs-kit,
+    body#top .payment-route,
+    body#top .payment-docs-page .faq-section.faq-system {
+        margin-top: 30px !important;
+    }
+
+    body#top .payment-order-sheet__lead,
+    body#top .payment-route__heading {
+        gap: 12px !important;
+    }
+
+    body#top .payment-order-sheet__stack,
+    body#top .payment-route__track {
+        gap: 10px !important;
+    }
+
+    body#top .payment-docs-kit__items {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+}

@@ -3047,3 +3047,62 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         max-width: none !important;
     }
 }
+
+/* Open mobile layout: keep content cards, remove the outer frame. */
+@media (max-width: 640px) {
+    body#top .services-page > .container {
+        width: calc(100vw - 28px) !important;
+        max-width: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body#top .service-detail-card,
+    body#top .service-detail-card--featured,
+    body#top .service-detail-card--media-ready {
+        overflow: visible !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .service-detail-card::before,
+    body#top .service-detail-card::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    body#top .service-detail-card + .service-detail-card,
+    body#top .service-detail-card + .before-after-section {
+        margin-top: 28px !important;
+    }
+
+    body#top .service-content,
+    body#top .service-detail-card--featured .service-content,
+    body#top .service-detail-card--media-ready .service-content {
+        gap: 14px !important;
+        padding: 0 !important;
+    }
+
+    body#top .service-content > .service-description,
+    body#top .service-content > .service-advantages,
+    body#top .service-content > .process-steps,
+    body#top .service-content > .palette-card,
+    body#top .service-content > .service-cta {
+        grid-column: 1 / -1 !important;
+    }
+
+    body#top .service-content > .service-image {
+        grid-column: 1 / -1 !important;
+        margin-top: 2px !important;
+    }
+
+    body#top .service-image,
+    body#top .service-image:not(.equipment-slider):not(.service-image--placeholder),
+    body#top .equipment-slider {
+        width: 100% !important;
+        max-width: none !important;
+    }
+}

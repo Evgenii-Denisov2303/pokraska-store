@@ -1528,3 +1528,64 @@ body#top .pricing-estimate-card .calculator-contact a {
         max-width: none !important;
     }
 }
+
+/* Open mobile layout: remove section frames and keep the useful cards. */
+@media (max-width: 640px) {
+    body#top .prices-page > .container {
+        width: calc(100vw - 28px) !important;
+        max-width: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body#top .pricing-playbook,
+    body#top .pricing-breakdown,
+    body#top .pricing-clarity,
+    body#top .calculator-section,
+    body#top .guarantee-section,
+    body#top .prices-page .section[aria-labelledby="prices-faq-title"] {
+        overflow: visible !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .pricing-playbook::before,
+    body#top .pricing-breakdown::before,
+    body#top .pricing-clarity::before,
+    body#top .calculator-section::before,
+    body#top .guarantee-section::before,
+    body#top .prices-page .section[aria-labelledby="prices-faq-title"]::before {
+        content: none !important;
+        display: none !important;
+    }
+
+    body#top .pricing-playbook {
+        gap: 18px !important;
+        margin-bottom: 28px !important;
+    }
+
+    body#top .pricing-breakdown,
+    body#top .pricing-clarity,
+    body#top .prices-page .section[aria-labelledby="prices-faq-title"] {
+        margin-top: 30px !important;
+    }
+
+    body#top .pricing-playbook__lead,
+    body#top .pricing-estimate-card {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body#top .pricing-estimate-card {
+        padding-top: 16px !important;
+    }
+
+    body#top .factors-grid,
+    body#top .pricing-clarity__grid,
+    body#top .guarantee-list {
+        gap: 10px !important;
+    }
+}
