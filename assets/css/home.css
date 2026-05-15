@@ -9640,6 +9640,57 @@ body#top .hero-header--desktop-home {
 }
 
 @media (max-width: 640px) {
+    body#top .home-tail__request-copy,
+    body#top .home-tail__request-intro {
+        justify-items: center !important;
+        text-align: center !important;
+    }
+
+    body#top .home-tail__request-copy > .route-scene__eyebrow,
+    body#top .home-tail__request-source-label,
+    body#top .home-tail__contact-eyebrow {
+        align-self: center !important;
+        justify-self: center !important;
+        margin-inline: auto !important;
+        text-align: center !important;
+    }
+
+    body#top .home-tail__request-source {
+        justify-items: center !important;
+    }
+
+    body#top .home-tail__contact > p {
+        justify-self: center !important;
+        text-align: center !important;
+    }
+
+    body#top .home-tail__form-header {
+        display: grid !important;
+        justify-items: center !important;
+        text-align: center !important;
+    }
+
+    body#top .home-tail__form-card h4 {
+        justify-self: center !important;
+        text-align: center !important;
+    }
+
+    body#top .home-tail__contact-link {
+        grid-template-columns: auto max-content !important;
+        justify-content: center !important;
+        justify-items: center !important;
+        align-items: center !important;
+        gap: 6px !important;
+        text-align: left !important;
+    }
+
+    body#top .home-tail__contact-link > span {
+        width: auto !important;
+        text-align: left !important;
+    }
+}
+
+@media (max-width: 640px) {
     body#top .panel-scene {
         width: calc(100vw - 28px) !important;
         max-width: none !important;
@@ -10559,5 +10610,25 @@ body#top .hero-header--desktop-home {
         justify-items: end !important;
         text-align: right !important;
         margin: 0 18px 18px 0 !important;
+    }
+}
+
+/* Give the embedded Yandex request form enough vertical room for its submit button. */
+body#top .home-tail__request {
+    --home-request-form-height: 760px;
+    --home-request-panel-height: calc(var(--home-request-form-height) + 76px);
+}
+
+@media (max-width: 640px) {
+    body#top .home-tail__request {
+        --home-request-form-height: clamp(760px, 194vw, 810px);
+        --home-request-panel-height: auto;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+    body#top .home-tail__request {
+        --home-request-form-height: clamp(730px, 76vw, 800px);
+        --home-request-panel-height: auto;
     }
 }
