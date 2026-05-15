@@ -10615,20 +10615,20 @@ body#top .hero-header--desktop-home {
 
 /* Give the embedded Yandex request form enough vertical room for its submit button. */
 body#top .home-tail__request {
-    --home-request-form-height: 760px;
-    --home-request-panel-height: calc(var(--home-request-form-height) + 76px);
+    --home-request-form-height: 740px;
+    --home-request-panel-height: calc(var(--home-request-form-height) + 74px);
 }
 
 @media (max-width: 640px) {
     body#top .home-tail__request {
-        --home-request-form-height: clamp(760px, 194vw, 810px);
+        --home-request-form-height: clamp(724px, 184vw, 774px);
         --home-request-panel-height: auto;
     }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
     body#top .home-tail__request {
-        --home-request-form-height: clamp(730px, 76vw, 800px);
+        --home-request-form-height: clamp(707px, 74vw, 777px);
         --home-request-panel-height: auto;
     }
 }
