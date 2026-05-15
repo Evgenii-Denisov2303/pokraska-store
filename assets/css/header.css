@@ -1693,25 +1693,25 @@
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:visited,
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:hover {
-        grid-template-columns: 42px minmax(0, 1fr) !important;
+        grid-template-columns: 44px minmax(0, 1fr) !important;
         gap: 8px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__mark {
-        width: 42px !important;
-        height: 42px !important;
-        flex-basis: 42px !important;
+        width: 44px !important;
+        height: 44px !important;
+        flex-basis: 44px !important;
         padding: 3px !important;
         border-radius: 12px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__logo {
-        width: 36px !important;
-        height: 36px !important;
+        width: 38px !important;
+        height: 38px !important;
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__text {
-        min-height: 42px !important;
+        min-height: 44px !important;
         gap: 2px !important;
     }
 
