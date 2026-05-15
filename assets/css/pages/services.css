@@ -2427,10 +2427,33 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
         padding-right: 16px;
     }
 
+    .catalog-panel__grid,
+    .catalog-panel__grid--feature {
+        gap: 16px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+    }
+
+    .catalog-panel__text {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .catalog-panel__media-gallery {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     .catalog-info-card {
         gap: 9px;
-        padding-top: 16px;
-        padding-bottom: 17px;
+        padding: 16px 14px 17px;
+        border-radius: 20px;
+        box-shadow:
+            0 10px 18px rgba(var(--catalog-section-strong-rgb), 0.035),
+            inset 0 1px 0 rgba(255, 255, 255, 0.42);
     }
 
     .catalog-info-card h3,
@@ -2492,6 +2515,7 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
 
     .catalog-panel__media-frame {
         aspect-ratio: 1 / 1;
+        border-radius: 22px;
     }
 
     .catalog-link {
@@ -2838,8 +2862,22 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
     }
 
     .catalog-nav-shell {
-        padding: 10px;
-        border-radius: 20px;
+        overflow: visible;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+    }
+
+    .catalog-nav-shell::before,
+    .catalog-nav-shell::after {
+        content: none;
+        display: none;
+    }
+
+    .catalog-nav-intro {
+        display: none;
     }
 
     .faq-section--catalog .section-title {
@@ -2862,35 +2900,67 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
     }
 
     .catalog-group-tabs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 6px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
     }
 
     .catalog-group-tab {
-        min-height: 40px;
-        gap: 7px;
-        padding: 6px 8px;
-        border-radius: 13px;
+        justify-content: center;
+        min-height: 36px;
+        gap: 0;
+        padding: 7px 4px;
+        border-radius: 999px;
+        box-shadow:
+            0 7px 13px rgba(var(--catalog-group-strong-rgb), 0.055),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
     }
 
     .catalog-group-tab__icon {
-        flex-basis: 28px;
-        width: 28px;
-        height: 28px;
-        border-radius: 9px;
-        font-size: 0.78rem;
+        display: none;
     }
 
     .catalog-group-tab__title {
-        font-size: 0.82rem;
+        display: inline-flex;
+        justify-content: center;
+        width: 100%;
+        font-size: clamp(0.62rem, 2.45vw, 0.72rem);
+        line-height: 1.05;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .catalog-group-tab[data-catalog-group="garage"] .catalog-group-tab__title {
+        font-size: 0;
+    }
+
+    .catalog-group-tab[data-catalog-group="garage"] .catalog-group-tab__title::after {
+        content: "Гараж";
+        font-size: clamp(0.62rem, 2.45vw, 0.72rem);
         line-height: 1.05;
     }
 
+    .catalog-group-panel__links {
+        flex-wrap: nowrap;
+        gap: 6px;
+        overflow-x: auto;
+        margin-inline: -2px;
+        padding: 1px 2px 4px;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .catalog-group-panel__links::-webkit-scrollbar {
+        display: none;
+    }
+
     .catalog-link {
+        flex: 0 0 auto;
         min-height: 28px;
         padding: 5px 9px;
         font-size: 0.76rem;
         line-height: 1.05;
+        scroll-snap-align: start;
     }
 
     .catalog-link.is-active,
@@ -2932,6 +3002,21 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
     .catalog-panel__media-thumbs {
         grid-auto-columns: minmax(66px, 80px);
         gap: 7px;
+    }
+
+    .catalog-panel__media-frame {
+        aspect-ratio: 4 / 3;
+    }
+
+    .catalog-info-card {
+        gap: 8px;
+        padding: 14px 12px 15px;
+        border-radius: 18px;
+    }
+
+    .catalog-info-card ul li {
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     .catalog-assistant__secondary {
@@ -3009,6 +3094,98 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
 }
 
 @media (max-width: 640px) {
+    .catalog-sidebar {
+        width: calc(100vw - 28px);
+        max-width: none;
+        justify-self: center;
+    }
+
+    .catalog-nav-shell {
+        overflow: visible;
+        width: 100%;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+    }
+
+    .catalog-nav-shell::before,
+    .catalog-nav-shell::after {
+        content: none;
+        display: none;
+    }
+
+    .catalog-nav-intro {
+        display: none;
+    }
+
+    .catalog-nav-body {
+        width: 100%;
+        gap: 7px;
+    }
+
+    .catalog-group-tabs {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+    }
+
+    .catalog-group-tab {
+        justify-content: center;
+        min-height: 36px;
+        gap: 0;
+        padding: 7px 4px;
+        border-radius: 999px;
+        box-shadow:
+            0 7px 13px rgba(var(--catalog-group-strong-rgb), 0.055),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .catalog-group-tab__icon {
+        display: none;
+    }
+
+    .catalog-group-tab__title {
+        display: inline-flex;
+        justify-content: center;
+        width: 100%;
+        font-size: clamp(0.62rem, 2.45vw, 0.72rem);
+        line-height: 1.05;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .catalog-group-tab[data-catalog-group="garage"] .catalog-group-tab__title {
+        font-size: 0;
+    }
+
+    .catalog-group-tab[data-catalog-group="garage"] .catalog-group-tab__title::after {
+        content: "Гараж";
+        font-size: clamp(0.62rem, 2.45vw, 0.72rem);
+        line-height: 1.05;
+    }
+
+    .catalog-group-panel__links {
+        flex-wrap: nowrap;
+        width: 100%;
+        gap: 6px;
+        overflow-x: auto;
+        margin-inline: 0;
+        padding: 1px 10px 5px 0;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .catalog-group-panel__links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .catalog-link {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+    }
+
     .catalog-panel__badges {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
