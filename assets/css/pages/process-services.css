@@ -2931,9 +2931,10 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .advantage-item {
-        min-height: 98px !important;
-        padding: 10px 9px !important;
-        gap: 6px !important;
+        align-content: start !important;
+        min-height: 0 !important;
+        padding: 9px 8px !important;
+        gap: 5px !important;
         border-radius: 15px !important;
     }
 
@@ -2943,12 +2944,15 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
 
     body#top .advantage-item span {
         font-size: 0.72rem !important;
-        line-height: 1.28 !important;
+        line-height: 1.24 !important;
+        overflow-wrap: break-word !important;
+        word-break: normal !important;
+        hyphens: auto !important;
     }
 
     body#top .advantages-grid > .advantage-item:nth-child(3):last-child {
         grid-column: 1 / -1 !important;
-        min-height: 76px !important;
+        min-height: 0 !important;
     }
 
     body#top .process-steps {
@@ -2957,7 +2961,7 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .process-step {
-        min-height: 132px !important;
+        min-height: 0 !important;
         padding: 12px 10px !important;
         gap: 7px !important;
         border-radius: 16px !important;
@@ -2971,6 +2975,9 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .process-step p {
         font-size: 0.72rem !important;
         line-height: 1.34 !important;
+        overflow-wrap: break-word !important;
+        word-break: normal !important;
+        hyphens: auto !important;
     }
 
     body#top .equipment-slider__btn {
@@ -3121,9 +3128,9 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         grid-template-columns: 1fr !important;
         align-content: start !important;
         justify-items: center !important;
-        min-height: 104px !important;
-        padding: 10px 7px !important;
-        gap: 7px !important;
+        min-height: 82px !important;
+        padding: 8px 5px !important;
+        gap: 5px !important;
         text-align: center !important;
     }
 
@@ -3137,8 +3144,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .services-page--powder #wheels .advantages-grid > .advantage-item span {
-        font-size: clamp(0.62rem, 2.45vw, 0.72rem) !important;
-        line-height: 1.2 !important;
+        font-size: clamp(0.6rem, 2.35vw, 0.7rem) !important;
+        line-height: 1.16 !important;
         text-align: center !important;
     }
 }
@@ -3150,12 +3157,12 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
 
     body#top .services-page--powder #wheels .advantages-grid > .advantage-item,
     body#top .services-page--powder #wheels .advantages-grid > .advantage-item:nth-child(3):last-child {
-        min-height: 108px !important;
-        padding: 9px 5px !important;
+        min-height: 86px !important;
+        padding: 7px 4px !important;
     }
 
     body#top .services-page--powder #wheels .advantages-grid > .advantage-item span {
         font-size: 0.6rem !important;
-        line-height: 1.18 !important;
+        line-height: 1.15 !important;
     }
 }

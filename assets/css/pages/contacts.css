@@ -2178,7 +2178,7 @@ body#top .contacts-form-embed {
 
 @media (max-width: 640px) {
     body#top .contacts-page {
-        --contacts-form-height: clamp(724px, 184vw, 774px);
+        --contacts-form-height: clamp(744px, 188vw, 794px);
         padding: 42px 0 40px;
     }
 
@@ -2267,11 +2267,43 @@ body#top .contacts-form-embed {
         align-content: start;
         padding: 24px 20px;
     }
+
+    body#top .contacts-panel--direct .contacts-meta-row,
+    body#top .contacts-meta-row {
+        grid-template-columns: 1fr !important;
+        gap: 9px !important;
+        padding-top: 0 !important;
+    }
+
+    body#top .contacts-meta-chip,
+    body#top .contacts-panel--direct .contacts-meta-chip {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        align-content: start !important;
+        gap: 5px !important;
+        min-width: 0 !important;
+        padding: 12px 14px !important;
+    }
+
+    body#top .contacts-meta-label {
+        max-width: none !important;
+        font-size: 0.68rem !important;
+        line-height: 1.22 !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    body#top .contacts-meta-chip strong {
+        min-width: 0 !important;
+        font-size: 0.94rem !important;
+        line-height: 1.3 !important;
+        overflow-wrap: break-word !important;
+        word-break: normal !important;
+    }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
     body#top .contacts-page {
-        --contacts-form-height: clamp(707px, 74vw, 777px);
+        --contacts-form-height: clamp(727px, 75vw, 797px);
     }
 
     body#top .contacts-form-frame,
