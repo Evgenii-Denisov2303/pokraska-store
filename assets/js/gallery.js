@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let galleryItemsData = [];
     let galleryItemsLoaded = false;
     let galleryItemsLoadError = false;
+    let galleryInitialized = false;
     const hideTimeouts = new WeakMap();
+    const mobileFilterResultsMedia = window.matchMedia('(max-width: 768px), (pointer: coarse)');
 
     function getFilterButtons() {
         return Array.from(document.querySelectorAll('[data-gallery-filters] .filter-btn'));
@@ -113,6 +115,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return buttons.some((button) => button.getAttribute('data-filter') === normalized)
             ? normalized
             : 'all';
+    }
+
+    function getRequestedFilterValue() {
+        const params = new URLSearchParams(window.location.search);
+        return normalizeFilterValue(params.get('filter') || activeFilter || 'all');
+    }
+
+    function scrollGalleryResultsIntoView() {
+        if (!galleryGrid || !mobileFilterResultsMedia.matches) return;
+
+        window.setTimeout(() => {
+            galleryGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 40);
     }
 
     function escapeHtml(value) {
@@ -407,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         visibleCount = pageSize;
         await ensureGalleryItems();
-        applyFilter(activeFilter || normalizeFilterValue(filterFromUrl), true);
+        applyFilter(getRequestedFilterValue(), true);
     }
 
     function animateProofCounter() {
@@ -470,6 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
             await ensureGalleryItems();
             const filterValue = filterButton.getAttribute('data-filter') || 'all';
             applyFilter(filterValue, true);
+            scrollGalleryResultsIntoView();
 
             const nextUrl = filterValue === 'all'
                 ? 'gallery.html'
@@ -549,11 +565,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         bindFilterSwipeState();
         setupProofCounter();
+        galleryInitialized = true;
     }
 
-    window.addEventListener('pageshow', (event) => {
-        if (!event.persisted) return;
-        resetGalleryToFirstPage();
+    window.addEventListener('pageshow', () => {
+        if (!galleryInitialized) return;
+        window.setTimeout(resetGalleryToFirstPage, 0);
     });
 
     initializeGallery();
