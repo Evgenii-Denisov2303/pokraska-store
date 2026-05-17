@@ -8891,6 +8891,28 @@ body#top .hero-header--desktop-home {
     }
 }
 
+@media (min-width: 390px) and (max-width: 640px) {
+    body#top .reviews-scene__intro h3 {
+        display: grid !important;
+        justify-items: center !important;
+        width: min(100%, 24ch) !important;
+        max-width: calc(100vw - 28px) !important;
+        font-size: clamp(2.02rem, 7.6vw, 2.26rem) !important;
+        line-height: 0.95 !important;
+        text-wrap: initial !important;
+    }
+
+    body#top .reviews-scene__intro h3 span {
+        display: block !important;
+        width: auto !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .reviews-scene__intro p {
+        max-width: min(36ch, calc(100vw - 32px)) !important;
+    }
+}
+
 @media (max-width: 640px) {
     body#top .home-tail__request {
         --home-request-form-height: clamp(650px, 160vw, 700px);
@@ -9739,6 +9761,8 @@ body#top .hero-header--desktop-home {
 
     body#top .panel-scene__card,
     body#top .panel-scene__card--light {
+        height: auto !important;
+        min-height: 0 !important;
         gap: 13px !important;
         padding: 0 !important;
         border-radius: 0 !important;
@@ -9751,7 +9775,7 @@ body#top .hero-header--desktop-home {
     body#top .panel-scene__card--light .panel-scene__media {
         width: 100% !important;
         height: auto !important;
-        aspect-ratio: 16 / 10 !important;
+        aspect-ratio: 4 / 3 !important;
         border-radius: 22px !important;
         box-shadow:
             0 14px 24px rgba(16, 38, 61, 0.075),
