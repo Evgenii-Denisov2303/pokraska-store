@@ -3038,7 +3038,7 @@ body#top .gallery-page .gallery-item:nth-child(7n + 1),
 body#top .gallery-page .gallery-item:nth-child(7n + 2),
 body#top .gallery-page .gallery-item:nth-child(7n + 5) {
     position: relative !important;
-    display: block !important;
+    display: block;
     height: auto !important;
     min-height: 0 !important;
     overflow: hidden !important;
