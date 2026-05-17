@@ -2312,3 +2312,37 @@ body#top .contacts-form-embed {
         height: var(--contacts-form-height) !important;
     }
 }
+
+@media (max-width: 768px),
+    (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    body#top .contacts-meta-chip,
+    body#top .contacts-panel--direct .contacts-meta-chip {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        align-content: start !important;
+        gap: 5px !important;
+        min-width: 0 !important;
+    }
+
+    body#top .contacts-meta-label,
+    body#top .contacts-panel--direct .contacts-meta-label {
+        max-width: none !important;
+        line-height: 1.22 !important;
+    }
+
+    body#top .contacts-meta-chip strong,
+    body#top .contacts-panel--direct .contacts-meta-chip strong {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+    }
+}
+
+@media (max-width: 640px),
+    (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    body#top .contacts-panel--direct .contacts-meta-row,
+    body#top .contacts-meta-row {
+        grid-template-columns: 1fr !important;
+    }
+}

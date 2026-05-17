@@ -402,6 +402,14 @@ document.addEventListener('DOMContentLoaded', function () {
         updateFilterSwipeState();
     }
 
+    async function resetGalleryToFirstPage() {
+        if (!galleryGrid || !getFilterButtons().length) return;
+
+        visibleCount = pageSize;
+        await ensureGalleryItems();
+        applyFilter(activeFilter || normalizeFilterValue(filterFromUrl), true);
+    }
+
     function animateProofCounter() {
         if (!proofCounterElement) return;
         if (proofCounterElement.dataset.counterAnimated === 'true') return;
@@ -533,6 +541,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        visibleCount = pageSize;
         const items = await ensureGalleryItems();
         if (items.length) {
             applyFilter(normalizeFilterValue(filterFromUrl), true);
@@ -541,6 +550,11 @@ document.addEventListener('DOMContentLoaded', function () {
         bindFilterSwipeState();
         setupProofCounter();
     }
+
+    window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) return;
+        resetGalleryToFirstPage();
+    });
 
     initializeGallery();
 });
