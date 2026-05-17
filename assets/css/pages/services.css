@@ -3290,6 +3290,12 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
     }
 }
 
+@media (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    body#top .catalog-page {
+        min-height: calc(100dvh - 440px);
+    }
+}
+
 @media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
     body#top .catalog-page {
         padding-top: 92px !important;

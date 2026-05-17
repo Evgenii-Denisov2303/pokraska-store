@@ -825,6 +825,60 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
     }
 }
 
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    body#top .payment-docs-page {
+        min-height: calc(100dvh - 440px);
+        padding-top: 136px !important;
+    }
+
+    body#top .payment-docs-page > .container {
+        width: min(1180px, calc(100vw - 40px)) !important;
+        max-width: none !important;
+    }
+
+    body#top .payment-order-sheet,
+    body#top .payment-docs-kit,
+    body#top .payment-route {
+        border-color: rgba(24, 61, 93, 0.1);
+    }
+
+    body#top .payment-order-sheet {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 28px !important;
+    }
+
+    body#top .payment-order-sheet__lead {
+        max-width: 760px;
+    }
+
+    body#top .payment-order-sheet__stack,
+    body#top .payment-route__track {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    body#top .payment-route__track::before {
+        display: none !important;
+    }
+
+    body#top .payment-doc-card--payment,
+    body#top .payment-doc-card--docs {
+        margin-left: 0 !important;
+    }
+
+    body#top .payment-docs-kit {
+        grid-template-columns: 1fr !important;
+        align-items: start !important;
+    }
+
+    body#top .payment-docs-kit__items {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, max-content));
+        align-items: stretch;
+    }
+}
+
 /* Open mobile layout: remove heavy wrappers, keep the document cards. */
 @media (max-width: 640px) {
     body#top .payment-docs-page > .container {

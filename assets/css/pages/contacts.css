@@ -2346,3 +2346,137 @@ body#top .contacts-form-embed {
         grid-template-columns: 1fr !important;
     }
 }
+
+@media (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    body#top .contacts-page {
+        padding-top: 136px !important;
+        --contacts-gap: 22px;
+        --contacts-form-height: 740px;
+        --contacts-map-height: clamp(460px, 38vw, 560px);
+    }
+
+    body#top .contacts-page > .container {
+        width: min(1280px, calc(100vw - 40px)) !important;
+        max-width: none !important;
+    }
+
+    body#top .contacts-heading {
+        width: min(760px, 100%) !important;
+        margin-inline: 0 auto !important;
+    }
+
+    body#top .contacts-core,
+    body#top .contacts-route {
+        grid-template-columns: 1fr !important;
+        gap: var(--contacts-gap) !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+    }
+
+    body#top .contacts-core {
+        margin-top: 24px !important;
+        align-items: start !important;
+    }
+
+    body#top .contacts-panel--direct,
+    body#top .contacts-panel--route-copy,
+    body#top .contacts-panel--route-map {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 0 !important;
+    }
+
+    body#top .contacts-panel--direct {
+        justify-self: stretch !important;
+        padding: 22px !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-panel__header {
+        max-width: 760px !important;
+        padding-bottom: 10px !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-primary-link {
+        width: min(640px, 100%) !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-secondary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-direct-actions {
+        grid-template-columns: repeat(2, minmax(0, 240px)) !important;
+        justify-content: start !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-meta-row,
+    body#top .contacts-meta-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body#top .contacts-meta-chip,
+    body#top .contacts-panel--direct .contacts-meta-chip {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        align-content: start !important;
+        gap: 5px !important;
+        min-width: 0 !important;
+    }
+
+    body#top .contacts-meta-label,
+    body#top .contacts-panel--direct .contacts-meta-label {
+        max-width: none !important;
+        line-height: 1.22 !important;
+    }
+
+    body#top .contacts-meta-chip strong,
+    body#top .contacts-panel--direct .contacts-meta-chip strong {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+    }
+
+    body#top .contacts-panel--request {
+        width: min(720px, 100%) !important;
+        max-width: 720px !important;
+        justify-self: center !important;
+        min-height: 0 !important;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height) !important;
+        height: var(--contacts-form-height) !important;
+    }
+
+    body#top .contacts-route {
+        margin-top: 26px !important;
+    }
+
+    body#top .contacts-panel--route-copy {
+        padding: 22px !important;
+    }
+
+    body#top .contacts-route-steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body#top .contacts-route-steps li {
+        padding: 14px !important;
+        border-radius: 20px !important;
+    }
+
+    body#top .contacts-route-actions {
+        grid-template-columns: repeat(2, minmax(0, 240px)) !important;
+        justify-content: start !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .contacts-panel--route-map iframe {
+        min-height: var(--contacts-map-height) !important;
+        height: var(--contacts-map-height) !important;
+    }
+}

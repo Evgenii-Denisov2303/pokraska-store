@@ -1243,6 +1243,16 @@ body#top .apple-shell > .preview-footer {
     }
 }
 
+@media (pointer: coarse) and (min-width: 1301px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    .preview-footer {
+        --footer-gap-before: clamp(6px, 0.85vw, 12px);
+        --footer-scene-y: clamp(-44px, -2.4vw, -30px);
+        --footer-scene-space: clamp(188px, 13.8vw, 212px);
+        --footer-scene-size: 100% auto;
+        --footer-floor-height: 58%;
+    }
+}
+
 @media (max-width: 640px) {
     body#top .apple-shell:has(> .preview-footer) {
         padding-bottom: 0;
