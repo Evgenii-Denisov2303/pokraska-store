@@ -1826,8 +1826,9 @@ body#top .contacts-page .contacts-subtitle {
     }
 }
 
-/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
-@media (min-width: 900px) and (max-width: 1023px) and (max-aspect-ratio: 2 / 3) {
+/* Phone browsers in "desktop site" mode report a wide but very tall touch viewport. */
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1023px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1023px) and (max-aspect-ratio: 2 / 3) {
     body#top .contacts-page {
         padding-top: 136px !important;
         --contacts-gap: 20px;
@@ -1848,7 +1849,7 @@ body#top .contacts-page .contacts-subtitle {
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: minmax(0, 1fr) minmax(390px, 0.92fr) !important;
         gap: var(--contacts-gap) !important;
         width: 100% !important;
         margin-inline: auto !important;
@@ -1902,9 +1903,9 @@ body#top .contacts-page .contacts-subtitle {
     }
 
     body#top .contacts-panel--request {
-        width: min(560px, 100%) !important;
-        max-width: 560px !important;
-        justify-self: center !important;
+        width: 100% !important;
+        max-width: none !important;
+        justify-self: stretch !important;
         margin-top: 0 !important;
     }
 
@@ -2055,7 +2056,8 @@ body#top .contacts-page .contacts-subtitle {
     }
 }
 
-@media (min-width: 1024px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
+@media (pointer: coarse) and (min-width: 1024px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 1024px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
     (min-width: 1024px) and (max-width: 1100px) and (max-height: 700px) and (orientation: landscape) {
     body#top .contacts-page {
         --contacts-gap: 20px;
@@ -2075,7 +2077,7 @@ body#top .contacts-page .contacts-subtitle {
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: minmax(0, 1fr) minmax(410px, 0.92fr) !important;
         gap: var(--contacts-gap) !important;
         width: 100% !important;
         margin-inline: auto !important;
@@ -2114,9 +2116,9 @@ body#top .contacts-page .contacts-subtitle {
     }
 
     body#top .contacts-panel--request {
-        width: min(560px, 100%) !important;
-        max-width: 560px !important;
-        justify-self: center !important;
+        width: 100% !important;
+        max-width: none !important;
+        justify-self: stretch !important;
         min-height: 0 !important;
     }
 
@@ -2314,7 +2316,8 @@ body#top .contacts-form-embed {
 }
 
 @media (max-width: 768px),
-    (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    (pointer: coarse) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     body#top .contacts-meta-chip,
     body#top .contacts-panel--direct .contacts-meta-chip {
         display: grid !important;
@@ -2340,7 +2343,8 @@ body#top .contacts-form-embed {
 }
 
 @media (max-width: 640px),
-    (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    (pointer: coarse) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     body#top .contacts-panel--direct .contacts-meta-row,
     body#top .contacts-meta-row {
         grid-template-columns: 1fr !important;
@@ -2350,7 +2354,7 @@ body#top .contacts-form-embed {
 @media (pointer: coarse) and (min-width: 1101px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
     (hover: none) and (min-width: 1101px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .contacts-page {
-        min-height: calc(100dvh - 440px);
+        min-height: 0;
         padding-top: 136px !important;
         --contacts-gap: 22px;
         --contacts-form-height: 740px;
@@ -2369,7 +2373,7 @@ body#top .contacts-form-embed {
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: minmax(0, 1fr) minmax(420px, 0.92fr) !important;
         gap: var(--contacts-gap) !important;
         width: 100% !important;
         margin-inline: auto !important;
@@ -2441,9 +2445,9 @@ body#top .contacts-form-embed {
     }
 
     body#top .contacts-panel--request {
-        width: min(720px, 100%) !important;
-        max-width: 720px !important;
-        justify-self: center !important;
+        width: 100% !important;
+        max-width: none !important;
+        justify-self: stretch !important;
         min-height: 0 !important;
     }
 

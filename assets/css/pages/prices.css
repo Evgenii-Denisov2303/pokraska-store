@@ -1506,9 +1506,11 @@ body#top .pricing-estimate-card .calculator-contact a {
     }
 }
 
-/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+/* Phone browsers in "desktop site" mode report a wide but very tall touch viewport. */
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top .prices-page {
+        min-height: 0 !important;
         padding-top: 136px !important;
     }
 
@@ -1532,7 +1534,7 @@ body#top .pricing-estimate-card .calculator-contact a {
 @media (pointer: coarse) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
     (hover: none) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .prices-page {
-        min-height: calc(100dvh - 440px);
+        min-height: 0;
         padding-top: 136px !important;
     }
 

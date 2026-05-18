@@ -512,8 +512,9 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
     }
 }
 
-/* Phone "desktop site" mode: desktop-wide CSS viewport, but portrait phone rhythm. */
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+/* Phone "desktop site" mode: desktop-wide CSS viewport, but portrait touch rhythm. */
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
         padding-top: 136px !important;
     }
@@ -554,7 +555,8 @@ html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .c
     }
 }
 
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
         --inner-page-footer-bottom: clamp(12px, 1.5vw, 20px);
     }

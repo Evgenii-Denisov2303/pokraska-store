@@ -3032,15 +3032,29 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 }
 
-/* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+/* Phone browsers in "desktop site" mode report a wide but very tall touch viewport. */
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top .services-page {
+        min-height: 0 !important;
         padding-top: 136px !important;
     }
 
     body#top .services-page > .container {
         width: min(100%, calc(100vw - 24px)) !important;
         max-width: none !important;
+    }
+
+    body#top .service-detail-card--media-ready:has(.service-image--placeholder) .service-content {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body#top .service-detail-card--media-ready:has(.service-image--placeholder) :is(.service-description, .service-advantages, .service-cta, .palette-card) {
+        grid-column: 1 / -1 !important;
+    }
+
+    body#top .service-detail-card--media-ready .service-image--placeholder {
+        display: none !important;
     }
 }
 

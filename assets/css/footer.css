@@ -884,7 +884,8 @@
 
 /* Tablet and phone desktop-site footer: keep the three footer groups in one compact row. */
 @media (min-width: 820px) and (max-width: 1100px),
-    (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
     .preview-footer {
         width: min(100%, calc(100% - 40px));
@@ -1127,8 +1128,9 @@
     }
 }
 
-/* Phone desktop-site portrait reports a wide, very tall viewport; tighten the footer scene there. */
-@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+/* Phone desktop-site portrait reports a wide, very tall touch viewport; tighten the footer scene there. */
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     .preview-footer {
         --footer-gap-before: clamp(6px, 1vw, 12px);
         --footer-scene-y: clamp(-54px, -4.6vw, -36px);
@@ -1137,7 +1139,8 @@
     }
 }
 
-@media (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3) {
+@media (pointer: coarse) and (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3) {
     .preview-footer {
         --footer-gap-before: clamp(6px, 0.9vw, 12px);
         --footer-scene-y: clamp(-40px, -2.4vw, -24px);
@@ -1374,7 +1377,8 @@ body#top :is(
 }
 
 @media (min-width: 820px) and (max-width: 1100px),
-    (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
     .preview-footer__brand {
         pointer-events: none !important;
