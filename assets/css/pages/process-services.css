@@ -3064,19 +3064,23 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         padding-right: 0 !important;
     }
 
-    body#top .service-detail-card,
-    body#top .service-detail-card--featured,
-    body#top .service-detail-card--media-ready {
+    body#top .services-page > .container .service-detail-card,
+    body#top .services-page > .container .service-detail-card--featured,
+    body#top .services-page > .container .service-detail-card--media-ready {
         overflow: visible !important;
         padding: 0 !important;
         border: 0 !important;
+        border-color: transparent !important;
         border-radius: 0 !important;
         background: none !important;
+        background-image: none !important;
         box-shadow: none !important;
     }
 
-    body#top .service-detail-card::before,
-    body#top .service-detail-card::after {
+    body#top .services-page > .container .service-detail-card::before,
+    body#top .services-page > .container .service-detail-card::after,
+    body#top .services-page .service-quick-nav::before,
+    body#top .services-page .service-quick-nav::after {
         content: none !important;
         display: none !important;
     }

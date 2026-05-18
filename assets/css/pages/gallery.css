@@ -3195,3 +3195,17 @@ body#top .gallery-page :is(.gallery-empty, .gallery-filters, .gallery-filter-she
     border-color: var(--site-card-border) !important;
     box-shadow: var(--site-card-shadow) !important;
 }
+
+@media (max-width: 640px) {
+    body#top .gallery-page .gallery-filter-shell {
+        background: none !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    body#top .gallery-page .gallery-filter-shell::before,
+    body#top .gallery-page .gallery-filter-shell::after {
+        content: none !important;
+        display: none !important;
+    }
+}
