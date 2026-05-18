@@ -7086,7 +7086,7 @@ button {
 
     .hero-mobile-cta p {
         position: absolute;
-        top: clamp(92px, 24vw, 108px);
+        top: clamp(118px, 30vw, 150px);
         left: clamp(18px, 4.8vw, 28px);
         display: grid;
         gap: 2px;
@@ -7100,8 +7100,8 @@ button {
         text-align: left;
         letter-spacing: 0;
         text-shadow:
-            0 2px 12px rgba(8, 18, 28, 0.46),
-            0 1px 2px rgba(8, 18, 28, 0.36);
+            0 3px 14px rgba(8, 18, 28, 0.56),
+            0 1px 3px rgba(8, 18, 28, 0.44);
     }
 
     .hero-mobile-cta p span {
