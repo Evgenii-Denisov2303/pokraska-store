@@ -1253,6 +1253,26 @@ body#top .apple-shell > .preview-footer {
     }
 }
 
+@media (pointer: coarse) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
+    (hover: none) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    .preview-footer {
+        --footer-gap-before: clamp(4px, 0.55vw, 10px);
+        --footer-scene-y: clamp(-50px, -2.35vw, -32px);
+        --footer-scene-space: clamp(158px, 9vw, 190px);
+        --footer-scene-size: 100% auto;
+        --footer-floor-height: 56%;
+    }
+
+    .preview-footer__layout {
+        padding-bottom: 18px;
+    }
+
+    .preview-footer__bottom {
+        gap: 8px;
+        padding-top: 18px;
+    }
+}
+
 @media (max-width: 640px) {
     body#top .apple-shell:has(> .preview-footer) {
         padding-bottom: 0;

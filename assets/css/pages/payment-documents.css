@@ -825,7 +825,8 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
     }
 }
 
-@media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
+    (hover: none) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .payment-docs-page {
         min-height: calc(100dvh - 440px);
         padding-top: 136px !important;

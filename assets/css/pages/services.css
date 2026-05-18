@@ -3279,7 +3279,7 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
 }
 
 /* Phone browsers in "desktop site" mode report a wide but very tall viewport. */
-@media (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
+@media (min-width: 900px) and (max-width: 2200px) and (max-aspect-ratio: 2 / 3) {
     body#top .catalog-page {
         padding-top: 136px !important;
     }
@@ -3290,7 +3290,8 @@ body#top .catalog-page :is(.catalog-sidebar, .catalog-group-panels, .catalog-pan
     }
 }
 
-@media (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+@media (pointer: coarse) and (min-width: 1101px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
+    (hover: none) and (min-width: 1101px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .catalog-page {
         min-height: calc(100dvh - 440px);
     }

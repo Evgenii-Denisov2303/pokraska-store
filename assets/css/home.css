@@ -10464,6 +10464,93 @@ body#top .hero-header--desktop-home {
     }
 }
 
+/* Android Chrome "desktop site" can report a very wide, tall touch viewport.
+   Keep the home opening compact there so the footer does not float in excess air. */
+@media (pointer: coarse) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
+    (hover: none) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: none !important;
+    }
+
+    body#top .apple-shell {
+        padding-top: clamp(18px, 1.7vw, 34px) !important;
+        padding-bottom: 0 !important;
+    }
+
+    body#top .hero-scene,
+    body#top .hero-scene.scene-reveal,
+    body#top .hero-scene.scene-reveal.is-visible {
+        width: calc(100% + 40px) !important;
+        max-width: none !important;
+        margin-right: -20px !important;
+        margin-left: -20px !important;
+        overflow: hidden !important;
+        border-radius: clamp(0px, 1vw, 24px) !important;
+    }
+
+    body#top .hero-stage {
+        min-height: clamp(720px, 40vw, 860px) !important;
+        aspect-ratio: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    body#top .hero-stage__picture {
+        inset: 0 !important;
+    }
+
+    body#top .hero-stage__picture img {
+        width: 100% !important;
+        object-position: center bottom !important;
+    }
+
+    body#top .hero-copy {
+        top: clamp(104px, 5.8vw, 150px) !important;
+        left: clamp(46px, 4vw, 86px) !important;
+        width: min(520px, 34vw) !important;
+        gap: clamp(8px, 0.7vw, 12px) !important;
+    }
+
+    body#top .hero-copy h1 {
+        font-size: clamp(3.45rem, 3vw, 4.75rem) !important;
+        line-height: 0.9 !important;
+    }
+
+    body#top .hero-copy__title-sub {
+        font-size: clamp(1.22rem, 1vw, 1.54rem) !important;
+        line-height: 1.12 !important;
+    }
+
+    body#top .hero-copy__lead {
+        max-width: 30ch !important;
+        font-size: clamp(1rem, 0.78vw, 1.14rem) !important;
+        line-height: 1.46 !important;
+    }
+
+    body#top .hero-copy__actions .apple-button {
+        min-height: 42px !important;
+        padding: 9px 16px !important;
+        font-size: clamp(0.9rem, 0.68vw, 1rem) !important;
+    }
+
+    body#top .panel-scene {
+        width: calc(100% + 40px) !important;
+        max-width: none !important;
+        margin-right: -20px !important;
+        margin-left: -20px !important;
+        margin-top: clamp(40px, 3.2vw, 58px) !important;
+        gap: clamp(18px, 1.5vw, 24px) !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        min-height: clamp(500px, 30vw, 580px) !important;
+    }
+
+    body#top .home-tail-scene {
+        margin-bottom: 0 !important;
+    }
+}
+
 /* Square desktop-site canvas: keep the hero and first panels in one smart wide column. */
 @media (min-width: 2200px) and (min-height: 2200px) and (min-aspect-ratio: 9/10) and (max-aspect-ratio: 10/9) {
     body#top .hero-scene > .hero-header.hero-header--desktop-home {
