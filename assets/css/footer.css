@@ -112,7 +112,7 @@
     padding: 4px;
     border-radius: 16px;
     border: 1px solid rgba(var(--footer-accent-rgb), 0.08);
-    background: linear-gradient(180deg, rgba(255, 253, 248, 0.99) 0%, rgba(232, 220, 201, 0.94) 100%);
+    background: linear-gradient(180deg, rgba(247, 249, 252, 0.98) 0%, rgba(201, 212, 227, 0.92) 100%);
     box-shadow:
         0 12px 28px rgba(15, 23, 42, 0.09),
         0 2px 6px rgba(var(--footer-accent-rgb), 0.06),
@@ -399,10 +399,10 @@
 .preview-footer__brand-link:hover .preview-footer__mark,
 .preview-footer__brand-link:focus-visible .preview-footer__mark {
     border-color: rgba(var(--footer-accent-rgb), 0.14);
-    background: linear-gradient(180deg, rgba(255, 253, 249, 0.98) 0%, rgba(239, 228, 210, 0.94) 100%);
+    background: linear-gradient(180deg, rgba(252, 253, 255, 1) 0%, rgba(221, 229, 239, 0.96) 100%);
     box-shadow:
-        0 8px 16px rgba(67, 50, 36, 0.06),
-        0 2px 6px rgba(var(--footer-accent-rgb), 0.05),
+        0 14px 28px rgba(15, 23, 42, 0.1),
+        0 2px 8px rgba(var(--footer-accent-rgb), 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.86);
 }
 
@@ -1022,8 +1022,8 @@
     --footer-scene-x: center;
     --footer-scene-y: clamp(-24px, -1vw, -12px);
     --footer-scene-size: 100% auto;
-    --footer-floor-tint: rgba(238, 219, 190, 0.62);
-    --footer-floor-glow: rgba(211, 172, 112, 0.16);
+    --footer-floor-tint: rgba(246, 235, 218, 0.44);
+    --footer-floor-glow: rgba(211, 172, 112, 0.1);
     --footer-floor-height: 56%;
     overflow: hidden;
     width: 100%;
@@ -1032,11 +1032,11 @@
     padding: var(--footer-scene-space) clamp(22px, 3vw, 34px) 0;
     border: 0;
     border-radius: 0;
-    background-color: #fffdf9;
+    background-color: #fffefc;
     background-image:
         var(--footer-scene),
         radial-gradient(ellipse at 92% 78%, var(--footer-floor-glow), rgba(211, 172, 112, 0) 38%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(253, 249, 242, 0.48) 42%, var(--footer-floor-tint) 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 252, 247, 0.34) 42%, var(--footer-floor-tint) 100%);
     background-repeat: no-repeat, no-repeat, no-repeat;
     background-position:
         var(--footer-scene-x) var(--footer-scene-y),
@@ -1075,9 +1075,9 @@
     width: min(420px, 42vw);
     height: 150px;
     background:
-        radial-gradient(ellipse at 72% 50%, rgba(215, 184, 132, 0.24), rgba(215, 184, 132, 0) 62%),
-        radial-gradient(ellipse at center, rgba(var(--footer-accent-rgb), 0.08), rgba(var(--footer-accent-rgb), 0) 70%);
-    opacity: 0.66;
+        radial-gradient(ellipse at 72% 50%, rgba(215, 184, 132, 0.16), rgba(215, 184, 132, 0) 62%),
+        radial-gradient(ellipse at center, rgba(var(--footer-accent-rgb), 0.055), rgba(var(--footer-accent-rgb), 0) 70%);
+    opacity: 0.52;
     filter: blur(2px);
 }
 
@@ -1176,8 +1176,8 @@
         --footer-scene-space: clamp(102px, 27vw, 120px);
         --footer-scene-size: auto calc(100% + 36px);
         --footer-floor-height: 70%;
-        --footer-floor-tint: rgba(240, 222, 194, 0.54);
-        --footer-floor-glow: rgba(211, 172, 112, 0.12);
+        --footer-floor-tint: rgba(247, 235, 216, 0.38);
+        --footer-floor-glow: rgba(211, 172, 112, 0.08);
         padding-inline: 18px;
         border-radius: 0;
     }
@@ -1342,11 +1342,11 @@ body#top :is(
 .preview-footer__brand:focus-visible .preview-footer__mark {
     transform: translateY(-4px) !important;
     border-color: rgba(var(--footer-accent-rgb), 0.18) !important;
-    background: linear-gradient(180deg, rgba(255, 253, 249, 0.99) 0%, rgba(239, 228, 210, 0.96) 100%) !important;
+    background: linear-gradient(180deg, rgba(252, 253, 255, 1) 0%, rgba(221, 229, 239, 0.96) 100%) !important;
     box-shadow:
-        0 16px 30px rgba(67, 50, 36, 0.11),
-        0 4px 10px rgba(var(--footer-accent-rgb), 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+        0 14px 28px rgba(15, 23, 42, 0.1),
+        0 2px 8px rgba(var(--footer-accent-rgb), 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
 }
 
 .preview-footer__brand:hover .preview-footer__logo,
