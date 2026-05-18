@@ -3182,3 +3182,11 @@ body#top .services-page :is(.service-cta .btn:first-child, .service-overview__br
     border-color: rgba(255, 255, 255, 0.14) !important;
     color: #fffdf9 !important;
 }
+
+body#top .services-page--sandblast .service-quick-nav .service-nav-link.active::after,
+body#top .services-page--sandblast .service-quick-nav .service-nav-link[aria-current="page"]::after,
+body#top .services-page--powder .service-quick-nav .service-nav-link.active::after,
+body#top .services-page--powder .service-quick-nav .service-nav-link[aria-current="page"]::after {
+    content: none !important;
+    display: none !important;
+}

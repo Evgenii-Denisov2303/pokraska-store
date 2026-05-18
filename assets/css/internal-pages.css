@@ -567,7 +567,7 @@ html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .c
 }
 
 /* ========== FINAL SHARED COLOR ROLES ========== */
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
     :is(.btn-primary, .btn--primary, .pricing-estimate-card__action, .service-overview__bridge-link, .service-cta .btn:first-child) {
     background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
@@ -579,9 +579,9 @@ body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contac
         inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
     :is(.btn-primary, .btn--primary, .pricing-estimate-card__action, .service-overview__bridge-link, .service-cta .btn:first-child):hover,
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
     :is(.btn-primary, .btn--primary, .pricing-estimate-card__action, .service-overview__bridge-link, .service-cta .btn:first-child):focus-visible {
     background: linear-gradient(180deg, #7f93a0 0%, #677d8c 100%) !important;
     background-image: linear-gradient(180deg, #7f93a0 0%, #677d8c 100%) !important;
@@ -590,8 +590,8 @@ body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contac
     -webkit-text-fill-color: #fffdf9 !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .catalog-group-tab, .catalog-link, .filter-btn, .gallery-filter, .service-nav-link, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge) {
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .filter-btn, .gallery-filter, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge) {
     background: var(--site-action-ghost) !important;
     background-image: var(--site-action-ghost) !important;
     border-color: var(--site-action-ghost-border) !important;
@@ -601,18 +601,18 @@ body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contac
         inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .catalog-group-tab, .catalog-link, .filter-btn, .gallery-filter, .service-nav-link, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge):hover,
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .catalog-group-tab, .catalog-link, .filter-btn, .gallery-filter, .service-nav-link, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge):focus-visible {
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .filter-btn, .gallery-filter, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge):hover,
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.btn-secondary, .btn-outline, .quick-actions .btn, .filter-btn, .gallery-filter, .contacts-contact-tile, .contacts-address-row, .contacts-meta-chip, .payment-docs-chip, .payment-docs-hero__chips span, .price-summary__item, .guarantee-badge, .automation-product-page .product-badge):focus-visible {
     background: var(--site-action-ghost-hover) !important;
     background-image: var(--site-action-ghost-hover) !important;
     border-color: rgba(var(--theme-accent-rgb), 0.2) !important;
     color: var(--site-action-ghost-text) !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.catalog-group-tab.is-active, .filter-btn.active, .filter-btn[aria-pressed="true"], .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .service-nav-link.active, .service-nav-link[aria-current="page"], .automation-product-page .catalog-group-tab.is-active) {
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.filter-btn.active, .filter-btn[aria-pressed="true"], .gallery-filter.is-active, .gallery-filter[aria-pressed="true"], .automation-product-page .catalog-group-tab.is-active) {
     background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     border-color: rgba(255, 255, 255, 0.14) !important;
@@ -623,14 +623,14 @@ body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contac
         inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.catalog-group-tab.is-active *, .filter-btn.active *, .filter-btn[aria-pressed="true"] *, .gallery-filter.is-active *, .gallery-filter[aria-pressed="true"] *, .service-nav-link.active *, .service-nav-link[aria-current="page"] *) {
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.filter-btn.active *, .filter-btn[aria-pressed="true"] *, .gallery-filter.is-active *, .gallery-filter[aria-pressed="true"] *, .automation-product-page .catalog-group-tab.is-active *) {
     color: #fffdf9 !important;
     -webkit-text-fill-color: #fffdf9 !important;
 }
 
-body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.service-detail-card, .catalog-sidebar, .catalog-group-panels, .catalog-panel, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
+body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
+    :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-page .section, .privacy-page .contact-block) {
     background: var(--site-card-surface) !important;
     border-color: var(--site-card-border) !important;
     box-shadow: var(--site-card-shadow) !important;
