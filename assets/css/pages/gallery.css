@@ -3155,3 +3155,43 @@ body#top .gallery-page .work-note {
         --gallery-card-label-inset: 12px;
     }
 }
+
+/* Final gallery color roles. */
+body#top .gallery-page .filter-btn {
+    background: var(--site-action-ghost) !important;
+    background-image: var(--site-action-ghost) !important;
+    border-color: var(--site-action-ghost-border) !important;
+    color: var(--site-action-ghost-text) !important;
+    box-shadow:
+        0 12px 22px rgba(var(--site-action-slate-rgb), 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+body#top .gallery-page .filter-btn:hover,
+body#top .gallery-page .filter-btn:focus-visible {
+    background: var(--site-action-ghost-hover) !important;
+    background-image: var(--site-action-ghost-hover) !important;
+    border-color: rgba(var(--theme-accent-rgb), 0.2) !important;
+    color: var(--site-action-ghost-text) !important;
+}
+
+body#top .gallery-page .filter-btn.active,
+body#top .gallery-page .filter-btn[aria-pressed="true"],
+body#top .gallery-page .filter-btn.active:hover,
+body#top .gallery-page .filter-btn[aria-pressed="true"]:hover,
+body#top .gallery-page .filter-btn.active:focus-visible,
+body#top .gallery-page .filter-btn[aria-pressed="true"]:focus-visible {
+    background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: #fffdf9 !important;
+    box-shadow:
+        0 14px 26px rgba(var(--site-action-slate-rgb), 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+
+body#top .gallery-page :is(.gallery-empty, .gallery-filters, .gallery-filter-shell) {
+    background: var(--site-card-surface) !important;
+    border-color: var(--site-card-border) !important;
+    box-shadow: var(--site-card-shadow) !important;
+}

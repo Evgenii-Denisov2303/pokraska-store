@@ -1643,3 +1643,39 @@ body#top .pricing-estimate-card .calculator-contact a {
         gap: 10px !important;
     }
 }
+
+/* Final prices color roles. */
+body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card .btn.btn-primary, .pricing-estimate-card .btn-primary, .pricing-estimate-card__action),
+body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card .btn.btn-primary, .pricing-estimate-card .btn-primary, .pricing-estimate-card__action):hover,
+body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card .btn.btn-primary, .pricing-estimate-card .btn-primary, .pricing-estimate-card__action):focus-visible {
+    background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: #fffdf9 !important;
+    -webkit-text-fill-color: #fffdf9 !important;
+    box-shadow:
+        0 14px 26px rgba(var(--site-action-slate-rgb), 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+}
+
+body#top .prices-page :is(.pricing-estimate-card .btn i, .pricing-estimate-card .btn.btn-primary i, .pricing-estimate-card .btn-primary i, .pricing-estimate-card__action i) {
+    color: #fffdf9 !important;
+    -webkit-text-fill-color: #fffdf9 !important;
+}
+
+body#top .prices-page :is(.price-summary__item, .factor-card, .pricing-clarity__item, .guarantee-list li) {
+    background: var(--site-action-ghost) !important;
+    background-image: var(--site-action-ghost) !important;
+    border-color: var(--site-action-ghost-border) !important;
+    box-shadow:
+        0 12px 22px rgba(var(--site-action-slate-rgb), 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+@media (min-width: 641px) {
+    body#top .prices-page :is(.pricing-playbook, .pricing-breakdown, .pricing-clarity, .calculator-section, .guarantee-section, .prices-page .section[aria-labelledby="prices-faq-title"]) {
+        background: var(--site-card-surface) !important;
+        border-color: var(--site-card-border) !important;
+        box-shadow: var(--site-card-shadow) !important;
+    }
+}

@@ -3166,3 +3166,19 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         line-height: 1.15 !important;
     }
 }
+
+/* Final service-page color roles for shared cards and CTAs. */
+@media (min-width: 641px) {
+    body#top .services-page :is(.service-detail-card, .service-overview, .services-page .faq-section--catalog) {
+        background: var(--site-card-surface) !important;
+        border-color: var(--site-card-border) !important;
+        box-shadow: var(--site-card-shadow) !important;
+    }
+}
+
+body#top .services-page :is(.service-cta .btn:first-child, .service-overview__bridge-link) {
+    background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    color: #fffdf9 !important;
+}
