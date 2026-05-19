@@ -10678,7 +10678,7 @@ body#top .hero-header--desktop-home {
 }
 
 /* Android Chrome desktop-site zoom: tall portrait viewports can cross desktop breakpoints. */
-@media (min-width: 1101px) and (max-width: 3200px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
     body#top .route-scene__facts {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: clamp(10px, 1vw, 16px) !important;
