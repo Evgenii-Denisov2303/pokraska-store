@@ -568,6 +568,13 @@ html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .c
     }
 }
 
+@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    html body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page) {
+        min-height: 0 !important;
+        --inner-page-footer-bottom: clamp(8px, 0.8vw, 16px);
+    }
+}
+
 /* ========== FINAL SHARED COLOR ROLES ========== */
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
     :is(.btn-primary, .btn--primary, .pricing-estimate-card__action, .service-overview__bridge-link, .service-cta .btn:first-child) {

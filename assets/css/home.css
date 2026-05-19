@@ -10679,6 +10679,66 @@ body#top .hero-header--desktop-home {
 
 /* Android Chrome desktop-site zoom: tall portrait viewports can cross desktop breakpoints. */
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: grid !important;
+        position: absolute !important;
+        top: clamp(18px, 1.35vw, 34px) !important;
+        right: clamp(24px, 2vw, 56px) !important;
+        left: clamp(24px, 2vw, 56px) !important;
+        z-index: 24 !important;
+        width: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__topbar {
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr) auto !important;
+        gap: clamp(16px, 1.4vw, 26px) !important;
+        align-items: center !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home :is(.hero-brand, .hero-scene__nav, .hero-header-stack) {
+        pointer-events: auto !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__nav {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        display: flex !important;
+        width: auto !important;
+        max-width: min(1120px, 100%) !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        overflow: visible !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-menu-toggle {
+        display: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack--compact {
+        display: flex !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-brand {
+        max-width: none !important;
+    }
+
     body#top .route-scene__facts {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: clamp(10px, 1vw, 16px) !important;
