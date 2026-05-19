@@ -1312,8 +1312,8 @@ body#top .apple-shell > .preview-footer {
     .preview-footer {
         --footer-gap-before: clamp(10px, 0.75vw, 18px);
         --footer-gap-adjust: 0px;
-        --footer-scene: url("../images/footer/footer-gates-desktop-crop.webp");
-        --footer-scene-y: clamp(-30px, -1.05vw, -18px);
+        --footer-scene: url("../images/footer/footer-gates-tablet-portrait-tight.webp");
+        --footer-scene-y: 0px;
         --footer-scene-space: clamp(260px, 12vw, 342px);
         --footer-scene-size: 100% auto;
         --footer-floor-height: 58%;
@@ -1324,7 +1324,9 @@ body#top .apple-shell > .preview-footer {
         --footer-floor-tint: rgba(246, 235, 218, 0.58);
         --footer-floor-glow: rgba(211, 172, 112, 0.16);
         --footer-floor-height: 100%;
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
         flex: 1 0 auto;
         background-color: #fff8ef;
     }
