@@ -1448,6 +1448,50 @@ body#top :is(
     margin-top: calc(var(--footer-gap-before) + var(--footer-gap-adjust));
 }
 
+/* Tall Android/Chrome desktop-site mode: let the scenic footer absorb spare height. */
+@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top > :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) {
+        display: block !important;
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+    }
+
+    body#top :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) > .container {
+        display: block !important;
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+    }
+
+    body#top > .preview-footer {
+        display: flex !important;
+        flex: 1 0 auto !important;
+        flex-direction: column !important;
+        min-height: 0 !important;
+    }
+
+    body#top > .preview-footer .preview-footer__layout {
+        margin: auto 0 0 auto !important;
+    }
+}
+
 /* Final footer brand polish: only the original logo mark lifts, not the company copy. */
 .preview-footer__brand,
 .preview-footer__brand:hover,
