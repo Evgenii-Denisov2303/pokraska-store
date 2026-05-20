@@ -883,6 +883,13 @@ body#top .payment-docs-page .faq-section.faq-system .faq-answer p {
 }
 
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top .payment-docs-page,
+    body#top .payment-docs-page > .container {
+        display: block !important;
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+    }
+
     body#top .payment-docs-page .faq-section.faq-system {
         margin-top: clamp(26px, 2vw, 42px) !important;
         min-height: 0 !important;

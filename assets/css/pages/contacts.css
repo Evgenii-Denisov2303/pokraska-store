@@ -2488,10 +2488,14 @@ body#top .contacts-form-embed {
 }
 
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top .contacts-page {
+        --contacts-map-height: clamp(820px, 35vh, 1460px);
+    }
+
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: 1fr !important;
-        align-items: stretch !important;
+        grid-template-columns: minmax(0, 1fr) minmax(420px, 0.92fr) !important;
+        align-items: start !important;
     }
 
     body#top .contacts-panel--request,
@@ -2503,6 +2507,7 @@ body#top .contacts-form-embed {
 
     body#top .contacts-route {
         flex: 0 0 auto !important;
+        align-items: stretch !important;
     }
 
     body#top .contacts-panel--route-copy {
