@@ -2948,6 +2948,12 @@ body#top .gallery-page .zoom-btn::after {
     }
 }
 
+@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top .gallery-page .order-cta {
+        margin-top: clamp(30px, 2.4vw, 48px) !important;
+    }
+}
+
 /* Open mobile layout: filters and CTA use page width instead of nested shells. */
 @media (max-width: 640px) {
     body#top .gallery-page > .container {

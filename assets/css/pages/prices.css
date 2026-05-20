@@ -1531,8 +1531,8 @@ body#top .pricing-estimate-card .calculator-contact a {
     }
 }
 
-@media (pointer: coarse) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
-    (hover: none) and (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+@media (pointer: coarse) and (min-width: 900px) and (max-width: 3600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
+    (hover: none) and (min-width: 900px) and (max-width: 3600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .prices-page {
         min-height: 0;
         padding-top: 136px !important;
@@ -1582,6 +1582,13 @@ body#top .pricing-estimate-card .calculator-contact a {
     body#top .guarantee-list {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 12px !important;
+    }
+}
+
+@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top .prices-page .section[aria-labelledby="prices-faq-title"] {
+        margin-top: clamp(26px, 2vw, 42px) !important;
+        min-height: 0 !important;
     }
 }
 

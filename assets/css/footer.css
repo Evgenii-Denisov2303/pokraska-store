@@ -1277,7 +1277,7 @@ body#top .apple-shell > .preview-footer {
 }
 
 /* Android Chrome desktop-site zoom can report a 1900px+ portrait viewport.
-   Keep the scenic footer compact there and remove the desktop negative join. */
+   Keep the footer compact and let the page body absorb the extra height. */
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
     html {
         min-height: 100%;
@@ -1305,35 +1305,47 @@ body#top .apple-shell > .preview-footer {
         .privacy-page,
         .automation-product-page
     ) {
-        flex: 0 0 auto;
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    body#top :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) > .container {
+        display: flex;
+        flex: 1 0 auto;
+        flex-direction: column;
         min-width: 0;
     }
 
     .preview-footer {
-        --footer-gap-before: clamp(10px, 0.75vw, 18px);
+        --footer-gap-before: clamp(8px, 0.75vw, 16px);
         --footer-gap-adjust: 0px;
-        --footer-scene: url("../images/footer/footer-gates-tablet-portrait-tight.webp");
-        --footer-scene-y: 0px;
-        --footer-scene-space: clamp(260px, 12vw, 342px);
+        --footer-scene: url("../images/footer/footer-gates-desktop-crop.webp");
+        --footer-scene-y: clamp(-30px, -1.05vw, -18px);
+        --footer-scene-space: clamp(245px, 14.2vw, 342px);
         --footer-scene-size: 100% auto;
-        --footer-floor-height: 58%;
-        padding-bottom: clamp(12px, 0.9vw, 18px);
+        --footer-floor-height: 56%;
+        padding-bottom: 0;
     }
 
     body#top > .preview-footer {
-        --footer-floor-tint: rgba(246, 235, 218, 0.58);
-        --footer-floor-glow: rgba(211, 172, 112, 0.16);
-        --footer-floor-height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        flex: 1 0 auto;
-        background-color: #fff8ef;
+        display: block;
+        flex: 0 0 auto;
+        background-color: #fffefc;
     }
 
     .preview-footer__layout {
-        flex: 0 0 auto;
-        padding-bottom: clamp(12px, 1vw, 18px);
+        padding-bottom: clamp(10px, 0.9vw, 16px);
     }
 
     .preview-footer__bottom {
@@ -1357,6 +1369,52 @@ body#top .apple-shell > .preview-footer {
         .automation-product-page
     ) + .preview-footer {
         --footer-gap-adjust: 0px;
+    }
+}
+
+/* Extreme Android Chrome desktop-site zoom: scale inner pages instead of stretching their cards. */
+@media (min-width: 2200px) and (min-height: 3200px) and (max-aspect-ratio: 9 / 10) {
+    body#top > :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) {
+        zoom: 1.1;
+    }
+}
+
+@media (min-width: 2600px) and (min-height: 3800px) and (max-aspect-ratio: 9 / 10) {
+    body#top > :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) {
+        zoom: 1.25;
+    }
+}
+
+@media (min-width: 2750px) and (min-height: 4000px) and (max-aspect-ratio: 9 / 10) {
+    body#top > :is(
+        .catalog-page,
+        .services-page,
+        .gallery-page,
+        .prices-page,
+        .contacts-page,
+        .payment-docs-page,
+        .privacy-page,
+        .automation-product-page
+    ) {
+        zoom: 1.38;
     }
 }
 
