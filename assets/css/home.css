@@ -10801,8 +10801,8 @@ body#top .hero-header--desktop-home {
     body#top .panel-scene {
         --panel-scene-tall-media-side: clamp(390px, 35vw, 450px);
         --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 58px);
-        width: min(1060px, calc(100% - 32px)) !important;
-        max-width: 1060px !important;
+        width: min(1280px, calc(100% - 32px)) !important;
+        max-width: 1280px !important;
         margin-right: auto !important;
         margin-left: auto !important;
     }
@@ -11071,6 +11071,65 @@ body#top .hero-header--desktop-home {
     body#top .panel-scene__item span {
         font-size: clamp(0.64rem, 0.56rem + 0.1vw, 0.76rem) !important;
         line-height: 1.24 !important;
+    }
+}
+
+/* Extra-wide desktop-site phone/tablet canvas: avoid narrow cards on very tall viewports. */
+@media (min-width: 1500px) and (min-height: 1800px) and (max-aspect-ratio: 9 / 10) {
+    body#top .panel-scene {
+        --panel-scene-tall-media-side: clamp(600px, 34vw, 720px);
+        --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 70px);
+        width: min(1840px, calc(100% - clamp(48px, 5vw, 112px))) !important;
+        max-width: 1840px !important;
+    }
+
+    body#top .route-scene {
+        width: min(1840px, calc(100% - clamp(48px, 5vw, 112px))) !important;
+        max-width: 1840px !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        gap: clamp(16px, 1.2vw, 24px) clamp(18px, 1.4vw, 26px) !important;
+        padding: clamp(18px, 1.2vw, 24px) !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        gap: clamp(12px, 0.9vw, 18px) !important;
+        align-content: center !important;
+        align-self: stretch !important;
+        padding-block: clamp(8px, 0.9vw, 18px) !important;
+    }
+
+    body#top .panel-scene__copy-block,
+    body#top .panel-scene__card--light .panel-scene__copy-block,
+    body#top .panel-scene__card--powder .panel-scene__copy-block {
+        max-width: min(100%, 56ch) !important;
+    }
+
+    body#top .panel-scene__copy-block h3,
+    body#top .panel-scene__card--light .panel-scene__copy-block h3,
+    body#top .panel-scene__card--powder .panel-scene__copy-block h3 {
+        max-width: 18ch !important;
+    }
+
+    body#top .panel-scene__copy-block p,
+    body#top .panel-scene__card--light .panel-scene__copy-block p,
+    body#top .panel-scene__card--powder .panel-scene__copy-block p {
+        max-width: 46ch !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        width: min(100%, 980px) !important;
+        justify-self: start !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
 }
 

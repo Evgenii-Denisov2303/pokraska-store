@@ -2494,7 +2494,7 @@ body#top .contacts-form-embed {
 
     body#top .contacts-core,
     body#top .contacts-route {
-        grid-template-columns: minmax(0, 1fr) minmax(420px, 0.92fr) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         align-items: start !important;
     }
 
@@ -2511,11 +2511,68 @@ body#top .contacts-form-embed {
     }
 
     body#top .contacts-panel--route-copy {
-        display: block !important;
+        display: grid !important;
+        grid-template-rows: auto auto 1fr auto !important;
+        gap: clamp(12px, 1vw, 16px) !important;
+        padding: clamp(22px, 1.8vw, 26px) !important;
+    }
+
+    body#top .contacts-panel--route-copy .contacts-panel__header {
+        gap: 8px !important;
+        max-width: none !important;
+    }
+
+    body#top .contacts-route-highlights {
+        gap: 8px !important;
+        padding-top: 0 !important;
+    }
+
+    body#top .contacts-route-badge {
+        min-height: 34px !important;
+        padding: 7px 11px !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.62) !important;
+        box-shadow: none !important;
+    }
+
+    body#top .contacts-route-steps {
+        align-content: start !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+        border: 1px solid rgba(35, 51, 69, 0.08) !important;
+        border-radius: 22px !important;
+        background: rgba(255, 255, 255, 0.55) !important;
+    }
+
+    body#top .contacts-route-steps li {
+        gap: 6px !important;
+        padding: 13px 16px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    body#top .contacts-route-steps li + li {
+        border-top: 1px solid rgba(35, 51, 69, 0.07) !important;
+    }
+
+    body#top .contacts-route-steps strong {
+        font-size: clamp(0.98rem, 0.86rem + 0.16vw, 1.08rem) !important;
+        line-height: 1.24 !important;
+    }
+
+    body#top .contacts-route-steps span {
+        font-size: clamp(0.9rem, 0.8rem + 0.14vw, 0.98rem) !important;
+        line-height: 1.36 !important;
     }
 
     body#top .contacts-route-actions {
-        margin-top: clamp(14px, 1.2vw, 22px) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        margin-top: 0 !important;
+        align-self: end !important;
     }
 
     body#top .contacts-panel--route-map iframe {
