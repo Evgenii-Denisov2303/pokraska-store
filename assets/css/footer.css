@@ -1023,6 +1023,7 @@
     --footer-scene-x: center;
     --footer-scene-y: clamp(-24px, -1vw, -12px);
     --footer-scene-size: 100% auto;
+    --footer-rule-y: calc(var(--footer-scene-space) - 8px);
     --footer-floor-tint: rgba(246, 235, 218, 0.44);
     --footer-floor-glow: rgba(211, 172, 112, 0.1);
     --footer-floor-height: 56%;
@@ -1056,7 +1057,7 @@
 }
 
 .preview-footer::before {
-    top: calc(var(--footer-scene-space) - 8px);
+    top: var(--footer-rule-y);
     left: clamp(22px, 4vw, 64px);
     right: clamp(22px, 4vw, 64px);
     height: 1px;
@@ -1276,8 +1277,7 @@ body#top .apple-shell > .preview-footer {
     }
 }
 
-/* Android Chrome desktop-site zoom can report a 1900px+ portrait viewport.
-   Keep the footer compact and let the page body absorb the extra height. */
+/* Tall desktop-site portrait: keep page content intrinsic and let only the direct footer absorb spare height. */
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
     html {
         min-height: 100%;
@@ -1305,10 +1305,10 @@ body#top .apple-shell > .preview-footer {
         .privacy-page,
         .automation-product-page
     ) {
-        display: flex;
-        flex: 1 0 auto;
-        flex-direction: column;
+        display: block !important;
+        flex: 0 0 auto !important;
         min-width: 0;
+        min-height: 0 !important;
     }
 
     body#top :is(
@@ -1321,27 +1321,47 @@ body#top .apple-shell > .preview-footer {
         .privacy-page,
         .automation-product-page
     ) > .container {
-        display: flex;
-        flex: 1 0 auto;
-        flex-direction: column;
+        display: block !important;
+        flex: 0 0 auto !important;
         min-width: 0;
+        min-height: 0 !important;
     }
 
     .preview-footer {
         --footer-gap-before: clamp(8px, 0.75vw, 16px);
         --footer-gap-adjust: 0px;
         --footer-scene: url("../images/footer/footer-gates-desktop-crop.webp");
-        --footer-scene-y: clamp(-30px, -1.05vw, -18px);
-        --footer-scene-space: clamp(245px, 14.2vw, 342px);
-        --footer-scene-size: 100% auto;
+        --footer-scene-y: clamp(-36px, -1.4vw, -22px);
+        --footer-scene-space: clamp(214px, 11.8vw, 252px);
+        --footer-scene-size: auto calc(100% + 48px);
+        --footer-rule-y: calc(var(--footer-scene-space) - 22px);
         --footer-floor-height: 56%;
-        padding-bottom: 0;
+        padding-bottom: clamp(22px, 1.2vw, 34px);
     }
 
     body#top > .preview-footer {
-        display: block;
-        flex: 0 0 auto;
+        display: block !important;
+        flex: 1 0 auto !important;
+        margin-top: 0 !important;
+        min-height: 0 !important;
+        --footer-scene-y: clamp(-88px, -5.8vw, -62px);
+        --footer-scene-size: auto clamp(760px, 62vw, 860px);
+        --footer-scene-space: clamp(184px, 14.2vw, 212px);
+        --footer-rule-y: calc(var(--footer-scene-space) - 6px);
         background-color: #fffefc;
+        background-image:
+            var(--footer-scene),
+            radial-gradient(ellipse at 88% 72%, rgba(211, 172, 112, 0.12), rgba(211, 172, 112, 0) 42%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 252, 247, 0.3) 48%, rgba(246, 235, 218, 0.34) 100%);
+        background-repeat: no-repeat, no-repeat, no-repeat;
+        background-position:
+            var(--footer-scene-x) var(--footer-scene-y),
+            center bottom,
+            center bottom;
+        background-size:
+            var(--footer-scene-size),
+            100% 100%,
+            100% 100%;
     }
 
     .preview-footer__layout {
@@ -1369,6 +1389,10 @@ body#top .apple-shell > .preview-footer {
         .automation-product-page
     ) + .preview-footer {
         --footer-gap-adjust: 0px;
+    }
+
+    body#top > .preview-footer .preview-footer__layout {
+        margin: 0 auto !important;
     }
 }
 
@@ -1446,50 +1470,6 @@ body#top :is(
     .automation-product-page
 ) + .preview-footer {
     margin-top: calc(var(--footer-gap-before) + var(--footer-gap-adjust));
-}
-
-/* Tall Android/Chrome desktop-site mode: let the scenic footer absorb spare height. */
-@media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
-    body#top > :is(
-        .catalog-page,
-        .services-page,
-        .gallery-page,
-        .prices-page,
-        .contacts-page,
-        .payment-docs-page,
-        .privacy-page,
-        .automation-product-page
-    ) {
-        display: block !important;
-        flex: 0 0 auto !important;
-        min-height: 0 !important;
-    }
-
-    body#top :is(
-        .catalog-page,
-        .services-page,
-        .gallery-page,
-        .prices-page,
-        .contacts-page,
-        .payment-docs-page,
-        .privacy-page,
-        .automation-product-page
-    ) > .container {
-        display: block !important;
-        flex: 0 0 auto !important;
-        min-height: 0 !important;
-    }
-
-    body#top > .preview-footer {
-        display: flex !important;
-        flex: 1 0 auto !important;
-        flex-direction: column !important;
-        min-height: 0 !important;
-    }
-
-    body#top > .preview-footer .preview-footer__layout {
-        margin: auto 0 0 auto !important;
-    }
 }
 
 /* Final footer brand polish: only the original logo mark lifts, not the company copy. */

@@ -10777,6 +10777,214 @@ body#top .hero-header--desktop-home {
         max-width: none !important;
     }
 
+    body#top .hero-scene,
+    body#top .hero-scene.scene-reveal,
+    body#top .hero-scene.scene-reveal.is-visible {
+        overflow: hidden !important;
+    }
+
+    body#top .hero-stage {
+        min-height: clamp(820px, 64vw, 940px) !important;
+        aspect-ratio: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    body#top .hero-stage__picture {
+        inset: 0 !important;
+    }
+
+    body#top .hero-stage__picture img {
+        width: 100% !important;
+        object-position: center bottom !important;
+    }
+
+    body#top .panel-scene {
+        --panel-scene-tall-media-side: clamp(390px, 35vw, 450px);
+        --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 58px);
+        width: min(1060px, calc(100% - 32px)) !important;
+        max-width: 1060px !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        display: grid !important;
+        grid-template-columns: minmax(0, var(--panel-scene-tall-media-side)) minmax(0, 1fr) !important;
+        grid-template-areas:
+            "media top"
+            "dock dock" !important;
+        gap: clamp(12px, 1vw, 16px) clamp(14px, 1.2vw, 18px) !important;
+        align-items: start !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: clamp(14px, 1.15vw, 18px) !important;
+        overflow: visible !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-columns: minmax(0, 1fr) minmax(0, var(--panel-scene-tall-media-side)) !important;
+        grid-template-areas:
+            "top media"
+            "dock dock" !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media {
+        grid-area: media !important;
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+        margin: 0 !important;
+        border-radius: clamp(22px, 1.7vw, 28px) !important;
+    }
+
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay,
+    body#top .panel-scene__stamp {
+        display: none !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: media !important;
+        position: relative !important;
+        z-index: 2 !important;
+        align-self: start !important;
+        justify-self: start !important;
+        width: min(calc(100% - 32px), 230px) !important;
+        max-width: 230px !important;
+        margin: var(--panel-scene-tall-viewer-y) 0 0 clamp(14px, 1.15vw, 18px) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        justify-self: end !important;
+        justify-items: end !important;
+        text-align: right !important;
+        margin: var(--panel-scene-tall-viewer-y) clamp(14px, 1.15vw, 18px) 0 0 !important;
+    }
+
+    body#top .panel-scene__viewer strong,
+    body#top .panel-scene__viewer--light strong {
+        max-width: 17ch !important;
+        font-size: clamp(0.78rem, 0.66rem + 0.14vw, 0.94rem) !important;
+        line-height: 1.12 !important;
+        color: rgba(255, 255, 255, 0.98) !important;
+        text-shadow:
+            0 2px 10px rgba(8, 18, 28, 0.42),
+            0 1px 2px rgba(8, 18, 28, 0.3) !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        display: contents !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        display: none !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        grid-area: top !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: clamp(9px, 0.8vw, 12px) !important;
+        align-content: start !important;
+        align-self: start !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: dock !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: clamp(8px, 0.8vw, 12px) clamp(12px, 1vw, 16px) !important;
+        align-items: end !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-column: 1 / -1 !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: clamp(6px, 0.65vw, 8px) !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .panel-scene__item,
+    body#top .panel-scene__card--dark .panel-scene__item,
+    body#top .panel-scene__card--light .panel-scene__item {
+        min-height: 48px !important;
+        padding: 10px 28px 10px 12px !important;
+        border: 1px solid rgba(var(--theme-accent-strong-rgb), 0.08) !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.5) !important;
+        box-shadow: none !important;
+    }
+
+    body#top .panel-scene__item::before {
+        content: none !important;
+    }
+
+    body#top .panel-scene__item::after {
+        top: 11px !important;
+        right: 10px !important;
+        font-size: 0.74rem !important;
+    }
+
+    body#top .panel-scene__item span {
+        display: none !important;
+    }
+
+    body#top .panel-scene__trust,
+    body#top .panel-scene__card--light .panel-scene__trust,
+    body#top .panel-scene__card--dark .panel-scene__trust {
+        grid-column: 1 / 2 !important;
+        max-width: none !important;
+        padding: 0 0 0 12px !important;
+        border: 0 !important;
+        border-left: 2px solid rgba(var(--theme-accent-strong-rgb), 0.12) !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .panel-scene__actions {
+        grid-column: 2 / 3 !important;
+        justify-self: end !important;
+        gap: 8px !important;
+        margin-top: 0 !important;
+    }
+
+    body#top .panel-scene__dock > .panel-scene__actions .panel-scene__action {
+        min-height: 40px !important;
+        padding: 8px 12px !important;
+        font-size: 0.84rem !important;
+    }
+
     body#top .route-scene__facts {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: clamp(10px, 1vw, 16px) !important;
@@ -11226,6 +11434,27 @@ body#top .home-tail__request {
             0 14px 28px rgba(15, 23, 42, 0.1),
             0 2px 8px rgba(24, 61, 93, 0.06),
             inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+    }
+}
+
+/* Final home panel photo proportions: keep preview images close to square on compact screens. */
+@media (max-width: 640px) {
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media {
+        height: auto !important;
+        aspect-ratio: 6 / 5 !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 820px) {
+    body#top .panel-scene {
+        --panel-scene-tablet-media-height: clamp(500px, 78vw, 620px);
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        top: calc(18px + var(--panel-scene-tablet-media-height) - 72px) !important;
     }
 }
 

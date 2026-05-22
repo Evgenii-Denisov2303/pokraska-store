@@ -2489,7 +2489,7 @@ body#top .contacts-form-embed {
 
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
     body#top .contacts-page {
-        --contacts-map-height: clamp(820px, 35vh, 1460px);
+        --contacts-map-height: clamp(660px, 29vh, 720px);
     }
 
     body#top .contacts-core,
