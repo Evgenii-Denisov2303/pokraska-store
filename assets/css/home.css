@@ -10717,6 +10717,17 @@ body#top .hero-header--desktop-home {
 
 /* Android Chrome desktop-site zoom: tall portrait viewports can cross desktop breakpoints. */
 @media (min-width: 1101px) and (min-height: 1400px) and (max-aspect-ratio: 9 / 10) {
+    body#top :is(.statement-scene, .panel-scene, .route-scene, .reviews-scene, .home-tail-scene) {
+        content-visibility: visible !important;
+        contain-intrinsic-size: auto !important;
+    }
+
+    body#top .scene-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
     body#top .hero-scene > .hero-header.hero-header--desktop-home {
         display: grid !important;
         position: absolute !important;
@@ -11076,9 +11087,17 @@ body#top .hero-header--desktop-home {
 
 /* Extra-wide desktop-site phone/tablet canvas: avoid narrow cards on very tall viewports. */
 @media (min-width: 1500px) and (min-height: 1800px) and (max-aspect-ratio: 9 / 10) {
+    body#top .hero-stage {
+        min-height: clamp(1180px, 67vw, 1360px) !important;
+    }
+
+    body#top .hero-copy {
+        top: clamp(300px, 18vw, 390px) !important;
+    }
+
     body#top .panel-scene {
-        --panel-scene-tall-media-side: clamp(600px, 34vw, 720px);
-        --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 70px);
+        --panel-scene-tall-media-side: clamp(720px, 43vw, 880px);
+        --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 74px);
         width: min(1840px, calc(100% - clamp(48px, 5vw, 112px))) !important;
         max-width: 1840px !important;
     }
@@ -11090,8 +11109,19 @@ body#top .hero-header--desktop-home {
 
     body#top .panel-scene__card,
     body#top .panel-scene__card--light {
+        grid-template-areas:
+            "media top"
+            "media dock" !important;
+        grid-template-rows: minmax(0, 1fr) auto !important;
         gap: clamp(16px, 1.2vw, 24px) clamp(18px, 1.4vw, 26px) !important;
+        align-items: stretch !important;
         padding: clamp(18px, 1.2vw, 24px) !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-areas:
+            "top media"
+            "dock media" !important;
     }
 
     body#top .panel-scene__top,
@@ -11099,7 +11129,13 @@ body#top .hero-header--desktop-home {
         gap: clamp(12px, 0.9vw, 18px) !important;
         align-content: center !important;
         align-self: stretch !important;
-        padding-block: clamp(8px, 0.9vw, 18px) !important;
+        padding-block: clamp(10px, 1vw, 20px) !important;
+    }
+
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        align-self: end !important;
+        gap: clamp(8px, 0.85vw, 12px) clamp(12px, 1vw, 16px) !important;
     }
 
     body#top .panel-scene__copy-block,
@@ -11122,14 +11158,61 @@ body#top .hero-header--desktop-home {
 
     body#top .panel-scene__facts,
     body#top .panel-scene__card--light .panel-scene__facts {
-        width: min(100%, 980px) !important;
+        width: min(100%, 920px) !important;
         justify-self: start !important;
     }
 
     body#top .panel-scene__items,
     body#top .panel-scene__card--light .panel-scene__items,
     body#top .panel-scene__card--powder .panel-scene__items {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: clamp(6px, 0.75vw, 10px) clamp(8px, 0.95vw, 12px) !important;
+    }
+
+    body#top .panel-scene__item,
+    body#top .panel-scene__card--dark .panel-scene__item,
+    body#top .panel-scene__card--light .panel-scene__item {
+        min-height: 46px !important;
+    }
+}
+
+@media (min-width: 1800px) and (min-height: 2200px) and (max-aspect-ratio: 9 / 10) {
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        grid-template-columns: minmax(0, 1.65fr) minmax(260px, 0.88fr) !important;
+        gap: clamp(18px, 1.4vw, 26px) !important;
+        align-items: center !important;
+        align-content: center !important;
+    }
+
+    body#top .panel-scene__copy-block,
+    body#top .panel-scene__card--light .panel-scene__copy-block,
+    body#top .panel-scene__card--powder .panel-scene__copy-block {
+        grid-column: 1 !important;
+        max-width: none !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-column: 2 !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        align-self: center !important;
+        justify-self: stretch !important;
+        width: 100% !important;
+        gap: 0 !important;
+        padding: clamp(10px, 0.8vw, 14px) clamp(12px, 0.95vw, 16px) !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        padding: clamp(9px, 0.8vw, 12px) 0 !important;
+        border-left: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    body#top .panel-scene__fact + .panel-scene__fact {
+        border-top: 1px solid rgba(var(--theme-accent-rgb), 0.1) !important;
     }
 }
 
