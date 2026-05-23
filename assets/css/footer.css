@@ -1178,7 +1178,7 @@
         --footer-scene: url("../images/footer/footer-gates-mobile-tight.webp");
         --footer-scene-y: clamp(-18px, -3.8vw, -10px);
         --footer-scene-space: clamp(102px, 27vw, 120px);
-        --footer-scene-size: auto calc(100% + 36px);
+        --footer-scene-size: calc(100% + clamp(76px, 18vw, 116px)) auto;
         --footer-floor-height: 70%;
         --footer-floor-tint: rgba(247, 235, 216, 0.38);
         --footer-floor-glow: rgba(211, 172, 112, 0.08);
