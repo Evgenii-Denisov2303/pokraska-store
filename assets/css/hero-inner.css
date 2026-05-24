@@ -655,6 +655,7 @@
 
 /* Phone browsers in "desktop site" mode can report a desktop-wide touch viewport. */
 @media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
     (hover: none) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
@@ -690,6 +691,7 @@
 }
 
 @media (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3) {
     body#top {
         --internal-compact-page-start: 136px;

@@ -336,6 +336,7 @@
 
 /* Mobile and tablet tap target: only the logo image navigates, not the adjacent brand text. */
 @media (max-width: 1100px),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
@@ -1156,6 +1157,7 @@
 
 /* One compact header system: mobile, tablet and real phone desktop-site mode. */
 @media (max-width: 1100px),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
@@ -1651,6 +1653,7 @@
 }
 
 @media (min-width: 1101px) and (max-width: 1600px) and (pointer: coarse),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
     (hover: none) and (min-width: 1101px) and (max-width: 1600px) and (min-height: 1100px) and (min-aspect-ratio: 5 / 6) and (max-aspect-ratio: 6 / 5),
     (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse),
