@@ -12050,3 +12050,350 @@ body#top .home-tail__form-card {
         padding: 0 !important;
     }
 }
+
+/* Final home preview contract: stable centered photos, readable copy, no breakpoint jump. */
+body#top .panel-scene {
+    --panel-preview-gap: clamp(18px, 2.1vw, 42px);
+    --panel-preview-pad: clamp(14px, 1.25vw, 24px);
+    --panel-preview-media: clamp(500px, 46vw, 980px);
+}
+
+@media (max-width: 1101.98px) {
+    body#top .panel-scene {
+        --panel-preview-media: min(100%, clamp(320px, calc(100vw - 48px), 760px));
+        width: min(100%, calc(100vw - clamp(28px, 4.2vw, 48px))) !important;
+        max-width: 1120px !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-areas:
+            "media"
+            "content" !important;
+        gap: clamp(18px, 3vw, 26px) !important;
+        align-items: start !important;
+        justify-items: stretch !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: clamp(14px, 2.5vw, 22px) !important;
+        overflow: hidden !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media,
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        grid-area: media !important;
+        position: relative !important;
+        inset: auto !important;
+        justify-self: center !important;
+        width: var(--panel-preview-media) !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+        margin: 0 !important;
+        border-radius: clamp(20px, 3vw, 28px) !important;
+    }
+
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        z-index: 2 !important;
+        pointer-events: none !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media {
+        z-index: 1 !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: media !important;
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 3 !important;
+        align-self: end !important;
+        justify-self: start !important;
+        width: min(280px, calc(100% - 34px)) !important;
+        max-width: 280px !important;
+        margin: 0 0 clamp(14px, 2.4vw, 22px) clamp(14px, 2.4vw, 22px) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        justify-self: end !important;
+        justify-items: end !important;
+        text-align: right !important;
+        margin: 0 clamp(14px, 2.4vw, 22px) clamp(14px, 2.4vw, 22px) 0 !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        grid-area: content !important;
+        position: relative !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: clamp(16px, 2.8vw, 24px) !important;
+        align-content: start !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: clamp(4px, 1.2vw, 12px) !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        inset: 0 !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: auto !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)) !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important;
+    }
+}
+
+@media (min-width: 1102px) {
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        display: grid !important;
+        grid-template-columns: minmax(0, var(--panel-preview-media)) minmax(0, 1fr) !important;
+        grid-template-areas: "media content" !important;
+        gap: var(--panel-preview-gap) !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: var(--panel-preview-pad) !important;
+        overflow: hidden !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-columns: minmax(0, 1fr) minmax(0, var(--panel-preview-media)) !important;
+        grid-template-areas: "content media" !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media,
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        grid-area: media !important;
+        position: relative !important;
+        inset: auto !important;
+        align-self: center !important;
+        justify-self: center !important;
+        width: 100% !important;
+        max-width: var(--panel-preview-media) !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+        margin: 0 !important;
+        border-radius: clamp(22px, 1.8vw, 30px) !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media {
+        z-index: 1 !important;
+    }
+
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay,
+    body#top .panel-scene__stamp {
+        z-index: 2 !important;
+        pointer-events: none !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: media !important;
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 3 !important;
+        align-self: end !important;
+        justify-self: start !important;
+        width: min(280px, calc(100% - 40px)) !important;
+        max-width: 280px !important;
+        margin: 0 0 clamp(18px, 1.2vw, 28px) clamp(18px, 1.2vw, 28px) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        justify-self: end !important;
+        justify-items: end !important;
+        text-align: right !important;
+        margin: 0 clamp(18px, 1.2vw, 28px) clamp(18px, 1.2vw, 28px) 0 !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        grid-area: content !important;
+        position: relative !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-rows: auto auto !important;
+        gap: clamp(16px, 1.5vw, 26px) !important;
+        align-content: center !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: clamp(10px, 1.25vw, 22px) !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        inset: 0 !important;
+        display: block !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: auto !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__copy-block,
+    body#top .panel-scene__card--light .panel-scene__copy-block,
+    body#top .panel-scene__card--powder .panel-scene__copy-block {
+        max-width: min(100%, 58ch) !important;
+    }
+
+    body#top .panel-scene__copy-block h3,
+    body#top .panel-scene__card--light .panel-scene__copy-block h3,
+    body#top .panel-scene__card--powder .panel-scene__copy-block h3,
+    body#top .panel-scene__copy-block p,
+    body#top .panel-scene__card--light .panel-scene__copy-block p,
+    body#top .panel-scene__card--powder .panel-scene__copy-block p {
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width: 1102px) and (max-width: 1399.98px) {
+    body#top .panel-scene {
+        --panel-preview-media: clamp(580px, 54vw, 720px);
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        grid-template-columns: minmax(0, var(--panel-preview-media)) minmax(0, 1fr) !important;
+        grid-template-areas:
+            "media top"
+            "dock dock" !important;
+        align-items: center !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-columns: minmax(0, 1fr) minmax(0, var(--panel-preview-media)) !important;
+        grid-template-areas:
+            "top media"
+            "dock dock" !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        display: contents !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        display: none !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        grid-area: top !important;
+        align-self: center !important;
+        align-content: center !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: clamp(8px, 1vw, 16px) !important;
+    }
+
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: dock !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin-top: clamp(4px, 1.1vw, 16px) !important;
+        padding: clamp(8px, 1vw, 16px) !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 165px), 1fr)) !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        border-left: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)) !important;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1799.98px) {
+    body#top .panel-scene {
+        --panel-preview-media: clamp(700px, 46vw, 820px);
+    }
+}
+
+@media (min-width: 1800px) {
+    body#top .panel-scene {
+        --panel-preview-media: clamp(780px, 46vw, 980px);
+    }
+}
