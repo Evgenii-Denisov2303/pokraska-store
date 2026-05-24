@@ -1016,7 +1016,7 @@
 
 /* Scenic footer contract: one rhythm for the same footer on home and inner pages. */
 .preview-footer {
-    --footer-gap-before: clamp(14px, 1.6vw, 28px);
+    --footer-gap-before: 0px;
     --footer-gap-adjust: 0px;
     --footer-scene: url("../images/footer/footer-gates-desktop-crop.webp");
     --footer-scene-space: clamp(230px, 15.5vw, 342px);
@@ -1109,7 +1109,7 @@
 
 @media (min-width: 820px) and (max-width: 1199px) and (orientation: landscape) {
     .preview-footer {
-        --footer-gap-before: clamp(8px, 1.2vw, 16px);
+        --footer-gap-before: 0px;
         --footer-scene: url("../images/footer/footer-gates-tablet-landscape-tight.webp");
         --footer-scene-y: clamp(-10px, -0.9vw, -4px);
         --footer-scene-space: clamp(154px, 14.8vw, 206px);
@@ -1120,9 +1120,9 @@
 
 @media (min-width: 641px) and (max-width: 1100px) and (orientation: portrait) {
     .preview-footer {
-        --footer-gap-before: clamp(8px, 1.5vw, 16px);
+        --footer-gap-before: 0px;
         --footer-scene: url("../images/footer/footer-gates-tablet-portrait-tight.webp");
-        --footer-scene-y: clamp(-14px, -1.35vw, -8px);
+        --footer-scene-y: clamp(-22px, -2.2vw, -14px);
         --footer-scene-space: clamp(158px, 19vw, 202px);
         --footer-scene-size: 100% auto;
         --footer-floor-height: 46%;
@@ -1133,7 +1133,7 @@
 @media (pointer: coarse) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     .preview-footer {
-        --footer-gap-before: clamp(6px, 1vw, 12px);
+        --footer-gap-before: 0px;
         --footer-scene-y: clamp(-54px, -4.6vw, -36px);
         --footer-scene-space: clamp(138px, 16vw, 166px);
         --footer-floor-height: 54%;
@@ -1143,7 +1143,7 @@
 @media (pointer: coarse) and (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 1101px) and (max-width: 1300px) and (max-aspect-ratio: 2 / 3) {
     .preview-footer {
-        --footer-gap-before: clamp(6px, 0.9vw, 12px);
+        --footer-gap-before: 0px;
         --footer-scene-y: clamp(-40px, -2.4vw, -24px);
         --footer-scene-space: clamp(178px, 14.5vw, 196px);
         --footer-floor-height: 58%;
@@ -1152,9 +1152,9 @@
 
 @media (min-width: 641px) and (max-width: 819px) {
     .preview-footer {
-        --footer-gap-before: clamp(8px, 1.4vw, 14px);
+        --footer-gap-before: 0px;
         --footer-scene: url("../images/footer/footer-gates-tablet-portrait-tight.webp");
-        --footer-scene-y: clamp(-12px, -1.2vw, -7px);
+        --footer-scene-y: clamp(-20px, -2vw, -12px);
         --footer-scene-space: clamp(150px, 20vw, 172px);
         --footer-scene-size: 100% auto;
         --footer-floor-height: 48%;
@@ -1163,7 +1163,7 @@
 
 @media (min-width: 900px) and (max-width: 1220px) and (max-height: 560px) {
     .preview-footer {
-        --footer-gap-before: clamp(6px, 1vw, 12px);
+        --footer-gap-before: 0px;
         --footer-scene: url("../images/footer/footer-gates-tablet-landscape-tight.webp");
         --footer-scene-y: clamp(-6px, -0.6vw, -2px);
         --footer-scene-space: clamp(132px, 12vw, 168px);
@@ -1174,7 +1174,7 @@
 
 @media (max-width: 640.98px) {
     .preview-footer {
-        --footer-gap-before: clamp(8px, 2.8vw, 14px);
+        --footer-gap-before: 0px;
         --footer-scene: url("../images/footer/footer-gates-mobile-tight.webp");
         --footer-scene-y: clamp(-18px, -3.8vw, -10px);
         --footer-scene-space: clamp(128px, 33vw, 208px);
@@ -1271,7 +1271,7 @@ body#top .apple-shell > .preview-footer {
 
 @media (pointer: coarse) and (min-width: 1301px) and (max-width: 1600px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     .preview-footer {
-        --footer-gap-before: clamp(6px, 0.85vw, 12px);
+        --footer-gap-before: 0px;
         --footer-scene-y: clamp(-44px, -2.4vw, -30px);
         --footer-scene-space: clamp(188px, 13.8vw, 212px);
         --footer-scene-size: 100% auto;
@@ -1282,7 +1282,7 @@ body#top .apple-shell > .preview-footer {
 @media (pointer: coarse) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4),
     (hover: none) and (min-width: 1601px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     .preview-footer {
-        --footer-gap-before: clamp(4px, 0.55vw, 10px);
+        --footer-gap-before: 0px;
         --footer-scene-y: clamp(-50px, -2.35vw, -32px);
         --footer-scene-space: clamp(158px, 9vw, 190px);
         --footer-scene-size: 100% auto;
@@ -1350,7 +1350,7 @@ body#top .apple-shell > .preview-footer {
     }
 
     .preview-footer {
-        --footer-gap-before: clamp(8px, 0.75vw, 16px);
+        --footer-gap-before: 0px;
         --footer-gap-adjust: 0px;
         --footer-scene: url("../images/footer/footer-gates-desktop-crop.webp");
         --footer-scene-y: clamp(-36px, -1.4vw, -22px);
