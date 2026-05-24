@@ -1418,6 +1418,20 @@ body#top .apple-shell > .preview-footer {
     }
 }
 
+/* Wide desktop-site portrait: the footer is full width, so keep the gates artwork full width too. */
+@media (min-width: 1900px) and (min-height: 2600px) and (max-aspect-ratio: 9 / 10) {
+    body#top .preview-footer {
+        --footer-scene-size: 100% auto;
+        --footer-scene-space: clamp(218px, 9.8vw, 258px);
+        --footer-rule-y: calc(var(--footer-scene-space) - 10px);
+    }
+
+    body#top .apple-shell > .preview-footer,
+    body#top > .preview-footer {
+        --footer-scene-y: clamp(-96px, -4.1vw, -78px);
+    }
+}
+
 /* Extreme Android Chrome desktop-site zoom: scale inner pages instead of stretching their cards. */
 @media (min-width: 2200px) and (min-height: 3200px) and (max-aspect-ratio: 9 / 10) {
     body#top > :is(

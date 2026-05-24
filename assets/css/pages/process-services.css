@@ -2405,6 +2405,23 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         max-width: 100%;
     }
 
+    body#top .before-after-section__header,
+    body#top .before-after-section__footer,
+    body#top .before-after-section .before-after--service-wide {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    body#top .before-after-section .section-title,
+    body#top .before-after-section .section-subtitle {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     body#top .service-quick-nav {
         padding: 12px;
         margin-bottom: 0;

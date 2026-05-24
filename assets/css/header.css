@@ -335,7 +335,7 @@
 }
 
 /* Mobile and tablet tap target: only the logo image navigates, not the adjacent brand text. */
-@media (max-width: 1100px),
+@media (max-width: 1101px),
     (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
@@ -1156,7 +1156,7 @@
 }
 
 /* One compact header system: mobile, tablet and real phone desktop-site mode. */
-@media (max-width: 1100px),
+@media (max-width: 1101px),
     (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (pointer: coarse) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1600px) and (max-aspect-ratio: 2 / 3),
@@ -1646,7 +1646,7 @@
     }
 }
 
-@media (min-width: 821px) and (max-width: 1100px) {
+@media (min-width: 821px) and (max-width: 1101px) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list {
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     }
@@ -1693,6 +1693,189 @@
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a::after {
         font-size: 10px !important;
         line-height: 1.12 !important;
+    }
+}
+
+/* Wide phone desktop-site mode: keep the full menu visible instead of switching to a burger. */
+@media (min-width: 821px) and (max-width: 1221px),
+    (min-width: 900px) and (max-width: 2200px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
+    (pointer: coarse) and (min-width: 1101px) and (max-width: 1600px),
+    (hover: none) and (min-width: 1101px) and (max-width: 1600px),
+    (pointer: coarse) and (min-width: 2200px) and (min-height: 2200px) and (min-aspect-ratio: 9 / 10) and (max-aspect-ratio: 10 / 9),
+    (hover: none) and (min-width: 2200px) and (min-height: 2200px) and (min-aspect-ratio: 9 / 10) and (max-aspect-ratio: 10 / 9) {
+    body#top .header.header--desktop-hero.internal-legacy-header.header--home,
+    body#top .header.header--desktop-hero.internal-legacy-header.header--home.is-hidden,
+    body#top .header.header--desktop-hero.internal-legacy-header:not(.header--home),
+    body#top .header.header--desktop-hero.internal-legacy-header:not(.header--home).is-hidden,
+    body#top .header.header--desktop-hero.internal-legacy-header,
+    body#top .header.header--desktop-hero.internal-legacy-header.is-hidden {
+        display: block !important;
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        transform: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .container {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact {
+        position: sticky !important;
+        top: 0 !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) minmax(196px, auto) !important;
+        grid-template-areas:
+            "logo contacts"
+            "nav nav" !important;
+        align-items: center !important;
+        gap: 10px clamp(18px, 3vw, 34px) !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        padding: 12px clamp(18px, 3vw, 32px) 14px !important;
+        border: 0 !important;
+        border-bottom: 1px solid rgba(24, 61, 93, 0.1) !important;
+        border-radius: 0 !important;
+        background:
+            radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0) 32%),
+            var(--header-panel-bg) !important;
+        box-shadow: 0 14px 32px rgba(16, 38, 61, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(112%) !important;
+        backdrop-filter: blur(18px) saturate(112%) !important;
+        transform: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand {
+        grid-area: logo !important;
+        justify-self: start !important;
+        max-width: min(100%, 330px) !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .hero-brand__link:hover {
+        color: var(--header-panel-ink) !important;
+        text-decoration: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-contact-stack {
+        grid-area: contacts !important;
+        display: flex !important;
+        justify-self: end !important;
+        width: max-content !important;
+        max-width: 220px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-actions {
+        display: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav {
+        grid-area: nav !important;
+        position: static !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        overflow: visible !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 7px clamp(4px, 0.65vw, 8px) !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list li {
+        width: auto !important;
+        min-width: 0 !important;
+        flex: 0 0 auto !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:visited,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:hover,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a:focus-visible {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        min-height: 31px !important;
+        padding: 6px clamp(7px, 0.8vw, 10px) !important;
+        border: 1px solid rgba(24, 61, 93, 0.09) !important;
+        border-radius: 999px !important;
+        background: rgba(255, 255, 255, 0.46) !important;
+        box-shadow: none !important;
+        color: rgba(16, 38, 61, 0.82) !important;
+        font-size: clamp(12px, 1.28vw, 13.6px) !important;
+        font-weight: 790 !important;
+        line-height: 1.08 !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        transform: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a i,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a::before,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a.active,
+    body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a[aria-current="page"] {
+        border-color: rgba(24, 61, 93, 0.18) !important;
+        background: rgba(255, 255, 255, 0.72) !important;
+        color: var(--header-panel-ink) !important;
+        box-shadow: inset 0 -2px 0 rgba(24, 61, 93, 0.28) !important;
+    }
+
+    body#top .internal-hero-scene,
+    body#top .internal-scene-header,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home,
+    body#top .hero-header--desktop-home {
+        display: none !important;
+    }
+
+    body#top .internal-hero-scene + :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .privacy-page, .automation-product-page, .automation-faq-wrap) {
+        padding-top: clamp(24px, 3vw, 38px) !important;
+    }
+
+    body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .privacy-page, .automation-product-page, .automation-faq-wrap) > .container {
+        max-width: none !important;
+        min-width: 0 !important;
     }
 }
 
@@ -1836,7 +2019,7 @@
     }
 }
 
-@media (max-width: 1100px) and (hover: hover) and (pointer: fine) {
+@media (max-width: 1101px) and (hover: hover) and (pointer: fine) {
     body#top .header.header--desktop-hero.internal-legacy-header .header-top.header-top--compact .nav-list a {
         cursor: url("../images/ui/remote-cursor.svg") 6 5, pointer !important;
         transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease !important;
