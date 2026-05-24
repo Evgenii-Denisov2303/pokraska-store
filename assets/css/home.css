@@ -12318,7 +12318,7 @@ body#top .panel-scene {
     }
 }
 
-@media (min-width: 1102px) and (max-width: 1399.98px) {
+@media (min-width: 1102px) and (max-width: 1239.98px) {
     body#top .panel-scene {
         --panel-preview-media: clamp(580px, 54vw, 720px);
     }
@@ -12388,6 +12388,51 @@ body#top .panel-scene {
     }
 }
 
+@media (min-width: 1240px) and (max-width: 1399.98px) {
+    body#top .panel-scene {
+        --panel-preview-gap: clamp(22px, 2vw, 30px);
+        --panel-preview-media: clamp(660px, 52vw, 720px);
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        align-items: center !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        gap: clamp(12px, 1.15vw, 18px) !important;
+        padding: clamp(8px, 1vw, 16px) !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 145px), 1fr)) !important;
+        gap: clamp(7px, 0.75vw, 10px) !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        border-left: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 215px), 1fr)) !important;
+        gap: clamp(7px, 0.8vw, 10px) !important;
+    }
+}
+
 @media (min-width: 1400px) and (max-width: 1799.98px) {
     body#top .panel-scene {
         --panel-preview-media: clamp(700px, 46vw, 820px);
@@ -12418,5 +12463,27 @@ body#top .panel-scene {
         width: calc(100% + 38px) !important;
         margin-right: -19px !important;
         margin-left: -19px !important;
+    }
+}
+
+@media (min-width: 1102px) and (max-width: 1221.98px) {
+    body#top .hero-copy {
+        top: clamp(176px, 14.4vw, 190px) !important;
+    }
+}
+
+@media (min-width: 1500px) and (max-width: 1799.98px) and (max-height: 1599.98px) {
+    body#top .hero-stage {
+        min-height: clamp(940px, 58vw, 1040px) !important;
+    }
+
+    body#top .hero-copy {
+        top: clamp(226px, 14vw, 246px) !important;
+    }
+}
+
+@media (min-width: 1800px) and (max-height: 2600px) and (min-aspect-ratio: 9 / 10) {
+    body#top .hero-copy {
+        top: clamp(232px, 10.6vw, 260px) !important;
     }
 }
