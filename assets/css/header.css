@@ -383,9 +383,10 @@
         height: 200px;
         max-height: 200px;
         margin-top: 0;
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
         border: 0;
         border-radius: 0;
         background: transparent;
@@ -1876,6 +1877,18 @@
     body#top :is(.catalog-page, .services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .privacy-page, .automation-product-page, .automation-faq-wrap) > .container {
         max-width: none !important;
         min-width: 0 !important;
+    }
+}
+
+/* Home large canvas: the header belongs inside the hero image, not above it. */
+@media (min-width: 1500px) and (min-height: 1800px) and (max-aspect-ratio: 6 / 5) {
+    body#top > .header.header--desktop-hero.internal-legacy-header.header--home,
+    body#top > .header.header--desktop-hero.internal-legacy-header.header--home.is-hidden {
+        display: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: grid !important;
     }
 }
 

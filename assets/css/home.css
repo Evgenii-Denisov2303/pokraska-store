@@ -11579,12 +11579,85 @@ body#top .home-tail__request {
     }
 }
 
-/* Final home panel photo proportions: keep preview images close to square on compact screens. */
-@media (max-width: 640px) {
+/* Final home panel photo proportions: keep preview images square on compact screens. */
+@media (max-width: 641px) {
+    body#top .panel-scene {
+        --panel-mobile-media-side: calc(100vw - 28px);
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        position: relative !important;
+    }
+
     body#top .panel-scene__media,
     body#top .panel-scene__card--light .panel-scene__media {
         height: auto !important;
-        aspect-ratio: 6 / 5 !important;
+        aspect-ratio: 1 / 1 !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: auto !important;
+        position: absolute !important;
+        top: calc(var(--panel-mobile-media-side) - 72px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: clamp(14px, 3vw, 18px) !important;
+        z-index: 3 !important;
+        width: min(calc(100% - 28px), 260px) !important;
+        max-width: 260px !important;
+        margin: 0 !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        right: clamp(14px, 3vw, 18px) !important;
+        left: auto !important;
+        width: min(calc(100% - 28px), 260px) !important;
+        max-width: 260px !important;
+        justify-items: end !important;
+        text-align: right !important;
+    }
+}
+
+/* Tall 640px mobile panes: keep the hero artwork and mobile CTA inside the image. */
+@media (min-width: 560px) and (max-width: 641px) and (min-height: 760px) {
+    body#top .panel-scene {
+        --panel-mobile-media-side: calc(100vw - 48px);
+        width: var(--panel-mobile-media-side) !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+    }
+
+    body#top .hero-scene,
+    body#top .hero-scene.scene-reveal,
+    body#top .hero-scene.scene-reveal.is-visible {
+        min-height: clamp(640px, 105vw, 700px) !important;
+        overflow: hidden !important;
+    }
+
+    body#top .hero-stage {
+        min-height: clamp(640px, 105vw, 700px) !important;
+        aspect-ratio: auto !important;
+        margin-bottom: 0 !important;
+    }
+
+    body#top .hero-stage__picture {
+        inset: 0 !important;
+    }
+
+    body#top .hero-stage__picture img {
+        object-position: center bottom !important;
+    }
+
+    body#top .hero-mobile-cta p {
+        top: clamp(118px, 22vw, 146px) !important;
+    }
+
+    body#top .hero-mobile-cta__actions {
+        bottom: clamp(18px, 4vw, 28px) !important;
     }
 }
 
@@ -11597,6 +11670,53 @@ body#top .home-tail__request {
     body#top .panel-scene__viewer--dark,
     body#top .panel-scene__viewer--light {
         top: calc(18px + var(--panel-scene-tablet-media-height) - 72px) !important;
+    }
+}
+
+/* Tablet portrait panes use the same visible-gutter square preview contract. */
+@media (min-width: 642px) and (max-width: 821px) and (min-height: 760px) {
+    body#top .panel-scene {
+        --panel-tablet-media-side: calc(100vw - 64px);
+        width: var(--panel-tablet-media-side) !important;
+        max-width: none !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        position: relative !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 1 / 1 !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: auto !important;
+        position: absolute !important;
+        top: calc(var(--panel-tablet-media-side) - 76px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: clamp(16px, 2.2vw, 20px) !important;
+        z-index: 3 !important;
+        width: min(calc(100% - 32px), 260px) !important;
+        max-width: 260px !important;
+        margin: 0 !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        right: clamp(16px, 2.2vw, 20px) !important;
+        left: auto !important;
+        justify-items: end !important;
+        text-align: right !important;
     }
 }
 
@@ -11811,5 +11931,122 @@ body#top .home-tail__form-card {
     body#top .panel-scene__content,
     body#top .panel-scene__card--light .panel-scene__content {
         align-self: stretch !important;
+    }
+}
+
+/* Large desktop-site canvases: keep preview cards on one stable square-photo contract. */
+@media (min-width: 1500px) and (min-height: 1800px) and (max-aspect-ratio: 6 / 5) {
+    body#top .apple-shell {
+        --home-fluid-width: min(2800px, calc(100vw - clamp(36px, 2vw, 56px)));
+        overflow-x: clip !important;
+    }
+
+    body#top .panel-scene {
+        --panel-scene-tall-media-side: clamp(980px, 54vw, 1480px);
+        --panel-scene-tall-viewer-y: calc(var(--panel-scene-tall-media-side) - 76px);
+        width: var(--home-fluid-width) !important;
+        max-width: 2800px !important;
+    }
+
+    body#top .panel-scene__card,
+    body#top .panel-scene__card--light {
+        display: grid !important;
+        grid-template-columns: minmax(0, var(--panel-scene-tall-media-side)) minmax(620px, 1fr) !important;
+        grid-template-areas:
+            "media top"
+            "media dock" !important;
+        grid-template-rows: minmax(0, 1fr) auto !important;
+        gap: clamp(18px, 1.2vw, 28px) clamp(20px, 1.4vw, 32px) !important;
+        align-items: stretch !important;
+        min-height: 0 !important;
+        height: auto !important;
+        padding: clamp(18px, 1.1vw, 26px) !important;
+        overflow: visible !important;
+    }
+
+    body#top .panel-scene__card--light {
+        grid-template-columns: minmax(620px, 1fr) minmax(0, var(--panel-scene-tall-media-side)) !important;
+        grid-template-areas:
+            "top media"
+            "dock media" !important;
+    }
+
+    body#top .panel-scene__media,
+    body#top .panel-scene__card--light .panel-scene__media,
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay {
+        align-self: start !important;
+        grid-area: media !important;
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+    }
+
+    body#top .panel-scene__overlay,
+    body#top .panel-scene__card--light .panel-scene__overlay,
+    body#top .panel-scene__stamp {
+        display: none !important;
+    }
+
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        grid-area: media !important;
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        z-index: 2 !important;
+        align-self: end !important;
+        justify-self: start !important;
+        width: min(280px, calc(100% - 40px)) !important;
+        max-width: 280px !important;
+        margin: 0 0 clamp(18px, 1vw, 28px) clamp(18px, 1vw, 28px) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    body#top .panel-scene__card--light .panel-scene__viewer,
+    body#top .panel-scene__card--light .panel-scene__viewer--light {
+        justify-self: end !important;
+        justify-items: end !important;
+        text-align: right !important;
+        margin: 0 clamp(18px, 1vw, 28px) clamp(18px, 1vw, 28px) 0 !important;
+    }
+
+    body#top .panel-scene__content,
+    body#top .panel-scene__card--light .panel-scene__content {
+        display: contents !important;
+    }
+
+    body#top .panel-scene__content::before,
+    body#top .panel-scene__card--light .panel-scene__content::before {
+        display: none !important;
+    }
+
+    body#top .panel-scene__top,
+    body#top .panel-scene__card--light .panel-scene__top {
+        grid-area: top !important;
+        align-self: stretch !important;
+        align-content: center !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+    }
+
+    body#top .panel-scene__dock,
+    body#top .panel-scene__card--light .panel-scene__dock {
+        grid-area: dock !important;
+        align-self: end !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
     }
 }
