@@ -11822,7 +11822,7 @@ body#top .home-tail__form-card {
 /* Final home width contract: desktop, tall desktop-site and square modes share one rhythm. */
 @media (min-width: 1101px) {
     body#top .apple-shell {
-        --home-fluid-width: min(2160px, calc(100vw - clamp(16px, 2vw, 44px)));
+        --home-fluid-width: min(2160px, calc(100% - clamp(16px, 2vw, 44px)));
     }
 
     body#top :is(.panel-scene, .route-scene, .reviews-scene, .home-tail-scene) {
@@ -11835,6 +11835,8 @@ body#top .home-tail__form-card {
     body#top .apple-shell > .preview-footer :is(.preview-footer__layout, .preview-footer__bottom) {
         width: var(--home-fluid-width) !important;
         max-width: 2160px !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
     }
 }
 
@@ -11937,7 +11939,7 @@ body#top .home-tail__form-card {
 /* Large desktop-site canvases: keep preview cards on one stable square-photo contract. */
 @media (min-width: 1500px) and (min-height: 1800px) and (max-aspect-ratio: 6 / 5) {
     body#top .apple-shell {
-        --home-fluid-width: min(2800px, calc(100vw - clamp(36px, 2vw, 56px)));
+        --home-fluid-width: min(2800px, calc(100% - clamp(36px, 2vw, 56px)));
         overflow-x: clip !important;
     }
 
@@ -12395,5 +12397,26 @@ body#top .panel-scene {
 @media (min-width: 1800px) {
     body#top .panel-scene {
         --panel-preview-media: clamp(780px, 46vw, 980px);
+    }
+}
+
+@media (min-width: 1101px) {
+    body#top .hero-stage__picture {
+        inset: 0 !important;
+    }
+
+    body#top .hero-stage__picture img {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1499.98px) and (min-height: 901px) and (max-aspect-ratio: 6 / 5) {
+    body#top .hero-scene,
+    body#top .hero-scene.scene-reveal,
+    body#top .hero-scene.scene-reveal.is-visible {
+        width: calc(100% + 38px) !important;
+        margin-right: -19px !important;
+        margin-left: -19px !important;
     }
 }

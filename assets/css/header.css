@@ -2235,3 +2235,207 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
     }
 }
+
+/* Home hero collision guard: keep brand, menu and phone in separate tracks on small desktop canvases. */
+@media (min-width: 1102px) and (max-width: 1499.98px) {
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) max-content !important;
+        grid-template-rows: auto auto !important;
+        grid-template-areas:
+            "brand phone"
+            "nav nav" !important;
+        gap: clamp(10px, 1.1vw, 16px) !important;
+        top: clamp(12px, 1.2vw, 18px) !important;
+        right: clamp(18px, 2vw, 28px) !important;
+        left: clamp(18px, 2vw, 28px) !important;
+        width: auto !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__topbar {
+        grid-area: brand !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: max-content !important;
+        max-width: min(100%, 330px) !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-row {
+        display: contents !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home :is(.hero-brand, .hero-scene__nav, .hero-header-stack) {
+        pointer-events: auto !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__nav {
+        position: static !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        grid-area: nav !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: center !important;
+        justify-self: center !important;
+        align-self: center !important;
+        width: max-content !important;
+        max-width: calc(100vw - clamp(36px, 4vw, 56px)) !important;
+        min-width: 0 !important;
+        max-height: none !important;
+        gap: clamp(3px, 0.45vw, 6px) !important;
+        padding: 5px 6px !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-nav__link,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-nav__link:visited {
+        min-height: 28px !important;
+        padding: 5px clamp(4px, 0.55vw, 8px) !important;
+        font-size: clamp(10.6px, 0.84vw, 12.2px) !important;
+        line-height: 1.08 !important;
+        letter-spacing: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack--compact {
+        position: static !important;
+        inset: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        grid-area: phone !important;
+        display: flex !important;
+        justify-self: end !important;
+        align-self: center !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        width: clamp(190px, 17vw, 232px) !important;
+        max-width: clamp(190px, 17vw, 232px) !important;
+        min-height: 0 !important;
+        gap: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--secondary,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-address {
+        display: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary:visited,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary:hover,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary:focus-visible {
+        display: inline-grid !important;
+        grid-template-columns: 16px minmax(0, 1fr) !important;
+        align-items: center !important;
+        column-gap: 7px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 34px !important;
+        padding: 6px 9px !important;
+        margin: 0 !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary i {
+        width: 16px !important;
+        height: 16px !important;
+        flex-basis: 16px !important;
+        font-size: 0.86rem !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary .hero-header-main {
+        font-size: clamp(13px, 1.05vw, 15px) !important;
+        line-height: 1.06 !important;
+        letter-spacing: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-link--primary .hero-header-sub {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1500px) {
+    body#top .hero-scene > .hero-header.hero-header--desktop-home {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) max-content !important;
+        grid-template-rows: auto auto !important;
+        grid-template-areas:
+            "brand phone"
+            "nav nav" !important;
+        row-gap: clamp(12px, 1vw, 18px) !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__topbar {
+        grid-area: brand !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
+        align-self: center !important;
+        justify-self: start !important;
+        pointer-events: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-row {
+        display: contents !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home :is(.hero-brand, .hero-scene__nav, .hero-header-stack) {
+        pointer-events: auto !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__nav {
+        grid-area: nav !important;
+        position: static !important;
+        inset: auto !important;
+        justify-self: center !important;
+        align-self: center !important;
+        width: max-content !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        transform: none !important;
+    }
+
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack,
+    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack--compact {
+        grid-area: phone !important;
+        position: static !important;
+        inset: auto !important;
+        justify-self: end !important;
+        align-self: center !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+}
+
+@media (min-width: 1222px) and (max-width: 1499.98px) {
+    body#top .hero-copy {
+        top: clamp(210px, 15vw, 226px) !important;
+    }
+}
