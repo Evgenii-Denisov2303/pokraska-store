@@ -1290,8 +1290,17 @@ body#top .pricing-estimate-card .calculator-contact a {
         align-items: stretch;
     }
 
-    body#top .pricing-estimate-card .btn {
-        width: 100%;
+    body#top .pricing-estimate-card__footer {
+        justify-items: start;
+        align-items: start;
+    }
+
+    body#top .pricing-estimate-card .btn,
+    body#top .pricing-estimate-card__action {
+        width: fit-content;
+        max-width: 100%;
+        justify-self: start;
+        border-radius: 999px;
     }
 
     body#top .price-cta__actions .btn,
@@ -1660,6 +1669,7 @@ body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card .b
     background: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     background-image: linear-gradient(180deg, var(--site-action-slate) 0%, var(--site-action-slate-strong) 100%) !important;
     border-color: rgba(255, 255, 255, 0.14) !important;
+    border-radius: 999px !important;
     color: #fffdf9 !important;
     -webkit-text-fill-color: #fffdf9 !important;
     box-shadow:
@@ -1670,6 +1680,15 @@ body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card .b
 body#top .prices-page :is(.pricing-estimate-card .btn i, .pricing-estimate-card .btn.btn-primary i, .pricing-estimate-card .btn-primary i, .pricing-estimate-card__action i) {
     color: #fffdf9 !important;
     -webkit-text-fill-color: #fffdf9 !important;
+}
+
+@media (max-width: 760px) {
+    body#top .prices-page :is(.pricing-estimate-card .btn, .pricing-estimate-card__action) {
+        width: fit-content !important;
+        max-width: 100% !important;
+        justify-self: start !important;
+        border-radius: 999px !important;
+    }
 }
 
 body#top .prices-page :is(.price-summary__item, .factor-card, .pricing-clarity__item, .guarantee-list li) {

@@ -2041,6 +2041,13 @@
         transform: translateY(0) !important;
     }
 
+    body#top > .header.header--desktop-hero.internal-legacy-header.is-hidden,
+    body#top > .header.header--desktop-hero.internal-legacy-header.header--home.is-hidden,
+    body#top > .header.header--desktop-hero.internal-legacy-header:not(.header--home).is-hidden {
+        transform: translateY(-100%) !important;
+        pointer-events: none !important;
+    }
+
     body#top .internal-hero-scene,
     body#top .internal-scene-header,
     body#top .hero-scene > .hero-header.hero-header--desktop-home,
