@@ -12281,34 +12281,64 @@ body#top .panel-scene {
 
     body#top .panel-scene__facts,
     body#top .panel-scene__card--light .panel-scene__facts {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: clamp(6px, 1.8vw, 10px) !important;
-        padding: clamp(8px, 2.2vw, 12px) !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
     }
 
     body#top .panel-scene__fact,
     body#top .panel-scene__fact:first-child,
     body#top .panel-scene__card--light .panel-scene__fact {
+        display: grid !important;
+        place-items: center !important;
+        grid-column: auto !important;
         min-width: 0 !important;
+        min-height: clamp(42px, 7vw, 56px) !important;
         padding: clamp(7px, 2vw, 10px) clamp(6px, 1.8vw, 10px) !important;
-        border-left: 0 !important;
+        border: 1px solid rgba(var(--theme-accent-strong-rgb), 0.095) !important;
+        border-radius: clamp(13px, 2.6vw, 16px) !important;
+        background: rgba(255, 255, 255, 0.54) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+        text-align: center !important;
     }
 
     body#top .panel-scene__fact strong {
-        margin-bottom: 2px !important;
+        margin: 0 !important;
         font-size: clamp(0.84rem, 3vw, 0.98rem) !important;
         line-height: 1.12 !important;
+        text-align: center !important;
     }
 
     body#top .panel-scene__fact span {
-        font-size: clamp(0.72rem, 2.45vw, 0.84rem) !important;
-        line-height: 1.28 !important;
+        display: none !important;
     }
 
     body#top .panel-scene__items,
     body#top .panel-scene__card--light .panel-scene__items,
     body#top .panel-scene__card--powder .panel-scene__items {
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important;
+    }
+}
+
+@media (max-width: 374px) {
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 700px) {
+    body#top .panel-scene__items,
+    body#top .panel-scene__card--light .panel-scene__items,
+    body#top .panel-scene__card--powder .panel-scene__items {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body#top .panel-scene__item span {
+        display: none !important;
     }
 }
 
@@ -12451,6 +12481,42 @@ body#top .panel-scene {
     body#top .panel-scene__fact:first-child,
     body#top .panel-scene__card--light .panel-scene__fact {
         min-width: 0 !important;
+    }
+}
+
+@media (min-width: 1102px) and (max-width: 1599.98px) {
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        display: grid !important;
+        place-items: center !important;
+        grid-column: auto !important;
+        min-height: clamp(44px, 4.2vw, 58px) !important;
+        padding: clamp(8px, 0.8vw, 12px) !important;
+        border: 1px solid rgba(var(--theme-accent-strong-rgb), 0.095) !important;
+        border-radius: clamp(13px, 1.1vw, 16px) !important;
+        background: rgba(255, 255, 255, 0.56) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+        text-align: center !important;
+    }
+
+    body#top .panel-scene__fact strong {
+        margin: 0 !important;
+        font-size: clamp(0.78rem, 0.72rem + 0.18vw, 0.92rem) !important;
+        line-height: 1.14 !important;
+        text-align: center !important;
+    }
+
+    body#top .panel-scene__fact span {
+        display: none !important;
     }
 }
 
