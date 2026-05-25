@@ -12228,12 +12228,23 @@ body#top .panel-scene {
         backdrop-filter: none !important;
     }
 
+    body#top .panel-scene__viewer,
+    body#top .panel-scene__viewer--dark,
+    body#top .panel-scene__viewer--light {
+        justify-self: center !important;
+        width: min(calc(100% - clamp(28px, 4.8vw, 44px)), calc(var(--panel-preview-media) - clamp(28px, 4.8vw, 44px))) !important;
+        max-width: calc(100% - clamp(28px, 4.8vw, 44px)) !important;
+        box-sizing: border-box !important;
+        margin: 0 0 clamp(14px, 2.4vw, 22px) !important;
+        padding: 0 !important;
+    }
+
     body#top .panel-scene__card--light .panel-scene__viewer,
     body#top .panel-scene__card--light .panel-scene__viewer--light {
-        justify-self: end !important;
+        justify-self: center !important;
         justify-items: end !important;
         text-align: right !important;
-        margin: 0 clamp(14px, 2.4vw, 22px) clamp(14px, 2.4vw, 22px) 0 !important;
+        margin: 0 0 clamp(14px, 2.4vw, 22px) !important;
     }
 
     body#top .panel-scene__content,
