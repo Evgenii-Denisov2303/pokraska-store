@@ -12295,7 +12295,7 @@ body#top .panel-scene {
     body#top .panel-scene__card,
     body#top .panel-scene__card--light {
         display: grid !important;
-        grid-template-columns: minmax(0, var(--panel-preview-media)) minmax(0, 1fr) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         grid-template-areas: "media content" !important;
         gap: var(--panel-preview-gap) !important;
         align-items: center !important;
@@ -12307,7 +12307,7 @@ body#top .panel-scene {
     }
 
     body#top .panel-scene__card--light {
-        grid-template-columns: minmax(0, 1fr) minmax(0, var(--panel-preview-media)) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         grid-template-areas: "content media" !important;
     }
 
@@ -12318,7 +12318,7 @@ body#top .panel-scene {
         grid-area: media !important;
         position: relative !important;
         inset: auto !important;
-        align-self: center !important;
+        align-self: end !important;
         justify-self: center !important;
         width: 100% !important;
         max-width: var(--panel-preview-media) !important;
@@ -12428,7 +12428,7 @@ body#top .panel-scene {
 
     body#top .panel-scene__card,
     body#top .panel-scene__card--light {
-        grid-template-columns: minmax(0, var(--panel-preview-media)) minmax(0, 1fr) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         grid-template-areas:
             "media top"
             "dock dock" !important;
@@ -12436,7 +12436,7 @@ body#top .panel-scene {
     }
 
     body#top .panel-scene__card--light {
-        grid-template-columns: minmax(0, 1fr) minmax(0, var(--panel-preview-media)) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         grid-template-areas:
             "top media"
             "dock dock" !important;
