@@ -3939,6 +3939,7 @@ button {
 .home-tail__advantages span {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 12px;
     min-height: 100%;
     padding: 14px 15px;
@@ -3952,12 +3953,13 @@ button {
     font-size: 1.02rem;
     line-height: 1.28;
     font-weight: 760;
+    text-align: left;
     transition:
         transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
         box-shadow 0.22s ease,
         border-color 0.2s ease,
         background 0.2s ease;
-    text-wrap: balance;
+    text-wrap: pretty;
 }
 
 .home-tail__advantages i {

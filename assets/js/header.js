@@ -7,9 +7,7 @@
     const supportsInlineEditorViewport = window.innerWidth >= inlineEditorMinWidth
         && window.innerHeight >= inlineEditorMinHeight;
     const wantsInlineEditor = Boolean(window.POKRASKA_INLINE_EDITOR_ENABLED)
-        || query.get('edit') === '1'
-        || ['localhost', '127.0.0.1'].includes(window.location.hostname)
-        || window.location.port === '4173';
+        || query.get('edit') === '1';
 
     if (skipInlineEditor || !wantsInlineEditor || !supportsInlineEditorViewport || window.POKRASKA_INLINE_ASSETS_LOADING) {
         return;
@@ -167,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             link.addEventListener('pointerenter', triggerPrefetch, { passive: true, once: true });
             link.addEventListener('focus', triggerPrefetch, { passive: true, once: true });
-            link.addEventListener('touchstart', triggerPrefetch, { passive: true, once: true });
         });
     }
 

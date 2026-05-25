@@ -417,9 +417,10 @@ function shouldExposeInlineEditor(request, pathname, searchParams) {
         || pathname.startsWith('/admin/');
 
     if (isAdminPage) return false;
-    if (isLocalDevelopmentRequest(request)) return true;
-    if (!AUTH_ENABLED) return true;
+    if (searchParams?.get('noedit') === '1' || searchParams?.get('perf') === '1') return false;
     if (searchParams?.get('edit') === '1') return true;
+    if (isLocalDevelopmentRequest(request)) return false;
+    if (!AUTH_ENABLED) return true;
 
     return Boolean(getSession(request));
 }

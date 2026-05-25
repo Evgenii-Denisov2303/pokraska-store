@@ -1313,13 +1313,13 @@ body#top .automation-product-page .faq-section.faq-system,
 }
 
 .automation-products--single .automation-product-description {
-    display: -webkit-box;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
     min-height: 3em;
     font-size: 0.92rem;
     line-height: 1.5;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-box-orient: initial;
+    -webkit-line-clamp: initial;
 }
 
 .automation-products--single .automation-product-specs {
