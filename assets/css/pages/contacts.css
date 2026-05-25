@@ -2584,7 +2584,7 @@ body#top .contacts-form-embed {
 /* Tall phone "desktop site" and portrait tablet: keep route text readable and let embeds fill their cards. */
 @media (min-width: 641px) and (max-width: 1023px) {
     body#top .contacts-page {
-        --contacts-form-height: clamp(760px, 82vw, 840px) !important;
+        --contacts-form-height: clamp(740px, 76vw, 790px) !important;
     }
 
     body#top .contacts-form-frame,
@@ -2597,11 +2597,14 @@ body#top .contacts-form-embed {
 @media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
     body#top .contacts-page {
         --contacts-gap: 20px;
-        --contacts-form-height: clamp(820px, 88vw, 880px) !important;
+        --contacts-form-height: clamp(760px, 76vw, 800px) !important;
         --contacts-map-height: clamp(600px, 62vw, 690px) !important;
     }
 
-    body#top .contacts-core,
+    body#top .contacts-core {
+        align-items: start !important;
+    }
+
     body#top .contacts-route {
         align-items: stretch !important;
     }
@@ -2618,14 +2621,36 @@ body#top .contacts-form-embed {
     body#top .contacts-panel--request {
         display: flex !important;
         flex-direction: column !important;
+        align-self: start !important;
     }
 
     body#top .contacts-panel--direct .contacts-secondary-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
     }
 
     body#top .contacts-panel--direct .contacts-contact-tile {
-        min-height: 72px !important;
+        grid-template-columns: 42px minmax(0, 1fr) !important;
+        gap: 10px !important;
+        min-height: 0 !important;
+        padding: 12px !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-contact-icon {
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 15px !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-contact-label {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-contact-copy a,
+    body#top .contacts-panel--direct .contacts-contact-copy strong {
+        font-size: 0.88rem !important;
+        line-height: 1.24 !important;
     }
 
     body#top .contacts-form-frame,
@@ -2704,11 +2729,14 @@ body#top .contacts-form-embed {
 
 @media (min-width: 1101px) and (max-width: 1300px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
     body#top .contacts-page {
-        --contacts-form-height: clamp(760px, 62vw, 820px) !important;
+        --contacts-form-height: 740px !important;
         --contacts-map-height: clamp(660px, 56vw, 760px) !important;
     }
 
-    body#top .contacts-core,
+    body#top .contacts-core {
+        align-items: start !important;
+    }
+
     body#top .contacts-route {
         align-items: stretch !important;
     }
