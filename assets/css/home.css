@@ -12281,7 +12281,28 @@ body#top .panel-scene {
 
     body#top .panel-scene__facts,
     body#top .panel-scene__card--light .panel-scene__facts {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)) !important;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr)) !important;
+        gap: clamp(6px, 1.8vw, 10px) !important;
+        padding: clamp(8px, 2.2vw, 12px) !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        min-width: 0 !important;
+        padding: clamp(7px, 2vw, 10px) clamp(6px, 1.8vw, 10px) !important;
+        border-left: 0 !important;
+    }
+
+    body#top .panel-scene__fact strong {
+        margin-bottom: 2px !important;
+        font-size: clamp(0.84rem, 3vw, 0.98rem) !important;
+        line-height: 1.12 !important;
+    }
+
+    body#top .panel-scene__fact span {
+        font-size: clamp(0.72rem, 2.45vw, 0.84rem) !important;
+        line-height: 1.28 !important;
     }
 
     body#top .panel-scene__items,
@@ -12419,6 +12440,18 @@ body#top .panel-scene {
     body#top .panel-scene__card--powder .panel-scene__copy-block p {
         max-width: 100% !important;
     }
+
+    body#top .panel-scene__facts,
+    body#top .panel-scene__card--light .panel-scene__facts {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(8px, 0.9vw, 12px) !important;
+    }
+
+    body#top .panel-scene__fact,
+    body#top .panel-scene__fact:first-child,
+    body#top .panel-scene__card--light .panel-scene__fact {
+        min-width: 0 !important;
+    }
 }
 
 @media (min-width: 1102px) and (max-width: 1239.98px) {
@@ -12474,7 +12507,8 @@ body#top .panel-scene {
 
     body#top .panel-scene__facts,
     body#top .panel-scene__card--light .panel-scene__facts {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 165px), 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(7px, 0.8vw, 10px) !important;
     }
 
     body#top .panel-scene__fact,
@@ -12517,7 +12551,7 @@ body#top .panel-scene {
 
     body#top .panel-scene__facts,
     body#top .panel-scene__card--light .panel-scene__facts {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 145px), 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: clamp(7px, 0.75vw, 10px) !important;
     }
 
