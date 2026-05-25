@@ -7165,6 +7165,7 @@ button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 7px;
         min-height: 30px;
         padding: 6px 9px;
         border: 1px solid rgba(255, 255, 255, 0.34);
@@ -7180,6 +7181,21 @@ button {
             inset 0 1px 0 rgba(255, 255, 255, 0.78);
         -webkit-tap-highlight-color: transparent;
         tap-highlight-color: transparent;
+    }
+
+    .hero-mobile-cta__button i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        min-width: 14px;
+        font-size: 0.82em;
+        line-height: 1;
+    }
+
+    .hero-mobile-cta__button span {
+        display: inline-block;
+        min-width: 0;
     }
 
     .hero-mobile-cta__button--primary,
@@ -11622,7 +11638,7 @@ body#top .home-tail__request {
     }
 }
 
-/* Tall 640px mobile panes: keep the hero artwork and mobile CTA inside the image. */
+/* Tall 640px mobile/desktop-site panes: use a compact tablet-like hero instead of a stretched phone hero. */
 @media (min-width: 560px) and (max-width: 641px) and (min-height: 760px) {
     body#top .panel-scene {
         --panel-mobile-media-side: calc(100vw - 48px);
@@ -11634,12 +11650,12 @@ body#top .home-tail__request {
     body#top .hero-scene,
     body#top .hero-scene.scene-reveal,
     body#top .hero-scene.scene-reveal.is-visible {
-        min-height: clamp(640px, 105vw, 700px) !important;
+        min-height: clamp(550px, 88vw, 590px) !important;
         overflow: hidden !important;
     }
 
     body#top .hero-stage {
-        min-height: clamp(640px, 105vw, 700px) !important;
+        min-height: clamp(550px, 88vw, 590px) !important;
         aspect-ratio: auto !important;
         margin-bottom: 0 !important;
     }
@@ -11649,7 +11665,83 @@ body#top .home-tail__request {
     }
 
     body#top .hero-stage__picture img {
-        object-position: center bottom !important;
+        object-position: center 44% !important;
+    }
+
+    body#top .hero-mobile-cta {
+        display: none !important;
+    }
+
+    body#top .hero-copy {
+        top: clamp(92px, 14vw, 108px) !important;
+        left: clamp(18px, 4.2vw, 26px) !important;
+        width: min(420px, calc(100% - 36px)) !important;
+        gap: 7px !important;
+    }
+
+    body#top .hero-copy h1 {
+        position: static !important;
+        display: grid !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        clip-path: none !important;
+        white-space: normal !important;
+        border: 0 !important;
+        font-size: clamp(2.5rem, 6.4vw, 3.04rem) !important;
+        line-height: 0.88 !important;
+    }
+
+    body#top .hero-copy__subtext {
+        display: block !important;
+    }
+
+    body#top .hero-copy__lead {
+        max-width: 28ch !important;
+        font-size: 0.96rem !important;
+        line-height: 1.34 !important;
+    }
+
+    body#top .hero-copy__features {
+        display: grid !important;
+        gap: 7px !important;
+        max-width: 310px !important;
+        margin-top: 1px !important;
+    }
+
+    body#top .hero-copy__features span {
+        gap: 8px !important;
+        font-size: 0.86rem !important;
+        line-height: 1.18 !important;
+    }
+
+    body#top .hero-copy__features span i {
+        width: 22px !important;
+        height: 22px !important;
+        flex-basis: 22px !important;
+        font-size: 0.66rem !important;
+    }
+
+    body#top .hero-copy__actions {
+        display: grid !important;
+        grid-template-columns: max-content !important;
+        justify-items: start !important;
+        gap: 7px !important;
+        margin-top: 0 !important;
+        padding-top: 7px !important;
+    }
+
+    body#top .hero-copy__actions .apple-button {
+        min-width: 0 !important;
+        width: max-content !important;
+        min-height: 34px !important;
+        padding: 7px 12px !important;
+        border-radius: 999px !important;
+        font-size: 0.84rem !important;
+        line-height: 1.08 !important;
     }
 
     body#top .hero-mobile-cta p {

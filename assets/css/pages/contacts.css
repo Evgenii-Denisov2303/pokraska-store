@@ -2580,3 +2580,159 @@ body#top .contacts-form-embed {
         height: var(--contacts-map-height) !important;
     }
 }
+
+/* Tall phone "desktop site" and portrait tablet: keep route text readable and let embeds fill their cards. */
+@media (min-width: 641px) and (max-width: 1023px) {
+    body#top .contacts-page {
+        --contacts-form-height: clamp(760px, 82vw, 840px) !important;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height) !important;
+        height: var(--contacts-form-height) !important;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1100px) and (max-aspect-ratio: 2 / 3) {
+    body#top .contacts-page {
+        --contacts-gap: 20px;
+        --contacts-form-height: clamp(820px, 88vw, 880px) !important;
+        --contacts-map-height: clamp(600px, 62vw, 690px) !important;
+    }
+
+    body#top .contacts-core,
+    body#top .contacts-route {
+        align-items: stretch !important;
+    }
+
+    body#top .contacts-panel--direct,
+    body#top .contacts-panel--request,
+    body#top .contacts-panel--route-copy,
+    body#top .contacts-panel--route-map {
+        min-height: 0 !important;
+        height: auto !important;
+    }
+
+    body#top .contacts-panel--direct,
+    body#top .contacts-panel--request {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-secondary-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body#top .contacts-panel--direct .contacts-contact-tile {
+        min-height: 72px !important;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height) !important;
+        height: var(--contacts-form-height) !important;
+    }
+
+    body#top .contacts-panel--route-copy {
+        display: grid !important;
+        grid-template-rows: auto auto auto auto !important;
+        align-content: start !important;
+        gap: 14px !important;
+    }
+
+    body#top .contacts-route-steps {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+        border: 1px solid rgba(35, 51, 69, 0.08) !important;
+        border-radius: 22px !important;
+        background: rgba(255, 255, 255, 0.58) !important;
+    }
+
+    body#top .contacts-route-steps li {
+        min-height: 0 !important;
+        gap: 6px !important;
+        padding: 13px 16px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    body#top .contacts-route-steps li + li {
+        border-top: 1px solid rgba(35, 51, 69, 0.07) !important;
+    }
+
+    body#top .contacts-route-steps strong {
+        font-size: clamp(0.98rem, 0.9rem + 0.12vw, 1.04rem) !important;
+        line-height: 1.24 !important;
+    }
+
+    body#top .contacts-route-steps span {
+        font-size: clamp(0.9rem, 0.82rem + 0.12vw, 0.96rem) !important;
+        line-height: 1.36 !important;
+    }
+
+    body#top .contacts-route-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        margin-top: 0 !important;
+        align-self: start !important;
+    }
+
+    body#top .contacts-route-actions__label-full {
+        display: none !important;
+    }
+
+    body#top .contacts-route-actions__label-short {
+        display: inline !important;
+    }
+
+    body#top .contacts-panel--route-map {
+        display: grid !important;
+        align-self: stretch !important;
+        min-height: var(--contacts-map-height) !important;
+        padding: 0 !important;
+    }
+
+    body#top .contacts-panel--route-map iframe {
+        min-height: 100% !important;
+        height: 100% !important;
+    }
+}
+
+@media (min-width: 1101px) and (max-width: 1300px) and (min-height: 1200px) and (max-aspect-ratio: 3 / 4) {
+    body#top .contacts-page {
+        --contacts-form-height: clamp(760px, 62vw, 820px) !important;
+        --contacts-map-height: clamp(660px, 56vw, 760px) !important;
+    }
+
+    body#top .contacts-core,
+    body#top .contacts-route {
+        align-items: stretch !important;
+    }
+
+    body#top .contacts-form-frame,
+    body#top .contacts-form-embed {
+        min-height: var(--contacts-form-height) !important;
+        height: var(--contacts-form-height) !important;
+    }
+
+    body#top .contacts-route-steps {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+
+    body#top .contacts-panel--route-map {
+        display: grid !important;
+        align-self: stretch !important;
+        min-height: var(--contacts-map-height) !important;
+        padding: 0 !important;
+    }
+
+    body#top .contacts-panel--route-map iframe {
+        min-height: 100% !important;
+        height: 100% !important;
+    }
+}
