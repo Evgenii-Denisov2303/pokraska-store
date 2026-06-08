@@ -133,7 +133,7 @@ function urlToLocalHtml(url) {
         errors.push(`Sitemap URL must use https: ${url}`);
     }
 
-    if (parsed.hostname !== 'pokraska.store') {
+    if (parsed.hostname !== 'komfortplus116.online') {
         errors.push(`Sitemap URL uses unexpected host: ${url}`);
     }
 

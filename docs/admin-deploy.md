@@ -1,4 +1,4 @@
-# Визуальное редактирование pokraska.store
+# Визуальное редактирование komfortplus116.online
 
 Ниже 2 рабочих режима:
 
@@ -82,8 +82,8 @@ docker compose up -d --build
 
 После этого сайт и visual-режим будут работать через HTTPS на том же домене:
 
-- сайт: `https://pokraska.store/`
-- запасной экран запуска: `https://pokraska.store/admin/`
+- сайт: `https://komfortplus116.online/`
+- запасной экран запуска: `https://komfortplus116.online/admin/`
 
 ## 4. Что важно для заказчика
 
