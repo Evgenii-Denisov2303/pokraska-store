@@ -1,6 +1,6 @@
 ---
 name: "Content Data Guidelines"
-description: "Use when: editing pokraska.store content JSON, shared business data, navigation items, CTA lists, service copy, or content-driven page data."
+description: "Use when: editing komfortplus116.ru content JSON, shared business data, navigation items, CTA lists, service copy, or content-driven page data."
 applyTo: "content/*.json"
 ---
 # Content Data Guidelines

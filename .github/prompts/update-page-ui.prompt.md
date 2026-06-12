@@ -1,10 +1,10 @@
 ---
 name: "Исправить интерфейс страницы"
-description: "Use when: fixing pokraska.store layout, responsive behavior, CSS, page interactions, or HTML/JS presentation issues."
+description: "Use when: fixing komfortplus116.ru layout, responsive behavior, CSS, page interactions, or HTML/JS presentation issues."
 argument-hint: "Опиши страницу и что визуально или по поведению нужно исправить"
 agent: "pokraska-frontend"
 ---
-Исправь интерфейс или поведение страницы на pokraska.store по моему описанию.
+Исправь интерфейс или поведение страницы на komfortplus116.ru по моему описанию.
 
 - Сначала найди реальный источник проблемы: HTML, CSS, JS, data-driven renderer или их связку.
 - Делай минимальное изменение, которое устраняет проблему без лишнего рефакторинга.

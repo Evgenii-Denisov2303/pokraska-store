@@ -1,11 +1,11 @@
 ---
 name: "Проверить дубли и рассинхрон"
-description: "Use when: auditing pokraska.store for duplicate content, contact mismatches, CTA drift, navigation inconsistencies, or divergence between content JSON, HTML, and SEO metadata."
+description: "Use when: auditing komfortplus116.ru for duplicate content, contact mismatches, CTA drift, navigation inconsistencies, or divergence between content JSON, HTML, and SEO metadata."
 argument-hint: "Укажи, что проверить: весь сайт, контакты, CTA, навигацию, SEO или конкретную страницу"
 agent: "pokraska-main"
 tools: [read, search]
 ---
-Проведи аудит pokraska.store на дубли, рассинхрон и расхождения между источниками данных.
+Проведи аудит komfortplus116.ru на дубли, рассинхрон и расхождения между источниками данных.
 
 - Сначала определи предполагаемый source of truth для выбранной области: `content/*.json`, page HTML, shared JS renderer, `content/site.json`, SEO tags, `sitemap.xml` или `robots.txt`.
 - Ищи несогласованность между JSON, видимым HTML, повторяющимися CTA, контактами, навигацией, структурированными данными и SEO-метаданными.

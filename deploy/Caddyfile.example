@@ -1,4 +1,4 @@
-komfortplus116.online, www.komfortplus116.online {
+komfortplus116.ru, www.komfortplus116.ru {
     encode zstd gzip
 
     header {

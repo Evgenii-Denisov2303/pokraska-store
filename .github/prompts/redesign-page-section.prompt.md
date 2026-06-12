@@ -1,10 +1,10 @@
 ---
 name: "Переработать блок страницы"
-description: "Use when: redesigning a pokraska.store section, hero, card grid, CTA block, or page fragment while keeping the site static and production-ready."
+description: "Use when: redesigning a komfortplus116.ru section, hero, card grid, CTA block, or page fragment while keeping the site static and production-ready."
 argument-hint: "Опиши страницу, блок и какой результат по визуалу нужен"
 agent: "pokraska-frontend"
 ---
-Переработай конкретный блок или секцию на pokraska.store по моему описанию.
+Переработай конкретный блок или секцию на komfortplus116.ru по моему описанию.
 
 - Сначала найди реальный источник структуры и визуала: HTML, CSS, JS или data-driven renderer.
 - Предлагай и внедряй цельную переработку блока, а не набор случайных микроправок.

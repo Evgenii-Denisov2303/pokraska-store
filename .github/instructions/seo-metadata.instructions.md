@@ -1,6 +1,6 @@
 ---
 name: "SEO Metadata Guidelines"
-description: "Use when: editing pokraska.store SEO metadata, page titles, meta descriptions, canonical URLs, Open Graph tags, Twitter cards, JSON-LD, robots.txt, sitemap.xml, or site.webmanifest."
+description: "Use when: editing komfortplus116.ru SEO metadata, page titles, meta descriptions, canonical URLs, Open Graph tags, Twitter cards, JSON-LD, robots.txt, sitemap.xml, or site.webmanifest."
 applyTo:
   - "*.html"
   - "pages/**/*.html"

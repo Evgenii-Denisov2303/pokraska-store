@@ -1,11 +1,11 @@
 ---
 name: "Синхронизировать контакты по сайту"
-description: "Use when: changing pokraska.store phone numbers, email, address, company info, or other business contacts across the whole site."
+description: "Use when: changing komfortplus116.ru phone numbers, email, address, company info, or other business contacts across the whole site."
 argument-hint: "Укажи новые контакты или реквизиты, которые нужно проставить"
 agent: "pokraska-main"
 tools: [read, edit, search]
 ---
-Синхронизируй контактные данные и сведения о компании по всему pokraska.store.
+Синхронизируй контактные данные и сведения о компании по всему komfortplus116.ru.
 
 - Найди основной source of truth для контактов, обычно это `content/site.json`.
 - Обнови все зеркальные места: видимые контактные блоки, `tel:` и `mailto:` ссылки, JSON-LD, hardcoded business details и другие найденные дубли.

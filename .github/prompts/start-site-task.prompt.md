@@ -1,10 +1,10 @@
 ---
 name: "Начать задачу по сайту"
-description: "Use when: you are new to pokraska.store, are not sure which agent to use, or have a mixed task across content, UI, and SEO."
+description: "Use when: you are new to komfortplus116.ru, are not sure which agent to use, or have a mixed task across content, UI, and SEO."
 argument-hint: "Опиши задачу по сайту своими словами"
 agent: "pokraska-main"
 ---
-Разбери и выполни задачу по pokraska.store по моему описанию.
+Разбери и выполни задачу по komfortplus116.ru по моему описанию.
 
 - Сначала определи основной source of truth: `content/*.json`, hardcoded HTML, CSS, JS, page metadata, `robots.txt`, `sitemap.xml` или `site.webmanifest`.
 - Если задача смешанная, синхронизируй контент, интерфейс и SEO в правильной последовательности, не перекладывая выбор агента на меня.

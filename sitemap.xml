@@ -4,19 +4,19 @@
 
   <!-- Главная страница -->
   <url>
-    <loc>https://komfortplus116.online/</loc>
+    <loc>https://komfortplus116.ru/</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://komfortplus116.online/assets/images/hero/home-hero-main.jpg</image:loc>
-      <image:title>komfortplus116.online — Ворота, заборы и порошковая покраска в Казани</image:title>
+      <image:loc>https://komfortplus116.ru/assets/images/hero/home-hero-main.jpg</image:loc>
+      <image:title>komfortplus116.ru — Ворота, заборы и порошковая покраска в Казани</image:title>
     </image:image>
   </url>
 
   <!-- Каталог -->
   <url>
-    <loc>https://komfortplus116.online/pages/services.html</loc>
+    <loc>https://komfortplus116.ru/pages/services.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -24,7 +24,7 @@
 
   <!-- Пескоструйная обработка -->
   <url>
-    <loc>https://komfortplus116.online/pages/sandblasting.html</loc>
+    <loc>https://komfortplus116.ru/pages/sandblasting.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -32,7 +32,7 @@
 
   <!-- Комплектующие для откатных ворот -->
   <url>
-    <loc>https://komfortplus116.online/pages/automation-sliding-components.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-sliding-components.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -40,13 +40,13 @@
 
   <!-- Автоматика для откатных ворот -->
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-rto500.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-rto500.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-rto1000.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-rto1000.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
@@ -54,43 +54,43 @@
 
   <!-- Автоматика для распашных ворот: карточки -->
   <url>
-    <loc>https://komfortplus116.online/pages/automation-swing.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-swing.html</loc>
     <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.74</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-ati3000a.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-ati3000a.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-ati5000a.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-ati5000a.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-am5000kit.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-am5000kit.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-lm-l.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-lm-l.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-sl-u.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-sl-u.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
   <url>
-    <loc>https://komfortplus116.online/pages/automation-alutech-at-4n.html</loc>
+    <loc>https://komfortplus116.ru/pages/automation-alutech-at-4n.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
@@ -98,7 +98,7 @@
 
   <!-- Порошковая покраска -->
   <url>
-    <loc>https://komfortplus116.online/pages/powder-coating.html</loc>
+    <loc>https://komfortplus116.ru/pages/powder-coating.html</loc>
     <lastmod>2026-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -106,7 +106,7 @@
 
   <!-- Цены -->
   <url>
-    <loc>https://komfortplus116.online/pages/prices.html</loc>
+    <loc>https://komfortplus116.ru/pages/prices.html</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -114,7 +114,7 @@
 
   <!-- Оплата и документы -->
   <url>
-    <loc>https://komfortplus116.online/pages/payment-documents.html</loc>
+    <loc>https://komfortplus116.ru/pages/payment-documents.html</loc>
     <lastmod>2026-03-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
@@ -122,23 +122,23 @@
 
   <!-- Галерея -->
   <url>
-    <loc>https://komfortplus116.online/pages/gallery.html</loc>
+    <loc>https://komfortplus116.ru/pages/gallery.html</loc>
     <lastmod>2026-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://komfortplus116.online/assets/images/gallery/sliding/sliding-01.webp</image:loc>
+      <image:loc>https://komfortplus116.ru/assets/images/gallery/sliding/sliding-01.webp</image:loc>
       <image:title>Откатные ворота — примеры работ</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://komfortplus116.online/assets/images/gallery/swing/swing-01.webp</image:loc>
+      <image:loc>https://komfortplus116.ru/assets/images/gallery/swing/swing-01.webp</image:loc>
       <image:title>Распашные ворота — примеры работ</image:title>
     </image:image>
   </url>
 
   <!-- Контакты -->
   <url>
-    <loc>https://komfortplus116.online/pages/contacts.html</loc>
+    <loc>https://komfortplus116.ru/pages/contacts.html</loc>
     <lastmod>2026-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
@@ -146,7 +146,7 @@
 
   <!-- Политика конфиденциальности -->
   <url>
-    <loc>https://komfortplus116.online/politika.html</loc>
+    <loc>https://komfortplus116.ru/politika.html</loc>
     <lastmod>2026-01-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

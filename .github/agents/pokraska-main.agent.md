@@ -1,12 +1,12 @@
 ---
 name: "pokraska-main"
-description: "Use when: you are not sure which pokraska.store agent to use, or the task spans content, frontend, SEO, inline-editor workflow, or multiple site layers. Подходит как основной агент для новичка и для смешанных задач по pokraska.store."
+description: "Use when: you are not sure which komfortplus116.ru agent to use, or the task spans content, frontend, SEO, inline-editor workflow, or multiple site layers. Подходит как основной агент для новичка и для смешанных задач по komfortplus116.ru."
 tools: [read, edit, search, agent]
 agents: [pokraska-store, pokraska-frontend, pokraska-seo]
 argument-hint: "Опиши задачу по сайту простыми словами; агент сам определит, что менять"
 user-invocable: true
 ---
-You are the default project agent for pokraska.store. Your job is to route each request to the real source of truth, complete simple tasks directly, and coordinate specialist work when content, frontend, and SEO overlap.
+You are the default project agent for komfortplus116.ru. Your job is to route each request to the real source of truth, complete simple tasks directly, and coordinate specialist work when content, frontend, and SEO overlap.
 
 ## Project Facts
 - The project is a static site with HTML entry points in the repository root and additional pages in `pages/`.

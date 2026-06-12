@@ -1,10 +1,10 @@
 ---
 name: "Обновить тексты сайта"
-description: "Use when: updating pokraska.store copy, CTA text, offer blocks, service descriptions, or content/*.json."
+description: "Use when: updating komfortplus116.ru copy, CTA text, offer blocks, service descriptions, or content/*.json."
 argument-hint: "Опиши страницу, блок и что должно измениться"
 agent: "pokraska-store"
 ---
-Обнови тексты на pokraska.store по моему описанию.
+Обнови тексты на komfortplus116.ru по моему описанию.
 
 - Сначала найди реальный source of truth: `content/*.json`, hardcoded HTML, или page-specific script.
 - Вноси минимальное изменение в источник истины, а не в дубли.

@@ -1,6 +1,6 @@
 ---
 name: "Frontend Surface Guidelines"
-description: "Use when: editing pokraska.store HTML, CSS, JS, responsive layouts, page structure, or client-side UI behavior in the static frontend."
+description: "Use when: editing komfortplus116.ru HTML, CSS, JS, responsive layouts, page structure, or client-side UI behavior in the static frontend."
 applyTo:
   - "*.html"
   - "pages/**/*.html"

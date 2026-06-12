@@ -1,10 +1,10 @@
 ---
 name: "Обновить SEO страницы"
-description: "Use when: updating pokraska.store page title, meta description, canonical, Open Graph, Twitter tags, JSON-LD, sitemap, or robots rules."
+description: "Use when: updating komfortplus116.ru page title, meta description, canonical, Open Graph, Twitter tags, JSON-LD, sitemap, or robots rules."
 argument-hint: "Опиши страницу и SEO-задачу"
 agent: "pokraska-seo"
 ---
-Обнови SEO-слой pokraska.store для страницы или технической задачи, которую я описал.
+Обнови SEO-слой komfortplus116.ru для страницы или технической задачи, которую я описал.
 
 - Найди точный SEO source of truth: HTML head, `robots.txt`, `sitemap.xml`, `site.webmanifest`, или связанный business data source.
 - Держи согласованными `title`, `meta description`, canonical, Open Graph, Twitter и `og:url`, если задача затрагивает страницу целиком.

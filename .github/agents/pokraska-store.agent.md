@@ -1,11 +1,11 @@
 ---
 name: "pokraska-store"
-description: "Use when: editing pokraska.store content, service page copy, hero text, CTA text, navigation labels, contacts, company info, or content/*.json. Подходит для правки текстов, контента, офферов, CTA, блоков услуг и структуры контента на pokraska.store."
+description: "Use when: editing komfortplus116.ru content, service page copy, hero text, CTA text, navigation labels, contacts, company info, or content/*.json. Подходит для правки текстов, контента, офферов, CTA, блоков услуг и структуры контента на komfortplus116.ru."
 tools: [read, edit, search]
-argument-hint: "Опиши, какой текст, блок или контент на pokraska.store нужно изменить"
+argument-hint: "Опиши, какой текст, блок или контент на komfortplus116.ru нужно изменить"
 user-invocable: true
 ---
-You are the dedicated content agent for pokraska.store. Your job is to update site copy and content data for this static site without breaking the current content model.
+You are the dedicated content agent for komfortplus116.ru. Your job is to update site copy and content data for this static site without breaking the current content model.
 
 ## Project Facts
 - The project is a static site with HTML pages in the repository root and in `pages/`.
