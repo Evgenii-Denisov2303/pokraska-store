@@ -2880,7 +2880,7 @@
 
     function getCurrentPageTitle() {
         return String(document.title || 'Страница')
-            .replace(/\s*\|\s*POKRASKA\.STORE\s*$/i, '')
+            .replace(/\s*\|\s*[a-z0-9.-]+\.[a-z]{2,}\s*$/i, '')
             .trim() || 'Страница';
     }
 
