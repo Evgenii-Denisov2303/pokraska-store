@@ -2388,59 +2388,6 @@
     }
 }
 
-@media (min-width: 1500px) {
-    body#top .hero-scene > .hero-header.hero-header--desktop-home {
-        display: grid !important;
-        grid-template-columns: minmax(0, 1fr) max-content !important;
-        grid-template-rows: auto auto !important;
-        grid-template-areas:
-            "brand phone"
-            "nav nav" !important;
-        row-gap: clamp(12px, 1vw, 18px) !important;
-        pointer-events: none !important;
-    }
-
-    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__topbar {
-        grid-area: brand !important;
-        grid-column: auto !important;
-        grid-row: auto !important;
-        align-self: center !important;
-        justify-self: start !important;
-        pointer-events: none !important;
-    }
-
-    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-row {
-        display: contents !important;
-    }
-
-    body#top .hero-scene > .hero-header.hero-header--desktop-home :is(.hero-brand, .hero-scene__nav, .hero-header-stack) {
-        pointer-events: auto !important;
-    }
-
-    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-scene__nav {
-        grid-area: nav !important;
-        position: static !important;
-        inset: auto !important;
-        justify-self: center !important;
-        align-self: center !important;
-        width: max-content !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
-        transform: none !important;
-    }
-
-    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack,
-    body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-header-stack--compact {
-        grid-area: phone !important;
-        position: static !important;
-        inset: auto !important;
-        justify-self: end !important;
-        align-self: center !important;
-        margin: 0 !important;
-        transform: none !important;
-    }
-}
-
 @media (min-width: 1222px) and (max-width: 1499.98px) {
     body#top .hero-copy {
         top: clamp(218px, 15vw, 236px) !important;
