@@ -27,11 +27,12 @@
     <link rel="preload" href="assets/fonts/manrope/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/cormorant/cormorant-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/cormorant/cormorant-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" as="style" href="assets/css/fontawesome.css" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="assets/css/fontawesome.css"></noscript>
+    <link rel="preload" as="image" href="assets/images/hero/home-hero-main-mobile.webp" media="(max-width: 640px)" fetchpriority="high">
+    <link rel="preload" as="style" href="assets/css/fontawesome.css?v=20260823-perf-1" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="assets/css/fontawesome.css?v=20260823-perf-1"></noscript>
     <link rel="stylesheet" href="assets/css/home.css?v=20260615-form-icons-1">
-    <link rel="preload" as="style" href="assets/css/header.css?v=20260525-header-hide-1">
-    <link rel="stylesheet" href="assets/css/header.css?v=20260525-header-hide-1">
+    <link rel="preload" as="style" href="assets/css/header.css?v=20260823-home-header-1">
+    <link rel="stylesheet" href="assets/css/header.css?v=20260823-home-header-1">
     <link rel="preload" as="style" href="assets/css/footer.css?v=20260524-footer-wide-2" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="assets/css/footer.css?v=20260524-footer-wide-2"></noscript>
     <script id="home-structured-data" type="application/ld+json">
@@ -71,7 +72,7 @@
                 <div class="logo hero-brand">
                     <a href="#top" class="logo-link hero-brand__link" aria-label="Перейти на главную страницу">
                         <div class="hero-brand__mark logo-main logo-main--image">
-                            <img class="hero-brand__logo logo-image" src="assets/images/logo.png" width="700" height="700" alt="KOMFORTPLUS116.RU — ворота, заборы и порошковая покраска в Казани" loading="lazy" decoding="async">
+                            <img class="hero-brand__logo logo-image" src="assets/images/logo.png" width="320" height="320" alt="KOMFORTPLUS116.RU — ворота, заборы и порошковая покраска в Казани" loading="lazy" decoding="async">
                             <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                         </div>
                         <div class="hero-brand__text">
@@ -101,7 +102,7 @@
                     </div>
                 </div>
 
-                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация">
+                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация" aria-hidden="true" inert>
                     <ul class="nav-list">
                         <li><a href="#top" class="active" aria-current="page" data-menu-group="Старт" data-menu-note="главный экран"><i class="fas fa-home" aria-hidden="true"></i> <span class="nav-link__text">Главная</span></a></li>
                         <li><a href="pages/services.html" data-menu-group="Каталог" data-menu-note="ворота и автоматика"><i class="fas fa-store" aria-hidden="true"></i> <span class="nav-link__text">Каталог</span></a></li>
@@ -133,7 +134,7 @@
                     <div class="hero-brand">
                         <a class="hero-brand__link" href="#top" aria-label="KOMFORTPLUS116.RU">
                             <div class="hero-brand__mark logo-main logo-main--image">
-                                <img class="hero-brand__logo logo-image" src="assets/images/logo.png" alt="KOMFORTPLUS116.RU">
+                                <img class="hero-brand__logo logo-image" src="assets/images/logo.png" width="320" height="320" alt="KOMFORTPLUS116.RU">
                                 <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                             </div>
                             <div class="hero-brand__text">
@@ -185,7 +186,7 @@
                         <source media="(min-width: 1101px) and (max-width: 1600px) and (min-height: 901px) and (max-aspect-ratio: 6/5)" srcset="assets/images/hero/home-hero-main-tablet.webp">
                         <source media="(max-width: 640px)" srcset="assets/images/hero/home-hero-main-mobile.webp">
                         <source media="(max-width: 1080px)" srcset="assets/images/hero/home-hero-main-tablet.webp">
-                        <img src="assets/images/hero/home-hero-main.webp" width="3000" height="2000" alt="Автоматические ворота на главном экране сайта" loading="eager" fetchpriority="high" decoding="async">
+                        <img src="assets/images/hero/home-hero-main.webp" width="3000" height="2000" alt="Автоматические ворота на главном экране сайта" loading="eager" fetchpriority="high">
                     </picture>
                 <div class="hero-copy">
                     <span class="hero-copy__eyebrow"><i class="fas fa-circle" aria-hidden="true"></i> Производство и монтаж</span>
@@ -244,10 +245,10 @@
         <section class="scene panel-scene" aria-label="Каталог и порошковая покраска">
             <article class="panel-scene__card panel-scene__card--dark scene-reveal" data-panel-gallery>
                 <div class="panel-scene__media" aria-hidden="true">
-                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-gates-05.webp" alt="Откатные ворота и калитка на частном участке" data-caption="Откатные ворота" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-01.webp" alt="Распашные ворота на частном участке" data-caption="Распашные ворота" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-02.webp" alt="Металлическая калитка между каменными столбами" data-caption="Калитки" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-03.webp" alt="Современный металлический забор" data-caption="Заборы" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-gates-05.webp" width="1200" height="800" alt="Откатные ворота и калитка на частном участке" data-caption="Откатные ворота" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-01.webp" width="1200" height="800" alt="Распашные ворота на частном участке" data-caption="Распашные ворота" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-02.webp" width="1024" height="1024" alt="Металлическая калитка между каменными столбами" data-caption="Калитки" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-gates-03.webp" width="1200" height="800" alt="Современный металлический забор" data-caption="Заборы" loading="lazy" fetchpriority="low" decoding="async">
                 </div>
                 <div class="panel-scene__overlay" aria-hidden="true"></div>
                 <div class="panel-scene__stamp panel-scene__stamp--dark" aria-hidden="true">
@@ -255,7 +256,7 @@
                     <span>Калитки и заборы</span>
                     <span>Монтаж под ключ</span>
                 </div>
-                <div class="panel-scene__viewer panel-scene__viewer--dark" aria-hidden="true">
+                <div class="panel-scene__viewer panel-scene__viewer--dark">
                     <small>Сейчас на экране</small>
                     <strong data-panel-caption>Откатные ворота</strong>
                     <div class="panel-scene__dots" data-panel-dots>
@@ -328,11 +329,11 @@
 
             <article class="panel-scene__card panel-scene__card--light scene-reveal" data-scene-delay="120" data-panel-gallery>
                 <div class="panel-scene__media" aria-hidden="true">
-                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-powder-01.webp" alt="Маляр наносит порошковое покрытие на металлические изделия" data-caption="Порошковая покраска" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-02.webp" alt="Порошковая покраска металлических радиаторов" data-caption="Радиаторы и металлоизделия" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-03.webp" alt="Порошковая покраска секций ограждения" data-caption="Секции и ограждения" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-04.webp" alt="Порошковая покраска металлических панелей" data-caption="Панели и фасадные элементы" loading="lazy" fetchpriority="low" decoding="async">
-                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-05.webp" alt="Порошковая покраска каркасов и стоек" data-caption="Каркасы и стойки" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image is-active" src="assets/images/catalog/home-direction-powder-01.webp" width="1200" height="800" alt="Маляр наносит порошковое покрытие на металлические изделия" data-caption="Порошковая покраска" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-02.webp" width="1200" height="900" alt="Порошковая покраска металлических радиаторов" data-caption="Радиаторы и металлоизделия" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-03.webp" width="1200" height="900" alt="Порошковая покраска секций ограждения" data-caption="Секции и ограждения" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-04.webp" width="1420" height="1024" alt="Порошковая покраска металлических панелей" data-caption="Панели и фасадные элементы" loading="lazy" fetchpriority="low" decoding="async">
+                    <img class="panel-scene__image" data-src="assets/images/catalog/home-direction-powder-05.webp" width="1200" height="1600" alt="Порошковая покраска каркасов и стоек" data-caption="Каркасы и стойки" loading="lazy" fetchpriority="low" decoding="async">
                 </div>
                 <div class="panel-scene__overlay" aria-hidden="true"></div>
                 <div class="panel-scene__stamp panel-scene__stamp--light" aria-hidden="true">
@@ -340,7 +341,7 @@
                     <span>Антикоррозийная защита</span>
                     <span>Стойкость к износу</span>
                 </div>
-                <div class="panel-scene__viewer panel-scene__viewer--light" aria-hidden="true">
+                <div class="panel-scene__viewer panel-scene__viewer--light">
                     <small>Сейчас на экране</small>
                     <strong data-panel-caption>Порошковая покраска</strong>
                     <div class="panel-scene__dots" data-panel-dots>
@@ -604,7 +605,7 @@
             <div class="preview-footer__column preview-footer__column--company">
                 <a class="preview-footer__brand" href="#top" aria-label="Наверх">
                     <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
-                        <img class="preview-footer__logo logo-image" src="assets/images/logo.png" alt="">
+                        <img class="preview-footer__logo logo-image" src="assets/images/logo.png" width="320" height="320" alt="">
                         <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                     </span>
                     <span class="preview-footer__brand-copy">
@@ -649,7 +650,7 @@
             </div>
     </footer>
     </main>
-    <script src="assets/js/header.js?v=20260620-inline-title-cleanup-1" defer></script>
-    <script src="assets/js/home.js?v=20260620-inline-title-cleanup-1" defer></script>
+    <script src="assets/js/header.js?v=20260823-perf-1" defer></script>
+    <script src="assets/js/home.js?v=20260823-perf-1" defer></script>
 </body>
 </html>

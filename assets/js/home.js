@@ -326,16 +326,20 @@
     }
 
     if (scenes.length) {
+        const shouldRevealImmediately = forceReveal || reducedMotion || !('IntersectionObserver' in window);
+        const immediateScenes = shouldRevealImmediately
+            ? scenes
+            : scenes.filter((scene) => scene.getBoundingClientRect().top < window.innerHeight * 0.92);
+
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
             scene.style.setProperty('--scene-delay', `${delay}ms`);
             ensureSceneCurtain(scene);
         });
 
-        if (forceReveal || reducedMotion || !('IntersectionObserver' in window)) {
-            scenes.forEach((scene) => scene.classList.add('is-visible'));
+        if (shouldRevealImmediately) {
+            immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
         } else {
-            const immediateScenes = scenes.filter((scene) => scene.getBoundingClientRect().top < window.innerHeight * 0.92);
             immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
 
             const observer = new IntersectionObserver((entries) => {

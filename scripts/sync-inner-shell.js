@@ -123,7 +123,7 @@ function buildHeaderTop(pageFile) {
                 <div class="logo hero-brand">
                     <a href="${escapeHtml(homeHref)}" class="logo-link hero-brand__link" aria-label="Перейти на главную страницу">
                         <div class="hero-brand__mark logo-main logo-main--image">
-                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" width="700" height="700" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" loading="lazy" decoding="async">
+                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" width="320" height="320" alt="${escapeHtml(site.brand.logo.alt || site.brand.logoAlt || site.brand.name)}" loading="lazy" decoding="async">
                             <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                         </div>
                         <div class="hero-brand__text">
@@ -153,7 +153,7 @@ function buildHeaderTop(pageFile) {
                     </div>
                 </div>
 
-                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация">
+                <nav class="nav" id="site-mobile-nav" aria-label="Основная навигация" aria-hidden="true" inert>
                     <ul class="nav-list">
 ${buildHeaderNav(pageFile)}
                     </ul>
@@ -183,7 +183,7 @@ function buildHeroHeader(pageFile) {
                 <div class="hero-brand">
                     <a class="hero-brand__link" href="${escapeHtml(homeHref)}" aria-label="${escapeHtml(site.brand.name)}">
                         <div class="hero-brand__mark logo-main logo-main--image">
-                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" alt="${escapeHtml(site.brand.name)}">
+                            <img class="hero-brand__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" width="320" height="320" alt="${escapeHtml(site.brand.name)}">
                             <span class="logo-wave hero-brand__wave" aria-hidden="true"></span>
                         </div>
                         <div class="hero-brand__text">
@@ -267,7 +267,7 @@ function buildPreviewFooter(pageFile) {
             <div class="preview-footer__column preview-footer__column--company">
                 <a class="preview-footer__brand" href="${escapeHtml(topHref)}" aria-label="Наверх">
                     <span class="preview-footer__mark logo-main logo-main--image" aria-hidden="true">
-                        <img class="preview-footer__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" alt="">
+                        <img class="preview-footer__logo logo-image" src="${escapeHtml(resolveLogoSrc(pageFile))}" width="320" height="320" alt="">
                         <span class="logo-wave preview-footer__wave" aria-hidden="true"></span>
                     </span>
                     <span class="preview-footer__brand-copy">

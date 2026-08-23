@@ -2243,8 +2243,8 @@
     }
 }
 
-/* Home hero collision guard: keep brand, menu and phone in separate tracks on small desktop canvases. */
-@media (min-width: 1102px) and (max-width: 1499.98px) {
+/* Home hero collision guard: keep brand, menu and phone in separate tracks only on narrow desktop canvases. */
+@media (min-width: 1102px) and (max-width: 1221.98px) {
     body#top .hero-scene > .hero-header.hero-header--desktop-home {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) max-content !important;

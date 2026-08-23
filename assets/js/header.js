@@ -206,9 +206,10 @@ document.addEventListener('DOMContentLoaded', function () {
             : (headerTop || header);
         const compactHeaderTarget = headerTop || header;
         const heightTarget = isCompact ? compactHeaderTarget : desktopHeaderTarget;
-        document.documentElement.style.setProperty('--header-height', `${heightTarget.offsetHeight}px`);
+        const headerHeight = heightTarget.offsetHeight;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
         if (headerTop) {
-            document.documentElement.style.setProperty('--header-top-height', `${heightTarget.offsetHeight}px`);
+            document.documentElement.style.setProperty('--header-top-height', `${headerHeight}px`);
         }
     }
 
@@ -261,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const scrollingDown = currentScrollY > lastScrollY;
         const nearTop = currentScrollY < 20;
 
-        if (scrollingDown && currentScrollY > 0) {
+        if (scrollingDown && !nearTop) {
             if (!isHeaderCollapsed) {
                 isHeaderCollapsed = true;
                 setHeaderHeight();
@@ -300,6 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (mobileMenuBtn && nav) {
         const icon = mobileMenuBtn.querySelector('i');
         nav.setAttribute('aria-hidden', 'true');
+        nav.inert = true;
 
         function toggleMenu(forceState) {
             const isOpen = typeof forceState === 'boolean' ? forceState : !nav.classList.contains('active');
@@ -310,6 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
             mobileMenuBtn.classList.toggle('active', isOpen);
             mobileMenuBtn.classList.toggle('is-active', isOpen);
             nav.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+            nav.inert = !isOpen;
 
             if (icon) {
                 icon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
