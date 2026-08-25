@@ -5,7 +5,12 @@ const pages = [
     { name: 'services', path: '/pages/services.html' },
     { name: 'powder-coating', path: '/pages/powder-coating.html' },
     { name: 'gallery', path: '/pages/gallery.html' },
-    { name: 'contacts', path: '/pages/contacts.html' }
+    { name: 'contacts', path: '/pages/contacts.html' },
+    { name: 'automation-ati3000a', path: '/pages/automation-ati3000a.html' },
+    { name: 'automation-alutech-am5000kit', path: '/pages/automation-alutech-am5000kit.html' },
+    { name: 'automation-alutech-lm-l', path: '/pages/automation-alutech-lm-l.html' },
+    { name: 'automation-alutech-sl-u', path: '/pages/automation-alutech-sl-u.html' },
+    { name: 'automation-sliding-components', path: '/pages/automation-sliding-components.html' }
 ];
 
 function slugifyProjectName(name) {
