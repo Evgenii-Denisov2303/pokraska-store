@@ -4,6 +4,7 @@ const pages = [
     { name: 'home', path: '/' },
     { name: 'services', path: '/pages/services.html' },
     { name: 'powder-coating', path: '/pages/powder-coating.html' },
+    { name: 'sandblasting', path: '/pages/sandblasting.html' },
     { name: 'gallery', path: '/pages/gallery.html' },
     { name: 'contacts', path: '/pages/contacts.html' },
     { name: 'automation-ati3000a', path: '/pages/automation-ati3000a.html' },
