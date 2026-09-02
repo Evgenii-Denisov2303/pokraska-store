@@ -86,10 +86,25 @@ async function collectLayoutMetrics(page) {
             heroBottomGap = Math.round(stageRect.bottom - pictureRect.bottom);
         }
 
+        const panelCards = [...document.querySelectorAll('.panel-scene__card')].map((card) => {
+            const media = card.querySelector('.panel-scene__media');
+            const content = card.querySelector('.panel-scene__content');
+            const copy = card.querySelector('.panel-scene__copy-block');
+
+            return {
+                cardWidth: card.getBoundingClientRect().width,
+                mediaWidth: media ? media.getBoundingClientRect().width : 0,
+                contentWidth: content ? content.getBoundingClientRect().width : 0,
+                copyWidth: copy ? copy.getBoundingClientRect().width : 0
+            };
+        });
+
         return {
             horizontalOverflow,
             overflowingSelectors,
-            heroBottomGap
+            heroBottomGap,
+            panelCards,
+            viewportWidth: window.innerWidth
         };
     });
 }
@@ -112,6 +127,21 @@ test.describe('Responsive layout smoke', () => {
 
             if (targetPage.name === 'home' && metrics.heroBottomGap != null) {
                 expect(Math.abs(metrics.heroBottomGap), 'Hero picture no longer aligns with hero stage bottom').toBeLessThanOrEqual(4);
+            }
+
+            if (targetPage.name === 'home' && metrics.viewportWidth <= 1101) {
+                expect(metrics.panelCards, 'Both homepage preview cards must be present').toHaveLength(2);
+
+                for (const panelCard of metrics.panelCards) {
+                    expect(
+                        Math.abs(panelCard.cardWidth - panelCard.mediaWidth),
+                        'Homepage preview media must fill its card in the single-column layout'
+                    ).toBeLessThanOrEqual(2);
+                    expect(
+                        panelCard.copyWidth,
+                        'Homepage preview copy must stay inside the readable content column'
+                    ).toBeLessThanOrEqual(panelCard.contentWidth + 2);
+                }
             }
         });
     }

@@ -12164,7 +12164,8 @@ body#top .panel-scene {
 
 @media (max-width: 1101.98px) {
     body#top .panel-scene {
-        --panel-preview-media: min(100%, clamp(320px, calc(100vw - 48px), 760px));
+        --panel-preview-media: 100%;
+        --panel-preview-card-pad: clamp(14px, 2.5vw, 22px);
         width: min(100%, calc(100vw - clamp(28px, 4.2vw, 48px))) !important;
         max-width: 1120px !important;
         margin-right: auto !important;
@@ -12184,7 +12185,7 @@ body#top .panel-scene {
         width: 100% !important;
         min-height: 0 !important;
         height: auto !important;
-        padding: clamp(14px, 2.5vw, 22px) !important;
+        padding: var(--panel-preview-card-pad) !important;
         overflow: hidden !important;
     }
 
@@ -12196,8 +12197,8 @@ body#top .panel-scene {
         position: relative !important;
         inset: auto !important;
         justify-self: center !important;
-        width: var(--panel-preview-media) !important;
-        max-width: 100% !important;
+        width: calc(100% + var(--panel-preview-card-pad) + var(--panel-preview-card-pad)) !important;
+        max-width: none !important;
         height: auto !important;
         min-height: 0 !important;
         aspect-ratio: 1 / 1 !important;
@@ -12242,8 +12243,8 @@ body#top .panel-scene {
     body#top .panel-scene__viewer--dark,
     body#top .panel-scene__viewer--light {
         justify-self: center !important;
-        width: min(calc(100% - clamp(28px, 4.8vw, 44px)), calc(var(--panel-preview-media) - clamp(28px, 4.8vw, 44px))) !important;
-        max-width: calc(100% - clamp(28px, 4.8vw, 44px)) !important;
+        width: calc(100% + var(--panel-preview-card-pad) + var(--panel-preview-card-pad) - clamp(28px, 4.8vw, 44px)) !important;
+        max-width: none !important;
         box-sizing: border-box !important;
         margin: 0 0 clamp(14px, 2.4vw, 22px) !important;
         padding: 0 !important;
@@ -12287,6 +12288,27 @@ body#top .panel-scene {
         max-width: none !important;
         min-width: 0 !important;
         padding: 0 !important;
+    }
+
+    body#top .panel-scene__copy-block,
+    body#top .panel-scene__card--light .panel-scene__copy-block,
+    body#top .panel-scene__card--powder .panel-scene__copy-block {
+        width: 100% !important;
+        max-width: min(100%, 58ch) !important;
+    }
+
+    body#top .panel-scene__copy-block h3,
+    body#top .panel-scene__card--light .panel-scene__copy-block h3,
+    body#top .panel-scene__card--powder .panel-scene__copy-block h3,
+    body#top .panel-scene__copy-block p,
+    body#top .panel-scene__card--light .panel-scene__copy-block p,
+    body#top .panel-scene__card--powder .panel-scene__copy-block p {
+        max-width: 100% !important;
+    }
+
+    body#top .panel-scene__title--gates span,
+    body#top .panel-scene__title--powder span {
+        display: block;
     }
 
     body#top .panel-scene__facts,
