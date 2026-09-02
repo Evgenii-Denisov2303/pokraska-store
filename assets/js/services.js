@@ -1015,11 +1015,70 @@ document.addEventListener('DOMContentLoaded', async function() {
     const catalogPanels = () => Array.from(document.querySelectorAll('[data-catalog-panel]'));
     const catalogGroupTabs = Array.from(document.querySelectorAll('[data-catalog-group]'));
     const catalogGroupPanels = Array.from(document.querySelectorAll('[data-catalog-group-panel]'));
+    const catalogGroupPanelsWrap = document.querySelector('.catalog-group-panels');
 
     if (catalogTabs().length && catalogPanels().length) {
         const lastActiveTabByGroup = new Map();
         let catalogBreadcrumbSyncFrame = null;
         let catalogGroupPanelsHeightFrame = null;
+        let catalogLinksSwipeFrame = null;
+
+        const updateCatalogLinksSwipeState = () => {
+            if (!catalogGroupPanelsWrap) {
+                return;
+            }
+
+            const activeLinks = catalogGroupPanelsWrap.querySelector(
+                '.catalog-group-panel.is-active .catalog-group-panel__links'
+            );
+            if (!activeLinks) {
+                catalogGroupPanelsWrap.classList.remove('has-overflow', 'is-at-start', 'is-at-end');
+                return;
+            }
+
+            const maxScroll = Math.max(0, activeLinks.scrollWidth - activeLinks.clientWidth);
+            const edgeThreshold = 10;
+            const hasOverflow = maxScroll > edgeThreshold;
+            const isAtStart = !hasOverflow || activeLinks.scrollLeft <= edgeThreshold;
+            const isAtEnd = !hasOverflow || activeLinks.scrollLeft >= maxScroll - edgeThreshold;
+
+            catalogGroupPanelsWrap.classList.toggle('has-overflow', hasOverflow);
+            catalogGroupPanelsWrap.classList.toggle('is-at-start', isAtStart);
+            catalogGroupPanelsWrap.classList.toggle('is-at-end', isAtEnd);
+        };
+
+        const scheduleCatalogLinksSwipeState = () => {
+            if (catalogLinksSwipeFrame) {
+                return;
+            }
+
+            catalogLinksSwipeFrame = window.requestAnimationFrame(() => {
+                updateCatalogLinksSwipeState();
+                catalogLinksSwipeFrame = null;
+            });
+        };
+
+        const bindCatalogLinksSwipeState = () => {
+            catalogGroupPanels.forEach((groupPanel) => {
+                const linksWrap = groupPanel.querySelector(':scope > .catalog-group-panel__links');
+                if (!linksWrap || linksWrap.dataset.swipeStateBound === 'true') {
+                    return;
+                }
+
+                linksWrap.addEventListener('scroll', scheduleCatalogLinksSwipeState, { passive: true });
+                linksWrap.addEventListener('touchend', scheduleCatalogLinksSwipeState, { passive: true });
+                linksWrap.addEventListener('pointerup', scheduleCatalogLinksSwipeState, { passive: true });
+                linksWrap.dataset.swipeStateBound = 'true';
+            });
+
+            if (document.fonts && typeof document.fonts.ready?.then === 'function') {
+                document.fonts.ready.then(scheduleCatalogLinksSwipeState).catch(() => {});
+            }
+
+            updateCatalogLinksSwipeState();
+            window.setTimeout(updateCatalogLinksSwipeState, 120);
+            window.setTimeout(updateCatalogLinksSwipeState, 480);
+        };
 
         const getCatalogBreadcrumbText = (panel) => {
             if (!panel) {
@@ -1577,6 +1636,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             syncCatalogGroupPanelsHeight();
             syncCatalogNavIntro();
+            scheduleCatalogLinksSwipeState();
         };
 
         const activateCatalogTab = (panelId, options = {}) => {
@@ -1680,6 +1740,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         decorateCatalogPanels(document);
         syncCatalogTabLabels();
         syncCatalogGroupPanelsHeight();
+        bindCatalogLinksSwipeState();
 
         const hashState = getCatalogHashState();
         let initialTab = document.querySelector('.catalog-link.is-active') || catalogTabs()[0];
@@ -1750,6 +1811,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             catalogGroupPanelsHeightFrame = requestAnimationFrame(() => {
                 syncCatalogGroupPanelsHeight();
+                scheduleCatalogLinksSwipeState();
                 catalogGroupPanelsHeightFrame = null;
             });
         });

@@ -99,11 +99,26 @@ async function collectLayoutMetrics(page) {
             };
         });
 
+        const catalogNavWrap = document.querySelector('.catalog-group-panels');
+        const catalogNavList = catalogNavWrap?.querySelector(
+            '.catalog-group-panel.is-active .catalog-group-panel__links'
+        );
+        const catalogRightHint = catalogNavWrap?.querySelector('.catalog-scroll-hint--right');
+        const catalogNav = catalogNavWrap && catalogNavList
+            ? {
+                maxScroll: Math.max(0, catalogNavList.scrollWidth - catalogNavList.clientWidth),
+                hasOverflow: catalogNavWrap.classList.contains('has-overflow'),
+                isAtStart: catalogNavWrap.classList.contains('is-at-start'),
+                rightHintDisplay: catalogRightHint ? window.getComputedStyle(catalogRightHint).display : null
+            }
+            : null;
+
         return {
             horizontalOverflow,
             overflowingSelectors,
             heroBottomGap,
             panelCards,
+            catalogNav,
             viewportWidth: window.innerWidth
         };
     });
@@ -141,6 +156,26 @@ test.describe('Responsive layout smoke', () => {
                         panelCard.copyWidth,
                         'Homepage preview copy must stay inside the readable content column'
                     ).toBeLessThanOrEqual(panelCard.contentWidth + 2);
+                }
+            }
+
+            if (targetPage.name === 'services' && metrics.catalogNav) {
+                const shouldOverflow = metrics.catalogNav.maxScroll > 10;
+
+                expect(metrics.catalogNav.hasOverflow).toBe(shouldOverflow);
+                if (metrics.viewportWidth <= 640) {
+                    expect(metrics.catalogNav.rightHintDisplay).toBe('flex');
+
+                    if (shouldOverflow) {
+                        expect(metrics.catalogNav.isAtStart).toBe(true);
+                        await page.locator('.catalog-group-panel.is-active .catalog-group-panel__links').evaluate((list) => {
+                            list.scrollLeft = list.scrollWidth;
+                            list.dispatchEvent(new Event('scroll'));
+                        });
+                        await expect(page.locator('.catalog-group-panels')).toHaveClass(/is-at-end/);
+                    }
+                } else {
+                    expect(metrics.catalogNav.rightHintDisplay).toBe('none');
                 }
             }
         });
