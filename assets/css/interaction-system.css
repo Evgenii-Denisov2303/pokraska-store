@@ -290,17 +290,62 @@ body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([a
     color: var(--interaction-secondary-text) !important;
 }
 
-body#top .services-page .service-quick-nav .service-nav-link.active,
-body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] {
-    background: linear-gradient(180deg, var(--interaction-primary) 0%, var(--interaction-primary-strong) 100%) !important;
-    border-color: transparent !important;
-    color: var(--interaction-primary-text) !important;
-    box-shadow: 0 9px 18px rgba(31, 56, 76, 0.16) !important;
+body#top .services-page .service-quick-nav .service-nav-link .service-nav-link__icon {
+    position: relative;
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem !important;
+    border: 1px solid transparent !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: color 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
-body#top .services-page .service-quick-nav .service-nav-link.active :is(.service-nav-link__icon, .service-nav-link__icon i, .service-nav-link__label),
-body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] :is(.service-nav-link__icon, .service-nav-link__icon i, .service-nav-link__label) {
-    color: var(--interaction-primary-text) !important;
+body#top .services-page .service-quick-nav .service-nav-link.active,
+body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    color: rgba(var(--service-accent-strong-rgb), 1) !important;
+    box-shadow: none !important;
+}
+
+body#top .services-page .service-quick-nav .service-nav-link.active .service-nav-link__icon,
+body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] .service-nav-link__icon {
+    border-color: rgba(var(--service-accent-rgb), 0.32) !important;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(var(--service-accent-soft-rgb), 0.9)) !important;
+    color: rgba(var(--service-accent-strong-rgb), 1) !important;
+    box-shadow:
+        0 7px 15px rgba(var(--service-accent-strong-rgb), 0.13),
+        inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+}
+
+body#top .services-page .service-quick-nav .service-nav-link.active .service-nav-link__icon::after,
+body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] .service-nav-link__icon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 23px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        rgba(var(--service-accent-rgb), 0.08),
+        rgba(var(--service-accent-strong-rgb), 0.92) 46%,
+        rgba(var(--service-accent-rgb), 0.72) 70%,
+        rgba(var(--service-accent-rgb), 0.08)
+    );
+    box-shadow: 0 2px 7px rgba(var(--service-accent-strong-rgb), 0.22);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+body#top .services-page .service-quick-nav .service-nav-link.active :is(.service-nav-link__icon i, .service-nav-link__label),
+body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] :is(.service-nav-link__icon i, .service-nav-link__label) {
+    color: rgba(var(--service-accent-strong-rgb), 1) !important;
 }
 
 body#top .services-page .service-header {
