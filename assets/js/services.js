@@ -1235,14 +1235,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             catalogAssistantPoints.replaceChildren(fragment);
 
             if (catalogAssistantPrimary) {
-                const targetPanel = panelId ? document.getElementById(panelId) : null;
-                catalogAssistantPrimary.setAttribute('href', targetPanel ? `#${panelId}` : '#catalog-categories');
+                catalogAssistantPrimary.setAttribute('href', '../index.html#request-form');
             }
 
             if (catalogAssistantSecondary) {
-                const activeGroupTab = catalogGroupTabs.find((tab) => tab.classList.contains('is-active')) || catalogGroupTabs[0];
-                const groupTargetId = activeGroupTab?.id || 'catalog-categories';
-                catalogAssistantSecondary.setAttribute('href', `#${groupTargetId}`);
+                const targetPanel = panelId ? document.getElementById(panelId) : null;
+                catalogAssistantSecondary.setAttribute('href', targetPanel ? `#${panelId}` : '#catalog-categories');
             }
 
             if (shouldAnimate) {

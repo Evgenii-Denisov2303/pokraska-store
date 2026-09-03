@@ -49,6 +49,7 @@
     <link rel="preload" as="style" href="../assets/css/fontawesome.css?v=20260823-perf-1" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260823-perf-1"></noscript>
 <link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20260525-contact-wide-5">
+<link rel="stylesheet" href="../assets/css/interaction-system.css?v=20260903-actions-1">
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -243,28 +244,28 @@
                     </a>
 
                     <div class="contacts-secondary-grid">
-                        <div class="contacts-contact-tile">
+                        <a class="contacts-contact-tile" href="tel:+79625542260" aria-label="Позвонить по дополнительному номеру +7 (962) 554-22-60">
                             <span class="contacts-contact-icon">
                                 <i class="fas fa-phone-alt" aria-hidden="true"></i>
                             </span>
                             <div class="contacts-contact-copy">
                                 <span class="contacts-contact-label">Дополнительный номер</span>
-                                <a href="tel:+79625542260">+7 (962) 554-22-60</a>
+                                <strong>+7 (962) 554-22-60</strong>
                             </div>
-                        </div>
+                        </a>
 
-                        <div class="contacts-contact-tile">
+                        <a class="contacts-contact-tile" href="mailto:vorota404@mail.ru" aria-label="Написать на почту vorota404@mail.ru">
                             <span class="contacts-contact-icon">
                                 <i class="fas fa-envelope" aria-hidden="true"></i>
                             </span>
                             <div class="contacts-contact-copy">
                                 <span class="contacts-contact-label">Почта</span>
-                                <a href="mailto:vorota404@mail.ru">vorota404@mail.ru</a>
+                                <strong>vorota404@mail.ru</strong>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
-                    <div class="contacts-address-row">
+                    <a class="contacts-address-row contacts-address-row--link" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
                         <span class="contacts-contact-icon">
                             <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                         </span>
@@ -272,14 +273,15 @@
                             <span class="contacts-contact-label">Адрес производства</span>
                             <strong>Казань, Старое Победилово, ул. Садовая, 72</strong>
                         </div>
-                    </div>
+                        <span class="contacts-address-cue">Открыть на карте <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
 
                     <div class="contacts-direct-actions">
-                        <a class="btn btn-outline" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">
+                        <a class="btn btn-outline ui-secondary" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-telegram-plane" aria-hidden="true"></i>
                             Написать в Telegram
                         </a>
-                        <a class="btn btn-outline" href="https://max.ru" target="_blank" rel="noopener noreferrer">
+                        <a class="btn btn-outline ui-secondary" href="https://max.ru" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-comments" aria-hidden="true"></i>
                             Написать в Max
                         </a>
@@ -349,12 +351,12 @@
                     </ul>
 
                     <div class="contacts-route-actions">
-                        <a class="btn contacts-route-actions__primary" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
+                        <a class="btn ui-primary contacts-route-actions__primary" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-route" aria-hidden="true"></i>
                             <span class="contacts-route-actions__label-full">Проложить маршрут</span>
                             <span class="contacts-route-actions__label-short">Маршрут</span>
                         </a>
-                        <a class="btn btn-outline" href="tel:+79625542260">
+                        <a class="btn btn-outline ui-secondary" href="tel:+79625542260">
                             <i class="fas fa-phone-alt" aria-hidden="true"></i>
                             <span class="contacts-route-actions__label-full">Позвонить на производство</span>
                             <span class="contacts-route-actions__label-short">Позвонить</span>
@@ -367,11 +369,11 @@
                         <span class="contacts-map-placeholder__eyebrow">Карта и маршрут</span>
                         <h3>Открыть карту прямо на странице</h3>
                         <p>Карта загружается по клику, чтобы страница оставалась легче, а маршрут всё так же можно посмотреть без перехода.</p>
-                        <button class="btn contacts-map-placeholder__button" type="button" data-embed-trigger>
+                        <button class="btn ui-primary contacts-map-placeholder__button" type="button" data-embed-trigger>
                             <i class="fas fa-route" aria-hidden="true"></i>
                             Открыть карту
                         </button>
-                        <a class="contacts-map-placeholder__link" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
+                        <a class="contacts-map-placeholder__link ui-text-link" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
                             Открыть маршрут в Яндекс Картах
                         </a>
                     </div>

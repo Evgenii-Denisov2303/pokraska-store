@@ -6,6 +6,8 @@ const pages = [
     { name: 'powder-coating', path: '/pages/powder-coating.html' },
     { name: 'sandblasting', path: '/pages/sandblasting.html' },
     { name: 'gallery', path: '/pages/gallery.html' },
+    { name: 'prices', path: '/pages/prices.html' },
+    { name: 'payment-documents', path: '/pages/payment-documents.html' },
     { name: 'contacts', path: '/pages/contacts.html' },
     { name: 'automation-ati3000a', path: '/pages/automation-ati3000a.html' },
     { name: 'automation-alutech-am5000kit', path: '/pages/automation-alutech-am5000kit.html' },
