@@ -421,7 +421,17 @@ table th {
 }
 
 /* ========== FINAL VISUAL PASS ========== */
-.privacy-container,
+body#top .privacy-container {
+    width: min(980px, 100%);
+    max-width: 980px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+}
+
 .privacy-page .section,
 .highlight,
 .contact-block {
@@ -429,7 +439,6 @@ table th {
     overflow: hidden;
 }
 
-.privacy-container::before,
 .privacy-page .section::before,
 .contact-block::before {
     content: "";
@@ -478,7 +487,6 @@ table tr:hover {
 }
 
 @media (max-width: 768px) {
-    .privacy-container::before,
     .privacy-page .section::before,
     .contact-block::before {
         left: 18px;

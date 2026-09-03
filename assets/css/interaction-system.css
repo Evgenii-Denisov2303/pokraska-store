@@ -348,6 +348,51 @@ body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"
     color: rgba(var(--service-accent-strong-rgb), 1) !important;
 }
 
+@media (max-width: 640px) {
+    body#top .services-page .service-quick-nav .service-nav-link.active,
+    body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] {
+        border: 1px solid rgba(var(--service-accent-rgb), 0.24) !important;
+        border-radius: 999px !important;
+        background:
+            radial-gradient(circle at 34% 16%, rgba(255, 255, 255, 0.76), transparent 46%),
+            linear-gradient(145deg, rgba(var(--service-accent-soft-rgb), 0.98), rgba(var(--service-accent-rgb), 0.32)) !important;
+        background-image:
+            radial-gradient(circle at 34% 16%, rgba(255, 255, 255, 0.76), transparent 46%),
+            linear-gradient(145deg, rgba(var(--service-accent-soft-rgb), 0.98), rgba(var(--service-accent-rgb), 0.32)) !important;
+        box-shadow:
+            0 8px 16px rgba(var(--service-accent-strong-rgb), 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    }
+
+    body#top .services-page .service-quick-nav .service-nav-link.active .service-nav-link__icon,
+    body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] .service-nav-link__icon {
+        border-color: transparent !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    body#top .services-page .service-quick-nav .service-nav-link.active .service-nav-link__icon::after,
+    body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"] .service-nav-link__icon::after {
+        content: none;
+        display: none;
+    }
+
+    body#top .services-page .service-quick-nav .service-nav-link:focus-visible {
+        outline: 0;
+        border-radius: 999px !important;
+        box-shadow: 0 0 0 3px rgba(var(--service-accent-strong-rgb), 0.2) !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body#top .services-page .service-quick-nav .service-nav-link.active:focus-visible,
+    body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"]:focus-visible {
+        box-shadow:
+            0 0 0 3px rgba(var(--service-accent-strong-rgb), 0.18),
+            0 8px 16px rgba(var(--service-accent-strong-rgb), 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    }
+}
+
 body#top .services-page .service-header {
     border-radius: 15px 15px 6px 6px !important;
     cursor: default;

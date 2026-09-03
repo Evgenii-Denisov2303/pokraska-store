@@ -70,7 +70,7 @@ html {
         z-index: 1;
     }
 
-    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"]) {
+    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"]) {
         overflow: visible !important;
         isolation: auto !important;
         background: var(--theme-surface-gradient) !important;
@@ -78,8 +78,8 @@ html {
         box-shadow: 0 22px 40px rgba(31, 38, 34, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
     }
 
-    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"])::before,
-    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .privacy-container, .prices-page .section[aria-labelledby="prices-faq-title"])::after {
+    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::before,
+    body#top :is(.service-detail-card, .before-after-section .container, .gallery-item, .gallery-empty, .gallery-filters, .price-factors, .guarantee-section, .calculator-section, .contacts-hero-card, .contact-info-card, .contact-form-card, .contacts-location-card, .payment-docs-panel, .payment-docs-section, .payment-docs-cta, .automation-product-card, .prices-page .section[aria-labelledby="prices-faq-title"])::after {
         content: none !important;
         display: none !important;
     }

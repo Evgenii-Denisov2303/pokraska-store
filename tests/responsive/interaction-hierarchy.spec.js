@@ -130,3 +130,91 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
         }
     }
 });
+
+test('service navigation keeps one moving mobile accent and preserves the tablet artwork', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-wide');
+    test.setTimeout(60_000);
+
+    const servicePages = [
+        {
+            name: 'powder-coating',
+            path: '/pages/powder-coating.html?noedit=1',
+            target: '#equipment'
+        },
+        {
+            name: 'sandblasting',
+            path: '/pages/sandblasting.html?noedit=1',
+            target: '#rust'
+        }
+    ];
+
+    for (const target of servicePages) {
+        for (const width of [340, 375, 640]) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.goto(target.path, { waitUntil: 'domcontentloaded' });
+
+            const nav = page.locator('.service-quick-nav');
+            const targetLink = page.locator(`.service-nav-link[href="${target.target}"]`);
+
+            await expect(nav).toBeVisible();
+            await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
+
+            const mobileVisual = await page.evaluate(() => {
+                const navElement = document.querySelector('.service-quick-nav');
+                const activeLink = navElement.querySelector('.service-nav-link.active');
+                const activeIcon = activeLink.querySelector('.service-nav-link__icon');
+                const navStyle = getComputedStyle(navElement);
+                const activeStyle = getComputedStyle(activeLink);
+                const activeIconAfter = getComputedStyle(activeIcon, '::after');
+
+                return {
+                    horizontalOverflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
+                    navBackground: navStyle.backgroundImage,
+                    activeBackground: activeStyle.backgroundImage,
+                    activeRadius: Number.parseFloat(activeStyle.borderRadius),
+                    iconUnderlineContent: activeIconAfter.content,
+                    iconUnderlineDisplay: activeIconAfter.display
+                };
+            });
+
+            expect(mobileVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
+            expect(mobileVisual.navBackground, `${target.name}: mobile artwork is missing at ${width}px`).not.toBe('none');
+            expect(mobileVisual.activeBackground, `${target.name}: active mobile accent is missing at ${width}px`).not.toBe('none');
+            expect(mobileVisual.activeRadius, `${target.name}: active mobile accent is square at ${width}px`).toBeGreaterThan(20);
+            expect(
+                mobileVisual.iconUnderlineContent === 'none' || mobileVisual.iconUnderlineDisplay === 'none',
+                `${target.name}: obsolete mobile underline is still visible at ${width}px`
+            ).toBe(true);
+
+            await targetLink.click();
+            await page.waitForTimeout(1100);
+
+            await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
+            await expect(targetLink).toHaveClass(/active/);
+            await expect(targetLink).toHaveAttribute('aria-current', 'page');
+        }
+
+        for (const width of [768, 844, 1440]) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.goto(target.path, { waitUntil: 'domcontentloaded' });
+
+            const tabletDesktopVisual = await page.evaluate(() => {
+                const navElement = document.querySelector('.service-quick-nav');
+                const label = navElement.querySelector('.service-nav-link__label');
+                const beforeStyle = getComputedStyle(navElement, '::before');
+
+                return {
+                    horizontalOverflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
+                    artworkDisplay: beforeStyle.display,
+                    artworkContent: beforeStyle.content,
+                    labelDisplay: getComputedStyle(label).display
+                };
+            });
+
+            expect(tabletDesktopVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
+            expect(tabletDesktopVisual.artworkDisplay, `${target.name}: tablet artwork is hidden at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.artworkContent, `${target.name}: tablet artwork is missing at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.labelDisplay, `${target.name}: tablet label is hidden at ${width}px`).not.toBe('none');
+        }
+    }
+});
