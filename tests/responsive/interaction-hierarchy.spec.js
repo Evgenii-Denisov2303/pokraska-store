@@ -186,6 +186,10 @@ test('service navigation keeps one moving mobile accent and preserves the tablet
                 `${target.name}: obsolete mobile underline is still visible at ${width}px`
             ).toBe(true);
 
+            await targetLink.hover();
+            const hoverRadius = await targetLink.evaluate((link) => Number.parseFloat(getComputedStyle(link).borderRadius));
+            expect(hoverRadius, `${target.name}: mobile hover becomes square at ${width}px`).toBeGreaterThan(20);
+
             await targetLink.click();
             await page.waitForTimeout(1100);
 
@@ -201,13 +205,21 @@ test('service navigation keeps one moving mobile accent and preserves the tablet
             const tabletDesktopVisual = await page.evaluate(() => {
                 const navElement = document.querySelector('.service-quick-nav');
                 const label = navElement.querySelector('.service-nav-link__label');
+                const activeLink = navElement.querySelector('.service-nav-link.active');
+                const activeIcon = navElement.querySelector('.service-nav-link.active .service-nav-link__icon');
                 const beforeStyle = getComputedStyle(navElement, '::before');
+                const activeStyle = getComputedStyle(activeLink);
+                const activeIconAfter = getComputedStyle(activeIcon, '::after');
 
                 return {
                     horizontalOverflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
                     artworkDisplay: beforeStyle.display,
                     artworkContent: beforeStyle.content,
-                    labelDisplay: getComputedStyle(label).display
+                    labelDisplay: getComputedStyle(label).display,
+                    activeBackground: activeStyle.backgroundImage,
+                    activeRadius: Number.parseFloat(activeStyle.borderRadius),
+                    iconUnderlineContent: activeIconAfter.content,
+                    iconUnderlineDisplay: activeIconAfter.display
                 };
             });
 
@@ -215,6 +227,19 @@ test('service navigation keeps one moving mobile accent and preserves the tablet
             expect(tabletDesktopVisual.artworkDisplay, `${target.name}: tablet artwork is hidden at ${width}px`).not.toBe('none');
             expect(tabletDesktopVisual.artworkContent, `${target.name}: tablet artwork is missing at ${width}px`).not.toBe('none');
             expect(tabletDesktopVisual.labelDisplay, `${target.name}: tablet label is hidden at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.activeBackground, `${target.name}: active tablet pill is missing at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.activeRadius, `${target.name}: active tablet state is square at ${width}px`).toBeGreaterThan(20);
+            expect(
+                tabletDesktopVisual.iconUnderlineContent === 'none' || tabletDesktopVisual.iconUnderlineDisplay === 'none',
+                `${target.name}: obsolete underline is still visible at ${width}px`
+            ).toBe(true);
+
+            const targetLink = page.locator(`.service-nav-link[href="${target.target}"]`);
+            await targetLink.click();
+            await page.waitForTimeout(1100);
+            await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
+            await expect(targetLink).toHaveClass(/active/);
+            await expect(targetLink).toHaveAttribute('aria-current', 'page');
         }
     }
 });
