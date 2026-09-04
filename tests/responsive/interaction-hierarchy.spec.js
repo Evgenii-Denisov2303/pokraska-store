@@ -131,9 +131,9 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
     }
 });
 
-test('service navigation keeps one moving mobile accent and preserves the tablet artwork', async ({ page }, testInfo) => {
+test('service navigation stays sticky, moves one active pill, and preserves the artwork', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
-    test.setTimeout(60_000);
+    test.setTimeout(90_000);
 
     const servicePages = [
         {
@@ -196,9 +196,32 @@ test('service navigation keeps one moving mobile accent and preserves the tablet
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
             await expect(targetLink).toHaveAttribute('aria-current', 'page');
+
+            const stickyMetrics = await page.evaluate((selector) => {
+                const navElement = document.querySelector('.service-quick-nav');
+                const section = document.querySelector(selector);
+                const navRect = navElement.getBoundingClientRect();
+                const sectionRect = section.getBoundingClientRect();
+                const navStyle = getComputedStyle(navElement);
+
+                return {
+                    position: navStyle.position,
+                    cssTop: Number.parseFloat(navStyle.top),
+                    navTop: navRect.top,
+                    navBottom: navRect.bottom,
+                    sectionTop: sectionRect.top,
+                    viewportHeight: window.innerHeight
+                };
+            }, target.target);
+
+            expect(stickyMetrics.position, `${target.name}: navigation is not sticky at ${width}px`).toBe('sticky');
+            expect(Math.abs(stickyMetrics.navTop - stickyMetrics.cssTop), `${target.name}: navigation left its sticky position at ${width}px`).toBeLessThanOrEqual(3);
+            expect(stickyMetrics.navTop, `${target.name}: navigation left the viewport at ${width}px`).toBeGreaterThanOrEqual(0);
+            expect(stickyMetrics.navBottom, `${target.name}: navigation covers the whole viewport at ${width}px`).toBeLessThan(stickyMetrics.viewportHeight);
+            expect(stickyMetrics.sectionTop, `${target.name}: section heading is hidden below the navigation at ${width}px`).toBeGreaterThanOrEqual(stickyMetrics.navBottom + 6);
         }
 
-        for (const width of [768, 844, 1440]) {
+        for (const width of [768, 844, 1024, 1101, 1102, 1440]) {
             await page.setViewportSize({ width, height: 900 });
             await page.goto(target.path, { waitUntil: 'domcontentloaded' });
 
@@ -240,6 +263,41 @@ test('service navigation keeps one moving mobile accent and preserves the tablet
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
             await expect(targetLink).toHaveAttribute('aria-current', 'page');
+
+            const stickyMetrics = await page.evaluate((selector) => {
+                const navElement = document.querySelector('.service-quick-nav');
+                const section = document.querySelector(selector);
+                const navRect = navElement.getBoundingClientRect();
+                const sectionRect = section.getBoundingClientRect();
+                const navStyle = getComputedStyle(navElement);
+
+                return {
+                    position: navStyle.position,
+                    cssTop: Number.parseFloat(navStyle.top),
+                    navTop: navRect.top,
+                    navBottom: navRect.bottom,
+                    sectionTop: sectionRect.top,
+                    viewportHeight: window.innerHeight
+                };
+            }, target.target);
+
+            expect(stickyMetrics.position, `${target.name}: navigation is not sticky at ${width}px`).toBe('sticky');
+            expect(Math.abs(stickyMetrics.navTop - stickyMetrics.cssTop), `${target.name}: navigation left its sticky position at ${width}px`).toBeLessThanOrEqual(3);
+            expect(stickyMetrics.navTop, `${target.name}: navigation left the viewport at ${width}px`).toBeGreaterThanOrEqual(0);
+            expect(stickyMetrics.navBottom, `${target.name}: navigation covers the whole viewport at ${width}px`).toBeLessThan(stickyMetrics.viewportHeight);
+            expect(stickyMetrics.sectionTop, `${target.name}: section heading is hidden below the navigation at ${width}px`).toBeGreaterThanOrEqual(stickyMetrics.navBottom + 6);
         }
+
+        await page.setViewportSize({ width: 375, height: 900 });
+        await page.goto(target.path, { waitUntil: 'domcontentloaded' });
+        await page.evaluate((selector) => {
+            document.querySelector(selector).scrollIntoView();
+        }, target.target);
+        await page.waitForTimeout(300);
+
+        const scrolledTargetLink = page.locator(`.service-nav-link[href="${target.target}"]`);
+        await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
+        await expect(scrolledTargetLink).toHaveClass(/active/);
+        await expect(scrolledTargetLink).toHaveAttribute('aria-current', 'page');
     }
 });

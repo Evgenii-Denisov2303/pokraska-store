@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const header = document.querySelector('.internal-scene-header') || document.querySelector('.header');
+    const sceneHeader = document.querySelector('.internal-scene-header');
+    const compactHeader = document.querySelector('.header');
     const sections = navLinks
         .map((link) => document.querySelector(link.getAttribute('href')))
         .filter(Boolean);
@@ -37,9 +38,70 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getOffset() {
-        const headerHeight = header ? header.offsetHeight : 120;
-        return headerHeight + 22;
+    function getStickyTop(headerHidden = null) {
+        if (!quickNav) {
+            return 0;
+        }
+
+        if (headerHidden !== null && window.innerWidth <= 1101.98) {
+            if (headerHidden) {
+                return 8;
+            }
+
+            const headerTopHeight = Number.parseFloat(
+                window.getComputedStyle(document.documentElement).getPropertyValue('--header-top-height')
+            );
+
+            return (Number.isFinite(headerTopHeight) ? headerTopHeight : 72) + 8;
+        }
+
+        const stickyTop = Number.parseFloat(window.getComputedStyle(quickNav).top);
+        return Number.isFinite(stickyTop) ? Math.max(stickyTop, 0) : 0;
+    }
+
+    function getOffset(headerHidden = null) {
+        if (quickNav) {
+            const quickNavStyle = window.getComputedStyle(quickNav);
+
+            if (quickNavStyle.position === 'sticky') {
+                return getStickyTop(headerHidden) + quickNav.offsetHeight + 14;
+            }
+        }
+
+        const visibleHeader = [sceneHeader, compactHeader].find((candidate) => {
+            if (!candidate || candidate.offsetHeight === 0) {
+                return false;
+            }
+
+            return window.getComputedStyle(candidate).display !== 'none';
+        });
+
+        return (visibleHeader ? visibleHeader.offsetHeight : 0) + 22;
+    }
+
+    function getTargetScrollTop(target) {
+        const bodyStyle = window.getComputedStyle(document.body);
+        const currentBodyPadding = Number.parseFloat(bodyStyle.paddingTop) || 0;
+        const targetDocumentTop = target.getBoundingClientRect().top + window.scrollY;
+
+        if (window.innerWidth > 1101.98) {
+            return targetDocumentTop - getOffset();
+        }
+
+        const targetIsBelow = target.getBoundingClientRect().top > getOffset();
+        const finalHeaderHidden = targetIsBelow;
+        const bodyUsesHeaderPadding = window.matchMedia(
+            '(max-width: 768px), (max-height: 520px) and (max-width: 1024px)'
+        ).matches;
+        const headerHeight = Number.parseFloat(
+            window.getComputedStyle(document.documentElement).getPropertyValue('--header-height')
+        );
+        const finalBodyPadding = !finalHeaderHidden && bodyUsesHeaderPadding && Number.isFinite(headerHeight)
+            ? headerHeight
+            : 0;
+        const finalTargetDocumentTop = targetDocumentTop + finalBodyPadding - currentBodyPadding;
+
+        return finalTargetDocumentTop - getOffset(finalHeaderHidden);
     }
 
     function setActiveLink(id) {
@@ -59,7 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentId = sections[0]?.id || '';
 
         sections.forEach((section) => {
-            if (threshold >= section.offsetTop) {
+            const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+
+            if (threshold >= sectionTop) {
                 currentId = section.id;
             }
         });
@@ -78,8 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             event.preventDefault();
+            event.stopPropagation();
 
-            const targetTop = target.getBoundingClientRect().top + window.scrollY - getOffset();
+            const targetTop = getTargetScrollTop(target);
             window.scrollTo({
                 top: Math.max(targetTop, 0),
                 behavior: 'smooth'
@@ -94,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = document.querySelector(window.location.hash);
         if (target) {
             window.setTimeout(() => {
-                const targetTop = target.getBoundingClientRect().top + window.scrollY - getOffset();
+                const targetTop = getTargetScrollTop(target);
                 window.scrollTo({
                     top: Math.max(targetTop, 0),
                     behavior: 'smooth'
