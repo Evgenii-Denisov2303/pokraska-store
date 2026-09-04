@@ -7138,7 +7138,7 @@ button {
 
     .hero-mobile-cta p {
         position: absolute;
-        top: clamp(102px, 28vw, 126px);
+        top: clamp(168px, 48vw, 194px);
         left: clamp(18px, 4.8vw, 28px);
         display: grid;
         gap: 6px;
