@@ -300,9 +300,9 @@ body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([a
 
 body#top .services-page .service-quick-nav .service-nav-link .service-nav-link__icon {
     position: relative;
-    width: 2rem !important;
-    height: 2rem !important;
-    min-width: 2rem !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    min-width: 1.5rem !important;
     border: 1px solid transparent !important;
     border-radius: 999px !important;
     background: transparent !important;

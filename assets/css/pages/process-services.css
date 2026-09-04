@@ -234,6 +234,7 @@ body#top .service-quick-nav {
     --service-nav-glow-rgb: 208, 220, 234;
     --service-nav-wave-rgb: 132, 161, 192;
     --service-nav-aurora-rgb: 236, 220, 198;
+    --service-nav-surface-rgb: 247, 249, 251;
     --service-nav-text-rgb: 72, 90, 107;
     --service-nav-text-strong-rgb: 39, 54, 69;
     position: relative;
@@ -243,10 +244,10 @@ body#top .service-quick-nav {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
     margin: 18px 0 0;
-    padding: 8px 8px;
-    border-radius: 34px;
+    padding: 4px 8px;
+    border-radius: 24px;
     border: 0;
-    background: none;
+    background: rgba(var(--service-nav-surface-rgb), 0.35);
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -256,6 +257,7 @@ body#top .services-page--powder .service-quick-nav {
     --service-nav-glow-rgb: 232, 239, 249;
     --service-nav-wave-rgb: 92, 144, 226;
     --service-nav-aurora-rgb: 228, 186, 122;
+    --service-nav-surface-rgb: 249, 247, 243;
     --service-nav-text-rgb: 66, 86, 111;
     --service-nav-text-strong-rgb: 40, 56, 74;
 }
@@ -264,6 +266,7 @@ body#top .services-page--sandblast .service-quick-nav {
     --service-nav-glow-rgb: 241, 246, 252;
     --service-nav-wave-rgb: 56, 123, 194;
     --service-nav-aurora-rgb: 166, 156, 204;
+    --service-nav-surface-rgb: 243, 248, 251;
     --service-nav-text-rgb: 66, 86, 104;
     --service-nav-text-strong-rgb: 36, 52, 68;
 }
@@ -393,8 +396,8 @@ body#top .services-page .service-quick-nav .service-nav-link {
     width: 100%;
     max-width: 100%;
     justify-self: stretch;
-    min-height: 58px;
-    padding: 10px 22px 11px;
+    min-height: 36px;
+    padding: 4px 16px;
     border-radius: 0 !important;
     border: 0 !important;
     background: none !important;
@@ -2105,9 +2108,9 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 8px;
         margin: 16px 0 0;
-        padding: 8px 8px 10px;
+        padding: 3px 8px;
         border: 0;
-        background: none;
+        background: rgba(var(--service-nav-surface-rgb), 0.35);
         box-shadow: none;
     }
 
@@ -2132,8 +2135,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     }
 
     body#top .services-page .service-quick-nav .service-nav-link {
-        min-height: 52px;
-        padding: 8px 12px 9px;
+        min-height: 36px;
+        padding: 4px 10px;
         justify-content: center;
         gap: 8px;
         flex-direction: row;
@@ -2625,12 +2628,12 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .service-quick-nav {
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 8px;
-        padding: 8px 8px 10px;
+        padding: 3px 8px;
     }
 
     body#top .services-page .service-quick-nav .service-nav-link {
-        min-height: 50px;
-        padding: 8px 10px 9px;
+        min-height: 36px;
+        padding: 4px 8px;
         gap: 7px;
         flex-direction: row;
         align-items: center;
@@ -2812,8 +2815,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
         justify-content: stretch;
         gap: 6px;
         margin: 8px 0 0;
-        padding: 6px;
-        border-radius: 22px;
+        padding: 2px 6px;
+        border-radius: 20px;
         overflow-x: hidden;
         overflow-y: visible;
         scroll-snap-type: none;
@@ -2826,12 +2829,14 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .services-page--powder .service-quick-nav {
         border: 1px solid rgba(112, 94, 73, 0.12);
         background: linear-gradient(100deg, rgba(222, 234, 246, 0.9), rgba(226, 194, 151, 0.48), rgba(242, 246, 249, 0.92));
+        background-color: rgba(var(--service-nav-surface-rgb), 0.35);
         box-shadow: 0 10px 22px rgba(48, 65, 82, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
     }
 
     body#top .services-page--sandblast .service-quick-nav {
         border: 1px solid rgba(84, 110, 124, 0.14);
         background: linear-gradient(100deg, rgba(224, 237, 244, 0.94), rgba(174, 168, 207, 0.4), rgba(218, 232, 240, 0.92));
+        background-color: rgba(var(--service-nav-surface-rgb), 0.35);
         box-shadow: 0 10px 22px rgba(48, 65, 82, 0.085), inset 0 1px 0 rgba(255, 255, 255, 0.74);
     }
 
@@ -2842,8 +2847,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
     body#top .services-page .service-quick-nav .service-nav-link {
         width: 100%;
         min-width: 0;
-        min-height: 42px;
-        padding: 8px;
+        min-height: 36px;
+        padding: 4px;
         flex-direction: row;
         align-items: center;
         justify-content: center;
@@ -2938,8 +2943,8 @@ body#top .before-after-section .before-after--service-wide .before-after__prompt
 
     body#top .services-page .service-quick-nav .service-nav-link {
         min-width: 0;
-        min-height: 40px;
-        padding-inline: 8px;
+        min-height: 36px;
+        padding-inline: 6px;
     }
 
     body#top .services-page .service-quick-nav .service-nav-link__label {

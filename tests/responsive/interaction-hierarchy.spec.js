@@ -131,7 +131,7 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
     }
 });
 
-test('service navigation stays sticky, moves one active pill, and preserves the artwork', async ({ page }, testInfo) => {
+test('service navigation stays compact and sticky, moves one active pill, and preserves the artwork', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
     test.setTimeout(90_000);
 
@@ -169,7 +169,10 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
 
                 return {
                     horizontalOverflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
+                    navHeight: navElement.getBoundingClientRect().height,
                     navBackground: navStyle.backgroundImage,
+                    navBackgroundColor: navStyle.backgroundColor,
+                    activeHeight: activeLink.getBoundingClientRect().height,
                     activeBackground: activeStyle.backgroundImage,
                     activeRadius: Number.parseFloat(activeStyle.borderRadius),
                     iconUnderlineContent: activeIconAfter.content,
@@ -178,7 +181,11 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
             });
 
             expect(mobileVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
+            expect(mobileVisual.navHeight, `${target.name}: mobile navigation is not compact at ${width}px`).toBeLessThanOrEqual(44);
+            expect(mobileVisual.navHeight, `${target.name}: mobile navigation collapsed at ${width}px`).toBeGreaterThanOrEqual(38);
             expect(mobileVisual.navBackground, `${target.name}: mobile artwork is missing at ${width}px`).not.toBe('none');
+            expect(mobileVisual.navBackgroundColor, `${target.name}: mobile surface is too transparent at ${width}px`).toContain('0.35');
+            expect(mobileVisual.activeHeight, `${target.name}: mobile navigation target collapsed at ${width}px`).toBeGreaterThanOrEqual(34);
             expect(mobileVisual.activeBackground, `${target.name}: active mobile accent is missing at ${width}px`).not.toBe('none');
             expect(mobileVisual.activeRadius, `${target.name}: active mobile accent is square at ${width}px`).toBeGreaterThan(20);
             expect(
@@ -191,7 +198,7 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
             expect(hoverRadius, `${target.name}: mobile hover becomes square at ${width}px`).toBeGreaterThan(20);
 
             await targetLink.click();
-            await page.waitForTimeout(1100);
+            await page.waitForTimeout(1700);
 
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
@@ -236,6 +243,9 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
 
                 return {
                     horizontalOverflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - window.innerWidth,
+                    navHeight: navElement.getBoundingClientRect().height,
+                    navBackgroundColor: getComputedStyle(navElement).backgroundColor,
+                    activeHeight: activeLink.getBoundingClientRect().height,
                     artworkDisplay: beforeStyle.display,
                     artworkContent: beforeStyle.content,
                     labelDisplay: getComputedStyle(label).display,
@@ -247,6 +257,10 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
             });
 
             expect(tabletDesktopVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
+            expect(tabletDesktopVisual.navHeight, `${target.name}: tablet/desktop navigation is not compact at ${width}px`).toBeLessThanOrEqual(46);
+            expect(tabletDesktopVisual.navHeight, `${target.name}: tablet/desktop navigation collapsed at ${width}px`).toBeGreaterThanOrEqual(40);
+            expect(tabletDesktopVisual.navBackgroundColor, `${target.name}: tablet/desktop surface is too transparent at ${width}px`).toContain('0.35');
+            expect(tabletDesktopVisual.activeHeight, `${target.name}: tablet/desktop navigation target collapsed at ${width}px`).toBeGreaterThanOrEqual(34);
             expect(tabletDesktopVisual.artworkDisplay, `${target.name}: tablet artwork is hidden at ${width}px`).not.toBe('none');
             expect(tabletDesktopVisual.artworkContent, `${target.name}: tablet artwork is missing at ${width}px`).not.toBe('none');
             expect(tabletDesktopVisual.labelDisplay, `${target.name}: tablet label is hidden at ${width}px`).not.toBe('none');
@@ -259,7 +273,7 @@ test('service navigation stays sticky, moves one active pill, and preserves the 
 
             const targetLink = page.locator(`.service-nav-link[href="${target.target}"]`);
             await targetLink.click();
-            await page.waitForTimeout(1100);
+            await page.waitForTimeout(1700);
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
             await expect(targetLink).toHaveAttribute('aria-current', 'page');
