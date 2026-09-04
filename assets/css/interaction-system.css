@@ -292,10 +292,17 @@ body#top .services-page .service-quick-nav .service-nav-link {
     cursor: pointer;
 }
 
-body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):hover,
-body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):focus-visible {
-    background: rgba(255, 255, 255, 0.62) !important;
+body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):hover {
+    background: transparent !important;
     color: var(--interaction-secondary-text) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):focus-visible {
+    background: rgba(255, 255, 255, 0.38) !important;
+    color: var(--interaction-secondary-text) !important;
+    transform: none !important;
 }
 
 body#top .services-page .service-quick-nav .service-nav-link .service-nav-link__icon {
@@ -355,7 +362,12 @@ body#top .services-page .service-quick-nav .service-nav-link[aria-current="page"
 }
 
 @media (max-width: 640px) {
-    body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):hover,
+    body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):hover {
+        border-color: transparent !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
     body#top .services-page .service-quick-nav .service-nav-link:not(.active):not([aria-current="page"]):focus-visible {
         border: 1px solid rgba(var(--service-accent-rgb), 0.16) !important;
         border-radius: 999px !important;

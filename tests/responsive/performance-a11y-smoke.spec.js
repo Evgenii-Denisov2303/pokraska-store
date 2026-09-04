@@ -46,3 +46,45 @@ test('mobile performance and accessibility contracts stay intact', async ({ page
     await gatesGallery.getByRole('button', { name: 'Заборы' }).click();
     await expect(gatesGallery.locator('[data-panel-caption]')).toHaveText('Заборы');
 });
+
+test('home intro statement and photo panels wait for scroll before their delayed reveal', async ({ page }) => {
+    const revealTargets = [
+        { selector: '.statement-scene__lead', delay: 1000 },
+        { selector: '.panel-scene__card--dark', delay: 1000 },
+        { selector: '.panel-scene__card--light', delay: 1150 }
+    ];
+
+    for (const target of revealTargets) {
+        await page.goto('/?noedit=1', { waitUntil: 'domcontentloaded' });
+
+        const scene = page.locator(target.selector);
+        await expect(scene).not.toHaveClass(/is-visible/);
+        await expect(scene).toHaveAttribute('data-scene-delay', String(target.delay));
+
+        const startedAt = await scene.evaluate((element) => {
+            window.__homeRevealVisibleAt = 0;
+            const observer = new MutationObserver(() => {
+                if (!element.classList.contains('is-visible')) return;
+                window.__homeRevealVisibleAt = performance.now();
+                observer.disconnect();
+            });
+            observer.observe(element, { attributes: true, attributeFilter: ['class'] });
+
+            document.documentElement.style.scrollBehavior = 'auto';
+            const top = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.55;
+            const started = performance.now();
+            window.scrollTo(0, Math.max(0, top));
+            window.scrollBy(0, 12);
+            return started;
+        });
+
+        await expect(scene).toHaveAttribute('data-scene-reveal-state', 'pending');
+        await expect(scene).toHaveClass(/is-visible/, { timeout: target.delay + 1600 });
+        await expect(scene).toHaveAttribute('data-scene-reveal-state', 'visible');
+
+        const visibleAt = await page.evaluate(() => window.__homeRevealVisibleAt);
+        expect(visibleAt - startedAt).toBeGreaterThanOrEqual(target.delay - 50);
+        expect(await scene.evaluate((element) => getComputedStyle(element).animationName))
+            .toBe('home-scroll-scene-reveal');
+    }
+});

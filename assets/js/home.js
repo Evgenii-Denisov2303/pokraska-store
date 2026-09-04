@@ -327,13 +327,19 @@
 
     if (scenes.length) {
         const shouldRevealImmediately = forceReveal || reducedMotion || !('IntersectionObserver' in window);
+        const scrollTriggeredScenes = scenes.filter((scene) => scene.dataset.sceneTrigger === 'scroll');
+        const scheduledScrollScenes = new WeakSet();
         const immediateScenes = shouldRevealImmediately
             ? scenes
-            : scenes.filter((scene) => scene.getBoundingClientRect().top < window.innerHeight * 0.92);
+            : scenes.filter((scene) => (
+                scene.dataset.sceneTrigger !== 'scroll'
+                && scene.getBoundingClientRect().top < window.innerHeight * 0.92
+            ));
 
         scenes.forEach((scene) => {
             const delay = Number(scene.dataset.sceneDelay || 0);
-            scene.style.setProperty('--scene-delay', `${delay}ms`);
+            const cssDelay = scene.dataset.sceneTrigger === 'scroll' ? 0 : delay;
+            scene.style.setProperty('--scene-delay', `${cssDelay}ms`);
             ensureSceneCurtain(scene);
         });
 
@@ -342,10 +348,36 @@
         } else {
             immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
 
+            const isWithinScrollRevealArea = (scene) => {
+                const bounds = scene.getBoundingClientRect();
+                return bounds.top < window.innerHeight * 0.62 && bounds.bottom > 0;
+            };
+
+            const revealScene = (scene) => {
+                if (scene.dataset.sceneTrigger !== 'scroll') {
+                    scene.classList.add('is-visible');
+                    return;
+                }
+
+                if (scheduledScrollScenes.has(scene) || scene.classList.contains('is-visible')) return;
+
+                const delay = Math.max(0, Number(scene.dataset.sceneDelay || 0));
+                scheduledScrollScenes.add(scene);
+                scene.dataset.sceneRevealState = 'pending';
+
+                window.setTimeout(() => {
+                    scene.classList.add('is-visible');
+                    scene.dataset.sceneRevealState = 'visible';
+                }, delay);
+            };
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    entry.target.classList.add('is-visible');
+                    if (entry.target.dataset.sceneTrigger === 'scroll') {
+                        if (window.scrollY <= 4 || !isWithinScrollRevealArea(entry.target)) return;
+                    }
+                    revealScene(entry.target);
                     observer.unobserve(entry.target);
                 });
             }, {
@@ -357,6 +389,26 @@
                 if (scene.classList.contains('is-visible')) return;
                 observer.observe(scene);
             });
+
+            const revealVisibleScrollScenes = () => {
+                if (window.scrollY <= 4) return;
+
+                scrollTriggeredScenes.forEach((scene) => {
+                    if (scheduledScrollScenes.has(scene) || scene.classList.contains('is-visible')) return;
+                    if (!isWithinScrollRevealArea(scene)) return;
+
+                    revealScene(scene);
+                    observer.unobserve(scene);
+                });
+
+                if (scrollTriggeredScenes.every((scene) => (
+                    scheduledScrollScenes.has(scene) || scene.classList.contains('is-visible')
+                ))) {
+                    window.removeEventListener('scroll', revealVisibleScrollScenes);
+                }
+            };
+
+            window.addEventListener('scroll', revealVisibleScrollScenes, { passive: true });
         }
     }
 

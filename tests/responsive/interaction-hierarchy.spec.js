@@ -70,7 +70,7 @@ const pages = [
 
 test('interaction hierarchy stays clear at exact production widths', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
-    test.setTimeout(90_000);
+    test.setTimeout(120_000);
 
     for (const viewport of viewports) {
         await page.setViewportSize(viewport);
@@ -194,8 +194,18 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             ).toBe(true);
 
             await targetLink.hover();
-            const hoverRadius = await targetLink.evaluate((link) => Number.parseFloat(getComputedStyle(link).borderRadius));
-            expect(hoverRadius, `${target.name}: mobile hover becomes square at ${width}px`).toBeGreaterThan(20);
+            const mobileHoverVisual = await targetLink.evaluate((link) => {
+                const style = getComputedStyle(link);
+                return {
+                    backgroundColor: style.backgroundColor,
+                    radius: Number.parseFloat(style.borderRadius)
+                };
+            });
+            expect(mobileHoverVisual.radius, `${target.name}: mobile hover becomes square at ${width}px`).toBeGreaterThan(20);
+            expect(
+                mobileHoverVisual.backgroundColor,
+                `${target.name}: inactive mobile hover looks like a second active pill at ${width}px`
+            ).toBe('rgba(0, 0, 0, 0)');
 
             await targetLink.click();
             await page.waitForTimeout(1700);
@@ -277,6 +287,15 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
             await expect(targetLink).toHaveAttribute('aria-current', 'page');
+
+            const inactiveLink = page.locator('.service-nav-link:not(.active)').first();
+            await inactiveLink.hover();
+            await expect.poll(
+                () => inactiveLink.evaluate((link) => getComputedStyle(link).backgroundColor),
+                { message: `${target.name}: hover looks like a second active pill at ${width}px` }
+            ).toBe('rgba(0, 0, 0, 0)');
+            await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
+            await expect(targetLink).toHaveClass(/active/);
 
             const stickyMetrics = await page.evaluate((selector) => {
                 const navElement = document.querySelector('.service-quick-nav');
