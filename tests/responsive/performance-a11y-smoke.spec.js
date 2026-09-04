@@ -49,9 +49,9 @@ test('mobile performance and accessibility contracts stay intact', async ({ page
 
 test('home intro statement and photo panels wait for scroll before their delayed reveal', async ({ page }) => {
     const revealTargets = [
-        { selector: '.statement-scene__lead', delay: 1000 },
-        { selector: '.panel-scene__card--dark', delay: 1000 },
-        { selector: '.panel-scene__card--light', delay: 1150 }
+        { selector: '.statement-scene__lead', delay: 500 },
+        { selector: '.panel-scene__card--dark', delay: 500 },
+        { selector: '.panel-scene__card--light', delay: 500 }
     ];
 
     for (const target of revealTargets) {
