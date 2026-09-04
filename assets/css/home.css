@@ -366,6 +366,24 @@ button {
     }
 }
 
+/* Phones show the content immediately; the delayed reveal is reserved for larger canvases. */
+@media (max-width: 640px),
+    (max-height: 640px) and (pointer: coarse) {
+    body#top .scene-reveal,
+    body#top .scene-reveal.is-visible,
+    body#top .scene-reveal[data-scene-trigger="scroll"].is-visible {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+        will-change: auto !important;
+    }
+
+    body#top .scene-reveal__curtain {
+        display: none !important;
+    }
+}
+
 .hero-scene {
     position: relative;
     overflow: hidden;

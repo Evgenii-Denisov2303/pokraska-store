@@ -47,19 +47,32 @@ test('mobile performance and accessibility contracts stay intact', async ({ page
     await expect(gatesGallery.locator('[data-panel-caption]')).toHaveText('Заборы');
 });
 
-test('home intro statement and photo panels wait for scroll before their delayed reveal', async ({ page }) => {
+test('home intro statement and photo panels reveal immediately on phones and stay delayed elsewhere', async ({ page }) => {
     const revealTargets = [
-        { selector: '.statement-scene__lead', delay: 500 },
-        { selector: '.panel-scene__card--dark', delay: 500 },
-        { selector: '.panel-scene__card--light', delay: 500 }
+        { selector: '.statement-scene__lead', delay: 200 },
+        { selector: '.panel-scene__card--dark', delay: 200 },
+        { selector: '.panel-scene__card--light', delay: 200 }
     ];
 
     for (const target of revealTargets) {
         await page.goto('/?noedit=1', { waitUntil: 'domcontentloaded' });
 
         const scene = page.locator(target.selector);
-        await expect(scene).not.toHaveClass(/is-visible/);
         await expect(scene).toHaveAttribute('data-scene-delay', String(target.delay));
+
+        const mobileRevealDisabled = await page.evaluate(() => window.matchMedia(
+            '(max-width: 640px), (max-height: 640px) and (pointer: coarse)'
+        ).matches);
+
+        if (mobileRevealDisabled) {
+            await expect(scene).toHaveClass(/is-visible/);
+            await expect(scene).toHaveAttribute('data-scene-reveal-state', 'visible');
+            await expect(scene.locator(':scope > .scene-reveal__curtain')).toHaveCount(0);
+            expect(await scene.evaluate((element) => getComputedStyle(element).animationName)).toBe('none');
+            continue;
+        }
+
+        await expect(scene).not.toHaveClass(/is-visible/);
 
         const startedAt = await scene.evaluate((element) => {
             window.__homeRevealVisibleAt = 0;

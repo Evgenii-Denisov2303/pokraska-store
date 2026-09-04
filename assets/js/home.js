@@ -58,6 +58,9 @@
     const panelGalleryState = new WeakMap();
     const prefetchedUrls = new Set();
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const mobileRevealDisabled = window.matchMedia?.(
+        '(max-width: 640px), (max-height: 640px) and (pointer: coarse)'
+    ).matches;
 
     function isCompactHeroViewport() {
         return window.innerWidth <= COMPACT_HEADER_BREAKPOINT;
@@ -98,7 +101,7 @@
     }
 
     function ensureSceneCurtain(scene) {
-        if (window.innerWidth > 1100) return;
+        if (window.innerWidth > 1100 || mobileRevealDisabled) return;
         if (scene.querySelector(':scope > .scene-reveal__curtain')) return;
         const curtain = document.createElement('span');
         curtain.className = 'scene-reveal__curtain';
@@ -326,7 +329,10 @@
     }
 
     if (scenes.length) {
-        const shouldRevealImmediately = forceReveal || reducedMotion || !('IntersectionObserver' in window);
+        const shouldRevealImmediately = forceReveal
+            || reducedMotion
+            || mobileRevealDisabled
+            || !('IntersectionObserver' in window);
         const scrollTriggeredScenes = scenes.filter((scene) => scene.dataset.sceneTrigger === 'scroll');
         const scheduledScrollScenes = new WeakSet();
         const immediateScenes = shouldRevealImmediately
@@ -344,7 +350,10 @@
         });
 
         if (shouldRevealImmediately) {
-            immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
+            immediateScenes.forEach((scene) => {
+                scene.classList.add('is-visible');
+                scene.dataset.sceneRevealState = 'visible';
+            });
         } else {
             immediateScenes.forEach((scene) => scene.classList.add('is-visible'));
 
