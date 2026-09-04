@@ -10310,7 +10310,7 @@ body#top .hero-header--desktop-home {
 
 @media (min-width: 900px) and (max-width: 1600px) and (max-height: 900px) and (orientation: landscape) and (pointer: coarse) {
     body#top .hero-stage {
-        min-height: clamp(520px, 62vw, 620px) !important;
+        min-height: clamp(720px, 95vh, 760px) !important;
     }
 
     body#top .hero-stage__picture {
@@ -10540,7 +10540,7 @@ body#top .hero-header--desktop-home {
     }
 
     body#top .hero-stage {
-        min-height: clamp(720px, 47vw, 980px) !important;
+        min-height: clamp(820px, 55vw, 980px) !important;
         aspect-ratio: auto !important;
         margin-bottom: 0 !important;
     }
@@ -11597,7 +11597,7 @@ body#top .home-tail__request {
 }
 
 /* Wide but short browser panes: keep the home hero controls inside the photo area. */
-@media (min-width: 1101px) and (max-width: 1600px) and (max-height: 1000px) {
+@media (min-width: 1101px) and (max-width: 1600px) and (max-height: 1000px) and (hover: hover) and (pointer: fine) {
     body#top .hero-stage {
         min-height: clamp(880px, 64vw, 940px) !important;
         aspect-ratio: auto !important;
@@ -11654,7 +11654,7 @@ body#top .home-tail__request {
     }
 }
 
-@media (min-width: 1101px) and (max-width: 2200px) and (max-height: 900px) {
+@media (min-width: 1101px) and (max-width: 2200px) and (max-height: 900px) and (hover: hover) and (pointer: fine) {
     body#top .hero-stage {
         min-height: clamp(920px, 60vw, 1040px) !important;
         margin-bottom: 0 !important;
@@ -12783,6 +12783,14 @@ body#top .panel-scene {
         width: calc(100% + 38px) !important;
         margin-right: -19px !important;
         margin-left: -19px !important;
+    }
+}
+
+/* Tall desktop canvases need enough photo height for both hero actions. */
+@media (min-width: 1101px) and (max-width: 1499.98px) and (min-height: 1001px) and (max-aspect-ratio: 3 / 2) and (hover: hover) and (pointer: fine) {
+    body#top .hero-stage {
+        min-height: clamp(840px, 62vw, 920px) !important;
+        aspect-ratio: auto !important;
     }
 }
 

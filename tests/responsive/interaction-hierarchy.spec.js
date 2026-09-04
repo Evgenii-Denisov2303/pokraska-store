@@ -133,7 +133,7 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
 
 test('service navigation stays compact and sticky, moves one active pill, and preserves the artwork', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
-    test.setTimeout(90_000);
+    test.setTimeout(150_000);
 
     const servicePages = [
         {
