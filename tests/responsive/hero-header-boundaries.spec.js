@@ -28,9 +28,11 @@ test('home hero keeps both actions inside the photo at exact tall and touch boun
         { width: 1102, height: 1200, hasTouch: false },
         { width: 1221, height: 1200, hasTouch: false },
         { width: 1222, height: 1200, hasTouch: false },
+        { width: 1222, height: 1200, hasTouch: true },
         { width: 1400, height: 1200, hasTouch: false },
         { width: 1400, height: 1200, hasTouch: true },
-        { width: 1499, height: 1200, hasTouch: false }
+        { width: 1499, height: 1200, hasTouch: false },
+        { width: 1600, height: 1200, hasTouch: true }
     ];
 
     for (const viewport of viewports) {
@@ -60,6 +62,18 @@ test('home hero keeps both actions inside the photo at exact tall and touch boun
             expect(metrics.copyBottom, `${label}: hero copy leaves the photo`).toBeLessThanOrEqual(metrics.stageBottom + 1);
             expect(Math.max(...metrics.actionBottoms), `${label}: hero action is clipped`).toBeLessThanOrEqual(metrics.stageBottom + 1);
             expect(metrics.stageHeight, `${label}: hero is taller than the viewport`).toBeLessThanOrEqual(metrics.viewportHeight);
+
+            if (viewport.width >= 1102) {
+                const header = page.locator('.hero-header--desktop-home');
+                await expect(header.locator('a[href="tel:+79376154629"]'), `${label}: desktop phone is missing`).toBeVisible();
+
+                const brand = await header.evaluate((element) => ({
+                    markWidth: element.querySelector('.hero-brand__mark').getBoundingClientRect().width,
+                    nameSize: parseFloat(getComputedStyle(element.querySelector('.hero-brand__name')).fontSize)
+                }));
+                expect(brand.markWidth, `${label}: desktop logo shrank to mobile size`).toBeGreaterThanOrEqual(54);
+                expect(brand.nameSize, `${label}: desktop brand text shrank to mobile size`).toBeGreaterThanOrEqual(24);
+            }
         });
     }
 });
