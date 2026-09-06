@@ -65,23 +65,50 @@ async function addOutsideButton(page) {
     return page.locator('[data-contact-test-outside]');
 }
 
-test('contact widget only exposes configured Telegram on public page shells', async ({ page }, testInfo) => {
+async function expectDisabledPlaceholders(page, { visible = false } = {}) {
+    for (const [messenger, name] of [['max', 'MAX'], ['whatsapp', 'WhatsApp']]) {
+        const placeholder = page.locator(`${selectors.link}[data-messenger="${messenger}"]`);
+        await expect(placeholder).toHaveCount(1);
+        await expect(placeholder).toHaveAttribute('type', 'button');
+        await expect(placeholder).toHaveAttribute('aria-disabled', 'true');
+        await expect(placeholder).toHaveAttribute('aria-label', `${name} — скоро будет доступен`);
+        await expect(placeholder).toHaveAttribute('title', /.+/);
+        await expect(placeholder).toBeDisabled();
+        expect(await placeholder.getAttribute('href')).toBeNull();
+        expect(await placeholder.evaluate((element) => element instanceof HTMLButtonElement && element.disabled)).toBe(true);
+
+        if (visible) {
+            await expect(placeholder).toBeVisible();
+            const metrics = await placeholder.evaluate((element) => {
+                const box = element.getBoundingClientRect();
+                return { width: box.width, height: box.height, radius: getComputedStyle(element).borderTopLeftRadius, text: element.innerText.trim() };
+            });
+            expect(Math.abs(metrics.width - metrics.height), `${name}: disabled circle geometry`).toBeLessThanOrEqual(1);
+            expect(metrics.width, `${name}: visible touch target`).toBeGreaterThanOrEqual(44);
+            expect(metrics.width, `${name}: compact target`).toBeLessThanOrEqual(64);
+            expect(Number.parseFloat(metrics.radius)).toBeGreaterThanOrEqual(metrics.radius.includes('%') ? 50 : metrics.width / 2 - 1);
+            expect(metrics.text, `${name}: icon-only placeholder`).toBe('');
+        }
+    }
+}
+
+test('contact widget keeps three controls with only Telegram enabled on public page shells', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
 
     for (const path of ['/index.html', '/pages/contacts.html', '/politika.html']) {
-        // The contacts form may already intersect a tall initial viewport.
-        await openPage(page, path, { expectAvailable: path !== '/pages/contacts.html' });
+        await openPage(page, path);
         await expect(page.locator('body > .contact-widget')).toHaveCount(1);
-        await expect(page.locator(selectors.link)).toHaveCount(1);
+        await expect(page.locator(selectors.link)).toHaveCount(3);
         const telegram = page.locator(`${selectors.link}[data-messenger="telegram"]`);
+        expect(await telegram.evaluate((element) => element instanceof HTMLAnchorElement)).toBe(true);
+        await expect(telegram).toBeEnabled();
         await expect(telegram).toHaveAttribute('href', testContact.telegram.href);
         await expect(telegram).toHaveAttribute('target', '_blank');
         await expect(telegram).toHaveAttribute('rel', /\bnoopener\b/);
         await expect(telegram).toHaveAttribute('rel', /\bnoreferrer\b/);
         // A correctly hidden link is excluded from the accessibility tree until opened.
         await expect(telegram).toHaveAttribute('aria-label', /Telegram/i);
-        await expect(page.locator(`${selectors.link}[data-messenger="max"]`)).toHaveCount(0);
-        await expect(page.locator(`${selectors.link}[data-messenger="whatsapp"]`)).toHaveCount(0);
+        await expectDisabledPlaceholders(page);
     }
 });
 
@@ -106,6 +133,8 @@ test('three configured messenger circles remain compact and inside exact viewpor
             for (const [messenger, contact] of Object.entries(testContact)) {
                 const link = page.locator(`${selectors.link}[data-messenger="${messenger}"]`);
                 await expect(link, label).toBeVisible();
+                await expect(link).toBeEnabled();
+                expect(await link.evaluate((element) => element instanceof HTMLAnchorElement)).toBe(true);
                 await expect(link).toHaveAttribute('href', contact.href);
                 await expect(link).toHaveAttribute('target', '_blank');
                 await expect(link).toHaveAttribute('rel', /\bnoopener\b/);
@@ -184,7 +213,7 @@ test('contact widget closes by its button, outside click and Escape', async ({ p
     await expect(toggle).toBeFocused();
 });
 
-test('contact widget keeps closed links out of keyboard navigation', async ({ page }) => {
+test('contact widget skips disabled placeholders and closed links during keyboard navigation', async ({ page }) => {
     await openPage(page);
     const toggle = page.locator(selectors.toggle);
     const telegram = page.locator(`${selectors.link}[data-messenger="telegram"]`);
@@ -194,6 +223,36 @@ test('contact widget keeps closed links out of keyboard navigation', async ({ pa
     await page.keyboard.press('Tab');
     await expect(outside).toBeFocused();
     await expect(telegram).not.toBeFocused();
+
+    await toggle.focus();
+    await page.keyboard.press('Enter');
+    await expectOpen(page);
+    await expect(page.locator(selectors.link)).toHaveCount(3);
+    await expectDisabledPlaceholders(page, { visible: true });
+
+    // Native disabled buttons must be inert even for HTMLElement.click(); never force-click them.
+    const originalURL = page.url();
+    const originalPageCount = page.context().pages().length;
+    for (const messenger of ['max', 'whatsapp']) {
+        const clickEvents = await page.locator(`${selectors.link}[data-messenger="${messenger}"]`).evaluate((button) => {
+            let events = 0;
+            const countClick = () => { events += 1; };
+            button.addEventListener('click', countClick);
+            button.click();
+            button.removeEventListener('click', countClick);
+            return events;
+        });
+        expect(clickEvents, `${messenger}: disabled DOM click must not dispatch an action`).toBe(0);
+        expect(page.url()).toBe(originalURL);
+        expect(page.context().pages()).toHaveLength(originalPageCount);
+    }
+
+    await page.keyboard.press('Tab');
+    // MAX precedes Telegram in the DOM but is disabled; WhatsApp follows and is also skipped.
+    await expect(telegram).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(outside).toBeFocused();
+    await expectClosed(page);
 
     await toggle.focus();
     await page.keyboard.press('Enter');
@@ -257,38 +316,41 @@ test('contact widget yields while text fields and an embedded form have focus', 
     await expectSuppressed(page, false);
 });
 
-test('contact widget yields to the visible contacts form and returns away from it', async ({ page }) => {
-    // Keep this visibility test independent of the remote form server and its scripts.
-    await page.route('https://forms.yandex.ru/**', (route) => route.fulfill({
-        contentType: 'text/html',
-        body: '<!doctype html><html><body>Test form content</body></html>'
-    }));
-    await openPage(page, '/pages/contacts.html', { expectAvailable: false });
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+test('contact widget stays visible while scrolling past forms and yields only to form interaction', async ({ page }) => {
+    // Use a deterministic cross-origin form without submitting anything to Yandex.
+    await page.route('https://forms.yandex.ru/**', (route) => {
+        if (route.request().resourceType() !== 'document') return route.continue();
+        return route.fulfill({
+            contentType: 'text/html',
+            body: '<!doctype html><html><body><input aria-label="Test form field"></body></html>'
+        });
+    });
+    for (const path of ['/index.html', '/pages/contacts.html']) {
+        await openPage(page, path);
+        await page.locator(selectors.toggle).click();
+        const formContainer = path === '/index.html' ? '#request-form' : '.contacts-form-frame';
+        await page.locator(formContainer).scrollIntoViewIfNeeded();
+        const frameSelector = 'iframe[src*="forms.yandex.ru"], iframe[data-src*="forms.yandex.ru"]';
+        const frame = page.locator(frameSelector);
+        await expect(frame).toBeVisible();
+        await frame.scrollIntoViewIfNeeded();
+        await expectSuppressed(page, false);
+        await expectOpen(page);
 
-    // At the top, desktop/tablet can already show part of the form, unlike narrow phones.
-    await expect.poll(() => page.evaluate(() => {
-        const frame = document.querySelector('.contacts-form-embed');
-        const root = document.querySelector('.contact-widget');
-        const box = frame.getBoundingClientRect();
-        const intersects = box.width > 0 && box.height > 0
-            && box.bottom >= 0 && box.top <= innerHeight && box.right >= 0 && box.left <= innerWidth;
-        return root.hidden === intersects && root.inert === intersects;
-    })).toBe(true);
+        await page.frameLocator(frameSelector).getByRole('textbox', { name: 'Test form field' }).focus();
+        await expectSuppressed(page, true);
+        await expectClosed(page);
 
-    await page.locator('.contacts-form-frame').scrollIntoViewIfNeeded();
-    const frame = page.locator('.contacts-form-embed');
-    await expect(frame).toBeVisible();
-    await frame.scrollIntoViewIfNeeded();
-    await expectSuppressed(page, true);
-    await expectClosed(page);
-
-    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
-    await expect.poll(() => frame.evaluate((element) => {
-        const box = element.getBoundingClientRect();
-        return box.bottom < 0 || box.top > innerHeight;
-    })).toBe(true);
-    await expectSuppressed(page, false);
-    await expect(page.locator(selectors.toggle)).toBeVisible();
-    await expectClosed(page);
+        // A focused iframe must not keep hiding the widget once it is scrolled offscreen.
+        await page.evaluate((homePage) => window.scrollTo({
+            top: homePage ? 0 : document.documentElement.scrollHeight, behavior: 'instant'
+        }), path === '/index.html');
+        await expect.poll(() => frame.evaluate((element) => {
+            const box = element.getBoundingClientRect();
+            return box.bottom < 0 || box.top > innerHeight;
+        })).toBe(true);
+        await expectSuppressed(page, false);
+        await expect(page.locator(selectors.toggle)).toBeVisible();
+        await expectClosed(page);
+    }
 });

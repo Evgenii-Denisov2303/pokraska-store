@@ -25,11 +25,10 @@
 
     function mount(contact) {
         if (document.querySelector('.contact-widget')) return;
-        const channels = definitions.flatMap(definition => {
-            const href = validHref(contact?.[definition.key]?.href, definition);
-            return href ? [{ ...definition, href }] : [];
-        });
-        if (!channels.length) return;
+        const channels = definitions.map(definition => ({
+            ...definition,
+            href: validHref(contact?.[definition.key]?.href, definition)
+        }));
 
         const widget = document.createElement('div');
         widget.className = 'contact-widget';
@@ -48,14 +47,23 @@
         list.hidden = true;
         channels.forEach(channel => {
             const item = document.createElement('li');
-            const link = document.createElement('a');
+            const link = document.createElement(channel.href ? 'a' : 'button');
             link.className = 'contact-widget__link';
             link.dataset.messenger = channel.key;
-            link.href = channel.href;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.setAttribute('aria-label', `Написать в ${channel.label} (откроется в новой вкладке)`);
-            link.title = channel.label;
+            if (channel.href) {
+                link.href = channel.href;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.setAttribute('aria-label', `Написать в ${channel.label} (откроется в новой вкладке)`);
+                link.title = channel.label;
+            } else {
+                // Keep the promised channels visible without inventing a destination.
+                link.type = 'button';
+                link.disabled = true;
+                link.setAttribute('aria-disabled', 'true');
+                link.setAttribute('aria-label', `${channel.label} — скоро будет доступен`);
+                link.title = `${channel.label} — скоро будет доступен`;
+            }
             if (channel.key === 'max') {
                 link.innerHTML = maxIcon;
             } else {
@@ -100,16 +108,22 @@
             }
         });
 
-        const visibleForms = new Set();
         function updateAvailability() {
-            const editing = document.activeElement?.matches('input, textarea, select, iframe, [contenteditable="true"]');
+            const active = document.activeElement;
+            let editing = active?.matches('input, textarea, select, iframe, [contenteditable="true"]');
+            if (editing && active.tagName === 'IFRAME') {
+                // An iframe can keep focus after the visitor scrolls away from it.
+                const box = active.getBoundingClientRect();
+                editing = box.width > 0 && box.height > 0 && box.bottom > 0
+                    && box.top < innerHeight && box.right > 0 && box.left < innerWidth;
+            }
             const covered = document.body.matches('.menu-open, .modal-open');
-            const hidden = Boolean(editing || covered || visibleForms.size);
+            const hidden = Boolean(editing || covered);
             if (hidden) setOpen(false);
             widget.hidden = hidden;
             widget.inert = hidden;
         }
-        // Don't float on top of navigation, photo viewers, keyboards or Yandex forms.
+        // Hide during interaction, not just because scrolling brings a form into view.
         new MutationObserver(updateAvailability).observe(document.body, {
             attributes: true, attributeFilter: ['class']
         });
@@ -118,15 +132,8 @@
         window.addEventListener('blur', () => setTimeout(updateAvailability, 0));
         window.addEventListener('focus', updateAvailability);
         if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) visibleForms.add(entry.target);
-                    else visibleForms.delete(entry.target);
-                });
-                updateAvailability();
-            });
-            document.querySelectorAll('iframe[src*="forms.yandex.ru"], iframe[data-src*="forms.yandex.ru"]')
-                .forEach(frame => observer.observe(frame));
+            const observer = new IntersectionObserver(updateAvailability);
+            document.querySelectorAll('iframe').forEach(frame => observer.observe(frame));
         }
         updateAvailability();
     }

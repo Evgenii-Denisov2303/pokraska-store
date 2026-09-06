@@ -74,6 +74,13 @@ body.modal-open .contact-widget {
 .contact-widget [data-messenger="telegram"] { background: #229ed9; }
 .contact-widget [data-messenger="whatsapp"] { background: #1b9c62; }
 
+.contact-widget .contact-widget__link:disabled {
+    opacity: 0.65;
+    filter: saturate(0.6);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 .contact-widget .contact-widget__icon {
     display: block;
     width: 25px;
@@ -97,7 +104,7 @@ body.modal-open .contact-widget {
 
 @media (hover: hover) and (pointer: fine) {
     .contact-widget .contact-widget__toggle:hover,
-    .contact-widget .contact-widget__link:hover {
+    .contact-widget .contact-widget__link:not(:disabled):hover {
         filter: brightness(1.09);
     }
 }
