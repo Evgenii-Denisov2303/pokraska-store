@@ -640,12 +640,14 @@
     }
 }
 
-/* Tablet and narrow desktop-site mode use the compact header; wider canvases keep the hero header visible. */
+/* Narrow desktop-site portrait: reserve the measured compact header plus 20px.
+   The 73px fallback matches the compact header before JavaScript (or without it).
+   Wider canvases keep the hero header visible; ordinary mobile spacing is unchanged. */
 @media (pointer: coarse) and (min-width: 900px) and (max-width: 1101.98px) and (max-aspect-ratio: 2 / 3),
     (min-width: 900px) and (max-width: 1101.98px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
     (hover: none) and (min-width: 900px) and (max-width: 1101.98px) and (max-aspect-ratio: 2 / 3) {
     body#top {
-        --internal-compact-page-start: 96px;
+        --internal-compact-page-start: calc(var(--internal-header-measured-height, 73px) + 20px);
     }
 
     body#top .header.header--desktop-hero.internal-legacy-header:not(.header--home),
@@ -668,14 +670,6 @@
     body#top .internal-hero-scene + .automation-faq-wrap,
     body#top .internal-hero-scene + .automation-product-page {
         padding-top: var(--internal-compact-page-start) !important;
-    }
-}
-
-@media (pointer: coarse) and (min-width: 900px) and (max-width: 1101.98px) and (max-aspect-ratio: 2 / 3),
-    (min-width: 900px) and (max-width: 1101.98px) and (min-height: 1200px) and (max-aspect-ratio: 2 / 3),
-    (hover: none) and (min-width: 900px) and (max-width: 1101.98px) and (max-aspect-ratio: 2 / 3) {
-    body#top {
-        --internal-compact-page-start: 136px;
     }
 }
 

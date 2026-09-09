@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const body = document.body;
     const header = document.querySelector('.header');
     const headerTop = document.querySelector('.header-top');
+    const hasInternalHeroScene = Boolean(document.querySelector('.internal-hero-scene'));
     let lastScrollY = window.scrollY;
     let isHeaderCollapsed = false;
     const prefetchedUrls = new Set();
@@ -210,6 +211,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
         if (headerTop) {
             document.documentElement.style.setProperty('--header-top-height', `${headerHeight}px`);
+            if (hasInternalHeroScene && isCompact && headerHeight > 0) {
+                document.documentElement.style.setProperty('--internal-header-measured-height', `${headerHeight}px`);
+            }
         }
     }
 
