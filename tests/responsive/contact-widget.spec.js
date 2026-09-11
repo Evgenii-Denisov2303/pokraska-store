@@ -24,6 +24,12 @@ const testContact = {
     whatsapp: { label: 'WhatsApp', href: 'https://wa.me/79625542260' }
 };
 
+const publicContact = {
+    telegram: testContact.telegram,
+    max: { label: 'MAX', href: 'https://max.ru/u/f9LHodD0cOItfQENJdtnVA18mKt_dz-mP6Rv3RiPhpVu9WSvbv9ZLWavSxE' },
+    whatsapp: testContact.whatsapp
+};
+
 async function openPage(page, path = '/index.html', { expectAvailable = true } = {}) {
     await page.goto(`${path}?noedit=1`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
@@ -92,23 +98,53 @@ async function expectDisabledPlaceholders(page, { visible = false } = {}) {
     }
 }
 
-test('contact widget keeps three controls with only Telegram enabled on public page shells', async ({ page }, testInfo) => {
+test('contact widget enables all three approved destinations on public page shells', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
 
     for (const path of ['/index.html', '/pages/contacts.html', '/politika.html']) {
         await openPage(page, path);
         await expect(page.locator('body > .contact-widget')).toHaveCount(1);
         await expect(page.locator(selectors.link)).toHaveCount(3);
-        const telegram = page.locator(`${selectors.link}[data-messenger="telegram"]`);
-        expect(await telegram.evaluate((element) => element instanceof HTMLAnchorElement)).toBe(true);
-        await expect(telegram).toBeEnabled();
-        await expect(telegram).toHaveAttribute('href', testContact.telegram.href);
-        await expect(telegram).toHaveAttribute('target', '_blank');
-        await expect(telegram).toHaveAttribute('rel', /\bnoopener\b/);
-        await expect(telegram).toHaveAttribute('rel', /\bnoreferrer\b/);
-        // A correctly hidden link is excluded from the accessibility tree until opened.
-        await expect(telegram).toHaveAttribute('aria-label', /Telegram/i);
-        await expectDisabledPlaceholders(page);
+        await page.locator(selectors.toggle).click();
+        for (const [messenger, contact] of Object.entries(publicContact)) {
+            const link = page.locator(`${selectors.link}[data-messenger="${messenger}"]`);
+            expect(await link.evaluate((element) => element instanceof HTMLAnchorElement)).toBe(true);
+            await expect(link).toBeVisible();
+            await expect(link).toBeEnabled();
+            await expect(link).not.toHaveAttribute('aria-disabled', 'true');
+            await expect(link).toHaveAttribute('href', contact.href);
+            await expect(link).toHaveAttribute('target', '_blank');
+            await expect(link).toHaveAttribute('rel', /\bnoopener\b/);
+            await expect(link).toHaveAttribute('rel', /\bnoreferrer\b/);
+            await expect(link).toHaveAccessibleName(new RegExp(contact.label, 'i'));
+        }
+        // Existing footer and content links must agree with the shared configuration.
+        await expect(page.locator('footer a[href^="https://max.ru"]')).toHaveAttribute('href', publicContact.max.href);
+        for (const link of await page.locator('a[href^="https://max.ru"]').all()) {
+            await expect(link).toHaveAttribute('href', publicContact.max.href);
+        }
+    }
+});
+
+test('approved MAX and WhatsApp links open in a new tab without leaving the site', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-wide');
+    // Intercept destinations: exercise the buttons without contacting or messaging anyone.
+    for (const messenger of ['max', 'whatsapp']) {
+        await page.context().route(publicContact[messenger].href, route => route.fulfill({
+            contentType: 'text/html', body: '<title>Messenger destination test</title>'
+        }));
+    }
+    await openPage(page);
+    const originalURL = page.url();
+    await page.locator(selectors.toggle).click();
+    for (const messenger of ['max', 'whatsapp']) {
+        const popupPromise = page.waitForEvent('popup');
+        await page.locator(`${selectors.link}[data-messenger="${messenger}"]`).click();
+        const popup = await popupPromise;
+        await popup.waitForLoadState('domcontentloaded');
+        expect(popup.url()).toBe(publicContact[messenger].href);
+        expect(page.url()).toBe(originalURL);
+        await popup.close();
     }
 });
 
@@ -214,6 +250,10 @@ test('contact widget closes by its button, outside click and Escape', async ({ p
 });
 
 test('contact widget skips disabled placeholders and closed links during keyboard navigation', async ({ page }) => {
+    // Missing channels remain a supported fallback, independent of the live contacts.
+    await page.route('**/content/site.json*', route => route.fulfill({
+        json: { contact: { telegram: testContact.telegram } }
+    }));
     await openPage(page);
     const toggle = page.locator(selectors.toggle);
     const telegram = page.locator(`${selectors.link}[data-messenger="telegram"]`);
