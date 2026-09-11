@@ -250,7 +250,7 @@ function buildPreviewFooterBottom(pageFile) {
 
     return `            <div class="preview-footer__bottom">
                 <p>&copy; ${escapeHtml(yearRange)} ${escapeHtml(site.brand?.footerCaption || '')}</p>
-                <p><a href="${escapeHtml(policyHref)}">${escapeHtml(site.footer?.policyLabel || 'Политика конфиденциальности')}</a> | Домен: ${escapeHtml(site.brand?.domain || '')}</p>
+                <p><a href="${escapeHtml(policyHref)}">${escapeHtml(site.footer?.policyLabel || 'Политика обработки персональных данных')}</a></p>
             </div>`;
 }
 

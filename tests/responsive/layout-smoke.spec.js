@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const { checkFaqMarkers } = require('./helpers/faq-contract');
 
 const pages = [
     { name: 'home', path: '/' },
@@ -141,6 +142,39 @@ test.describe('Responsive layout smoke', () => {
 
             expect(metrics.horizontalOverflow, `Horizontal overflow detected on ${targetPage.name}`).toBeLessThanOrEqual(2);
             expect(metrics.overflowingSelectors, `Hidden overflow detected on ${targetPage.name}`).toEqual([]);
+
+            const footerRows = page.locator('.preview-footer__bottom > p');
+            await expect(footerRows).toHaveCount(2);
+            await expect(footerRows.first()).toHaveText('© 2026 ООО «Комфорт Плюс»');
+            await expect(footerRows.last()).toHaveText('Политика обработки персональных данных');
+            const policyLink = footerRows.last().locator('a');
+            await expect(policyLink).toHaveAttribute('href', /(?:^|\/)politika\.html$/);
+            const footerLayout = await footerRows.evaluateAll((rows) => rows.map((row) => {
+                const textLines = new Set();
+                const walker = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+                let textNode;
+                while ((textNode = walker.nextNode())) {
+                    if (!textNode.textContent.trim()) continue;
+                    const range = document.createRange();
+                    range.selectNodeContents(textNode);
+                    for (const rect of range.getClientRects()) {
+                        textLines.add(Math.round(rect.top));
+                    }
+                }
+                const box = row.getBoundingClientRect();
+                return {
+                    top: box.top,
+                    bottom: box.bottom,
+                    lines: textLines.size
+                };
+            }));
+            await page.locator('.preview-footer__bottom').screenshot({
+                path: testInfo.outputPath(`${slugifyProjectName(testInfo.project.name)}-${targetPage.name}-footer.png`)
+            });
+            expect(footerLayout[1].top).toBeGreaterThanOrEqual(footerLayout[0].bottom);
+            expect(footerLayout.map((row) => row.lines)).toEqual([1, 1]);
+
+            await checkFaqMarkers(page);
 
             if (targetPage.name === 'home' && metrics.heroBottomGap != null) {
                 expect(Math.abs(metrics.heroBottomGap), 'Hero picture no longer aligns with hero stage bottom').toBeLessThanOrEqual(4);

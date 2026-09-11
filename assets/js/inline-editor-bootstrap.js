@@ -1033,7 +1033,7 @@
     }
 
     function resolveFooterYearRange(node) {
-        const fallbackStartYear = 2014;
+        const fallbackStartYear = 2026;
         const currentYear = new Date().getFullYear();
         const text = normalizeText(node?.textContent);
         const match = text.match(/©\s*([0-9]{4})(?:-([0-9]{4}))?/);
@@ -1047,24 +1047,6 @@
             if (!(node instanceof HTMLElement)) return;
             const yearRange = resolveFooterYearRange(node);
             node.textContent = `© ${yearRange} ${normalizeText(value)}`;
-        });
-    }
-
-    function applyFooterDomain(nodes, value) {
-        nodes.forEach((node) => {
-            if (!(node instanceof HTMLElement)) return;
-            const link = node.querySelector('a') || document.createElement('a');
-            if (!link.isConnected) {
-                link.href = 'politika.html';
-                link.textContent = 'Политика конфиденциальности';
-                node.textContent = '';
-                node.appendChild(link);
-            }
-
-            Array.from(node.childNodes).forEach((child) => {
-                if (child !== link) child.remove();
-            });
-            node.append(document.createTextNode(` | Домен: ${normalizeText(value)}`));
         });
     }
 
@@ -3831,10 +3813,6 @@
             '.preview-footer__bottom p:first-child'
         ]);
 
-        const footerMetaNodes = selectMany([
-            '.preview-footer__bottom p:last-child'
-        ]);
-
         const footerPolicyNodes = selectMany([
             '.preview-footer__bottom p:last-child a'
         ]);
@@ -4027,16 +4005,6 @@
                                 node.setAttribute('href', normalizeText(value));
                             }
                         });
-                    }
-                } : null,
-                footerMetaNodes.length ? {
-                    element: footerMetaNodes,
-                    type: 'text',
-                    path: 'brand.domain',
-                    label: 'Домен в футере',
-                    hint: 'Домен в нижней строке футера.',
-                    render: function(value) {
-                        applyFooterDomain(footerMetaNodes, value);
                     }
                 } : null
             ]
