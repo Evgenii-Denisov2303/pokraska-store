@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { inspectStructuredData } = require('./lib/structured-data');
 
 const rootDir = path.resolve(__dirname, '..');
 const publicHtmlIgnore = new Set([
@@ -266,6 +267,9 @@ function checkMetadata(publicHtmlFiles) {
         if (allowedHtmlOutsideSitemap.has(rel)) continue;
 
         const html = readText(path.join(rootDir, rel));
+        for (const error of inspectStructuredData(html).errors) {
+            errors.push(`${rel}: ${error}`);
+        }
         const title = (html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '')
             .replace(/\s+/g, ' ')
             .trim();

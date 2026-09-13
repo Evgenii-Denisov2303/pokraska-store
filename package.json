@@ -7,7 +7,7 @@
     "convert-webp": "node scripts/convert-to-webp.js",
     "sync-inner-shell": "node scripts/sync-inner-shell.js",
     "check:whitespace": "git diff --check",
-    "check:site": "node scripts/check-site-integrity.js",
+    "check:site": "node --test tests/site/structured-data.test.js && node scripts/check-site-integrity.js",
     "check:publish": "npm run check:whitespace && npm run check:site && npm run test:responsive",
     "test:responsive": "playwright test",
     "test:responsive:headed": "playwright test --headed",
