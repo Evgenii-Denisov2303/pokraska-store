@@ -631,6 +631,7 @@ body#top .price-summary {
 
 body#top .price-summary__item {
     display: grid;
+    grid-template-rows: auto 1fr auto;
     gap: 8px;
     min-height: 100%;
     padding: 18px;
@@ -661,7 +662,7 @@ body#top .price-summary__item p {
 
 body#top .price-summary__item:hover,
 body#top .price-summary__item:focus-within {
-    transform: translateY(-2px);
+    transform: none;
     border-color: rgba(var(--theme-accent-rgb), 0.16);
     box-shadow:
         0 16px 28px rgba(18, 46, 74, 0.045),

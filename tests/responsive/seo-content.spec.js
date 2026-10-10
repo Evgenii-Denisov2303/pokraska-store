@@ -110,7 +110,11 @@ test.describe('SEO content and existing design contract', () => {
         }
 
         for (const source of ['index.html', 'pages/services.html']) {
-            const pageLinks = links(readPage(source), source);
+            // Deferred catalog panels are inserted into services.html. Relative
+            // links in that fragment therefore resolve against the catalog URL.
+            const html = readPage(source) + (source === 'pages/services.html'
+                ? readPage('content/catalog-panels-fragment.html') : '');
+            const pageLinks = links(html, source);
             for (const { file } of gatePages) {
                 expect(pageLinks.some((link) => link.origin === siteOrigin && link.pathname === `/${file}`), `${source}: crawlable link to ${file}`).toBe(true);
             }
@@ -130,7 +134,7 @@ test.describe('SEO content and existing design contract', () => {
                 await expect(page.locator('h1')).toBeVisible();
                 await page.evaluate(() => document.fonts.ready);
                 const geometry = await page.evaluate(() => {
-                    const selectors = ['h1', '.automation-product-card', '.automation-product-info', '.automation-product-cta', '.automation-product-guide', '.faq-system'];
+                    const selectors = ['h1', '.gate-detail__hero', '.gate-detail__intro', '.gate-detail__actions', '.gate-detail__columns', '.gate-detail__calculation', '.faq-system'];
                     return {
                         overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth,
                         boxes: selectors.flatMap((selector) => [...document.querySelectorAll(selector)].map((element) => {
@@ -147,10 +151,10 @@ test.describe('SEO content and existing design contract', () => {
                 }
                 await expect(page.locator('.preview-footer__bottom > p')).toHaveCount(2);
                 await expect(page.locator('.preview-footer__bottom a')).toHaveAttribute('href', /(?:^|\/)politika\.html$/);
-                await expect(page.locator('.automation-product-cta a').first()).toBeVisible();
+                await expect(page.locator('.gate-detail__hero .gate-detail__actions a').first()).toBeVisible();
                 await checkFaqMarkers(page);
                 if (viewport.width === 375 || viewport.width === 1280) {
-                    await page.screenshot({ path: testInfo.outputPath(`${target.filter}-${viewport.width}.png`), fullPage: true });
+                    await page.screenshot({ path: testInfo.outputPath(`${target.filter}-${viewport.width}-first-screen.png`) });
                 }
                 if (viewport.width === 375) {
                     const menu = page.locator('button[aria-controls="site-mobile-nav"]:visible').first();
@@ -169,6 +173,20 @@ test.describe('SEO content and existing design contract', () => {
             await expect(mainImage).not.toHaveAttribute('src', initialSource);
             await gallery.locator('[data-gallery-prev]').click();
             await expect(mainImage).toHaveAttribute('src', initialSource);
+            const secondThumb = gallery.locator('[data-thumb-src]').nth(1);
+            const secondSource = await secondThumb.getAttribute('data-thumb-src');
+            await secondThumb.click();
+            await expect(mainImage).toHaveAttribute('src', secondSource);
+            await expect(secondThumb).toHaveClass(/is-active/);
+            const mainLink = gallery.locator('[data-main-link]');
+            await expect(mainLink).toHaveAttribute('href', secondSource);
+            await mainLink.click();
+            const lightbox = page.getByRole('dialog', { name: 'Просмотр изображения' });
+            await expect(lightbox).toBeVisible();
+            await expect(lightbox.locator('.lightbox-modal__image')).toHaveAttribute('src', secondSource);
+            await lightbox.getByRole('button', { name: 'Закрыть просмотр' }).click();
+            await expect(lightbox).toBeHidden();
+            await expect(mainLink).toBeFocused();
         });
     }
 

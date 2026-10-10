@@ -219,7 +219,9 @@ html {
 
 html {
     font-size: 16.5px;
-    scroll-behavior: smooth;
+    /* Native hash/history positioning must not animate toward a stale offset.
+       Clicked same-page links keep their explicit smooth scroll in header.js. */
+    scroll-behavior: auto;
     overflow-y: scroll;
 }
 
@@ -1487,6 +1489,13 @@ button {
 
     .home-tail-scene {
         contain-intrinsic-size: 1px 920px;
+    }
+
+    /* Anchors need real scene heights before the browser computes their position.
+       Keep the resolved layout after a request click so later scrolling stays stable. */
+    body#top:is(:has(#request-form:target), .home-request-target) :is(.statement-scene, .panel-scene, .route-scene, .reviews-scene, .home-tail-scene) {
+        content-visibility: visible;
+        contain-intrinsic-size: auto;
     }
 }
 
@@ -3621,6 +3630,7 @@ button {
 .home-tail__section--request {
     width: min(1280px, 100%);
     justify-self: center;
+    scroll-margin-top: calc(var(--header-top-height, 73px) + 20px);
 }
 
 .home-tail__intro {

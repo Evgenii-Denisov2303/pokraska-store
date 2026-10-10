@@ -62,6 +62,29 @@
         '(max-width: 640px), (max-height: 640px) and (pointer: coarse)'
     ).matches;
 
+    function prepareRequestAnchor() {
+        body.classList.add('home-request-target');
+    }
+
+    // Incoming hashes are handled by CSS before native anchor positioning.
+    // Retain that layout even if the hash later changes. Back/Forward may rebuild
+    // this document without bfcache; resolve its height before native restoration.
+    const restoringHistory = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+    if (window.location.hash === '#request-form' || focusSection === 'request' || restoringHistory) {
+        prepareRequestAnchor();
+    }
+
+    window.addEventListener('hashchange', () => {
+        if (window.location.hash === '#request-form') prepareRequestAnchor();
+    });
+
+    // The shared header measures same-page links in its bubble-phase handler.
+    // Resolve skipped scenes first; no delayed scroll should override user input.
+    document.addEventListener('click', (event) => {
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        if (event.target.closest('a[href="#request-form"]')) prepareRequestAnchor();
+    }, { capture: true });
+
     function isCompactHeroViewport() {
         return window.innerWidth <= COMPACT_HEADER_BREAKPOINT;
     }

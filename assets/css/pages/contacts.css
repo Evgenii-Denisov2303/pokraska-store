@@ -186,6 +186,8 @@ body#top .contacts-page .contacts-subtitle {
 
 .contacts-panel--request {
     background: var(--contacts-surface-quiet);
+    /* Cross-page anchors must remain visible when the compact header collapses. */
+    scroll-margin-top: calc(var(--header-height, 73px) + 20px);
 }
 
 .contacts-panel--route-map {
