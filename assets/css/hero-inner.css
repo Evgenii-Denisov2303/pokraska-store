@@ -1069,3 +1069,99 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.62);
     }
 }
+
+/* Light desktop surface: paint only. The shared 200px header viewport, full-size
+   photo canvas, control positions and typography remain unchanged. Touch and
+   compact headers keep the original finish above. */
+@media (min-width: 1102px) and (hover: hover) and (pointer: fine) {
+    body#top .internal-hero-scene {
+        background: linear-gradient(110deg, #fffbf3 0%, #fcfcfa 58%, #f6f8fa 100%);
+    }
+
+    body#top .internal-hero-stage {
+        opacity: 0.14;
+        box-shadow: none;
+    }
+
+    body#top .internal-hero-scene::before {
+        inset: 0;
+        height: auto;
+        background: radial-gradient(ellipse 520px 220px at 3% 22%, rgba(249, 210, 128, 0.25), rgba(255, 236, 188, 0.1) 48%, transparent 78%);
+        filter: none;
+        opacity: 1;
+    }
+
+    body#top .internal-hero-scene::after {
+        height: 72px;
+        background: linear-gradient(180deg, transparent, #f5f8fa);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    body#top .internal-hero-scene + :is(.catalog-page, .services-page, .gallery-page, .prices-page, .payment-docs-page, .contacts-page, .privacy-page, .automation-faq-wrap, .automation-product-page)::before {
+        height: 96px;
+        background: linear-gradient(180deg, #f5f8fa, rgba(245, 248, 250, 0));
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        box-shadow: none;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-brand__mark,
+    body#top .desktop-hero-header.internal-scene-header .hero-brand__link:is(:hover, :focus-visible) .hero-brand__mark {
+        background: linear-gradient(180deg, #fffefb, #f4f3ed) !important;
+        border-color: rgba(95, 109, 112, 0.15) !important;
+        box-shadow: 0 3px 10px rgba(41, 57, 65, 0.055) !important;
+        transform: none !important;
+    }
+
+    body#top .internal-scene-header .hero-brand__wave {
+        opacity: 0;
+    }
+
+    body#top .internal-scene-header .hero-brand__text::after {
+        opacity: 0.4;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-scene__nav {
+        background: rgba(255, 255, 255, 0.82);
+        border-color: rgba(81, 108, 121, 0.16);
+        box-shadow: 0 3px 12px rgba(41, 57, 65, 0.035);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-nav__link:is(:hover, :focus-visible) {
+        background: #f0f4f5;
+        border-color: rgba(81, 108, 121, 0.15);
+        box-shadow: none;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-nav__link--active,
+    body#top .desktop-hero-header.internal-scene-header .hero-nav__link--active:is(:visited, :hover, :focus-visible) {
+        background: #e7eef1;
+        border-color: #becdd4;
+        box-shadow: none;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-nav__link::after,
+    body#top .desktop-hero-header.internal-scene-header .hero-nav__link:is(:hover, :focus-visible)::after {
+        opacity: 0;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary,
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:is(:visited, :hover, :focus-visible) {
+        background: rgba(255, 255, 255, 0.86);
+        border-color: rgba(81, 108, 121, 0.2);
+        box-shadow: 0 3px 10px rgba(41, 57, 65, 0.035);
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary:is(:hover, :focus-visible) {
+        background: #f0f4f5;
+    }
+
+    body#top .desktop-hero-header.internal-scene-header .hero-header-link--primary i {
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+    }
+}

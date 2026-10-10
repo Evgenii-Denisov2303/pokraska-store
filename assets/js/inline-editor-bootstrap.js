@@ -1576,6 +1576,30 @@
         };
     }
 
+    function renderHomeHeroTitleLine(node, text) {
+        if (!(node instanceof HTMLElement)) return;
+
+        const title = normalizeText(text);
+        const splitAt = title.lastIndexOf(' ');
+        if (!node.classList.contains('hero-copy__title-main--offset') || splitAt < 1) {
+            applyTextToNode(node, title);
+            return;
+        }
+
+        // Retain the desktop line break without changing the compact title text.
+        const separator = document.createElement('span');
+        separator.className = 'hero-copy__title-separator';
+        separator.textContent = '\u00a0';
+        const desktopBreak = document.createElement('br');
+        desktopBreak.className = 'hero-copy__desktop-break';
+        node.replaceChildren(
+            document.createTextNode(title.slice(0, splitAt)),
+            separator,
+            desktopBreak,
+            document.createTextNode(title.slice(splitAt + 1))
+        );
+    }
+
     function createHomeHeroModuleBinding(pageMeta) {
         if (pageMeta.key !== 'home') return null;
 
@@ -1628,7 +1652,7 @@
             render: function(value) {
                 const next = value && typeof value === 'object' ? value : {};
                 replaceIconLineText(eyebrowNode, 'i', next.eyebrow || '');
-                titleNodes.forEach((node, index) => applyTextToNode(node, next.titleLines?.[index] || ''));
+                titleNodes.forEach((node, index) => renderHomeHeroTitleLine(node, next.titleLines?.[index] || ''));
                 applyTextToNode(subtitleNode, next.subtitle || '');
                 applyTextToNode(leadNode, next.lead || '');
                 applyIconTextCollection(featureNodes, next.features || []);

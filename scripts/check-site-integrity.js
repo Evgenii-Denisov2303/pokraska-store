@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { inspectStructuredData } = require('./lib/structured-data');
 
 const rootDir = path.resolve(__dirname, '..');
@@ -24,6 +25,22 @@ const tempNamePattern = /^(tmp_|\.codex-temp$|\.codex-temp-|.*\.tmp$|.*\.bak$)/i
 const errors = [];
 const warnings = [];
 
+// Local design comparisons are not public pages. Skip this exact workspace
+// only when Git ignores it and no file inside it is tracked/staged for release.
+// A forced-added artifact (or an unavailable Git check) still fails below.
+function hasOnlyIgnoredLocalPreviews() {
+    try {
+        const options = { cwd: rootDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] };
+        const ignored = execFileSync('git', ['check-ignore', '--', '.codex-temp'], options).trim();
+        const tracked = execFileSync('git', ['ls-files', '--', '.codex-temp'], options).trim();
+        return ignored === '.codex-temp' && !tracked;
+    } catch {
+        return false;
+    }
+}
+
+const ignoreLocalPreviews = hasOnlyIgnoredLocalPreviews();
+
 function toPosix(filePath) {
     return filePath.split(path.sep).join('/');
 }
@@ -39,6 +56,9 @@ function isInsideRoot(filePath) {
 
 function walk(dir, files = []) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        if (dir === rootDir && entry.isDirectory() && entry.name === '.codex-temp' && ignoreLocalPreviews) {
+            continue;
+        }
         if (entry.isDirectory() && ignoredDirs.has(entry.name)) {
             continue;
         }
@@ -196,6 +216,11 @@ function checkLocalAssets(publicHtmlFiles) {
 
                 if (!isInsideRoot(target)) {
                     errors.push(`${rel}: ${attr} escapes project root: ${value}`);
+                    continue;
+                }
+
+                if (fromRoot(target).split('/').some((part) => tempNamePattern.test(part))) {
+                    errors.push(`${rel}: ${attr} points to a temporary artifact: ${value}`);
                     continue;
                 }
 

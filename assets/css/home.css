@@ -202,7 +202,7 @@ html {
 
     body#top .hero-scene > .hero-header .hero-brand__link:hover .hero-brand__mark,
     body#top .hero-scene > .hero-header .hero-brand__link:focus-visible .hero-brand__mark {
-        transform: translateY(-3px);
+        transform: none;
         border-color: rgba(var(--theme-accent-rgb), 0.16);
         background: linear-gradient(180deg, rgba(252, 253, 255, 1) 0%, rgba(221, 229, 239, 0.96) 100%);
         box-shadow:
@@ -1051,6 +1051,10 @@ button {
 .hero-copy__title-main,
 .hero-copy__title-sub {
     display: block;
+}
+
+.hero-copy__desktop-break {
+    display: none;
 }
 
 .hero-copy__title-main--offset {
@@ -11452,36 +11456,131 @@ body#top .home-tail__request {
 @media (min-width: 1101px) and (max-width: 1600px) and (max-height: 1000px) and (hover: hover) and (pointer: fine) {
     body#top .hero-copy {
         top: clamp(156px, 11vw, 188px) !important;
-        gap: 10px !important;
+    }
+}
+
+/* Approved light desktop hero. Shared canvas/header placement stays in header.css;
+   touch, compact tablet and phone layouts keep their existing presentation. */
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+    body#top .hero-scene {
+        --hero-light-ink: #213845;
+        --hero-light-body: #3d515c;
+    }
+
+    body#top .hero-stage::after {
+        background: linear-gradient(90deg, rgba(255,249,237,.98) 0%, rgba(255,249,237,.96) 26%, rgba(255,249,237,.76) 40%, rgba(255,249,237,.25) 53%, rgba(255,249,237,0) 67%);
+        /* The radial opening keeps the original sunlight visible at the left. */
+        -webkit-mask-image:
+            radial-gradient(ellipse clamp(190px,18vw,300px) clamp(135px,12vw,200px) at 4% 25%, transparent 0%, rgba(0,0,0,.08) 24%, rgba(0,0,0,.48) 57%, #000 100%),
+            linear-gradient(180deg, transparent 0%, #000 22%, #000 58%, rgba(0,0,0,.55) 68%, transparent 82%);
+        mask-image:
+            radial-gradient(ellipse clamp(190px,18vw,300px) clamp(135px,12vw,200px) at 4% 25%, transparent 0%, rgba(0,0,0,.08) 24%, rgba(0,0,0,.48) 57%, #000 100%),
+            linear-gradient(180deg, transparent 0%, #000 22%, #000 58%, rgba(0,0,0,.55) 68%, transparent 82%);
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
+        pointer-events: none;
+    }
+
+    body#top .hero-copy {
+        width: min(660px, 54vw) !important;
+        gap: 16px !important;
     }
 
     body#top .hero-copy h1 {
-        font-size: clamp(3.06rem, 3.86vw, 3.72rem) !important;
-        line-height: 0.88 !important;
+        display: block !important;
+        font-size: clamp(48px, 4.2vw, 66px) !important;
+        font-weight: 600;
+        line-height: 1.06 !important;
+        letter-spacing: -.025em;
+        white-space: nowrap;
+        text-wrap: initial;
+        color: var(--hero-light-ink);
+        text-shadow: none;
+        -webkit-text-stroke: 0;
     }
 
+    body#top .hero-copy__title-main {
+        display: inline;
+        margin: 0;
+        color: var(--hero-light-ink);
+        -webkit-text-stroke: 0;
+    }
+
+    body#top .hero-copy__desktop-break {
+        display: initial;
+    }
+
+    body#top .hero-copy__title-separator,
     body#top .hero-copy__title-sub {
-        margin-top: 11px !important;
+        display: none;
+    }
+
+    body#top .hero-copy__eyebrow {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: .11em;
+        color: #506875;
+        text-shadow: none;
+        -webkit-text-stroke: 0;
+    }
+
+    body#top .hero-copy__eyebrow::before {
+        background: rgba(67,95,111,.45);
+        box-shadow: none;
+    }
+
+    body#top .hero-copy__eyebrow i {
+        color: #738c99;
+    }
+
+    body#top .hero-copy__subtext {
+        max-width: 43ch;
+        padding-top: 0;
     }
 
     body#top .hero-copy__lead {
-        font-size: 1.02rem !important;
-        line-height: 1.4 !important;
+        max-width: 43ch !important;
+        font-size: 16px !important;
+        font-weight: 450;
+        line-height: 1.55 !important;
+        color: var(--hero-light-body);
+        text-shadow: none;
     }
 
     body#top .hero-copy__features {
-        gap: 8px !important;
-        margin-top: 2px !important;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: none;
+        gap: 8px 18px !important;
+        margin-top: 0 !important;
     }
 
     body#top .hero-copy__features span {
-        font-size: 0.93rem !important;
-        line-height: 1.24 !important;
+        gap: 10px;
+        font-size: 14px !important;
+        font-weight: 500;
+        line-height: 1.4 !important;
+        color: var(--hero-light-ink);
+        text-shadow: none;
+    }
+
+    body#top .hero-copy__features span i {
+        width: 24px;
+        height: 24px;
+        flex-basis: 24px;
+        background: rgba(67,95,111,.1);
+        color: #426174;
+        box-shadow: none;
+        font-size: 11px;
     }
 
     body#top .hero-copy__actions {
-        gap: 8px !important;
-        padding-top: 10px !important;
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 10px !important;
+        padding-top: 0 !important;
+        margin-top: 3px !important;
+        border: 0;
     }
 }
 
@@ -11501,11 +11600,11 @@ body#top .home-tail__request {
     }
 }
 
-/* Final desktop hover layer for the homepage brand mark. */
+/* Desktop brand feedback stays stationary, matching the inner-page header. */
 @media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
     body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-brand__link:hover .hero-brand__mark,
     body#top .hero-scene > .hero-header.hero-header--desktop-home .hero-brand__link:focus-visible .hero-brand__mark {
-        transform: translateY(-3px) !important;
+        transform: none !important;
         border-color: rgba(var(--theme-accent-rgb), 0.16) !important;
         background: linear-gradient(180deg, rgba(252, 253, 255, 1) 0%, rgba(221, 229, 239, 0.96) 100%) !important;
         box-shadow:

@@ -10,6 +10,8 @@ const innerPages = [
     '/pages/gallery.html',
     '/pages/contacts.html',
     '/pages/prices.html',
+    '/pages/gates-sliding.html',
+    '/pages/gates-swing.html',
     '/pages/automation-ati3000a.html',
     '/pages/payment-documents.html',
     '/politika.html'
@@ -18,6 +20,10 @@ const innerPages = [
 async function withViewport(browser, viewport, hasTouch, callback) {
     const context = await browser.newContext({ baseURL, viewport, hasTouch, isMobile: false });
     try {
+        // Header geometry does not depend on third-party forms, maps or counters.
+        await context.route('**/*', (route) => new URL(route.request().url()).origin === baseURL
+            ? route.continue()
+            : route.abort());
         await callback(await context.newPage());
     } finally {
         await context.close();
@@ -64,6 +70,7 @@ async function collectHeader(page) {
         const imageStyle = image && getComputedStyle(image);
         const scene = document.querySelector('.hero-scene, .internal-hero-scene');
         return {
+            isHome: header.classList.contains('hero-header--desktop-home'),
             visible: Object.fromEntries(Object.entries(elements).map(([key, element]) => [key,
                 Boolean(element && element.checkVisibility() && Number(getComputedStyle(element).opacity) > 0)
             ])),
@@ -120,7 +127,8 @@ function expectSameHeader(actual, expected, label) {
     for (const property of ['source', 'objectFit', 'objectPosition', 'transform']) {
         expect(actual.image[property], `${label}: image ${property} differs`).toBe(expected.image[property]);
     }
-    expect(actual.imagePreloads, `${label}: preload must match the selected hero without an extra image`).toEqual([actual.image.source]);
+    expect(actual.imagePreloads, `${label}: preload must match the page's existing image-loading contract`)
+        .toEqual(actual.isHome ? expected.imagePreloads : [actual.image.source]);
     expect(expected.horizontalOverflow, `${label}: homepage horizontal overflow`).toBeLessThanOrEqual(2);
     expect(actual.horizontalOverflow, `${label}: horizontal overflow`).toBeLessThanOrEqual(2);
 }
@@ -150,22 +158,48 @@ for (const hasTouch of [false, true]) {
                 const home = await collectHeader(page);
                 await expectStationaryHover(page, `${label}: home`);
 
-                const targets = viewport.width === 1400 ? innerPages : innerPages.slice(0, 1);
+                const targets = viewport.width === 1400 ? innerPages : [
+                    '/pages/powder-coating.html', '/pages/contacts.html',
+                    '/pages/services.html', '/pages/gates-sliding.html'
+                ];
                 for (const path of targets) {
                     await openPage(page, path);
                     expectSameHeader(await collectHeader(page), home, `${label}: ${path}`);
                 }
 
-                // A real navigation click must not leave the hovered/active link in a different position.
+                // Follow the customer's actual path, including a nested catalog page.
+                // Active/hover states must never change link, logo or phone geometry.
                 await openPage(page, '/index.html');
-                await page.locator('.hero-header--desktop-home .hero-nav__link').filter({ hasText: /^Каталог$/ }).click();
-                await page.waitForURL('**/pages/services.html');
-                await waitForHeader(page);
-                expectSameHeader(await collectHeader(page), home, `${label}: catalog after click`);
+                for (const [text, pathname] of [
+                    ['Порошковая покраска', '/pages/powder-coating.html'],
+                    ['Контакты', '/pages/contacts.html'],
+                    ['Каталог', '/pages/services.html']
+                ]) {
+                    await page.locator(headerSelector).locator('.hero-nav__link').filter({ hasText: new RegExp(`^${text}$`) }).click();
+                    await page.waitForURL((url) => url.pathname === pathname);
+                    await waitForHeader(page);
+                    expectSameHeader(await collectHeader(page), home, `${label}: ${pathname} after click`);
+                }
                 await page.mouse.move(0, 0);
                 await expectStationaryHover(page, `${label}: catalog`);
 
+                const details = page.locator('[data-gate-details]:visible');
+                await expect(details).toHaveCount(1);
+                await expect(details).toHaveAttribute('href', 'gates-sliding.html');
+                await details.click();
+                await page.waitForURL('**/pages/gates-sliding.html');
+                await waitForHeader(page);
+                expectSameHeader(await collectHeader(page), home, `${label}: nested gate after click`);
+
+                for (const pathname of ['/pages/services.html', '/pages/contacts.html', '/pages/powder-coating.html', '/index.html']) {
+                    await page.goBack({ waitUntil: 'domcontentloaded' });
+                    await expect(page).toHaveURL((url) => url.pathname === pathname);
+                    await waitForHeader(page);
+                    expectSameHeader(await collectHeader(page), home, `${label}: back to ${pathname}`);
+                }
+
                 // Reload at a different wall-clock time: paused animation must not choose a new frame.
+                await openPage(page, '/pages/services.html');
                 await page.waitForTimeout(150);
                 await page.reload({ waitUntil: 'domcontentloaded' });
                 await waitForHeader(page);
@@ -194,3 +228,52 @@ for (const hasTouch of [false, true]) {
         }
     });
 }
+
+test('desktop logo stays stationary on hover, keyboard focus and return-home click', async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-wide');
+    test.setTimeout(90_000);
+
+    for (const viewport of [{ width: 1280, height: 800 }, { width: 1400, height: 1200 }]) {
+        await withViewport(browser, viewport, false, async (page) => {
+            let home;
+            for (const path of ['/index.html', '/pages/powder-coating.html']) {
+                await openPage(page, path);
+                if (path === '/index.html') home = await collectHeader(page);
+                const label = `${viewport.width}x${viewport.height} ${path}`;
+                const header = page.locator(headerSelector);
+                const logo = header.locator('.hero-brand__link');
+                const mark = logo.locator('.hero-brand__mark');
+                const text = logo.locator('.hero-brand__name');
+                const markBox = await mark.boundingBox();
+                const textBox = await text.boundingBox();
+
+                await logo.hover();
+                await page.waitForTimeout(350);
+                expectBox(await mark.boundingBox(), markBox, `${label}: logo hover`);
+                expectBox(await text.boundingBox(), textBox, `${label}: company name hover`);
+                await page.mouse.move(0, 0);
+                await page.waitForTimeout(350);
+
+                // Reach the logo through the keyboard, so :focus-visible is real.
+                for (let attempt = 0; attempt < 12; attempt += 1) {
+                    await page.keyboard.press('Tab');
+                    if (await logo.evaluate((element) => element === document.activeElement)) break;
+                }
+                await expect(logo, `${label}: logo remains keyboard reachable`).toBeFocused();
+                expect(await logo.evaluate((element) => element.matches(':focus-visible')), `${label}: keyboard focus is visible`).toBe(true);
+                await page.waitForTimeout(350);
+                expectBox(await mark.boundingBox(), markBox, `${label}: logo keyboard focus`);
+                expectBox(await text.boundingBox(), textBox, `${label}: company name keyboard focus`);
+            }
+
+            // Keep the pointer over the logo on both pages: different hover transforms
+            // would otherwise produce a jump even with identical resting positions.
+            // Existing branding intentionally makes only the mark clickable, not the text.
+            await page.locator(headerSelector).locator('.hero-brand__mark').click();
+            await page.waitForURL((url) => url.pathname === '/index.html');
+            await waitForHeader(page);
+            await page.waitForTimeout(350);
+            expectSameHeader(await collectHeader(page), home, `${viewport.width}x${viewport.height}: logo click returns home without moving`);
+        });
+    }
+});

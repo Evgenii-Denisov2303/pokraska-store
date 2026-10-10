@@ -136,3 +136,106 @@ test('internal header keeps navigation and phone in separate tracks around 1102p
         });
     }
 });
+
+for (const javaScriptEnabled of [true, false]) {
+    test(`home light typography is static and compact hero is preserved (${javaScriptEnabled ? 'JS enabled' : 'no JS'})`, async ({ browser }, testInfo) => {
+        test.skip(testInfo.project.name !== 'desktop-wide');
+        test.setTimeout(90_000);
+
+        for (const viewport of [
+            { width: 375, height: 812, hasTouch: true },
+            { width: 844, height: 390, hasTouch: true },
+            { width: 1280, height: 800, hasTouch: false },
+            { width: 1400, height: 1200, hasTouch: false }
+        ]) {
+            const context = await browser.newContext({
+                baseURL,
+                viewport: { width: viewport.width, height: viewport.height },
+                hasTouch: viewport.hasTouch,
+                isMobile: false,
+                javaScriptEnabled,
+                reducedMotion: 'reduce'
+            });
+            try {
+                await context.route('**/*', (route) => new URL(route.request().url()).origin === baseURL
+                    ? route.continue()
+                    : route.abort());
+                const page = await context.newPage();
+                await page.goto('/index.html?noedit=1', { waitUntil: 'load' });
+                await page.evaluate(async () => {
+                    await document.fonts.ready;
+                    await document.querySelector('.hero-stage__picture img').decode();
+                });
+
+                const label = `${viewport.width}x${viewport.height} ${javaScriptEnabled ? 'JS' : 'no JS'}`;
+                const metrics = await page.evaluate(() => {
+                    const title = document.querySelector('.hero-copy h1');
+                    const css = getComputedStyle(title);
+                    const stage = document.querySelector('.hero-stage').getBoundingClientRect();
+                    const copy = document.querySelector('.hero-copy').getBoundingClientRect();
+                    const subtitle = document.querySelector('.hero-copy__title-sub');
+                    const compact = document.querySelector('.hero-mobile-cta');
+                    const compactTitle = compact.querySelector('.hero-mobile-cta__title');
+                    const compactSubtitle = compact.querySelector('.hero-mobile-cta__subtitle');
+                    const actionsSelector = compact.checkVisibility() ? '.hero-mobile-cta__actions a' : '.hero-copy__actions a';
+                    const range = document.createRange();
+                    range.selectNodeContents(title);
+                    return {
+                        text: title.innerText.replace(/\s+/g, ' ').trim(),
+                        family: css.fontFamily,
+                        weight: css.fontWeight,
+                        color: css.color,
+                        shadow: css.textShadow,
+                        lineRatio: parseFloat(css.lineHeight) / parseFloat(css.fontSize),
+                        subtitleVisible: Boolean(subtitle?.checkVisibility()),
+                        titleFits: [...range.getClientRects()].every((r) => r.left >= copy.left - 1 && r.right <= copy.right + 1),
+                        compactVisible: compact.checkVisibility(),
+                        compactTitle: compactTitle.textContent.trim(),
+                        compactSubtitle: compactSubtitle.textContent.trim(),
+                        compactTitleFamily: getComputedStyle(compactTitle).fontFamily,
+                        compactSubtitleFamily: getComputedStyle(compactSubtitle).fontFamily,
+                        overlay: getComputedStyle(document.querySelector('.hero-stage'), '::after').backgroundImage,
+                        actionCount: document.querySelectorAll(actionsSelector).length,
+                        actionsFit: [...document.querySelectorAll(actionsSelector)].every((el) => {
+                            const r = el.getBoundingClientRect();
+                            return r.left >= stage.left - 1 && r.right <= stage.right + 1
+                                && r.top >= stage.top - 1 && r.bottom <= stage.bottom + 1
+                                && el.scrollWidth <= el.clientWidth + 1;
+                        }),
+                        overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth
+                    };
+                });
+
+                expect(metrics.overflow, `${label}: horizontal overflow`).toBeLessThanOrEqual(2);
+                expect(metrics.actionCount, `${label}: two visible hero actions`).toBe(2);
+                expect(metrics.actionsFit, `${label}: hero actions must remain inside the photo`).toBe(true);
+                if (viewport.width >= 1102) {
+                    expect(metrics.text, `${label}: title is available without JS rewriting`).toBe('Автоматические ворота в Казани');
+                    expect(metrics.family, `${label}: original serif family`).toContain('Cormorant Garamond');
+                    expect(metrics.weight, `${label}: lighter agreed heading weight`).toBe('600');
+                    expect(metrics.color, `${label}: dark heading on the light background`).toBe('rgb(33, 56, 69)');
+                    expect(metrics.shadow, `${label}: no heavy text outline`).toBe('none');
+                    expect(metrics.lineRatio).toBeCloseTo(1.06, 2);
+                    expect(metrics.subtitleVisible, `${label}: removed promotional subtitle stays hidden`).toBe(false);
+                    expect(metrics.titleFits, `${label}: title does not overflow its copy block`).toBe(true);
+                    expect(metrics.compactVisible).toBe(false);
+                } else if (viewport.width <= 640) {
+                    expect(metrics.compactVisible, `${label}: preserve the existing compact hero`).toBe(true);
+                    expect(metrics.compactTitle).toBe('Ворота под ключ');
+                    expect(metrics.compactSubtitle).toBe('Изготовление и монтаж в Казани');
+                    expect(metrics.compactTitleFamily).toContain('Cormorant Garamond');
+                    expect(metrics.compactSubtitleFamily).toContain('Manrope');
+                    expect(metrics.overlay, `${label}: desktop warm veil must not leak into mobile`).not.toContain('255, 249, 237');
+                } else {
+                    // Landscape/tablet already uses hero-copy, not the narrow-phone CTA.
+                    expect(metrics.compactVisible, `${label}: preserve the existing landscape hero`).toBe(false);
+                    expect(metrics.family).toContain('Cormorant Garamond');
+                    expect(metrics.subtitleVisible, `${label}: desktop-only subtitle removal must not affect landscape`).toBe(true);
+                    expect(metrics.overlay, `${label}: desktop warm veil must not leak into touch landscape`).not.toContain('255, 249, 237');
+                }
+            } finally {
+                await context.close();
+            }
+        }
+    });
+}
