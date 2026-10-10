@@ -1,0 +1,47 @@
+/* Shared, quiet guidance beside the existing embedded forms. */
+.request-help {
+    margin: 0 0 16px;
+    min-width: 0;
+    color: var(--theme-text-muted, #52697a);
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.request-help > p {
+    margin: 0 0 8px;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.request-help .request-context {
+    color: var(--theme-text-strong, #18364f);
+}
+
+.request-context[hidden] {
+    display: none;
+}
+
+.request-help__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+}
+
+.request-help__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 44px;
+    color: var(--theme-accent-strong, #244c69);
+    font-size: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.request-help__links a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 4px;
+}

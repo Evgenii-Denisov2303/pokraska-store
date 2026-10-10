@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const catalogAssistantTitle = document.querySelector('[data-catalog-assistant-title]');
     const catalogAssistantCopy = document.querySelector('[data-catalog-assistant-copy]');
     const catalogAssistantPoints = document.querySelector('[data-catalog-assistant-points]');
-    const catalogAssistantPrimary = document.querySelector('[data-catalog-assistant-primary]');
+    const catalogEstimateLinks = Array.from(document.querySelectorAll('[data-catalog-estimate-link]'));
     const catalogAssistantSecondary = document.querySelector('[data-catalog-assistant-secondary]');
 
     const catalogFaqContent = {
@@ -1215,6 +1215,23 @@ document.addEventListener('DOMContentLoaded', async function() {
             }, 440);
         };
 
+        const syncCatalogEstimateLinks = (panelId) => {
+            const gateTypes = {
+                'catalog-panel-sliding': 'gates-sliding',
+                'catalog-panel-sliding-frame': 'gates-sliding',
+                'catalog-panel-swing': 'gates-swing',
+                'catalog-panel-swing-frame': 'gates-swing'
+            };
+            const groupServices = { gates: 'gates', fences: 'fences', garage: 'garage', automation: 'automation' };
+            const activeTab = catalogTabs().find((tab) => tab.dataset.catalogTab === panelId);
+            const groupId = activeTab?.closest('[data-catalog-group-panel]')?.dataset.catalogGroupPanel;
+            const service = gateTypes[panelId] || groupServices[groupId] || 'gates';
+
+            catalogEstimateLinks.forEach((link) => {
+                link.setAttribute('href', `contacts.html?service=${service}#contact-form`);
+            });
+        };
+
         const syncCatalogAssistant = (panelId, shouldAnimate = true) => {
             if (!catalogAssistant || !catalogAssistantEyebrow || !catalogAssistantTitle || !catalogAssistantCopy || !catalogAssistantPoints) {
                 return;
@@ -1233,10 +1250,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             catalogAssistantPoints.replaceChildren(fragment);
-
-            if (catalogAssistantPrimary) {
-                catalogAssistantPrimary.setAttribute('href', '../index.html#request-form');
-            }
 
             if (catalogAssistantSecondary) {
                 const targetPanel = panelId ? document.getElementById(panelId) : null;
@@ -1662,6 +1675,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             syncCatalogFaq(panelId);
+            syncCatalogEstimateLinks(panelId);
             syncCatalogAssistant(panelId, animateAssistant);
         };
 

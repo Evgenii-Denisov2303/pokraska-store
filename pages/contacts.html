@@ -78,6 +78,7 @@
     </script>
 
     <link rel="stylesheet" href="../assets/css/contact-widget.css?v=20260906-contact-2">
+    <link rel="stylesheet" href="../assets/css/request-help.css?v=20261010-request-help-1">
 </head>
 <body id="top">
     <!-- ========== HEADER ========== -->
@@ -299,7 +300,16 @@
                     <div class="contacts-panel__header contacts-panel__header--request">
                         <h2 id="contact-connect-title">Оставить заявку</h2>
                     </div>
-
+                    <div class="request-help">
+                        <p class="request-context" data-request-context hidden>Тема заявки: <strong data-request-service></strong></p>
+                        <p>Для связи достаточно имени и телефона. Почта и описание — по желанию.</p>
+                        <p>Фото объекта или изделия можно отправить в мессенджер:</p>
+                        <div class="request-help__links" aria-label="Отправить фото в мессенджер">
+                            <a href="https://wa.me/79625542260" data-request-whatsapp target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+                            <a href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane" aria-hidden="true"></i>Telegram</a>
+                            <a href="https://max.ru/u/f9LHodD0cOItfQENJdtnVA18mKt_dz-mP6Rv3RiPhpVu9WSvbv9ZLWavSxE" target="_blank" rel="noopener noreferrer">MAX</a>
+                        </div>
+                    </div>
                     <div class="contacts-form-frame" data-embed-loader data-embed-lazy>
                         <div class="contacts-form-placeholder" data-embed-placeholder>
                             <span class="contacts-form-placeholder__eyebrow">Форма заявки</span>
@@ -309,11 +319,11 @@
                                 <i class="fas fa-comment-dots" aria-hidden="true"></i>
                                 Загружаем форму
                             </button>
-                            <a class="contacts-form-placeholder__link" href="https://forms.yandex.ru/u/696e3c3ee010db8992425918/" target="_blank" rel="noopener noreferrer">
+                            <a class="contacts-form-placeholder__link" data-request-form-link href="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" target="_blank" rel="noopener noreferrer">
                                 Открыть форму в новой вкладке
                             </a>
                         </div>
-                        <iframe class="contacts-form-embed" title="Заявка KOMFORTPLUS116.RU" data-src="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" name="ya-form-696e3c3ee010db8992425918" loading="lazy" hidden></iframe>
+                        <iframe class="contacts-form-embed" title="Заявка KOMFORTPLUS116.RU" data-request-embed data-request-field="answer_long_text_71488" data-src="https://forms.yandex.ru/u/696e3c3ee010db8992425918?iframe=1" name="ya-form-696e3c3ee010db8992425918" loading="lazy" hidden></iframe>
                     </div>
                 </section>
             </div>
@@ -435,6 +445,7 @@
 <!-- ========== SCRIPTS ========== -->
     <script src="../assets/js/header.js?v=20260909-footer-copy-1" defer></script>
     <script src="../assets/js/contact-widget.js?v=20260906-contact-2" defer></script>
+    <script src="../assets/js/request-context.js?v=20261010-request-help-1" defer></script>
     <script src="../assets/js/embed-loader.js?v=20260501-embed-loader-map-1" defer></script>
 </body>
 </html>

@@ -221,9 +221,9 @@ test.describe('SEO additions remain part of the existing visual design', () => {
             await page.setViewportSize({ width: 375, height: 812 });
             await openGate(page, type);
             const action = page.locator('.gate-detail__actions a').first();
-            await expect(action).toHaveAttribute('href', 'contacts.html#contact-form');
+            await expect(action).toHaveAttribute('href', `contacts.html?service=gates-${type}#contact-form`);
             await action.click();
-            await expect(page).toHaveURL(/\/pages\/contacts\.html#contact-form$/);
+            await expect(page).toHaveURL(new RegExp(`/pages/contacts\\.html\\?service=gates-${type}#contact-form$`));
             await expect(page.locator('#contact-form')).toBeVisible();
             await page.evaluate(() => document.fonts.ready);
             // Scrolling to a deep cross-page anchor collapses the mobile header
