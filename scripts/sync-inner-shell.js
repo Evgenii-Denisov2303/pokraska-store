@@ -66,7 +66,7 @@ function resolveActiveHref(pageFile) {
         return '/politika.html';
     }
 
-    if (pageFile === 'services.html' || pageFile.startsWith('automation-')) {
+    if (pageFile === 'services.html' || pageFile.startsWith('automation-') || pageFile.startsWith('gates-')) {
         return '/pages/services.html';
     }
 

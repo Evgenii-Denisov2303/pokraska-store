@@ -1,4 +1,6 @@
 const { defineConfig, devices } = require('@playwright/test');
+const siteTestPort = process.env.SITE_TEST_PORT || '4173';
+const siteBaseURL = `http://127.0.0.1:${siteTestPort}`;
 
 module.exports = defineConfig({
     testDir: './tests/responsive',
@@ -9,14 +11,15 @@ module.exports = defineConfig({
         ['html', { open: 'never' }]
     ],
     use: {
-        baseURL: 'http://127.0.0.1:4173',
+        baseURL: siteBaseURL,
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
         video: 'retain-on-failure'
     },
     webServer: {
         command: 'npm start',
-        url: 'http://127.0.0.1:4173/api/health',
+        url: `${siteBaseURL}/api/health`,
+        env: { PORT: siteTestPort },
         reuseExistingServer: true,
         timeout: 120_000
     },

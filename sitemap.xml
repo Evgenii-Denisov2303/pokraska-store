@@ -5,7 +5,7 @@
   <!-- Главная страница -->
   <url>
     <loc>https://komfortplus116.ru/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -17,15 +17,29 @@
   <!-- Каталог -->
   <url>
     <loc>https://komfortplus116.ru/pages/services.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Ворота: отдельные страницы услуг -->
+  <url>
+    <loc>https://komfortplus116.ru/pages/gates-sliding.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://komfortplus116.ru/pages/gates-swing.html</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Пескоструйная обработка -->
   <url>
     <loc>https://komfortplus116.ru/pages/sandblasting.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -99,7 +113,7 @@
   <!-- Порошковая покраска -->
   <url>
     <loc>https://komfortplus116.ru/pages/powder-coating.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -107,7 +121,7 @@
   <!-- Цены -->
   <url>
     <loc>https://komfortplus116.ru/pages/prices.html</loc>
-    <lastmod>2026-08-23</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

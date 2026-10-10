@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const baseURL = 'http://127.0.0.1:4173';
+const baseURL = `http://127.0.0.1:${process.env.SITE_TEST_PORT || '4173'}`;
 const tolerance = 0.6;
 const headerSelector = '.hero-header--desktop-home, .internal-scene-header';
 const innerPages = [

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const baseURL = 'http://127.0.0.1:4173';
+const baseURL = `http://127.0.0.1:${process.env.SITE_TEST_PORT || '4173'}`;
 const diagnosticsOnly = process.env.CONTACT_LAYOUT_DIAGNOSTICS === '1';
 const touchPortraitSizes = [
     [980, 2000], [1089, 2300], [1100, 2350], [1102, 2350],
