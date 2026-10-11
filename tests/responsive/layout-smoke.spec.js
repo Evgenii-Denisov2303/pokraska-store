@@ -133,6 +133,17 @@ test.describe('Responsive layout smoke', () => {
             await page.goto(targetPage.path, { waitUntil: 'networkidle' });
 
             await expect(page.locator('body')).toBeVisible();
+            if (targetPage.name === 'home') {
+                // Below-fold photo panels begin hidden at scale(.992). Measure
+                // the visible, settled composition rather than that reveal state.
+                for (const card of await page.locator('.panel-scene__card').all()) {
+                    await card.scrollIntoViewIfNeeded();
+                    await expect(card).toHaveClass(/is-visible/);
+                    await card.evaluate((element) => Promise.all(
+                        element.getAnimations().map((animation) => animation.finished.catch(() => {}))
+                    ));
+                }
+            }
             await page.screenshot({
                 path: testInfo.outputPath(`${slugifyProjectName(testInfo.project.name)}-${targetPage.name}.png`),
                 fullPage: true
@@ -185,8 +196,8 @@ test.describe('Responsive layout smoke', () => {
 
                 for (const panelCard of metrics.panelCards) {
                     expect(
-                        Math.abs(panelCard.cardWidth - panelCard.mediaWidth),
-                        'Homepage preview media must fill its card in the single-column layout'
+                        Math.abs(Math.min(panelCard.cardWidth, 560) - panelCard.mediaWidth),
+                        'Homepage preview media must fill narrow cards and stay bounded on tablets'
                     ).toBeLessThanOrEqual(2);
                     expect(
                         panelCard.copyWidth,

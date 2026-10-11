@@ -12164,16 +12164,84 @@ body#top .home-tail__form-card {
     }
 }
 
-/* Final home preview contract: stable centered photos, readable copy, no breakpoint jump. */
+/* Home preview contract: landscape photos, bounded tablet size and a shared
+   visual frame so captions follow the photo instead of the taller text column. */
 body#top .panel-scene {
     --panel-preview-gap: clamp(18px, 2.1vw, 42px);
     --panel-preview-pad: clamp(14px, 1.25vw, 24px);
     --panel-preview-media: clamp(500px, 46vw, 980px);
 }
 
+body#top .panel-scene .panel-scene__visual {
+    grid-area: media !important;
+    display: grid;
+    grid-template-areas: "photo";
+    position: relative;
+    place-self: center;
+    width: 100%;
+    max-width: min(var(--panel-preview-media), 780px);
+    min-width: 0;
+    aspect-ratio: 3 / 2;
+    border-radius: clamp(20px, 1.8vw, 28px);
+}
+
+body#top .panel-scene .panel-scene__visual :is(.panel-scene__media, .panel-scene__overlay) {
+    grid-area: photo !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    border-radius: inherit !important;
+}
+
+body#top .panel-scene .panel-scene__visual .panel-scene__viewer {
+    --photo-caption-inset: clamp(14px, 1.5vw, 22px);
+    grid-area: photo !important;
+    position: relative !important;
+    inset: auto !important;
+    align-self: end !important;
+    justify-self: center !important;
+    width: calc(100% - 2 * var(--photo-caption-inset)) !important;
+    max-width: none !important;
+    margin: 0 0 var(--photo-caption-inset) !important;
+    transform: none !important;
+}
+
+body#top .panel-scene .panel-scene__visual .panel-scene__viewer strong {
+    color: #fffdf9 !important;
+    text-shadow: 0 1px 3px rgba(8, 20, 32, .72) !important;
+}
+
+body#top .panel-scene .panel-scene__visual .panel-scene__overlay {
+    background: linear-gradient(180deg, transparent 55%, rgba(8, 20, 32, .08) 72%, rgba(8, 20, 32, .52) 100%) !important;
+}
+
+body#top .panel-scene .panel-scene__visual .panel-scene__dot {
+    border-color: rgba(255, 253, 249, .7) !important;
+    background: rgba(255, 253, 249, .45) !important;
+    box-shadow: 0 1px 4px rgba(8, 20, 32, .3) !important;
+}
+
+body#top .panel-scene .panel-scene__visual .panel-scene__dot.is-active,
+body#top .panel-scene .panel-scene__visual .panel-scene__dot::after {
+    background: #fffdf9 !important;
+}
+
+/* These two source photos are square/portrait: show the whole product rather
+   than cutting the gate threshold or the feet of the hanging frames. */
+body#top .panel-scene__image--uncropped {
+    object-fit: contain;
+    object-position: center !important;
+    background: #586361;
+}
+
 @media (max-width: 1101.98px) {
     body#top .panel-scene {
-        --panel-preview-media: 100%;
+        --panel-preview-media: 560px;
         --panel-preview-card-pad: clamp(14px, 2.5vw, 22px);
         width: min(100%, calc(100vw - clamp(28px, 4.2vw, 48px))) !important;
         max-width: 1120px !important;
@@ -12198,21 +12266,8 @@ body#top .panel-scene {
         overflow: hidden !important;
     }
 
-    body#top .panel-scene__media,
-    body#top .panel-scene__card--light .panel-scene__media,
-    body#top .panel-scene__overlay,
-    body#top .panel-scene__card--light .panel-scene__overlay {
-        grid-area: media !important;
-        position: relative !important;
-        inset: auto !important;
-        justify-self: center !important;
+    body#top .panel-scene .panel-scene__visual {
         width: calc(100% + var(--panel-preview-card-pad) + var(--panel-preview-card-pad)) !important;
-        max-width: none !important;
-        height: auto !important;
-        min-height: 0 !important;
-        aspect-ratio: 1 / 1 !important;
-        margin: 0 !important;
-        border-radius: clamp(20px, 3vw, 28px) !important;
     }
 
     body#top .panel-scene__overlay,
@@ -12416,24 +12471,6 @@ body#top .panel-scene {
     body#top .panel-scene__card--light {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
         grid-template-areas: "content media" !important;
-    }
-
-    body#top .panel-scene__media,
-    body#top .panel-scene__card--light .panel-scene__media,
-    body#top .panel-scene__overlay,
-    body#top .panel-scene__card--light .panel-scene__overlay {
-        grid-area: media !important;
-        position: relative !important;
-        inset: auto !important;
-        align-self: end !important;
-        justify-self: center !important;
-        width: 100% !important;
-        max-width: var(--panel-preview-media) !important;
-        height: auto !important;
-        min-height: 0 !important;
-        aspect-ratio: 1 / 1 !important;
-        margin: 0 !important;
-        border-radius: clamp(22px, 1.8vw, 30px) !important;
     }
 
     body#top .panel-scene__media,
