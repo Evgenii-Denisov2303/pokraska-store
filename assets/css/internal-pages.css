@@ -390,8 +390,9 @@ body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payme
     box-shadow: 0 10px 18px rgba(var(--site-action-slate-rgb), 0.14) !important;
 }
 
+/* Text links inherit the page accent; action roles own their contrast colours. */
 body#top :is(.services-page, .gallery-page, .prices-page, .contacts-page, .payment-docs-page, .automation-product-page, .privacy-page)
-    :is(.contact-details a, .gallery-card__link, .payment-docs-page a, .prices-page a, .services-page a[href]:not(.btn):not(.catalog-group-tab)) {
+    :is(.contact-details a, .gallery-card__link, .payment-docs-page a, .prices-page a, .services-page a[href]:not(.btn):not(.catalog-group-tab)):not(:where(.ui-action, .ui-primary, .ui-secondary, .decision-cta__primary, .decision-cta__secondary, .btn, .btn-primary, .btn--primary, .btn-secondary, .btn-outline)) {
     color: var(--theme-accent-strong) !important;
 }
 

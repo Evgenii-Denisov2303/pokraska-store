@@ -15,7 +15,7 @@ const pages = [
         path: '/pages/contacts.html?noedit=1',
         primary: '.contacts-route-actions__primary',
         secondary: '.contacts-route-actions .ui-secondary',
-        staticSurface: '.contacts-meta-chip'
+        staticSurface: '.contact-directory__visit-note'
     },
     {
         name: 'prices',
@@ -105,6 +105,8 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
                     secondaryRight: secondaryRect.right,
                     primaryBackground: primaryStyle.backgroundImage,
                     secondaryBackground: secondaryStyle.backgroundImage,
+                    primaryBackgroundColor: primaryStyle.backgroundColor,
+                    secondaryBackgroundColor: secondaryStyle.backgroundColor,
                     primaryColor: primaryStyle.color,
                     secondaryColor: secondaryStyle.color,
                     staticCursor: staticStyle.cursor,
@@ -123,15 +125,15 @@ test('interaction hierarchy stays clear at exact production widths', async ({ pa
             expect(metrics.primaryRight, `${target.name}: primary action leaves the viewport`).toBeLessThanOrEqual(metrics.viewportWidth + 1);
             expect(metrics.secondaryRight, `${target.name}: secondary action leaves the viewport`).toBeLessThanOrEqual(metrics.viewportWidth + 1);
             expect(
-                `${metrics.primaryBackground}|${metrics.primaryColor}`,
+                `${metrics.primaryBackground}|${metrics.primaryBackgroundColor}|${metrics.primaryColor}`,
                 `${target.name}: primary and secondary actions lost their visual distinction`
-            ).not.toBe(`${metrics.secondaryBackground}|${metrics.secondaryColor}`);
+            ).not.toBe(`${metrics.secondaryBackground}|${metrics.secondaryBackgroundColor}|${metrics.secondaryColor}`);
             expect(metrics.staticCursor, `${target.name}: static information looks interactive`).not.toBe('pointer');
         }
     }
 });
 
-test('service navigation stays compact and sticky, moves one active pill, and preserves the artwork', async ({ page }, testInfo) => {
+test('service navigation stays compact and sticky with one active pill and the approved light surfaces', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
     test.setTimeout(150_000);
 
@@ -139,12 +141,14 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
         {
             name: 'powder-coating',
             path: '/pages/powder-coating.html?noedit=1',
-            target: '#equipment'
+            target: '#equipment',
+            activeColor: 'rgb(232, 223, 210)'
         },
         {
             name: 'sandblasting',
             path: '/pages/sandblasting.html?noedit=1',
-            target: '#rust'
+            target: '#rust',
+            activeColor: 'rgb(220, 231, 233)'
         }
     ];
 
@@ -174,6 +178,7 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
                     navBackgroundColor: navStyle.backgroundColor,
                     activeHeight: activeLink.getBoundingClientRect().height,
                     activeBackground: activeStyle.backgroundImage,
+                    activeBackgroundColor: activeStyle.backgroundColor,
                     activeRadius: Number.parseFloat(activeStyle.borderRadius),
                     iconUnderlineContent: activeIconAfter.content,
                     iconUnderlineDisplay: activeIconAfter.display
@@ -183,10 +188,11 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             expect(mobileVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
             expect(mobileVisual.navHeight, `${target.name}: mobile navigation is not compact at ${width}px`).toBeLessThanOrEqual(44);
             expect(mobileVisual.navHeight, `${target.name}: mobile navigation collapsed at ${width}px`).toBeGreaterThanOrEqual(38);
-            expect(mobileVisual.navBackground, `${target.name}: mobile artwork is missing at ${width}px`).not.toBe('none');
-            expect(mobileVisual.navBackgroundColor, `${target.name}: mobile surface is too transparent at ${width}px`).toContain('0.35');
+            expect(mobileVisual.navBackground, `${target.name}: obsolete mobile gradient returned at ${width}px`).toBe('none');
+            expect(mobileVisual.navBackgroundColor, `${target.name}: approved mobile surface changed at ${width}px`).toBe('rgb(245, 243, 237)');
             expect(mobileVisual.activeHeight, `${target.name}: mobile navigation target collapsed at ${width}px`).toBeGreaterThanOrEqual(34);
-            expect(mobileVisual.activeBackground, `${target.name}: active mobile accent is missing at ${width}px`).not.toBe('none');
+            expect(mobileVisual.activeBackground, `${target.name}: obsolete mobile active gradient returned at ${width}px`).toBe('none');
+            expect(mobileVisual.activeBackgroundColor, `${target.name}: active mobile accent changed at ${width}px`).toBe(target.activeColor);
             expect(mobileVisual.activeRadius, `${target.name}: active mobile accent is square at ${width}px`).toBeGreaterThan(20);
             expect(
                 mobileVisual.iconUnderlineContent === 'none' || mobileVisual.iconUnderlineDisplay === 'none',
@@ -194,6 +200,10 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             ).toBe(true);
 
             await targetLink.hover();
+            await expect.poll(
+                () => targetLink.evaluate((link) => getComputedStyle(link).backgroundColor),
+                { message: `${target.name}: inactive mobile hover colour changed at ${width}px` }
+            ).toBe('rgb(234, 230, 219)');
             const mobileHoverVisual = await targetLink.evaluate((link) => {
                 const style = getComputedStyle(link);
                 return {
@@ -205,7 +215,8 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             expect(
                 mobileHoverVisual.backgroundColor,
                 `${target.name}: inactive mobile hover looks like a second active pill at ${width}px`
-            ).toBe('rgba(0, 0, 0, 0)');
+            ).toBe('rgb(234, 230, 219)');
+            expect(mobileHoverVisual.backgroundColor).not.toBe(target.activeColor);
 
             await targetLink.click();
             await page.waitForTimeout(1700);
@@ -260,6 +271,7 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
                     artworkContent: beforeStyle.content,
                     labelDisplay: getComputedStyle(label).display,
                     activeBackground: activeStyle.backgroundImage,
+                    activeBackgroundColor: activeStyle.backgroundColor,
                     activeRadius: Number.parseFloat(activeStyle.borderRadius),
                     iconUnderlineContent: activeIconAfter.content,
                     iconUnderlineDisplay: activeIconAfter.display
@@ -269,12 +281,13 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             expect(tabletDesktopVisual.horizontalOverflow, `${target.name}: overflow at ${width}px`).toBeLessThanOrEqual(2);
             expect(tabletDesktopVisual.navHeight, `${target.name}: tablet/desktop navigation is not compact at ${width}px`).toBeLessThanOrEqual(46);
             expect(tabletDesktopVisual.navHeight, `${target.name}: tablet/desktop navigation collapsed at ${width}px`).toBeGreaterThanOrEqual(40);
-            expect(tabletDesktopVisual.navBackgroundColor, `${target.name}: tablet/desktop surface is too transparent at ${width}px`).toContain('0.35');
+            expect(tabletDesktopVisual.navBackgroundColor, `${target.name}: approved tablet/desktop surface changed at ${width}px`).toBe('rgb(245, 243, 237)');
             expect(tabletDesktopVisual.activeHeight, `${target.name}: tablet/desktop navigation target collapsed at ${width}px`).toBeGreaterThanOrEqual(34);
-            expect(tabletDesktopVisual.artworkDisplay, `${target.name}: tablet artwork is hidden at ${width}px`).not.toBe('none');
-            expect(tabletDesktopVisual.artworkContent, `${target.name}: tablet artwork is missing at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.artworkDisplay, `${target.name}: obsolete tablet artwork returned at ${width}px`).toBe('none');
+            expect(tabletDesktopVisual.artworkContent, `${target.name}: obsolete tablet artwork content returned at ${width}px`).toBe('none');
             expect(tabletDesktopVisual.labelDisplay, `${target.name}: tablet label is hidden at ${width}px`).not.toBe('none');
-            expect(tabletDesktopVisual.activeBackground, `${target.name}: active tablet pill is missing at ${width}px`).not.toBe('none');
+            expect(tabletDesktopVisual.activeBackground, `${target.name}: obsolete tablet active gradient returned at ${width}px`).toBe('none');
+            expect(tabletDesktopVisual.activeBackgroundColor, `${target.name}: active tablet accent changed at ${width}px`).toBe(target.activeColor);
             expect(tabletDesktopVisual.activeRadius, `${target.name}: active tablet state is square at ${width}px`).toBeGreaterThan(20);
             expect(
                 tabletDesktopVisual.iconUnderlineContent === 'none' || tabletDesktopVisual.iconUnderlineDisplay === 'none',
@@ -293,7 +306,8 @@ test('service navigation stays compact and sticky, moves one active pill, and pr
             await expect.poll(
                 () => inactiveLink.evaluate((link) => getComputedStyle(link).backgroundColor),
                 { message: `${target.name}: hover looks like a second active pill at ${width}px` }
-            ).toBe('rgba(0, 0, 0, 0)');
+            ).toBe('rgb(234, 230, 219)');
+            expect(await inactiveLink.evaluate((link) => getComputedStyle(link).backgroundColor)).not.toBe(target.activeColor);
             await expect(page.locator('.service-nav-link.active')).toHaveCount(1);
             await expect(targetLink).toHaveClass(/active/);
 

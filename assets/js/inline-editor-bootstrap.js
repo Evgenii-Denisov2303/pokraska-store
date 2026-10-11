@@ -3301,10 +3301,97 @@
         }
 
         const contactsDirectPanel = document.querySelector('.contacts-panel--direct');
-        if (pageMeta.key === 'contacts' && contactsDirectPanel instanceof HTMLElement && !contactsDirectPanel.dataset.inlineEditId) {
+        if (pageMeta.key === 'contacts' && contactsDirectPanel?.matches('.contacts-panel--directory') && !contactsDirectPanel.dataset.inlineEditId) {
+            const panel = contactsDirectPanel;
+            const kicker = panel.querySelector('.contacts-panel__kicker');
+            const title = panel.querySelector('.contacts-panel__header h2');
+            const copy = panel.querySelector('.contacts-panel__header p:not(.contacts-panel__kicker)');
+            const primary = panel.querySelector('.contact-directory__primary');
+            const rows = [...panel.querySelectorAll('.contact-directory__row')];
+            const visit = panel.querySelector('.contact-directory__visit-note');
+            // Keep Telegram/MAX at their existing saved indexes; WhatsApp is additive.
+            const actions = ['telegram-plane', 'comments', 'whatsapp'].map((icon) =>
+                panel.querySelector(`.contact-directory__messengers a:has(.fa-${icon})`));
+            const directory = [
+                { key: 'secondary', label: 'Дополнительный номер', row: rows[0], value: rows[0]?.querySelector('a') },
+                { key: 'email', label: 'Почта', row: rows[1], value: rows[1]?.querySelector('a') },
+                { key: 'address', label: 'Адрес', row: rows[3], value: rows[3]?.querySelector('dd > span') }
+            ];
+            const mapLink = panel.querySelector('.contact-directory__map-link');
+            const meta = [
+                { label: rows[2]?.querySelector('dt'), value: rows[2]?.querySelector('dd') },
+                { label: visit?.querySelector('strong'), value: visit?.querySelector('p') }
+            ];
+            const updateText = (node, value) => { if (value !== undefined) applyTextToNode(node, value); };
+            bindings.push({
+                id: `inline-module-${pageMeta.key}-direct-panel`, element: panel,
+                type: 'object', editorMode: 'module', editorKindLabel: 'Контактный блок',
+                path: `pages.${pageMeta.key}.modules.directPanel`,
+                label: 'Блок "Связаться напрямую"', overviewPriority: 1,
+                hint: 'Телефоны, почта, адрес, режим работы и мессенджеры.',
+                fields: [
+                    { key: 'kicker', label: 'Подпись сверху' },
+                    { key: 'title', label: 'Заголовок', type: 'textarea' },
+                    { key: 'copy', label: 'Описание', type: 'textarea' },
+                    { key: 'primary.label', label: 'Подпись у главного номера' },
+                    { key: 'primary.number', label: 'Главный номер' },
+                    { key: 'primary.href', label: 'Ссылка главного номера' },
+                    ...directory.flatMap(({ key, label }) => [
+                        { key: `directory.${key}.label`, label: `${label} — подпись` },
+                        { key: `directory.${key}.value`, label: `${label} — значение` },
+                        ...(key === 'address' ? [] : [{ key: `directory.${key}.href`, label: `${label} — ссылка` }])
+                    ]),
+                    { key: 'map.label', label: 'Ссылка карты — текст' },
+                    { key: 'map.href', label: 'Ссылка карты — адрес' },
+                    ...meta.flatMap((_, index) => [
+                        { key: `meta.${index}.label`, label: index ? 'Выезд — подпись' : 'Режим работы — подпись' },
+                        { key: `meta.${index}.value`, label: index ? 'Выезд — описание' : 'Режим работы — часы', type: 'textarea' }
+                    ]),
+                    ...actions.flatMap((_, index) => [
+                        { key: `actions.${index}.label`, label: `${['Telegram', 'MAX', 'WhatsApp'][index]} — текст` },
+                        { key: `actions.${index}.href`, label: `${['Telegram', 'MAX', 'WhatsApp'][index]} — ссылка` }
+                    ])
+                ],
+                defaultValue: {
+                    kicker: normalizeText(kicker.textContent), title: normalizeText(title.textContent), copy: normalizeText(copy.textContent),
+                    primary: { label: normalizeText(primary.querySelector('.contact-directory__label').textContent), number: normalizeText(primary.querySelector('strong').textContent), href: primary.getAttribute('href') },
+                    directory: Object.fromEntries(directory.map(({ key, row, value }) => [key, {
+                        label: normalizeText(row.querySelector('dt').textContent), value: normalizeText(value.textContent),
+                        ...(value instanceof HTMLAnchorElement ? { href: value.getAttribute('href') } : {})
+                    }])),
+                    map: readActionValue(mapLink),
+                    meta: meta.map((item) => ({ label: normalizeText(item.label.textContent), value: normalizeText(item.value.textContent) })),
+                    actions: actions.map(readActionValue)
+                },
+                render(value) {
+                    const next = value && typeof value === 'object' ? value : {};
+                    updateText(kicker, next.kicker); updateText(title, next.title); updateText(copy, next.copy);
+                    updateText(primary.querySelector('.contact-directory__label'), next.primary?.label);
+                    updateText(primary.querySelector('strong'), next.primary?.number);
+                    if (next.primary?.href) primary.setAttribute('href', normalizeText(next.primary.href));
+                    directory.forEach(({ key, row, value: node }) => {
+                        const item = next.directory?.[key];
+                        updateText(row.querySelector('dt'), item?.label); updateText(node, item?.value);
+                        if (item?.href && node instanceof HTMLAnchorElement) node.setAttribute('href', normalizeText(item.href));
+                        if (item?.value !== undefined && key !== 'address') {
+                            node.setAttribute('aria-label', `${key === 'email' ? 'Написать на почту' : 'Позвонить по дополнительному номеру'} ${normalizeText(node.textContent)}`);
+                        }
+                    });
+                    if (next.map?.label !== undefined) applyLinkText(mapLink, next.map.label);
+                    if (next.map?.href) mapLink.setAttribute('href', normalizeText(next.map.href));
+                    meta.forEach((item, index) => {
+                        updateText(item.label, next.meta?.[index]?.label);
+                        updateText(item.value, next.meta?.[index]?.value ?? (index === 0 ? next.primary?.note : undefined));
+                    });
+                    actions.forEach((node, index) => {
+                        if (next.actions?.[index]) applyActionValue(node, { ...readActionValue(node), ...next.actions[index] });
+                    });
+                }
+            });
+        } else if (pageMeta.key === 'contacts' && contactsDirectPanel instanceof HTMLElement && !contactsDirectPanel.dataset.inlineEditId) {
             const kickerNode = contactsDirectPanel.querySelector('.contacts-panel__kicker');
             const titleNode = contactsDirectPanel.querySelector('.contacts-panel__header h2');
-            const copyNode = contactsDirectPanel.querySelector('.contacts-panel__header p');
+            const copyNode = contactsDirectPanel.querySelector('.contacts-panel__header p:not(.contacts-panel__kicker)');
             const primaryLink = contactsDirectPanel.querySelector('.contacts-primary-link');
             const primaryLabelNode = primaryLink?.querySelector('.contacts-primary-label');
             const primaryStrongNode = primaryLink?.querySelector('strong');
@@ -3383,10 +3470,53 @@
         }
 
         const contactsRoutePanel = document.querySelector('.contacts-panel--route-copy');
-        if (pageMeta.key === 'contacts' && contactsRoutePanel instanceof HTMLElement && !contactsRoutePanel.dataset.inlineEditId) {
+        if (pageMeta.key === 'contacts' && contactsRoutePanel?.matches('.contacts-panel--arrival') && !contactsRoutePanel.dataset.inlineEditId) {
+            const panel = contactsRoutePanel;
+            const kicker = panel.querySelector('.contacts-panel__kicker');
+            const title = panel.querySelector('.contacts-panel__header h2');
+            const copy = panel.querySelector('.contacts-panel__header p:not(.contacts-panel__kicker)');
+            const items = [...panel.querySelectorAll('.contact-arrival li')];
+            const actions = [...panel.querySelectorAll('.contacts-route-actions a')];
+            const updateText = (node, value) => { if (value !== undefined) applyTextToNode(node, value); };
+            bindings.push({
+                id: `inline-module-${pageMeta.key}-route-panel`, element: panel,
+                type: 'object', editorMode: 'module', editorKindLabel: 'Маршрут',
+                path: `pages.${pageMeta.key}.modules.routePanel`, label: 'Блок "Как нас найти"',
+                hint: 'Ориентиры на месте и два действия.', overviewPriority: 2,
+                fields: [
+                    { key: 'kicker', label: 'Подпись сверху' },
+                    { key: 'title', label: 'Заголовок', type: 'textarea' },
+                    { key: 'copy', label: 'Описание', type: 'textarea' },
+                    { key: 'steps.1.title', label: 'Вход — заголовок' },
+                    { key: 'steps.1.copy', label: 'Вход — описание', type: 'textarea' },
+                    { key: 'badges.1', label: 'Парковка — заголовок' },
+                    ...actions.flatMap((_, index) => [
+                        { key: `actions.${index}.label`, label: `Кнопка ${index + 1} — текст` },
+                        { key: `actions.${index}.href`, label: `Кнопка ${index + 1} — ссылка` }
+                    ])
+                ],
+                defaultValue: {
+                    kicker: normalizeText(kicker.textContent), title: normalizeText(title.textContent), copy: normalizeText(copy.textContent),
+                    steps: [{}, { title: normalizeText(items[0].querySelector('strong').textContent), copy: normalizeText(items[0].querySelector('p').textContent) }],
+                    badges: ['', normalizeText(items[1].querySelector('strong').textContent)],
+                    actions: actions.map(readActionValue)
+                },
+                render(value) {
+                    const next = value && typeof value === 'object' ? value : {};
+                    updateText(kicker, next.kicker); updateText(title, next.title); updateText(copy, next.copy);
+                    // Preserve old saved directions without putting the removed address/visit tiles back.
+                    updateText(items[0].querySelector('strong'), next.steps?.[1]?.title);
+                    updateText(items[0].querySelector('p'), next.steps?.[1]?.copy);
+                    updateText(items[1].querySelector('strong'), Array.isArray(next.badges) ? next.badges[1] : (next.badges ? toListValue(next.badges)[1] : undefined));
+                    actions.forEach((node, index) => {
+                        if (next.actions?.[index]) applyActionValue(node, { ...readActionValue(node), ...next.actions[index] });
+                    });
+                }
+            });
+        } else if (pageMeta.key === 'contacts' && contactsRoutePanel instanceof HTMLElement && !contactsRoutePanel.dataset.inlineEditId) {
             const kickerNode = contactsRoutePanel.querySelector('.contacts-panel__kicker');
             const titleNode = contactsRoutePanel.querySelector('.contacts-panel__header h2');
-            const copyNode = contactsRoutePanel.querySelector('.contacts-panel__header p');
+            const copyNode = contactsRoutePanel.querySelector('.contacts-panel__header p:not(.contacts-panel__kicker)');
             const badgeNodes = Array.from(contactsRoutePanel.querySelectorAll('.contacts-route-badge'));
             const stepNodes = Array.from(contactsRoutePanel.querySelectorAll('.contacts-route-steps li'));
             const actionNodes = Array.from(contactsRoutePanel.querySelectorAll('.contacts-route-actions a'));

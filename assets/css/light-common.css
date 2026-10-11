@@ -1,0 +1,14 @@
+/* Approved light design contract. Scoped to data-design="light", loaded after
+   legacy component styles so page breakpoints cannot restore old nested surfaces.
+   Shared header, hero, footer geometry and font families remain unchanged. */
+body[data-design="light"] { --light-ink:#263b41; --light-copy:#526164; --light-line:#dcded7; }
+body#top[data-design="light"] .faq-section.faq-system { background:transparent !important; border-color:transparent !important; box-shadow:none !important; }
+body#top[data-design="light"] .faq-section.faq-system::before { display:none !important; }
+body#top[data-design="light"] .faq-system .faq-item { background:transparent !important; border:0 !important; border-bottom:1px solid var(--light-line) !important; border-radius:0 !important; box-shadow:none !important; }
+body#top[data-design="light"] .faq-system .faq-list { gap:0; }
+body#top[data-design="light"] .faq-system .faq-question { color:var(--light-ink); }
+body#top[data-design="light"] .faq-system .faq-item:hover { background:#f5f4ef !important; }
+body#top[data-design="light"] .decision-cta { background:#eef0e9 !important; border-color:transparent !important; box-shadow:none !important; }
+body#top[data-design="light"] .decision-cta__primary { background:#436576 !important; border-color:#436576 !important; color:#fff !important; box-shadow:none !important; }
+body#top[data-design="light"] .decision-cta__primary:hover { background:#324f60 !important; }
+body#top[data-design="light"] .decision-cta__secondary { background:transparent !important; box-shadow:none !important; }

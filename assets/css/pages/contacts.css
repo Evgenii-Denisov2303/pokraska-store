@@ -2806,3 +2806,261 @@ body#top .contacts-form-embed {
         overflow-wrap: normal !important;
     }
 }
+
+/* Contact directory replaces the retired nested tile/meta markup above.
+   Its selectors are independent of the historical tile breakpoints; the
+   existing outer grid and calibrated Yandex form sizes remain the contract. */
+body#top .contacts-page .contacts-panel--directory,
+body#top .contacts-page .contacts-panel--arrival {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    gap: 20px !important;
+}
+
+body#top .contacts-page .contacts-panel--directory .contacts-panel__header h2,
+body#top .contacts-page .contacts-panel--arrival .contacts-panel__header h2 {
+    max-width: none;
+    line-height: 1.06;
+}
+
+.contact-directory__primary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 12px 0 16px;
+    border-bottom: 1px solid #dce1d9;
+    color: #26485c;
+    text-decoration: none;
+}
+
+.contact-directory__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #eaece4;
+    color: #526e7b;
+    font-size: 18px;
+}
+
+.contact-directory__primary-copy {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.contact-directory__label,
+.contact-directory dt {
+    color: #66766f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.contact-directory__primary strong {
+    font-size: clamp(21px, 2vw, 27px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+}
+
+.contact-directory {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.contact-directory__row {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+    padding: 14px 0;
+    border-bottom: 1px solid #e0e4dc;
+}
+
+.contact-directory__row:first-child {
+    padding-top: 0;
+}
+
+.contact-directory dt,
+.contact-directory dd {
+    margin: 0;
+}
+
+.contact-directory dd {
+    min-width: 0;
+    color: #304e5d;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+}
+
+.contact-directory dd a {
+    display: inline-block;
+    max-width: 100%;
+    padding-block: 4px;
+    color: #31596d;
+    text-decoration: underline;
+    text-decoration-color: #aebfbe;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+.contact-directory__row--address dd {
+    display: grid;
+    gap: 5px;
+}
+
+.contact-directory .contact-directory__map-link {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 9px;
+    font-size: 14px;
+}
+
+.contact-directory__primary:hover strong,
+.contact-directory dd a:hover {
+    color: #203f52;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.contact-directory__primary:focus-visible,
+.contact-directory dd a:focus-visible {
+    outline: 2px solid #587e8d;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.contact-directory__messengers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+body#top .contacts-page .contact-directory__messengers .ui-secondary {
+    flex: 1 0 auto;
+    min-height: 44px;
+    padding: 10px 12px;
+    gap: 7px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.contact-directory__visit-note {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #dde2d8;
+}
+
+.contact-directory__visit-note strong,
+.contact-arrival strong {
+    color: #354c53;
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.45;
+}
+
+.contact-directory__visit-note p,
+.contact-arrival p {
+    margin: 6px 0 0;
+    color: #5e6f77;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.contact-arrival {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.contact-arrival li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    padding: 18px 0;
+    border-bottom: 1px solid #dde2d8;
+}
+
+.contact-arrival li:first-child {
+    padding-top: 0;
+}
+
+.contact-arrival li > i {
+    margin-top: 4px;
+    color: #6c8272;
+    font-size: 17px;
+    text-align: center;
+}
+
+body#top .contacts-page .contacts-panel--arrival .contacts-route-actions {
+    margin-top: 0 !important;
+    align-self: stretch !important;
+}
+
+/* Whether the existing breakpoint selects one or two columns, grid children
+   stretch to their own row only. No fixed height is imposed on mobile panels. */
+body#top .contacts-page .contacts-core,
+body#top .contacts-page .contacts-route {
+    align-items: stretch !important;
+}
+
+body#top .contacts-page .contacts-core > .contacts-panel,
+body#top .contacts-page .contacts-route > .contacts-panel {
+    align-self: stretch !important;
+}
+
+@media (min-width: 1024px) {
+    body#top .contacts-page .contacts-panel--arrival {
+        min-height: 0 !important;
+    }
+
+    body#top .contacts-page .contacts-panel--route-map {
+        min-height: 420px !important;
+    }
+
+    body#top .contacts-page .contacts-panel--route-map iframe {
+        position: absolute;
+        inset: 0;
+        min-height: 0 !important;
+        height: 100% !important;
+    }
+}
+
+@media (max-width: 640px) {
+    body#top .contacts-page .contacts-panel--directory,
+    body#top .contacts-page .contacts-panel--arrival {
+        gap: 18px !important;
+    }
+
+    .contact-directory__primary {
+        gap: 12px;
+    }
+
+    .contact-directory__icon {
+        flex-basis: 38px;
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+
+    .contact-directory__primary strong {
+        font-size: 22px;
+    }
+
+    .contact-directory__visit-note {
+        margin-top: 0;
+    }
+}

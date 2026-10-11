@@ -1,0 +1,344 @@
+/* Approved light design contract. Scoped to data-design="light", loaded after
+   legacy component styles so page breakpoints cannot restore old nested surfaces.
+   Shared header, hero, footer geometry and font families remain unchanged. */
+
+/* Quiet page ground continues the published light header. */
+body#top[data-design="light"] :is(.contacts-page, .prices-page, .payment-docs-page, .gallery-page, .privacy-page) {
+    background: linear-gradient(180deg, #f5f8fa 0, #faf9f5 420px, #faf9f5 calc(100% - 120px), #f8fafb 100%) !important;
+}
+
+body#top[data-design="light"] :is(.contacts-heading__icon, .prices-heading__icon, .payment-docs-heading__icon, .gallery-heading__icon) {
+    background: #f1eee6 !important;
+    border-color: #e2ddd2 !important;
+    box-shadow: none !important;
+    color: #587080 !important;
+}
+
+/* Home: retain the images, gallery overlays, text placement and hero sunlight.
+   Only nested surfaces below the hero lose the glass-and-card treatment. */
+body#top[data-design="light"] .panel-scene .panel-scene__card {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__content::before {
+    background: #fbfaf7 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .panel-scene :is(.panel-scene__facts, .panel-scene__items, .panel-scene__trust) {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__facts {
+    border-top-color: #dcded6 !important;
+    border-bottom-color: #dcded6 !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__fact {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #e1e1d9 !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__item {
+    background: transparent !important;
+    border-color: #dedfd8 !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__item::before {
+    background: #aa9675 !important;
+}
+body#top[data-design="light"] .panel-scene .panel-scene__item:hover,
+body#top[data-design="light"] .panel-scene .panel-scene__item:focus-visible {
+    background: #efeee6 !important;
+}
+body#top[data-design="light"] :is(.route-scene, .reviews-scene, .home-tail__section--brands) {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .route-scene::before,
+body#top[data-design="light"] .route-scene::after,
+body#top[data-design="light"] .reviews-scene::before {
+    background: none !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.route-scene__fact, .route-step, .reviews-scene__card) {
+    background: #f5f4ee !important;
+    border-color: #e0e1d8 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .route-scene__fact {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-bottom-color: #d7ddd7 !important;
+    border-radius: 0 !important;
+}
+body#top[data-design="light"] .route-scene__fact::before {
+    background: #a5967a !important;
+}
+body#top[data-design="light"] .route-step > i {
+    background: #ebece5 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: #526d7b !important;
+}
+body#top[data-design="light"] .reviews-scene__rating {
+    color: #a68d5e !important;
+}
+body#top[data-design="light"] .home-tail__brand {
+    background: #fffefa !important;
+    border-color: #e0e1d8 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .home-tail__brand::before,
+body#top[data-design="light"] .home-tail__brand::after {
+    background: none !important;
+}
+body#top[data-design="light"] :is(.home-tail__request-copy, .home-tail__form-card) {
+    background: #fffefa !important;
+    border-color: #e0e1d8 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .home-tail__request-copy .home-tail__contact {
+    background: #f4f3ed !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.home-tail__advantages span, .home-tail__request-source-items span) {
+    background: transparent !important;
+    border-color: #e1e0d7 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .home-tail__contact-link {
+    background: #fffefa !important;
+    border-color: #dddcd1 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.panel-scene, .route-scene, .home-tail-scene) .panel-scene__action--primary {
+    background: #496778 !important;
+    border-color: #496778 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: #fffefa !important;
+}
+body#top[data-design="light"] :is(.panel-scene, .home-tail-scene) .panel-scene__action--ghost {
+    background: #f6f5ef !important;
+    border-color: #ccd2cd !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: #405968 !important;
+}
+body#top[data-design="light"] :is(.panel-scene, .route-scene, .home-tail-scene) .panel-scene__action--primary:hover {
+    background: #355568 !important;
+}
+
+/* Contact panel surfaces; the directory and arrival layout live in contacts.css. */
+body#top[data-design="light"] .contacts-page .contacts-panel {
+    background: #fffefa !important;
+    border-color: #e1e1d7 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .contacts-page .contacts-panel::before {
+    background: none !important;
+}
+/* Prices and documents: open sections, quieter supporting tiles. */
+body#top[data-design="light"] .prices-page > .container :is(.pricing-breakdown, .pricing-clarity),
+body#top[data-design="light"] .payment-docs-page :is(.payment-order-sheet, .payment-route) {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-bottom: 1px solid #dcded5 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding-inline: 0 !important;
+}
+body#top[data-design="light"] .prices-page :is(.pricing-breakdown, .pricing-clarity)::before,
+body#top[data-design="light"] .payment-docs-page :is(.payment-order-sheet, .payment-route)::before,
+body#top[data-design="light"] .payment-docs-page .payment-order-sheet::after {
+    display: none !important;
+}
+body#top[data-design="light"] .prices-page :is(.price-summary__item, .factor-card, .pricing-clarity__item),
+body#top[data-design="light"] .payment-docs-page :is(.payment-doc-card, .payment-route__step) {
+    background: #f2f1e9 !important;
+    border-color: #ddded4 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .prices-page .price-summary__item a {
+    color: #365d70 !important;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+body#top[data-design="light"] .prices-page :is(.pricing-breakdown__heading h2, .pricing-clarity__lead h3) {
+    max-width: 28ch;
+}
+body#top[data-design="light"] .payment-docs-page .payment-docs-kit {
+    background: #eaece3 !important;
+    border-color: #dfe1d7 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .payment-docs-page :is(.payment-order-sheet__facts span, .payment-docs-kit__items span) {
+    background: transparent !important;
+    border-color: #d9dbd0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .payment-docs-page .payment-route__track::before {
+    display: none !important;
+}
+body#top[data-design="light"] .payment-docs-page .payment-route__index {
+    background: #e5e7dd !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    color: #557064 !important;
+}
+body#top[data-design="light"] :is(.prices-page, .payment-docs-page) .faq-section.faq-system {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding-inline: 0 !important;
+}
+body#top[data-design="light"] :is(.prices-page, .payment-docs-page) .faq-section.faq-system::before {
+    display: none !important;
+}
+body#top[data-design="light"] :is(.prices-page, .payment-docs-page) .faq-item {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-bottom: 1px solid #d9dcd2 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.prices-page, .payment-docs-page) .faq-question {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.prices-page, .payment-docs-page) .faq-question:hover {
+    background: #f0f0e8 !important;
+}
+
+/* Gallery: photos keep their readable dark caption overlay and lightbox. */
+body#top[data-design="light"] .gallery-page :is(.gallery-filter-shell, .gallery-empty) {
+    background: #f0f1e9 !important;
+    border-color: #dddfd3 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .gallery-page .gallery-filter-shell::before,
+body#top[data-design="light"] .gallery-page .gallery-filter-shell::after {
+    background: none !important;
+}
+body#top[data-design="light"] .gallery-page .filter-btn {
+    background: #fbfaf5 !important;
+    border-color: #d7dcd3 !important;
+    color: #465f6c !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .gallery-page .filter-btn:hover {
+    background: #e3e8df !important;
+}
+body#top[data-design="light"] .gallery-page .filter-btn:is(.active, [aria-pressed="true"]) {
+    background: #496b73 !important;
+    border-color: #496b73 !important;
+    color: #fffefa !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .gallery-page .gallery-item {
+    border-color: transparent !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .gallery-page .order-cta {
+    background: #e9ece2 !important;
+    border-color: #dde1d5 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+}
+
+/* Policy: read as a document instead of repeated nested cards. */
+body#top[data-design="light"] .privacy-page .section {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-top: 1px solid #dcdfd4 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding-inline: 0 !important;
+}
+body#top[data-design="light"] .privacy-page .section::before {
+    display: none !important;
+}
+body#top[data-design="light"] .privacy-page :is(.highlight, table) {
+    background: #f0f1e9 !important;
+    border-color: #dfe2d7 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .privacy-page table th {
+    background: #e6e9df !important;
+}
+body#top[data-design="light"] .privacy-page .privacy-header .date {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .privacy-page .contact-block {
+    background: #45636d !important;
+    border-color: transparent !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+
+/* Distinct actions remain actions; no changes to forms or iframe geometry. */
+body#top[data-design="light"] :is(.contacts-page, .prices-page, .payment-docs-page) .decision-cta {
+    background: #e9ece2 !important;
+    border-color: #dde1d5 !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.contacts-page, .prices-page, .payment-docs-page) .ui-primary {
+    background: #496778 !important;
+    border-color: #496778 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: #fffefa !important;
+}
+body#top[data-design="light"] :is(.contacts-page, .prices-page, .payment-docs-page) .ui-primary:hover {
+    background: #355568 !important;
+}
+body#top[data-design="light"] :is(.contacts-page, .prices-page, .payment-docs-page) .ui-secondary {
+    background: #faf9f3 !important;
+    border-color: #cad3c9 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: #405d69 !important;
+}
+
+@media (max-width: 640px) {
+    body#top[data-design="light"] .contacts-page .contacts-panel {
+        background: transparent !important;
+        border-color: transparent !important;
+        border-radius: 0 !important;
+    }
+
+    body#top[data-design="light"] .prices-page :is(.pricing-breakdown, .pricing-clarity),
+    body#top[data-design="light"] .payment-docs-page :is(.payment-order-sheet, .payment-route) {
+        padding-bottom: 24px !important;
+    }
+    body#top[data-design="light"] .gallery-page .gallery-filter-shell {
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+}

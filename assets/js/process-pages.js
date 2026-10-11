@@ -15,11 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = navLinks
         .map((link) => document.querySelector(link.getAttribute('href')))
         .filter(Boolean);
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (quickNav) {
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        if (reducedMotion || !('IntersectionObserver' in window)) {
+        if (motionPreference.matches || !('IntersectionObserver' in window)) {
             window.setTimeout(() => quickNav.classList.add('is-revealed'), 60);
         } else {
             const observer = new IntersectionObserver((entries) => {
@@ -79,7 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return (visibleHeader ? visibleHeader.offsetHeight : 0) + 22;
     }
 
+    function prepareAnchorLayout() {
+        // Offscreen service cards use estimated heights until content-visibility
+        // reveals them. Resolve all preceding cards before measuring an anchor:
+        // otherwise a newly rendered slider/thumbnail row moves the destination
+        // after scrollTo has already captured its position. Keep the real layout
+        // for subsequent clicks and ordinary scrolling; never pin the active link.
+        sections.forEach((section) => {
+            if (window.getComputedStyle(section).contentVisibility === 'auto') {
+                section.style.contentVisibility = 'visible';
+                section.style.containIntrinsicSize = 'auto';
+            }
+        });
+    }
+
     function getTargetScrollTop(target) {
+        prepareAnchorLayout();
         const bodyStyle = window.getComputedStyle(document.body);
         const currentBodyPadding = Number.parseFloat(bodyStyle.paddingTop) || 0;
         const targetDocumentTop = target.getBoundingClientRect().top + window.scrollY;
@@ -147,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetTop = getTargetScrollTop(target);
             window.scrollTo({
                 top: Math.max(targetTop, 0),
-                behavior: 'smooth'
+                behavior: motionPreference.matches ? 'instant' : 'smooth'
             });
 
             history.replaceState(null, '', hash);
@@ -162,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const targetTop = getTargetScrollTop(target);
                 window.scrollTo({
                     top: Math.max(targetTop, 0),
-                    behavior: 'smooth'
+                    behavior: motionPreference.matches ? 'instant' : 'smooth'
                 });
                 setActiveLink(target.id);
             }, 120);
@@ -173,4 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', updateActiveLink, { passive: true });
     window.addEventListener('resize', updateActiveLink);
+    quickNav?.addEventListener('transitionend', (event) => {
+        // Revealing the compact header animates the sticky nav's top offset.
+        // Its final position can change after the last scroll event, especially
+        // when selecting the current section again or navigating upward.
+        if (event.target === quickNav && event.propertyName === 'top') {
+            updateActiveLink();
+        }
+    });
 });

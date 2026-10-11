@@ -35,13 +35,13 @@
     <link rel="preload" as="image" href="../assets/images/hero/home-hero-main.webp" media="(min-width: 1081px) and (not ((min-width: 1101px) and (max-width: 1600px) and (min-height: 901px) and (max-aspect-ratio: 6/5))) and (not ((min-width: 2200px) and (min-height: 2200px) and (min-aspect-ratio: 9/10) and (max-aspect-ratio: 10/9)))" fetchpriority="high">
 <link rel="stylesheet" href="../assets/css/header.css?v=20260905-hero-parity-1">
     <link rel="stylesheet" href="../assets/css/hero-inner.css?v=20261010-light-header-1">
-<link rel="stylesheet" href="../assets/css/internal-pages.css?v=20260522-footer-join-2">
+<link rel="stylesheet" href="../assets/css/internal-pages.css?v=20261011-light-links-1">
     <link rel="preload" as="style" href="../assets/css/footer.css?v=20260524-footer-wide-2" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="../assets/css/footer.css?v=20260524-footer-wide-2"></noscript>
     <link rel="stylesheet" href="../assets/css/form.css?v=20260428-form-warm-1">
     <link rel="preload" as="style" href="../assets/css/fontawesome.css?v=20260823-perf-1" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="../assets/css/fontawesome.css?v=20260823-perf-1"></noscript>
-<link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20261010-form-anchor-1">
+<link rel="stylesheet" href="../assets/css/pages/contacts.css?v=20261010-light-directory-1">
 <link rel="stylesheet" href="../assets/css/interaction-system.css?v=20260903-actions-1">
 
     <!-- Favicon -->
@@ -79,8 +79,10 @@
 
     <link rel="stylesheet" href="../assets/css/contact-widget.css?v=20260906-contact-2">
     <link rel="stylesheet" href="../assets/css/request-help.css?v=20261010-request-help-1">
+    <link rel="stylesheet" href="../assets/css/light-common.css?v=20261010-light-design-1">
+    <link rel="stylesheet" href="../assets/css/light-support.css?v=20261010-light-design-1">
 </head>
-<body id="top">
+<body id="top" data-design="light">
     <!-- ========== HEADER ========== -->
     <header class="header header--desktop-hero internal-legacy-header">
         <div class="container">
@@ -222,77 +224,63 @@
             </div>
 
             <div class="contacts-core">
-                <section class="contacts-panel contacts-panel--direct" aria-labelledby="contacts-direct-title">
+                <section class="contacts-panel contacts-panel--direct contacts-panel--directory" aria-labelledby="contacts-direct-title">
                     <div class="contacts-panel__header">
                         <p class="contacts-panel__kicker">Связаться напрямую</p>
                         <h2 id="contacts-direct-title">Телефон, почта и адрес</h2>
                         <p>Позвоните, напишите или приезжайте на производство. Для расчёта достаточно короткого описания задачи.</p>
                     </div>
 
-                    <a class="contacts-primary-link" href="tel:+79376154629">
-                        <span class="contacts-primary-icon">
+                    <a class="contact-directory__primary" href="tel:+79376154629">
+                        <span class="contact-directory__icon">
                             <i class="fas fa-phone-alt" aria-hidden="true"></i>
                         </span>
-                        <span class="contacts-primary-copy">
-                            <span class="contacts-primary-label">Основной номер</span>
+                        <span class="contact-directory__primary-copy">
+                            <span class="contact-directory__label">Основной номер</span>
                             <strong>+7 (937) 615-46-29</strong>
-                            <span>Пн-Пт 8:00-18:00, Сб 9:00-14:00</span>
                         </span>
                     </a>
 
-                    <div class="contacts-secondary-grid">
-                        <a class="contacts-contact-tile" href="tel:+79625542260" aria-label="Позвонить по дополнительному номеру +7 (962) 554-22-60">
-                            <span class="contacts-contact-icon">
-                                <i class="fas fa-phone-alt" aria-hidden="true"></i>
-                            </span>
-                            <div class="contacts-contact-copy">
-                                <span class="contacts-contact-label">Дополнительный номер</span>
-                                <strong>+7 (962) 554-22-60</strong>
-                            </div>
-                        </a>
-
-                        <a class="contacts-contact-tile" href="mailto:vorota404@mail.ru" aria-label="Написать на почту vorota404@mail.ru">
-                            <span class="contacts-contact-icon">
-                                <i class="fas fa-envelope" aria-hidden="true"></i>
-                            </span>
-                            <div class="contacts-contact-copy">
-                                <span class="contacts-contact-label">Почта</span>
-                                <strong>vorota404@mail.ru</strong>
-                            </div>
-                        </a>
-                    </div>
-
-                    <a class="contacts-address-row contacts-address-row--link" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">
-                        <span class="contacts-contact-icon">
-                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                        </span>
-                        <div class="contacts-contact-copy">
-                            <span class="contacts-contact-label">Адрес производства</span>
-                            <strong>Казань, Старое Победилово, ул. Садовая, 72</strong>
+                    <dl class="contact-directory">
+                        <div class="contact-directory__row">
+                            <dt>Дополнительный номер</dt>
+                            <dd><a href="tel:+79625542260" aria-label="Позвонить по дополнительному номеру +7 (962) 554-22-60">+7 (962) 554-22-60</a></dd>
                         </div>
-                        <span class="contacts-address-cue">Открыть на карте <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-                    </a>
+                        <div class="contact-directory__row">
+                            <dt>Почта</dt>
+                            <dd><a href="mailto:vorota404@mail.ru" aria-label="Написать на почту vorota404@mail.ru">vorota404@mail.ru</a></dd>
+                        </div>
+                        <div class="contact-directory__row">
+                            <dt>Режим работы</dt>
+                            <dd>Пн-Пт 8:00-18:00, Сб 9:00-14:00</dd>
+                        </div>
+                        <div class="contact-directory__row contact-directory__row--address">
+                            <dt>Адрес производства</dt>
+                            <dd>
+                                <span>Казань, Старое Победилово, ул. Садовая, 72</span>
+                                <a class="contact-directory__map-link" href="https://yandex.ru/maps/?ll=49.083482%2C55.703165&amp;mode=routes&amp;rtext=~55.703165%2C49.083482&amp;rtt=auto&amp;ruri=~&amp;z=17" target="_blank" rel="noopener noreferrer">Открыть на карте <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                            </dd>
+                        </div>
+                    </dl>
 
-                    <div class="contacts-direct-actions">
-                        <a class="btn btn-outline ui-secondary" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">
+                    <div class="contact-directory__messengers" aria-label="Написать в мессенджер">
+                        <a class="ui-secondary" href="https://wa.me/79625542260" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                            WhatsApp
+                        </a>
+                        <a class="ui-secondary" href="https://t.me/+79625542260" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-telegram-plane" aria-hidden="true"></i>
-                            Написать в Telegram
+                            Telegram
                         </a>
-                        <a class="btn btn-outline ui-secondary" href="https://max.ru/u/f9LHodD0cOItfQENJdtnVA18mKt_dz-mP6Rv3RiPhpVu9WSvbv9ZLWavSxE" target="_blank" rel="noopener noreferrer">
+                        <a class="ui-secondary" href="https://max.ru/u/f9LHodD0cOItfQENJdtnVA18mKt_dz-mP6Rv3RiPhpVu9WSvbv9ZLWavSxE" target="_blank" rel="noopener noreferrer">
                             <i class="fas fa-comments" aria-hidden="true"></i>
-                            Написать в Max
+                            MAX
                         </a>
                     </div>
 
-                    <div class="contacts-meta-row" aria-label="Дополнительная информация">
-                        <div class="contacts-meta-chip">
-                            <span class="contacts-meta-label">Режим работы</span>
-                            <strong>Пн-Пт 8:00-18:00, Сб 9:00-14:00</strong>
-                        </div>
-                        <div class="contacts-meta-chip">
-                            <span class="contacts-meta-label">Выезд замерщика</span>
-                            <strong>По предварительной записи</strong>
-                        </div>
+                    <div class="contact-directory__visit-note">
+                        <strong>Замер и выезд</strong>
+                        <p>По воротам и заборам возможен выезд специалиста по предварительной записи.</p>
                     </div>
                 </section>
 
@@ -329,30 +317,24 @@
             </div>
 
             <section class="contacts-route" aria-labelledby="contact-location-title">
-                <div class="contacts-panel contacts-panel--route-copy">
+                <div class="contacts-panel contacts-panel--route-copy contacts-panel--arrival">
                     <div class="contacts-panel__header">
                         <p class="contacts-panel__kicker">Схема проезда</p>
                         <h2 id="contact-location-title">Как нас найти</h2>
                         <p>Производство находится в Старом Победилово. Ниже собрали карту, ориентиры и быстрые действия, чтобы доехать без лишних звонков.</p>
                     </div>
 
-                    <div class="contacts-route-highlights">
-                        <span class="contacts-route-badge"><i class="fas fa-warehouse" aria-hidden="true"></i> Цех №3</span>
-                        <span class="contacts-route-badge"><i class="fas fa-car" aria-hidden="true"></i> Парковка на площадке</span>
-                    </div>
-
-                    <ul class="contacts-route-steps">
+                    <ul class="contact-arrival">
                         <li>
-                            <strong>Производственная площадка</strong>
-                            <span>Находимся в Старом Победилово, на территории производства по адресу ул. Садовая, 72.</span>
+                            <i class="fas fa-warehouse" aria-hidden="true"></i>
+                            <div>
+                                <strong>Вход через цех №3</strong>
+                                <p>Заезжайте со стороны ворот и ориентируйтесь на цех №3. Если потребуется, подскажем по телефону уже на месте.</p>
+                            </div>
                         </li>
                         <li>
-                            <strong>Вход через цех №3</strong>
-                            <span>Заезжайте со стороны ворот и ориентируйтесь на цех №3. Если потребуется, подскажем по телефону уже на месте.</span>
-                        </li>
-                        <li>
-                            <strong>Замер и выезд</strong>
-                            <span>По воротам и заборам возможен выезд специалиста по предварительной записи.</span>
+                            <i class="fas fa-car" aria-hidden="true"></i>
+                            <div><strong>Парковка на площадке</strong></div>
                         </li>
                     </ul>
 
@@ -443,7 +425,7 @@
 
 
 <!-- ========== SCRIPTS ========== -->
-    <script src="../assets/js/header.js?v=20261010-light-hero-1" defer></script>
+    <script src="../assets/js/header.js?v=20261011-light-directory-1" defer></script>
     <script src="../assets/js/contact-widget.js?v=20260906-contact-2" defer></script>
     <script src="../assets/js/request-context.js?v=20261010-request-help-1" defer></script>
     <script src="../assets/js/embed-loader.js?v=20260501-embed-loader-map-1" defer></script>

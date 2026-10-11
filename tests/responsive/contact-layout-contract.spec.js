@@ -12,7 +12,11 @@ const contactsCases = [
     ...touchPortraitSizes.map(([width, height]) => ({ width, height, hasTouch: true })),
     { width: 320, height: 740, hasTouch: true, isMobile: true },
     { width: 390, height: 844, hasTouch: true, isMobile: true },
+    { width: 640, height: 900, hasTouch: true },
+    { width: 641, height: 900, hasTouch: true },
     { width: 768, height: 1024, hasTouch: true },
+    { width: 1023, height: 900, hasTouch: true },
+    { width: 1024, height: 900, hasTouch: true },
     { width: 980, height: 1469, hasTouch: true },
     { width: 980, height: 1470, hasTouch: true },
     { width: 1280, height: 800, hasTouch: false },
@@ -60,33 +64,33 @@ async function contactMetrics(page) {
             return { x: rect.x, y: rect.y + scrollY, width: rect.width, height: rect.height, bottom: rect.bottom + scrollY };
         };
         const rect = (selector) => box(document.querySelector(selector));
-        const tiles = [...document.querySelectorAll('.contacts-secondary-grid .contacts-contact-tile')].map((tile) => {
-            const value = tile.querySelector('strong');
+        const contacts = [...document.querySelectorAll('.contact-directory a[href^="tel:"], .contact-directory a[href^="mailto:"]')].map((value) => {
             const range = document.createRange();
             range.selectNodeContents(value);
             const lines = [...range.getClientRects()].filter((line) => line.width > 0 && line.height > 0);
-            return { box: box(tile), copyWidth: value.getBoundingClientRect().width, lines: new Set(lines.map((line) => Math.round(line.y))).size };
+            return { box: box(value.closest('.contact-directory__row')), lines: new Set(lines.map((line) => Math.round(line.y))).size };
         });
+        const direct = rect('.contacts-panel--direct');
+        const request = rect('.contacts-panel--request');
         const route = rect('.contacts-panel--route-copy');
         const map = rect('.contacts-panel--route-map');
-        const steps = rect('.contacts-route-steps');
-        const items = [...document.querySelectorAll('.contacts-route-steps > li')].map(box);
+        const steps = rect('.contact-arrival');
+        const items = [...document.querySelectorAll('.contact-arrival > li')].map(box);
         const actions = rect('.contacts-route-actions');
         const paddingBottom = parseFloat(getComputedStyle(document.querySelector('.contacts-panel--route-copy')).paddingBottom);
         const header = rect('.contacts-panel--route-copy .contacts-panel__header');
-        const badges = rect('.contacts-route-highlights');
+        const directStyle = getComputedStyle(document.querySelector('.contacts-panel--direct'));
         return {
             width: innerWidth, height: innerHeight,
             overflow: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth) - innerWidth,
-            tiles, route, map, items,
-            secondaryWidth: rect('.contacts-secondary-grid').width,
-            stepsWidth: steps.width,
+            contacts, direct, request, route, map, items,
             stepsBottomBlank: steps.bottom - Math.max(...items.map((item) => item.bottom)),
             gapBeforeActions: actions.y - steps.bottom,
             gapAfterActions: route.bottom - actions.bottom - paddingBottom,
-            gapHeaderBadges: badges.y - header.bottom,
-            gapBadgesSteps: steps.y - badges.bottom,
+            gapHeaderSteps: steps.y - header.bottom,
+            sameCoreRow: Math.abs(direct.y - request.y) <= 1,
             sameRouteRow: Math.abs(route.y - map.y) <= 1,
+            directSurface: { background: directStyle.backgroundColor, paddingLeft: parseFloat(directStyle.paddingLeft) },
             mapLoaded: !document.querySelector('.contacts-panel--route-map iframe').hidden
         };
     });
@@ -94,48 +98,59 @@ async function contactMetrics(page) {
 
 function expectContacts(metrics, label) {
     expect.soft(metrics.overflow, `${label}: page width`).toBeLessThanOrEqual(2);
-    expect.soft(metrics.tiles, `${label}: both secondary contacts exist`).toHaveLength(2);
-    for (const [index, tile] of metrics.tiles.entries()) {
-        expect.soft(tile.lines, `${label}: secondary contact ${index + 1} must remain a complete readable value`).toBe(1);
+    if (metrics.width <= 640) {
+        expect.soft(metrics.directSurface.paddingLeft, `${label}: mobile directory stays open`).toBe(0);
+        expect.soft(metrics.directSurface.background, `${label}: no zero-padding painted panel`).toBe('rgba(0, 0, 0, 0)');
     }
-    if (metrics.secondaryWidth < 640) {
-        expect.soft(metrics.tiles[1].box.y, `${label}: narrow secondary contacts must stack`)
-            .toBeGreaterThanOrEqual(metrics.tiles[0].box.bottom - 1);
+    expect.soft(metrics.contacts, `${label}: additional phone and email exist`).toHaveLength(2);
+    for (const [index, contact] of metrics.contacts.entries()) {
+        expect.soft(contact.lines, `${label}: contact ${index + 1} must remain a complete readable value`).toBe(1);
     }
-    if (metrics.stepsWidth < 640) {
-        for (let index = 1; index < metrics.items.length; index += 1) {
-            expect.soft(metrics.items[index].y, `${label}: route descriptions must stack inside a narrow card`)
-                .toBeGreaterThanOrEqual(metrics.items[index - 1].bottom - 1);
-        }
+    expect.soft(metrics.contacts[1].box.y, `${label}: contact directory rows must stack`)
+        .toBeGreaterThanOrEqual(metrics.contacts[0].box.bottom - 1);
+    for (let index = 1; index < metrics.items.length; index += 1) {
+        expect.soft(metrics.items[index].y, `${label}: arrival directions remain a vertical list`)
+            .toBeGreaterThanOrEqual(metrics.items[index - 1].bottom - 1);
     }
     // Below 1024px, the two-card row is intentional only in tall desktop-site mode.
     if (metrics.width >= 1024 || (metrics.width >= 900 && metrics.height >= metrics.width * 1.5)) {
+        expect.soft(metrics.sameCoreRow, `${label}: desktop-site contact/form panels keep their shared row`).toBe(true);
         expect.soft(metrics.sameRouteRow, `${label}: desktop-site route panels keep their shared row`).toBe(true);
+    }
+    if (metrics.sameCoreRow) {
+        expect.soft(Math.abs(metrics.direct.bottom - metrics.request.bottom), `${label}: contact/form bottom edges`).toBeLessThanOrEqual(2);
+        expect.soft(Math.abs(metrics.direct.height - metrics.request.height), `${label}: equal contact/form height`).toBeLessThanOrEqual(2);
     }
     if (metrics.sameRouteRow) {
         expect.soft(Math.abs(metrics.route.bottom - metrics.map.bottom), `${label}: route/map bottom edges`).toBeLessThanOrEqual(2);
         expect.soft(Math.abs(metrics.route.height - metrics.map.height), `${label}: equal route/map height`).toBeLessThanOrEqual(2);
     }
-    for (const key of ['stepsBottomBlank', 'gapBeforeActions', 'gapAfterActions']) {
+    for (const key of ['stepsBottomBlank', 'gapHeaderSteps', 'gapBeforeActions', 'gapAfterActions']) {
         expect.soft(metrics[key], `${label}: ${key} must not become an empty stretched region`).toBeLessThanOrEqual(40);
         expect.soft(metrics[key], `${label}: ${key} must not overlap`).toBeGreaterThanOrEqual(-2);
     }
 }
 
-test('contact cards adapt to their actual width and route panels stay aligned', async ({ browser }, testInfo) => {
+test('contact directory stays readable and paired panels stay aligned', async ({ browser }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-wide');
-    test.setTimeout(150_000);
+    test.setTimeout(240_000);
     for (const canvas of contactsCases) {
         await withCanvas(browser, canvas, async (page) => {
             await openLocal(page, '/pages/contacts.html');
-            await expect(page.locator('.contacts-route-steps > li')).toHaveCount(3);
+            await expect(page.locator('.contact-arrival > li')).toHaveCount(2);
+            await expect(page.locator('.contact-directory__messengers a')).toHaveCount(3);
             const label = `${canvas.width}x${canvas.height} ${canvas.hasTouch ? 'touch' : 'mouse'}`;
             const before = await contactMetrics(page);
             if (diagnosticsOnly) console.log('CONTACT_LAYOUT', label, JSON.stringify(before));
             else expectContacts(before, `${label} map ${before.mapLoaded ? 'loaded' : 'placeholder'}`);
 
-            // One narrow and one wide desktop-site canvas also cover the iframe-loaded state.
-            if ([980, 1307].includes(canvas.width) && canvas.height > 1200) {
+            if (canvas.width === 390) {
+                await page.locator('.contacts-panel--direct').screenshot({ path: testInfo.outputPath('contacts-directory-mobile.png') });
+                await page.locator('.contacts-panel--route-copy').screenshot({ path: testInfo.outputPath('contacts-arrival-mobile.png') });
+            }
+
+            // Tall desktop-site canvases and a normal desktop cover loaded map geometry too.
+            if (([980, 1307].includes(canvas.width) && canvas.height > 1200) || canvas.width === 1280) {
                 const mapTrigger = page.locator('.contacts-map-placeholder [data-embed-trigger]');
                 if (await mapTrigger.isVisible()) await mapTrigger.click();
                 await expect(page.locator('.contacts-panel--route-map iframe')).toBeVisible();

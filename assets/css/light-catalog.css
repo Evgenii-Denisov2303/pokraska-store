@@ -1,0 +1,275 @@
+/* Approved light design contract. Scoped to data-design="light", loaded after
+   legacy component styles so page breakpoints cannot restore old nested surfaces.
+   Shared header, hero, footer geometry and font families remain unchanged. */
+body#top[data-design="light"] :is(.catalog-page, .automation-faq-wrap, .automation-product-page) {
+    background: linear-gradient(180deg, #f5f8fa 0, #faf9f5 420px, #faf9f5 calc(100% - 120px), #f8fafb 100%) !important;
+}
+body#top[data-design="light"] .automation-faq-wrap:has(+ :is(.automation-product-page, .catalog-page--faq-tail)) {
+    background: linear-gradient(180deg, #f5f8fa 0, #faf9f5 420px) !important;
+}
+body#top[data-design="light"] .automation-faq-wrap + :is(.automation-product-page, .catalog-page--faq-tail) {
+    background: linear-gradient(180deg, #faf9f5 0, #faf9f5 calc(100% - 120px), #f8fafb 100%) !important;
+}
+
+body#top[data-design="light"] :is(.catalog-page, .automation-faq-wrap, .automation-product-page) :is(.ui-primary, .btn-primary, .btn--primary, .catalog-assistant__primary) {
+    background: #436576 !important;
+    background-image: none !important;
+    border-color: #436576 !important;
+    color: #fffdf9 !important;
+    -webkit-text-fill-color: #fffdf9 !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] :is(.catalog-page, .automation-faq-wrap, .automation-product-page) :is(.ui-primary, .btn-primary, .btn--primary, .catalog-assistant__primary):hover {
+    background: #345466 !important;
+    border-color: #345466 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+body#top[data-design="light"] .catalog-page {
+    --catalog-shadow-soft: none;
+    --catalog-shadow-strong: none;
+    --catalog-text-body: #465461;
+    --catalog-text-soft: #596672;
+    --catalog-radius-xl: 18px;
+    --catalog-radius-lg: 14px;
+}
+
+/* Category navigation keeps its existing dimensions and the four family colours. */
+body#top[data-design="light"] .catalog-page .catalog-nav-shell {
+    background: #f0f1ed !important;
+    border-color: #dce0db !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-nav-shell::before,
+body#top[data-design="light"] .catalog-page .catalog-nav-shell::after,
+body#top[data-design="light"] .catalog-page .catalog-group-tab::before,
+body#top[data-design="light"] .catalog-page .catalog-link::after {
+    display: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-group-tab {
+    background: rgba(255, 255, 255, 0.68) !important;
+    border-color: rgba(var(--catalog-group-rgb), 0.2) !important;
+    color: var(--catalog-group-ink) !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-group-tab:hover {
+    background: rgba(var(--catalog-group-rgb), 0.1) !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-group-tab.is-active {
+    background: rgb(var(--catalog-group-strong-rgb)) !important;
+    border-color: rgb(var(--catalog-group-strong-rgb)) !important;
+    color: #fff !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-group-tab__icon {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-group-tab.is-active .catalog-group-tab__icon {
+    color: #fff !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-link {
+    background: #fbfcfa !important;
+    border-color: rgba(var(--catalog-nav-family-rgb), 0.18) !important;
+    color: var(--catalog-nav-ink) !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-link:hover {
+    background: rgba(var(--catalog-nav-family-rgb), 0.08) !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-link.is-active {
+    background: rgb(var(--catalog-nav-warm-rgb)) !important;
+    border-color: rgba(var(--catalog-nav-family-rgb), 0.4) !important;
+    color: rgb(var(--catalog-nav-family-strong-rgb)) !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-link.is-active::before {
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-group-tab, .catalog-link):focus-visible {
+    outline: 2px solid rgba(var(--catalog-nav-family-strong-rgb), 0.8) !important;
+    outline-offset: 3px;
+}
+
+/* Open content sections: photographs and typography supply the hierarchy. */
+body#top[data-design="light"] .catalog-page :is(.catalog-panel, .catalog-panel__grid, .catalog-panel__section-heading--intro) {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-info-card {
+    background: transparent !important;
+    border: 0 !important;
+    border-top: 1px solid #d6dbd5 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-panel__inline-title, .catalog-info-card h3, .catalog-info-card h4, .catalog-panel__section-heading--intro h2, .catalog-panel__section-heading--intro h3) {
+    line-height: 1.08 !important;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-panel__eyebrow, .catalog-panel__badges span) {
+    background: rgba(var(--catalog-section-rgb), 0.07) !important;
+    border-color: rgba(var(--catalog-section-rgb), 0.1) !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-panel__text p, .catalog-info-card p, .catalog-panel__text ul li, .catalog-info-card ul li, .catalog-palette-card__info p, .catalog-palette-card__info li) {
+    color: #475763;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-panel__text ul li, .catalog-info-card ul li, .catalog-palette-card__info ul li)::before {
+    background: rgba(var(--catalog-section-strong-rgb), 0.78);
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-panel__media-frame {
+    border-color: #dde0d9;
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .catalog-panel__media-thumb {
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-panel__media-thumb.is-active {
+    border-color: rgb(var(--catalog-section-strong-rgb));
+    box-shadow: 0 0 0 1px rgba(var(--catalog-section-strong-rgb), 0.35) !important;
+}
+body#top[data-design="light"] .catalog-page .catalog-panel__media-thumb::after {
+    display: none;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-palette-card, .partner-card) {
+    background: #f2f2ec !important;
+    border-color: #dfe2db !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .partner-card::before {
+    display: none;
+}
+
+/* Products are still clearly clickable, with one surface instead of nested pills. */
+body#top[data-design="light"] :is(.catalog-page, .automation-product-page, .automation-faq-wrap) :is(.automation-card, .automation-accessories__item) {
+    background: #fffefa !important;
+    border-color: #dce0d8 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .catalog-page .automation-card--link:hover {
+    border-color: rgba(var(--catalog-section-strong-rgb), 0.5) !important;
+    transform: none !important;
+}
+body#top[data-design="light"] .catalog-page .automation-card__media {
+    background: #fff;
+    border: 0;
+    border-radius: 10px;
+}
+body#top[data-design="light"] .catalog-page .automation-card__specs li {
+    background: transparent !important;
+    border: 0;
+    border-bottom: 1px solid #e2e5de;
+    border-radius: 0 !important;
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .automation-card__specs li::before {
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .automation-step {
+    border: 0;
+    border-top: 1px solid #d6dbd5;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .automation-step__number {
+    background: rgba(var(--catalog-section-rgb), 0.1);
+    color: rgb(var(--catalog-section-strong-rgb));
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .catalog-assistant {
+    background: #edf0e8;
+    border-color: #dbe1d5;
+    border-radius: 18px;
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page .catalog-assistant::before,
+body#top[data-design="light"] .catalog-page .catalog-assistant::after,
+body#top[data-design="light"] .catalog-page .catalog-assistant__actions::before {
+    display: none;
+}
+body#top[data-design="light"] .catalog-page .catalog-assistant__actions {
+    background: #42606b;
+    border-radius: 14px;
+    box-shadow: none;
+}
+body#top[data-design="light"] .catalog-page :is(.catalog-assistant__points span, .catalog-assistant__eyebrow) {
+    background: transparent;
+    border-color: #d6dfd1;
+    box-shadow: none;
+}
+
+/* Gate and automation detail pages use the same open editorial treatment. */
+body#top[data-design="light"] :is(.gate-detail__hero, .automation-product-guide),
+body#top[data-design="light"] :is(.automation-faq-wrap, .automation-product-page) .automation-product-card {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .gate-detail__calculation {
+    background: #f0f1eb;
+    border-color: #dce0d6;
+    border-radius: 16px;
+    box-shadow: none;
+}
+body#top[data-design="light"] .automation-product-back {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .automation-product-main {
+    background: #f6f6f0 !important;
+    border-color: #dce0d7 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .automation-product-main::before {
+    display: none;
+}
+body#top[data-design="light"] .automation-product-main img {
+    background: #f8f8f4;
+}
+body#top[data-design="light"] .automation-product-thumb {
+    box-shadow: none !important;
+}
+body#top[data-design="light"] .automation-product-thumb.is-active {
+    border-color: #42606b !important;
+    box-shadow: 0 0 0 1px #42606b !important;
+}
+body#top[data-design="light"] .automation-product-title {
+    line-height: 1.06;
+}
+body#top[data-design="light"] .automation-product-title::after {
+    background: #a8b6ae;
+    height: 1px;
+}
+body#top[data-design="light"] .automation-product-description {
+    color: #475763;
+    line-height: 1.55;
+}
+body#top[data-design="light"] .automation-product-specs {
+    background: transparent;
+    border-color: #d9dfd7;
+    border-radius: 10px;
+}
+body#top[data-design="light"] .automation-product-guide__card {
+    background: transparent;
+    border: 0;
+    border-top: 1px solid #d6dbd5;
+    border-radius: 0;
+}
+
+@media (max-width: 640px) {
+    body#top[data-design="light"] .catalog-page .catalog-nav-shell {
+        background: transparent !important;
+    }
+    body#top[data-design="light"] .catalog-page .catalog-info-card {
+        padding-inline: 4px !important;
+    }
+    body#top[data-design="light"] .automation-product-guide {
+        padding-inline: 0;
+    }
+}
